@@ -13037,3 +13037,14 @@ EOF
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/snp132Mask/
 
 #############################################################################
+#CREATE MICROSAT TRACK (DONE 2001-11-13 - Chin)
+    ssh hgwdev
+    cd /cluster/data/hg19/bed
+    mkdir microsat
+    cd microsat
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 100 && $9 0
+    {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}'
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed hg19 microsat microsat.bed
+
+#############################################################################

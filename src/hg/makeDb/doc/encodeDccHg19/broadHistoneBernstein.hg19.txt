@@ -2504,7 +2504,834 @@ make alpha DBS=hg19
 #wgEncodeBroadHistoneHepg2H3k27me3StdRawDataRep2.fastq.gz
 # Conclusion: missing 4 things:
 - HUVEC/H3K36me3 PEAKS are missing (signals and 3 replicates of bam and fastq are here)
-- K562/H3K9me1 replicate is missing missing BAM and FASTQ (rep1 is here)
+- K562/H3K9me1 replicate 2 is missing missing BAM and FASTQ (rep1 is here)
 - K562/Control replicate 2 is missing BAM and FASTQ  (rep1 is here)
 - HepG2/H3K27me3 replicate 2 is missing FASTQ only (rep1 fastq is here)
 
+
+2010-11-17 Update Illumina machine metadata from Tim Durham's list
+==================================================================
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeBroadHistone labVersion=" -count
+No metadata met your selection criteria
+0 objects
+0 variables
+0 values
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=GM12878 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=H1-hESC antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe "
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HMEC antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K9me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H3K9me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMM antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H2A.Z replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H2A.Z replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HSMMtube antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=CTCF replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=Control replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K27ac replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K36me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K4me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K9ac  replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K9ac  replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K9ac  replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K9me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K9me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H3K9me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=H4K20me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HUVEC antibody=Pol2(b) replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HeLa-S3 antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H2A.Z replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H2A.Z replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=HepG2 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H3K9me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=K562 antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NH-A antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=CTCF replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K27ac replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K27me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K36me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me2 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K4me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K9ac replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K9me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K9me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H3K9me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=H4K20me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHEK antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=Control replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=Control replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg19 -vars="composite=wgEncodeBroadHistone cell=NHLF antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+
+mdbPrint hg19 -count -vars="composite=wgEncodeBroadHistone labVersion="
+Using table named 'hg19.metaDb_tdreszer'.
+531 objects
+11143 variables
+11143 values
+
+mdbPrint hg19 -count -vars="composite=wgEncodeBroadHistone view=Alignments labVersion="
+Using table named 'hg19.metaDb_tdreszer'.
+266 objects
+5852 variables
+5852 values
+mdbPrint hg19 -count -vars="composite=wgEncodeBroadHistone view=Alignments"
+Using table named 'hg19.metaDb_tdreszer'.
+272 objects
+5978 variables
+5978 values
+mdbPrint hg19 -count -vars="composite=wgEncodeBroadHistone view=Alignments labVersion!="
+Using table named 'hg19.metaDb_tdreszer'.
+6 objects
+126 variables
+126 values
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone view=Alignments labVersion!=" | grep metaObject
+metaObject wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2
+metaObject wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3
+metaObject wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1
+metaObject wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2
+metaObject wgEncodeBroadHistoneHuvecPol2bStdAlnRep2
+metaObject wgEncodeBroadHistoneHuvecPol2bStdAlnRep3
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone view=Alignments labVersion!=" -count
+Using table named 'hg19.metaDb_tdreszer'.
+No metadata met your selection criteria
+0 objects
+0 variables
+0 values
+
+mdbPrint hg19 -count -vars="composite=wgEncodeBroadHistone view=RawData labVersion="
+Using table named 'hg19.metaDb_tdreszer'.
+265 objects
+5291 variables
+5291 values
+[hgwdev:tdreszer testing> mdbPrint hg19 -count -vars="composite=wgEncodeBroadHistone view=RawData"
+Using table named 'hg19.metaDb_tdreszer'.
+271 objects
+5405 variables
+5405 values
+mdbPrint hg19 -count -vars="composite=wgEncodeBroadHistone view=RawData labVersion!="
+Using table named 'hg19.metaDb_tdreszer'.
+6 objects
+114 variables
+114 values
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone view=RawData labVersion!=" | grep metaObject
+metaObject wgEncodeBroadHistoneHuvecH3k9me1StdRawDataRep2
+metaObject wgEncodeBroadHistoneHuvecH3k9me1StdRawDataRep3
+metaObject wgEncodeBroadHistoneHuvecH4k20me1StdRawDataRep1
+metaObject wgEncodeBroadHistoneHuvecH4k20me1StdRawDataRep2
+metaObject wgEncodeBroadHistoneHuvecPol2bStdRawDataRep2
+metaObject wgEncodeBroadHistoneHuvecPol2bStdRawDataRep3
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone view=RawData labVersion!=" -count
+Using table named 'hg19.metaDb_tdreszer'.
+No metadata met your selection criteria
+0 objects
+0 variables
+0 values
+
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone labVersion=" -countUsing table named 'hg19.metaDb_tdreszer'.
+543 objects
+11395 variables
+11395 values
+# Now all bams and fastqs in hg19 have labVersions
+
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra 
+gdiff wgEncodeBroadHistone.ra
+gdiff wgEncodeBroadHistone.ra | grep -v @@ | grep -v labVersion
+1 wgEncodeBroadHistone.ra
+diff --git a/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeBroadHistone.ra b/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeBroadHistone.ra
+index c218bc5..dcc210e 100644
+--- a/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeBroadHistone.ra
++++ b/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/wgEncodeBroadHistone.ra
+-# MAGIC: -915570537
++# MAGIC: 654812764
+# Only lab version has changed.
+git add, ci, push
+make alpha DBS=hg19
+encodeDownloadsPage.pl -db=hg19 index.html
+
+# Now Extend Ilumina mdb update to hg18
+mdbPrint hg18 -table=metaDb -vars="composite=wgEncodeBroadHistone labVersion=" -count
+No metadata met your selection criteria
+0 objects
+0 variables
+0 values
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe "
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K9me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H3K9me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H2A.Z replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H2A.Z replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=CTCF replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K27ac replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K36me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K4me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K9ac  replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K9ac  replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K9ac  replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K9me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K9me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H3K9me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=H4K20me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=Pol2(b) replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H2A.Z replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H2A.Z replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K79me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K79me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H3K9me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=CTCF replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K27ac replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K27me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K36me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me2 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K4me3 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K9ac replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K9me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K9me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H3K9me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=H4K20me1 replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=Pol2(b) replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=Pol2(b) replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=CTCF replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=CTCF replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K27ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K27ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K27me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K27me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K36me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K36me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K4me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K4me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K4me2 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K4me2 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K4me3 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K4me3 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K9ac replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H3K9ac replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H4K20me1 replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=H4K20me1 replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=GM12878 antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=H1-hESC antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HMEC antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMM antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HSMMtube antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HUVEC antibody=Input replicate=3" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HeLa-S3 antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=HepG2 antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=K562 antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NH-A antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHEK antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=Input replicate=1" -var=labVersion -val="Illumina Genome Analyzer IIx"
+mdbUpdate hg18 -vars="composite=wgEncodeBroadChipSeq cell=NHLF antibody=Input replicate=2" -var=labVersion -val="Illumina Genome Analyzer IIe"
+
+mdbPrint hg18 -count -vars="composite=wgEncodeBroadChipSeq view=Alignments labVersion="
+184 objects
+3582 variables
+3582 values
+mdbPrint hg18 -count -vars="composite=wgEncodeBroadChipSeq view=Alignments labVersion!="
+Using table named 'hg18.metaDb_tdreszer'.
+2 objects
+40 variables
+40 values
+mdbPrint hg18 -vars="composite=wgEncodeBroadChipSeq view=Alignments labVersion!=" | grep metaObj
+metaObject wgEncodeBroadChipSeqAlignmentsRep2K562ControlV2
+metaObject wgEncodeBroadChipSeqAlignmentsRep2K562H3k9me1V2
+
+mdbPrint hg18 -count -vars="composite=wgEncodeBroadChipSeq view=RawData labVersion="
+Using table named 'hg18.metaDb_tdreszer'.
+184 objects
+3312 variables
+3312 values
+mdbPrint hg18 -count -vars="composite=wgEncodeBroadChipSeq view=RawData labVersion!="
+Using table named 'hg18.metaDb_tdreszer'.
+2 objects
+34 variables
+34 values
+mdbPrint hg18 -vars="composite=wgEncodeBroadChipSeq view=RawData labVersion!=" | grep metaObj
+Using table named 'hg18.metaDb_tdreszer'.
+objects:2  vars:34
+metaObject wgEncodeBroadChipSeqRawDataRep2K562Control
+metaObject wgEncodeBroadChipSeqRawDataRep2K562H3k9me1
+# Interesting: same 2 as missing in hg19
+
+mdbPrint hg18 -vars="composite=wgEncodeBroadChipSeq" > wgEncodeBroadChipSeq.ra 
+gdiff wgEncodeBroadChipSeq.ra | grep -v @@ | grep -v labVersion
+man/hg18/metaDb/alpha/wgEncodeBroadChipSeq.ra
+index 056fea8..167ae50 100644
+--- a/src/hg/makeDb/trackDb/human/hg18/metaDb/alpha/wgEncodeBroadChipSeq.ra
++++ b/src/hg/makeDb/trackDb/human/hg18/metaDb/alpha/wgEncodeBroadChipSeq.ra
+-# MAGIC: -380800573
++# MAGIC: 487550617
+
+git add, ci, push
+make alpha DBS=hg18
+encodeDownloadsPage.pl -db=hg18 index.html
+
+
+
+2010-11-17 New submissions
+==========================
+rm mdbBroad.ra
+cat 2978/out/mdb.txt >> mdbBroad.ra
+cat 2979/out/mdb.txt >> mdbBroad.ra
+cat 2980/out/mdb.txt >> mdbBroad.ra
+cat 2982/out/mdb.txt >> mdbBroad.ra
+cat 2969/out/mdb.txt >> mdbBroad.ra
+cat 2981/out/mdb.txt >> mdbBroad.ra
+cat 2970/out/mdb.txt >> mdbBroad.ra
+cat 2983/out/mdb.txt >> mdbBroad.ra
+cat 2984/out/mdb.txt >> mdbBroad.ra
+cat 2985/out/mdb.txt >> mdbBroad.ra
+cat 2986/out/mdb.txt >> mdbBroad.ra
+cat 2987/out/mdb.txt >> mdbBroad.ra
+cat 2988/out/mdb.txt >> mdbBroad.ra
+cat 2989/out/mdb.txt >> mdbBroad.ra
+cat 2990/out/mdb.txt >> mdbBroad.ra
+cat 2991/out/mdb.txt >> mdbBroad.ra
+cat 2992/out/mdb.txt >> mdbBroad.ra
+mv mdbBroad.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+e mdbBroad.ra # Actually, nothing really needs to be changed.
+ mdbUpdate hg19 mdbBroad.ra
+Using table named 'hg19.metaDb_tdreszer'.
+Read 88 metadata objects from hg19
+Affected 1716 row(s) in hg19.metaDb_tdreszer
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra 
+gold wgEncodeBroadHistone.ra
+git update, add, ci, push
+
+rm tdbBroad.ra
+cat 2978/out/trackDb.ra >> tdbBroad.ra
+cat 2979/out/trackDb.ra >> tdbBroad.ra
+cat 2980/out/trackDb.ra >> tdbBroad.ra
+cat 2982/out/trackDb.ra >> tdbBroad.ra
+cat 2969/out/trackDb.ra >> tdbBroad.ra
+cat 2981/out/trackDb.ra >> tdbBroad.ra
+cat 2970/out/trackDb.ra >> tdbBroad.ra
+cat 2983/out/trackDb.ra >> tdbBroad.ra
+cat 2984/out/trackDb.ra >> tdbBroad.ra
+cat 2985/out/trackDb.ra >> tdbBroad.ra
+cat 2986/out/trackDb.ra >> tdbBroad.ra
+cat 2987/out/trackDb.ra >> tdbBroad.ra
+cat 2988/out/trackDb.ra >> tdbBroad.ra
+cat 2989/out/trackDb.ra >> tdbBroad.ra
+cat 2990/out/trackDb.ra >> tdbBroad.ra
+cat 2991/out/trackDb.ra >> tdbBroad.ra
+cat 2992/out/trackDb.ra >> tdbBroad.ra
+mv tdbBroad.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+e tdbBroad.ra # edit subGroups, longLabels and shortLabels
+encodePatchTdb metaDb/alpha/testing/tdbBroad.ra wgEncodeBroadHistone.ra
+
+make DBS=hg19
+Check in sandbox.  Fine.
+
+git up, add,ci,push
+make alpha DBS=hg19
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2978 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2979 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2980 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2982 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2969 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2981 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2970 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2983 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2984 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2985 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2986 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2987 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2988 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2989 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2990 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2991 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2992 displayed
+
+hgsql encpipeline_prod
+select id,name,status, user_id from projects where name like "BI_%" and status = "displayed";
++------+---------------------------+-----------+---------+
+| id   | name                      | status    | user_id |
++------+---------------------------+-----------+---------+
+| 2969 | BI_HepG2_H3K27me3         | displayed |      34 | 
+| 2970 | BI_Huvec_H3K36me3         | displayed |      34 | 
+| 2978 | BI_GM12878_H2A.Z          | displayed |      34 | 
+| 2979 | BI_GM12878_H3K79me2       | displayed |      34 | 
+| 2980 | BI_GM12878_H3K9me3        | displayed |      34 | 
+| 2981 | BI_HSMM_H2A.Z             | displayed |      34 | 
+| 2982 | BI_HeLaS3_H3K27me3        | displayed |      34 | 
+| 2983 | BI_K562_H2A.Z             | displayed |      34 | 
+| 2984 | BI_K562_H3K79me2          | displayed |      34 | 
+| 2985 | BI_K562_H3K9me3           | displayed |      34 | 
+| 2986 | BI_NH-Osteoblast_CTCF     | displayed |      34 | 
+| 2987 | BI_NH-Osteoblast_H2A.Z    | displayed |      34 | 
+| 2988 | BI_NH-Osteoblast_H3K27ac  | displayed |      34 | 
+| 2989 | BI_NH-Osteoblast_H3K36me3 | displayed |      34 | 
+| 2990 | BI_NH-Osteoblast_H3K4me1  | displayed |      34 | 
+| 2991 | BI_NH-Osteoblast_H3K4me2  | displayed |      34 | 
+| 2992 | BI_NH-Osteoblast_H3K9me3  | displayed |      34 | 
++------+---------------------------+-----------+---------+
+17 rows in set (0.00 sec)
+update projects set name = "Broad 2010-11-12 HepG2_H3K27me3" where id = 2969;
+update projects set name = "Broad 2010-11-12 Huvec_H3K36me3" where id = 2970;
+update projects set name = "Broad 2010-11-12 GM12878_H2A.Z" where id = 2978;
+update projects set name = "Broad 2010-11-12 GM12878_H3K79me2" where id = 2979;
+update projects set name = "Broad 2010-11-12 GM12878_H3K9me3" where id = 2980;
+update projects set name = "Broad 2010-11-12 HSMM_H2A.Z" where id = 2981;
+update projects set name = "Broad 2010-11-12 HeLaS3_H3K27me3" where id = 2982;
+update projects set name = "Broad 2010-11-12 K562_H2A.Z" where id = 2983;
+update projects set name = "Broad 2010-11-12 K562_H3K79me2" where id = 2984;
+update projects set name = "Broad 2010-11-12 K562_H3K9me3" where id = 2985;
+update projects set name = "Broad 2010-11-12 NH-Osteoblast_CTCF" where id = 2986;
+update projects set name = "Broad 2010-11-12 NH-Osteoblast_H2A.Z" where id = 2987;
+update projects set name = "Broad 2010-11-12 NH-Osteoblast_H3K27ac" where id = 2988;
+update projects set name = "Broad 2010-11-12 NH-Osteoblast_H3K36me3" where id = 2989;
+update projects set name = "Broad 2010-11-12 NH-Osteoblast_H3K4me1" where id = 2990;
+update projects set name = "Broad 2010-11-12 NH-Osteoblast_H3K4me2" where id = 2991;
+update projects set name = "Broad 2010-11-12 NH-Osteoblast_H3K9me3" where id = 2992;
+select id,name,status, user_id from projects where name like "BI_%";
++------+------------------+-----------------+---------+
+| id   | name             | status          | user_id |
++------+------------------+-----------------+---------+
+| 1187 | bigWigTest       | revoked         |      31 | 
+| 2993 | BI_NHDF_CTCF     | validate failed |      34 | 
+| 2994 | BI_NHDF_H3K27ac  | validate failed |      34 | 
+| 2995 | BI_NHDF_H3K27me3 | validate failed |      34 | 
+| 2996 | BI_NHDF_H3K36me3 | validate failed |      34 | 
+| 2997 | BI_NHDF_H3K4me2  | validate failed |      34 | 
+| 2998 | BI_NHDF_H3K4me3  | validate failed |      34 | 
+| 2999 | BI_NHDF_H3K9ac   | validate failed |      34 | 
++------+------------------+-----------------+---------+
+8 rows in set (0.00 sec)
+
+At this point, waiting for Broad on:
+- 8 submissions for cellLine NHDF-Ad which are mapped as male but cell line shows female
+- K562/H3K9me1 replicate 2 is missing missing BAM and FASTQ (rep1 is here)
+- K562/Control replicate 2 is missing BAM and FASTQ  (rep1 is here)
+The 2 missing replicates are not likely to be provided.

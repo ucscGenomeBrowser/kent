@@ -2010,7 +2010,7 @@ return mdbObjFindValue(mdbObj,var);
 }
 
 struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files)
-// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+// Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 {  // TODO: Change this to use normal mdb struct routines?
 if (!tables && !files)
@@ -2028,7 +2028,9 @@ if (!tables || !files)
 
 if(var != NULL)
     dyStringPrintf(dyQuery,"l2.var = '%s' and l2.val ", var);
-if(sameString(op, "contains"))
+if(sameString(op, "in"))
+    dyStringPrintf(dyQuery,"in (%s)", val); // Note, must be a formatted string already: 'a','b','c' or  1,2,3
+else if(sameString(op, "contains") || sameString(op, "like"))
     dyStringPrintf(dyQuery,"like '%%%s%%'", val);
 else if (limit > 0 && strlen(val) == limit)
     dyStringPrintf(dyQuery,"like '%s%%'", val);
@@ -2149,7 +2151,7 @@ return pairs;
 
 struct hash *mdbCvTermTypeHash()
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
-// Those terms should contain label,descrition,searchable,cvDefined,hidden
+// Those terms should contain label,description,searchable,cvDefined,hidden
 {
 static struct hash *cvHashOfTermTypes = NULL;
 
@@ -2164,6 +2166,12 @@ if (cvHashOfTermTypes == NULL)
         hashAdd(cvHashOfTermTypes,"cell",cellHash);
         hashReplace(cellHash, "term", cloneString("cell")); // spilling memory of 'cellType' val
         }
+    struct hash *abHash = hashRemove(cvHashOfTermTypes,"Antibody");
+    if (abHash)
+        {
+        hashAdd(cvHashOfTermTypes,"antibody",abHash);
+        hashReplace(abHash, "term", cloneString("antibody")); // spilling memory of 'Antibody' val
+        }
     }
 
 
@@ -2172,6 +2180,7 @@ return cvHashOfTermTypes;
 
 struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvDefined)
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
+// TODO: change to return struct that includes searchable!
 {
 struct slPair *whitePairs = NULL;
 
@@ -2192,8 +2201,13 @@ while ((hEl = hashNext(&hc)) != NULL)
     if (searchTracks)
         {
         setting = hashFindVal(typeHash,"searchable");
+#ifdef CV_SEARCH_SUPPORTS_FREETEXT
+        if (setting == NULL
+        || (differentWord(setting,"select") && differentWord(setting,"freeText")))
+#else///ifndef CV_SEARCH_SUPPORTS_FREETEXT
         if (setting == NULL || differentWord(setting,"select")) // TODO: Currently only 'select's are supported
-            continue;
+#endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
+           continue;
         }
     if (cvDefined)
         {
@@ -2212,3 +2226,26 @@ if (whitePairs != NULL)
 
 return whitePairs;
 }
+
+#ifdef CV_SEARCH_SUPPORTS_FREETEXT
+enum mdbCvSearchable mdbCvSearchMethod(char *term)
+// returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
+{
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *searchable = hashFindVal(termHash,"searchable");
+    if (searchable != NULL)
+        {
+        if (sameWord(searchable,"select"))
+            return cvsSearchBySingleSelect;
+        if (sameWord(searchable,"freeText"))
+            return cvsSearchByFreeText;
+        }
+    }
+return cvsNotSearchable;
+}
+#endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
+

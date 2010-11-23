@@ -75,5 +75,7 @@ char *docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub,
 char *docIdGetPath(char *docId, char *docIdDir, char *suffix, char *submitPath);
 
 boolean fileIsCompressed(char *fileName);
+
+char *docDecorateType(char *type);
 #endif /* DOCIDSUB_H */
 

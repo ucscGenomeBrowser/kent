@@ -171,9 +171,7 @@ if(showShortLabel)
     dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
-//#ifdef OMIT
 struct hash *cvTermTypes = mdbCvTermTypeHash();
-//#endif///def OMIT
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
@@ -195,7 +193,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         // If antibody and metadata contains input={sameValue} then just print input
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
-//#ifdef OMIT
+
         if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
             {
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
@@ -228,7 +226,6 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     }
                 }
             }
-//#endif///def OMIT
         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }

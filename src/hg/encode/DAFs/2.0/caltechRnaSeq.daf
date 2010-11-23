@@ -24,7 +24,7 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Myers
-lab               Caltech
+lab               Caltech(Wold)
 dataType          RnaSeq
 compositeSuffix   CaltechRnaSeq
 group             expression
@@ -123,7 +123,7 @@ downloadOnly     no
 
 view             InsLength
 longLabelPrefix  Caltech RNA-seq Insert Length Distribution
-type             insdist
+type             insDist
 hasReplicates    yes
 required         no
 downloadOnly     yes

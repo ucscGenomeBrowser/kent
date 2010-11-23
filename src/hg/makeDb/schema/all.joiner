@@ -3174,6 +3174,7 @@ tablesIgnored $gbd
     intronEst
     knownAlt
     metaDb%
+    microsat
     miRNA
     nestedRepeats
     nestedRepeatsRM327
@@ -3526,9 +3527,6 @@ tablesIgnored $fr
     ecoresHg16
     ecoresRn3
 
-tablesIgnored $felCat
-    microsat
-
 tablesIgnored hg16
     chicken_hmrg
     rat_hmrg
@@ -3537,9 +3535,6 @@ tablesIgnored hg16
 
 tablesIgnored canFam2
     uncertified
-
-tablesIgnored oryLat2
-    microsat
 
 tablesIgnored susScr2
     bosTau4ChainPileUp

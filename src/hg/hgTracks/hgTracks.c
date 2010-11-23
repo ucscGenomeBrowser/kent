@@ -1592,7 +1592,6 @@ return scaleBases;
 enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
-assert(tdbIsCompositeChild(subtrack->tdb));
 if(tdbIsCompositeChild(subtrack->tdb))
     {
     if (!subtrack->limitedVisSet)
@@ -1601,6 +1600,8 @@ if(tdbIsCompositeChild(subtrack->tdb))
         limitVisibility(subtrack);
         }
     }
+else
+    limitVisibility(subtrack);
 return subtrack->limitedVis;
 }
 
@@ -2145,7 +2146,8 @@ if (withLeftLabels && psOutput == NULL)
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
             }
-        drawGrayButtonBox(hvgSide, trackTabX, y, trackTabWidth, height, TRUE);
+        else if(!trackImgOnly) // Side buttons only need to be drawn when drawing page with js advanced features off  // TODO: Should remove wasted pixels too
+            drawGrayButtonBox(hvgSide, trackTabX, y, trackTabWidth, height, TRUE);
         mapBoxTrackUi(hvgSide, trackTabX, y, trackTabWidth, height,
               RULER_TRACK_NAME, RULER_TRACK_LABEL, "ruler");
         y += height + 1;
@@ -2165,12 +2167,6 @@ if (withLeftLabels && psOutput == NULL)
             if (track->group != lastGroup)
                 grayButtonGroup = !grayButtonGroup;
             lastGroup = track->group;
-            if (grayButtonGroup)
-                drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
-            else
-                drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
             if(theImgBox)
                 {
                 // Mini-buttons (side label slice) for tracks
@@ -2179,6 +2175,14 @@ if (withLeftLabels && psOutput == NULL)
                 curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
                 }
+            else if(!trackImgOnly) // Side buttons only need to be drawn when drawing page with js advanced features off
+                {
+                if (grayButtonGroup)
+                    drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth, h, track->hasUi);
+                else
+                    drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth, h, track->hasUi);
+                }
+
             if (track->hasUi)
                 {
                 if(tdbIsCompositeChild(track->tdb))
@@ -3168,6 +3172,8 @@ else
 if (!ct->dbTrack)
     tg->nextItemButtonable = FALSE;
 tg->hasUi = TRUE;
+tg->customTrack = TRUE;// Explicitly declare this a custom track for flatTrack ordering
+
 freez(&typeDupe);
 return tg;
 }
@@ -4260,7 +4266,7 @@ for (;track != NULL; track = track->next)
 
     if (tdbIsContainer(track->tdb))
         {
-        shapedByubtrackOverride = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
+        shapedByubtrackOverride = cartTdbTreeReshapeIfNeeded(cart,track->tdb);
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
@@ -4455,6 +4461,12 @@ hPrintf("<CENTER>\n");
 
 if(trackImgOnly)
     {
+    struct track *ideoTrack = chromIdeoTrack(trackList);
+    if (ideoTrack)
+        {
+        ideoTrack->limitedVisSet = TRUE;
+        ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
+        }
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
     return;  // bail out b/c we are done
@@ -4667,13 +4679,11 @@ if (!hideControls)
 
     /* Display bottom control panel. */
 
-#ifdef TRACK_SEARCH
     if(isSearchTracksSupported(database,cart))
         {
         cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
         hPrintf(" ");
         }
-#endif///def TRACK_SEARCH
     hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
 	hPrintf("&nbsp;");
     hButtonWithMsg("hgt.defaultImgOrder", "default order","Display current tracks in their default order");
@@ -5120,8 +5130,11 @@ withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
-withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
-withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
+if (!cgiVarExists("hgt.imageV1"))
+    {
+    withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
+    withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
+    }
 if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
@@ -5524,7 +5537,6 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
     }
-
 hWrites(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
@@ -5544,7 +5556,6 @@ jsIncludeFile("lowetooltip.js", NULL);
 
 if(advancedJavascriptFeaturesEnabled(cart))
     {
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 webIncludeResourceFile("jquery.contextmenu.css");
 webIncludeResourceFile("jquery-ui.css");
 #ifdef CONTEXT_MENU
@@ -5559,7 +5570,6 @@ hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
@@ -5622,12 +5632,10 @@ else if (cartVarExists(cart, configShowEncodeGroups))
             collapseGroup(grp->name, FALSE);
     configPageSetTrackVis(-2);
     }
-#ifdef TRACK_SEARCH
 else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
     {
     doSearchTracks(groupList);
     }
-#endif///def TRACK_SEARCH
 else
     {
     tracksDisplay();

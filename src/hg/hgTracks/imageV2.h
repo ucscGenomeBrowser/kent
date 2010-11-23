@@ -67,7 +67,7 @@ void flatTracksFree(struct flatTracks **flatTracks);
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track);
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable);
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 
@@ -279,9 +279,10 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
     };
 
-#define IMG_ANYORDER  -2
-#define IMG_FIXEDPOS  -1
-#define IMG_ORDEREND  1000
+#define IMG_ANYORDER -2
+#define IMG_FIXEDPOS -1
+#define IMG_ORDERTOP  10000
+#define IMG_ORDEREND  20000
 #define IMG_ORDER_VAR "imgOrd"
 
 struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order);

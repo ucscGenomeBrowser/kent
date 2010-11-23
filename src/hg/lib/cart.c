@@ -2154,7 +2154,7 @@ if (countUnchecked + countVisChanged)
 return (countUnchecked + countVisChanged);
 }
 
-boolean cartTdbTreeMatchSubtrackVis(struct cart *cart,struct trackDb *tdbContainer)
+boolean cartTdbTreeReshapeIfNeeded(struct cart *cart,struct trackDb *tdbContainer)
 /* When subtrack vis is set via findTracks, and composite has no cart settings,
    then "shape" composite to match found */
 {

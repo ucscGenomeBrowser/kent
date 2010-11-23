@@ -27,7 +27,7 @@ shortLabel Broad Histone
 longLabel ENCODE Histone Modifications by ChIP-Seq from  Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHEK=NHEK NHLF=NHLF
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHDFa=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTBL=Osteobl
 subGroup3 factor Antibody CTCF=CTCF H2AZ=H2A.Z H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K09me3=H3K9me3 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K79me2=H3K79me2 H4K20me1=H4K20me1 POL2B=Pol2(b) zCTRL=Input_Control
 dimensions dimensionY=cellType dimensionX=factor
 sortOrder cellType=+ factor=+ view=+
@@ -1266,6 +1266,244 @@ dataVersion through the ENCODE Jun 2010 Freeze
         origAssembly hg18
         # subId=2923 dateSubmitted=2010-11-05
 
+        track wgEncodeBroadHistoneGm12878H2azStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel GM12878 H2A.Z Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, GM12878 cells)
+        subGroups view=Peaks factor=H2AZ cellType=GM12878
+        type broadPeak
+        origAssembly hg19
+        color 153,38,0
+        # subId=2978 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneGm12878H3k79me2StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel 12878 H3K79me2 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, GM12878 cells)
+        subGroups view=Peaks factor=H3K79me2 cellType=GM12878
+        type broadPeak
+        origAssembly hg19
+        color 153,38,0
+        # subId=2979 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneGm12878H3k9me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel 12878 H3K9me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, GM12878 cells)
+        subGroups view=Peaks factor=H3K09me3 cellType=GM12878
+        type broadPeak
+        origAssembly hg19
+        color 153,38,0
+        # subId=2980 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneHelas3H3k27me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel HeLaS H3K27me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HeLa-S3 cells)
+        subGroups view=Peaks factor=H3K27me3 cellType=HELA
+        type broadPeak
+        origAssembly hg19
+        color 0,119,158
+        # subId=2982 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneHsmmH2azStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel HSMM H2A.Z Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, HSMM cells)
+        subGroups view=Peaks factor=H2AZ cellType=HSMM
+        type broadPeak
+        origAssembly hg19
+        # subId=2981 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneHuvecH3k36me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel HUVEC H3K36me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HUVEC cells)
+        subGroups view=Peaks factor=H3K36me3 cellType=HUVEC
+        type broadPeak
+        origAssembly hg18
+        color 224,75,0
+        # subId=2970 dateSubmitted=2010-11-12
+
+        track wgEncodeBroadHistoneK562H2azStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel K562 H2A.Z Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, K562 cells)
+        subGroups view=Peaks factor=H2AZ cellType=K562
+        type broadPeak
+        origAssembly hg19
+        color 46,0,184
+        # subId=2983 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneK562H3k79me2StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel K562 H3K79me2 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, K562 cells)
+        subGroups view=Peaks factor=H3K79me2 cellType=K562
+        type broadPeak
+        origAssembly hg19
+        color 46,0,184
+        # subId=2984 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneK562H3k9me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel K562 H3K9me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, K562 cells)
+        subGroups view=Peaks factor=H3K09me3 cellType=K562
+        type broadPeak
+        origAssembly hg19
+        color 46,0,184
+        # subId=2985 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblCtcfStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel Ostbl CTCF Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, Osteobl cells)
+        subGroups view=Peaks factor=CTCF cellType=OSTBL
+        type broadPeak
+        origAssembly hg19
+        # subId=2986 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH2azStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel Ostbl H2A.Z Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, Osteobl cells)
+        subGroups view=Peaks factor=H2AZ cellType=OSTBL
+        type broadPeak
+        origAssembly hg19
+        # subId=2987 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k27acStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel Ostbl H3K27ac Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, Osteobl cells)
+        subGroups view=Peaks factor=H3K27ac cellType=OSTBL
+        type broadPeak
+        origAssembly hg19
+        # subId=2988 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k36me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel Ostbl H3K36me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, Osteobl cells)
+        subGroups view=Peaks factor=H3K36me3 cellType=OSTBL
+        type broadPeak
+        origAssembly hg19
+        # subId=2989 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k4me1StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel Ostbl H3K4me1 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, Osteobl cells)
+        subGroups view=Peaks factor=H3K04me1 cellType=OSTBL
+        type broadPeak
+        origAssembly hg19
+        # subId=2990 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k4me2StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel Ostbl H3K4me2 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, Osteobl cells)
+        subGroups view=Peaks factor=H3K04me2 cellType=OSTBL
+        type broadPeak
+        origAssembly hg19
+        # subId=2991 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k9me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel Ostbl H3K9me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, Osteobl cells)
+        subGroups view=Peaks factor=H3K09me3 cellType=OSTBL
+        type broadPeak
+        origAssembly hg19
+        # subId=2992 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneNhdfadCtcfStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel NHDFa CTCF Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NHDF-Ad cells)
+        subGroups view=Peaks factor=CTCF cellType=NHDFa
+        type broadPeak
+        origAssembly hg19
+        # subId=3006 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k27acStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel NHDFa H3K27ac Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NHDF-Ad cells)
+        subGroups view=Peaks factor=H3K27ac cellType=NHDFa
+        type broadPeak
+        origAssembly hg19
+        # subId=3007 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k27me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel NHDFa H3K27me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NHDF-Ad cells)
+        subGroups view=Peaks factor=H3K27me3 cellType=NHDFa
+        type broadPeak
+        origAssembly hg19
+        # subId=3008 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k36me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel NHDFa H3K36me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NHDF-Ad cells)
+        subGroups view=Peaks factor=H3K36me3 cellType=NHDFa
+        type broadPeak
+        origAssembly hg19
+        # subId=3009 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k4me2StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel NHDFa H3K4me2 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, NHDF-Ad cells)
+        subGroups view=Peaks factor=H3K04me2 cellType=NHDFa
+        type broadPeak
+        origAssembly hg19
+        # subId=3010 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k4me3StdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel NHDFa H3K4me3 Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NHDF-Ad cells)
+        subGroups view=Peaks factor=H3K04me3 cellType=NHDFa
+        type broadPeak
+        origAssembly hg19
+        # subId=3011 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k9acStdPk
+        release alpha
+        parent wgEncodeBroadHistoneViewPeaks off
+        shortLabel NHDFa H3K9ac Pk
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, NHDF-Ad cells)
+        subGroups view=Peaks factor=H3K09ac cellType=NHDFa
+        type broadPeak
+        origAssembly hg19
+        # subId=3012 dateSubmitted=2010-11-19
+
 
     track wgEncodeBroadHistoneViewSignal
     shortLabel Signal
@@ -1282,7 +1520,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
 
         #track wgEncodeBroadChipSeqSignalGm12878Ctcf
         #subTrack wgEncodeBroadChipSeqViewSignal
-        #shortLabel 12878 CTCF S
+        #shortLabel 12878 CTCF Sg
         #longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, GM12878)
         #subGroups view=Signal factor=CTCF cellType=GM12878
         #type wig 0.00 14530.00
@@ -2634,4 +2872,231 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 18680.640625
         origAssembly hg19
         # subId=1894 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H2azStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM12878 H2A.Z Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, GM12878 cells)
+        subGroups view=Signal factor=H2AZ cellType=GM12878
+        type bigWig 0.040000 5573.080078
+        origAssembly hg19
+        color 153,38,0
+        # subId=2978 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneGm12878H3k79me2StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel 12878 H3K79me2 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, GM12878 cells)
+        subGroups view=Signal factor=H3K79me2 cellType=GM12878
+        type bigWig 0.040000 2011.920044
+        origAssembly hg19
+        color 153,38,0
+        # subId=2979 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneGm12878H3k9me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel 12878 H3K9me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, GM12878 cells)
+        subGroups view=Signal factor=H3K09me3 cellType=GM12878
+        type bigWig 0.040000 44431.519531
+        origAssembly hg19
+        color 153,38,0
+        # subId=2980 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneHelas3H3k27me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel HeLaS H3K27me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HeLa-S3 cells)
+        subGroups view=Signal factor=H3K27me3 cellType=HELA
+        type bigWig 0.040000 24157.039062
+        origAssembly hg19
+        color 0,119,158
+        # subId=2982 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneHsmmH2azStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel HSMM H2A.Z Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, HSMM cells)
+        subGroups view=Signal factor=H2AZ cellType=HSMM
+        type bigWig 0.040000 9646.160156
+        origAssembly hg19
+        # subId=2981 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneK562H2azStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel K562 H2A.Z Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, K562 cells)
+        subGroups view=Signal factor=H2AZ cellType=K562
+        type bigWig 0.040000 9285.080078
+        origAssembly hg19
+        color 46,0,184
+        # subId=2983 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneK562H3k79me2StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel K562 H3K79me2 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, K562 cells)
+        subGroups view=Signal factor=H3K79me2 cellType=K562
+        type bigWig 0.040000 5517.479980
+        origAssembly hg19
+        color 46,0,184
+        # subId=2984 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneK562H3k9me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel K562 H3K9me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, K562 cells)
+        subGroups view=Signal factor=H3K09me3 cellType=K562
+        type bigWig 0.040000 44343.121094
+        origAssembly hg19
+        color 46,0,184
+        # subId=2985 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblCtcfStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl CTCF Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, Osteobl cells)
+        subGroups view=Signal factor=CTCF cellType=OSTBL
+        type bigWig 0.040000 13777.519531
+        origAssembly hg19
+        # subId=2986 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH2azStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl H2A.Z Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, Osteobl cells)
+        subGroups view=Signal factor=H2AZ cellType=OSTBL
+        type bigWig 0.040000 56248.921875
+        origAssembly hg19
+        # subId=2987 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k27acStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl H3K27ac Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, Osteobl cells)
+        subGroups view=Signal factor=H3K27ac cellType=OSTBL
+        type bigWig 0.040000 10683.360352
+        origAssembly hg19
+        # subId=2988 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k36me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl H3K36me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, Osteobl cells)
+        subGroups view=Signal factor=H3K36me3 cellType=OSTBL
+        type bigWig 0.040000 31413.000000
+        origAssembly hg19
+        # subId=2989 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k4me1StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl H3K4me1 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, Osteobl cells)
+        subGroups view=Signal factor=H3K04me1 cellType=OSTBL
+        type bigWig 0.040000 12418.000000
+        origAssembly hg19
+        # subId=2990 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k4me2StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl H3K4me2 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, Osteobl cells)
+        subGroups view=Signal factor=H3K04me2 cellType=OSTBL
+        type bigWig 0.040000 13407.240234
+        origAssembly hg19
+        # subId=2991 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneOsteoblH3k9me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl H3K9me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, Osteobl cells)
+        subGroups view=Signal factor=H3K09me3 cellType=OSTBL
+        type bigWig 0.040000 82158.562500
+        origAssembly hg19
+        # subId=2992 dateSubmitted=2010-11-16
+
+        track wgEncodeBroadHistoneNhdfadCtcfStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa CTCF Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NHDF-Ad cells)
+        subGroups view=Signal factor=CTCF cellType=NHDFa
+        type bigWig 0.040000 18716.720703
+        origAssembly hg19
+        # subId=3006 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k27acStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa H3K27ac Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NHDF-Ad cells)
+        subGroups view=Signal factor=H3K27ac cellType=NHDFa
+        type bigWig 0.040000 12216.320312
+        origAssembly hg19
+        # subId=3007 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k27me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa H3K27me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NHDF-Ad cells)
+        subGroups view=Signal factor=H3K27me3 cellType=NHDFa
+        type bigWig 0.040000 16666.439453
+        origAssembly hg19
+        # subId=3008 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k36me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa H3K36me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NHDF-Ad cells)
+        subGroups view=Signal factor=H3K36me3 cellType=NHDFa
+        type bigWig 0.040000 24724.080078
+        origAssembly hg19
+        # subId=3009 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k4me2StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa H3K4me2 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, NHDF-Ad cells)
+        subGroups view=Signal factor=H3K04me2 cellType=NHDFa
+        type bigWig 0.040000 13155.320312
+        origAssembly hg19
+        # subId=3010 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k4me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa H3K4me3 Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NHDF-Ad cells)
+        subGroups view=Signal factor=H3K04me3 cellType=NHDFa
+        type bigWig 0.040000 26645.640625
+        origAssembly hg19
+        # subId=3011 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneNhdfadH3k9acStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa H3K9ac Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, NHDF-Ad cells)
+        subGroups view=Signal factor=H3K09ac cellType=NHDFa
+        type bigWig 0.040000 14526.120117
+        origAssembly hg19
+        # subId=3012 dateSubmitted=2010-11-19
 

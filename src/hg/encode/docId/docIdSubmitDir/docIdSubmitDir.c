@@ -27,6 +27,7 @@ errAbort(
 
 
 boolean editInput = FALSE;
+char *toBeDecided = "not yet assigned";
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
@@ -75,6 +76,29 @@ char *value = hel2->val;
 struct mdbVar *mdbVar = addMdbTxtVar(mdbObj, stringInMdb, value);
 
 return mdbVar;
+}
+
+char *getReportVersion(char *blob)
+{
+if (blob == NULL)
+    errAbort("no report blob");
+
+char *start = strchr(blob, '+');
+if (start == NULL)
+    errAbort("no plus in report blob");
+
+start++;
+char *end = strchr(start, '+');
+if (end == NULL)
+    errAbort("no second plus in report blob");
+
+char save = *end;
+*end = 0;
+
+char *ret = cloneString(start);
+*end = save;
+
+return ret;
 }
 
 struct hash *readLoadRa(struct mdbObj *mdbObjs, char *submitDir)
@@ -213,6 +237,7 @@ for(; mdbObj; mdbObj = nextObj)
     docIdSub.valReport = NULL;
     docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
     docIdSub.submitter = mdbObjFindValue(mdbObj, "lab") ;
+    docIdSub.assembly = mdbObjFindValue(mdbObj, "assembly") ;
 
     char *type = mdbObjFindValue(mdbObj, "type") ;
     struct mdbVar *submitPathVar = mdbObjFind(mdbObj, "submitPath") ;
@@ -231,25 +256,37 @@ for(; mdbObj; mdbObj = nextObj)
         subPartVar = addMdbTxtVar(mdbObj, "subPart", NULL);
         }
 
+    boolean multipleFiles = FALSE;
+    boolean firstTime = TRUE;
+    char *masterDocId = NULL;
+    char *oldObjName = NULL;
+    struct mdbVar *tmpVar;
+    tmpVar = mdbObjFind(mdbObj, "type") ;
+    char *suffix = docDecorateType(tmpVar->val);
+
     // step through the path and submit each file
     while(submitPath != NULL)
         {
+        char buffer[10 * 1024];
         char *space = strchr(submitPath, ' ');
         if (space)
             {
+            multipleFiles = TRUE;
             *space = 0;
             space++;
             }
-        
-        if (subPartVar)
-            {
-            char buffer[10 * 1024];
-
-            safef(buffer, sizeof buffer, "%d", subPart);
-            subPartVar->val = cloneString(buffer);
-            }
-
         submitPathVar->val = cloneString(submitPath);
+
+        if (subPartVar)
+            subPartVar->val = toBeDecided;
+        tmpVar = mdbObjFind(mdbObj, "fileName") ;
+        if (tmpVar != NULL)
+            tmpVar->val = toBeDecided;
+        tmpVar = mdbObjFind(mdbObj, "tableName") ;
+        if (tmpVar != NULL)
+            tmpVar->val = toBeDecided;
+        oldObjName = mdbObj->obj;
+        mdbObj->obj = toBeDecided;
         mdbObjPrintToFile(mdbObj, TRUE, tempFile);
         docIdSub.metaData = readBlob(tempFile);	
         unlink(tempFile);
@@ -257,35 +294,60 @@ for(; mdbObj; mdbObj = nextObj)
         safef(file, sizeof file, "%s/%s", submitDir, submitPath);
         docIdSub.submitPath = cloneString(file);
         printf("submitPath %s\n", docIdSub.submitPath);
+
+        safef(buffer, sizeof buffer, "%s.report", file);
+        docIdSub.valReport = readBlob(buffer);	
+        docIdSub.valVersion = getReportVersion(docIdSub.valReport);
+
         char *docId = docIdSubmit(conn, &docIdSub, docIdDir, type);
         char *decoratedDocId = docIdDecorate(atoi(docId));
 
-        addMdbTxtVar(mdbObj, "docId", decoratedDocId);
+        if (firstTime)
+            addMdbTxtVar(mdbObj, "docId", decoratedDocId);
+        else 
+            {
+            struct mdbVar *docIdVar = mdbObjFind(mdbObj, "docId") ;
+            docIdVar->val = cloneString(decoratedDocId);
+            }
 
         submitPath = space;
         subPart++;
+
+        if (firstTime)
+            masterDocId = cloneString(decoratedDocId);
 
         if (editInput)
             {
             // output load.ra and docIdMetaDb.ra stanzas
             //outLoadStanza(loadRaF, mapHash, mdbObj);
-            fprintf(sedF, "s/%s/%s/g\n", mdbObj->obj, decoratedDocId);
 
             mdbObj->obj = decoratedDocId;
             struct mdbVar *fileNameVar = mdbObjFind(mdbObj, "fileName") ;
-            char *fileName = fileNameVar->val;
-            char *suffix = strchr(fileName, '.');
+            //char *fileName = fileNameVar->val;
             char buffer[10 * 1024];
 
-            safef(buffer, sizeof buffer, "%s%s",decoratedDocId,suffix);
-            fileNameVar->val = buffer;
+            safef(buffer, sizeof buffer, "%s.%s",decoratedDocId,suffix);
+            fileNameVar->val = cloneString(buffer);
 
             struct mdbVar *tableNameVar = mdbObjFind(mdbObj, "tableName") ;
-            tableNameVar->val = decoratedDocId;
+            if (tableNameVar != NULL)
+                tableNameVar->val = decoratedDocId;
 
+            if (subPartVar)
+                {
+                if (firstTime)
+                    safef(buffer, sizeof buffer, "%d.%s", subPart, "master");
+                else
+                    safef(buffer, sizeof buffer, "%d.%s", subPart, masterDocId );
+                subPartVar->val = cloneString(buffer);
+                }
             mdbObjPrintToStream(mdbObj, TRUE, metaRaF);
 
+            if (firstTime || !multipleFiles)
+                fprintf(sedF, "s/%s/%s/g\n", oldObjName, decoratedDocId);
             }
+
+        firstTime = FALSE;
         } 
     }
 }
