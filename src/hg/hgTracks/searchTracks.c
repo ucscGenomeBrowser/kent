@@ -175,7 +175,6 @@ static int getFormatTypes(char ***pLabels, char ***pTypes)
 {
 char *crudeTypes[] = {
     ANYLABEL,
-    //"altGraphX",
     "bam",
     "psl",
     "chain",
@@ -192,7 +191,7 @@ char *crudeTypes[] = {
     "bedGraph",
     "bigWig",
     "wig",
-    "wigMaf",
+    "wigMaf"
 };
 // Non-standard:
 // type altGraphX
@@ -212,7 +211,6 @@ char *crudeTypes[] = {
 
 char *nicerTypes[] = {
     ANYLABEL,
-    //"altGraphX",
     "Alignment binary (bam) - binary SAM",
     "Alignment Blast (psl) - Blast output",
     "Alignment Chains (chain) - Pairwise alignment",
@@ -228,8 +226,8 @@ char *nicerTypes[] = {
     "Repeats (rmsk) - Repeat masking",
     "Signal (bedGraph) - graphically represented bed data",
     "Signal (bigWig) - self index, often remote wiggle format",
-    "Signal (wig) - wiggle format"
-    "Signal (wigMaf) - multiple alignment wiggle",
+    "Signal (wig) - wiggle format",
+    "Signal (wigMaf) - multiple alignment wiggle"
 };
 #endif///def TRACK_SEARCH_ON_TYPE
 
@@ -536,12 +534,11 @@ struct slRef *tracks = NULL;
                         {
                         struct track *track = tr->track;
                     #ifdef TRACK_SEARCH_ON_TYPE
-                        char *trackType = cloneFirstWord(track->tdb->type);
+                        char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
                     #endif///def TRACK_SEARCH_ON_TYPE
                         if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains")) &&
                     #ifdef TRACK_SEARCH_ON_TYPE
                            (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb))) &&
-                           //(isEmpty(typeSearch) || sameWord(typeSearch, trackType)) &&
                     #endif///def TRACK_SEARCH_ON_TYPE
                            (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
                           (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
@@ -554,16 +551,13 @@ struct slRef *tracks = NULL;
                             else
                                 warn("found group track is NULL.");
                             }
-                        #ifdef TRACK_SEARCH_ON_TYPE
-                            freeMem(trackType);
-                        #endif///def TRACK_SEARCH_ON_TYPE
                         if (track->subtracks != NULL)
                             {
                             struct track *subTrack;
                             for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                                 {
                             #ifdef TRACK_SEARCH_ON_TYPE
-                                trackType = cloneFirstWord(subTrack->tdb->type);
+                                trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
                             #endif///def TRACK_SEARCH_ON_TYPE
                                 if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains")) &&
                             #ifdef TRACK_SEARCH_ON_TYPE
@@ -582,9 +576,6 @@ struct slRef *tracks = NULL;
                                     else
                                         warn("found subtrack is NULL.");
                                     }
-                            #ifdef TRACK_SEARCH_ON_TYPE
-                                freeMem(trackType);
-                            #endif///def TRACK_SEARCH_ON_TYPE
                                 }
                             }
                         }
@@ -850,6 +841,8 @@ char *currentTab = cartUsualString(cart, TRACK_SEARCH_CURRENT_TAB, "simpleTab");
 char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
 #ifdef TRACK_SEARCH_ON_TYPE
 char *typeSearch = cartOptionalString(cart, TRACK_SEARCH_ON_TYPE);
+#else///ifndef TRACK_SEARCH_ON_TYPE
+char *typeSearch = NULL;
 #endif///def TRACK_SEARCH_ON_TYPE
 char *descSearch;
 char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
@@ -1047,11 +1040,7 @@ if(doSearch)
     if(simpleSearch)
         tracks = simpleSearchForTracksstruct(trix,descWords,descWordCount);
     else
-#ifdef TRACK_SEARCH_ON_TYPE
         tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,numMetadataNonEmpty,numMetadataSelects,mdbVar,mdbVal);
-#else///ifndef TRACK_SEARCH_ON_TYPE
-        tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,NULL,descSearch,groupSearch,numMetadataNonEmpty,numMetadataSelects,mdbVar,mdbVal);
-#endif///ndef TRACK_SEARCH_ON_TYPE
 
     // Sort and Print results
     enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
