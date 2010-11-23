@@ -7182,7 +7182,7 @@ tag ren
 type grant
 description Ren
 grantInst LICR
-project LICR
+projectName LICR (Provisional)
 
 term Hardison
 tag hardison
@@ -7201,7 +7201,7 @@ projectName
 term Giddings
 tag giddings
 type grant
-description Diggings
+description Giddings (Provisional)
 grantInst University of North Carolina
 projectName UNC-Giddings
 
@@ -7413,7 +7413,7 @@ term geoSample
 type typeOfTerm
 label GEO sample accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
-searchable select
+searchable freeText
 cvDefined no
 validate GSM[0-9]*
 
@@ -7429,7 +7429,7 @@ term geoSeries
 type typeOfTerm
 label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
-searchable select
+searchable freeText
 cvDefined no
 validate GSE[0-9]*
 
@@ -7470,7 +7470,7 @@ term labExpId
 type typeOfTerm
 label Lab provided identifier
 description An ID provided by a lab that uniquely identifies an experiment (dataset) to that lab.
-searchable select
+searchable freeText
 cvDefined no
 validate none
 
@@ -7655,7 +7655,7 @@ term subId
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable select
+searchable freeText
 cvDefined no
 validate [0-9]*
 

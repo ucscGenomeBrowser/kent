@@ -15585,6 +15585,909 @@ subId 2901
 tableName wgEncodeBroadHistoneNhaH3k4me3StdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneNhdfadCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3006
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadCtcfStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3006
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadCtcfStdPk
+objType table
+antibody CTCF
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadCtcfStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 3006
+tableName wgEncodeBroadHistoneNhdfadCtcfStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneNhdfadCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadCtcfStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3006
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadCtcfStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3006
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadCtcfStdSig
+objType table
+antibody CTCF
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadCtcfStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 3006
+tableName wgEncodeBroadHistoneNhdfadCtcfStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep1
+objType file
+antibody H3K27ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3007
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep2
+objType file
+antibody H3K27ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3007
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27acStdPk
+objType table
+antibody H3K27ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 3007
+tableName wgEncodeBroadHistoneNhdfadH3k27acStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27acStdRawDataRep1
+objType file
+antibody H3K27ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3007
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27acStdRawDataRep2
+objType file
+antibody H3K27ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3007
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27acStdSig
+objType table
+antibody H3K27ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27acStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 3007
+tableName wgEncodeBroadHistoneNhdfadH3k27acStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep1
+objType file
+antibody H3K27me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3008
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep2
+objType file
+antibody H3K27me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3008
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27me3StdPk
+objType table
+antibody H3K27me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 3008
+tableName wgEncodeBroadHistoneNhdfadH3k27me3StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27me3StdRawDataRep1
+objType file
+antibody H3K27me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3008
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27me3StdRawDataRep2
+objType file
+antibody H3K27me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3008
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k27me3StdSig
+objType table
+antibody H3K27me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k27me3StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 3008
+tableName wgEncodeBroadHistoneNhdfadH3k27me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep1
+objType file
+antibody H3K36me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3009
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep2
+objType file
+antibody H3K36me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3009
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k36me3StdPk
+objType table
+antibody H3K36me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 3009
+tableName wgEncodeBroadHistoneNhdfadH3k36me3StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneNhdfadH3k36me3StdRawDataRep1
+objType file
+antibody H3K36me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3009
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k36me3StdRawDataRep2
+objType file
+antibody H3K36me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3009
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k36me3StdSig
+objType table
+antibody H3K36me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k36me3StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 3009
+tableName wgEncodeBroadHistoneNhdfadH3k36me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep1
+objType file
+antibody H3K4me2
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3010
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep2
+objType file
+antibody H3K4me2
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3010
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me2StdPk
+objType table
+antibody H3K4me2
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 3010
+tableName wgEncodeBroadHistoneNhdfadH3k4me2StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me2StdRawDataRep1
+objType file
+antibody H3K4me2
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3010
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me2StdRawDataRep2
+objType file
+antibody H3K4me2
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3010
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me2StdSig
+objType table
+antibody H3K4me2
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me2StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 3010
+tableName wgEncodeBroadHistoneNhdfadH3k4me2StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3011
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3011
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me3StdPk
+objType table
+antibody H3K4me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 3011
+tableName wgEncodeBroadHistoneNhdfadH3k4me3StdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me3StdRawDataRep1
+objType file
+antibody H3K4me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3011
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me3StdRawDataRep2
+objType file
+antibody H3K4me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3011
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k4me3StdSig
+objType table
+antibody H3K4me3
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k4me3StdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 3011
+tableName wgEncodeBroadHistoneNhdfadH3k4me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep1
+objType file
+antibody H3K9ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep1.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3012
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep2
+objType file
+antibody H3K9ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdAlnRep2.bam
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3012
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhdfadH3k9acStdPk
+objType table
+antibody H3K9ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdPk.broadPeak.gz
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+softwareVersion ScriptureVPaperR3
+subId 3012
+tableName wgEncodeBroadHistoneNhdfadH3k9acStdPk
+view Peaks
+
+metaObject wgEncodeBroadHistoneNhdfadH3k9acStdRawDataRep1
+objType file
+antibody H3K9ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdRawDataRep1.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 3012
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k9acStdRawDataRep2
+objType file
+antibody H3K9ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdRawDataRep2.fastq.gz
+grant Bernstein
+lab Broad
+labVersion Illumina Genome Analyzer IIx
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3012
+view RawData
+
+metaObject wgEncodeBroadHistoneNhdfadH3k9acStdSig
+objType table
+antibody H3K9ac
+cell NHDF-Ad
+composite wgEncodeBroadHistone
+control std
+controlId NHDF-Ad/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-19
+fileName wgEncodeBroadHistoneNhdfadH3k9acStdSig.bigWig
+grant Bernstein
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 3012
+tableName wgEncodeBroadHistoneNhdfadH3k9acStdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneNhekControlStdAlnRep1
 objType file
 antibody Control
@@ -19916,4 +20819,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -409832520
+# MAGIC: 912902475
