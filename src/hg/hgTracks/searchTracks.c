@@ -20,13 +20,6 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-#ifndef TRACK_SEARCH
-void doSearchTracks(struct group *groupList)
-{
-    return;
-}
-#else///ifdef TRACK_SEARCH
-
 #define ANYLABEL                 "Any"
 #define TRACK_SEARCH_FORM        "trackSearch"
 #define SEARCH_RESULTS_FORM      "searchResults"
@@ -35,6 +28,7 @@ void doSearchTracks(struct group *groupList)
 #define TRACK_SEARCH_CURRENT_TAB "tsCurTab"
 #define TRACK_SEARCH_SIMPLE      "tsSimple"
 #define TRACK_SEARCH_ON_NAME     "tsName"
+#define TRACK_SEARCH_ON_TYPE     "tsType"
 #define TRACK_SEARCH_ON_GROUP    "tsGroup"
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
@@ -173,6 +167,82 @@ while((pair = slPopHead(&pairs)) != NULL)
     }
 *pLabels = labels;
 *pTerms = values;
+return count;
+}
+
+#ifdef TRACK_SEARCH_ON_TYPE
+static int getFormatTypes(char ***pLabels, char ***pTypes)
+{
+char *crudeTypes[] = {
+    ANYLABEL,
+    "bam",
+    "psl",
+    "chain",
+    "netAlign",
+    "maf",
+    "bed",
+    "bigBed",
+    "ctgPos",
+    "expRatio",
+    "genePred",
+    "broadPeak",
+    "narrowPeak",
+    "rmsk",
+    "bedGraph",
+    "bigWig",
+    "wig",
+    "wigMaf"
+};
+// Non-standard:
+// type altGraphX
+// type axt
+// type bed5FloatScore
+// type bed5FloatScoreWithFdr
+// type chromGraph
+// type clonePos
+// type coloredExon
+// type encodeFiveC
+// type factorSource
+// type ld2
+// type logo
+// type maf
+// type sample
+// type wigMafProt 0.0 1.0
+
+char *nicerTypes[] = {
+    ANYLABEL,
+    "Alignment binary (bam) - binary SAM",
+    "Alignment Blast (psl) - Blast output",
+    "Alignment Chains (chain) - Pairwise alignment",
+    "Alignment Nets (netAlign) - Net alignments",
+    "Alignments (maf) - multiple alignment format",
+    "bed - browser extensible data",
+    "bigBed - self index, often remote bed format",
+    "ctgPos - Contigs",
+    "expRatio - Expression ratios",
+    "Genes (genePred) - Gene prediction and annotation",
+    "Peaks Broad (broadPeak) - ENCODE large region peak format",
+    "Peaks Narrow (narrowPeak) - ENCODE small region peak format",
+    "Repeats (rmsk) - Repeat masking",
+    "Signal (bedGraph) - graphically represented bed data",
+    "Signal (bigWig) - self index, often remote wiggle format",
+    "Signal (wig) - wiggle format",
+    "Signal (wigMaf) - multiple alignment wiggle"
+};
+#endif///def TRACK_SEARCH_ON_TYPE
+
+int ix = 0, count = sizeof(crudeTypes)/sizeof(char *);
+char **labels;
+char **values;
+AllocArray(labels, count);
+AllocArray(values, count);
+for(ix=0;ix<count;ix++)
+    {
+    labels[ix] = cloneString(nicerTypes[ix]);
+    values[ix] = cloneString(crudeTypes[ix]);
+    }
+*pLabels = labels;
+*pTypes = values;
 return count;
 }
 
@@ -377,14 +447,14 @@ for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; t
 return tracks;
 }
 
-static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList, char **descWords,int descWordCount, char *nameSearch, char *descSearch, char *groupSearch,
+static struct slRef *advancedSearchForTracks(struct sqlConnection *conn,struct group *groupList, char **descWords,int descWordCount, char *nameSearch, char *typeSearch, char *descSearch, char *groupSearch,
                                              int numMetadataNonEmpty,int numMetadataSelects,char **mdbVar,char **mdbVal)
 // Performs the advanced search and returns the found tracks.
 {
 int tracksFound = 0;
 struct slRef *tracks = NULL;
 
-    if(!isEmpty(nameSearch) || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty)
+    if(!isEmpty(nameSearch) || typeSearch != NULL || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty)
         {
         // First do the metaDb searches, which can be done quickly for all tracks with db queries.
         struct hash *matchingTracks = newHash(0);
@@ -463,7 +533,13 @@ struct slRef *tracks = NULL;
                     for (tr = group->trackList; tr != NULL; tr = tr->next)
                         {
                         struct track *track = tr->track;
+                    #ifdef TRACK_SEARCH_ON_TYPE
+                        char *trackType = cloneFirstWord(track->tdb->type); // will be spilled
+                    #endif///def TRACK_SEARCH_ON_TYPE
                         if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains")) &&
+                    #ifdef TRACK_SEARCH_ON_TYPE
+                           (isEmpty(typeSearch) || (sameWord(typeSearch, trackType) && !tdbIsComposite(track->tdb))) &&
+                    #endif///def TRACK_SEARCH_ON_TYPE
                            (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
                           (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                             {
@@ -480,7 +556,13 @@ struct slRef *tracks = NULL;
                             struct track *subTrack;
                             for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                                 {
+                            #ifdef TRACK_SEARCH_ON_TYPE
+                                trackType = cloneFirstWord(subTrack->tdb->type); // will be spilled
+                            #endif///def TRACK_SEARCH_ON_TYPE
                                 if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains")) &&
+                            #ifdef TRACK_SEARCH_ON_TYPE
+                                   (isEmpty(typeSearch) || sameWord(typeSearch, trackType)) &&
+                            #endif///def TRACK_SEARCH_ON_TYPE
                                    (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount)) &&
                                    (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
                                     {
@@ -757,6 +839,11 @@ groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
 char *currentTab = cartUsualString(cart, TRACK_SEARCH_CURRENT_TAB, "simpleTab");
 char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
+#ifdef TRACK_SEARCH_ON_TYPE
+char *typeSearch = cartOptionalString(cart, TRACK_SEARCH_ON_TYPE);
+#else///ifndef TRACK_SEARCH_ON_TYPE
+char *typeSearch = NULL;
+#endif///def TRACK_SEARCH_ON_TYPE
 char *descSearch;
 char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
 boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
@@ -783,6 +870,9 @@ if(sameString(currentTab, "simpleTab"))
     descSearch = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
     simpleSearch = TRUE;
     freez(&nameSearch);
+#ifdef TRACK_SEARCH_ON_TYPE
+    freez(&typeSearch);
+#endif///def TRACK_SEARCH_ON_TYPE
     freez(&groupSearch);
     }
 else
@@ -886,6 +976,21 @@ hPrintf("</td></tr>\n");
 if (!simpleSearch && groupSearch)
     searchTermsExist = TRUE;
 
+#ifdef TRACK_SEARCH_ON_TYPE
+// Track Type is (drop down)
+hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
+hPrintf("<td nowrap><b style='max-width:100px;'>Data Format:</b></td>");
+hPrintf("<td align='right'>is</td>\n");
+hPrintf("<td colspan='%d'>", cols - 4);
+char **formatTypes = NULL;
+char **formatLabels = NULL;
+int formatCount = getFormatTypes(&formatLabels, &formatTypes);
+cgiMakeDropListFull(TRACK_SEARCH_ON_TYPE, formatLabels, formatTypes, formatCount, typeSearch, "class='typeSearch' style='min-width:40%; font-size:.9em;'");
+hPrintf("</td></tr>\n");
+if (!simpleSearch && typeSearch)
+    searchTermsExist = TRUE;
+#endif///def TRACK_SEARCH_ON_TYPE
+
 // Metadata selects require careful accounting
 if(metaDbExists)
     numMetadataSelects = printMdbSelects(conn, cart, simpleSearch, &mdbVar, &mdbVal, &numMetadataNonEmpty, cols);
@@ -906,6 +1011,8 @@ if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
 if(groupSearch != NULL && sameString(groupSearch, ANYLABEL))
     groupSearch = NULL;
+if(typeSearch != NULL && sameString(typeSearch, ANYLABEL))
+    typeSearch = NULL;
 
 if(!isEmpty(descSearch))
     {
@@ -933,7 +1040,7 @@ if(doSearch)
     if(simpleSearch)
         tracks = simpleSearchForTracksstruct(trix,descWords,descWordCount);
     else
-        tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,descSearch,groupSearch,numMetadataNonEmpty,numMetadataSelects,mdbVar,mdbVal);
+        tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,typeSearch,descSearch,groupSearch,numMetadataNonEmpty,numMetadataSelects,mdbVar,mdbVal);
 
     // Sort and Print results
     enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
@@ -958,4 +1065,3 @@ hPrintf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more 
 
 webEndSectionTables();
 }
-#endif///def TRACK_SEARCH
