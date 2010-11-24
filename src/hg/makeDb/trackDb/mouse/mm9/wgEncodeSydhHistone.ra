@@ -6,7 +6,7 @@ track wgEncodeSydhHist
 release alpha
 compositeTrack on
 shortLabel Stan/Yale Histone
-longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale
+longLabel Histone Modifications by ChIP-seq from ENCODE Stanford/Yale
 group regulation
 priority 0
 type bed 3
@@ -17,7 +17,7 @@ subGroup2 cellType Cell_Line CH12=CH12  MEL=MEL
 subGroup3 factor Factor H3K4me3=H3K4me3 zInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGYale=IgG-Yale
 subGroup5 treatment Treatment None=None DMSO20=DMSO_2.0pct
-dimensions dimensionX=cellType dimensionY=factor 
+dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ view=+ treatment=+ 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
