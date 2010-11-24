@@ -243,14 +243,14 @@ if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
 printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, showLongLabel?"true":"false", title);
+        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", title);
 if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
     {
-    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->table,
+    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track,
         metadataAsHtmlTable(db,tdb,showLongLabel,TRUE,trackHash) );
     }
 else
-    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->table);
+    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->track);
 return TRUE;
 }
 
