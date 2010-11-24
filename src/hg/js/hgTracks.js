@@ -1990,7 +1990,7 @@ function handleTrackUi(response, status)
 
     // make sure all links (e.g. help links) open up in a new window
     response = response.replace(/<a /ig, "<a target='_blank' ");
-    
+
     $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
@@ -2475,6 +2475,7 @@ function findTracksClear()
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
     $('select.groupSearch').attr('selectedIndex',0);
+    $('select.typeSearch').attr('selectedIndex',0);
     //findTracksSearchButtonsEnable(false);
     return false;
 }
