@@ -23,6 +23,7 @@ char *database = "encpipeline_prod";
 extern char *docIdTable;
 //char *docIdDir = "/hive/groups/encode/dcc/pipeline/downloads/docId";
 char *docIdDir = "http://hgdownload-test.cse.ucsc.edu/goldenPath/docId";
+char *docIdDirBeta = "http://hgdownload-test.cse.ucsc.edu/goldenPath/betaDocId";
 
 void doStandard(struct cart *theCart)
 {
@@ -72,11 +73,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     unlink(tempFile);
 
     char *docIdType = mdbObjFindValue(mdbObj, "type");
+    char *docIdComposite = mdbObjFindValue(mdbObj, "composite");
     char buffer[10 * 1024];
     safef(buffer, sizeof buffer, "%d", docIdSub->ix);
+    if (sameString(database, "encpipeline_beta"))
+        docIdDir = docIdDirBeta;
     printf("<tr><td><a href=%s> %s</a></td>", 
         docIdGetPath(buffer, docIdDir, docIdType, NULL) , 
-        docIdDecorate(docIdSub->ix));
+        docIdDecorate(docIdComposite,docIdSub->ix));
     printf("<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>",   mdbObjFindValue(mdbObj, "assembly"),mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
     printf("<td><a href=docIdMetaShow?docId=%s&db=%s&meta=""> metadata</a></td>", buffer, database);
     printf("<td> %s</td>", docIdSub->valVersion);
@@ -93,7 +97,7 @@ cartWebEnd();
 void doDocIdMeta(struct cart *theCart)
 {
 char *docId = cartString(theCart, "docId");
-cartWebStart(cart, database, "ENCODE DCC:  Metadata for submission %s",docId);
+cartWebStart(cart, database, "ENCODE DCC:  Metadata for docId %s",docId);
 struct sqlConnection *conn = sqlConnect(database);
 char query[10 * 1024];
 struct sqlResult *sr;
@@ -146,7 +150,7 @@ cartWebEnd();
 void doDocIdReport(struct cart *theCart)
 {
 char *docId = cartString(theCart, "docId");
-cartWebStart(cart, database, "ENCODE DCC:  Validation report for submission %s",docId);
+cartWebStart(cart, database, "ENCODE DCC:  Validation report for docId %s",docId);
 struct sqlConnection *conn = sqlConnect(database);
 char query[10 * 1024];
 struct sqlResult *sr;
