@@ -278,7 +278,19 @@ if(schemaLink)
     }
 if(downloadLink)
     {
-    makeNamedDownloadsLink(db, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    // special case exception (hg18:NHGRI BiPs are in 7 different dbs but only hg18 has downloads):
+    char *targetDb = trackDbSetting(tdb, "compareGenomeLinks");
+    if (targetDb != NULL)
+        {
+        targetDb = cloneFirstWordByDelimiter(targetDb,'=');
+        if (!startsWith("hg",targetDb))
+            freez(&targetDb);
+        }
+    if (targetDb == NULL)
+        targetDb = cloneString(db);
+
+    makeNamedDownloadsLink(targetDb, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    freez(&targetDb);
     if(metadataLink)
         printf(",");
     }
