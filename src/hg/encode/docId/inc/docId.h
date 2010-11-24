@@ -67,7 +67,7 @@ void docIdSubOutput(struct docIdSub *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *docIdDecorate(int num);
+char *docIdDecorate(char *composite, int num);
 
 char *docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
     char *docIdDir, char *type);

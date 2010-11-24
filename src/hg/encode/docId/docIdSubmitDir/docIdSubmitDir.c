@@ -59,6 +59,7 @@ mdbVar->varType = vtTxt;
 mdbVar->val     = cloneString(val);
 hashAdd(mdbObj->varHash, mdbVar->var, mdbVar); // pointer to struct to resolve type
 slAddHead(&(mdbObj->vars),mdbVar);
+//verbose(2, "added %s to obj %s\n", mdbVar->var, mdbObj->obj);
 
 return mdbVar;
 }
@@ -80,9 +81,6 @@ return mdbVar;
 
 char *getReportVersion(char *blob)
 {
-if (blob == NULL)
-    errAbort("no report blob");
-
 char *start = strchr(blob, '+');
 if (start == NULL)
     errAbort("no plus in report blob");
@@ -111,12 +109,18 @@ struct hash *loadHash =  raReadAll(loadRa, "tablename");
 struct hashCookie cook = hashFirst(loadHash);
 struct hashEl *hel;
 struct hash *mapHash = newHash(5);
+struct hash *fileHash = newHash(5);
 
 while((hel = hashNext(&cook)) != NULL)
     {
     struct hash *blockHash = hel->val;
     struct mdbObj *mdbObj = findMetaObject(mdbObjs, hel->name);
     hashAdd(mapHash, mdbObj->obj, blockHash);
+
+    char *fileVal = hashMustFindVal(blockHash, "files");
+    if (hashLookup(fileHash, fileVal))
+        errAbort("more than one load stanza uses the same files value");
+    hashStore(fileHash, fileVal);
 
     struct mdbVar *mdbVar = addVar(mdbObj, blockHash, "files", "submitPath");
     char *files = mdbVar->val; 
@@ -242,7 +246,7 @@ for(; mdbObj; mdbObj = nextObj)
     char *type = mdbObjFindValue(mdbObj, "type") ;
     struct mdbVar *submitPathVar = mdbObjFind(mdbObj, "submitPath") ;
     if (submitPathVar == NULL)
-        errAbort("object doesn't have submitPath");
+        errAbort("object %s doesn't have submitPath", mdbObj->obj);
     char *submitPath = cloneString(submitPathVar->val);
     char *space = strchr(submitPath, ' ');
     struct mdbVar * subPartVar = NULL;
@@ -297,10 +301,16 @@ for(; mdbObj; mdbObj = nextObj)
 
         safef(buffer, sizeof buffer, "%s.report", file);
         docIdSub.valReport = readBlob(buffer);	
-        docIdSub.valVersion = getReportVersion(docIdSub.valReport);
+        if (docIdSub.valReport == NULL)
+            warn("no report blob for object %s", oldObjName);
+        else
+            docIdSub.valVersion = getReportVersion(docIdSub.valReport);
 
         char *docId = docIdSubmit(conn, &docIdSub, docIdDir, type);
-        char *decoratedDocId = docIdDecorate(atoi(docId));
+        char *composite = mdbObjFindValue(mdbObj, "composite");
+        if (composite == NULL)
+            errAbort("could not find composite name in metadata");
+        char *decoratedDocId = docIdDecorate(composite, atoi(docId));
 
         if (firstTime)
             addMdbTxtVar(mdbObj, "docId", decoratedDocId);
