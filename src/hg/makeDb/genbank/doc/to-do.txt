@@ -1197,3 +1197,7 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - problematic NR alignment filtering do to repeat masking.  Poor alignments
   chosen NR_031679 NR_031644 NR_030317.  
+
+- hg19 NM_001001432 block 3 11 base exon is misaligned generating
+  an invalid introns due to duplication of the exon.  NM_000364 gets it
+  right due to being constrained by other exons.
