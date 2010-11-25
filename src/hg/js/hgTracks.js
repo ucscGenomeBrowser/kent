@@ -2328,6 +2328,8 @@ function findTracksChangeVis(seenVis)
             $(hiddenVis).val("hide");
     }
     $(hiddenVis).attr('disabled',false);
+
+    $('input.viewBtn').val('View in Browser');
     //warn("Changed "+trackName+" to "+$(hiddenVis).val())
 }
 
@@ -2341,7 +2343,7 @@ function findTracksClickedOne(selCb,justClicked)
     var tr = $(selCb).parents('tr.found');
     var tdb = tdbGetJsonRecord(trackName);
     var needSel = (tdb.parentTrack != undefined);
-    var shouldPack = tdb.canPack;
+    var shouldPack = tdb.canPack && tdb.kindOfParent == 0; // If parent then not pack but full
     if (shouldPack && tdb.shouldPack != undefined && !tdb.shouldPack)
         shouldPack = false;
     var checked = $(selCb).attr('checked');
@@ -2351,10 +2353,8 @@ function findTracksClickedOne(selCb,justClicked)
     if(checked) {
         $(seenVis).attr('disabled', false);
         if($(seenVis).attr('selectedIndex') == 0) {
-            if(tdbIsFolder(tdb))
-                $(seenVis).attr('selectedIndex',1);  // show
-            else if(shouldPack)
-                $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
+            if(shouldPack)
+                $(seenVis).attr('selectedIndex',3);  // packed
             else
                 $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
         }
@@ -2447,18 +2447,8 @@ function findTracksSearchButtonsEnable(enable)
     }
 }
 
-function findTracksViewButtoneText()
-{ // Update View in Browser buttn text
-    var inputs = $('table#foundTracks').find('input:hidden:enabled');  // Doesn't work!!!
-    if( $(inputs).length == 0)
-        $('input.viewBtn').val('return to browser');
-    else
-        $('input.viewBtn').val('view in browser');
-}
-
 function findTracksCounts()
 {// Displays visible and checked track count
-    //findTracksViewButtoneText();   // Doesn't work!!!
     var counter = $('.selCbCount');
     if(counter != undefined) {
         var selCbs =  $("input.selCb");
