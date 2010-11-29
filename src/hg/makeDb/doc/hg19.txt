@@ -10224,7 +10224,7 @@ EOF
 
 
 #############################################################################
-# AFFY U133Plus2 (DONE 2010-10-04 Chin)
+# AFFY U133Plus2 (DONE 2010-10-04 Chin) (Removed prefixes 2010-11-29 galt)
     # Align probes 
     ssh swarm
     cd /hive/data/genomes/hg19/bed
@@ -10265,10 +10265,12 @@ EOF
     # Load probes and alignments into database.
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/affyProbes/affyU133Plus2
-    #perl -pi.bak -e "s/U133\+2://" affyU133Plus2.psl
+
+    # remove prefix
+    perl -pi.bak -e "s/U133\+2://" affyU133Plus2.psl
     hgLoadPsl hg19 affyU133Plus2.psl
-    #hgLoadSeq -abbr=U133+2: hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
-    hgLoadSeq  hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    hgLoadSeq -abbr=U133+2: hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+         # note: re-ran the -replace was used with hgLoadSeq
     #   Creating seq.tab file
     #   Adding /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     #   54613 sequences
@@ -10283,7 +10285,7 @@ EOF
 
 
 #############################################################################
-# AFFY U95 (DONE 2010-10-07 Chin)
+# AFFY U95 (DONE 2010-10-07 Chin)  (Removed prefixes 2010-11-29 galt)
     # Align probes 
     ssh swarm
     cd /hive/data/genomes/hg19/bed
@@ -10325,8 +10327,12 @@ EOF
     # Load probes and alignments into database.
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/affyProbes/affyU95
+
+    # remove prefix
+    perl -pi.bak -e "s/U95Av2://" affyU95.psl
     hgLoadPsl hg19 affyU95.psl
-    hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    hgLoadSeq -abbr=U95Av2: hg19 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+         # note: re-ran the -replace was used with hgLoadSeq
     #   Creating seq.tab file
     #   Adding /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
     #   12386 sequences
