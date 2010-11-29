@@ -533,7 +533,7 @@ int cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boo
 /* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
    If suffix NULL then removes 'trackName' which holds visibility */
 
-boolean cartTdbTreeMatchSubtrackVis(struct cart *cart,struct trackDb *tdbComposite);
+boolean cartTdbTreeReshapeIfNeeded(struct cart *cart,struct trackDb *tdbComposite);
 /* When subtrack vis is set via findTracks, and composite has no cart settings,
    then fashion composite to match found */
 

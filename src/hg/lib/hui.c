@@ -171,9 +171,7 @@ if(showShortLabel)
     dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
-//#ifdef OMIT
 struct hash *cvTermTypes = mdbCvTermTypeHash();
-//#endif///def OMIT
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
@@ -195,7 +193,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         // If antibody and metadata contains input={sameValue} then just print input
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
-//#ifdef OMIT
+
         if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
             {
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
@@ -228,7 +226,6 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     }
                 }
             }
-//#endif///def OMIT
         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
@@ -246,14 +243,14 @@ if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
 printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, showLongLabel?"true":"false", title);
+        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", title);
 if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
     {
-    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->table,
+    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track,
         metadataAsHtmlTable(db,tdb,showLongLabel,TRUE,trackHash) );
     }
 else
-    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->table);
+    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->track);
 return TRUE;
 }
 
@@ -281,7 +278,19 @@ if(schemaLink)
     }
 if(downloadLink)
     {
-    makeNamedDownloadsLink(db, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    // special case exception (hg18:NHGRI BiPs are in 7 different dbs but only hg18 has downloads):
+    char *targetDb = trackDbSetting(tdb, "compareGenomeLinks");
+    if (targetDb != NULL)
+        {
+        targetDb = cloneFirstWordByDelimiter(targetDb,'=');
+        if (!startsWith("hg",targetDb))
+            freez(&targetDb);
+        }
+    if (targetDb == NULL)
+        targetDb = cloneString(db);
+
+    makeNamedDownloadsLink(targetDb, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    freez(&targetDb);
     if(metadataLink)
         printf(",");
     }

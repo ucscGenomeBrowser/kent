@@ -4266,7 +4266,7 @@ for (;track != NULL; track = track->next)
 
     if (tdbIsContainer(track->tdb))
         {
-        shapedByubtrackOverride = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
+        shapedByubtrackOverride = cartTdbTreeReshapeIfNeeded(cart,track->tdb);
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
@@ -4679,13 +4679,11 @@ if (!hideControls)
 
     /* Display bottom control panel. */
 
-#ifdef TRACK_SEARCH
     if(isSearchTracksSupported(database,cart))
         {
         cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
         hPrintf(" ");
         }
-#endif///def TRACK_SEARCH
     hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
 	hPrintf("&nbsp;");
     hButtonWithMsg("hgt.defaultImgOrder", "default order","Display current tracks in their default order");
@@ -5558,7 +5556,6 @@ jsIncludeFile("lowetooltip.js", NULL);
 
 if(advancedJavascriptFeaturesEnabled(cart))
     {
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 webIncludeResourceFile("jquery.contextmenu.css");
 webIncludeResourceFile("jquery-ui.css");
 #ifdef CONTEXT_MENU
@@ -5573,7 +5570,6 @@ hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");
@@ -5636,12 +5632,10 @@ else if (cartVarExists(cart, configShowEncodeGroups))
             collapseGroup(grp->name, FALSE);
     configPageSetTrackVis(-2);
     }
-#ifdef TRACK_SEARCH
 else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
     {
     doSearchTracks(groupList);
     }
-#endif///def TRACK_SEARCH
 else
     {
     tracksDisplay();
