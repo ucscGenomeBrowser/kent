@@ -3548,7 +3548,6 @@ description pseudogene
 # lab (lab that first asked for this antibody(
 # validation (either missing or the name of a validation document in a format to be documented by Venkat)
 # lots (optional lot numbers)
-Va
 term AP-2alpha
 tag AP2alpha
 type Antibody
