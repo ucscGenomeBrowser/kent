@@ -1,12 +1,16 @@
 # Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler:vsmalladi assited by Cricket)
 # Notes:
-#	-Short Labels: 4 characters cell type,(1 Character is for a treatment), 7 chracters Factor. 2 characters View (Ok or Sg)
-#	- Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human all Peaks and Signals excluding Inputs
+# - Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human all Peaks and Signals excluding Inputs will be turned on
+# -Dimensions:
+#		X - Cell Line
+#		Y - Factor
+#		Z - Treatment
+
 track wgEncodeSydhHist
 release alpha
 compositeTrack on
 shortLabel Stan/Yale Histone
-longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale
+longLabel Histone Modifications by ChIP-seq from ENCODE Stanford/Yale
 group regulation
 priority 0
 type bed 3
@@ -17,7 +21,8 @@ subGroup2 cellType Cell_Line CH12=CH12  MEL=MEL
 subGroup3 factor Factor H3K4me3=H3K4me3 zInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGYale=IgG-Yale
 subGroup5 treatment Treatment None=None DMSO20=DMSO_2.0pct
-dimensions dimensionX=cellType dimensionY=factor 
+dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
+dimensionZchecked None,DMSO20
 sortOrder cellType=+ factor=+ view=+ treatment=+ 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
@@ -104,7 +109,7 @@ wgEncode 1
 		#### Submission 1168 ####
     		track wgEncodeSydhHistMelInputIggyaleSig
     		release alpha
-    		subTrack wgEncodeSydhHistViewSig 
+    		subTrack wgEncodeSydhHistViewSig off
     		shortLabel MEL  IgGYale   Sg 
     		longLabel ENCODE Histone Mods by ChIP-seq Stanford/Yale Signal (Input in MEL cells)
     		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=None
@@ -126,7 +131,7 @@ wgEncode 1
 		#### Submission 1195 #####
 		track wgEncodeSydhHistCh12InputIggyaleSig
 		release alpha
-    		subTrack wgEncodeSydhHistViewSig 
+    		subTrack wgEncodeSydhHistViewSig off 
     		shortLabel CH12 IgGYale   Sg
     		longLabel ENCODE Histone Mods by ChIP-seq Stanford/Yale Signal (Input in CH12 cells)
     		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=None

@@ -1,3 +1,49 @@
+metaObject wgEncodeSydhTfbsGm10847IggmusRawDataRep1
+objType file
+antibody Input
+cell GM10847
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM10847/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm10847IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 861
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm10847IggmusRawDataRep2
+objType file
+antibody Input
+cell GM10847
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM10847/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm10847IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 861
+treatment None
+view RawData
+
 metaObject wgEncodeSydhTfbsGm10847InputIggmusAlnRep1
 objType file
 antibody Input
@@ -141,52 +187,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1108
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm10847MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM10847
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM10847/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm10847MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 861
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm10847MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM10847
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM10847/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm10847MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 861
 treatment None
 view RawData
 
@@ -455,7 +455,7 @@ subId 1366
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm10847Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm10847Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM10847
@@ -466,7 +466,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm10847Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm10847Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM10847_IgG_Control.
@@ -478,7 +478,7 @@ subId 862
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm10847Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm10847Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM10847
@@ -489,7 +489,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm10847Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm10847Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM10847_IgG_Control.
@@ -773,6 +773,52 @@ setType exp
 subId 1389
 treatment None
 view Alignments
+
+metaObject wgEncodeSydhTfbsGm12878IggmusRawDataRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm12878IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 956
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12878IggmusRawDataRep2
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm12878IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 956
+treatment None
+view RawData
 
 metaObject wgEncodeSydhTfbsGm12878InputIggmusAlnRep1
 objType file
@@ -1283,52 +1329,6 @@ setType exp
 subId 1378
 treatment None
 view Alignments
-
-metaObject wgEncodeSydhTfbsGm12878MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM12878/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 956
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM12878/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 956
-treatment None
-view RawData
 
 metaObject wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep1
 objType file
@@ -2153,7 +2153,7 @@ subId 1394
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM12878
@@ -2164,7 +2164,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -2176,7 +2176,7 @@ subId 957
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM12878
@@ -2187,7 +2187,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -2199,7 +2199,7 @@ subId 957
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep4
+metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep4
 objType file
 antibody Pol2
 cell GM12878
@@ -2210,7 +2210,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -2222,7 +2222,7 @@ subId 957
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep5
+metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep5
 objType file
 antibody Pol2
 cell GM12878
@@ -2233,7 +2233,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep5.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep5.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12878_IgG_Control.
@@ -2245,7 +2245,7 @@ subId 957
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep6
+metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep6
 objType file
 antibody Pol2
 cell GM12878
@@ -2256,7 +2256,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep6.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep6.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -2268,7 +2268,7 @@ subId 957
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep7
+metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep7
 objType file
 antibody Pol2
 cell GM12878
@@ -2279,7 +2279,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2MusiggRawDataRep7.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep7.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -2313,7 +2313,7 @@ subId 92
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12878Pol2RawDataRep1Musigg
+metaObject wgEncodeSydhTfbsGm12878Pol2RawDataRep1Iggmus
 objType file
 antibody Pol2
 cell GM12878
@@ -2324,7 +2324,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep1Musigg.fastq.gz
+fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep1Iggmus.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -3674,6 +3674,50 @@ subId 1341
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsGm12891IggmusRawDataRep1
+objType file
+antibody Input
+cell GM12891
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12891/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm12891IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 863
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12891IggmusRawDataRep2
+objType file
+antibody Input
+cell GM12891
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12891/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm12891IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 863
+treatment None
+view RawData
+
 metaObject wgEncodeSydhTfbsGm12891InputIggmusAlnRep1
 objType file
 antibody Input
@@ -3815,50 +3859,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1111
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12891MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM12891
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM12891/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 863
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12891MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM12891
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM12891/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 863
 treatment None
 view RawData
 
@@ -4156,7 +4156,7 @@ subId 1394
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM12891
@@ -4167,7 +4167,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -4179,7 +4179,7 @@ subId 865
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM12891
@@ -4190,7 +4190,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -4202,7 +4202,7 @@ subId 865
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM12891
@@ -4213,7 +4213,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -4225,7 +4225,7 @@ subId 865
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep4
+metaObject wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep4
 objType file
 antibody Pol2
 cell GM12891
@@ -4236,7 +4236,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -4248,7 +4248,7 @@ subId 865
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep5
+metaObject wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep5
 objType file
 antibody Pol2
 cell GM12891
@@ -4259,7 +4259,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep5.fastq.gz
+fileName wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep5.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -4271,7 +4271,7 @@ subId 865
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep6
+metaObject wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep6
 objType file
 antibody Pol2
 cell GM12891
@@ -4282,7 +4282,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12891Pol2MusiggRawDataRep6.fastq.gz
+fileName wgEncodeSydhTfbsGm12891Pol2IggmusRawDataRep6.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with GM12891_IgG_Control.
@@ -4291,6 +4291,52 @@ project wgEncode
 replicate 6
 setType exp
 subId 865
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12892IggmusRawDataRep1
+objType file
+antibody Input
+cell GM12892
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12892/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm12892IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 959
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm12892IggmusRawDataRep2
+objType file
+antibody Input
+cell GM12892
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12892/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm12892IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 959
 treatment None
 view RawData
 
@@ -4437,52 +4483,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1110
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12892MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM12892
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM12892/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12892MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 959
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12892MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM12892
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM12892/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12892MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 959
 treatment None
 view RawData
 
@@ -4705,7 +4705,7 @@ subId 1389
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm12892Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm12892Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM12892
@@ -4716,7 +4716,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm12892Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm12892Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12892_IgG_Control.
@@ -4728,7 +4728,7 @@ subId 1008
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12892Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm12892Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM12892
@@ -4739,7 +4739,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm12892Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm12892Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12892_IgG_Control.
@@ -4751,7 +4751,7 @@ subId 1008
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm12892Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm12892Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM12892
@@ -4762,7 +4762,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm12892Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm12892Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12892_IgG_Control.
@@ -4771,6 +4771,52 @@ project wgEncode
 replicate 3
 setType exp
 subId 1008
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm15510IggmusRawDataRep1
+objType file
+antibody Input
+cell GM15510
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM15510/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm15510IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 996
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm15510IggmusRawDataRep2
+objType file
+antibody Input
+cell GM15510
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM15510/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm15510IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 996
 treatment None
 view RawData
 
@@ -4917,52 +4963,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1112
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm15510MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM15510
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM15510/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm15510MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 996
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm15510MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM15510
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM15510/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm15510MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 996
 treatment None
 view RawData
 
@@ -5281,7 +5281,7 @@ subId 1389
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm15510Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm15510Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM15510
@@ -5292,7 +5292,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm15510Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm15510Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM15510_IgG_Control.
@@ -5304,7 +5304,7 @@ subId 997
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm15510Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM15510
@@ -5315,7 +5315,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm15510Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm15510Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM15510_IgG_Control.
@@ -5327,7 +5327,7 @@ subId 997
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm15510Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm15510Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM15510
@@ -5338,7 +5338,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm15510Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm15510Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM15510_IgG_Control.
@@ -5347,6 +5347,52 @@ project wgEncode
 replicate 3
 setType exp
 subId 997
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm18505IggmusRawDataRep1
+objType file
+antibody Input
+cell GM18505
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM18505/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeSydhTfbsGm18505IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1020
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm18505IggmusRawDataRep2
+objType file
+antibody Input
+cell GM18505
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM18505/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeSydhTfbsGm18505IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1020
 treatment None
 view RawData
 
@@ -5493,52 +5539,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1113
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm18505MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM18505
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM18505/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18505MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1020
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm18505MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM18505
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM18505/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18505MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1020
 treatment None
 view RawData
 
@@ -5882,7 +5882,7 @@ subId 1393
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM18505
@@ -5893,7 +5893,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
@@ -5905,7 +5905,7 @@ subId 1016
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM18505
@@ -5916,7 +5916,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
@@ -5928,7 +5928,7 @@ subId 1016
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM18505
@@ -5939,7 +5939,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
@@ -5951,7 +5951,7 @@ subId 1016
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep4
+metaObject wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep4
 objType file
 antibody Pol2
 cell GM18505
@@ -5962,7 +5962,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18505Pol2MusiggRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm18505Pol2IggmusRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
@@ -5971,6 +5971,75 @@ project wgEncode
 replicate 4
 setType exp
 subId 1016
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm18526IggmusRawDataRep1
+objType file
+antibody Input
+cell GM18526
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM18526/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeSydhTfbsGm18526IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1025
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm18526IggmusRawDataRep2
+objType file
+antibody Input
+cell GM18526
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM18526/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeSydhTfbsGm18526IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1025
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm18526IggmusRawDataRep3
+objType file
+antibody Input
+cell GM18526
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM18526/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeSydhTfbsGm18526IggmusRawDataRep3.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 3
+setType input
+subId 1025
 treatment None
 view RawData
 
@@ -6142,75 +6211,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1114
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm18526MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM18526
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM18526/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18526MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1025
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm18526MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM18526
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM18526/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18526MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1025
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm18526MusiggMusiggRawDataRep3
-objType file
-antibody Input
-cell GM18526
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM18526/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18526MusiggMusiggRawDataRep3.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 3
-setType input
-subId 1025
 treatment None
 view RawData
 
@@ -6432,7 +6432,7 @@ subId 1390
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18526Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm18526Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM18526
@@ -6443,7 +6443,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18526Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18526Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -6455,7 +6455,7 @@ subId 1024
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18526Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm18526Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM18526
@@ -6466,7 +6466,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18526Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18526Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -6478,7 +6478,7 @@ subId 1024
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18526Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm18526Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM18526
@@ -6489,7 +6489,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18526Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm18526Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
@@ -6498,6 +6498,29 @@ project wgEncode
 replicate 3
 setType exp
 subId 1024
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm18951IggmusRawDataRep1
+objType file
+antibody Input
+cell GM18951
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM18951/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeSydhTfbsGm18951IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1044
 treatment None
 view RawData
 
@@ -6618,29 +6641,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1115
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm18951MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM18951
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM18951/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18951MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1044
 treatment None
 view RawData
 
@@ -6934,7 +6934,7 @@ subId 1393
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM18951
@@ -6945,7 +6945,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.
@@ -6957,7 +6957,7 @@ subId 1029
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM18951
@@ -6968,7 +6968,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.
@@ -6980,7 +6980,7 @@ subId 1029
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM18951
@@ -6991,7 +6991,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.
@@ -7003,7 +7003,7 @@ subId 1029
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep4
+metaObject wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep4
 objType file
 antibody Pol2
 cell GM18951
@@ -7014,7 +7014,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm18951Pol2MusiggRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm18951Pol2IggmusRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.
@@ -7023,6 +7023,52 @@ project wgEncode
 replicate 4
 setType exp
 subId 1029
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm19099IggmusRawDataRep1
+objType file
+antibody Input
+cell GM19099
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM19099/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeSydhTfbsGm19099IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1045
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm19099IggmusRawDataRep2
+objType file
+antibody Input
+cell GM19099
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM19099/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeSydhTfbsGm19099IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1045
 treatment None
 view RawData
 
@@ -7167,52 +7213,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1116
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm19099MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM19099
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM19099/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19099MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1045
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm19099MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM19099
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM19099/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19099MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1045
 treatment None
 view RawData
 
@@ -7433,7 +7433,7 @@ subId 1390
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19099Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm19099Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM19099
@@ -7444,7 +7444,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm19099Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm19099Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion llumina 2.0, low confidence sequences excluded.  Data paired with GM19099_IgG_Control.
@@ -7456,7 +7456,7 @@ subId 1046
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19099Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm19099Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM19099
@@ -7467,7 +7467,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm19099Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm19099Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion llumina 2.0, low confidence sequences excluded.  Data paired with GM19099_IgG_Control.
@@ -7479,7 +7479,7 @@ subId 1046
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19099Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm19099Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM19099
@@ -7490,7 +7490,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeSydhTfbsGm19099Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm19099Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion llumina 2.0, low confidence sequences excluded.  Data paired with GM19099_IgG_Control.
@@ -7499,6 +7499,52 @@ project wgEncode
 replicate 3
 setType exp
 subId 1046
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm19193IggmusRawDataRep1
+objType file
+antibody Input
+cell GM19193
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM19193/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeSydhTfbsGm19193IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1047
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsGm19193IggmusRawDataRep2
+objType file
+antibody Input
+cell GM19193
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM19193/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeSydhTfbsGm19193IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 1047
 treatment None
 view RawData
 
@@ -7643,52 +7689,6 @@ project wgEncode
 replicate 2
 setType input
 subId 1117
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm19193MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell GM19193
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM19193/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19193MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1047
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm19193MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell GM19193
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM19193/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-14
-dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19193MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 1047
 treatment None
 view RawData
 
@@ -7936,7 +7936,7 @@ subId 1393
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep1
 objType file
 antibody Pol2
 cell GM19193
@@ -7947,7 +7947,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
@@ -7959,7 +7959,7 @@ subId 1048
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
 cell GM19193
@@ -7970,7 +7970,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
@@ -7982,7 +7982,7 @@ subId 1048
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep3
 objType file
 antibody Pol2
 cell GM19193
@@ -7993,7 +7993,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
@@ -8005,7 +8005,7 @@ subId 1048
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep4
+metaObject wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep4
 objType file
 antibody Pol2
 cell GM19193
@@ -8016,7 +8016,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeSydhTfbsGm19193Pol2MusiggRawDataRep4.fastq.gz
+fileName wgEncodeSydhTfbsGm19193Pol2IggmusRawDataRep4.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
@@ -9183,7 +9183,7 @@ subId 1391
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Baf155MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsHelas3Baf155IggmusRawDataRep1
 objType file
 antibody BAF155
 cell HeLa-S3
@@ -9194,7 +9194,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Baf155MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Baf155IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -9206,7 +9206,7 @@ subId 888
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Baf155MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsHelas3Baf155IggmusRawDataRep2
 objType file
 antibody BAF155
 cell HeLa-S3
@@ -9217,7 +9217,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Baf155MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Baf155IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -9229,7 +9229,7 @@ subId 888
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Baf155MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsHelas3Baf155IggmusRawDataRep3
 objType file
 antibody BAF155
 cell HeLa-S3
@@ -9240,7 +9240,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Baf155MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Baf155IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -9327,7 +9327,7 @@ subId 1391
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Baf170MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsHelas3Baf170IggmusRawDataRep1
 objType file
 antibody BAF170
 cell HeLa-S3
@@ -9338,7 +9338,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Baf170MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Baf170IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -9350,7 +9350,7 @@ subId 890
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Baf170MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsHelas3Baf170IggmusRawDataRep2
 objType file
 antibody BAF170
 cell HeLa-S3
@@ -9361,7 +9361,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Baf170MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Baf170IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -9373,7 +9373,7 @@ subId 890
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Baf170MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsHelas3Baf170IggmusRawDataRep3
 objType file
 antibody BAF170
 cell HeLa-S3
@@ -9384,7 +9384,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Baf170MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Baf170IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -11171,7 +11171,7 @@ subId 1391
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Ini1MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsHelas3Ini1IggmusRawDataRep1
 objType file
 antibody Ini1
 cell HeLa-S3
@@ -11182,7 +11182,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Ini1MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Ini1IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
@@ -11194,7 +11194,7 @@ subId 892
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Ini1MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsHelas3Ini1IggmusRawDataRep2
 objType file
 antibody Ini1
 cell HeLa-S3
@@ -11205,7 +11205,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Ini1MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Ini1IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
@@ -11217,7 +11217,7 @@ subId 892
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Ini1MusiggRawDataRep3
+metaObject wgEncodeSydhTfbsHelas3Ini1IggmusRawDataRep3
 objType file
 antibody Ini1
 cell HeLa-S3
@@ -11228,7 +11228,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Ini1MusiggRawDataRep3.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Ini1IggmusRawDataRep3.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
@@ -12325,7 +12325,7 @@ subId 1383
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Nrf1MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsHelas3Nrf1IggmusRawDataRep1
 objType file
 antibody Nrf1
 cell HeLa-S3
@@ -12336,7 +12336,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Nrf1MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Nrf1IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data set paired with HeLa-S3_MouseIgG_Control.
@@ -12348,7 +12348,7 @@ subId 999
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Nrf1MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsHelas3Nrf1IggmusRawDataRep2
 objType file
 antibody Nrf1
 cell HeLa-S3
@@ -12359,7 +12359,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsHelas3Nrf1MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Nrf1IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data set paired with HeLa-S3_MouseIgG_Control.
@@ -18652,7 +18652,7 @@ subId 1398
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562Brg1MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsK562Brg1IggmusRawDataRep1
 objType file
 antibody Brg1
 cell K562
@@ -18663,7 +18663,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Brg1MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsK562Brg1IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
@@ -18675,7 +18675,7 @@ subId 893
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562Brg1MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsK562Brg1IggmusRawDataRep2
 objType file
 antibody Brg1
 cell K562
@@ -18686,7 +18686,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Brg1MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsK562Brg1IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
@@ -21590,6 +21590,52 @@ subId 359
 treatment IFNg6h
 view RawData
 
+metaObject wgEncodeSydhTfbsK562IggmusRawDataRep1
+objType file
+antibody Input
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId K562/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsK562IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 864
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562IggmusRawDataRep2
+objType file
+antibody Input
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId K562/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsK562IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType input
+subId 864
+treatment None
+view RawData
+
 metaObject wgEncodeSydhTfbsK562Ini1IggmusAlnRep1
 objType file
 antibody Ini1
@@ -21640,7 +21686,7 @@ subId 1387
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562Ini1MusiggRawDataRep1
+metaObject wgEncodeSydhTfbsK562Ini1IggmusRawDataRep1
 objType file
 antibody Ini1
 cell K562
@@ -21651,7 +21697,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Ini1MusiggRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsK562Ini1IggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
@@ -21663,7 +21709,7 @@ subId 894
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562Ini1MusiggRawDataRep2
+metaObject wgEncodeSydhTfbsK562Ini1IggmusRawDataRep2
 objType file
 antibody Ini1
 cell K562
@@ -21674,7 +21720,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Ini1MusiggRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsK562Ini1IggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
@@ -22598,52 +22644,6 @@ setType exp
 subId 1387
 treatment None
 view Alignments
-
-metaObject wgEncodeSydhTfbsK562MusiggMusiggRawDataRep1
-objType file
-antibody Input
-cell K562
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId K562/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562MusiggMusiggRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 864
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562MusiggMusiggRawDataRep2
-objType file
-antibody Input
-cell K562
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId K562/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562MusiggMusiggRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType input
-subId 864
-treatment None
-view RawData
 
 metaObject wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep1
 objType file
@@ -23687,7 +23687,7 @@ subId 16
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562Pol2RawDataRep1Musigg
+metaObject wgEncodeSydhTfbsK562Pol2RawDataRep1Iggmus
 objType file
 antibody Pol2
 cell K562
@@ -23698,7 +23698,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Pol2RawDataRep1Musigg.fastq.gz
+fileName wgEncodeSydhTfbsK562Pol2RawDataRep1Iggmus.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -23732,7 +23732,7 @@ subId 16
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562Pol2RawDataRep2Musigg
+metaObject wgEncodeSydhTfbsK562Pol2RawDataRep2Iggmus
 objType file
 antibody Pol2
 cell K562
@@ -23743,7 +23743,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Pol2RawDataRep2Musigg.fastq.gz
+fileName wgEncodeSydhTfbsK562Pol2RawDataRep2Iggmus.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Data paired with IgG_Control.
@@ -27545,4 +27545,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 984877108
+# MAGIC: -1612497872

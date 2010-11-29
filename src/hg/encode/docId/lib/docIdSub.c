@@ -181,11 +181,11 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *docIdDecorate(int num)
+char *docIdDecorate(char *composite, int num)
 {
 char buffer[10 * 1024];
 
-safef(buffer, sizeof buffer, "wgEncode%09d", num);
+safef(buffer, sizeof buffer, "%s%09d",composite, num);
 return cloneString(buffer);
 }
 
@@ -262,7 +262,7 @@ verbose(2, "submitPath %s\n", docIdSub->submitPath);
 verbose(2, "submitter %s\n", docIdSub->submitter);
 verbose(2, "type %s\n", type);
 
-char query[10 * 1024];
+char query[1024 * 1024];
 
 fillNull(&docIdSub->valReport);
 fillNull(&docIdSub->md5sum);

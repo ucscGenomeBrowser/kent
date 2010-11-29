@@ -3335,3 +3335,89 @@ At this point, waiting for Broad on:
 - K562/H3K9me1 replicate 2 is missing missing BAM and FASTQ (rep1 is here)
 - K562/Control replicate 2 is missing BAM and FASTQ  (rep1 is here)
 The 2 missing replicates are not likely to be provided.
+
+
+2010-11-22 NHDF has been submitted correctly
+============================================
+select id,name,status,user_id from projects where name like "BI_%";
++------+----------------------+-----------------+---------+
+| id   | name                 | status          | user_id |
++------+----------------------+-----------------+---------+
+| 2993 | BI_NHDF_CTCF         | validate failed |      34 | 
+| 2994 | BI_NHDF_H3K27ac      | validate failed |      34 | 
+| 2995 | BI_NHDF_H3K27me3     | validate failed |      34 | 
+| 2996 | BI_NHDF_H3K36me3     | validate failed |      34 | 
+| 2997 | BI_NHDF_H3K4me2      | validate failed |      34 | 
+| 2998 | BI_NHDF_H3K4me3      | validate failed |      34 | 
+| 2999 | BI_NHDF_H3K9ac       | validate failed |      34 | 
+| 3006 | BI_NHDF_CTCF (1)     | loaded          |      34 | 
+| 3007 | BI_NHDF_H3K27ac (1)  | loaded          |      34 | 
+| 3008 | BI_NHDF_H3K27me3 (1) | loaded          |      34 | 
+| 3009 | BI_NHDF_H3K36me3 (1) | loaded          |      34 | 
+| 3010 | BI_NHDF_H3K4me2 (1)  | loaded          |      34 | 
+| 3011 | BI_NHDF_H3K4me3 (1)  | loaded          |      34 | 
+| 3012 | BI_NHDF_H3K9ac (1)   | loaded          |      34 | 
++------+----------------------+-----------------+---------+
+15 rows in set (0.00 sec)
+
+rm mdbBroad.ra
+cat 3006/out/mdb.txt >> mdbBroad.ra
+cat 3007/out/mdb.txt >> mdbBroad.ra
+cat 3008/out/mdb.txt >> mdbBroad.ra
+cat 3009/out/mdb.txt >> mdbBroad.ra
+cat 3010/out/mdb.txt >> mdbBroad.ra
+cat 3011/out/mdb.txt >> mdbBroad.ra
+cat 3012/out/mdb.txt >> mdbBroad.ra
+mv mdbBroad.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+e mdbBroad.ra # Actually, nothing really needs to be changed.
+mdbUpdate hg19 mdbBroad.ra
+Using table named 'hg19.metaDb_tdreszer'.
+Read 42 metadata objects from hg19
+Affected 819 row(s) in hg19.metaDb_tdreszer
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra 
+gold wgEncodeBroadHistone.ra
+git update, add, ci, push
+
+rm tdbBroad.ra
+cat 3006/out/trackDb.ra >> tdbBroad.ra
+cat 3007/out/trackDb.ra >> tdbBroad.ra
+cat 3008/out/trackDb.ra >> tdbBroad.ra
+cat 3009/out/trackDb.ra >> tdbBroad.ra
+cat 3010/out/trackDb.ra >> tdbBroad.ra
+cat 3011/out/trackDb.ra >> tdbBroad.ra
+cat 3012/out/trackDb.ra >> tdbBroad.ra
+mv tdbBroad.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+e tdbBroad.ra # edit subGroups, longLabels and shortLabels
+encodePatchTdb metaDb/alpha/testing/tdbBroad.ra wgEncodeBroadHistone.ra
+
+make DBS=hg19
+Check in sandbox.  Fine.
+
+git up, add,ci,push
+make alpha DBS=hg19
+
+encodeDownloadsPage.pl -db=hg19 index.html
+1237 files
+encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3006 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3007 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3008 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3009 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3010 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3011 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3012 displayed
+update projects set name = "Broad 2010-11-19 NHDF_CTCF" where id = 3006;
+update projects set name = "Broad 2010-11-19 NHDF_H3K27ac" where id = 3007;
+update projects set name = "Broad 2010-11-19 NHDF_H3K27me3" where id = 3008;
+update projects set name = "Broad 2010-11-19 NHDF_H3K36me3" where id = 3009;
+update projects set name = "Broad 2010-11-19 NHDF_H3K4me2" where id = 3010;
+update projects set name = "Broad 2010-11-19 NHDF_H3K4me3" where id = 3011;
+update projects set name = "Broad 2010-11-19 NHDF_H3K9ac" where id = 3012;
+
+At this point, waiting for Broad on:
+- K562/H3K9me1 replicate 2 is missing missing BAM and FASTQ (rep1 is here)  WILL NOT BE SUBMITTED
+- K562/Control replicate 2 is missing BAM and FASTQ  (rep1 is here)         WILL NOT BE SUBMITTED
+The 2 missing replicates are not likely to be provided.
+
+Missing Controls for NHDF-Ad and Osteobl
