@@ -1735,7 +1735,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
         subGroups view=location
 	color 32,32,190
 	shortLabel Haplotypes
-	longLabel Haplotypes to GRCh37 reference sequence
+	longLabel Haplotypes to GRCh37 Reference Sequence
 	html altSeqComposite
 	priority 1
 
@@ -1744,7 +1744,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
         subGroups view=location
 	color 190,32,32
 	shortLabel Patches
-	longLabel Patches to GRCh37 reference sequence
+	longLabel Patches to GRCh37 Reference Sequence
 	html altSeqComposite
 	priority 2
 
@@ -1768,7 +1768,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
         parent altSeqCompositeViewpsl
         subGroups view=psl
 	shortLabel Alignment
-	longLabel GRCh37.p2 Lift over alignments
+	longLabel GRCh37 Alternate Sequence Lift Over Alignments
 	html altSeqComposite
 	priority 3
 
@@ -1787,7 +1787,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
         parent altSeqCompositeViewchain
         subGroups view=chain
         shortLabel Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
+        longLabel GRCh37 Alternate Sequence Chained Alignments
         type chain hg19Patch2
         html chainNet
 	priority 4
@@ -1806,7 +1806,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
         parent altSeqCompositeViewnet
         subGroups view=net
         shortLabel Net
-        longLabel $o_Organism ($o_date) Alignment net
+        longLabel GRCh37 Alternate Sequence Alignment Net
         type netAlign hg19Patch2 chainHg19Patch2
         html chainNet
 	priority 5
