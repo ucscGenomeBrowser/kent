@@ -10,6 +10,8 @@
 
 static char const rcsid[] = "$Id: great.c,v 1.3 2010/06/01 20:09:36 galt Exp $";
 
+static char* greatData = "greatData/supportedAssemblies.txt";
+
 static struct dyString *getRequestName()
 {
 char *track = cartString(cart, hgtaTrack);
@@ -35,10 +37,63 @@ if (!sameString(output, outBed) && !sameString(output, outWigBed))
     }
 }
 
+void addAssemblyToSupportedList(struct dyString* dy, char* assembly)
+{
+char* organism = hOrganism(assembly);
+char* freezeDate = hFreezeDate(assembly);
+dyStringPrintf(dy, "%s %s", organism, freezeDate);
+freeMem(organism);
+freeMem(freezeDate);
+}
+
 void verifyGreatAssemblies()
 {
-if (differentStringNullOk(database, "hg18") && differentStringNullOk(database, "mm9"))
+// First read in the assembly name and description information into name lists
+struct slName* supportedAssemblies = NULL;
+struct lineFile *lf = lineFileOpen(greatData, TRUE);
+int fieldCount = 1;
+char* row[fieldCount];
+int wordCount;
+while ((wordCount = lineFileChopTab(lf, row)) != 0)
+	{
+	if (wordCount != fieldCount)
+		errAbort("The %s file is not properly formatted.\n", greatData);
+	slNameAddHead(&supportedAssemblies, row[0]);
+	}
+lineFileClose(&lf);
+
+boolean invalidAssembly = TRUE;
+struct slName* currAssembly;
+for (currAssembly = supportedAssemblies; currAssembly != NULL; currAssembly = currAssembly->next)
+	{
+	if (!hDbIsActive(currAssembly->name))
+		{
+		errAbort("Assembly %s in supported assembly file is not an active assembly.\n", currAssembly->name);
+		}
+	if (sameOk(database, currAssembly->name))
+		{
+		invalidAssembly = FALSE;
+		break;
+		}
+	}
+
+if (invalidAssembly)
     {
+	slReverse(&supportedAssemblies);
+	currAssembly = supportedAssemblies;
+	struct dyString* dy = dyStringNew(0);
+	addAssemblyToSupportedList(dy, currAssembly->name);
+
+	currAssembly = currAssembly->next;
+	while (currAssembly != NULL)
+		{
+		dyStringAppend(dy, ", ");
+		if (currAssembly->next == NULL)
+			dyStringAppend(dy, "and ");
+		addAssemblyToSupportedList(dy, currAssembly->name);
+		currAssembly = currAssembly->next;
+		}
+
     hPrintf("<script type='text/javascript'>\n");
     hPrintf("function logSpecies() {\n");
     hPrintf("try {\n");
@@ -49,10 +104,14 @@ if (differentStringNullOk(database, "hg18") && differentStringNullOk(database, "
     hPrintf("}\n");
     hPrintf("window.onload = logSpecies;\n");
     hPrintf("</script>\n");
-    errAbort("GREAT only supports the Human, Mar. 2006 (NCBI36/hg18) and Mouse, July 2007 (NCBI37/mm9) assemblies."
-    "\nPlease go back and ensure that one of those assemblies is chosen.");
+    errAbort("GREAT only supports the %s assemblies."
+    "\nPlease go back and ensure that one of those assemblies is chosen.",
+	dyStringContents(dy));
     htmlClose();
+	dyStringFree(&dy);
     }
+
+slNameFreeList(&supportedAssemblies);
 }
 
 void doGreatTopLevel()
