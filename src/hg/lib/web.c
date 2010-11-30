@@ -314,13 +314,8 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-#ifdef TRACK_SEARCH
         printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
 	       uiState,TRACK_SEARCH);
-#else///ifndef TRACK_SEARCH
-        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet' class='topbar'>\n",
-               uiState);
-#endif///ndef TRACK_SEARCH
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (haveBlat && !endsWith(scriptName, "hgBlat"))
@@ -1055,9 +1050,9 @@ if (oldVars)
     char *oldDb = hashFindVal(oldVars, "db");
     char *oldOrg = hashFindVal(oldVars, "org");
     char *oldClade = hashFindVal(oldVars, "clade");
-    if ((oldDb    && differentWord(oldDb, *retDb)) ||
-	(oldOrg   && differentWord(oldOrg, *retGenome)) ||
-	(oldClade && differentWord(oldClade, *retClade)))
+    if ((!IS_CART_VAR_EMPTY(oldDb)    && differentWord(oldDb, *retDb)) ||
+	(!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
+	(!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
 	{
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)

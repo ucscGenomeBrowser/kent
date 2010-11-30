@@ -32,7 +32,8 @@ awk '
 if (match($1,"^./")) {gsub("^./","",$1); gsub(":$","",$1); printf "%s/", $1 }
 if (NF == 9) { if (match($1,"^-rw")) {printf "%s\n", $NF} }
 }
-' release.${VERSION}.gtf.ls-lR > release.${VERSION}.gtf.names
+' release.${VERSION}.gtf.ls-lR \
+    | sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.gtf.names
 
 echo "Scanning for MySQL table files"
 
@@ -49,11 +50,12 @@ BEGIN{ D="notYet" }
   if (!match($1,"^d")) {
     if (match($1,"^./")) {
         gsub("^./","",$1); gsub(":$","",$1); D = $1;
-        if (match(D,"_core_")) { printf "x       x =>  %s ,\n", D }
+        if (match(D,"_core_")) { printf "%s\n", D }
     }
   }
 }
-' release.${VERSION}.MySQL.ls-lR > release.${VERSION}.MySQL.names
+' release.${VERSION}.MySQL.ls-lR \
+	| sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.MySQL.names
 
 echo "Scanning for protein fasta files:"
 
@@ -72,8 +74,11 @@ BEGIN{ D="notYet" }
         gsub("^./","",$1); gsub(":$","",$1); D = $1;
     }
     if ((9 == NF) && match($1,"^-rw") && match($NF,"pep.all.fa")) {
-        printf "=> %s/%s ,\n", D, $NF
+        printf "%s/%s\n", D, $NF
     }
   }
 }
-' release.${VERSION}.fasta.ls-lR > release.${VERSION}.fasta.names
+' release.${VERSION}.fasta.ls-lR \
+	| sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.fasta.names
+
+rm -f ftp.rsp

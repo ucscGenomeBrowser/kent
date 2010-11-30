@@ -656,7 +656,7 @@ if(theImgBox && curImgTrack)
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, 
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height,
                        track ? track->track : NULL);
     }
 else
@@ -2575,7 +2575,11 @@ else if (drawOpt > baseColorDrawOff)
     if (startsWith("genePred", tg->tdb->type))
 	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
-	lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons));
+        {
+        char var[256];
+        safef(var, sizeof(var), "%s.%s", tg->tdb->track, CODON_NUMBERING_SUFFIX);
+        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBoolean(cart, var, FALSE));
+        }
     }
 if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
     baseColorSetCdsBounds(lf, psl, tg);
@@ -5430,6 +5434,113 @@ else
     return lf->name;
 }
 
+char *getRgdGene2Symbol(struct sqlConnection *conn, char *acc)
+/* get gene symbol from rgdGene2ToSymbol or NULL if not found.
+ * WARNING: static return */
+{
+static char symbolBuf[256];
+char query[256], *symbol = NULL;
+if (hTableExists(database,  "rgdGene2ToSymbol"))
+    {
+    sprintf(query, "select geneSymbol from rgdGene2ToSymbol where rgdId = '%s'", acc);
+    symbol = sqlQuickQuery(conn, query, symbolBuf, sizeof(symbolBuf));
+    if ((symbol != NULL) && (symbol[0] == '\0'))
+        symbol = NULL;
+    }
+return symbol;
+}
+
+char *rgdGene2Name(struct track *tg, void *item)
+/* Get name to use for rgdGene2 item. */
+{
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL)
+    return lf->extra;
+else
+    return lf->name;
+}
+
+char *rgdGene2MapName(struct track *tg, void *item)
+/* Return un-abbreviated gene name. */
+{
+struct linkedFeatures *lf = item;
+return lf->name;
+}
+
+void lookupRgdGene2Names(struct track *tg)
+/* This converts the RGD Gene ID to a gene name where possible. */
+{
+struct linkedFeatures *lf;
+struct sqlConnection *conn = hAllocConn(database);
+boolean labelStarted = FALSE;
+boolean useGeneName = FALSE;
+boolean useAcc =  FALSE;
+
+struct hashEl *rgdGene2Labels = cartFindPrefix(cart, "rgdGene2.label");
+struct hashEl *label;
+
+if (rgdGene2Labels == NULL)
+    {
+    useGeneName = TRUE; /* default to gene name */
+    /* set cart to match what doing */
+    cartSetBoolean(cart, "rgdGene2.label.gene", TRUE);
+    }
+for (label = rgdGene2Labels; label != NULL; label = label->next)
+    {
+    if (endsWith(label->name, "gene") && differentString(label->val, "0"))
+        useGeneName = TRUE;
+    else if (endsWith(label->name, "acc") && differentString(label->val, "0"))
+        useAcc = TRUE;
+    else if (!endsWith(label->name, "gene") &&
+             !endsWith(label->name, "acc") )
+        {
+        useGeneName = TRUE;
+        cartRemove(cart, label->name);
+        }
+    }
+
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    struct dyString *name = dyStringNew(SMALLDYBUF);
+    labelStarted = FALSE; /* reset for each item in track */
+    if (useGeneName || useAcc)
+        {
+        char *org = getOrganismShort(conn, lf->name);
+        if (org != NULL)
+            dyStringPrintf(name, "%s ", org);
+        }
+    if (useGeneName)
+        {
+        char *gene = getRgdGene2Symbol(conn, lf->name);
+        if (gene != NULL)
+            {
+            dyStringAppend(name, gene);
+            }
+        labelStarted = TRUE;
+        }
+    if (useAcc)
+        {
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
+        dyStringAppend(name, lf->name);
+        }
+    lf->extra = dyStringCannibalize(&name);
+    }
+hFreeConn(&conn);
+}
+
+void loadRgdGene2(struct track *tg)
+/* Load up RGD genes. */
+{
+enum trackVisibility vis = tg->visibility;
+tg->items = lfFromGenePredInRange(tg, tg->table, chromName, winStart, winEnd);
+if (vis != tvDense)
+    {
+    lookupRgdGene2Names(tg);
+    }
+vis = limitVisibility(tg);
+}
+
 char *refGeneName(struct track *tg, void *item)
 /* Get name to use for refGene item. */
 {
@@ -5800,6 +5911,14 @@ tg->loadItems = loadRefGene;
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = refGeneColor;
+}
+
+void rgdGene2Methods(struct track *tg)
+/* Make track of RGD genes. */
+{
+tg->loadItems = loadRgdGene2;
+tg->itemName = rgdGene2Name;
+tg->mapItemName = rgdGene2MapName;
 }
 
 boolean filterNonCoding(struct track *tg, void *item)
@@ -9057,28 +9176,15 @@ bool isSubtrackVisible(struct track *subtrack)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
-#ifdef SUBTRACKS_HAVE_VIS
 boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
-#endif///def SUBTRACKS_HAVE_VIS
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
 char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
-#ifndef SUBTRACKS_HAVE_VIS
-/* Remove redundant cart settings to avoid cart bloat. */
-if (enabled == enabledInTdb)
-    {
-    char *var = cartOptionalString(cart, option);
-    if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
-        cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
-    }
-#endif///def SUBTRACKS_HAVE_VIS
-#ifdef SUBTRACKS_HAVE_VIS
 if(overrideComposite)
     enabled = TRUE;
-#endif///def SUBTRACKS_HAVE_VIS
 return enabled;
 }
 
@@ -9100,35 +9206,44 @@ enum trackVisibility limitVisibility(struct track *tg)
 {
 if (!tg->limitedVisSet)
     {
-    enum trackVisibility vis = tg->visibility;
-    int h;
-    int maxHeight = maximumTrackHeight(tg);
     tg->limitedVisSet = TRUE;
-    if (vis == tvHide)
-	{
-	tg->height = 0;
-	tg->limitedVis = tvHide;
-	return tvHide;
-	}
-    if (tg->subtracks != NULL)
-	{
-	struct track *subtrack;
-	int subCnt = subtrackCount(tg->subtracks);
-	maxHeight = maxHeight * max(subCnt,1);
-	for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-	    limitVisibility(subtrack);
-	}
-    while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+    if (trackShouldUseAjaxRetrieval(tg))
         {
-        if (vis == tvFull && tg->canPack)
-            vis = tvPack;
-        else if (vis == tvPack)
-            vis = tvSquish;
-        else
-            vis = tvDense;
+        tg->limitedVis = tg->visibility;
+        tg->height = REMOTE_TRACK_HEIGHT;
         }
-    tg->height = h;
-    tg->limitedVis = vis;
+    else
+        {
+        enum trackVisibility vis = tg->visibility;
+        int h;
+        int maxHeight = maximumTrackHeight(tg);
+
+        if (vis == tvHide)
+            {
+            tg->height = 0;
+            tg->limitedVis = tvHide;
+            return tvHide;
+            }
+        if (tg->subtracks != NULL)
+            {
+            struct track *subtrack;
+            int subCnt = subtrackCount(tg->subtracks);
+            maxHeight = maxHeight * max(subCnt,1);
+            for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+                limitVisibility(subtrack);
+            }
+        while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            if (vis == tvFull && tg->canPack)
+                vis = tvPack;
+            else if (vis == tvPack)
+                vis = tvSquish;
+            else
+                vis = tvDense;
+            }
+        tg->height = h;
+        tg->limitedVis = vis;
+        }
     }
 return tg->limitedVis;
 }
@@ -9378,9 +9493,11 @@ char *allFreqCopy = cloneString(myItem->alleleFreq);
 int cnt = chopByChar(nameCopy, '/', allele, myItem->alleleCount);
 if (cnt != myItem->alleleCount)
     errAbort("Bad allele name %s", myItem->name);
-chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
+int fcnt = chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
+if (fcnt != myItem->alleleCount && fcnt != 0)
+    errAbort("Bad freq for %s",  myItem->name);
 int i = 0;
-for (i=0;i<myItem->alleleCount;i++)
+for (i=0;i<fcnt;i++)
     allTot += atoi(freq[i]);
 /* draw a tall box */
 if (sameString(display, "freq"))
@@ -9504,10 +9621,10 @@ void loadPgSnp(struct track *tg)
 char query[256];
 struct customTrack *ct = tg->customPt;
 char *table = tg->table;
-struct sqlConnection *conn; 
-if (ct == NULL) 
+struct sqlConnection *conn;
+if (ct == NULL)
     conn = hAllocConn(database);
-else 
+else
     {
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
@@ -9613,10 +9730,18 @@ void cactusDraw(struct track *tg, int seqStart, int seqEnd,
 {
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct slList *item;
+        color=MG_RED;
+hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 for (item = tg->items; item != NULL; item = item->next)
     {
-    if(tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, hvg);
+    //if(tg->itemColor != NULL)
+        //color = tg->itemColor(tg, item, hvg);
+    /*
+    if (color == MG_BLACK)
+        color=MG_RED;
+    else
+        color=MG_BLACK;
+        */
     char *name = tg->itemName(tg, item);
     name = strchr(name, '.');
 
@@ -9626,6 +9751,7 @@ for (item = tg->items; item != NULL; item = item->next)
 
     tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
     }
+hvGfxUnclip(hvg);
 //linkedFeaturesDraw(tg, seqStart, seqEnd,
         //hvg, xOff, yOff, width,
         //font, color, vis);
@@ -9642,7 +9768,7 @@ linkedFeaturesDrawAt(tg, item,
 
 int cactusHeight(struct track *tg, enum trackVisibility vis)
 {
-tg->height = 3 * tg->lineHeight;
+tg->height = 5 * tg->lineHeight;
 return tg->height;
 }
 
@@ -9663,6 +9789,33 @@ void cactusLeftLabels(struct track *tg, int seqStart, int seqEnd,
 {
 }
 
+Color cactusColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+static boolean firstTime = TRUE;
+static unsigned colorArray[5];
+
+if (firstTime)
+    {
+    firstTime = FALSE;
+    int ii;
+    for(ii=0; ii < 5; ii++)
+        colorArray[ii] = MG_RED;
+    }
+
+char *name = tg->itemName(tg, item);
+name = strchr(name, '.');
+
+if (name != NULL)
+    name++;
+int y = atoi(name);
+
+if (colorArray[y] == MG_RED)
+    colorArray[y] = MG_BLACK;
+else
+    colorArray[y] = MG_RED;
+return colorArray[y];
+}
+
 void cactusBedMethods(struct track *tg)
 /* cactus bed track methods */
 {
@@ -9681,7 +9834,7 @@ tg->loadItems = loadGappedBed;
 //tg->itemName = cactusName;
 tg->itemName = linkedFeaturesName;
 //tg->mapItemName = refGeneMapName;
-//tg->itemColor = blastColor;
+tg->itemColor = cactusColor;
 tg->itemNameColor = cactusNameColor;
 tg->drawLeftLabels = cactusLeftLabels;
 }
@@ -10447,17 +10600,18 @@ struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
 struct customTrack *ct = tg->customPt;
-struct sqlConnection *conn; 
+struct sqlConnection *conn;
 char *table = tg->table;
 int bedSize = tg->bedSize; /* count of fields in bed part */
 
 if (ct == NULL)
     conn = hAllocConn(database);
-else 
+else
     {
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
     tg->bedSize = ct->fieldCount - 2; /* field count of bed part */
+    bedSize = tg->bedSize;
     }
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -10485,7 +10639,7 @@ struct customTrack *ct = tg->customPt;
 
 if (ct == NULL)
     conn = hAllocConn(database);
-else 
+else
     {
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
@@ -10712,11 +10866,120 @@ else
     }
 }
 
+/* reserve space no more than 20 unique OMIM entries */
+char omimGeneBuffer[2000];
+
+char *omimGeneDiseaseList(struct track *tg, struct bed *item)
+/* Return list of diseases associated with a OMIM entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+int i=0;
+
+conn = hAllocConn(database);
+
+safef(query,sizeof(query),
+        "select distinct description from omimMorbidMap, omimGene where name='%s' and name=cast(omimId as char) order by description", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* show up to 20 max entries */
+chp = omimGeneBuffer;
+while ((row != NULL) && i<20)
+    {
+    /* omimMorbidMap description field some times have trailing blanks. */
+    eraseTrailingSpaces(row[0]);
+    if (i != 0)
+	{
+	safef(chp, 3, "; ");
+	chp++;chp++;
+	}
+    safef(chp, 100, "%s", row[0]);
+    chp = chp+strlen(row[0]);
+    row = sqlNextRow(sr);
+    i++;
+    }
+
+if ((i == 20) && (row != NULL))
+    {
+    safef(chp, 5, " ...");
+    chp++;chp++;chp++;chp++;
+    }
+
+*chp = '\0';
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(omimGeneBuffer);
+}
+
+static void omimGeneDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *sPhenotypes;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+sPhenotypes = omimGeneDiseaseList(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, omimGeneColor(tg, item, hvg));
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, sPhenotypes)-2, y,
+		    mgFontStringWidth(font, sPhenotypes),
+                    heightPer, MG_BLACK, font, sPhenotypes);
+        }
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = hvGfxContrastingColor(hvg, color);
+	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	}
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-')
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = hvGfxContrastingColor(hvg, color);
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		dir, textColor, TRUE);
+	}
+    }
+}
+
 void omimGeneMethods (struct track *tg)
 {
 tg->itemColor 	  = omimGeneColor;
 tg->itemNameColor = omimGeneColor;
 tg->itemName      = omimGeneName;
+tg->drawItemAt    = omimGeneDrawAt;
 }
 
 Color restColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -11065,6 +11328,8 @@ if (sameWord(type, "bed"))
 else if (sameWord(type, "bigBed"))
     {
     bigBedMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bedGraph"))
     {
@@ -11073,6 +11338,8 @@ else if (sameWord(type, "bedGraph"))
 else if (sameWord(type, "bigWig"))
     {
     bigWigMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;  // TODO: Dummy drawItems as well?
     }
 else
 #endif /* GBROWSE */
@@ -11123,6 +11390,8 @@ else if (sameWord(type, "maf"))
 else if (sameWord(type, "bam"))
     {
     bamMethods(track);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
     }
 else if (startsWith(type, "bedDetail"))
     {
@@ -11512,8 +11781,10 @@ registerTrackHandler("snp128", snp125Methods);
 registerTrackHandler("snp129", snp125Methods);
 registerTrackHandler("snp130", snp125Methods);
 registerTrackHandler("snp131", snp125Methods);
+registerTrackHandler("snp131Composite", snp125Methods);
 registerTrackHandler("snp131Clinical", snp125Methods);
 registerTrackHandler("snp131NonClinical", snp125Methods);
+registerTrackHandler("snp132", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
@@ -11595,6 +11866,7 @@ registerTrackHandler("decipher", decipherMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
+registerTrackHandler("rgdGene2", rgdGene2Methods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
 registerTrackHandler("blastDm2FB", blastMethods);

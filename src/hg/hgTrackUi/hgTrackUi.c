@@ -1376,6 +1376,18 @@ safef(varName, sizeof(varName), "%s.%s", tdb->track, HIDE_NONCODING_SUFFIX);
 cartMakeCheckBox(cart, varName, HIDE_NONCODING_DEFAULT);
 }
 
+void rgdGene2UI(struct trackDb *tdb)
+/* Put up rgdGene2 gene ID track controls, with checkboxes */
+{
+/* Put up label line  - boxes for gene and accession. */
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+printf("<BR>\n");
+
+baseColorDrawOptDropDown(cart, tdb);
+}
+
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene or xenoRefGene gene ID track controls, with checkboxes */
 {
@@ -2214,6 +2226,8 @@ else if (startsWith("transMapAln", track))
         transMapUI(tdb);
 else if (sameString(track, "refGene"))
         refGeneUI(tdb);
+else if (sameString(track, "rgdGene2"))
+        rgdGene2UI(tdb);
 else if (sameString(track, "knownGene"))
         knownGeneUI(tdb);
 else if (sameString(track, "omimGene"))
@@ -2468,7 +2482,7 @@ if(tdbIsContainer(tdb))
     if (1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
-        cartTdbTreeMatchSubtrackVis(cart,tdb);
+        cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",

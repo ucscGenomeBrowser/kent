@@ -1007,7 +1007,7 @@ int slPairValCmpCase(const void *va, const void *vb)
 {
 const struct slPair *a = *((struct slPair **)va);
 const struct slPair *b = *((struct slPair **)vb);
-return strcmp((char *)(a->val), (char *)(b->val));
+return strcasecmp((char *)(a->val), (char *)(b->val));
 }
 
 int slPairValCmp(const void *va, const void *vb)

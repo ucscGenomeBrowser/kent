@@ -181,11 +181,11 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *docIdDecorate(int num)
+char *docIdDecorate(char *composite, int num)
 {
 char buffer[10 * 1024];
 
-safef(buffer, sizeof buffer, "wgEncode%09d", num);
+safef(buffer, sizeof buffer, "%s%09d",composite, num);
 return cloneString(buffer);
 }
 
@@ -207,15 +207,12 @@ if (sameString(dot, "bam") ||
 return FALSE;
 }
 
-static char *decorateType(char *type, char *submitPath)
+char *docDecorateType(char *type)
 // add .gz for types that should be compressed
 {
 if (sameString(type, "bam") ||
     sameString(type, "bigWig"))
         return type;
-
-if ((submitPath != NULL) && !endsWith(submitPath, ".gz"))
-    return type;
 
 char buffer[10 * 1024];
 
@@ -228,7 +225,7 @@ char *docIdGetPath(char *docId, char *docIdDir, char *type, char *submitPath)
 {
 char *ptr = docId + strlen(docId) - 1;
 struct dyString *dy = newDyString(20);
-char *suffix = decorateType(type, submitPath);
+char *suffix = docDecorateType(type);
 
 dyStringPrintf(dy, "%s/", docIdDir);
 for (; ptr != docId; ptr--)
@@ -249,7 +246,7 @@ if (*val == NULL)
     *val = nullString;
 }
 
-void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
+char *docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
     char *docIdDir, char *type)
 {
 
@@ -265,7 +262,7 @@ verbose(2, "submitPath %s\n", docIdSub->submitPath);
 verbose(2, "submitter %s\n", docIdSub->submitter);
 verbose(2, "type %s\n", type);
 
-char query[10 * 1024];
+char query[1024 * 1024];
 
 fillNull(&docIdSub->valReport);
 fillNull(&docIdSub->md5sum);
@@ -279,7 +276,7 @@ char *response = sqlQuickString(conn, query);
 printf("submitted got response %s\n", response);
 
 safef(query, sizeof query, "select last_insert_id()");
-char *docId = sqlQuickString(conn, query);
+char *docId = cloneString(sqlQuickString(conn, query));
 
 printf("submitted got docId %s\n", docId);
 
@@ -298,4 +295,6 @@ makeDirsOnPath(linkToFile);
 *slash = '/';
 if (link(docIdSub->submitPath, linkToFile) < 0)
     errnoAbort("can't link %s to file %s\n", docIdSub->submitPath, linkToFile);
+
+return docId;
 }

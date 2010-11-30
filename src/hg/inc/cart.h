@@ -14,6 +14,7 @@
 // If cgi set as CART_VAR_EMPTY, then removed from cart
 // If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
 #define CART_VAR_EMPTY "[]"
+#define IS_CART_VAR_EMPTY(var) ((var) == NULL || sameString(var,CART_VAR_EMPTY))
 
 typedef struct sqlConnection *(*DbConnector)();
 /* funtion type used to get a connection to database */
@@ -532,7 +533,7 @@ int cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boo
 /* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
    If suffix NULL then removes 'trackName' which holds visibility */
 
-boolean cartTdbTreeMatchSubtrackVis(struct cart *cart,struct trackDb *tdbComposite);
+boolean cartTdbTreeReshapeIfNeeded(struct cart *cart,struct trackDb *tdbComposite);
 /* When subtrack vis is set via findTracks, and composite has no cart settings,
    then fashion composite to match found */
 

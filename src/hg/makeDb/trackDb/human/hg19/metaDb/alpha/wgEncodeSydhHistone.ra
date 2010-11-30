@@ -13,7 +13,6 @@ fileIndex wgEncodeSydhHistoneK562H3k27me3UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562H3k27me3UcdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k27me3UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -36,7 +35,6 @@ fileIndex wgEncodeSydhHistoneK562H3k27me3UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562H3k27me3UcdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k27me3UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -81,7 +79,6 @@ fileName wgEncodeSydhHistoneK562H3k27me3UcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneK562H3k27me3UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -104,7 +101,6 @@ fileName wgEncodeSydhHistoneK562H3k27me3UcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneK562H3k27me3UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -149,7 +145,6 @@ fileIndex wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -172,7 +167,6 @@ fileIndex wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -216,7 +210,6 @@ dateUnrestricted 2011-02-20
 fileName wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k4me1UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -238,7 +231,6 @@ dateUnrestricted 2011-02-20
 fileName wgEncodeSydhHistoneK562H3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k4me1UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -283,7 +275,6 @@ fileIndex wgEncodeSydhHistoneK562H3k4me3UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562H3k4me3UcdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k4me3UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -306,7 +297,6 @@ fileIndex wgEncodeSydhHistoneK562H3k4me3UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562H3k4me3UcdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k4me3UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -351,7 +341,6 @@ fileName wgEncodeSydhHistoneK562H3k4me3UcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneK562H3k4me3UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -374,7 +363,6 @@ fileName wgEncodeSydhHistoneK562H3k4me3UcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneK562H3k4me3UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -419,7 +407,6 @@ fileIndex wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -442,7 +429,6 @@ fileIndex wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -487,7 +473,6 @@ fileName wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneK562H3k9acbUcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -510,7 +495,6 @@ fileName wgEncodeSydhHistoneK562H3k9acbUcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneK562H3k9acbUcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -555,7 +539,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -578,7 +561,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -623,7 +605,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k27me3StdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -646,7 +627,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k27me3StdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -691,7 +671,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -714,7 +693,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -759,7 +737,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -782,7 +759,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k36me3bUcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -827,7 +803,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -850,7 +825,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -894,7 +868,6 @@ dateUnrestricted 2011-03-21
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k4me1UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -916,7 +889,6 @@ dateUnrestricted 2011-03-21
 fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k4me1UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -961,7 +933,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -984,7 +955,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1029,7 +999,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k4me3StdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein. G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1052,7 +1021,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k4me3StdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication. Method of Immunoprecipitation:Protein.G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1097,7 +1065,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1120,7 +1087,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1165,7 +1131,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k9acStdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1188,7 +1153,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k9acStdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation: Sonication. Method of Immunoprecipitation: Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1233,7 +1197,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1256,7 +1219,6 @@ fileIndex wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam.bai
 fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1301,7 +1263,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k9me3UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1324,7 +1285,6 @@ fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein G magnetic beads.
-parentTable wgEncodeSydhHistoneNt2d1H3k9me3UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1369,7 +1329,6 @@ fileIndex wgEncodeSydhHistoneNt2d1InputStdAln.bam.bai
 fileName wgEncodeSydhHistoneNt2d1InputStdAln.bam
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1InputStdAln
 project wgEncode
 setType input
 subId 1123
@@ -1390,7 +1349,6 @@ dateUnrestricted 2011-02-04
 fileName wgEncodeSydhHistoneNt2d1InputStdRawData.fastq.gz
 grant Snyder
 lab UCD
-parentTable wgEncodeSydhHistoneNt2d1InputStdRawSignal
 project wgEncode
 setType input
 subId 1123
@@ -1419,6 +1377,138 @@ tableName wgEncodeSydhHistoneNt2d1InputStdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2763
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2763
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdPk
+objType table
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2763
+tableName wgEncodeSydhHistoneU2osH3k36me3bUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2763
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2763
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+objType table
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2763
+tableName wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1
 objType file
 antibody H3K9me3
@@ -1427,13 +1517,12 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1449,13 +1538,12 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1471,12 +1559,12 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0.  Submitted even though replicate peak overlap below threshold because data visually looks good, but calling peaks for H3K9me3 is very difficult due to the nature of the signal and not the quality of the data.  When we call peaks using our program that has been modified for histones, we get a ~60% overlap. That's about as good as it gets with H3K9me3 peak calling.
 project wgEncode
 setType exp
@@ -1493,14 +1581,13 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
-parentTable wgEncodeSydhHistoneU2osH3k9me3UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1516,14 +1603,13 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
-parentTable wgEncodeSydhHistoneU2osH3k9me3UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1539,12 +1625,12 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-16
 dateUnrestricted 2011-05-16
 fileName wgEncodeSydhHistoneU2osH3k9me3UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1553,4 +1639,4 @@ tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-# MAGIC: 2068653049
+# MAGIC: 1376044456

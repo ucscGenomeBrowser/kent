@@ -34,6 +34,8 @@ struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 int  kgVersion = KG_UNKNOWN;	/* KG version */
 
+//#include "rgdInfo.c"
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -140,7 +142,7 @@ if (name == NULL)
 return name;
 }
 
-char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn, 
+char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn,
 	char *geneId)
 /* Look up SwissProt id.  Return NULL if not found.  FreeMem this when done.
  * spConn is existing SwissProt database conn.  May be NULL. */
@@ -148,6 +150,11 @@ char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn,
 char *proteinSql = genomeSetting("proteinSql");
 char query[256];
 char *someAcc, *primaryAcc = NULL;
+if (isRgdGene(conn))
+    {
+    return(getRgdGeneUniProtAcc(curGeneId, conn));
+    }
+
 safef(query, sizeof(query), proteinSql, geneId);
 someAcc = sqlQuickString(conn, query);
 if (someAcc == NULL || someAcc[0] == 0)
@@ -164,7 +171,7 @@ boolean idInAllMrna(char *id, struct sqlConnection *conn)
 /* Return TRUE if id is in allMrna table */
 {
 char query[256];
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
 	"select count(*) from all_mrna where qName = '%s'", id);
 return sqlQuickNum(conn, query) > 0;
 }
@@ -178,7 +185,7 @@ if (!sqlTablesExist(conn, "refGene"))
     return(FALSE);
     }
 
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
 	"select count(*) from refGene where name = '%s'", id);
 return sqlQuickNum(conn, query) > 0;
 }
@@ -186,7 +193,7 @@ return sqlQuickNum(conn, query) > 0;
 char *abbreviateSummary(char *summary)
 /* Get rid of some repetitious stuff. */
 {
-char *pattern = 
+char *pattern =
 "Publication Note:  This RefSeq record includes a subset "
 "of the publications that are available for this gene. "
 "Please see the Entrez Gene record to access additional publications.";
@@ -258,7 +265,7 @@ if (cdsStart < cdsEnd)
     {
     for (i=0; i<exonCnt; i++)
 	{
-	if ( (cdsStart <= curGenePred->exonEnds[i]) &&  
+	if ( (cdsStart <= curGenePred->exonEnds[i]) &&
 	     (cdsEnd >= curGenePred->exonStarts[i]) )
 	     cdsExonCnt++;
 	}
@@ -280,7 +287,7 @@ char *sectionRequiredSetting(struct section *section, char *name)
 {
 char *res = sectionSetting(section, name);
 if (res == NULL)
-    errAbort("Can't find required %s field in %s in settings.ra", 
+    errAbort("Can't find required %s field in %s in settings.ra",
     	name, section->name);
 return res;
 }
@@ -334,10 +341,11 @@ else
     return 0;
 }
 
-static void addGoodSection(struct section *section, 
+static void addGoodSection(struct section *section,
 	struct sqlConnection *conn, struct section **pList)
 /* Add section to list if it is non-null and exists returns ok. */
 {
+//printf("<br>adding %s section \n", section->name);fflush(stdout);
 if (section != NULL && hashLookup(section->settings, "hide") == NULL
    && section->exists(section, conn, curGeneId))
      slAddHead(pList, section);
@@ -355,7 +363,17 @@ addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 /* disable ortherOrg section for CGB servers for the time being */
 if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
+    addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
+/*if (isRgdGene(conn))
+    {
+    addGoodSection(ctdRgdGene2Section(conn, sectionRa), conn, &sectionList);
+    }
+else
+    {
+    addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
+    }
+*/
+addGoodSection(rgdGeneRawSection(conn, sectionRa), conn, &sectionList);
 
 //addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 /* temporarily disable microarray section for Zebrafish, until a bug is fixed */
@@ -409,7 +427,7 @@ for (section=sectionList; section != NULL; section = section->next)
 	++rowIx;
 	}
     webPrintLinkCellStart();
-    hPrintf("<A HREF=\"#%s\" class=\"toc\">%s</A>", 
+    hPrintf("<A HREF=\"#%s\" class=\"toc\">%s</A>",
     	section->name, section->shortLabel);
     webPrintLinkCellEnd();
     }
@@ -438,7 +456,9 @@ for (section = sectionList; section != NULL; section = section->next)
     char *indicator = (isOpen ? "-" : "+");
     char *indicatorImg = (isOpen ? "../images/remove.gif" : "../images/add.gif");
     struct dyString *header = dyStringNew(0);
-    dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);	
+    //keep the following line for future debugging need
+    //printf("<br>printing %s section\n", section->name);fflush(stdout);
+    dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);
     dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
     	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicatorImg, indicator);
     dyStringAppend(header, section->longLabel);
@@ -508,7 +528,7 @@ if (newChrom != NULL
 	&& newStarts != NULL
 	&& newEnds != NULL)
     {
-    if (oldGene == NULL || oldStarts == NULL || oldEnds == NULL
+    if (IS_CART_VAR_EMPTY(oldGene) || IS_CART_VAR_EMPTY(oldStarts) || IS_CART_VAR_EMPTY(oldEnds)
     	|| sameString(oldGene, newGene))
 	{
 	curGeneChrom = newChrom;
@@ -525,7 +545,7 @@ if (newChrom != NULL
     char query[256];
     struct sqlResult *sr;
     char **row;
-    safef(query, sizeof(query), 
+    safef(query, sizeof(query),
     	"select chrom,txStart,txEnd from %s where name = '%s'"
 	, table, curGeneId);
     sr = sqlGetResult(conn, query);
@@ -552,9 +572,8 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
-
 hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
 	"select * from %s where name = '%s' "
 	"and chrom = '%s' and txStart=%d and txEnd=%d"
 	, table, curGeneId, curGeneChrom, curGeneStart, curGeneEnd);
@@ -568,7 +587,7 @@ return gp;
 }
 
 void doKgMethod()
-/* display knownGene.html content (UCSC Known Genes 
+/* display knownGene.html content (UCSC Known Genes
  * Method, Credits, and Data Use Restrictions) */
 {
 cartWebStart(cart, database, "Methods, Credits, and Use Restrictions");
@@ -609,6 +628,7 @@ else
     spConn = hAllocConn(UNIPROT_DB_NAME);
     swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
 
+    if (isRgdGene(conn)) swissProtAcc=getRgdGeneUniProtAcc(curGeneId, conn);
     /* Check command variables, and do the ones that
      * don't want to put up the hot link bar etc. */
     if (cartVarExists(cart, hggDoGetMrnaSeq))
@@ -626,7 +646,7 @@ else
     else
 	{
 	/* Default case - start fancy web page. */
-	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index", 
+	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
 	    genome, curGeneName, curGeneId);
 	webMain(conn);
 	cartWebEnd();

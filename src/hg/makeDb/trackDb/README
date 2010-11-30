@@ -76,6 +76,13 @@ The format of the type fields:
    <fieldCount> - the number of standard fields
    <extraInfo> - either '.' meaning no non-standard fields
        or '+' if there are additional non-standard fields.
+   Optional variable for bed tracks with 9 or more of the standard fields:
+   itemRgb=on  - interpret field nine as a color for this item specified
+               - as an R,G,B triplet.  When loaded this field appears
+               - as an integer with the RGB values in specific bits of
+               - the integer.  The input ascii data in the bed file is
+               - specifically three numbers in the range 0-255 separated by
+               - commas in field nine, e.g.: 0,0,255 == full blue color
 3. type chain <otherDb>
    Alignment data
    <otherDb> - other database this organism is aligned to
@@ -261,6 +268,15 @@ The format of the type fields:
     corresponds to the count at which it gets as dark as it can get.  If maxVal is 0 then this
     will be calculated from the data itself.
 
+    The database loading procedure for the table can be:
+	hgBbiDbLink hg18 itemRgbBbTest /gbdb/hg18/bbi/itemRgb.hg18.bb
+    which is equivalent to:
+    hgsql hg18 -e 'drop table if exists itemRgbBbTest;
+            create table itemRgbBbTest (fileName varchar(255) not null);
+            insert into itemRgbBbTest values
+        ("/gbdb/hg18/bbi/itemRgb.hg18.bb");'
+    The fileName can also be a valid URL to the bb file.
+
 18. type bigWig [lower] [upper]
     This uses a binary indexed file rather than a database table.  It is, other
     than substituting "bigWig" for "wig" in the type line, the same as the
@@ -304,13 +320,13 @@ The format of the type fields:
 	sourceTable <tableName>
     Use the program hgBedsToBedExp to create the tables from a collection of
     (simpler) bed's one for each txn factor/cell combination.
-    
-21. type bedDetail 
-    This type is used for mostly bed like files but where you want to include 
+
+21. type bedDetail
+    This type is used for mostly bed like files but where you want to include
     some extra text for the details page or table browser filtering.  It also
-    includes an ID field, so if an URL is specified can link to another 
-    resource without affecting the name displayed in the track.  
-    
+    includes an ID field, so if an URL is specified can link to another
+    resource without affecting the name displayed in the track.
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
@@ -375,6 +391,11 @@ configureByPopup - on, off                    - Default: on for most tracks, off
                                                 instead always forces user to hgTrackUi page; this is useful for very
                                                 complicated config pages like dbSnp or multiz which do not work well in a modal dialogs,
                                                 and snp tracks which use javascript that is not compatible with modal dialogs.
+pennantIcon - icon [url [hint]]               - Displays icon next to track in "parade" of tracks found in hgTracks config
+                                                MAY at some point appear in search tracks and next to title in hgTrackUi
+                                                Icon is required and must be in htdocs/images.
+                                                Url is optional and can be relative to the cgi-bin or absolute.
+                                                Hint is optional text for a toolTip.  Enclose in quotes for readability.
 
 The shortLabel and longLabel fields and the associated HTML files
 may have the following variables, which will be substituted:

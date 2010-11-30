@@ -1,3 +1,1704 @@
+metaObject wgEncodeUwTfbsAg04449CtcfStdAlnRep1
+objType file
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2596
+view Alignments
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdAlnRep2
+objType file
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2595
+view Alignments
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2596
+tableName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2595
+tableName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdPkRep1
+objType table
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2596
+tableName wgEncodeUwTfbsAg04449CtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdPkRep2
+objType table
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2595
+tableName wgEncodeUwTfbsAg04449CtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2596
+view RawData
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2595
+view RawData
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdRawRep1
+objType table
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2596
+tableName wgEncodeUwTfbsAg04449CtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg04449CtcfStdRawRep2
+objType table
+antibody CTCF
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449CtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2595
+tableName wgEncodeUwTfbsAg04449CtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg04449InputStdAlnRep1
+objType file
+antibody Input
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2597
+view Alignments
+
+metaObject wgEncodeUwTfbsAg04449InputStdRawDataRep1
+objType file
+antibody Input
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2597
+view RawData
+
+metaObject wgEncodeUwTfbsAg04449InputStdRawRep1
+objType table
+antibody Input
+cell AG04449
+composite wgEncodeUwTfbs
+control std
+controlId AG04449/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-22
+dateUnrestricted 2011-07-22
+fileName wgEncodeUwTfbsAg04449InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2597
+tableName wgEncodeUwTfbsAg04449InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg04450CtcfStdAlnRep1
+objType file
+antibody CTCF
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450CtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2663
+view Alignments
+
+metaObject wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2663
+tableName wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg04450CtcfStdPkRep1
+objType table
+antibody CTCF
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450CtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2663
+tableName wgEncodeUwTfbsAg04450CtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsAg04450CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2663
+view RawData
+
+metaObject wgEncodeUwTfbsAg04450CtcfStdRawRep1
+objType table
+antibody CTCF
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450CtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2663
+tableName wgEncodeUwTfbsAg04450CtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg04450InputStdAlnRep1
+objType file
+antibody Input
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2662
+view Alignments
+
+metaObject wgEncodeUwTfbsAg04450InputStdRawDataRep1
+objType file
+antibody Input
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2662
+view RawData
+
+metaObject wgEncodeUwTfbsAg04450InputStdRawRep1
+objType table
+antibody Input
+cell AG04450
+composite wgEncodeUwTfbs
+control std
+controlId AG04450/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg04450InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2662
+tableName wgEncodeUwTfbsAg04450InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdAlnRep1
+objType file
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2666
+view Alignments
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdAlnRep2
+objType file
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2665
+view Alignments
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2666
+tableName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2665
+tableName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdPkRep1
+objType table
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2666
+tableName wgEncodeUwTfbsAg09309CtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdPkRep2
+objType table
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2665
+tableName wgEncodeUwTfbsAg09309CtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2666
+view RawData
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2665
+view RawData
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdRawRep1
+objType table
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2666
+tableName wgEncodeUwTfbsAg09309CtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg09309CtcfStdRawRep2
+objType table
+antibody CTCF
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309CtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2665
+tableName wgEncodeUwTfbsAg09309CtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg09309InputStdAlnRep1
+objType file
+antibody Input
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2664
+view Alignments
+
+metaObject wgEncodeUwTfbsAg09309InputStdRawDataRep1
+objType file
+antibody Input
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2664
+view RawData
+
+metaObject wgEncodeUwTfbsAg09309InputStdRawRep1
+objType table
+antibody Input
+cell AG09309
+composite wgEncodeUwTfbs
+control std
+controlId AG09309/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09309InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2664
+tableName wgEncodeUwTfbsAg09309InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdAlnRep1
+objType file
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2668
+view Alignments
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdAlnRep2
+objType file
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2669
+view Alignments
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2668
+tableName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2669
+tableName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdPkRep1
+objType table
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2668
+tableName wgEncodeUwTfbsAg09319CtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdPkRep2
+objType table
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2669
+tableName wgEncodeUwTfbsAg09319CtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2668
+view RawData
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2669
+view RawData
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdRawRep1
+objType table
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2668
+tableName wgEncodeUwTfbsAg09319CtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg09319CtcfStdRawRep2
+objType table
+antibody CTCF
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319CtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2669
+tableName wgEncodeUwTfbsAg09319CtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg09319InputStdAlnRep1
+objType file
+antibody Input
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2667
+view Alignments
+
+metaObject wgEncodeUwTfbsAg09319InputStdRawDataRep1
+objType file
+antibody Input
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2667
+view RawData
+
+metaObject wgEncodeUwTfbsAg09319InputStdRawRep1
+objType table
+antibody Input
+cell AG09319
+composite wgEncodeUwTfbs
+control std
+controlId AG09319/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg09319InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2667
+tableName wgEncodeUwTfbsAg09319InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdAlnRep1
+objType file
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2671
+view Alignments
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdAlnRep2
+objType file
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2672
+view Alignments
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2671
+tableName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2672
+tableName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdPkRep1
+objType table
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2671
+tableName wgEncodeUwTfbsAg10803CtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdPkRep2
+objType table
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2672
+tableName wgEncodeUwTfbsAg10803CtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2671
+view RawData
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2672
+view RawData
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdRawRep1
+objType table
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2671
+tableName wgEncodeUwTfbsAg10803CtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg10803CtcfStdRawRep2
+objType table
+antibody CTCF
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803CtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2672
+tableName wgEncodeUwTfbsAg10803CtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsAg10803InputStdAlnRep1
+objType file
+antibody Input
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2670
+view Alignments
+
+metaObject wgEncodeUwTfbsAg10803InputStdRawDataRep1
+objType file
+antibody Input
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2670
+view RawData
+
+metaObject wgEncodeUwTfbsAg10803InputStdRawRep1
+objType table
+antibody Input
+cell AG10803
+composite wgEncodeUwTfbs
+control std
+controlId AG10803/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAg10803InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2670
+tableName wgEncodeUwTfbsAg10803InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAoafCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2675
+view Alignments
+
+metaObject wgEncodeUwTfbsAoafCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2674
+view Alignments
+
+metaObject wgEncodeUwTfbsAoafCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2675
+tableName wgEncodeUwTfbsAoafCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsAoafCtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2674
+tableName wgEncodeUwTfbsAoafCtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsAoafCtcfStdPkRep1
+objType table
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2675
+tableName wgEncodeUwTfbsAoafCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsAoafCtcfStdPkRep2
+objType table
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2674
+tableName wgEncodeUwTfbsAoafCtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsAoafCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2675
+view RawData
+
+metaObject wgEncodeUwTfbsAoafCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2674
+view RawData
+
+metaObject wgEncodeUwTfbsAoafCtcfStdRawRep1
+objType table
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2675
+tableName wgEncodeUwTfbsAoafCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsAoafCtcfStdRawRep2
+objType table
+antibody CTCF
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafCtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2674
+tableName wgEncodeUwTfbsAoafCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsAoafInputStdAlnRep1
+objType file
+antibody Input
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2673
+view Alignments
+
+metaObject wgEncodeUwTfbsAoafInputStdRawDataRep1
+objType file
+antibody Input
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2673
+view RawData
+
+metaObject wgEncodeUwTfbsAoafInputStdRawRep1
+objType table
+antibody Input
+cell AoAF
+composite wgEncodeUwTfbs
+control std
+controlId AoAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsAoafInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2673
+tableName wgEncodeUwTfbsAoafInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwTfbsBjCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -5,7 +1706,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -17,7 +1718,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -32,7 +1732,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -44,7 +1744,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -59,7 +1758,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -85,7 +1784,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -111,7 +1810,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -137,7 +1836,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
@@ -163,7 +1862,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -173,7 +1872,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjCtcfStdRawSignalRep1
 project wgEncode
 rank 1
 replicate 1
@@ -188,7 +1886,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -214,7 +1912,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -240,7 +1938,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -252,7 +1950,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -267,7 +1964,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -286,6 +1983,48 @@ subId 1283
 tableName wgEncodeUwTfbsBjInputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwTfbsBjtertCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell BJ
+composite wgEncodeUwTfbs
+controlId BJ/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsBjtertCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 517
+view RawData
+
+metaObject wgEncodeUwTfbsBjtertCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell BJ
+composite wgEncodeUwTfbs
+controlId BJ/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwTfbsBjtertCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 516
+view RawData
+
 metaObject wgEncodeUwTfbsCaco2CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -293,7 +2032,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -305,7 +2044,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsCaco2CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -320,7 +2058,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -332,7 +2070,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsCaco2CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -347,7 +2084,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -373,7 +2110,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -399,7 +2136,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -425,7 +2162,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -444,6 +2181,48 @@ subId 1267
 tableName wgEncodeUwTfbsCaco2CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsCaco2CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell Caco-2
+composite wgEncodeUwTfbs
+controlId Caco-2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsCaco2CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 519
+view RawData
+
+metaObject wgEncodeUwTfbsCaco2CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell Caco-2
+composite wgEncodeUwTfbs
+controlId Caco-2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-20
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsCaco2CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 518
+view RawData
+
 metaObject wgEncodeUwTfbsCaco2CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -451,7 +2230,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -477,7 +2256,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -503,7 +2282,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -515,7 +2294,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsCaco2InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -530,7 +2308,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -556,7 +2334,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -568,7 +2346,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm06990CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -583,7 +2360,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -595,7 +2372,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm06990CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -610,7 +2386,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -636,7 +2412,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -662,7 +2438,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -688,7 +2464,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -707,6 +2483,49 @@ subId 1271
 tableName wgEncodeUwTfbsGm06990CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm06990CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM06990
+composite wgEncodeUwTfbs
+controlId GM06990/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-20
+dateSubmitted 2009-06-29
+dateUnrestricted 2010-03-29
+fileName wgEncodeUwTfbsGm06990CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 520
+view RawData
+
+metaObject wgEncodeUwTfbsGm06990CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM06990
+composite wgEncodeUwTfbs
+controlId GM06990/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-21
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsGm06990CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 527
+view RawData
+
 metaObject wgEncodeUwTfbsGm06990CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -714,7 +2533,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -740,7 +2559,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -766,7 +2585,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -778,7 +2597,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm06990InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -793,7 +2611,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -819,7 +2637,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -831,7 +2649,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12801CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -846,7 +2663,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -872,7 +2689,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -891,6 +2708,28 @@ subId 1270
 tableName wgEncodeUwTfbsGm12801CtcfStdPkRep1
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12801CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12801
+composite wgEncodeUwTfbs
+controlId GM12801/Input
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-30
+dateUnrestricted 2010-03-29
+fileName wgEncodeUwTfbsGm12801CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion 1
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 299
+view RawData
+
 metaObject wgEncodeUwTfbsGm12801CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -898,7 +2737,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -924,7 +2763,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -936,7 +2775,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12801InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -951,7 +2789,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -977,7 +2815,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -989,7 +2827,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12864CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1004,7 +2841,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1016,7 +2853,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12864CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -1031,7 +2867,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1057,7 +2893,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1083,7 +2919,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1109,7 +2945,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -1128,6 +2964,48 @@ subId 1273
 tableName wgEncodeUwTfbsGm12864CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12864CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12864
+composite wgEncodeUwTfbs
+controlId GM12864/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12864CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 982
+view RawData
+
+metaObject wgEncodeUwTfbsGm12864CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM12864
+composite wgEncodeUwTfbs
+controlId GM12864/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12864CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 983
+view RawData
+
 metaObject wgEncodeUwTfbsGm12864CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -1135,7 +3013,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1161,7 +3039,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1187,7 +3065,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -1199,7 +3077,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12864InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1214,7 +3091,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -1240,7 +3117,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1252,7 +3129,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12865CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1267,7 +3143,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1279,7 +3155,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12865CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -1294,7 +3169,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1320,7 +3195,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1346,7 +3221,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1372,7 +3247,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -1391,6 +3266,48 @@ subId 1274
 tableName wgEncodeUwTfbsGm12865CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12865CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12865
+composite wgEncodeUwTfbs
+controlId GM12865/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12865CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 985
+view RawData
+
+metaObject wgEncodeUwTfbsGm12865CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM12865
+composite wgEncodeUwTfbs
+controlId GM12865/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12865CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 984
+view RawData
+
 metaObject wgEncodeUwTfbsGm12865CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -1398,7 +3315,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1424,7 +3341,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1450,7 +3367,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -1462,7 +3379,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12865InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1477,7 +3393,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -1503,7 +3419,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1515,7 +3431,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12872CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1530,7 +3445,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1542,7 +3457,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12872CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -1557,7 +3471,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1583,7 +3497,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1609,7 +3523,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1635,7 +3549,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -1654,6 +3568,48 @@ subId 1278
 tableName wgEncodeUwTfbsGm12872CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12872CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12872
+composite wgEncodeUwTfbs
+controlId GM12872/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12872CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 986
+view RawData
+
+metaObject wgEncodeUwTfbsGm12872CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM12872
+composite wgEncodeUwTfbs
+controlId GM12872/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12872CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 987
+view RawData
+
 metaObject wgEncodeUwTfbsGm12872CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -1661,7 +3617,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1687,7 +3643,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -1713,7 +3669,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -1725,7 +3681,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12872InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1740,7 +3695,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -1766,7 +3721,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -1778,7 +3733,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12873CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1793,7 +3747,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -1805,7 +3759,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12873CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -1820,7 +3773,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -1846,7 +3799,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -1872,7 +3825,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -1898,7 +3851,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -1917,6 +3870,48 @@ subId 1279
 tableName wgEncodeUwTfbsGm12873CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12873CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12873
+composite wgEncodeUwTfbs
+controlId GM12873/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12873CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 988
+view RawData
+
+metaObject wgEncodeUwTfbsGm12873CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM12873
+composite wgEncodeUwTfbs
+controlId GM12873/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12873CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 989
+view RawData
+
 metaObject wgEncodeUwTfbsGm12873CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -1924,7 +3919,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -1950,7 +3945,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -1976,7 +3971,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -1988,7 +3983,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12873InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2003,7 +3997,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -2029,7 +4023,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2041,7 +4035,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12874CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2056,7 +4049,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2068,7 +4061,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12874CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -2083,7 +4075,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2109,7 +4101,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2135,7 +4127,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2161,7 +4153,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -2180,6 +4172,48 @@ subId 1280
 tableName wgEncodeUwTfbsGm12874CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12874CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12874
+composite wgEncodeUwTfbs
+controlId GM12874/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12874CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 991
+view RawData
+
+metaObject wgEncodeUwTfbsGm12874CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM12874
+composite wgEncodeUwTfbs
+controlId GM12874/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12874CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 990
+view RawData
+
 metaObject wgEncodeUwTfbsGm12874CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -2187,7 +4221,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2213,7 +4247,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2239,7 +4273,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
@@ -2251,7 +4285,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12874InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2266,7 +4299,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -2292,7 +4325,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -2304,7 +4337,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12875CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2319,7 +4351,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -2331,7 +4363,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12875CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -2346,7 +4377,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -2372,7 +4403,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -2398,7 +4429,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -2424,7 +4455,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
@@ -2443,6 +4474,48 @@ subId 1484
 tableName wgEncodeUwTfbsGm12875CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12875CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12875
+composite wgEncodeUwTfbs
+controlId GM12875/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12875CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 992
+view RawData
+
+metaObject wgEncodeUwTfbsGm12875CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM12875
+composite wgEncodeUwTfbs
+controlId GM12875/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-11
+dateUnrestricted 2010-10-11
+fileName wgEncodeUwTfbsGm12875CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 993
+view RawData
+
 metaObject wgEncodeUwTfbsGm12875CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -2450,7 +4523,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -2476,7 +4549,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -2502,7 +4575,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -2514,7 +4587,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12875InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2529,7 +4601,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
@@ -2555,7 +4627,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -2567,7 +4639,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12878CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2582,7 +4653,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -2594,7 +4665,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12878CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -2609,7 +4679,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -2635,7 +4705,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -2661,7 +4731,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-29
@@ -2687,7 +4757,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -2706,6 +4776,49 @@ subId 1265
 tableName wgEncodeUwTfbsGm12878CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsGm12878CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeUwTfbs
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-19
+dateSubmitted 2009-06-30
+dateUnrestricted 2010-03-29
+fileName wgEncodeUwTfbsGm12878CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 690
+view RawData
+
+metaObject wgEncodeUwTfbsGm12878CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeUwTfbs
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-21
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsGm12878CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 528
+view RawData
+
 metaObject wgEncodeUwTfbsGm12878CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -2713,7 +4826,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -2739,7 +4852,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -2765,7 +4878,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -2777,7 +4890,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12878InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2792,7 +4904,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -2811,79 +4923,1492 @@ subId 1293
 tableName wgEncodeUwTfbsGm12878InputStdRawRep1
 view RawSignal
 
-metaObject wgEncodeUwTfbsH7esInputStdAlnRep1
+metaObject wgEncodeUwTfbsHaspCtcfStdAlnRep1
 objType file
-antibody Input
-cell H7-hESC
+antibody CTCF
+cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/Input/std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwTfbsH7esInputStdAlnRep1.bam.bai
-fileName wgEncodeUwTfbsH7esInputStdAlnRep1.bam
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 lab UW
-labVersion Bowtie 0.12.5
+labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsH7esInputStdAlnRep1
 project wgEncode
-rank 1
 replicate 1
-setType input
-subId 2033
+setType exp
+subId 2781
 view Alignments
 
-metaObject wgEncodeUwTfbsH7esInputStdRawDataRep1
-objType file
-antibody Input
-cell H7-hESC
+metaObject wgEncodeUwTfbsHaspCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/Input/std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwTfbsH7esInputStdRawDataRep1.fastq.gz
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2781
+tableName wgEncodeUwTfbsHaspCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHaspCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HA-sp
+composite wgEncodeUwTfbs
+control std
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2781
+tableName wgEncodeUwTfbsHaspCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHaspCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HA-sp
+composite wgEncodeUwTfbs
+control std
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspCtcfStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsH7esInputStdRawSignalRep1
 project wgEncode
-rank 1
 replicate 1
-setType input
-subId 2033
+setType exp
+subId 2781
 view RawData
 
-metaObject wgEncodeUwTfbsH7esInputStdRawRep1
+metaObject wgEncodeUwTfbsHaspCtcfStdRawRep1
 objType table
-antibody Input
-cell H7-hESC
+antibody CTCF
+cell HA-sp
 composite wgEncodeUwTfbs
 control std
-controlId H7-hESC/Input/std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwTfbsH7esInputStdRawRep1.bigWig
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg19
 project wgEncode
-rank 1
+replicate 1
+setType exp
+subId 2781
+tableName wgEncodeUwTfbsHaspCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHaspInputStdAlnRep1
+objType file
+antibody Input
+cell HA-sp
+composite wgEncodeUwTfbs
+control std
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
 replicate 1
 setType input
-subId 2033
-tableName wgEncodeUwTfbsH7esInputStdRawRep1
+subId 2780
+view Alignments
+
+metaObject wgEncodeUwTfbsHaspInputStdRawDataRep1
+objType file
+antibody Input
+cell HA-sp
+composite wgEncodeUwTfbs
+control std
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2780
+view RawData
+
+metaObject wgEncodeUwTfbsHaspInputStdRawRep1
+objType table
+antibody Input
+cell HA-sp
+composite wgEncodeUwTfbs
+control std
+controlId HA-sp/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-28
+dateUnrestricted 2011-07-28
+fileName wgEncodeUwTfbsHaspInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2780
+tableName wgEncodeUwTfbsHaspInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2677
+view Alignments
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2678
+view Alignments
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2677
+tableName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2678
+tableName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2677
+tableName wgEncodeUwTfbsHbmecCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdPkRep2
+objType table
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2678
+tableName wgEncodeUwTfbsHbmecCtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2677
+view RawData
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2678
+view RawData
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2677
+tableName wgEncodeUwTfbsHbmecCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHbmecCtcfStdRawRep2
+objType table
+antibody CTCF
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecCtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2678
+tableName wgEncodeUwTfbsHbmecCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsHbmecInputStdAlnRep1
+objType file
+antibody Input
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2676
+view Alignments
+
+metaObject wgEncodeUwTfbsHbmecInputStdRawDataRep1
+objType file
+antibody Input
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2676
+view RawData
+
+metaObject wgEncodeUwTfbsHbmecInputStdRawRep1
+objType table
+antibody Input
+cell HBMEC
+composite wgEncodeUwTfbs
+control std
+controlId HBMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHbmecInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2676
+tableName wgEncodeUwTfbsHbmecInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHcfaaCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2680
+view Alignments
+
+metaObject wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2680
+tableName wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHcfaaCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2680
+tableName wgEncodeUwTfbsHcfaaCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHcfaaCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2680
+view RawData
+
+metaObject wgEncodeUwTfbsHcfaaCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2680
+tableName wgEncodeUwTfbsHcfaaCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHcfaaInputStdAlnRep1
+objType file
+antibody Input
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2679
+view Alignments
+
+metaObject wgEncodeUwTfbsHcfaaInputStdRawDataRep1
+objType file
+antibody Input
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2679
+view RawData
+
+metaObject wgEncodeUwTfbsHcfaaInputStdRawRep1
+objType table
+antibody Input
+cell HCFaa
+composite wgEncodeUwTfbs
+control std
+controlId HCFaa/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfaaInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2679
+tableName wgEncodeUwTfbsHcfaaInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHcfInputStdAlnRep1
+objType file
+antibody Input
+cell HCF
+composite wgEncodeUwTfbs
+control std
+controlId HCF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2703
+view Alignments
+
+metaObject wgEncodeUwTfbsHcfInputStdRawDataRep1
+objType file
+antibody Input
+cell HCF
+composite wgEncodeUwTfbs
+control std
+controlId HCF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2703
+view RawData
+
+metaObject wgEncodeUwTfbsHcfInputStdRawRep1
+objType table
+antibody Input
+cell HCF
+composite wgEncodeUwTfbs
+control std
+controlId HCF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcfInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2703
+tableName wgEncodeUwTfbsHcfInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHcmInputStdAlnRep1
+objType file
+antibody Input
+cell HCM
+composite wgEncodeUwTfbs
+control std
+controlId HCM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcmInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2704
+view Alignments
+
+metaObject wgEncodeUwTfbsHcmInputStdRawDataRep1
+objType file
+antibody Input
+cell HCM
+composite wgEncodeUwTfbs
+control std
+controlId HCM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcmInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2704
+view RawData
+
+metaObject wgEncodeUwTfbsHcmInputStdRawRep1
+objType table
+antibody Input
+cell HCM
+composite wgEncodeUwTfbs
+control std
+controlId HCM/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcmInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2704
+tableName wgEncodeUwTfbsHcmInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2682
+view Alignments
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2683
+view Alignments
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2682
+tableName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2683
+tableName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2682
+tableName wgEncodeUwTfbsHcpeCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdPkRep2
+objType table
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2683
+tableName wgEncodeUwTfbsHcpeCtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2682
+view RawData
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2683
+view RawData
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2682
+tableName wgEncodeUwTfbsHcpeCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHcpeCtcfStdRawRep2
+objType table
+antibody CTCF
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeCtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2683
+tableName wgEncodeUwTfbsHcpeCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsHcpeInputStdAlnRep1
+objType file
+antibody Input
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2681
+view Alignments
+
+metaObject wgEncodeUwTfbsHcpeInputStdRawDataRep1
+objType file
+antibody Input
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2681
+view RawData
+
+metaObject wgEncodeUwTfbsHcpeInputStdRawRep1
+objType table
+antibody Input
+cell HCPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HCPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHcpeInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2681
+tableName wgEncodeUwTfbsHcpeInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHct116InputStdAlnRep1
+objType file
+antibody Input
+cell HCT-116
+composite wgEncodeUwTfbs
+control std
+controlId HCT-116/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHct116InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2705
+view Alignments
+
+metaObject wgEncodeUwTfbsHct116InputStdRawDataRep1
+objType file
+antibody Input
+cell HCT-116
+composite wgEncodeUwTfbs
+control std
+controlId HCT-116/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHct116InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2705
+view RawData
+
+metaObject wgEncodeUwTfbsHct116InputStdRawRep1
+objType table
+antibody Input
+cell HCT-116
+composite wgEncodeUwTfbs
+control std
+controlId HCT-116/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHct116InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2705
+tableName wgEncodeUwTfbsHct116InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHeeCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2686
+view Alignments
+
+metaObject wgEncodeUwTfbsHeeCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2685
+view Alignments
+
+metaObject wgEncodeUwTfbsHeeCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2686
+tableName wgEncodeUwTfbsHeeCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHeeCtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2685
+tableName wgEncodeUwTfbsHeeCtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsHeeCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2686
+tableName wgEncodeUwTfbsHeeCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHeeCtcfStdPkRep2
+objType table
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2685
+tableName wgEncodeUwTfbsHeeCtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsHeeCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2686
+view RawData
+
+metaObject wgEncodeUwTfbsHeeCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2685
+view RawData
+
+metaObject wgEncodeUwTfbsHeeCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2686
+tableName wgEncodeUwTfbsHeeCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHeeCtcfStdRawRep2
+objType table
+antibody CTCF
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeCtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2685
+tableName wgEncodeUwTfbsHeeCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsHeeInputStdAlnRep1
+objType file
+antibody Input
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2684
+view Alignments
+
+metaObject wgEncodeUwTfbsHeeInputStdRawDataRep1
+objType file
+antibody Input
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2684
+view RawData
+
+metaObject wgEncodeUwTfbsHeeInputStdRawRep1
+objType table
+antibody Input
+cell HEEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HEEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHeeInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2684
+tableName wgEncodeUwTfbsHeeInputStdRawRep1
 view RawSignal
 
 metaObject wgEncodeUwTfbsHek293CtcfStdAlnRep1
@@ -2893,7 +6418,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -2905,7 +6430,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHek293CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2920,7 +6444,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -2932,7 +6456,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHek293CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -2947,7 +6470,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -2973,7 +6496,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -2999,7 +6522,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3025,7 +6548,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -3044,6 +6567,49 @@ subId 1486
 tableName wgEncodeUwTfbsHek293CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsHek293CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HEK293
+composite wgEncodeUwTfbs
+controlId HEK293/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-30
+dateSubmitted 2009-06-30
+dateUnrestricted 2010-03-29
+fileName wgEncodeUwTfbsHek293CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 626
+view RawData
+
+metaObject wgEncodeUwTfbsHek293CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HEK293
+composite wgEncodeUwTfbs
+controlId HEK293/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwTfbsHek293CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 599
+view RawData
+
 metaObject wgEncodeUwTfbsHek293CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -3051,7 +6617,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3077,7 +6643,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -3103,7 +6669,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -3115,7 +6681,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHek293InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3130,7 +6695,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -3156,7 +6721,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -3168,7 +6733,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHelas3CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3183,7 +6747,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -3195,7 +6759,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHelas3CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -3210,7 +6773,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3236,7 +6799,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -3262,7 +6825,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3288,7 +6851,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3307,6 +6870,48 @@ subId 1296
 tableName wgEncodeUwTfbsHelas3CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsHelas3CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HeLa-S3
+composite wgEncodeUwTfbs
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-19
+dateUnrestricted 2010-07-19
+fileName wgEncodeUwTfbsHelas3CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 691
+view RawData
+
+metaObject wgEncodeUwTfbsHelas3CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HeLa-S3
+composite wgEncodeUwTfbs
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-21
+dateUnrestricted 2010-06-21
+fileName wgEncodeUwTfbsHelas3CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 532
+view RawData
+
 metaObject wgEncodeUwTfbsHelas3CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -3314,7 +6919,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3340,7 +6945,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -3366,7 +6971,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
@@ -3378,7 +6983,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHelas3InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3393,7 +6997,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -3419,7 +7023,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3431,7 +7035,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHepg2CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3446,7 +7049,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3458,7 +7061,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHepg2CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -3473,7 +7075,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3499,7 +7101,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3525,7 +7127,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3551,7 +7153,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3570,6 +7172,50 @@ subId 1299
 tableName wgEncodeUwTfbsHepg2CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsHepg2CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HepG2
+composite wgEncodeUwTfbs
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-02
+fileName wgEncodeUwTfbsHepg2CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion 1
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 406
+view RawData
+
+metaObject wgEncodeUwTfbsHepg2CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HepG2
+composite wgEncodeUwTfbs
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-29
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-02
+fileName wgEncodeUwTfbsHepg2CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 608
+view RawData
+
 metaObject wgEncodeUwTfbsHepg2CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -3577,7 +7223,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3603,7 +7249,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -3629,7 +7275,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -3641,7 +7287,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHepg2InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3656,7 +7301,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -3682,7 +7327,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3694,7 +7339,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHl60CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3709,7 +7353,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3735,7 +7379,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3754,6 +7398,28 @@ subId 1300
 tableName wgEncodeUwTfbsHl60CtcfStdPkRep1
 view Peaks
 
+metaObject wgEncodeUwTfbsHl60CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HL-60
+composite wgEncodeUwTfbs
+controlId HL-60/Input
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-30
+dateUnrestricted 2010-03-29
+fileName wgEncodeUwTfbsHl60CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion 1
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 306
+view RawData
+
 metaObject wgEncodeUwTfbsHl60CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -3761,7 +7427,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -3787,7 +7453,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -3799,7 +7465,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHl60InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3814,7 +7479,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -3840,7 +7505,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -3852,7 +7517,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHmecCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3867,7 +7531,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -3893,7 +7557,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -3912,6 +7576,27 @@ subId 1301
 tableName wgEncodeUwTfbsHmecCtcfStdPkRep1
 view Peaks
 
+metaObject wgEncodeUwTfbsHmecCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HMEC
+composite wgEncodeUwTfbs
+controlId HMEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-12
+dateUnrestricted 2010-07-11
+fileName wgEncodeUwTfbsHmecCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 676
+view RawData
+
 metaObject wgEncodeUwTfbsHmecCtcfStdRawRep1
 objType table
 antibody CTCF
@@ -3919,7 +7604,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -3945,7 +7630,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -3957,7 +7642,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHmecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3972,7 +7656,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -3991,6 +7675,915 @@ subId 1302
 tableName wgEncodeUwTfbsHmecInputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwTfbsHmfCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2689
+view Alignments
+
+metaObject wgEncodeUwTfbsHmfCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2688
+view Alignments
+
+metaObject wgEncodeUwTfbsHmfCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2689
+tableName wgEncodeUwTfbsHmfCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHmfCtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2688
+tableName wgEncodeUwTfbsHmfCtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsHmfCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2689
+tableName wgEncodeUwTfbsHmfCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHmfCtcfStdPkRep2
+objType table
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2688
+tableName wgEncodeUwTfbsHmfCtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsHmfCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2689
+view RawData
+
+metaObject wgEncodeUwTfbsHmfCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2688
+view RawData
+
+metaObject wgEncodeUwTfbsHmfCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2689
+tableName wgEncodeUwTfbsHmfCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHmfCtcfStdRawRep2
+objType table
+antibody CTCF
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfCtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2688
+tableName wgEncodeUwTfbsHmfCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsHmfInputStdAlnRep1
+objType file
+antibody Input
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2687
+view Alignments
+
+metaObject wgEncodeUwTfbsHmfInputStdRawDataRep1
+objType file
+antibody Input
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2687
+view RawData
+
+metaObject wgEncodeUwTfbsHmfInputStdRawRep1
+objType table
+antibody Input
+cell HMF
+composite wgEncodeUwTfbs
+control std
+controlId HMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHmfInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2687
+tableName wgEncodeUwTfbsHmfInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHpafCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2692
+view Alignments
+
+metaObject wgEncodeUwTfbsHpafCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2691
+view Alignments
+
+metaObject wgEncodeUwTfbsHpafCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2692
+tableName wgEncodeUwTfbsHpafCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHpafCtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2691
+tableName wgEncodeUwTfbsHpafCtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsHpafCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2692
+tableName wgEncodeUwTfbsHpafCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHpafCtcfStdPkRep2
+objType table
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2691
+tableName wgEncodeUwTfbsHpafCtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsHpafCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2692
+view RawData
+
+metaObject wgEncodeUwTfbsHpafCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2691
+view RawData
+
+metaObject wgEncodeUwTfbsHpafCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2692
+tableName wgEncodeUwTfbsHpafCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHpafCtcfStdRawRep2
+objType table
+antibody CTCF
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafCtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2691
+tableName wgEncodeUwTfbsHpafCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsHpafInputStdAlnRep1
+objType file
+antibody Input
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2690
+view Alignments
+
+metaObject wgEncodeUwTfbsHpafInputStdRawDataRep1
+objType file
+antibody Input
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2690
+view RawData
+
+metaObject wgEncodeUwTfbsHpafInputStdRawRep1
+objType table
+antibody Input
+cell HPAF
+composite wgEncodeUwTfbs
+control std
+controlId HPAF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpafInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2690
+tableName wgEncodeUwTfbsHpafInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHpfCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2694
+view Alignments
+
+metaObject wgEncodeUwTfbsHpfCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdAlnRep2.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2695
+view Alignments
+
+metaObject wgEncodeUwTfbsHpfCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2694
+tableName wgEncodeUwTfbsHpfCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHpfCtcfStdHotspotsRep2
+objType table
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdHotspotsRep2.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2695
+tableName wgEncodeUwTfbsHpfCtcfStdHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwTfbsHpfCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2694
+tableName wgEncodeUwTfbsHpfCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHpfCtcfStdPkRep2
+objType table
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdPkRep2.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2695
+tableName wgEncodeUwTfbsHpfCtcfStdPkRep2
+view Peaks
+
+metaObject wgEncodeUwTfbsHpfCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2694
+view RawData
+
+metaObject wgEncodeUwTfbsHpfCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2695
+view RawData
+
+metaObject wgEncodeUwTfbsHpfCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2694
+tableName wgEncodeUwTfbsHpfCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHpfCtcfStdRawRep2
+objType table
+antibody CTCF
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfCtcfStdRawRep2.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 2695
+tableName wgEncodeUwTfbsHpfCtcfStdRawRep2
+view RawSignal
+
+metaObject wgEncodeUwTfbsHpfInputStdAlnRep1
+objType file
+antibody Input
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2693
+view Alignments
+
+metaObject wgEncodeUwTfbsHpfInputStdRawDataRep1
+objType file
+antibody Input
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2693
+view RawData
+
+metaObject wgEncodeUwTfbsHpfInputStdRawRep1
+objType table
+antibody Input
+cell HPF
+composite wgEncodeUwTfbs
+control std
+controlId HPF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHpfInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2693
+tableName wgEncodeUwTfbsHpfInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwTfbsHreCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -3998,7 +8591,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4010,7 +8603,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHreCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4025,7 +8617,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -4037,7 +8629,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHreCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -4052,7 +8643,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4078,7 +8669,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -4104,7 +8695,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4130,7 +8721,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4149,6 +8740,48 @@ subId 1305
 tableName wgEncodeUwTfbsHreCtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsHreCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HRE
+composite wgEncodeUwTfbs
+controlId HRE/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-21
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsHreCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 523
+view RawData
+
+metaObject wgEncodeUwTfbsHreCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HRE
+composite wgEncodeUwTfbs
+controlId HRE/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwTfbsHreCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 601
+view RawData
+
 metaObject wgEncodeUwTfbsHreCtcfStdRawRep1
 objType table
 antibody CTCF
@@ -4156,7 +8789,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4182,7 +8815,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -4208,7 +8841,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -4220,7 +8853,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHreInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4235,7 +8867,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -4254,6 +8886,192 @@ subId 1303
 tableName wgEncodeUwTfbsHreInputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwTfbsHrpeCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeCtcfStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2697
+view Alignments
+
+metaObject wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1
+objType table
+antibody CTCF
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1.broadPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2697
+tableName wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwTfbsHrpeCtcfStdPkRep1
+objType table
+antibody CTCF
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeCtcfStdPkRep1.narrowPeak.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2697
+tableName wgEncodeUwTfbsHrpeCtcfStdPkRep1
+view Peaks
+
+metaObject wgEncodeUwTfbsHrpeCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2697
+view RawData
+
+metaObject wgEncodeUwTfbsHrpeCtcfStdRawRep1
+objType table
+antibody CTCF
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeCtcfStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType exp
+subId 2697
+tableName wgEncodeUwTfbsHrpeCtcfStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsHrpeInputStdAlnRep1
+objType file
+antibody Input
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2696
+view Alignments
+
+metaObject wgEncodeUwTfbsHrpeInputStdRawDataRep1
+objType file
+antibody Input
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2696
+view RawData
+
+metaObject wgEncodeUwTfbsHrpeInputStdRawRep1
+objType table
+antibody Input
+cell HRPEpiC
+composite wgEncodeUwTfbs
+control std
+controlId HRPEpiC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHrpeInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2696
+tableName wgEncodeUwTfbsHrpeInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwTfbsHuvecCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -4261,7 +9079,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -4273,7 +9091,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHuvecCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4288,7 +9105,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -4300,7 +9117,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHuvecCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -4315,7 +9131,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -4341,7 +9157,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -4367,7 +9183,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -4393,7 +9209,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -4412,6 +9228,49 @@ subId 1306
 tableName wgEncodeUwTfbsHuvecCtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsHuvecCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell HUVEC
+composite wgEncodeUwTfbs
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-19
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwTfbsHuvecCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 693
+view RawData
+
+metaObject wgEncodeUwTfbsHuvecCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell HUVEC
+composite wgEncodeUwTfbs
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-19
+dateUnrestricted 2010-07-19
+fileName wgEncodeUwTfbsHuvecCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 692
+view RawData
+
 metaObject wgEncodeUwTfbsHuvecCtcfStdRawRep1
 objType table
 antibody CTCF
@@ -4419,7 +9278,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -4445,7 +9304,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -4471,7 +9330,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -4483,7 +9342,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHuvecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4498,7 +9356,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -4517,6 +9375,144 @@ subId 1316
 tableName wgEncodeUwTfbsHuvecInputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwTfbsHvmfInputStdAlnRep1
+objType file
+antibody Input
+cell HVMF
+composite wgEncodeUwTfbs
+control std
+controlId HVMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHvmfInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2698
+view Alignments
+
+metaObject wgEncodeUwTfbsHvmfInputStdRawDataRep1
+objType file
+antibody Input
+cell HVMF
+composite wgEncodeUwTfbs
+control std
+controlId HVMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHvmfInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2698
+view RawData
+
+metaObject wgEncodeUwTfbsHvmfInputStdRawRep1
+objType table
+antibody Input
+cell HVMF
+composite wgEncodeUwTfbs
+control std
+controlId HVMF/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsHvmfInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2698
+tableName wgEncodeUwTfbsHvmfInputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsJurkatInputStdAlnRep1
+objType file
+antibody Input
+cell Jurkat
+composite wgEncodeUwTfbs
+control std
+controlId Jurkat/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsJurkatInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2699
+view Alignments
+
+metaObject wgEncodeUwTfbsJurkatInputStdRawDataRep1
+objType file
+antibody Input
+cell Jurkat
+composite wgEncodeUwTfbs
+control std
+controlId Jurkat/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsJurkatInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2699
+view RawData
+
+metaObject wgEncodeUwTfbsJurkatInputStdRawRep1
+objType table
+antibody Input
+cell Jurkat
+composite wgEncodeUwTfbs
+control std
+controlId Jurkat/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsJurkatInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2699
+tableName wgEncodeUwTfbsJurkatInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwTfbsK562CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -4524,7 +9520,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -4536,7 +9532,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsK562CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4551,7 +9546,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4563,7 +9558,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsK562CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -4578,7 +9572,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -4604,7 +9598,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4630,7 +9624,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -4656,7 +9650,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4675,6 +9669,49 @@ subId 1264
 tableName wgEncodeUwTfbsK562CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsK562CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell K562
+composite wgEncodeUwTfbs
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-13
+dateSubmitted 2009-06-30
+dateUnrestricted 2010-03-29
+fileName wgEncodeUwTfbsK562CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 659
+view RawData
+
+metaObject wgEncodeUwTfbsK562CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell K562
+composite wgEncodeUwTfbs
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-21
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsK562CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 525
+view RawData
+
 metaObject wgEncodeUwTfbsK562CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -4682,7 +9719,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -4708,7 +9745,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4734,7 +9771,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -4746,7 +9783,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsK562InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4761,7 +9797,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -4780,6 +9816,213 @@ subId 1308
 tableName wgEncodeUwTfbsK562InputStdRawRep1
 view RawSignal
 
+metaObject wgEncodeUwTfbsMcf7InputStdAlnRep1
+objType file
+antibody Input
+cell MCF-7
+composite wgEncodeUwTfbs
+control std
+controlId MCF-7/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsMcf7InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2700
+view Alignments
+
+metaObject wgEncodeUwTfbsMcf7InputStdRawDataRep1
+objType file
+antibody Input
+cell MCF-7
+composite wgEncodeUwTfbs
+control std
+controlId MCF-7/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsMcf7InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2700
+view RawData
+
+metaObject wgEncodeUwTfbsMcf7InputStdRawRep1
+objType table
+antibody Input
+cell MCF-7
+composite wgEncodeUwTfbs
+control std
+controlId MCF-7/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsMcf7InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2700
+tableName wgEncodeUwTfbsMcf7InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsNb4InputStdAlnRep1
+objType file
+antibody Input
+cell NB4
+composite wgEncodeUwTfbs
+control std
+controlId NB4/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsNb4InputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2701
+view Alignments
+
+metaObject wgEncodeUwTfbsNb4InputStdRawDataRep1
+objType file
+antibody Input
+cell NB4
+composite wgEncodeUwTfbs
+control std
+controlId NB4/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsNb4InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2701
+view RawData
+
+metaObject wgEncodeUwTfbsNb4InputStdRawRep1
+objType table
+antibody Input
+cell NB4
+composite wgEncodeUwTfbs
+control std
+controlId NB4/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsNb4InputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2701
+tableName wgEncodeUwTfbsNb4InputStdRawRep1
+view RawSignal
+
+metaObject wgEncodeUwTfbsNhdfneoInputStdAlnRep1
+objType file
+antibody Input
+cell NHDF-neo
+composite wgEncodeUwTfbs
+control std
+controlId NHDF-neo/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsNhdfneoInputStdAlnRep1.bam
+fragLength 350
+grant Stam
+lab UW
+labVersion Bowtie 0.12.7
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2702
+view Alignments
+
+metaObject wgEncodeUwTfbsNhdfneoInputStdRawDataRep1
+objType file
+antibody Input
+cell NHDF-neo
+composite wgEncodeUwTfbs
+control std
+controlId NHDF-neo/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsNhdfneoInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2702
+view RawData
+
+metaObject wgEncodeUwTfbsNhdfneoInputStdRawRep1
+objType table
+antibody Input
+cell NHDF-neo
+composite wgEncodeUwTfbs
+control std
+controlId NHDF-neo/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-23
+dateUnrestricted 2011-07-23
+fileName wgEncodeUwTfbsNhdfneoInputStdRawRep1.bigWig
+fragLength 350
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 2702
+tableName wgEncodeUwTfbsNhdfneoInputStdRawRep1
+view RawSignal
+
 metaObject wgEncodeUwTfbsNhekCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -4787,7 +10030,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4799,7 +10042,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsNhekCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4814,7 +10056,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -4826,7 +10068,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsNhekCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -4841,7 +10082,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4867,7 +10108,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -4893,7 +10134,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4919,7 +10160,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -4938,6 +10179,49 @@ subId 1309
 tableName wgEncodeUwTfbsNhekCtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsNhekCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell NHEK
+composite wgEncodeUwTfbs
+controlId NHEK/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-19
+dateSubmitted 2009-09-21
+dateUnrestricted 2010-06-20
+fileName wgEncodeUwTfbsNhekCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 695
+view RawData
+
+metaObject wgEncodeUwTfbsNhekCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell NHEK
+composite wgEncodeUwTfbs
+controlId NHEK/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-19
+dateUnrestricted 2010-07-19
+fileName wgEncodeUwTfbsNhekCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 694
+view RawData
+
 metaObject wgEncodeUwTfbsNhekCtcfStdRawRep1
 objType table
 antibody CTCF
@@ -4945,7 +10229,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -4971,7 +10255,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -4997,7 +10281,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -5009,7 +10293,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsNhekInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5024,7 +10307,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5050,7 +10333,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5062,7 +10345,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSaecCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5077,7 +10359,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5089,7 +10371,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSaecCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -5104,7 +10385,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5130,7 +10411,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5156,7 +10437,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5182,7 +10463,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5201,6 +10482,48 @@ subId 1311
 tableName wgEncodeUwTfbsSaecCtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsSaecCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell SAEC
+composite wgEncodeUwTfbs
+controlId SAEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-19
+dateUnrestricted 2010-07-19
+fileName wgEncodeUwTfbsSaecCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 697
+view RawData
+
+metaObject wgEncodeUwTfbsSaecCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell SAEC
+composite wgEncodeUwTfbs
+controlId SAEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-19
+dateUnrestricted 2010-07-19
+fileName wgEncodeUwTfbsSaecCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 696
+view RawData
+
 metaObject wgEncodeUwTfbsSaecCtcfStdRawRep1
 objType table
 antibody CTCF
@@ -5208,7 +10531,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5234,7 +10557,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5260,7 +10583,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -5272,7 +10595,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSaecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5287,7 +10609,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5313,7 +10635,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5325,7 +10647,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSknshraCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5340,7 +10661,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-23
@@ -5352,7 +10673,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSknshraCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -5367,7 +10687,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5393,7 +10713,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5419,7 +10739,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5445,7 +10765,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5464,6 +10784,48 @@ subId 1314
 tableName wgEncodeUwTfbsSknshraCtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsSknshraCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell SK-N-SH_RA
+composite wgEncodeUwTfbs
+controlId SK-N-SH_RA/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-19
+dateUnrestricted 2010-07-19
+fileName wgEncodeUwTfbsSknshraCtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 698
+view RawData
+
+metaObject wgEncodeUwTfbsSknshraCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell SK-N-SH_RA
+composite wgEncodeUwTfbs
+controlId SK-N-SH_RA/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-23
+dateUnrestricted 2010-07-22
+fileName wgEncodeUwTfbsSknshraCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 753
+view RawData
+
 metaObject wgEncodeUwTfbsSknshraCtcfStdRawRep1
 objType table
 antibody CTCF
@@ -5471,7 +10833,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -5497,7 +10859,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5523,7 +10885,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -5535,7 +10897,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSknshraInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5550,7 +10911,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5576,7 +10937,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -5588,7 +10949,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsWerirb1CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5603,7 +10963,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -5615,7 +10975,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsWerirb1CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -5630,7 +10989,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -5656,7 +11015,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -5682,7 +11041,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -5708,7 +11067,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -5727,6 +11086,50 @@ subId 1492
 tableName wgEncodeUwTfbsWerirb1CtcfStdPkRep2
 view Peaks
 
+metaObject wgEncodeUwTfbsWerirb1CtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell WERI-Rb-1
+composite wgEncodeUwTfbs
+controlId WERI-Rb-1/Input
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-02
+fileName wgEncodeUwTfbsWerirb1CtcfStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion 1
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 407
+view RawData
+
+metaObject wgEncodeUwTfbsWerirb1CtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell WERI-Rb-1
+composite wgEncodeUwTfbs
+controlId WERI-Rb-1/Input
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-02
+fileName wgEncodeUwTfbsWerirb1CtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+labVersion 1
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 407
+view RawData
+
 metaObject wgEncodeUwTfbsWerirb1CtcfStdRawRep1
 objType table
 antibody CTCF
@@ -5734,7 +11137,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -5760,7 +11163,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -5786,7 +11189,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -5798,7 +11201,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsWerirb1InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5813,7 +11215,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -5832,4 +11234,4 @@ subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1252321968
+# MAGIC: 1485490629

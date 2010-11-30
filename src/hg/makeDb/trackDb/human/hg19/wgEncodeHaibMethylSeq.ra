@@ -1,10 +1,12 @@
+# HAIB Methyl-Seq (wrangler: Venkat)
+
 track wgEncodeHaibMethylSeq
 compositeTrack on
 superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
-subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 GM12891=GM12891 GM12892=GM12892 H1hESC=H1-hESC H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HepG2=HepG2 HeLaS3=HeLa-S3 HFL11W=HFL11W HFL24W=HFL24W K562=K562 
+subGroup1 cellType Cell_Line K562=K562&nbsp;(Tier_1) GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12891=GM12891 GM12892=GM12892 H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HFL11W=HFL11W HFL24W=HFL24W
 subGroup2 rep Replicate rep1=1 rep2=2
 subGroup3 restrictionEnzyme restrictionEnzyme None=None
 dimensions dimensionX=rep dimensionY=cellType
@@ -204,7 +206,7 @@ release alpha
 
         track wgEncodeHaibMethylSeqH9esHpaRegionsRep1
         release alpha
-        parent wgEncodeHaibMethylSeq off
+        parent wgEncodeHaibMethylSeq on
         shortLabel H9ES 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES cells)
         subGroups  cellType=H9ES restrictionEnzyme=None rep=rep1
@@ -222,7 +224,7 @@ release alpha
 
         track wgEncodeHaibMethylSeqHalHpaRegionsRep1
         release alpha
-        parent wgEncodeHaibMethylSeq off
+        parent wgEncodeHaibMethylSeq
         shortLabel HAL 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HAL cells)
         subGroups  cellType=HAL restrictionEnzyme=None rep=rep1
@@ -230,7 +232,7 @@ release alpha
         color 189,0,157
         # subId=1875 dateSubmitted=2010-07-16
 
-        track wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1
+        track wgEncodeHaibMethylonH9esafpplusHpaRegionsRep1
         release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel H9ES-AFP+ 1

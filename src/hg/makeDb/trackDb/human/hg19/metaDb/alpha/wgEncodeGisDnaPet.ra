@@ -9,7 +9,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm1287810kFasta3p.csfasta.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -26,7 +26,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm1287810kFasta5p.csfasta.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -43,7 +43,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm1287810kQual3p.csqual.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -60,7 +60,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm1287810kQual5p.csqual.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -77,7 +77,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128781kFasta3p.csfasta.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -94,7 +94,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128781kFasta5p.csfasta.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -111,7 +111,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128781kQual3p.csqual.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -128,7 +128,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128781kQual5p.csqual.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -145,7 +145,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128785kFasta3p.csfasta.gz
 fragSize 5k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -162,7 +162,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128785kFasta5p.csfasta.gz
 fragSize 5k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -179,7 +179,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128785kQual3p.csqual.gz
 fragSize 5k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -196,7 +196,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetGm128785kQual5p.csqual.gz
 fragSize 5k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -207,7 +207,7 @@ objType table
 cell GM12878
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -273,7 +273,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK56210kFasta3p.csfasta.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -290,7 +290,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK56210kFasta5p.csfasta.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -307,7 +307,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK56210kQual3p.csqual.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -324,7 +324,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK56210kQual5p.csqual.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -341,7 +341,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK5621kFasta3p.csfasta.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -358,7 +358,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK5621kFasta5p.csfasta.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -375,7 +375,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK5621kQual3p.csqual.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -392,7 +392,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetK5621kQual5p.csqual.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -409,7 +409,7 @@ dateUnrestricted 2011-01-05
 fileName wgEncodeGisDnaPetK56220kFasta3p.csfasta.gz
 fragSize 20k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -426,7 +426,7 @@ dateUnrestricted 2011-01-05
 fileName wgEncodeGisDnaPetK56220kFasta5p.csfasta.gz
 fragSize 20k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -443,7 +443,7 @@ dateUnrestricted 2011-01-05
 fileName wgEncodeGisDnaPetK56220kQual3p.csqual.gz
 fragSize 20k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -460,7 +460,7 @@ dateUnrestricted 2011-01-05
 fileName wgEncodeGisDnaPetK56220kQual5p.csqual.gz
 fragSize 20k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 1075
@@ -471,7 +471,7 @@ objType table
 cell K562
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -491,7 +491,7 @@ objType table
 cell K562
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -537,7 +537,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetRd1K56210kFastq.fastq.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -554,7 +554,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetRd1K5621kFastq.fastq.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -571,7 +571,7 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetRd2K56210kFastq.fastq.gz
 fragSize 10k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
@@ -588,10 +588,10 @@ dateUnrestricted 2010-08-17
 fileName wgEncodeGisDnaPetRd2K5621kFastq.fastq.gz
 fragSize 1k
 grant Gingeras
-lab Gis
+lab GIS
 origAssembly hg18
 project wgEncode
 subId 761
 view FastqRd2
 
-# MAGIC: 1401934143
+# MAGIC: 1116762533

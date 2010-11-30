@@ -11,9 +11,8 @@
 
 /* hgEncodeVocab - A CGI script to display the different types of encode controlled vocabulary.
  * usage:
- *   hgEncodeVocab [ra=cv.ra] type=[Antibody|"Cell Line"|localization|rnaExtract|"Gene Type"] [tier=(1|2|3)]
+ *   hgEncodeVocab type=[Antibody|"Cell Line"|localization|rnaExtract|"Gene Type"] [tier=(1|2|3)]
  * options:\n"
- *    ra=cv.ra       : Path to cv.ra file (default cv_file())
  *    type=TypeName  : Type to display
  *    tier=N         : If type="Cell Line" then this is the tier to display
  *    bgcolor=RRGGBB : Change background color (hex digits)
@@ -33,17 +32,23 @@
 #define TITLE_FIELD        "title"
 
 #define CELL_TYPE          "Cell Line"
+#define CELL_TYPE_ALT      "cellType"
 #define ANTIBODY_TYPE      "Antibody"
+#define ANTIBODY_TYPE_ALT  "antibody"
 #define LOCALIZATION_TYPE  "localization"
 #define LAB_TYPE           "lab"
+#define GRANT_TYPE         "grant"
 #define CONTROL_TYPE       "control"
 #define DATA_TYPE          "dataType"
+#define TYPE_OF_TERM       "typeOfTerm"
 
 #define ORGANISM           "organism"
 #define ORG_HUMAN          "human"
 #define ORG_MOUSE          "mouse"
 
 #define DESCRIPTION_FIELD  "description"
+#define MAX_TABLE_ROWS     10
+#define TABLE_ROWS_AVAILABLE(rowsUsed) (MAX_TABLE_ROWS - (rowsUsed))
 
 static char *termOpt = NULL;
 static char *tagOpt = NULL;
@@ -79,6 +84,7 @@ if(s != NULL && differentWord(s,"missing"))
     {
     char *docSetting = cloneString(s);
     char *settings=docSetting;
+    int count=0;
     while((s = nextWord(&settings)) != NULL)
         {
         char *docTitle = NULL;
@@ -95,8 +101,12 @@ if(s != NULL && differentWord(s,"missing"))
             }
         safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
         safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
-        //if (fileExists(documentFile))
-            printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+        if (count>0)
+            printf("<BR>");
+        count++;
+        docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
+        printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+        freeMem(docTitle);
         }
     freeMem(docSetting);
     }
@@ -134,6 +144,55 @@ char *termB = hashMustFindVal((struct hash *)b, TERM_FIELD);
 return (strcasecmp(termA, termB));
 }
 
+boolean doTypeDefinition(struct hash *cvHash,char *type,boolean inTable,boolean showType)
+// Write out description of type the type if it is known
+{
+struct hash *ra = NULL;
+if (sameWord(type,CELL_TYPE))
+    ra = hashFindVal(cvHash,CELL_TYPE_ALT);
+else if (sameWord(type,ANTIBODY_TYPE))
+    ra = hashFindVal(cvHash,ANTIBODY_TYPE_ALT); // Find by term
+else
+    ra = hashFindVal(cvHash,type); // Find by term
+if (ra == NULL)
+    return FALSE;
+
+char *val = hashMustFindVal(ra, TYPE_FIELD);
+if (differentWord(val,"typeOfTerm"))
+    errAbort("Expected '%s' to be typeOfTerm but was '%s'\n",type,val);
+
+val = hashMustFindVal(ra, DESCRIPTION_FIELD);
+char *label = hashFindVal(ra, LABEL_FIELD);
+
+puts("<TR>");
+struct dyString *dyDefinition = dyStringNew(256);
+if (inTable)
+    dyStringPrintf(dyDefinition,"  <td colspan=%d style='background:%s; color:%s;'>&nbsp;",
+                   TABLE_ROWS_AVAILABLE(0),COLOR_LTGREEN,COLOR_DARKBLUE); /// border: 3px ridge #AA0000;
+else
+    dyStringPrintf(dyDefinition,"<div style='max-width:900px;'>");
+if (label != NULL)
+    {
+    dyStringPrintf(dyDefinition,"<B><em>%s</em></B>",label);
+    if (showType)
+        dyStringPrintf(dyDefinition,"&nbsp;[%s]",type);
+    dyStringAppend(dyDefinition,":&nbsp;");
+    }
+else if (showType)
+    dyStringPrintf(dyDefinition,"<B>%s</B>:&nbsp;",type);
+
+dyStringPrintf(dyDefinition,"%s",val);
+if (inTable)
+    dyStringAppend(dyDefinition,"&nbsp;</td>");
+else
+    dyStringPrintf(dyDefinition,"</div>");
+printf("%s\n",dyStringContents(dyDefinition));
+dyStringFree(&dyDefinition);
+
+puts("</TR>");
+return TRUE;
+}
+
 void doTypeHeader(char *type, char *cellOrg)
 {
 if ((organismOptLower != NULL) && !sameWord(cellOrg, organismOptLower))
@@ -142,6 +201,7 @@ if ((organismOptLower != NULL) && !sameWord(cellOrg, organismOptLower))
 
 // NOTE:  All tables must have the same number of columns in order to allow 'control' to be swapped in  Use colSapn= on description column
 
+printf("<TR style='background:%s;'>\n",COLOR_BG_HEADER_LTBLUE);
 if (sameWord(type,CELL_TYPE))
    {
     printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
@@ -153,7 +213,7 @@ if (sameWord(type,CELL_TYPE))
    	 }
       else
 	 {
-    	  printf("  <TH>Source</TH><TH colspan=3>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source Lab </TH><TH>Term ID</TH><TH><I>Label</I>");
+    	  printf("  <TH>Source</TH><TH colspan=%d>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source Lab </TH><TH>Term ID</TH><TH><I>Label</I>",TABLE_ROWS_AVAILABLE(7));
          // printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type)
 	 }
     }
@@ -163,11 +223,15 @@ else if (sameWord(type,ANTIBODY_TYPE))
     }
 else if(sameWord(type,LAB_TYPE))
     {
-    printf("  <TH>%s</TH><TH colspan=5>Institution</TH><TH>Lab PI</TH><TH>Grant PI</TH><TH>Organism</TH><TH><I>Label</I></TH>",type);
+    printf("  <TH>%s</TH><TH colspan=%d>Institution</TH><TH>Lab PI</TH><TH>Grant PI</TH><TH>Organism</TH><TH><I>Label</I></TH>",type,TABLE_ROWS_AVAILABLE(5));
+    }
+else if(sameWord(type,LAB_TYPE))
+    {
+    printf("  <TH>%s</TH><TH colspan=%d>Institution</TH><TH><I>Label</I></TH>",type,TABLE_ROWS_AVAILABLE(2));
     }
 else if(sameWord(type,DATA_TYPE))
     {
-    printf("  <TH>Data Type</TH><TH colspan=8>Description</TH><TH><I>Label</I></TH>");
+    printf("  <TH>Data Type</TH><TH colspan=%d>Description</TH><TH><I>Label</I></TH>",TABLE_ROWS_AVAILABLE(2));
     }
 else
     {
@@ -176,13 +240,14 @@ else
 
     if (sameWord(type,LOCALIZATION_TYPE))
         {
-        printf("  <TH>%s</TH><TH colspan=7>Description</TH><TH>GO ID</TH><TH><I>Label</I></TH>",caplitalized);
+        printf("  <TH>%s</TH><TH colspan=%d>Description</TH><TH>GO ID</TH><TH><I>Label</I></TH>",caplitalized,TABLE_ROWS_AVAILABLE(3));
         }
     else
-        printf("  <TH>%s</TH><TH colspan=8>Description</TH><TH><I>Label</I></TH>",caplitalized); //  colspan=8: Control term might be mixed in with other (e.g. Antibody)
+        printf("  <TH>%s</TH><TH colspan=%d>Description</TH><TH><I>Label</I></TH>",caplitalized,TABLE_ROWS_AVAILABLE(2));
 
     freeMem(caplitalized);
     }
+puts("</TR>");
 }
 
 boolean doTypeRow(struct hash *ra, char *org)
@@ -288,7 +353,7 @@ if (sameWord(type,CELL_TYPE))
 	printf("  <TD>%s</TD>\n", term);
 
 	s = hashFindVal(ra, DESCRIPTION_FIELD);
-	printf("  <TD colspan=3>%s</TD>\n", s ? s : "&nbsp;" );
+	printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(7), s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "category");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "sex");
@@ -429,7 +494,7 @@ else if(sameWord(type,LAB_TYPE))
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "labInst");
-    printf("  <TD colspan=5>%s</TD>\n", s?s:"&nbsp;");
+    printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(5), s?s:"&nbsp;");
     s = hashFindVal(ra, "labPiFull");
     printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
     s = hashFindVal(ra, "grantPi");
@@ -442,12 +507,24 @@ else if(sameWord(type,LAB_TYPE))
     else
         printf("  <TD>%s</TD>\n", term );
     }
+else if(sameWord(type,GRANT_TYPE))
+    {
+    puts("<TR>");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "grantInst");
+    printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
+    s = hashFindVal(ra, LABEL_FIELD);
+    if (s != NULL)
+        printf("  <TD><I>%s</I></TD>\n", s );
+    else
+        printf("  <TD>%s</TD>\n", term );
+    }
 else if (sameWord(type,LOCALIZATION_TYPE))
     {
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashMustFindVal(ra, DESCRIPTION_FIELD);
-    printf("  <TD>%s</TD>\n", s);
+    printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(3), s);
     s = hashFindVal(ra, "termId");
     u = hashFindVal(ra, "termUrl");
     printf("  <TD>");
@@ -465,6 +542,31 @@ else if (sameWord(type,LOCALIZATION_TYPE))
         printf("  <TD>%s</TD>\n", term );
     puts("</TR>");
     }
+else if (sameWord(type,TYPE_OF_TERM))
+    {
+    s = hashFindVal(ra, DESCRIPTION_FIELD);
+
+    puts("<TR>");
+    printf("  <TD><A HREF='hgEncodeVocab?type=%s' title='%s details' TARGET=ucscVocabChild>%s</a></TD>\n", term, term, term);
+    printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
+    s = hashFindVal(ra, LABEL_FIELD);
+    if (s != NULL)
+        printf("  <TD><I>%s</I></TD>\n", s );
+    else
+        printf("  <TD>%s</TD>\n", term );
+    if (sameString(term,CELL_TYPE_ALT))
+        {
+        puts("<TR>");
+        printf("  <TD><A HREF='hgEncodeVocab?type=%s&organism=Mouse' title='Mouse %s details' TARGET=ucscVocabChild>%s</a> <em>(for mouse)</em></TD>\n", term, term, term);
+        s = hashFindVal(ra, DESCRIPTION_FIELD);
+        printf("  <TD colspan=%d>%s <em>(for mouse)</em></TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
+        s = hashFindVal(ra, LABEL_FIELD);
+        if (s != NULL)
+            printf("  <TD><I>%s</I></TD>\n", s );
+        else
+            printf("  <TD>%s</TD>\n", term );
+        }
+    }
 else
     {
     s = hashFindVal(ra, DESCRIPTION_FIELD);
@@ -476,7 +578,7 @@ else
     //printf("  <TH>%s</TH><TH>Description</TH>",type);
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
-    printf("  <TD colspan=8>%s</TD>\n", s?s:"&nbsp;"); //  colspan=8: Control term might be mixed in with other (e.g. Antibody)
+    printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
     s = hashFindVal(ra, LABEL_FIELD);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
@@ -517,26 +619,21 @@ for(ix=0;ix<requestCount;ix++)
 return targets;
 }
 
-///boolean typeDescription(char type)
-///// Write out description of type if it is known
-///{
-///// TODO: move this list into cv.ra as type=term
-///
-///}
-
 static char *normalizeType(char *type)
 /* Strips any quotation marks and converts common synonyms */
 {
-(void)stripChar(type,'\"');
-if ((sameWord(type,"Cell Line"))
-||  (sameWord(type,"cellLine" ))
-||  (sameWord(type,"Cell Type"))
-||  (sameWord(type,"cellType"))
-||  (sameWord(type,"Cell" )))  // sameWord is case insensitive
-    return cloneString(CELL_TYPE);
-else if (sameWord(type,"Factor"))
-    return cloneString(ANTIBODY_TYPE);
-
+if (type != NULL)
+{
+    (void)stripChar(type,'\"');
+    if ((sameWord(type,"Cell Line"))
+    ||  (sameWord(type,"cellLine" ))
+    ||  (sameWord(type,"Cell Type"))
+    ||  (sameWord(type,CELL_TYPE_ALT))
+    ||  (sameWord(type,"Cell" )))  // sameWord is case insensitive
+        return cloneString(CELL_TYPE);
+    else if (sameWord(type,"Factor"))
+        return cloneString(ANTIBODY_TYPE);
+}
 return type;
 }
 
@@ -597,7 +694,7 @@ return normalizeType(type);
 
 void doMiddle()
 {
-struct hash *cvHash = raReadAll(cgiUsualString("ra", cv_file()), TERM_FIELD);
+struct hash *cvHash = raReadAll(cv_file(), TERM_FIELD);  // cv_file is no longer passed as an option
 struct hashCookie hc = hashFirst(cvHash);
 struct hashEl *hEl;
 struct slList *termList = NULL;
@@ -658,43 +755,49 @@ if (targetOpt && requestCount > 0 && sameWord(queryBy,TERM_FIELD) && sameWord(ty
     }
 
 // Get just the terms that match type and requested, then sort them
-while ((hEl = hashNext(&hc)) != NULL)
+if (differentWord(type,TYPE_OF_TERM) || typeOpt != NULL )  // If type resolves to typeOfTerm and typeOfTerm was not requested, then just show definition
     {
-    ra = (struct hash *)hEl->val;
-    char *thisType = hashMustFindVal(ra,TYPE_FIELD);
-    if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,CONTROL_TYPE)))
-        continue;
-    // Skip all rows that do not match queryBy param if specified
-    if(requested)
+    while ((hEl = hashNext(&hc)) != NULL)
         {
-        char *val = hashFindVal(ra, queryBy);
-        if (val == NULL)
+        ra = (struct hash *)hEl->val;
+        char *thisType = hashMustFindVal(ra,TYPE_FIELD);
+        if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,CONTROL_TYPE)))
             continue;
-        if (-1 == stringArrayIx(val,requested,requestCount))
-            continue;
+        // Skip all rows that do not match queryBy param if specified
+        if(requested)
+            {
+            char *val = hashFindVal(ra, queryBy);
+            if (val == NULL)
+                continue;
+            if (-1 == stringArrayIx(val,requested,requestCount))
+                continue;
+            }
+        slAddTail(&termList, ra);
         }
-    slAddTail(&termList, ra);
-    }
-if (slCount(termList) == 0)
-    {
-    // TODO: Make header with typeDescription().  This will also allow calling hgEncodeVocab for a type defined in cv.ra even though the term is NOT in cv.ra
-    errAbort("Error: Unrecognised type (%s)\n", type);
     }
 slSort(&termList, termCmp);
 
-puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>");
-puts("<TR style=\"background:#D9E4F8\">");
-doTypeHeader(type, org);
-puts("</TR>");
-
-// Print out the terms
-while((ra = slPopHead(&termList)) != NULL)
+boolean described = doTypeDefinition(cvHash,type,FALSE,(slCount(termList) == 0));
+printf("<TABLE BORDER=1 BGCOLOR=%s CELLSPACING=0 CELLPADDING=2>\n",COLOR_BG_DEFAULT);
+//boolean described = doTypeDefinition(cvHash,type,TRUE,(slCount(termList) == 0));
+if (slCount(termList) > 0)
     {
-    if(doTypeRow( ra, org ))
-        totalPrinted++;
+    doTypeHeader(type, org);
+
+    // Print out the terms
+    while((ra = slPopHead(&termList)) != NULL)
+        {
+        if(doTypeRow( ra, org ))
+            totalPrinted++;
+        }
     }
 puts("</TABLE><BR>");
-if(totalPrinted > 1)
+if (totalPrinted == 0)
+    {
+    if (!described)
+        warn("Error: Unrecognised type (%s)\n", type);
+    }
+else if(totalPrinted > 1)
     printf("Total = %d\n", totalPrinted);
 }
 

@@ -93,28 +93,6 @@ static void processSourceLine(FILE *pslF, struct gff3Ann *node)
 // what to do?
 }
 
-static boolean getNextCigarOp(char **ptr, char *op, int *size)
-{
-char *str = *ptr;
-
-if ((str == NULL) || (*str == 0))
-    return FALSE;
-
-char *end = strchr(str, '+');
-if (end)
-    {
-    *end = 0;
-    *ptr = end + 1;
-    }
-else 
-    *ptr = NULL;
-
-*op = *str++;
-*size = atoi(str);
-
-return TRUE;
-}
-
 static struct nameAndSize *getNameAndSize(struct hash *hash, char *name)
 /* Find size of name in hash or die trying. */
 {
@@ -127,7 +105,6 @@ return hel->val;
 static void processMatchLine(FILE *pslF, struct gff3Ann *node,
     struct hash *chromHash)
 {
-int blocksAlloced = 100;
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
 if ((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL))
@@ -135,47 +112,9 @@ if ((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL))
 
 struct nameAndSize *ns = getNameAndSize(chromHash, node->targetId);
 
-struct psl *psl = pslNew(node->seqid, node->end - node->start, node->start, 
-    node->end, ns->name, ns->size,  node->targetStart, node->targetEnd, 
-    node->strand, blocksAlloced, 0);
-char *ptr = attr->vals->name;
-char op;
-int size;
-int tStart = node->targetStart;
-int qStart = node->start;
-
-while(getNextCigarOp(&ptr, &op, &size))
-    {
-    switch (op)
-        {
-        case 'M': // match or mismatch (gapless aligned block)
-            if (psl->blockCount == blocksAlloced)
-                {
-                printf("grow\n");
-                pslGrow(psl, &blocksAlloced);
-                }
-
-            psl->blockSizes[psl->blockCount] = size;
-            psl->qStarts[psl->blockCount] = qStart;
-            psl->tStarts[psl->blockCount] = tStart;
-            psl->blockCount++;
-            tStart += size;
-            qStart += size;
-            break;
-
-        case 'I': // inserted in target
-            tStart += size;
-            break;
-        case 'D': // deleted from target
-            qStart += size;
-            break;
-        
-        default:
-            errAbort("bamToFfAli: unrecognized CIGAR op %c -- update me", op);
-        }
-    }
-assert (tStart ==  node->targetEnd);
-assert(qStart ==  node->end);
+struct psl *psl = pslFromGff3Cigar(node->seqid, node->end - node->start, node->start, node->end,
+                                   ns->name, ns->size,  node->targetStart, node->targetEnd, 
+                                   node->strand, attr->vals->name);
 pslOutput(psl, pslF, '\t' , '\n');
 pslFree(&psl);
 }
