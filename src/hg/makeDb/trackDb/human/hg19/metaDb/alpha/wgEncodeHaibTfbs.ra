@@ -6550,7 +6550,6 @@ fileName wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1061
-origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6575,7 +6574,6 @@ fileName wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1200
-origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -6599,7 +6597,6 @@ fileName wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1061
-origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6625,7 +6622,6 @@ fileName wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1200
-origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -20182,4 +20178,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: -1199691030
+# MAGIC: 610957938
