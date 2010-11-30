@@ -112,7 +112,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHistViewSig off
     		shortLabel MEL IgGYale Sg 
-                longLabel MEL Input Histone Modifications Signal from ENCODE/Stanford/Yale
+                longLabel MEL IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=None
     		type bigWig 1 80497
     		color 46,0,184
@@ -134,7 +134,7 @@ wgEncode 1
 		release alpha
     		subTrack wgEncodeSydhHistViewSig off 
     		shortLabel CH12 IgGYale Sg
-                longLabel CH12 Input Histone Modifications Signal from ENCODE/Stanford/Yale
+                longLabel CH12 IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=None
     		type bigWig 1.000000 59055.000000
     		color 153,38,0

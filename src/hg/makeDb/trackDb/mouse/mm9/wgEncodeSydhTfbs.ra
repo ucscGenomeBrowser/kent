@@ -331,7 +331,7 @@ wgEncode 1
 		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 IgGrab Sg
-                longLabel CH12 IGGRab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel CH12 IgG-rab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
 		subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGrab treatment=None
 		type bigWig 1 66328
 		color 153,38,0
@@ -364,7 +364,7 @@ wgEncode 1
     		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 IgGmus Sg
-                longLabel CH12 IGGmus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel CH12 IgG-mus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 71455
     		color 153,38,0
@@ -441,7 +441,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off 
     		shortLabel MEL IgGmus Sg
-                longLabel MEL IGGmus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL IgG-mus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 78618
     		color 46,0,184
@@ -486,7 +486,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL IgGrat Sg
-                longLabel MEL IGGRat Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL IgG-rat Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGrat treatment=None
     		type bigWig 1 90844
     		color 46,0,184
