@@ -1708,32 +1708,34 @@ dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
 track altSeqComposite
 compositeTrack on
-shortLabel Alt Sequence
+shortLabel GRC Patch Release
 longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
-subGroup1 view Views location=Location psl=Psl chain=Chain net=Net
+subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
-sortOrder view=+
+# sortOrder view=+
 visibility hide
 type bed 6
 noInherit on
 group map
 priority 25
-chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
+chromosomes  chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
 otherDb hg19Patch2
 html altSeqComposite
+dataVersion GRCh37 Patch 2 update, August 2010
 
     track altSeqCompositeViewlocation
-    shortLabel Location
+    shortLabel Patch/Haplotype
     view location
     visibility pack
     parent altSeqComposite
+    noScoreFilter .
 
 	track altSeqHaplotypes
         parent altSeqCompositeViewlocation
         subGroups view=location
 	color 32,32,190
 	shortLabel Haplotypes
-	longLabel Haplotypes to GRCh37 reference sequence (patch2 update)
+	longLabel Haplotypes to GRCh37 reference sequence
 	html altSeqComposite
 	priority 1
 
@@ -1741,13 +1743,13 @@ html altSeqComposite
         parent altSeqCompositeViewlocation
         subGroups view=location
 	color 190,32,32
-	shortLabel GRCh37.p2 updates
-	longLabel Patches to GRCh37 reference sequence (patch2 update)
+	shortLabel Patches
+	longLabel Patches to GRCh37 reference sequence
 	html altSeqComposite
 	priority 2
 
     track altSeqCompositeViewpsl
-    shortLabel Psl
+    shortLabel Alignment
     view psl
     visibility pack
     parent altSeqComposite
@@ -1765,7 +1767,7 @@ html altSeqComposite
 	track altSeqLiftOverPsl
         parent altSeqCompositeViewpsl
         subGroups view=psl
-	shortLabel Lift Over
+	shortLabel Alignment
 	longLabel GRCh37.p2 Lift over alignments
 	html altSeqComposite
 	priority 3
@@ -1784,7 +1786,7 @@ html altSeqComposite
         track chainHg19Patch2
         parent altSeqCompositeViewchain
         subGroups view=chain
-        shortLabel $o_Organism Chain
+        shortLabel Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain hg19Patch2
         html chainNet
@@ -1803,7 +1805,7 @@ html altSeqComposite
         track netHg19Patch2
         parent altSeqCompositeViewnet
         subGroups view=net
-        shortLabel $o_Organism Net
+        shortLabel Net
         longLabel $o_Organism ($o_date) Alignment net
         type netAlign hg19Patch2 chainHg19Patch2
         html chainNet
