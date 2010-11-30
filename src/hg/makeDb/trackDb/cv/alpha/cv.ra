@@ -2494,7 +2494,7 @@ vendorId CC-2511, CC-2511T225
 orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36999591CFE2F18852001A4B525E10%29/.do
 sex F
 tier 3
-protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf
+protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf Broad_Histone:NHDF-Ad_Bernstein_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
@@ -2558,7 +2558,7 @@ termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001593
 sex U
 tier 3
-protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf Broad_Histone:Osteoblast_Bernstein_protocol.pdf
 
 term ovcar-3
 tag ovcar3
