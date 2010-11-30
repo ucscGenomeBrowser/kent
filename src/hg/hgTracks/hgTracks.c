@@ -2029,12 +2029,9 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
         {
         char numBuf[SMALLBUF];
         sprintLongWithCommas(numBuf, maxSafeHeight);
-        printf("warning: image is over %s pixels high at "
-            "track '%s',<BR>remaining tracks set to hide "
-            "for this view.<BR>\n", numBuf, track->tdb->shortLabel);
-        warn("warning: image is over %s pixels high (%d pix) at "
-            "track '%s' (%s),<BR>remaining tracks set to hide "
-            "for this view.", numBuf, totalHeight, track->tdb->shortLabel,track->track);
+        if (safeHeight)  // Only one message
+            warn("Image is over %s pixels high (%d pix) at track:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
+                (flatTrack->next != NULL?"<BR>Additional tracks may have been set to hide at this zoom level.":""));
         safeHeight = FALSE;
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;

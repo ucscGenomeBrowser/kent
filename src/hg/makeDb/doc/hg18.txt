@@ -31087,5 +31087,30 @@ close($OUTD); close($OUTM); close($OUTU);
       hgBbiDbLink hg18 $track $f
     end
 
+#########################################################################
+# BUILD R-DMR TRACK.  DONE (Fan 7/23/2010)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/gs.19/build36/bed/rdmr
+cd /hive/data/genomes/gs.19/build36/bed/rdmr
+
+# download the supplemental data file, ng.471-S2.txt.
+
+cp -p ng.471-S2.txt rdmrRaw.tab
+# remove the header lines at the beginning of rdmrRaw.tab
+vi rdmrRaw.tab
+
+# load rdmrRaw table
+hgsql hg18 -e 'drop table rdmrRaw'
+hgsql hg18 < ~/kent/src/hg/lib/rdmrRaw.sql
+hgsql hg18 -e 'load data local infile "rdmrRaw.tab" into table rdmrRaw'
+
+# create rdmr table
+
+hgsql hg18 -N -e 'select chrom, chromStart-1, chromEnd, gene from rdmrRaw'
+>rdmr.tab
+
+hgLoadBed hg18 rdmr rdmr.tab
 
 #########################################################################
+
