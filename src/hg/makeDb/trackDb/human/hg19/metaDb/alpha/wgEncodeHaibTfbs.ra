@@ -13068,7 +13068,6 @@ fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1059
-origAssembly hg18
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -13093,7 +13092,6 @@ fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1169
-origAssembly hg18
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -13117,7 +13115,6 @@ fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1059
-origAssembly hg18
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -13143,7 +13140,6 @@ fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1169
-origAssembly hg18
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -20186,4 +20182,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: 1284627298
+# MAGIC: -1199691030
