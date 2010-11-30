@@ -464,7 +464,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL IgGrab Sg
-                longLabel MEL IggRab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL IgG-rab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGrab treatment=None
     		type bigWig 1 103648
     		color 46,0,184
