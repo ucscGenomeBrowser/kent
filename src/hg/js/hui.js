@@ -27,7 +27,7 @@ function _matSelectViewForSubTracks(obj,view)
 
         // Needed for later
         classesHidden = matViewClasses('hidden');
-        classesHidden = classesHidden.concat( matAbcCBclasses('unchecked') );
+        classesHidden = classesHidden.concat( matAbcCBclasses(false) );
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
@@ -36,7 +36,7 @@ function _matSelectViewForSubTracks(obj,view)
 
         // Needed for later
         classesHidden = matViewClasses('hidden');
-        classesHidden = classesHidden.concat( matAbcCBclasses('unchecked') );
+        classesHidden = classesHidden.concat( matAbcCBclasses(false) );
 
         // If hide => show then check all subCBs matching view and matCBs
         // If show => show than just enable subCBs for the view.
@@ -111,7 +111,7 @@ function matSubCbClick(subCB)
     hideOrShowSubtrack(subCB);
     // When subCBs are clicked, 3-state matCBs may need to be set
     var classes = matViewClasses('hidden');
-    classes = classes.concat( matAbcCBclasses('unchecked') );
+    classes = classes.concat( matAbcCBclasses(false) );
     var matCB = matCbFindFromSubCb( subCB );
     if( matCB != undefined ) {
         matChkBoxNormalize( matCB, classes );
@@ -155,7 +155,7 @@ function matCbClick(matCB)
                     $( matCBs ).each( function (i) { matCbComplete( this, true ); });
                 else {
                     var classes = matViewClasses('hidden');
-                    classes = classes.concat( matAbcCBclasses('unchecked') );
+                    classes = classes.concat( matAbcCBclasses(false) );
                     $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
                 }
             }
@@ -184,7 +184,7 @@ function matSetMatrixCheckBoxes(state)
         subCDs = $( subCDs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
     if(state) { // If clicking [+], further limit to only checked ABCs
-        var classes = matAbcCBclasses('unchecked');
+        var classes = matAbcCBclasses(false);
         subCDs = objsFilterByClasses(subCDs,"not",classes);  // remove unchecked abcCB classes
     }
     $( subCDs ).each( function (i) {
@@ -211,8 +211,7 @@ function filterCompositeSelectionChanged(obj)
     var classes = $(obj).val();  // It is already an array!
     if(classes == null) { // Nothing is selected.  Mark with "[empty]"
         classes = "";
-        setCartVar($(obj).attr('name'),"[empty]");
-        //$(obj).val("[empty]");
+        setCartVar($(obj).attr('name'),"[empty]");  // FIXME: setCartVar conflicts with "submit" button paradigm
     }
 
     // For all subtracks that DO NOT match selected classes AND are checked: uncheck
@@ -237,25 +236,36 @@ function filterCompositeSelectionChanged(obj)
             var filterComp = $("select.filterComp").not("[name='"+obj.name+"']"); // Exclude self from list
             for(var ix=0;ix<filterComp.length && subCBsToSelect.length > 0;ix++) {
                 var filterClasses = $(filterComp[ix]).val();
-                //alert(filterClasses);
                 if(filterClasses.length > 0 && filterClasses[0] != "All")
                     subCBsToSelect = objsFilterByClasses(subCBsToSelect,"or",filterClasses);     // Keep any that should be selected
                 else if(filterClasses.length == 0)
                     subCBsToSelect.length = 0;
             }
-            //alert("filterComp:"+filterComp.length);
         }
-        // FIXME: What about mat dimensions?
+        // Filter for Matrix CBs too
+        if (subCBsToSelect.length > 0) {
+            var matCb = $("input.matCb").filter(":checked");
+            if (matCb.length > 0) {
+                var matchClasses = "";
+                $( matCb ).each( function(i) {
+                    var filterClasses = $( this ).attr("class").split(" ");
+                    filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
+                    matchClasses = matchClasses + ",." + filterClasses.join('.');
+                });
+                if (matchClasses.length > 0) {
+                    matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
+                    subCBsToSelect = $(subCBsToSelect).filter(matchClasses);     // Keep any that should be selected
+                }
+            }
+        }
 
-        // What to do now?
+        // Now we have subCBs that should be checked.  Exclude already checked, then do it
         if (subCBsToSelect.length > 0)
             subCBsToSelect = $(subCBsToSelect).not(":checked");
         if (subCBsToSelect.length > 0)
             subCBsToSelect.each( function (i) { matSubCBcheckOne(this,true); });
     }
-    //alert("Subtracks:"+subCBs.length+"  To be selected:"+subCBsToSelect.length+"  unselected:"+subCBsToUnselect.length)
     matSubCBsSelected();
-    //$(obj).children("option:even").disabled = true;
 }
 
 ///////////// CB support routines ///////////////
@@ -281,7 +291,7 @@ function matSubCBsCheck(state)
     }
 
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
-        var classes = matAbcCBclasses('unchecked');
+        var classes = matAbcCBclasses(false);
         subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
         if(arguments.length == 1 || arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
@@ -474,14 +484,14 @@ function matViewClasses(limitTo)
     return classes;
 }
 
-function matAbcCBclasses(limitTo)
+function matAbcCBclasses(wantSelected)
 {// returns an array of classes from the dim ABC CB classes: converts "matCB abc rep1"[]s to "rep1","rep2"
     var classes = new Array;
     var abcCBs = $("input.matCB.abc");
     if(abcCBs.length > 0) {
-        if(limitTo == 'unchecked') {
+        if (!wantSelected) {
             abcCBs = abcCBs.not(":checked");
-        } else if(limitTo == 'checked') {
+        } else {
             abcCBs = abcCBs.filter(":checked");
         }
         $(abcCBs).each( function (i) {
@@ -489,6 +499,8 @@ function matAbcCBclasses(limitTo)
             classList = aryRemove(classList,"matCB","abc");
             classes.push( classList[0] );
         });
+    } else { // No abcCBs so look for filterBox classes
+        return filterCompositeClasses(wantSelected);
     }
     return classes;
 }
@@ -1237,7 +1249,7 @@ function filterCompositeSet(obj,all)
         });
     }
     if(vars.length > 0) {
-        setCartVars(vars,vals);
+        setCartVars(vars,vals);// FIXME: setCartVar conflicts with "submit" button paradigm
     }
     matSubCBsSelected(); // Be sure to update the counts!
 }
@@ -1267,7 +1279,24 @@ function filterCompositeExcludeOptions(obj)
             }
         }
     });
-    // FIXME: What about mat dimensions?
+    // Matrix CBs need to be considered too
+    if (subCBs.length > 0) {
+        var matCb = $("input.matCb").filter(":checked");
+        if (matCb.length == 0)
+            oneEmpty = true;
+        else {//if (matCb.length > 0) {
+            var matchClasses = "";
+            $( matCb ).each( function(i) {
+                var filterClasses = $( this ).attr("class").split(" ");
+                filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
+                matchClasses = matchClasses + ",." + filterClasses.join('.');
+            });
+            if (matchClasses.length > 0) {
+                matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
+                subCBs = $(subCBs).filter(matchClasses);
+            }
+        }
+    }
 
     // Walk through all selected subCBs to get other related tags
     var possibleSelections = [ ];  // empty array
@@ -1300,6 +1329,33 @@ function filterCompositeExcludeOptions(obj)
         }
     }
     return updated;
+}
+
+function filterCompositeClasses(wantSelected)
+{// returns an array of classes from the dim ABC filterComp classes: converts "matCB abc rep1"[]s to "rep1","rep2"
+    var classes = new Array;
+    var abcFBs = $("select.filterComp");
+    if(abcFBs.length > 0) {
+        $(abcFBs).each( function(i) {
+            // Need to walk through list of options
+            var ix=0;
+            var allAreSelected = false;
+            if (this.options[ix].value == "All") {
+                allAreSelected = this.options[ix].selected;
+                ix++;
+            }
+            for(;ix<this.length;ix++) {
+                if (allAreSelected || this.options[ix].selected) {
+                    if (wantSelected)
+                        classes.push(this.options[ix].value);
+                } else {
+                    if (!wantSelected)
+                        classes.push(this.options[ix].value);
+                }
+            }
+        });
+    }
+    return classes;
 }
 
 function multiSelectFocus(obj,sizeWhenOpen)
