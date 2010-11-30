@@ -3232,6 +3232,8 @@ tablesIgnored hg18
     numtS
     numtSMitochondrion
     numtSMitochondrionChrPlacement
+    rdmr
+    rdmrRaw
 
 tablesIgnored hg19
     altSeqHaplotypes
