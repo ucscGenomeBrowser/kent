@@ -3,21 +3,22 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
 rnaExtract longPolyA
-subId 1631
+subId 1874
 view Fastq
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2
@@ -25,21 +26,22 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
 rnaExtract longPolyA
-subId 1632
+subId 1874
 view Fastq
 
 metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1
@@ -279,20 +281,22 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 1647
+subId 1874
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2
@@ -301,19 +305,21 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1856
+subId 1874
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1
@@ -321,20 +327,22 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 1647
+subId 1874
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2
@@ -343,19 +351,21 @@ cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1856
+subId 1874
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2
@@ -363,21 +373,22 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1672
+subId 1874
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2
@@ -385,21 +396,22 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1672
+subId 1874
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep1
@@ -1201,21 +1213,22 @@ objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 2
 rnaExtract longPolyA
-subId 1626
+subId 1874
 view Fastq
 
 metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1
@@ -6219,21 +6232,22 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-19
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg18
 project wgEncode
 readType 1x75D
 replicate 1
 rnaExtract longPolyA
-subId 1637
+subId 1874
 view Fastq
 
 metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2
@@ -6495,20 +6509,22 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 1659
+subId 1874
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2
@@ -6537,20 +6553,22 @@ objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-14
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 1659
+subId 1874
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2
@@ -7090,6 +7108,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep1.fastq.gz
@@ -7101,7 +7120,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2
@@ -7131,6 +7150,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep1.fastq.gz
@@ -7142,7 +7162,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2
@@ -7172,6 +7192,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
@@ -7183,7 +7204,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2
@@ -7192,6 +7213,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
@@ -7204,7 +7226,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV3cRep1
@@ -7213,6 +7235,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
@@ -7224,7 +7247,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV3cRep2
@@ -7233,6 +7256,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
@@ -7244,7 +7268,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 view GeneGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV4Rep1
@@ -7253,6 +7277,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
@@ -7264,7 +7289,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view GeneGencV4
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV4Rep2
@@ -7273,6 +7298,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
@@ -7284,7 +7310,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 view GeneGencV4
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep1
@@ -7293,6 +7319,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep1.gtf.gz
@@ -7304,7 +7331,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep1
 view GeneModel
 
@@ -7314,6 +7341,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2.gtf.gz
@@ -7326,7 +7354,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2
 view GeneModel
 
@@ -7336,6 +7364,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200InsLengthRep1.insDist.gz
@@ -7347,7 +7376,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view InsLength
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200InsLengthRep2
@@ -7356,6 +7385,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200InsLengthRep2.insDist.gz
@@ -7367,7 +7397,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 view InsLength
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep1
@@ -7376,6 +7406,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep1.junction.gz
@@ -7387,7 +7418,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2
@@ -7396,6 +7427,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2.junction.gz
@@ -7408,7 +7440,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1904
+subId 3024
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep1
@@ -7417,6 +7449,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep1.bam
@@ -7428,7 +7461,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep1
 view Paired
 
@@ -7438,6 +7471,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam.bai
@@ -7451,7 +7485,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1904
+subId 3024
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2
 view Paired
 
@@ -7461,6 +7495,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1.bigWig
@@ -7472,7 +7507,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
 view Signal
 
@@ -7482,6 +7517,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
@@ -7494,7 +7530,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1904
+subId 3024
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
 view Signal
 
@@ -7504,6 +7540,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep1.bam
@@ -7515,7 +7552,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep1
 view Splices
 
@@ -7525,6 +7562,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam.bai
@@ -7538,7 +7576,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 1904
+subId 3024
 tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2
 view Splices
 
@@ -7548,6 +7586,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
@@ -7559,7 +7598,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2
@@ -7568,6 +7607,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
@@ -7580,7 +7620,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV3cRep1
@@ -7589,6 +7629,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
@@ -7600,7 +7641,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV3cRep2
@@ -7609,6 +7650,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
@@ -7620,7 +7662,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 view TranscriptGencV3c
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV4Rep1
@@ -7629,6 +7671,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-18
 dateUnrestricted 2011-08-18
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
@@ -7640,7 +7683,7 @@ project wgEncode
 readType 2x75
 replicate 1
 rnaExtract longPolyA
-subId 3000
+subId 3025
 view TranscriptGencV4
 
 metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV4Rep2
@@ -7649,6 +7692,7 @@ cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-11-24
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
@@ -7660,7 +7704,7 @@ project wgEncode
 readType 2x75
 replicate 2
 rnaExtract longPolyA
-subId 2960
+subId 3024
 view TranscriptGencV4
 
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1
@@ -8992,4 +9036,4 @@ rnaExtract longPolyA
 subId 2963
 view TranscriptGencV4
 
-# MAGIC: 1170978648
+# MAGIC: -1703407825
