@@ -41,9 +41,9 @@ wgEncode 1
 	subTrack wgEncodeSydhHist
 	signalFilter 0
 	signalFilterLimits 0:18241
-	pValueFilter 0
+	pValueFilter 2
 	pValueFilterLimits 0:300
-	qValueFilter 0
+	qValueFilter 2
 	qValueFilterLimits 0:300
   
 		#### Submission 1166 ####
