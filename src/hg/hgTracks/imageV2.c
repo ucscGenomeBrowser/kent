@@ -251,7 +251,7 @@ void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track 
 if (*jsonTdbSettingsString==NULL)
     {
     *jsonTdbSettingsString = newDyString(1024);
-    dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d},\n", rulerMode);
+    dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d, \"configureBy\": \"popup\", \"kindOfParent\": 0},\n", rulerMode);
     }
 else
     dyStringAppend(*jsonTdbSettingsString, ",\n");
