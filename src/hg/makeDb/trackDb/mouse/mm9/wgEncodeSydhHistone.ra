@@ -10,7 +10,7 @@ track wgEncodeSydhHist
 release alpha
 compositeTrack on
 shortLabel Stan/Yale Histone
-longLabel Histone Modifications by ChIP-seq from ENCODE Stanford/Yale
+longLabel Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale
 group regulation
 priority 0
 type bed 3
