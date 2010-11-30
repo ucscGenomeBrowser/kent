@@ -364,7 +364,569 @@ vendorId BioChain_CP-S12-D1234010-05_B402059
 orderUrl http://www.biochain.com/biochain/homepage.htm
 termId BTO:0001418
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001418
-protocol HudsonAlpha:Myers_BioChain_protocol.pdf 
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Colon_01-11002
+tag BCColon0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Colon
+lineage Colon
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000269
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000269
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Esophagus_01-11002
+tag BCEsophagus0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Esophagus
+lineage Esophagus
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000959
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000959
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Kidney_01-11002
+tag BCKidney0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Kidney
+lineage Kidney
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000671
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000671
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Liver_01-11002
+tag BCLiver0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Liver
+lineage Liver
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234149-05_B209118; BioChain_CP-S10-R1234149-20_B304045
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000759
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Lung_01-11002
+tag BCLung0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Lung
+lineage Lung
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000763
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000763
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Skeletal_Muscle_01-11002
+tag BCSkeletalMuscle0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Skeletal muscle
+lineage Skeletal muscle
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001103
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001103
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Skin_01-11002
+tag BCSkin0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA Extract
+tissue Skin
+lineage Skin
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234218-05_B402066
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001253
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Small_Intestine_01-11002
+tag BCSmallIntestine0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Small intestine
+lineage Small intestine
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234226-05_B402067; BioChain_CP-S10-R1234226-20_A612138
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000651
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000651
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Spleen_01-11002
+tag BCSpleen0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; RNA Extract
+tissue Spleen
+lineage Spleen
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S10-R1234246-20_A612140
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001281
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001281
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Stomach_01-11002
+tag BCStomach0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA Extract
+tissue Stomach
+lineage Stomach
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234248-05_A808008
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001307
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001307
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Colon_H12817N
+tag BCColonH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Colon
+lineage Colon
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000269
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000269
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Esophagus_H12817N
+tag BCEsophagusH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA Extract
+tissue Esophagus
+lineage Esophagus
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234106-05_B302113
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000959
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000959
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Kidney_H12817N
+tag BCKidneyH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Kidney
+lineage Kidney
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000671
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000671
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Lung_H12817N
+tag BCLungH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Lung
+lineage Lung
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000763
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000763
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Pancreas_H12817N
+tag BCPancreasH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Pancreas
+lineage Pancreas
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234188-05_B402063; BioChain_CP-S10-R1234188-20_B402076
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000988
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000988
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Penis_H12817N
+tag BCPenisH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA Extract
+tissue Penis
+lineage Penis
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234194-05_B402064
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000405
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000405
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Prostate_Gland_H12817N
+tag BCProstateGlandH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA Extract
+tissue Prostate gland
+lineage Prostate gland
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-D1234201-05_B101058
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001129
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001129
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Skeletal_Muscle_H12817N
+tag BCSkeletalMuscleH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Skeletal muscle
+lineage Skeletal muscle
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001103
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001103
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Jejunum_H12817N
+tag BCJejunumH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Jejunum
+lineage Jejunum
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234230-05_B402068; BioChain_CP-S10-R1234230-20_A911037
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000657
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000657
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Spleen_H12817N
+tag BCSpleenH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Spleen
+lineage Spleen
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234246-05_B402069; BioChain_CP-S10-R1234246-20_B304070
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001281
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001281
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Stomach_H12817N
+tag BCStomachH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Stomach
+lineage Stomach
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001307
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001307
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Adipose_UHN00001
+tag BCAdiposeUHN00001
+type Cell Line
+tier 3
+organism Human
+description Donor UHN0001; Age 35; African American; DNA Extract
+tissue Adipose tissue
+lineage Adipose tissue
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234003_A701166
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001487
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001487
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Adrenal_Gland_H12803N
+tag BCAdrenalGlandH12803N
+type Cell Line
+tier 3
+organism Human
+description Donor H12803N; Age 88; Caucasian; DNA Extract
+tissue Adrenal gland
+lineage Adrenal gland
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D1234004_B103117
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000047
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000047
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Brain_H11058N
+tag BCBrainH11058N
+type Cell Line
+tier 3
+organism Human
+description Donor H11058N; Age 66; Asian; DNA Extract
+tissue Brain
+lineage Brain
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234035_A810101
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000142
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000142
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Breast_02-03015
+tag BCBreast0203015
+type Cell Line
+tier 3
+organism Human
+description Donor 02-03015; Age 21; Caucasian; DNA Extract
+tissue Breast
+lineage Breast
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234086_A710031
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000149
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000149
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Pericardium_H12529N
+tag BCPericardiumH12529N
+type Cell Line
+tier 3
+organism Human
+description Donor H12529N; Age 70; Caucasian; DNA Extract
+tissue Pericardium
+lineage Pericardium
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D1234133_A712271
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000717
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000717
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Left_Ventricle_N41
+tag BCLeftVentricleN41
+type Cell Line
+tier 3
+organism Human
+description Donor N41; Age 26; Asian; DNA Extract
+tissue Left ventrible
+lineage Left ventrible
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D1234138_A705026
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001629
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001629
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Leukocyte_UHN00204
+tag BCLeukocyteUHN00204
+type Cell Line
+tier 3
+organism Human
+description Donor UHN00204; Age 54; Caucasian; DNA Extract
+tissue Peripheral blood mononuclear cell
+lineage Peripheral blood mononuclear cell
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234148_A612197
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001025
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Placenta_UHN00189
+tag BCPlacentaUHN00189
+type Cell Line
+tier 3
+organism Human
+description Donor UHN00189; Age 29; Native Indian; DNA Extract
+tissue Placenta
+lineage Placenta
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234200_A603104
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001078
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001078
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Rectum_N29
+tag BCRectumN29
+type Cell Line
+tier 3
+organism Human
+description Donor N29; Age 29; Asian; DNA Extract
+tissue Rectum
+lineage Rectum
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234206_A712205
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001158
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001158
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Testis_N30
+tag BCTestisN30
+type Cell Line
+tier 3
+organism Human
+description Donor N30; Age 41; Asian; DNA Extract
+tissue Testis
+lineage Testis
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234260_A711169
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001363
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001363
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Cervix_BN0773
+tag BCCervixBN0773
+type Cell Line
+tier 3
+organism Human
+description Donor BN0773; Age 44; Asian; DNA Extract
+tissue Uterine cervix
+lineage Uterine cervix
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234275_A511454
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001421
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001421
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Uterus_BN0765
+tag BCUterusBN0765
+type Cell Line
+tier 3
+organism Human
+description Donor BN0765; Age 44; Asian; DNA Extract
+tissue Uterus
+lineage Uterus
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234274_A810099
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001424
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001424
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
 
 term BE2_C
 tag BE2C
@@ -1932,7 +2494,7 @@ vendorId CC-2511, CC-2511T225
 orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36999591CFE2F18852001A4B525E10%29/.do
 sex F
 tier 3
-protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf
+protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf Broad_Histone:NHDF-Ad_Bernstein_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
@@ -1996,7 +2558,7 @@ termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001593
 sex U
 tier 3
-protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf Broad_Histone:Osteoblast_Bernstein_protocol.pdf
 
 term ovcar-3
 tag ovcar3
@@ -2986,7 +3548,6 @@ description pseudogene
 # lab (lab that first asked for this antibody(
 # validation (either missing or the name of a validation document in a format to be documented by Venkat)
 # lots (optional lot numbers)
-
 term AP-2alpha
 tag AP2alpha
 type Antibody
@@ -3398,6 +3959,21 @@ targetId GeneCard:E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf
 
+term  E2F6_(H-50) 
+tag  E2F6H50 
+type Antibody
+target  E2F6_(H-50) 
+antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 232-281 mapping at the C-terminus of E2F-6 of human origin. 
+targetDescription  This gene encodes a member of the E2F transcription factor protein family. E2F family members play a crucial role in control of the cell cycle and of the action of tumor suppressor proteins. They are also a target of the transforming proteins of small DNA tumor viruses. Many E2F proteins contain several evolutionarily conserved domains: a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. The encoded protein of this gene is atypical because it lacks the transactivation and tumor suppressor protein association domains. It contains a modular suppression domain and is an inhibitor of E2F-dependent transcription. The protein is part of a multimeric protein complex that contains a histone methyltransferase and the transcription factors Mga and Max. Multiple transcript variants have been reported for this gene, but it has not been clearly demonstrated that they encode valid isoforms (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-22823
+orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
+lab  Myers 
+lots  D1206 
+targetId E2F6
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
+validation E2F6_H-50(Immunoblot)_Myers:human_E2F6_H-50_validation_Myers.pdf
+
 term EBF
 tag EBF
 type Antibody
@@ -3411,6 +3987,21 @@ lab Myers
 targetId GeneCard:EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation missing
+
+term  EBF1_(C-8) 
+tag  EBF1C8 
+type Antibody
+target  EBF1_(C-8) 
+antibodyDescription  Mouse monoclonal IgG, raised against a.a. 1-300 mapping at the N-terminus of EBF of human origin. 
+targetDescription  Early B-cell factor 1.  Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity). 
+vendorName Santa Cruz Biotech 
+vendorId sc-137065
+orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
+lab  Myers 
+lots  J0505 
+targetId EBF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
+validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
 
 term ELK4
 tag ELK4
@@ -4058,6 +4649,21 @@ targetId GeneCard:IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
 validation missing
 
+term  IRF4_(M-17) 
+tag  IRF4M17 
+type Antibody
+target  IRF4_(M-17) 
+antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin. 
+targetDescription  The protein encoded by this gene belongs to the IRF (interferon regulatory factor) family.  It functions as a lymphocyte specific transcription factor and negatively regulates TLR signaling by selectively competing with IRF5.  A chromosomal translocation involving this gene and the IgH locus, t(6;14)(p25;q32), may be a cause of multiple myeloma (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-6059
+orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
+lab  Myers 
+lots  IO1O6 
+targetId IRF4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
+validation IRF4_M-17(Immunoblot)_Myers:human_IRF4_M-17_validation_Myers.pdf
+
 term JunD
 tag JUND
 type Antibody
@@ -4114,6 +4720,23 @@ lab Snyder
 targetId GeneCard:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
 validation missing
+
+term  MAX_(C-17) 
+tag  MAXC17 
+type Antibody
+target  MAX_(C-17) 
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin. 
+targetDescription  The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-197
+orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
+lab  Myers 
+lots  J0809 
+targetId MAX
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
+validation MAX_C-17(Immunoblot)_Myers:human_MAX_C-17_validation_Myers.pdf
+
+
 
 ##This does not appear in metaDb
 term MEF2A
@@ -4508,10 +5131,11 @@ antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=992
 vendorName Abcam
 vendorId ab992
+lots 940739, 891751 
 lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
-validation missing
+validation RAD21(Immunoblot)_Myers:human_RAD21_validation_Myers.pdf
 
 term RPC155
 tag RPC155
@@ -4624,6 +5248,22 @@ lab Myers
 targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
 validation SP1(Immunoblot):human_SP1_E-3_validation_Myers.pdf
+
+term  SP4_(V-20) 
+tag  SP4V20 
+type Antibody
+target  SP4_(V-20) 
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Sp4 of human origin. 
+targetDescription  Binds to GT and GC boxes promoters elements. Probable transcriptional activator. 
+vendorName Santa Cruz Biotech 
+vendorId sc-645
+orderUrl http://www.scbt.com/datasheet-645-sp4-v-20-antibody.html
+lab  Myers 
+lots  F2609 
+targetId SP4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
+validation SP4_V-20(Immunoblot)_Myers:human_SP4_V-20_validation_Myers.pdf
+
 
 term SREBP1
 tag SREBP1
@@ -4738,6 +5378,22 @@ geneId 6872
 lab Myers / Wold
 lots K0905 F2706
 validation missing
+
+term  TAF7_(SQ-8) 
+tag  TAF7SQ8 
+type Antibody
+target  TAF7_(SQ-8) 
+antibodyDescription  Mouse monoclonal IgG, raised against recombinant TAF II p55 (TAF7) of human origin. 
+targetDescription  The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5. The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors. This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators. The protein is required for transcription by promoters targeted by RNA polymerase II (RefSeq). 
+228
+vendorName Santa Cruz Biotech
+vendorId sc-101167
+orderUrl http://www.scbt.com/datasheet-101167-taf-ii-p55-sq-8-antibody.html
+lab  Myers 
+lots  J1509 
+targetId TAF7
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
+validation TAF7_SQ-8(Immunoblot)_Myers:human_TAF7_SQ-8_validation_Myers.pdf
 
 term TAL1_(SC-12984)
 tag TAL1SC12984
@@ -4906,6 +5562,21 @@ lab Snyder
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
 validation USF2(Immunoblot):human_USF2_validation_Snyder.pdf
+
+term USF2_(C-20) 
+tag USF2C20 
+type Antibody
+target  USF2_(C-20) 
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of USF-2 of mouse origin.  Recommended for detection of USF-2 p44 of mouse, rat and human. 
+targetDescription  This gene encodes a member of the basic helix-loop-helix leucine zipper family, and can function as a cellular transcription factor. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs. Two transcript variants encoding distinct isoforms have been identified for this gene (RefSeq). 
+vendorName Santa Cruz Biotech 
+vendorId sc-862
+orderUrl http://www.scbt.com/datasheet-862-usf-2-c-20-antibody.html
+lab  Myers 
+lots  J0908 
+targetId GeneCard:USF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
+validation USF2_C-20(Immunoblot)_Myers:human_USF2_C-20_validation_Myers.pdf
 
 term WHIP
 tag WHIP

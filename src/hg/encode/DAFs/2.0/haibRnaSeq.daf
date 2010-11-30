@@ -28,7 +28,7 @@ lab               HudsonAlpha
 dataType          RnaSeq
 compositeSuffix   HaibRnaSeq
 group             expression
-variables         cell, localization, rnaExtract, mapAlgorithm, readType, treatment
+variables         cell, rnaExtract, mapAlgorithm, readType, treatment
 assembly          hg19
 
 validationSettings validateFiles.fastq:mmCheckOneInN=100;validateFiles.bam:mmCheckOneInN=100,mismatches=3
@@ -45,13 +45,13 @@ view             PlusRawSignal
 longLabelPrefix  HAIB RNA-seq Plus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
-required         no
+required         yes
 
 view             MinusRawSignal
 longLabelPrefix  HAIB RNA-seq Minus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
-required         no
+required         yes
 
 view             Aligns
 longLabelPrefix  Myers RNA-seq Map Algorithm Alignments

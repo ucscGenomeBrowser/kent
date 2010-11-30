@@ -243,14 +243,14 @@ if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
 printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, showLongLabel?"true":"false", title);
+        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", title);
 if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
     {
-    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->table,
+    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track,
         metadataAsHtmlTable(db,tdb,showLongLabel,TRUE,trackHash) );
     }
 else
-    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->table);
+    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->track);
 return TRUE;
 }
 
@@ -278,7 +278,19 @@ if(schemaLink)
     }
 if(downloadLink)
     {
-    makeNamedDownloadsLink(db, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    // special case exception (hg18:NHGRI BiPs are in 7 different dbs but only hg18 has downloads):
+    char *targetDb = trackDbSetting(tdb, "compareGenomeLinks");
+    if (targetDb != NULL)
+        {
+        targetDb = cloneFirstWordByDelimiter(targetDb,'=');
+        if (!startsWith("hg",targetDb))
+            freez(&targetDb);
+        }
+    if (targetDb == NULL)
+        targetDb = cloneString(db);
+
+    makeNamedDownloadsLink(targetDb, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    freez(&targetDb);
     if(metadataLink)
         printf(",");
     }
@@ -6144,12 +6156,13 @@ jsIncludeFile("ui.dropdownchecklist.js",NULL);
 webIncludeResourceFile("ui.dropdownchecklist.css");
 
 // TODO:
-// 1) Make this work with matrix
-// 2) Scroll long lists should be configurable through tdb setting
+// 1) Scroll long lists should be configurable through tdb setting
 //    #define FILTER_COMPOSITE_OPEN_SIZE 16
-// 3) columnCount (Number of filterBoxes per row) should be configurable through tdb setting
+// 2) columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 
-printf("<B>Filter subtracks by:</B> (select multiple %sitems - %s)<BR>\n",(membersForAll->dimMax == dimA?"":"categories and "),FILTERBY_HELP_LINK);
+printf("<B>Filter subtracks %sby:</B> (select multiple %sitems - %s)<BR>\n",
+       (membersForAll->members[dimX] != NULL || membersForAll->members[dimY] != NULL ? "further ":""),
+       (membersForAll->dimMax == dimA?"":"categories and "),FILTERBY_HELP_LINK);
 printf("<TABLE><TR valign='top'>\n");
 
 // Do All [+][-] buttons
@@ -6274,30 +6287,35 @@ if (dimensionX || dimensionY) // Must be an X or Y dimension
         }
     }
 
-if(!hCompositeUiByFilter(db, cart, parentTdb, formName))
+// If there is no matrix and if there is a filterComposite, then were are done.
+if(dimensionX == NULL && dimensionY == NULL)
     {
-    char javascript[JBUFSIZE];
-    //puts("<B>Select subtracks by characterization:</B><BR>");
-    printf("<B>Select subtracks by ");
-    if(dimensionX && !dimensionY)
-        safef(javascript, sizeof(javascript), "%s:</B>",dimensionX->groupTitle);
-    else if(!dimensionX && dimensionY)
-        safef(javascript, sizeof(javascript), "%s:</B>",dimensionY->groupTitle);
-    else if(dimensionX && dimensionY)
-        safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->groupTitle,dimensionY->groupTitle);
-    else
-        safef(javascript, sizeof(javascript), "multiple variables:</B>");
-    puts(strLower(javascript));
+    if (hCompositeUiByFilter(db, cart, parentTdb, formName))
+        return FALSE;
+    }
 
-    if(!subgroupingExists(parentTdb,"view"))
-        puts("(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on subtrack selection' TARGET=_BLANK>help</A>)\n");
+// Tell the user what to do:
+char javascript[JBUFSIZE];
+//puts("<B>Select subtracks by characterization:</B><BR>");
+printf("<B>Select subtracks by ");
+if(dimensionX && !dimensionY)
+    safef(javascript, sizeof(javascript), "%s:</B>",dimensionX->groupTitle);
+else if(!dimensionX && dimensionY)
+    safef(javascript, sizeof(javascript), "%s:</B>",dimensionY->groupTitle);
+else if(dimensionX && dimensionY)
+    safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->groupTitle,dimensionY->groupTitle);
+else
+    safef(javascript, sizeof(javascript), "multiple variables:</B>");
+puts(strLower(javascript));
 
-    puts("<BR>\n");
+if(!subgroupingExists(parentTdb,"view"))
+    puts("(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on subtrack selection' TARGET=_BLANK>help</A>)\n");
 
-    if(membersForAll->abcCount > 0)
-        {
-        displayABCdimensions(db,cart,parentTdb,subtrackRefList,membersForAll);
-        }
+puts("<BR>\n");
+
+if(membersForAll->abcCount > 0 && membersForAll->filters == FALSE)
+    {
+    displayABCdimensions(db,cart,parentTdb,subtrackRefList,membersForAll);
     }
 
 if(dimensionX == NULL && dimensionY == NULL) // Could have been just filterComposite. Must be an X or Y dimension
@@ -6402,6 +6420,9 @@ if(dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
 
 puts("</TD></TR></TABLE>");
 puts("<BR>\n");
+
+// If any filter additional filter composites, they can be added at the end.
+hCompositeUiByFilter(db, cart, parentTdb, formName);
 
 return TRUE;
 }

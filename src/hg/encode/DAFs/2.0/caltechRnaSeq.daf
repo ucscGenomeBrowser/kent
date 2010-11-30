@@ -31,7 +31,7 @@ group             expression
 variables         cell,readType,mapAlgorithm,insertLength
 assembly          hg19
 
-validationSettings validateFiles.fastq:mmCheckOneInN=100;validateFiles.bam:mmCheckOneInN=100,mismatches=3 
+validationSettings validateFiles.fastq:mmCheckOneInN=100;validateFiles.bam:mmCheckOneInN=100,mismatches=6 
 
 # Track/view definition
 view             Signal
