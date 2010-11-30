@@ -6,7 +6,7 @@ track wgEncodeSydhTfbs
 release alpha
 compositeTrack on
 shortLabel Stan/Yale TFBS
-longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Stanford/Yale
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale
 group regulation
 priority 0
 type bed 3
