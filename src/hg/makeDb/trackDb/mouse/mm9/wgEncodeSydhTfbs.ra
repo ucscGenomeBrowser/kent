@@ -141,45 +141,45 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1857 dateSubmitted=2010-07-09
 
-        track wgEncodeSydhTfbsMelRad21Dmso20StdPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MEL Rad21 Pk
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in MEL cells)
-        subGroups view=Peaks factor=RAD21 cellType=MEL control=std treatment=DMSO20
-        type narrowPeak
-        color 46,0,184
-        # subId=2539 dateSubmitted=2010-10-20
+	        track wgEncodeSydhTfbsMelRad21Dmso20StdPk
+	        release alpha
+	        parent wgEncodeSydhTfbsViewPeaks off
+	        shortLabel MEL Rad21 Pk
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (Rad21 in MEL cells)
+	        subGroups view=Peaks factor=RAD21 cellType=MEL control=std treatment=DMSO20
+	        type narrowPeak
+	        color 46,0,184
+	        # subId=2539 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsMelRad21StdPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MEL Rad21 Pk
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in MEL cells)
-        subGroups view=Peaks factor=RAD21 cellType=MEL control=std treatment=None
-        type narrowPeak
-        color 46,0,184
-        # subId=2541 dateSubmitted=2010-10-20
+	        track wgEncodeSydhTfbsMelRad21StdPk
+	        release alpha
+	        parent wgEncodeSydhTfbsViewPeaks off
+	        shortLabel MEL Rad21 Pk
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (Rad21 in MEL cells)
+	        subGroups view=Peaks factor=RAD21 cellType=MEL control=std treatment=None
+	        type narrowPeak
+	        color 46,0,184
+	        # subId=2541 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsMelNelfeStdPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MEL NELFe Pk
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (NELFe in MEL cells)
-        subGroups view=Peaks factor=NELFE cellType=MEL control=std treatment=None
-        type narrowPeak
-        color 46,0,184
-        # subId=2543 dateSubmitted=2010-10-20
+	        track wgEncodeSydhTfbsMelNelfeStdPk
+	        release alpha
+	        parent wgEncodeSydhTfbsViewPeaks off
+	        shortLabel MEL NELFe Pk
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (NELFe in MEL cells)
+	        subGroups view=Peaks factor=NELFE cellType=MEL control=std treatment=None
+	        type narrowPeak
+	        color 46,0,184
+	        # subId=2543 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsMelCmybh141StdPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MEL c-Myb_(H-141) Pk
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (c-Myb_(H-141) in MEL cells)
-        subGroups view=Peaks factor=cMYBH141 cellType=MEL control=std treatment=None
-        type narrowPeak
-        color 46,0,184
-        # subId=2542 dateSubmitted=2010-10-27
+	        track wgEncodeSydhTfbsMelCmybh141StdPk
+	        release alpha
+	        parent wgEncodeSydhTfbsViewPeaks off
+	        shortLabel MEL c-Myb_(H-141) Pk
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Peaks (c-Myb_(H-141) in MEL cells)
+	        subGroups view=Peaks factor=cMYBH141 cellType=MEL control=std treatment=None
+	        type narrowPeak
+	        color 46,0,184
+	        # subId=2542 dateSubmitted=2010-10-27
 
 
 		#### Submission 1153 ####
@@ -593,7 +593,7 @@ wgEncode 1
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL  CTCF   Sg
-	        longLabel  ENCODE TFBS, Stanford/Yale ChIP-seq Signal (CTCF in MEL cells)
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (CTCF in MEL cells)
 	        subGroups view=Signal factor=CTCF cellType=MEL control=std treatment=DMSO20
 	        type bigWig 1.000000 93856.000000
 	        color 46,0,184
@@ -603,49 +603,49 @@ wgEncode 1
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL  Std    Sg
-	        longLabel  ENCODE TFBS, Stanford/Yale ChIP-seq Signal (Standard Input in MEL cells)
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (Standard Input in MEL cells)
 	        subGroups view=Signal factor=zInputstd cellType=MEL control=std treatment=DMSO20
 	        type bigWig 1.000000 78459.000000
 	        color 46,0,184
 	        # subId=1862 dateSubmitted=2010-07-09
 
-        track wgEncodeSydhTfbsMelRad21Dmso20StdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSig off
-        shortLabel MEL Rad21 Sig
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in MEL cells)
-        subGroups view=Signal factor=RAD21 cellType=MEL control=std treatment=DMSO20
-        type bigWig 1.000000 64232.000000
-        color 46,0,184
-        # subId=2539 dateSubmitted=2010-10-20
+	        track wgEncodeSydhTfbsMelRad21Dmso20StdSig
+	        release alpha
+	        parent wgEncodeSydhTfbsViewSig off
+	        shortLabel MEL Rad21 Sig
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (Rad21 in MEL cells)
+	        subGroups view=Signal factor=RAD21 cellType=MEL control=std treatment=DMSO20
+	        type bigWig 1.000000 64232.000000
+	        color 46,0,184
+	        # subId=2539 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsMelRad21StdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSig off
-        shortLabel MEL Rad21 Sig
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in MEL cells)
-        subGroups view=Signal factor=RAD21 cellType=MEL control=std treatment=None
-        type bigWig 1.000000 79946.000000
-        color 46,0,184
-        # subId=2541 dateSubmitted=2010-10-20
+	        track wgEncodeSydhTfbsMelRad21StdSig
+	        release alpha
+	        parent wgEncodeSydhTfbsViewSig off
+	        shortLabel MEL Rad21 Sig
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (Rad21 in MEL cells)
+	        subGroups view=Signal factor=RAD21 cellType=MEL control=std treatment=None
+	        type bigWig 1.000000 79946.000000
+	        color 46,0,184
+	        # subId=2541 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsMelNelfeStdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSig off
-        shortLabel MEL NELFe Sig
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (NELFe in MEL cells)
-        subGroups view=Signal factor=NELFE cellType=MEL control=std treatment=None
-        type bigWig 1.000000 114421.000000
-        color 46,0,184
-        # subId=2543 dateSubmitted=2010-10-20
+	        track wgEncodeSydhTfbsMelNelfeStdSig
+	        release alpha
+	        parent wgEncodeSydhTfbsViewSig off
+	        shortLabel MEL NELFe Sig
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (NELFe in MEL cells)
+	        subGroups view=Signal factor=NELFE cellType=MEL control=std treatment=None
+	        type bigWig 1.000000 114421.000000
+	        color 46,0,184
+	        # subId=2543 dateSubmitted=2010-10-20
 
-        track wgEncodeSydhTfbsMelCmybh141StdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSig off
-        shortLabel MEL c-Myb_(H-141) Sig
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Myb_(H-141) in MEL cells)
-        subGroups view=Signal factor=cMYBH141 cellType=MEL control=std treatment=None
-        type bigWig 1.000000 106720.000000
-        color 46,0,184
-        # subId=2542 dateSubmitted=2010-10-27
+	        track wgEncodeSydhTfbsMelCmybh141StdSig
+	        release alpha
+	        parent wgEncodeSydhTfbsViewSig off
+	        shortLabel MEL c-Myb_(H-141) Sig
+	        longLabel ENCODE TFBS, Stanford/Yale ChIP-seq Signal (c-Myb_(H-141) in MEL cells)
+	        subGroups view=Signal factor=cMYBH141 cellType=MEL control=std treatment=None
+	        type bigWig 1.000000 106720.000000
+	        color 46,0,184
+	        # subId=2542 dateSubmitted=2010-10-27
 
