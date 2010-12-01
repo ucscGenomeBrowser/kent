@@ -40,7 +40,7 @@ wgEncode 1
 	release alpha
 	shortLabel Peaks
 	view Peaks
-	visibility pack
+	visibility dense
 	viewUi on
 	subTrack wgEncodeSydhHist
 	signalFilter 0
