@@ -1510,6 +1510,11 @@ identifier ctdGeneSymbol
     hgFixed.ctdSorted.GeneSymbol dupeOk
     $hg.kgXref.geneSymbol minCheck=0.30
 
+identifier rdmrGene
+"R-DMR Gene"
+    $hg.rdmr.name dupeOk
+    $hg.rdmrRaw.gene minCheck=0.95
+
 identifier gadId
 "GAD Gene ID"
     $hg.kgXref.geneSymbol dupeOk
@@ -3232,8 +3237,6 @@ tablesIgnored hg18
     numtS
     numtSMitochondrion
     numtSMitochondrionChrPlacement
-    rdmr
-    rdmrRaw
 
 tablesIgnored hg19
     altSeqHaplotypes
