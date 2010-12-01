@@ -1,11 +1,14 @@
 # Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler:vsmalladi assited by Cricket)
 # Notes:
-# - Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human all Peaks and Signals excluding Inputs will be turned on
-# -Dimensions:
+# 	- Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human all Peaks and Signals excluding Inputs will be turned on
+# 	- Dimensions:
 #		X - Cell Line
 #		Y - Factor
 #		Z - Treatment
-
+#	
+#	- shortLabels
+#		Pekas - Pk
+#		Signal - Sg
 track wgEncodeSydhHist
 release alpha
 compositeTrack on
