@@ -7795,6 +7795,11 @@ done
     hgLoadPsl hg19 affyU133.psl
     hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
+    # Added knownToU133 table
+    hgMapToGene hg19 affyU133 knownGene knownToU133
+    # trim unwanted chip-prefix to be backwards compatible with hg17 and hg18
+    hgsql hg19 -e 'update knownToU133 set value=substring(value,7)'
+
 ##########################################################################
 # GNF ATLAS 2 (Done - 2009-09-30 - Jim)
     # Align probes from GNF1H chip.
@@ -10280,7 +10285,7 @@ EOF
     #     58592  
 
 
-    # Added knownToU133Plus2 track
+    # Added knownToU133Plus2 table
     hgMapToGene hg19 affyU133Plus2 knownGene knownToU133Plus2
 
 
@@ -10339,7 +10344,7 @@ EOF
     #   Updating seq table
     #   All done
 
-    # Added knownToU95 track
+    # Added knownToU95 table
     hgMapToGene hg19 affyU95 knownGene knownToU95
 
 #############################################################################
