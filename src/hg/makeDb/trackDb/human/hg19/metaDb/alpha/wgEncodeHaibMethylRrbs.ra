@@ -10,6 +10,7 @@ fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -29,6 +30,7 @@ fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -48,6 +50,7 @@ fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -67,6 +70,7 @@ fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -86,6 +90,7 @@ fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -105,6 +110,7 @@ fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -124,6 +130,7 @@ fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -143,6 +150,7 @@ fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -162,6 +170,7 @@ fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1217
@@ -181,6 +190,7 @@ fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1217
@@ -200,6 +210,7 @@ fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -219,6 +230,7 @@ fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -238,6 +250,7 @@ fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -257,6 +270,7 @@ fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -276,6 +290,7 @@ fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1174
@@ -295,6 +310,7 @@ fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1174
@@ -314,6 +330,7 @@ fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -333,6 +350,7 @@ fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -352,6 +370,7 @@ fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -371,6 +390,7 @@ fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -390,6 +410,7 @@ fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -409,6 +430,7 @@ fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -428,6 +450,7 @@ fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -447,6 +470,7 @@ fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -466,6 +490,7 @@ fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -485,6 +510,7 @@ fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -504,6 +530,7 @@ fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -523,6 +550,7 @@ fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -542,6 +570,7 @@ fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -561,6 +590,7 @@ fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -580,6 +610,7 @@ fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1219
@@ -599,6 +630,7 @@ fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1219
@@ -618,6 +650,7 @@ fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -637,6 +670,7 @@ fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -656,6 +690,7 @@ fileName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -675,6 +710,7 @@ fileName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -694,6 +730,7 @@ fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -713,6 +750,7 @@ fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -732,6 +770,7 @@ fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -751,6 +790,7 @@ fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -770,6 +810,7 @@ fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -789,6 +830,7 @@ fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -808,6 +850,7 @@ fileName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -827,6 +870,7 @@ fileName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -846,6 +890,7 @@ fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -865,6 +910,7 @@ fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -884,6 +930,7 @@ fileName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -903,6 +950,7 @@ fileName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -922,6 +970,7 @@ fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -941,6 +990,7 @@ fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -960,6 +1010,7 @@ fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -979,6 +1030,7 @@ fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -998,6 +1050,7 @@ fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -1017,6 +1070,7 @@ fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -1036,6 +1090,7 @@ fileName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -1055,6 +1110,7 @@ fileName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -1074,6 +1130,7 @@ fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
@@ -1093,6 +1150,7 @@ fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
@@ -1112,6 +1170,7 @@ fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1131,6 +1190,7 @@ fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1150,6 +1210,7 @@ fileName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1169,6 +1230,7 @@ fileName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1188,6 +1250,7 @@ fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1207,6 +1270,7 @@ fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1226,6 +1290,7 @@ fileName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1245,6 +1310,7 @@ fileName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1264,6 +1330,7 @@ fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1283,6 +1350,7 @@ fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1302,6 +1370,7 @@ fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1321,6 +1390,7 @@ fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1340,6 +1410,7 @@ fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -1359,6 +1430,7 @@ fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -1378,6 +1450,7 @@ fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1397,6 +1470,7 @@ fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1416,6 +1490,7 @@ fileName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1221
@@ -1435,6 +1510,7 @@ fileName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1221
@@ -1454,6 +1530,7 @@ fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -1473,6 +1550,7 @@ fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -1492,6 +1570,7 @@ fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -1511,6 +1590,7 @@ fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -1530,6 +1610,7 @@ fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -1549,6 +1630,7 @@ fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -1568,6 +1650,7 @@ fileName wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
@@ -1587,6 +1670,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1218
@@ -1606,6 +1690,7 @@ fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1218
@@ -1625,6 +1710,7 @@ fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -1644,6 +1730,7 @@ fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -1663,6 +1750,7 @@ fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1222
@@ -1682,6 +1770,7 @@ fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1222
@@ -1701,6 +1790,7 @@ fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
@@ -1720,6 +1810,7 @@ fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy HudsonAlpha
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
@@ -1739,6 +1830,7 @@ fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -1758,6 +1850,7 @@ fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -1777,6 +1870,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -1796,6 +1890,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -1815,6 +1910,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -1834,6 +1930,7 @@ fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -1853,6 +1950,7 @@ fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -1872,6 +1970,7 @@ fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -1891,6 +1990,7 @@ fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -1910,6 +2010,7 @@ fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -1929,6 +2030,7 @@ fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -1948,6 +2050,7 @@ fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -1967,6 +2070,7 @@ fileName wgEncodeHaibMethylRrbsMelanoSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -1986,6 +2090,7 @@ fileName wgEncodeHaibMethylRrbsMelanoSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -2005,6 +2110,7 @@ fileName wgEncodeHaibMethylRrbsMelanoSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
@@ -2024,6 +2130,7 @@ fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -2043,6 +2150,7 @@ fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -2062,6 +2170,7 @@ fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -2081,6 +2190,7 @@ fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -2100,6 +2210,7 @@ fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -2119,6 +2230,7 @@ fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -2138,6 +2250,7 @@ fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -2157,6 +2270,7 @@ fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -2176,6 +2290,7 @@ fileName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -2195,6 +2310,7 @@ fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -2214,6 +2330,7 @@ fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -2233,6 +2350,7 @@ fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2395
@@ -2252,6 +2370,7 @@ fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2395
@@ -2271,6 +2390,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -2290,6 +2410,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -2309,6 +2430,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2471
@@ -2328,6 +2450,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep4.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 4
 subId 2471
@@ -2347,6 +2470,7 @@ fileName wgEncodeHaibMethylRrbsPanisletsSitesRep5.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 5
 subId 2471
@@ -2366,6 +2490,7 @@ fileName wgEncodeHaibMethylRrbsProgfibSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -2385,6 +2510,7 @@ fileName wgEncodeHaibMethylRrbsProgfibSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -2404,6 +2530,7 @@ fileName wgEncodeHaibMethylRrbsRptecSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2471
@@ -2423,6 +2550,7 @@ fileName wgEncodeHaibMethylRrbsRptecSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2471
@@ -2442,6 +2570,7 @@ fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -2461,6 +2590,7 @@ fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -2480,6 +2610,7 @@ fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
@@ -2499,6 +2630,7 @@ fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
@@ -2518,6 +2650,7 @@ fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
@@ -2537,6 +2670,7 @@ fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy UW
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
@@ -2544,4 +2678,4 @@ tableName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -1292842855
+# MAGIC: 327442777
