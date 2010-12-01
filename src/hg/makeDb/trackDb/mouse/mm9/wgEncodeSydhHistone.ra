@@ -61,17 +61,6 @@ wgEncode 1
     		color 46,0,184 
     		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=H3K4me3 setType=exp treatment=None inputType=MEL/None/Input/IgG-Yale control=IgG-Yale view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1166 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhHist tableName=wgEncodeSydhHistMelH3k4me3IggyalePk fileName=wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
 
-	        track wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
-	        release alpha
-	        parent wgEncodeSydhHistViewPeaks 
-	        shortLabel MEL H3K4me3 D Pk
-                longLabel MEL H3K4me3 2% DMSO Histone Modifications Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=DMSO20
-	        type narrowPeak
-	        color 46,0,184
-	        # subId=1353 dateSubmitted=2010-07-09
-
-
 		
 		#### Submission 1194 ####
     		track wgEncodeSydhHistCh12H3k4me3IggyalePk
@@ -143,12 +132,3 @@ wgEncode 1
     		color 153,38,0
     		metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-Yale control=IgG-Yale view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1195 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhHist tableName=wgEncodeSydhHistCh12InputIggyaleSig fileName=wgEncodeSydhHistCh12InputIggyaleSig.bigWig.gz
 
-	        track wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
-	        release alpha
-	        parent wgEncodeSydhHistViewSig 
-	        shortLabel MEL H3K4me3 D Sg
-                longLabel MEL H3K4me3 2% DMSO Histone Modifications Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=DMSO20
-	        type bigWig 1.000000 38729.000000
-	        color 46,0,184
-	        # subId=1353 dateSubmitted=2010-07-09
