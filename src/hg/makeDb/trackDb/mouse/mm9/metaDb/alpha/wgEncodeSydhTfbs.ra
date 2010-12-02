@@ -304,7 +304,7 @@ view Signal
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -328,7 +328,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -352,7 +352,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12CtcfIggyalePk
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -376,7 +376,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -399,7 +399,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -422,7 +422,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleSig
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -1004,7 +1004,7 @@ view Signal
 metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1028,7 +1028,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1052,7 +1052,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12P300IggrabPk
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1076,7 +1076,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1099,7 +1099,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1122,7 +1122,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12P300IggrabSig
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1982,7 +1982,7 @@ view Signal
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2006,7 +2006,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2030,7 +2030,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdPk
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2054,7 +2054,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2077,7 +2077,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2100,7 +2100,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdSig
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -3139,7 +3139,7 @@ view Signal
 metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3163,7 +3163,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3187,7 +3187,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelP300IggmusPk
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3211,7 +3211,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3234,7 +3234,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3257,7 +3257,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelP300IggmusSig
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -2037779363
+# MAGIC: 763575025
