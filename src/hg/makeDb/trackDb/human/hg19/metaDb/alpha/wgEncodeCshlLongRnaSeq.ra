@@ -7227,7 +7227,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH+
+labProtocolId 025CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7250,7 +7250,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH+
+labProtocolId 026CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7273,7 +7273,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3.bam
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH+
+labProtocolId 025CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7296,7 +7296,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4.bam
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH+
+labProtocolId 026CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7319,7 +7319,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH+
+labProtocolId 025CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7341,7 +7341,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH+
+labProtocolId 026CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7363,7 +7363,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH+
+labProtocolId 025CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7385,7 +7385,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH+
+labProtocolId 026CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7407,7 +7407,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH+
+labProtocolId 025CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7430,7 +7430,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH+
+labProtocolId 026CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7453,7 +7453,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH+
+labProtocolId 025CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7476,7 +7476,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH+
+labProtocolId 026CH
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -7790,7 +7790,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL+
+labProtocolId 025NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7813,7 +7813,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL+
+labProtocolId 026NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7836,7 +7836,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3.bam
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL+
+labProtocolId 025NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7859,7 +7859,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4.bam
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL+
+labProtocolId 026NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7882,7 +7882,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL+
+labProtocolId 025NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7904,7 +7904,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL+
+labProtocolId 026NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7926,7 +7926,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL+
+labProtocolId 025NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7948,7 +7948,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL+
+labProtocolId 026NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7970,7 +7970,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL+
+labProtocolId 025NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -7993,7 +7993,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL+
+labProtocolId 026NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -8016,7 +8016,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL+
+labProtocolId 025NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -8039,7 +8039,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL+
+labProtocolId 026NL
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -8062,7 +8062,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP+
+labProtocolId 025NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8085,7 +8085,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP+
+labProtocolId 026NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8108,7 +8108,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3.bam
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP+
+labProtocolId 025NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8131,7 +8131,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4.bam
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP+
+labProtocolId 026NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8154,7 +8154,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP+
+labProtocolId 025NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8176,7 +8176,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP+
+labProtocolId 026NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8198,7 +8198,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP+
+labProtocolId 025NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8220,7 +8220,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP+
+labProtocolId 026NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8242,7 +8242,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP+
+labProtocolId 025NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8265,7 +8265,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP+
+labProtocolId 026NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8288,7 +8288,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP+
+labProtocolId 025NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -8311,7 +8311,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP+
+labProtocolId 026NP
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -11313,4 +11313,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: -1772862702
+# MAGIC: -1774671270
