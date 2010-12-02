@@ -4,7 +4,7 @@ compositeTrack on
 shortLabel Caltech RNA-seq
 longLabel ENCODE Caltech Wold RNA-seq
 group expression
-subGroup1 view Views GeneModel=Gene_Model Signal=Raw_Signal PlusSignal=Plus_Raw_Signal MinusSignal=Minus_Raw_Signal  Splices=Splice_Sites Aligns=Alignments Paired=Paired
+subGroup1 view Views GeneModel=Gene_Model Signal=Raw_Signal PlusSignal=Plus_Raw_Signal MinusSignal=Minus_Raw_Signal  Splices=Splice_Sites Aligns=Alignments 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HSMM=HSMM HUVEC=HUVEC HeLaS3=HeLaS3 HepG2=HepG2 MCF7=MCF7 NHEK=NHEK NHLF=NHLF
 subGroup3 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 blowBlat=Bowtie0.98+BLAT bow098=Bowtie_0.981 erng3b=Erange_3.0b erng32a=erng32a BB2=Bowtie0.10.0+BLAT TH1014=TopHat1.0.14
 subGroup4 readType Read_Type r1x75=Single_75nt r1x75D=Single_Strand-Specific_75nt r2x75=Paired_75nt_(200_bp) r2x75400=Paired_75nt_(400_bp)
@@ -643,23 +643,7 @@ wgEncode 1
 		subGroups view=Splices cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
 		# subId=3000 dateSubmitted=2010-11-18
-
 	
-	track wgEncodeCaltechRnaSeqViewPaired
-    	view Paired
-        shortLabel Alignments
-    	visibility hide
-    	subTrack wgEncodeCaltechRnaSeq
-
-		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep1
-		release alpha
-		parent wgEncodeCaltechRnaSeqViewPaired off
-		shortLabel MCF7 1
-                longLabel MCF-7 paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
-		subGroups view=Paired cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
-		type bam
-		# subId=3000 dateSubmitted=2010-11-18
-
 	track wgEncodeCaltechRnaSeqViewAligns
     	view Aligns
         shortLabel Alignments
@@ -677,6 +661,15 @@ wgEncode 1
 	showDiffBasesAllScales .
 	showDiffBasesMaxZoom 100
 	maxWindowToDraw 1000000
+
+		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep1
+		release alpha
+		parent wgEncodeCaltechRnaSeqViewAligns off
+		shortLabel MCF7 1
+                longLabel MCF-7 paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
+		subGroups view=Aligns cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
+		type bam
+		# subId=3024 dateSubmitted=2010-11-18
 
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1
 		release alpha
