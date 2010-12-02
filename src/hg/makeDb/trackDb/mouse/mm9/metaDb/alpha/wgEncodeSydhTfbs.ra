@@ -2410,7 +2410,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
@@ -2433,7 +2433,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
@@ -2455,7 +2455,7 @@ antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
-controlId MEL/None/Input/IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -436201473
+# MAGIC: 637541770
