@@ -122,12 +122,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1863 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelP300IggmusPk
+	        track wgEncodeSydhTfbsMelP300IggrabPk
 	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL p300 Pk
                 longLabel MEL p300 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=P300N15 cellType=MEL control=IGGmus treatment=None
+	        subGroups view=Peaks factor=P300N15 cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=1864 dateSubmitted=2010-07-08
@@ -580,12 +580,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1863 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelP300IggmusSig
+	        track wgEncodeSydhTfbsMelP300IggrabSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel MEL p300 Sg
                 longLabel MEL p300 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=P300N15 cellType=MEL control=IGGmus treatment=None
+	        subGroups view=Signal factor=P300N15 cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 93877.000000
 	        color 46,0,184
 	        # subId=1864 dateSubmitted=2010-07-08

@@ -3136,20 +3136,20 @@ tableName wgEncodeSydhTfbsMelNelfeIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep1
+metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep1
 objType file
 age immortalized
 antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3160,20 +3160,20 @@ subId 1864
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep2
+metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep2
 objType file
 age immortalized
 antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3184,19 +3184,19 @@ subId 1864
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelP300IggmusPk
+metaObject wgEncodeSydhTfbsMelP300IggrabPk
 objType table
 age immortalized
 antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelP300IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3204,23 +3204,23 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1864
-tableName wgEncodeSydhTfbsMelP300IggmusPk
+tableName wgEncodeSydhTfbsMelP300IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep1
+metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep1
 objType file
 age immortalized
 antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3231,19 +3231,19 @@ subId 1864
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep2
+metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep2
 objType file
 age immortalized
 antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3254,19 +3254,19 @@ subId 1864
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelP300IggmusSig
+metaObject wgEncodeSydhTfbsMelP300IggrabSig
 objType table
 age immortalized
 antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusSig.bigWig
+fileName wgEncodeSydhTfbsMelP300IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3274,7 +3274,7 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1864
-tableName wgEncodeSydhTfbsMelP300IggmusSig
+tableName wgEncodeSydhTfbsMelP300IggrabSig
 treatment None
 view Signal
 
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -1822169478
+# MAGIC: 21714830
