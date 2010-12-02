@@ -11,7 +11,7 @@ subGroup3 localization Localization 0-cell=Whole_Cell 20-cytosol=Cytosol 25-poly
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 dimensionZchecked longNonPolyA,longPolyA,total
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+sortOrder cellType=+ localization=+ rnaExtract=+ 
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 noInherit on
