@@ -3550,21 +3550,21 @@ tableName wgEncodeSydhTfbsMelRad21Dmso20StdSig
 treatment DMSO_2.0pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMelRad21StdAlnRep1
+metaObject wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdAlnRep1
+parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3572,21 +3572,21 @@ subId 2541
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21StdAlnRep2
+metaObject wgEncodeSydhTfbsMelRad21IggrabAlnRep2
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdAlnRep2.bam
+fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdAlnRep2
+parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3594,43 +3594,43 @@ subId 2541
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21StdPk
+metaObject wgEncodeSydhTfbsMelRad21IggrabPk
 objType table
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelRad21IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2541
-tableName wgEncodeSydhTfbsMelRad21StdPk
+tableName wgEncodeSydhTfbsMelRad21IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelRad21StdRawDataRep1
+metaObject wgEncodeSydhTfbsMelRad21IggrabRawDataRep1
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdRawSignalRep1
+parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3638,21 +3638,21 @@ subId 2541
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21StdRawDataRep2
+metaObject wgEncodeSydhTfbsMelRad21IggrabRawDataRep2
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdRawSignalRep2
+parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3660,25 +3660,25 @@ subId 2541
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21StdSig
+metaObject wgEncodeSydhTfbsMelRad21IggrabSig
 objType table
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdSig.bigWig
+fileName wgEncodeSydhTfbsMelRad21IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2541
-tableName wgEncodeSydhTfbsMelRad21StdSig
+tableName wgEncodeSydhTfbsMelRad21IggrabSig
 treatment None
 view Signal
 
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 598818856
+# MAGIC: -1822169478

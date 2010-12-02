@@ -162,12 +162,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2539 dateSubmitted=2010-10-20
 
-	        track wgEncodeSydhTfbsMelRad21StdPk
+	        track wgEncodeSydhTfbsMelRad21IggrabPk
 	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 Pk
                 longLabel MEL Rad21 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=RAD21 cellType=MEL control=std treatment=None
+	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=2541 dateSubmitted=2010-10-20
@@ -630,12 +630,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2539 dateSubmitted=2010-10-20
 
-	        track wgEncodeSydhTfbsMelRad21StdSig
+	        track wgEncodeSydhTfbsMelRad21IggrabSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 Sg
                 longLabel MEL Rad21 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=RAD21 cellType=MEL control=std treatment=None
+	        subGroups view=Signal factor=RAD21 cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 79946.000000
 	        color 46,0,184
 	        # subId=2541 dateSubmitted=2010-10-20
