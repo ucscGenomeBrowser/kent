@@ -610,12 +610,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1857 dateSubmitted=2010-07-09
 
-	        track wgEncodeSydhTfbsMelInputDmso20StdSig
+	        track wgEncodeSydhTfbsMelInputDmso20IggyaleSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
-	        shortLabel MEL Std D Sg
-                longLabel MEL Standard Input 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=zInputstd cellType=MEL control=std treatment=DMSO20
+	        shortLabel MEL IgGYale D Sg
+                longLabel MEL IgG-Yale Input 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+	        subGroups view=Signal factor=zInputstd cellType=MEL control=IGGYale treatment=DMSO20
 	        type bigWig 1.000000 78459.000000
 	        color 46,0,184
 	        # subId=1862 dateSubmitted=2010-07-09

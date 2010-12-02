@@ -2403,20 +2403,20 @@ tableName wgEncodeSydhTfbsMelGata1IggratSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdAln
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleAln
 objType file
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelInputDmso20StdAln.bam.bai
-fileName wgEncodeSydhTfbsMelInputDmso20StdAln.bam
+fileIndex wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam.bai
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2426,19 +2426,19 @@ subId 1862
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdRawData
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleRawData
 objType file
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20StdRawData.fastq.gz
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleRawData.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2448,19 +2448,19 @@ subId 1862
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdSig
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleSig
 objType table
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20StdSig.bigWig
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2468,7 +2468,7 @@ project wgEncode
 setType input
 strain Unknown
 subId 1862
-tableName wgEncodeSydhTfbsMelInputDmso20StdSig
+tableName wgEncodeSydhTfbsMelInputDmso20IggyaleSig
 treatment DMSO_2.0pct
 view Signal
 
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -261247244
+# MAGIC: -436201473
