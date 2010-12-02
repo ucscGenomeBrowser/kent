@@ -22,7 +22,7 @@ type bed 3
 origAssembly mm9
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line CH12=CH12 MEL=MEL
-subGroup3 factor Factor cJUN=c-Jun cMYBH141=c-MYB_(H-141) cMYC=c-Myc CTCFC20=CTCF E2F4=E2F4 GATA1SC265=GATA-1 JUND=JunD MAX=Max NELFE=NELFE P300N15=p300 POL2=Pol2 RAD21=Rad21 TBP=TBP USF2=USF2 zInputIGGMUS=Input_(<i>IgG-mus</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGRAT=Input_(<i>IgG-rat</i>) zInputstd=Input_(<i>Standard</i>)
+subGroup3 factor Factor cJUN=c-Jun cMYBH141=c-MYB_(H-141) cMYC=c-Myc CTCFC20=CTCF E2F4=E2F4 GATA1SC265=GATA-1 JUND=JunD MAX=Max NELFE=NELFE P300N15=p300 POL2=Pol2 RAD21=Rad21 TBP=TBP USF2=USF2 zInputIGGMUS=Input_(<i>IgG-mus</i>) zInputIGGRAB=Input_(<i>IgG-rab</i>) zInputIGGRAT=Input_(<i>IgG-rat</i>) zInputstd=Input_(<i>Standard</i>) zInputIGGYALE=Input_(<i>IgG-Yale</i>)
 subGroup4 control Control IGGmus=IgG-mus IGGrab=IgG-rab IGGrat=IgG-rat IGGYale=IgG-Yale std=std
 subGroup5 treatment Treatment None=None DMSO20=DMSO_2.0pct 
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
@@ -615,7 +615,7 @@ wgEncode 1
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL IgGYale D Sg
                 longLabel MEL IgG-Yale Input 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=zInputstd cellType=MEL control=IGGYale treatment=DMSO20
+	        subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=DMSO20
 	        type bigWig 1.000000 78459.000000
 	        color 46,0,184
 	        # subId=1862 dateSubmitted=2010-07-09
