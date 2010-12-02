@@ -5595,10 +5595,10 @@ targetId GeneCard:WRNIP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WRNIP1
 validation missing
 
-term WHIP
+term XRCC4
 tag XRCC4
 type Antibody
-target WHIP
+target XRCC4
 targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
 antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=145
