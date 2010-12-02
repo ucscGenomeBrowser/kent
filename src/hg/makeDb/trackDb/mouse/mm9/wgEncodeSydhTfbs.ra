@@ -112,12 +112,12 @@ wgEncode 1
 	        color 153,38,0
 	        # subId=1861 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelMaxIggmusPk
+	        track wgEncodeSydhTfbsMelMaxIggrabPk
 	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Max Pk
                 longLabel MEL Max Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=MAX cellType=MEL control=IGGmus treatment=None
+	        subGroups view=Peaks factor=MAX cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=1863 dateSubmitted=2010-07-08
@@ -182,12 +182,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2543 dateSubmitted=2010-10-20
 
-	        track wgEncodeSydhTfbsMelCmybh141StdPk
+	        track wgEncodeSydhTfbsMelCmybh141IggrabPk
 	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL c-Myb Pk
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=cMYBH141 cellType=MEL control=std treatment=None
+	        subGroups view=Peaks factor=cMYBH141 cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=2542 dateSubmitted=2010-10-27
@@ -570,12 +570,12 @@ wgEncode 1
 	        color 153,38,0
 	        # subId=1861 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelMaxIggmusSig
+	        track wgEncodeSydhTfbsMelMaxIggrabSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Max Sg
                 longLabel MEL Max Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=MAX cellType=MEL control=IGGmus treatment=None
+	        subGroups view=Signal factor=MAX cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 120749.000000
 	        color 46,0,184
 	        # subId=1863 dateSubmitted=2010-07-08
@@ -650,12 +650,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2543 dateSubmitted=2010-10-20
 
-	        track wgEncodeSydhTfbsMelCmybh141StdSig
+	        track wgEncodeSydhTfbsMelCmybh141IggrabSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL c-Myb Sg
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=cMYBH141 cellType=MEL control=std treatment=None
+	        subGroups view=Signal factor=cMYBH141 cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 106720.000000
 	        color 46,0,184
 	        # subId=2542 dateSubmitted=2010-10-27
