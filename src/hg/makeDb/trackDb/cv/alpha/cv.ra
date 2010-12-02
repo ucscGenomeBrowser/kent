@@ -2710,11 +2710,13 @@ sex U
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:progeria_Crawford_protocol.pdf
 
+#
+# This cell type has no protocol, and does not seem to ever have been used.
 term prostate
 tag prostate
 type Cell Line
 organism Human
-description prostate tissue purchased for Gingeras project (provisional)
+description prostate tissue purchased for Gingeras project
 tissue Prostate
 vendorName ATCC
 vendorId
@@ -2725,7 +2727,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001129
 tier 3
 sex M
-#protocol ???
+#protocol 
 
 term Raji
 tag Raji
@@ -3548,6 +3550,7 @@ description pseudogene
 # lab (lab that first asked for this antibody(
 # validation (either missing or the name of a validation document in a format to be documented by Venkat)
 # lots (optional lot numbers)
+
 term AP-2alpha
 tag AP2alpha
 type Antibody
@@ -4261,7 +4264,7 @@ term H2A.Z
 tag H2AZ
 type Antibody
 target H2AZ
-antibodyDescription (provisional) Unknown at this timeRabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2AZ.
+antibodyDescription Rabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2AZ.
 targetDescription H2A.Z is a sequence variant of Histone H2A.
 orderUrl http://www.millipore.com/catalogue/item/07-594
 vendorName Upstate (Millipore)
@@ -5334,7 +5337,7 @@ vendorId sc-476x
 orderUrl http://www.scbt.com/product.php?datasheet=476
 lab Snyder
 targetId GeneCard:STAT2
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2GC12M055021
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2
 validation missing
 
 term STAT3
@@ -5592,10 +5595,10 @@ targetId GeneCard:WRNIP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WRNIP1
 validation missing
 
-term WHIP
+term XRCC4
 tag XRCC4
 type Antibody
-target WHIP
+target XRCC4
 targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
 antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=145
@@ -7853,7 +7856,7 @@ tag ren
 type grant
 description Ren
 grantInst LICR
-projectName LICR (Provisional)
+projectName LICR 
 
 term Hardison
 tag hardison
@@ -7872,7 +7875,7 @@ projectName
 term Giddings
 tag giddings
 type grant
-description Giddings (Provisional)
+description Giddings 
 grantInst University of North Carolina
 projectName UNC-Giddings
 
@@ -7980,7 +7983,7 @@ term controlId
 type typeOfTerm
 label ControlId - explicit relationship
 #label Control ID - Specific dataset used as the control
-description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment. (Provisional)
+description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment. 
 searchable no
 cvDefined no
 validate none
@@ -8047,7 +8050,7 @@ validate Matches the fileName prefix with the suffix .bai
 term fileName
 type typeOfTerm
 label File Name for downloading
-description The name of a downloadable file associated with a particular track in the browser. (Provisional)
+description The name of a downloadable file associated with a particular track in the browser. 
 searchable no
 cvDefined no
 validate Exists
@@ -8180,7 +8183,7 @@ validate cv
 term mapAlgorithm
 type typeOfTerm
 label Mapping algorithm
-description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome. (Provisional)
+description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome. 
 searchable select
 cvDefined yes
 validate cv

@@ -728,8 +728,8 @@ type netAlign homIni13 chainHomIni13
 otherDb homIni13
 
 track chainHomNea0
-shortLabel Neanderthal Chain
-longLabel Neanderthal Chain
+shortLabel Neandertal Chain
+longLabel Neandertal Chain
 group x
 priority 300
 visibility hide
