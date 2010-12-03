@@ -38,3 +38,10 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 10.1
+visibility hide
+type ctgPos

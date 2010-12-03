@@ -36,7 +36,7 @@ lab               Stanford
 dataType          ChipSeq 
 compositeSuffix   SydhHist
 group             regulation
-variables         cell, antibody, treatment, input
+variables         cell, antibody, treatment, control
 assembly          mm9
 
 medianFragmentLength 200

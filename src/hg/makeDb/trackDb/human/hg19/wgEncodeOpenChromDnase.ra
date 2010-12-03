@@ -216,15 +216,6 @@ wgEncode 1
         color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrAndroPk
-        release alpha
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE Duke DNaseI HS Peaks (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=Peaks cellType=LHSR treatment=ANDRO
-        type narrowPeak
-        origAssembly hg18
-        # subId=1535 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
         release alpha
@@ -247,15 +238,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1545 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrPk
-        release alpha
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE Duke DNaseI HS Peaks (in LHSR cells)
-        subGroups view=Peaks cellType=LHSR treatment=AANONE
-        type narrowPeak
-        origAssembly hg18
-        # subId=1575 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseProgfibPk
         release alpha
@@ -629,15 +611,6 @@ wgEncode 1
         color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrAndroSig
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE Duke DNaseI HS F-Seq Density Signal (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=SIG cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 0.863800
-        origAssembly hg18
-        # subId=1535 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         release alpha
@@ -660,15 +633,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1545 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrSig
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE Duke DNaseI HS F-Seq Density Signal (in LHSR cells)
-        subGroups view=SIG cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 0.897000
-        origAssembly hg18
-        # subId=1575 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseProgfibSig
         release alpha
@@ -1042,15 +1006,6 @@ wgEncode 1
         color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrAndroBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE Duke DNaseI HS Raw Base Overlap Signal (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=SIGBO cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 219.000000
-        origAssembly hg18
-        # subId=1535 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
         release alpha
@@ -1073,15 +1028,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1545 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE Duke DNaseI HS Raw Base Overlap Signal (in LHSR cells)
-        subGroups view=SIGBO cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 195.000000
-        origAssembly hg18
-        # subId=1575 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseProgfibBaseOverlapSignal
         release alpha

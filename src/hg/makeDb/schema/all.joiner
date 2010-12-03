@@ -3547,3 +3547,6 @@ tablesIgnored susScr2
 tablesIgnored calJac3
     bacEnds
     bacEndCalJac3Singles
+
+tablesIgnored rheMac2
+    refSeqAnno
