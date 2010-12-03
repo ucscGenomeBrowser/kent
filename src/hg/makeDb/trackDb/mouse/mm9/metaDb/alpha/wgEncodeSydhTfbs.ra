@@ -3418,21 +3418,21 @@ tableName wgEncodeSydhTfbsMelPol2IggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20StdAlnRep1
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20StdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21Dmso20StdAlnRep1
+parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3440,21 +3440,21 @@ subId 2539
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20StdAlnRep2
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20StdAlnRep2.bam
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21Dmso20StdAlnRep2
+parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3462,43 +3462,43 @@ subId 2539
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20StdPk
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 objType table
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2539
-tableName wgEncodeSydhTfbsMelRad21Dmso20StdPk
+tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 treatment DMSO_2.0pct
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20StdRawDataRep1
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20StdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21Dmso20StdRawSignalRep1
+parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3506,21 +3506,21 @@ subId 2539
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20StdRawDataRep2
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20StdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21Dmso20StdRawSignalRep2
+parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3528,25 +3528,25 @@ subId 2539
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21Dmso20StdSig
+metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
 objType table
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21Dmso20StdSig.bigWig
+fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2539
-tableName wgEncodeSydhTfbsMelRad21Dmso20StdSig
+tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
 treatment DMSO_2.0pct
 view Signal
 
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 961903062
+# MAGIC: -470369006
