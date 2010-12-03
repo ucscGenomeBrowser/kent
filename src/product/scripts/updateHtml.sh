@@ -37,7 +37,7 @@ export DS=`date "+%Y-%m-%d"`
 export FETCHLOG="${LOGDIR}/htdocs/update.${DS}"
 mkdir -p "${LOGDIR}/htdocs"
 
-echo "#    ${RSYNC} --stats --exclude=\"encode\" -exclude=\"trash\" --exclude=\"lost+found/\" --exclude=\"ENCODE/\" --exclude=\"encodeDCC/\" ${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/" > ${FETCHLOG}
-${RSYNC} --stats --exclude="encode" -exclude="trash" \
+echo "#    ${RSYNC} --stats --exclude=\"encode\" --exclude=\"trash\" --exclude=\"lost+found/\" --exclude=\"ENCODE/\" --exclude=\"encodeDCC/\" ${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/" > ${FETCHLOG}
+${RSYNC} --stats --exclude="encode" --exclude="trash" \
 	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
 	${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/ >> ${FETCHLOG} 2>&1

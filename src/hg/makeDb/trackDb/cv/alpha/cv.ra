@@ -7674,7 +7674,7 @@ term PSU-m
 tag PSU
 type lab
 label Hardison - Penn State University
-description Hardison - Penn State Universityy
+description Hardison - Penn State University
 labInst PSU
 labPi Hardison
 labPiFull Ross Hardison
