@@ -142,12 +142,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1865 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelCtcfDmso20StdPk
+	        track wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
 	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=CTCFC20 cellType=MEL control=std treatment=DMSO20
+	        subGroups view=Peaks factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=1857 dateSubmitted=2010-07-09
@@ -600,12 +600,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1865 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelCtcfDmso20StdSig
+	        track wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=CTCFC20 cellType=MEL control=std treatment=DMSO20
+	        subGroups view=Signal factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type bigWig 1.000000 93856.000000
 	        color 46,0,184
 	        # subId=1857 dateSubmitted=2010-07-09

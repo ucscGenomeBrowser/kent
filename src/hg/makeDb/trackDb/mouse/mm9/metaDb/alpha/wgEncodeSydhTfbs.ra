@@ -1979,20 +1979,20 @@ tableName wgEncodeSydhTfbsMelCmycIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1
 objType file
 age immortalized
 antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep1.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2003,20 +2003,20 @@ subId 1857
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2
 objType file
 age immortalized
 antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleAlnRep2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2027,19 +2027,19 @@ subId 1857
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20StdPk
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
 objType table
 age immortalized
 antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2047,23 +2047,23 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1857
-tableName wgEncodeSydhTfbsMelCtcfDmso20StdPk
+tableName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
 treatment DMSO_2.0pct
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep1
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1
 objType file
 age immortalized
 antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2074,19 +2074,19 @@ subId 1857
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep2
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2
 objType file
 age immortalized
 antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2097,19 +2097,19 @@ subId 1857
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCtcfDmso20StdSig
+metaObject wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
 objType table
 age immortalized
 antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdSig.bigWig
+fileName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2117,7 +2117,7 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1857
-tableName wgEncodeSydhTfbsMelCtcfDmso20StdSig
+tableName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
 treatment DMSO_2.0pct
 view Signal
 
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 637541770
+# MAGIC: 961903062
