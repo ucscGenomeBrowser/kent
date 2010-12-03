@@ -1979,46 +1979,6 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
 
-metaObject wgEncodeOpenChromFaireLhsrAlnRep1
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileIndex wgEncodeOpenChromFaireLhsrAlnRep1.bam.bai
-fileName wgEncodeOpenChromFaireLhsrAlnRep1.bam
-grant Crawford
-lab UNC
-labVersion align_on_cluster_bwa.pl v 1
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 1547
-view Alignments
-
-metaObject wgEncodeOpenChromFaireLhsrAlnRep2
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileIndex wgEncodeOpenChromFaireLhsrAlnRep2.bam.bai
-fileName wgEncodeOpenChromFaireLhsrAlnRep2.bam
-grant Crawford
-lab UNC
-labVersion align_on_cluster_bwa.pl v 1
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 1547
-view Alignments
-
 metaObject wgEncodeOpenChromFaireLhsrAndroAlnRep1
 objType file
 cell LHSR
@@ -2121,44 +2081,6 @@ tableName wgEncodeOpenChromFaireLhsrAndroSig
 treatment androgen
 view Signal
 
-metaObject wgEncodeOpenChromFaireLhsrBaseOverlapSignal
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrBaseOverlapSignal.bigWig
-grant Crawford
-lab UNC
-labVersion baseAlignCounts.pl v 1
-origAssembly hg18
-project wgEncode
-subId 1547
-tableName wgEncodeOpenChromFaireLhsrBaseOverlapSignal
-view Base_Overlap_Signal
-
-metaObject wgEncodeOpenChromFaireLhsrPk
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrPk.narrowPeak.gz
-grant Crawford
-lab UNC
-labVersion p-value cutoff: 0.1
-origAssembly hg18
-project wgEncode
-subId 1547
-tableName wgEncodeOpenChromFaireLhsrPk
-view Peaks
-
 metaObject wgEncodeOpenChromFaireLhsrRawDataRep1
 objType file
 cell LHSR
@@ -2232,25 +2154,6 @@ replicate 2
 subId 874
 treatment androgen
 view RawData
-
-metaObject wgEncodeOpenChromFaireLhsrSig
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrSig.bigWig
-grant Crawford
-lab UNC
-labVersion fseq v 1.84, iff_generic_male
-origAssembly hg18
-project wgEncode
-subId 1547
-tableName wgEncodeOpenChromFaireLhsrSig
-view Signal
 
 metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
@@ -2729,4 +2632,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: 1983081724
+# MAGIC: 74800787
