@@ -1,0 +1,30 @@
+track wgEncodeSunySwitchgear
+compositeTrack on
+shortLabel SUNY Switchgear
+longLabel ENCODE SUNY Albany Tenenbaum RBP Associatediated RNA by Switchgear 
+group regulation
+subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1)  K562=K562&nbsp;(Tier_1)
+subGroup3 antibody Antibody_Target ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag ripInput=Input
+dimensions dimensionX=antibody dimensionY=cellType
+sortOrder cellType=+ antibody=+
+controlledVocabulary encode/cv.ra cellType=cell antibody=antibody
+dragAndDrop subTracks
+visibilityViewDefaults  RbpAssocRna=hide
+priority 0
+type bed 3
+wgEncode 1
+origAssembly hg19
+
+    track wgEncodeSunySwitchgearView
+    shortLabel Suny Switchgear
+    view RbpAssocRna
+    visibility pack
+    viewUi on
+    subTrack wgEncodeSunySwitchgear
+    pValueFilter 0.0
+    pValueFilterLimits 0:5
+    scoreFilter 2
+    scoreFilterLimits 1:800
+    scoreMin 95
+
