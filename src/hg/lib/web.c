@@ -20,6 +20,11 @@
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
+/* phoneHome business */
+#include <utime.h>
+#include <htmlPage.h>
+#include <signal.h>
+/* phoneHome business */
 
 static char const rcsid[] = "$Id: web.c,v 1.173 2010/05/20 03:14:17 kent Exp $";
 
@@ -314,13 +319,8 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-#ifdef TRACK_SEARCH
         printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
 	       uiState,TRACK_SEARCH);
-#else///ifndef TRACK_SEARCH
-        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet' class='topbar'>\n",
-               uiState);
-#endif///ndef TRACK_SEARCH
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (haveBlat && !endsWith(scriptName, "hgBlat"))
@@ -942,37 +942,77 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
-#ifdef NOT
+/* phoneHome business */
+static void alarmExit(int status)
+/* signal handler for SIGALRM for phoneHome function */
+{
+exit(0);
+}
+
 static void phoneHome()
 {
 static boolean beenHere = FALSE;
 if (beenHere)  /* one at a time please */
     return;
 beenHere = TRUE;
-char *scriptName = cgiScriptName();
-char *ip = getenv("SERVER_ADDR");
-if (scriptName && ip)
+
+char trashFile[PATH_LEN];
+safef(trashFile, sizeof(trashFile), "%s/registration.txt", trashDir());
+if(fileExists(trashFile))	/* update access time for trashFile */
     {
-    struct sqlConnection *conn = hConnectCentral();
-    if (conn)
+    struct utimbuf ut;
+    struct stat mystat;
+    ZeroVar(&mystat);
+    if (stat(trashFile,&mystat)==0)
 	{
-#define REGO_DB "UCSCRegistration"
-	if (sqlTableExists(conn, REGO_DB))
-	    return;
-	char query[256];
-	safef(query, sizeof(query), "create table %s", REGO_DB);
-	struct sqlResult *sr = sqlGetResult(conn, query);
-	sqlFreeResult(&sr);
-	hDisconnectCentral(&conn);
-	fprintf(stderr, "phoneHome: scriptName: %s, ip: %s\n", scriptName, ip);
+	ut.actime = clock1();
+	ut.modtime = mystat.st_mtime;
 	}
     else
-	fprintf(stderr, "phoneHome: scriptName: %s, ip: %s can not connect\n", scriptName, ip);
+	{
+	ut.actime = ut.modtime = clock1();
+	}
+    (void) utime(trashFile, &ut);
+    return;
     }
-else
-    fprintf(stderr, "phoneHome: scriptName: %s or ip %s are null\n", scriptName, ip);
-}
-#endif
+
+char *scriptName = cgiScriptName();
+char *ip = getenv("SERVER_ADDR");
+if (scriptName && ip)  /* will not be true from command line execution */
+    {
+    FILE *f = fopen(trashFile, "w");
+    if (f)		/* rigamarole only if we can get a trash file */
+	{
+	time_t now = time(NULL);
+	char *localTime;
+	extern char *tzname[2];
+	struct tm *tm = localtime(&now);
+	localTime = sqlUnixTimeToDate(&now,FALSE); /* FALSE == localtime */
+	fprintf(f, "%s, %s, %s %s, %s\n", scriptName, ip, localTime,
+	    tm->tm_isdst ? tzname[1] : tzname[0], trashFile);
+	fclose(f);
+	chmod(trashFile, 0666);
+	pid_t pid0 = fork();
+	if (0 == pid0)	/* in child */
+	    {
+	    close(STDOUT_FILENO); /* do not hang up Apache finish for parent */
+	    (void) signal(SIGALRM, alarmExit);
+	    (void) alarm(6);	/* timeout here in 6 seconds */
+#include "versionInfo.h"
+	    char url[1024];
+	    safef(url, sizeof(url), "%s%s",
+	"http://genomewiki.ucsc.edu/cgi-bin/useCount?version=browser.v",
+		CGI_VERSION);
+
+	    /* 6 second alarm will exit this page fetch if it does not work */
+	    (void) htmlPageGetWithCookies(url, NULL); /* ignore return */
+
+	    exit(0);
+	    }	/* child of fork has done exit(0) normally or via alarm */
+	}		/* trash file open OK */
+    }			/* an actual CGI binary */
+}			/* phoneHome()	*/
+/* phoneHome business */
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars)
@@ -995,9 +1035,8 @@ boolean gotClade = hGotClade();
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 *retClade = cgiOptionalString(cladeCgiName);
-#ifdef NOT
+/* phoneHome business */
 phoneHome();
-#endif
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
@@ -1055,9 +1094,9 @@ if (oldVars)
     char *oldDb = hashFindVal(oldVars, "db");
     char *oldOrg = hashFindVal(oldVars, "org");
     char *oldClade = hashFindVal(oldVars, "clade");
-    if ((oldDb    && differentWord(oldDb, *retDb)) ||
-	(oldOrg   && differentWord(oldOrg, *retGenome)) ||
-	(oldClade && differentWord(oldClade, *retClade)))
+    if ((!IS_CART_VAR_EMPTY(oldDb)    && differentWord(oldDb, *retDb)) ||
+	(!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
+	(!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
 	{
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)

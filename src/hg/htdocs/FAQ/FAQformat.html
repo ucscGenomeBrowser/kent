@@ -256,7 +256,7 @@ correct ID and description will be displayed on the details pages.
 This example uses the first 4 columns of BED format, but up to 12 may be used.
 Note that line breaks have been inserted into the track line in this example
 for documentation display purposes.
-Click <a class="insideLink" href="../../cgi-bin/hgTracks?hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/bedDetailExample.txt" 
+Click <a class="insideLink" href="../../cgi-bin/hgTracks?db=hg19&hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/bedDetailExample.txt" 
 TARGET=_blank>here</a> to view this track in the Genome Browser.</P>
 <PRE>
 track name=HbVar type=bedDetail description="HbVar custom track" db=hg19 visibility=3
@@ -1372,12 +1372,12 @@ HREF=../goldenPath/help/customTrack.html#TRACK TARGET=_blank>track line</A>.</P>
 Here is an example of an annotation track in Personal Genome SNP format. The
 first SNP using a '-' is an insertion; the second is a deletion. The last 3
 SNPs are in a coding region.</P>
-<PRE><TT>track type=pgSnp visibility=3 db=hg19
+<PRE><TT>track type=pgSnp visibility=3 db=hg19 name="pgSnp" description="Personal Genome SNP example"
 browser position chr21:31811924-31812937
 chr21	31812007	31812008	T/G	2	21,70	90,70
 chr21	31812031	31812032	T/G/A	3	9,60,7	80,80,30
-chr21	31812035	31812036	-/CGG	2	20,80	0,0
-chr21	31812088	31812094	-/CTCGG	2	30,70	0,0
+chr21	31812035	31812035	-/CGG	2	20,80	0,0
+chr21	31812088	31812093	-/CTCGG	2	30,70	0,0
 chr21	31812277	31812278	T	1	15	90
 chr21	31812771	31812772	A	1	36	80
 chr21	31812827	31812828	A/T	2	15,5	0,0

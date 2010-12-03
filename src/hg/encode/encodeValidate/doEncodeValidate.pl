@@ -305,7 +305,8 @@ our %formatCheckers = (
     junction  => \&validateFreepass,
     fpkm1  => \&validateFreepass,
     fpkm2  => \&validateFreepass,
-    insDistrib  => \&validateFreepass,
+    fpkm => \&validateFreepass,
+    insDist  => \&validateFreepass,
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
@@ -1002,6 +1003,20 @@ sub validatePsl
 ############################################################################
 # Misc subroutines
 
+sub validateDafField {
+    # validate value for type of field
+        # Venkat: Added $sex to accomadate tissues for mouse
+    my ($type, $val, $daf) = @_;
+    $type =~ s/ /_/g;
+    HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
+    if($validators{$type}) {
+                # Venkat: Added the return $sex to accomadate tissues for mouse
+        return $validators{$type}->($val, $type, "", $daf);
+    } else {
+        return $validators{'default'}->($val, $type, "", $daf); # Considers the term controlled vocab
+    }
+}
+
 sub validateDdfField {
     # validate value for type of field
 	# Venkat: Added $sex to accomadate tissues for mouse
@@ -1152,6 +1167,7 @@ sub printCompositeTdbSettings {
                 }
                 $sortOrder = "$sortOrder$groupVar=+ ";
                 $controlledVocab = "$controlledVocab $groupVar";
+                # TODO: This template could you typeOfTerms from cv.ra and substitute "label" as subGroup2 cell Cell_Line term1=label1 term2=label2
                 $setting = "subGroup$grpNo $groupVar " . ucfirst($groupVar);
                 $setting = "subGroup$grpNo $groupVar " . "Cell_Line" if $variable eq "cell";
                 for my $key (keys %ddfSets) {
@@ -1237,6 +1253,7 @@ sub validationSettings {
             if ($paramList ne "") {
                 HgAutomate::verbose(2, "validationSettings $type $fileType params:$paramList\n");
             }
+            $paramList .= " -doReport";
             return $paramList;
         } else {
             for my $setting (@set) {
@@ -1258,6 +1275,10 @@ sub validationSettings {
 
 ############################################################################
 # Main
+
+# if you want to use a different path for executed binaries, this
+# is how you do it
+# $ENV{PATH} = "/cluster/home/braney/bin/x86_64:" . $ENV{PATH};
 
 my @ddfHeader;		# list of field names on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
@@ -1493,6 +1514,11 @@ if (defined($daf->{variables})) {
     # Hubbard Sanger Gencode project has no variables
     @variables = ();
 }
+
+# Now testing daf lab and dataType.
+pushError(\@errors, validateDafField("grant", $daf->{grant}, $daf));
+pushError(\@errors, validateDafField("lab", $daf->{lab}, $daf));
+pushError(\@errors, validateDafField("dataType", $daf->{dataType}, $daf));
 
 my %metadataHash;
 
@@ -2040,12 +2066,7 @@ foreach my $ddfLine (@ddfLines) {
     $fileType =~ s/ //g;
     $metadata .= " composite=$compositeTrack";
 
-    if($downloadOnly) {
-        my $parentTable = $tableName;
-        $parentTable =~ s/RawData/RawSignal/    if $parentTable =~ /RawData/;
-        $parentTable =~ s/Alignments/RawSignal/ if $parentTable =~ /Alignments/;
-        $metadata .= " parentTable=$parentTable";
-    } else {
+    if(!$downloadOnly) {
         $metadata .= " tableName=$tableName";
     }
 
@@ -2170,6 +2191,38 @@ if($submitPath =~ /(\d+)$/) {
              $daf->{assembly}, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
+
+my @cmds;
+push @cmds, "docIdSubmitDir encpipeline_prod $submitPath  /hive/groups/encode/dcc/pipeline/downloads/docId";
+my $safe = SafePipe->new(CMDS => \@cmds,  DEBUG => $opt_verbose - 1);
+if(my $err = $safe->exec()) {
+    my $err = $safe->stderr();
+    printf "Could not submit to docId system: " . $err;
+    exit 1;
+}
+
+# commenting this out until we decide to roll-out name changes
+
+# undef(@cmds);
+# push @cmds, "mv $submitPath/out/trackDb.ra  $submitPath/out/trackDb.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/trackDb.ra.preDocId" ;
+
+# $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/trackDb.ra",  DEBUG => $opt_verbose - 1);
+# if(my $err = $safe->exec()) {
+#    my $err = $safe->stderr();
+#    printf "Could not edit trackDb.ra " . $err;
+#    exit 1;
+#}
+
+#undef(@cmds);
+#push @cmds, "mv $submitPath/out/load.ra  $submitPath/out/load.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/load.ra.preDocId";
+
+#$safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/load.ra",  DEBUG => $opt_verbose - 1);
+#if(my $err = $safe->exec()) {
+#    my $err = $safe->stderr();
+#    printf "Could not edit load.ra " . $err;
+#    exit 1;
+#}
+
 $time0=$timeStart;
 doTime("done. ") if $opt_timing;
 exit 0;

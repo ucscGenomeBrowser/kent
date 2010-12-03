@@ -1671,7 +1671,7 @@ TMPDIR=/scratch/tmp
     cat fb.calJac3.chainHg19Link.txt 
     #	1916431926 bases of 2752505800 (69.625%) in intersection
 ############################################################################
-# refSeqAnnon - RefSeq genomic annotations at the request of
+# refSeqAnno - RefSeq genomic annotations at the request of
 # Kim Pruit <pruitt@ncbi.nlm.nih.gov> for use by the Rhesus community.
 # (2010-10-14 markd)
 
@@ -1679,8 +1679,8 @@ TMPDIR=/scratch/tmp
        svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/code/pycbio/trunk
     and run make at top
 
-    mkdir /hive/data/genomes/rheMac2/bed/refSeqAnnon
-    cd /hive/data/genomes/rheMac2/bed/refSeqAnnon
+    mkdir /hive/data/genomes/rheMac2/bed/refSeqAnno
+    cd /hive/data/genomes/rheMac2/bed/refSeqAnno
 
     # get NCBI genome annotation:
     wget ftp://ftp.ncbi.nih.gov/genomes/Macaca_mulatta/README_CURRENT_BUILD
@@ -1693,7 +1693,7 @@ TMPDIR=/scratch/tmp
     wget ftp://ftp.ncbi.nih.gov/genomes/Macaca_mulatta/RNA/rna.gbk.gz
     zcat rna.gbk.gz |awk '/^VERSION/{mrna=$2} /\/protein_id=/{print mrna"\t"gensub("^.*\"(.*)\"","\\1","g",$1)}'  >mrna2prot.tbl
 
-    zcat gbs/*.gz |~/compbio/code/pycbio/bin/gbffGenesToGenePred --mrnaProtMap=mrna2prot.tbl --refSeqOnly --ext --allGenes --other /dev/stdin refSeqAnnon.contig.gp >&cnv.probs
+    zcat gbs/*.gz |~/compbio/code/pycbio/bin/gbffGenesToGenePred --mrnaProtMap=mrna2prot.tbl --refSeqOnly --ext --allGenes --other /dev/stdin refSeqAnno.contig.gp >&cnv.probs
 
     # no lift file was made, so must build one
     ftp://ftp.ncbi.nih.gov/genomes/Macaca_mulatta/seq_contig.md.gz
@@ -1705,14 +1705,14 @@ TMPDIR=/scratch/tmp
     tawk '$2~/\/start/ || $2~/\/end/ || $4 ~/chrUn/{next} {$4=gensub("[|].*", "", "g",$4); print $0}' ncbi.lft >ncbi.fix.lft 
 
     # lift to chromosomes
-    liftUp -type=.genepred -extGenePred refSeqAnnon.gp ncbi.fix.lft warn refSeqAnnon.contig.gp >&lift.probs
+    liftUp -type=.genepred -extGenePred refSeqAnno.gp ncbi.fix.lft warn refSeqAnno.contig.gp >&lift.probs
     # 635 drop due to not having chrUn
 
-    genePredCheck -db=rheMac2 refSeqAnnon.gp 
-    hgLoadGenePred -genePredExt rheMac2 refSeqAnnon refSeqAnnon.gp 
+    genePredCheck -db=rheMac2 refSeqAnno.gp 
+    hgLoadGenePred -genePredExt rheMac2 refSeqAnno refSeqAnno.gp 
 
     # add to 
       trackDb/rhesus/trackDb.ra
       trackDb/rhesus/rheMac2/trackDb.ra 
     # create
-      trackDb/rhesus/refSeqAnnon.html
+      trackDb/rhesus/refSeqAnno.html

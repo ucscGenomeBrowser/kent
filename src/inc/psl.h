@@ -296,6 +296,11 @@ void pslGrow(struct psl *psl, int *blockSpacePtr);
  * should point the the current maximum number of blocks and will be
  * updated to with the new amount of space. */
 
+struct psl* pslFromGff3Cigar(char *qName, int qSize, int qStart, int qEnd,
+                             char *tName, int tSize, int tStart, int tEnd,
+                             char* strand, char *cigar);
+/* create a PSL from a GFF3-style cigar formatted alignment */
+
 int pslRangeTreeOverlap(struct psl *psl, struct rbTree *rangeTree);
 /* Return amount that psl overlaps (on target side) with rangeTree. */
 

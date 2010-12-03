@@ -26,6 +26,7 @@ struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge r
 // A simplistic way of flattening the track list before building the image
 // NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
 /////////////////////////
+#define IMGORD_CUSTOM_ONTOP
 void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart)
 // Adds one track into the flatTracks list
 {
@@ -35,14 +36,28 @@ flatTrack->track = track;
 char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
 safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
+#ifdef IMGORD_CUSTOM_ONTOP
+if(flatTrack->order >= IMG_ORDERTOP)
+#else///ifndef IMGORD_CUSTOM_ONTOP
 if(flatTrack->order >= IMG_ORDEREND)
+#endif///ndef IMGORD_CUSTOM_ONTOP
     {
     cartRemove(cart,var);
     flatTrack->order = IMG_ANYORDER;
     }
+#ifdef IMGORD_CUSTOM_ONTOP
+static int topOrder  = IMG_ORDERTOP; // keep track of the order added to top of image
+#endif///def IMGORD_CUSTOM_ONTOP
 static int lastOrder = IMG_ORDEREND; // keep track of the order added and beyond end
 if( flatTrack->order == IMG_ANYORDER)
-    flatTrack->order = ++lastOrder;
+    {
+#ifdef IMGORD_CUSTOM_ONTOP
+    if (track->customTrack)
+        flatTrack->order = ++topOrder; // Custom tracks go to top
+    else
+#endif///def IMGORD_CUSTOM_ONTOP
+        flatTrack->order = ++lastOrder;
+    }
 
 slAddHead(flatTracks,flatTrack);
 }
@@ -54,6 +69,86 @@ const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
 return (a->order - b->order);
 }
+
+#ifdef IMGORD_CUSTOM_ONTOP
+void flatTracksSort(struct flatTracks **flatTracks)
+// This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
+{
+// flatTracks list has 2 sets of "order": those already dragReordered (below IMG_ORDERTOP)
+// and those not yet reordered (above).  Within those not yet dragReordered are 2 sets:
+// Those that begin numbering at IMG_ORDERTOP and those that begin at IMG_ORDEREND.
+// This routine must determine if there are any already dragOrdered, and if so, position the
+// newcomers in place.  Newly appearing customTracks will appear at top, while newly appearing
+// standard tracks appear at the end of the image.
+int haveBeenOrderd = 0, imgOrdHighest=0; // Keep track of reordered count and position
+int notYetOrdered = 0, toBeTopHighest=0; // Keep track of those to be reordered, and top ordered
+
+// First determine what if anything needs to be rearranged.
+struct flatTracks *oneTrack = *flatTracks;
+for(;oneTrack!=NULL;oneTrack = oneTrack->next)
+    {
+    if (oneTrack->order <= IMG_ORDERTOP)
+        {
+        haveBeenOrderd++;
+        if (imgOrdHighest < oneTrack->order )
+            imgOrdHighest = oneTrack->order;
+        }
+    else
+        {
+        notYetOrdered++;
+        if (oneTrack->order <= IMG_ORDEREND) // && oneTrack->order >= IMG_ORDERTOP
+            {
+            if (toBeTopHighest < oneTrack->order )
+                toBeTopHighest = oneTrack->order;
+            }
+        }
+    }
+
+// If some have previously been dragOrdered AND some new ones need to be given an explicit order
+if (haveBeenOrderd > 0 && notYetOrdered > 0)
+    {
+    char var[256];
+    int gapOnTopNeeded = 0;
+    if (toBeTopHighest > 0)
+        {
+        gapOnTopNeeded = toBeTopHighest - IMG_ORDERTOP;
+        imgOrdHighest += gapOnTopNeeded; // Will be after this loop
+        // Warning: Will need to throw away ALL previous orderings (even those not currently in image)!
+        safef(var,sizeof(var),"*_%s",IMG_ORDER_VAR);
+        cartRemoveLike(cart, var);
+        }
+    int gapFromOrderedToEnd = (IMG_ORDEREND - imgOrdHighest);  // This difference should be removed from any with IMG_ORDEREND
+    for(oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
+        {
+        if (oneTrack->order <= IMG_FIXEDPOS)
+            ;  // Untouchables
+        else if (oneTrack->order <= IMG_ORDERTOP && gapOnTopNeeded > 0)
+            {  // Already order tracks will need to be pushed down.
+            oneTrack->order += gapOnTopNeeded;
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        else if (oneTrack->order >= IMG_ORDERTOP
+             &&  oneTrack->order <  IMG_ORDEREND && gapOnTopNeeded > 0)
+            {  // Unordered custom tracks will need to be added to top!
+            oneTrack->order -= IMG_ORDERTOP; // Force to top
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        else if (oneTrack->order >= IMG_ORDEREND && gapFromOrderedToEnd)
+            {  // Normal unordered tracks can fill in the trailing numbers
+            oneTrack->order -= gapFromOrderedToEnd;
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        }
+    }
+
+if (flatTracks && *flatTracks)
+    slSort(flatTracks, flatTracksCmp);
+}
+
+#else///ifndef IMGORD_CUSTOM_ONTOP
 
 void flatTracksSort(struct flatTracks **flatTracks)
 // This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
@@ -92,6 +187,8 @@ if (imgOrdSet > 0 && notYetOrdered) // Image order has previously been set, so g
 if (flatTracks && *flatTracks)
     slSort(flatTracks, flatTracksCmp);
 }
+#endif///ndef IMGORD_CUSTOM_ONTOP
+
 
 void flatTracksFree(struct flatTracks **flatTracks)
 // Frees all memory used to support flatTracks (underlying tracks are untouched)
@@ -147,58 +244,64 @@ return kindOfChild;
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track)
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable)
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 {
 if (*jsonTdbSettingsString==NULL)
     {
     *jsonTdbSettingsString = newDyString(1024);
-    dyStringPrintf(*jsonTdbSettingsString, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d},\n", rulerMode);
+    dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d, \"configureBy\": \"popup\", \"kindOfParent\": 0},\n", rulerMode);
     }
 else
     dyStringAppend(*jsonTdbSettingsString, ",\n");
 
 // track name and type
-dyStringPrintf(*jsonTdbSettingsString, "\t%s: {", track->track);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+dyStringPrintf(*jsonTdbSettingsString, "\t\"%s\": {", track->track);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"type\": \"%s\",", track->tdb->type);
 
 // Tell which kind of parent and which kind of child
 enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
 enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tkindOfParent: %d,\n\t\tkindOfChild: %d,",kindOfParent,kindOfChild);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"kindOfParent\": %d,\n\t\t\"kindOfChild\": %d,",kindOfParent,kindOfChild);
 
 // Tell something about the parent and/or children
 if (kindOfChild != kocOrphan)
     {
     struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
 
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',\n\t\tparentLabel: '%s',",
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"parentTrack\": \"%s\",\n\t\t\"parentLabel\": \"%s\",",
                     parentTdb->track, javaScriptLiteralEncode(parentTdb->shortLabel));
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
-        dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
+        dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shouldPack\": 0,"); // default vis is full, but pack is an option
         track->canPack = parentTdb->canPack;
         }
     }
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(track->tdb->subtracks));
 
-// Now some miscellaneous tidbids
-if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
+// Configuring?
+if (!configurable || track->hasUi == FALSE)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
+else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
     matchRegex(track->track, "^snp[0-9]+$") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"clickThrough\",");
+else
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"popup\",");
+
+// Remote access by URL?
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"url\": \"%s\",", trackDbSetting(track->tdb, "url"));
 
 // Close with some standard vars
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,\n\t\t\"visibility\": %d\n\t}",
     javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
 
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
 // Closes and returns the contents of the jsonTdbSettingsString
 {
-dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n");
+dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n<!-- trackDbJson -->\n");
 return dyStringCannibalize(jsonTdbSettingsString);
 }
 
@@ -854,6 +957,12 @@ else
 return imgTrack;
 }
 
+void imgTrackMarkForAjaxRetrieval(struct imgTrack *imgTrack,boolean ajaxRetrieval)
+/* Updates the imgTrack to trigger an ajax callback from the html client to get this track */
+{
+imgTrack->ajaxRetrieval = ajaxRetrieval;
+}
+
 int imgTrackOrderCmp(const void *va, const void *vb)
 /* Compare to sort on imgTrack->order */
 {
@@ -990,6 +1099,8 @@ if(imgTrack)
         dyStringPrintf(myDy," centerLabel:%s",centerLabelSeenToString(imgTrack->centerLabelSeen));
     if(imgTrack->reorderable)
         dyStringPrintf(myDy," reorderable");
+    if(imgTrack->ajaxRetrieval)
+        dyStringPrintf(myDy," ajaxRetrieval");
     dyStringPrintf(myDy," order:%d vis:%s",imgTrack->order,hStringFromTv(imgTrack->vis));
     if(dy == NULL)
         warn("%s",dyStringCannibalize(&myDy));
@@ -1614,7 +1725,7 @@ else
                 tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
-        hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN'></p>",trackName,(slice->link == NULL?"inset ":""));
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);
@@ -1761,28 +1872,20 @@ hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWid
 hPrintf(" class='tableWithDragAndDrop'");
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 struct dyString *jsonTdbVars = NULL;
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-    if (!trackImgOnly)
-        {
-        struct track *track = hashFindVal(trackHash, trackName);
-        if(track)
-            jsonTdbSettingsBuild(&jsonTdbVars, track);
-        }
-#endif
-    //if(verbose && imgTrack->order == 3)
-    //    imgTrackShow(NULL,imgTrack,0);
-    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s'>\n",trackName,imgTrack->order,
+    struct track *track = hashFindVal(trackHash, trackName);
+    if(track)
+        jsonTdbSettingsBuild(&jsonTdbVars, track, TRUE);
+    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
         (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
-        (imgTrack->centerLabelSeen != clAlways?" clOpt":"") );
+        (imgTrack->centerLabelSeen != clAlways?" clOpt":""),
+        (imgTrack->ajaxRetrieval ?" mustRetrieve":""));
 
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
@@ -1836,8 +1939,6 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 hPrintf("</TABLE>\n");
 hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-if (!trackImgOnly && jsonTdbVars != NULL)
+if (jsonTdbVars != NULL)
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }

@@ -264,10 +264,9 @@ function showWarning(str)
 }
 
 // Specific calls...
-function lookupMetadata(tableName,showLonglabel,showShortLabel)
+function lookupMetadata(trackName,showLonglabel,showShortLabel)
 { // Ajax call to repopulate a metadata vals select when mdb var changes
-    //warn("lookupMetadata for:"+tableName);
-    var thisData = "db=" + getDb() +  "&cmd=tableMetadata&track=" + tableName;
+    var thisData = "db=" + getDb() +  "&cmd=tableMetadata&track=" + trackName;
     if(showLonglabel)
         thisData += "&showLonglabel=1";
     if(showShortLabel)
@@ -279,7 +278,7 @@ function lookupMetadata(tableName,showLonglabel,showShortLabel)
         trueSuccess: loadMetadataTable,
         success: catchErrorOrDispatch,
         cache: true,
-        cmd: tableName
+        cmd: trackName
     });
 }
 

@@ -1,6 +1,6 @@
 # Data Agreement File for LICR ChIP-seq (Transciption Factor Binding Sites) experiments for mm9
 
-#$Revision: 1.11 $
+#$Revision: 1.12 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -26,7 +26,7 @@
 
 # Lab and general info
 grant             Ren 
-lab               LICR
+lab               LICR-m
 dataType          ChipSeq 
 variables         cell, antibody,sex,age,strain,control
 compositeSuffix   LicrTfbs

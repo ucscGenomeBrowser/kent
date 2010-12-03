@@ -50,6 +50,7 @@ chip expRatio bed
 chromosomes *
 codingAnnoLabel_snp130CodingDbSnp bed
 codingAnnoLabel_snp131CodingDbSnp bed
+codingAnnoLabel_snp132CodingDbSnp bed
 codingAnnotations bed
 color *
 colorByStrand bigBed bed
@@ -191,7 +192,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak
-maxWindowToDraw bam rmsk bed
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak
 maxWindowToQuery bigWig bed
 metadata *
 mgiUrl bed
@@ -227,6 +228,7 @@ parent *
 patDb expRatio
 patKey expRatio
 patTable expRatio
+pennantIcon *
 pgDbLink bed
 pgPolyphenPredTab bed
 pgSiftPredTab bed
@@ -237,7 +239,7 @@ pslSequence psl
 pslTable bed
 qValueFilter bed narrowPeak broadPeak
 qValueFilterLimits bed narrowPeak broadPeak
-refSeqAnnonVersion genePred
+refSeqAnnoVersion genePred
 release *
 retroMrnaInfo psl
 sGroup_Chimp wigMaf
@@ -277,8 +279,8 @@ showDiffBasesMaxZoom *
 showNames bam
 showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
-signalFilter bed narrowPeak
-signalFilterLimits bed narrowPeak
+signalFilter bed narrowPeak broadPeak
+signalFilterLimits bed narrowPeak broadPeak
 smoothingWindow wig bed5FloatScore bedGraph
 snpExceptions bed
 snpExceptionDesc bed

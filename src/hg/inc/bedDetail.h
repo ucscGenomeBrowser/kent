@@ -72,5 +72,8 @@ struct bedDetail *bedDetailLoadWithGaps(char **row, int size);
 /* Load a bedDetail from row split from a file or from database,
    may have parts of BED not included.  Dispose of this with bedDetailFree(). */
 
+struct bedDetail *bedDetailLineFileLoad (char **row, int size, struct lineFile *lf);
+/* load from linefile line, with error checking */
+
 #endif /* BEDDETAIL_H */
 

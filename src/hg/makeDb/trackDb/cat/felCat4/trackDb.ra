@@ -56,3 +56,5 @@ sGroup_Vertebrate mm9 canFam2 monDom5 equCab2 ailMel1
 itemFirstCharCase noChange
 treeImage phylo/felCat4_6way.gif
 
+track nscanGene override
+informant Cat N-SCAN used human (hg19) as the informant for conservation.

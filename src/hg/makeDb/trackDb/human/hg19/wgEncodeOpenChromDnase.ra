@@ -24,7 +24,7 @@ shortLabel Duke DNaseI HS
 longLabel ENCODE DNaseI Hypersensitivity by DNase-seq from Duke (Open Chromatin)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Raw_Base_Overlap_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)  HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC  HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK  Osteobl=Osteobl PANI=PanIslets pHTE=pHTE PROG=ProgFib
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)  HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AOSMC=AoSMC CHORN=Chorion CLL=CLL FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK  Osteobl=Osteobl 8988T=PA-TU-8988T PANI=PanIslets PanIsD=PanIsletD pHTE=pHTE PROG=ProgFib
 #subGroup2 cellType Cell_Line AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
 subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs   SERUMFREE=Serum_Free
 sortOrder cellType=+ treatment=+ view=+
@@ -216,15 +216,6 @@ wgEncode 1
         color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrAndroPk
-        release alpha
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE Duke DNaseI HS Peaks (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=Peaks cellType=LHSR treatment=ANDRO
-        type narrowPeak
-        origAssembly hg18
-        # subId=1535 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
         release alpha
@@ -247,15 +238,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1545 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrPk
-        release alpha
-        parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE Duke DNaseI HS Peaks (in LHSR cells)
-        subGroups view=Peaks cellType=LHSR treatment=AANONE
-        type narrowPeak
-        origAssembly hg18
-        # subId=1575 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseProgfibPk
         release alpha
@@ -393,6 +375,61 @@ wgEncode 1
         subGroups view=Peaks cellType=A549 treatment=AANONE
         type narrowPeak
         # subId=2493 dateSubmitted=2010-10-15
+
+        track wgEncodeOpenChromDnaseHtr8Pk
+        release alpha
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel HTR8svn Pk
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HTR8svn cells)
+        subGroups view=Peaks cellType=HTR8 treatment=AANONE
+        type narrowPeak
+        # subId=2793 dateSubmitted=2010-11-02
+
+        track wgEncodeOpenChromDnase8988tPk
+        release alpha
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel 8988T Pk
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in 8988T cells)
+        subGroups view=Peaks cellType=8988T treatment=AANONE
+        type narrowPeak
+        # subId=2786 dateSubmitted=2010-11-01
+
+        track wgEncodeOpenChromDnasePanisdPk
+        release alpha
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel PanIsletD Pk
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in PanIsletD cells)
+        subGroups view=Peaks cellType=PanIsD treatment=AANONE
+        type narrowPeak
+        origAssembly hg18
+        # subId=2785 dateSubmitted=2010-10-29
+
+        track wgEncodeOpenChromDnaseHmecPk
+        release alpha
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel HMEC Pk
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HMEC cells)
+        subGroups view=Peaks cellType=HMEC treatment=AANONE
+        type narrowPeak
+        # subId=2764 dateSubmitted=2010-10-27
+
+        track wgEncodeOpenChromDnaseGlioblaPk
+        release alpha
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel Gliobla Pk
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Gliobla cells)
+        subGroups view=Peaks cellType=Gliobla treatment=AANONE
+        type narrowPeak
+        # subId=2514 dateSubmitted=2010-10-20
+
+        track wgEncodeOpenChromDnaseCllPk
+        release alpha
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel CLL Pk
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in CLL cells)
+        subGroups view=Peaks cellType=CLL treatment=AANONE
+        type narrowPeak
+        # subId=2787 dateSubmitted=2010-11-01
 
 
     track wgEncodeOpenChromDnaseViewSignal
@@ -574,15 +611,6 @@ wgEncode 1
         color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrAndroSig
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE Duke DNaseI HS F-Seq Density Signal (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=SIG cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 0.863800
-        origAssembly hg18
-        # subId=1535 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         release alpha
@@ -605,15 +633,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1545 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrSig
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE Duke DNaseI HS F-Seq Density Signal (in LHSR cells)
-        subGroups view=SIG cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 0.897000
-        origAssembly hg18
-        # subId=1575 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseProgfibSig
         release alpha
@@ -751,6 +770,61 @@ wgEncode 1
         subGroups view=SIG cellType=A549 treatment=AANONE
         type bigWig 0.000000 0.892200
         # subId=2493 dateSubmitted=2010-10-15
+
+        track wgEncodeOpenChromDnaseHtr8Sig
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel HTR8svn Sig
+        longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HTR8svn cells)
+        subGroups view=SIG cellType=HTR8 treatment=AANONE
+        type bigWig 0.000000 0.930700
+        # subId=2793 dateSubmitted=2010-11-02
+
+        track wgEncodeOpenChromDnase8988tSig
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel 8988T Sig
+        longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in 8988T cells)
+        subGroups view=SIG cellType=8988T treatment=AANONE
+        type bigWig 0.000000 1.842900
+        # subId=2786 dateSubmitted=2010-11-01
+
+        track wgEncodeOpenChromDnasePanisdSig
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel PanIsletD Sig
+        longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in PanIsletD cells)
+        subGroups view=SIG cellType=PanIsD treatment=AANONE
+        type bigWig 0.000000 1.462100
+        origAssembly hg18
+        # subId=2785 dateSubmitted=2010-10-29
+
+        track wgEncodeOpenChromDnaseHmecSig
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel HMEC Sig
+        longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HMEC cells)
+        subGroups view=SIG cellType=HMEC treatment=AANONE
+        type bigWig 0.000000 2.710200
+        # subId=2764 dateSubmitted=2010-10-27
+
+        track wgEncodeOpenChromDnaseGlioblaSig
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel Gliobla Sig
+        longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Gliobla cells)
+        subGroups view=SIG cellType=Gliobla treatment=AANONE
+        type bigWig 0.000000 1.195300
+        # subId=2514 dateSubmitted=2010-10-20
+
+        track wgEncodeOpenChromDnaseCllSig
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel CLL Sig
+        longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in CLL cells)
+        subGroups view=SIG cellType=CLL treatment=AANONE
+        type bigWig 0.000000 0.697500
+        # subId=2787 dateSubmitted=2010-11-01
 
 
     track wgEncodeOpenChromDnaseViewSigBo
@@ -932,15 +1006,6 @@ wgEncode 1
         color 46,0,184
         # subId=1534 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrAndroBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE Duke DNaseI HS Raw Base Overlap Signal (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=SIGBO cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 219.000000
-        origAssembly hg18
-        # subId=1535 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
         release alpha
@@ -963,15 +1028,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1545 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromDnaseLhsrBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE Duke DNaseI HS Raw Base Overlap Signal (in LHSR cells)
-        subGroups view=SIGBO cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 195.000000
-        origAssembly hg18
-        # subId=1575 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromDnaseProgfibBaseOverlapSignal
         release alpha
@@ -1109,4 +1165,59 @@ wgEncode 1
         subGroups view=SIGBO cellType=A549 treatment=AANONE
         type bigWig 0.000000 204.000000
         # subId=2493 dateSubmitted=2010-10-15
+
+        track wgEncodeOpenChromDnaseHtr8BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel HTR8svn
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HTR8svn cells)
+        subGroups view=SIGBO cellType=HTR8 treatment=AANONE
+        type bigWig 0.000000 187.000000
+        # subId=2793 dateSubmitted=2010-11-02
+
+        track wgEncodeOpenChromDnase8988tBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel 8988T
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in 8988T cells)
+        subGroups view=SIGBO cellType=8988T treatment=AANONE
+        type bigWig 0.000000 286.000000
+        # subId=2786 dateSubmitted=2010-11-01
+
+        track wgEncodeOpenChromDnasePanisdBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel PanIsletD
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in PanIsletD cells)
+        subGroups view=SIGBO cellType=PanIsD treatment=AANONE
+        type bigWig 0.000000 415.000000
+        origAssembly hg18
+        # subId=2785 dateSubmitted=2010-10-29
+
+        track wgEncodeOpenChromDnaseHmecBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel HMEC
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HMEC cells)
+        subGroups view=SIGBO cellType=HMEC treatment=AANONE
+        type bigWig 0.000000 495.000000
+        # subId=2764 dateSubmitted=2010-10-27
+
+        track wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel Gliobla
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Gliobla cells)
+        subGroups view=SIGBO cellType=Gliobla treatment=AANONE
+        type bigWig 0.000000 228.000000
+        # subId=2514 dateSubmitted=2010-10-20
+
+        track wgEncodeOpenChromDnaseCllBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel CLL
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in CLL cells)
+        subGroups view=SIGBO cellType=CLL treatment=AANONE
+        type bigWig 0.000000 302.000000
+        # subId=2787 dateSubmitted=2010-11-01
 

@@ -26,7 +26,7 @@ group regulation
 subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Raw_Base_Overlap_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AoSMC Astrocy=Astrocy CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC  HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
 #subGroup2 cellType Cell_Line AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
-subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs SERUMFREE=Serum_Free
+subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs NaBut=Sodium_Butyrate OHUrea=Hydroxyurea SERUMFREE=Serum_Free
 sortOrder cellType=+ treatment=+ view=+
 dimensions dimensionY=cellType dimensionX=treatment
 dragAndDrop subTracks
@@ -156,16 +156,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrPk
-        release alpha
-        parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in LHSR cells)
-        subGroups view=Peaks cellType=LHSR treatment=AANONE
-        type narrowPeak
-        origAssembly hg18
-        # subId=1547 dateSubmitted=2010-06-17
-
         track wgEncodeOpenChromFaireNhbePk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
@@ -176,15 +166,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1574 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrAndroPk
-        release alpha
-        parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=Peaks cellType=LHSR treatment=ANDRO
-        type narrowPeak
-        origAssembly hg18
-        # subId=1610 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifna4hPk
         release alpha
@@ -252,6 +233,26 @@ wgEncode 1
         subGroups view=Peaks cellType=Gliobla treatment=AANONE
         type narrowPeak
         # subId=2515 dateSubmitted=2010-10-20
+
+        track wgEncodeOpenChromFaireK562OhureaPk
+        release alpha
+        parent wgEncodeOpenChromFaireViewPeaks
+        shortLabel K562 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
+        subGroups view=Peaks cellType=K562 treatment=OHUrea
+        type narrowPeak
+        color 46,0,184
+        # subId=2772 dateSubmitted=2010-10-27
+
+        track wgEncodeOpenChromFaireK562NabutPk
+        release alpha
+        parent wgEncodeOpenChromFaireViewPeaks
+        shortLabel K562 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
+        subGroups view=Peaks cellType=K562 treatment=NaBut
+        type narrowPeak
+        color 46,0,184
+        # subId=2771 dateSubmitted=2010-10-27
 
 
     track wgEncodeOpenChromFaireViewSignal
@@ -373,16 +374,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrSig
-        release alpha
-        parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in LHSR cells)
-        subGroups view=SIG cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 0.469500
-        origAssembly hg18
-        # subId=1547 dateSubmitted=2010-06-17
-
         track wgEncodeOpenChromFaireNhbeSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
@@ -393,15 +384,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1574 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrAndroSig
-        release alpha
-        parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=SIG cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 0.497500
-        origAssembly hg18
-        # subId=1610 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifna4hSig
         release alpha
@@ -469,6 +451,26 @@ wgEncode 1
         subGroups view=SIG cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 0.367200
         # subId=2515 dateSubmitted=2010-10-20
+
+        track wgEncodeOpenChromFaireK562OhureaSig
+        release alpha
+        parent wgEncodeOpenChromFaireViewSignal
+        shortLabel K562 Sig
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in K562 cells)
+        subGroups view=SIG cellType=K562 treatment=OHUrea
+        type bigWig 0.000000 0.142500
+        color 46,0,184
+        # subId=2772 dateSubmitted=2010-10-27
+
+        track wgEncodeOpenChromFaireK562NabutSig
+        release alpha
+        parent wgEncodeOpenChromFaireViewSignal
+        shortLabel K562 Sig
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in K562 cells)
+        subGroups view=SIG cellType=K562 treatment=NaBut
+        type bigWig 0.000000 0.145600
+        color 46,0,184
+        # subId=2771 dateSubmitted=2010-10-27
 
 
     track wgEncodeOpenChromFaireViewSigBo
@@ -590,15 +592,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in LHSR cells)
-        subGroups view=SIGBO cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 1397.000000
-        origAssembly hg18
-        # subId=1547 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhbeBaseOverlapSignal
         release alpha
@@ -609,16 +602,6 @@ wgEncode 1
         type bigWig 0.000000 1465.000000
         origAssembly hg18
         # subId=1574 dateSubmitted=2010-06-17
-
-        track wgEncodeOpenChromFaireLhsrAndroBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in LHSR cells, with Methyltrienolone treatment )
-        subGroups view=SIGBO cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 1289.000000
-        origAssembly hg18
-        # subId=1610 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
         release alpha
@@ -686,4 +669,24 @@ wgEncode 1
         subGroups view=SIGBO cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 2386.000000
         # subId=2515 dateSubmitted=2010-10-20
+
+        track wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromFaireViewSigBo
+        shortLabel K562
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+        subGroups view=SIGBO cellType=K562 treatment=OHUrea
+        type bigWig 0.000000 1562.000000
+        color 46,0,184
+        # subId=2772 dateSubmitted=2010-10-27
+
+        track wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromFaireViewSigBo
+        shortLabel K562
+        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+        subGroups view=SIGBO cellType=K562 treatment=NaBut
+        type bigWig 0.000000 1560.000000
+        color 46,0,184
+        # subId=2771 dateSubmitted=2010-10-27
 

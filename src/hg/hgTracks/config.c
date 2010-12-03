@@ -48,6 +48,7 @@ cgiMakeDropListFull(groupCgiName, labels, groups, numGroups,
 }
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 
+
 static void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
 /* Put up track configurations. If groupTarget is
@@ -233,8 +234,10 @@ for (group = groupList; group != NULL; group = group->next)
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
-        if(trackDbSetting(track->tdb, "wgEncode") != NULL)
-            hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
+
+        // Print an icon before the title when one is defined
+        hPrintPennantIcon(track->tdb);
+
 	if (track->hasUi)
 	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s&hgTracksConfigPage=configure\">",
                 tdb->parent ? "TITLE=\"Part of super track: " : "",
@@ -447,13 +450,11 @@ else
 	  organization, browserName, organism, freeze, database);
 webNewSection(buf);
 hPrintf("Tracks: ");
-#ifdef TRACK_SEARCH
 if(isSearchTracksSupported(database,cart))
     {
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     hPrintf(" ");
     }
-#endif///def TRACK_SEARCH
 cgiMakeButtonWithMsg(configHideAll, "hide all","Hide all tracks in this genome assembly");
 hPrintf(" ");
 cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome assembly");
@@ -478,3 +479,4 @@ void configPage()
 {
 configPageSetTrackVis(-2);
 }
+

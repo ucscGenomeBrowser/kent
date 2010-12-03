@@ -111,7 +111,7 @@ if (!sqlExists(conn, query))
     if (db == NULL)
 	{
 	safef(query, sizeof(query), "select blatServers.db from blatServers,dbDb "
-	      "where blatServers.db = dbDb.name order by dbDb.orderKey,dbDb.name");
+	      "where blatServers.db = dbDb.name order by dbDb.orderKey,dbDb.name desc");
 	char *db = sqlQuickString(conn, query);
 	if (db == NULL)
 	    errAbort("central database tables blatServers and dbDb are disjoint/empty");

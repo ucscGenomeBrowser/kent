@@ -3,15 +3,14 @@ objType file
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipFibroblCtcfAlnRep1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2480
@@ -22,15 +21,14 @@ objType file
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipFibroblCtcfAlnRep2
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2480
@@ -41,13 +39,13 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2480
@@ -59,13 +57,13 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 subId 2480
@@ -77,13 +75,13 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_FB8470
 project wgEncode
 subId 2480
@@ -96,15 +94,14 @@ antibody Input
 cell Fibrobl
 composite wgEncodeOpenChromChip
 controlId Fibrobl/Input
-dataType ChIPseq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
-lab UT-Austin
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipFibroblInputAln
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 setType input
 subId 2487
@@ -116,13 +113,13 @@ antibody Input
 cell Fibrobl
 composite wgEncodeOpenChromChip
 controlId Fibrobl/Input
-dataType ChIPseq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 project wgEncode
 setType input
@@ -135,15 +132,14 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipGlioblaCtcfAlnRep1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2516
@@ -154,15 +150,14 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipGlioblaCtcfAlnRep2
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2516
@@ -173,13 +168,13 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2516
@@ -191,13 +186,13 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 subId 2516
@@ -209,14 +204,13 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep1.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipGlioblaCtcfRawSignalRep1
+lab UT-A
 project wgEncode
 replicate 1
 subId 2516
@@ -227,14 +221,13 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep2.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipGlioblaCtcfRawSignalRep2
+lab UT-A
 project wgEncode
 replicate 2
 subId 2516
@@ -245,13 +238,13 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_H54
 project wgEncode
 subId 2516
@@ -264,15 +257,14 @@ antibody Input
 cell Gliobla
 composite wgEncodeOpenChromChip
 controlId Gliobla/Input
-dataType ChIPseq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipGlioblaInputAln.bam
 grant Crawford
-lab UT-Austin
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipGlioblaInputAln
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 setType input
 subId 2499
@@ -284,14 +276,13 @@ antibody Input
 cell Gliobla
 composite wgEncodeOpenChromChip
 controlId Gliobla/Input
-dataType ChIPseq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipGlioblaInputRawData.fastq.gz
 grant Crawford
-lab UT-Austin
-parentTable wgEncodeOpenChromChipGlioblaInputRawSignal
+lab UT-A
 project wgEncode
 setType input
 subId 2499
@@ -303,13 +294,13 @@ antibody Input
 cell Gliobla
 composite wgEncodeOpenChromChip
 controlId Gliobla/Input
-dataType ChIPseq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipGlioblaInputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 project wgEncode
 setType input
@@ -330,10 +321,9 @@ dateUnrestricted 2010-06-08
 fileIndex wgEncodeOpenChromChipGm12878CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878CmycAlnRep1
 project wgEncode
 replicate 1
 subId 1229
@@ -352,10 +342,9 @@ dateUnrestricted 2010-06-08
 fileIndex wgEncodeOpenChromChipGm12878CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878CmycAlnRep2
 project wgEncode
 replicate 2
 subId 1229
@@ -373,7 +362,7 @@ dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 fileName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -393,13 +382,53 @@ dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 fileName wgEncodeOpenChromChipGm12878CmycPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.001
 origAssembly hg18
 project wgEncode
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipGm12878CmycRawDataRep1
+objType file
+antibody c-Myc
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-08
+dateUnrestricted 2010-06-08
+fileName wgEncodeOpenChromChipGm12878CmycRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 472
+view RawData
+
+metaObject wgEncodeOpenChromChipGm12878CmycRawDataRep2
+objType file
+antibody c-Myc
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-08
+dateUnrestricted 2010-06-08
+fileName wgEncodeOpenChromChipGm12878CmycRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 472
+view RawData
 
 metaObject wgEncodeOpenChromChipGm12878CmycSig
 objType table
@@ -413,7 +442,7 @@ dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
 fileName wgEncodeOpenChromChipGm12878CmycSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_GM12878
 origAssembly hg18
 project wgEncode
@@ -426,16 +455,15 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 2449
@@ -446,16 +474,15 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 2449
@@ -466,16 +493,15 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878CtcfAlnRep3
 project wgEncode
 replicate 3
 subId 2449
@@ -486,13 +512,13 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -505,13 +531,13 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -519,18 +545,81 @@ subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfPkRep1
 view Peaks
 
+metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-04
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep1V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 468
+view RawData
+
+metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-04
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep2V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 468
+view RawData
+
+metaObject wgEncodeOpenChromChipGm12878CtcfRawDataRep3
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-04
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipGm12878CtcfRawDataRep3V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 468
+view RawData
+
 metaObject wgEncodeOpenChromChipGm12878CtcfSig
 objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_GM12878
 origAssembly hg18
 project wgEncode
@@ -551,13 +640,31 @@ dateUnrestricted 2009-07-07
 fileIndex wgEncodeOpenChromChipGm12878InputAln.bam.bai
 fileName wgEncodeOpenChromChipGm12878InputAln.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878InputAln
 project wgEncode
 subId 1518
 view Alignments
+
+metaObject wgEncodeOpenChromChipGm12878InputRawData
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-07
+dateUnrestricted 2009-07-07
+fileName wgEncodeOpenChromChipGm12878InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType input
+subId 34
+view RawData
 
 metaObject wgEncodeOpenChromChipGm12878InputSig
 objType table
@@ -571,7 +678,7 @@ dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
 fileName wgEncodeOpenChromChipGm12878InputSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
@@ -592,10 +699,9 @@ dateUnrestricted 2010-09-22
 fileIndex wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878Pol2AlnRep1
 project wgEncode
 replicate 1
 subId 1478
@@ -614,10 +720,9 @@ dateUnrestricted 2010-09-22
 fileIndex wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12878Pol2AlnRep2
 project wgEncode
 replicate 2
 subId 1478
@@ -635,7 +740,7 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 fileName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -655,13 +760,53 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 fileName wgEncodeOpenChromChipGm12878Pol2Pk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Pk
 view Peaks
+
+metaObject wgEncodeOpenChromChipGm12878Pol2RawDataRep1
+objType file
+antibody Pol2
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-23
+dateUnrestricted 2010-09-22
+fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 868
+view RawData
+
+metaObject wgEncodeOpenChromChipGm12878Pol2RawDataRep2
+objType file
+antibody Pol2
+cell GM12878
+composite wgEncodeOpenChromChip
+controlId GM12878/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-23
+dateUnrestricted 2010-09-22
+fileName wgEncodeOpenChromChipGm12878Pol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 868
+view RawData
 
 metaObject wgEncodeOpenChromChipGm12878Pol2Sig
 objType table
@@ -675,7 +820,7 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 fileName wgEncodeOpenChromChipGm12878Pol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_GM12878
 origAssembly hg18
 project wgEncode
@@ -696,10 +841,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12891CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1490
@@ -718,10 +862,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12891CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1490
@@ -739,7 +882,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -759,13 +902,53 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm12891CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipGm12891CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM12891
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 644
+view RawData
+
+metaObject wgEncodeOpenChromChipGm12891CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM12891
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm12891CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 644
+view RawData
 
 metaObject wgEncodeOpenChromChipGm12891CtcfSig
 objType table
@@ -779,7 +962,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm12891CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -800,10 +983,9 @@ dateUnrestricted 2010-07-02
 fileIndex wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12892CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1491
@@ -822,10 +1004,9 @@ dateUnrestricted 2010-07-02
 fileIndex wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm12892CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1491
@@ -843,7 +1024,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -863,13 +1044,53 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeOpenChromChipGm12892CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipGm12892CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM12892
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 638
+view RawData
+
+metaObject wgEncodeOpenChromChipGm12892CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM12892
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeOpenChromChipGm12892CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 638
+view RawData
 
 metaObject wgEncodeOpenChromChipGm12892CtcfSig
 objType table
@@ -883,7 +1104,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeOpenChromChipGm12892CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
@@ -904,10 +1125,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm19238CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1516
@@ -926,10 +1146,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm19238CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1516
@@ -947,7 +1166,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -967,13 +1186,53 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19238CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipGm19238CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM19238
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 646
+view RawData
+
+metaObject wgEncodeOpenChromChipGm19238CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM19238
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm19238CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 646
+view RawData
 
 metaObject wgEncodeOpenChromChipGm19238CtcfSig
 objType table
@@ -987,7 +1246,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19238CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
@@ -1008,10 +1267,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm19239CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1525
@@ -1030,10 +1288,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm19239CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1525
@@ -1051,7 +1308,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1071,13 +1328,53 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19239CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipGm19239CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM19239
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 648
+view RawData
+
+metaObject wgEncodeOpenChromChipGm19239CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM19239
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm19239CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 648
+view RawData
 
 metaObject wgEncodeOpenChromChipGm19239CtcfSig
 objType table
@@ -1091,7 +1388,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19239CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -1112,10 +1409,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm19240CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1536
@@ -1134,10 +1430,9 @@ dateUnrestricted 2010-07-06
 fileIndex wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipGm19240CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1536
@@ -1155,7 +1450,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1175,13 +1470,53 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19240CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipGm19240CtcfRawDataRep1
+objType file
+antibody CTCF
+cell GM19240
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 650
+view RawData
+
+metaObject wgEncodeOpenChromChipGm19240CtcfRawDataRep2
+objType file
+antibody CTCF
+cell GM19240
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-06
+dateUnrestricted 2010-07-06
+fileName wgEncodeOpenChromChipGm19240CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 650
+view RawData
 
 metaObject wgEncodeOpenChromChipGm19240CtcfSig
 objType table
@@ -1195,7 +1530,7 @@ dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromChipGm19240CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
@@ -1216,10 +1551,9 @@ dateUnrestricted 2010-09-27
 fileIndex wgEncodeOpenChromChipH1hescCmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipH1hescCmycAlnRep1
 project wgEncode
 replicate 1
 subId 1504
@@ -1237,7 +1571,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 fileName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1257,13 +1591,32 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 fileName wgEncodeOpenChromChipH1hescCmycPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipH1hescCmycRawData
+objType file
+antibody c-Myc
+cell H1-hESC
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-28
+dateUnrestricted 2010-09-27
+fileName wgEncodeOpenChromChipH1hescCmycRawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType exp
+subId 882
+view RawData
 
 metaObject wgEncodeOpenChromChipH1hescCmycSig
 objType table
@@ -1277,7 +1630,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 fileName wgEncodeOpenChromChipH1hescCmycSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -1298,10 +1651,9 @@ dateUnrestricted 2010-07-01
 fileIndex wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipH1hescCtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1500
@@ -1319,7 +1671,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 fileName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1339,13 +1691,32 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 fileName wgEncodeOpenChromChipH1hescCtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipH1hescCtcfRawData
+objType file
+antibody CTCF
+cell H1-hESC
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-01
+dateUnrestricted 2010-07-01
+fileName wgEncodeOpenChromChipH1hescCtcfRawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType exp
+subId 636
+view RawData
 
 metaObject wgEncodeOpenChromChipH1hescCtcfSig
 objType table
@@ -1359,7 +1730,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 fileName wgEncodeOpenChromChipH1hescCtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -1380,10 +1751,9 @@ dateUnrestricted 2010-07-02
 fileIndex wgEncodeOpenChromChipH1hescPol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipH1hescPol2AlnRep1
 project wgEncode
 replicate 1
 subId 1833
@@ -1401,7 +1771,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1421,13 +1791,32 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeOpenChromChipH1hescPol2Pk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Pk
 view Peaks
+
+metaObject wgEncodeOpenChromChipH1hescPol2RawData
+objType file
+antibody Pol2
+cell H1-hESC
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeOpenChromChipH1hescPol2RawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType exp
+subId 641
+view RawData
 
 metaObject wgEncodeOpenChromChipH1hescPol2Sig
 objType table
@@ -1441,7 +1830,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeOpenChromChipH1hescPol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -1462,10 +1851,9 @@ dateUnrestricted 2009-12-21
 fileIndex wgEncodeOpenChromChipHelas3CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHelas3CmycAlnRep1
 project wgEncode
 replicate 1
 subId 1501
@@ -1484,10 +1872,9 @@ dateUnrestricted 2009-12-21
 fileIndex wgEncodeOpenChromChipHelas3CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHelas3CmycAlnRep2
 project wgEncode
 replicate 2
 subId 1501
@@ -1505,7 +1892,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1525,13 +1912,56 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHelas3CmycPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHelas3CmycRawDataRep1
+objType file
+antibody c-Myc
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-05
+dateSubmitted 2009-03-21
+dateUnrestricted 2009-12-21
+fileName wgEncodeOpenChromChipHelas3CmycRawDataRep1V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 642
+view RawData
+
+metaObject wgEncodeOpenChromChipHelas3CmycRawDataRep2V2
+objType file
+antibody c-Myc
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-05
+dateSubmitted 2009-03-21
+dateUnrestricted 2009-12-21
+fileName wgEncodeOpenChromChipHelas3CmycRawDataRep2V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 642
+submittedDataVersion V2 - new sequences generated
+view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CmycSig
 objType table
@@ -1545,7 +1975,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHelas3CmycSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
@@ -1566,10 +1996,9 @@ dateUnrestricted 2009-12-21
 fileIndex wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHelas3CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1499
@@ -1588,10 +2017,9 @@ dateUnrestricted 2009-12-21
 fileIndex wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHelas3CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1499
@@ -1609,7 +2037,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1629,13 +2057,56 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHelas3CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHelas3CtcfRawDataRep1
+objType file
+antibody CTCF
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-10
+dateSubmitted 2009-03-21
+dateUnrestricted 2009-12-21
+fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep1V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 493
+view RawData
+
+metaObject wgEncodeOpenChromChipHelas3CtcfRawDataRep2V2
+objType file
+antibody CTCF
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-10
+dateSubmitted 2009-03-21
+dateUnrestricted 2009-12-21
+fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep2V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 493
+submittedDataVersion V2 - new sequences generated
+view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CtcfSig
 objType table
@@ -1649,7 +2120,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHelas3CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
@@ -1671,14 +2142,33 @@ dateUnrestricted 2009-12-16
 fileIndex wgEncodeOpenChromChipHelas3InputAln.bam.bai
 fileName wgEncodeOpenChromChipHelas3InputAln.bam
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHelas3InputAln
 project wgEncode
 setType input
 subId 1609
 view Alignments
+
+metaObject wgEncodeOpenChromChipHelas3InputRawData
+objType file
+antibody Input
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-16
+dateUnrestricted 2009-12-16
+fileName wgEncodeOpenChromChipHelas3InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+labVersion Illumina, pooled
+origAssembly hg18
+project wgEncode
+setType input
+subId 275
+view RawData
 
 metaObject wgEncodeOpenChromChipHelas3InputSig
 objType table
@@ -1693,7 +2183,7 @@ dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
 fileName wgEncodeOpenChromChipHelas3InputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
@@ -1715,10 +2205,9 @@ dateUnrestricted 2010-09-28
 fileIndex wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHelas3Pol2AlnRep1
 project wgEncode
 replicate 1
 subId 1505
@@ -1737,10 +2226,9 @@ dateUnrestricted 2010-09-28
 fileIndex wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHelas3Pol2AlnRep2
 project wgEncode
 replicate 2
 subId 1505
@@ -1758,7 +2246,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1778,13 +2266,53 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipHelas3Pol2Pk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Pk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHelas3Pol2RawDataRep1
+objType file
+antibody Pol2
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-28
+dateUnrestricted 2010-09-28
+fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 885
+view RawData
+
+metaObject wgEncodeOpenChromChipHelas3Pol2RawDataRep2
+objType file
+antibody Pol2
+cell HeLa-S3
+composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-28
+dateUnrestricted 2010-09-28
+fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 885
+view RawData
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Sig
 objType table
@@ -1798,7 +2326,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipHelas3Pol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
@@ -1819,10 +2347,9 @@ dateUnrestricted 2009-12-22
 fileIndex wgEncodeOpenChromChipHepg2CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2CmycAlnRep1
 project wgEncode
 replicate 1
 subId 1527
@@ -1841,10 +2368,9 @@ dateUnrestricted 2009-12-22
 fileIndex wgEncodeOpenChromChipHepg2CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2CmycAlnRep2
 project wgEncode
 replicate 2
 subId 1527
@@ -1863,10 +2389,9 @@ dateUnrestricted 2009-12-22
 fileIndex wgEncodeOpenChromChipHepg2CmycAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2CmycAlnRep3
 project wgEncode
 replicate 3
 subId 1527
@@ -1884,7 +2409,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1904,13 +2429,76 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromChipHepg2CmycPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep1
+objType file
+antibody c-Myc
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-29
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromChipHepg2CmycRawDataRep1V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 593
+view RawData
+
+metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep2
+objType file
+antibody c-Myc
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-29
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromChipHepg2CmycRawDataRep2V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 593
+view RawData
+
+metaObject wgEncodeOpenChromChipHepg2CmycRawDataRep3
+objType file
+antibody c-Myc
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-29
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromChipHepg2CmycRawDataRep3V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 593
+view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CmycSig
 objType table
@@ -1924,7 +2512,7 @@ dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromChipHepg2CmycSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HepG2
 origAssembly hg18
 project wgEncode
@@ -1945,10 +2533,9 @@ dateUnrestricted 2009-12-21
 fileIndex wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1517
@@ -1967,10 +2554,9 @@ dateUnrestricted 2009-12-21
 fileIndex wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1517
@@ -1988,7 +2574,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2008,13 +2594,55 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHepg2CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHepg2CtcfRawDataRep1
+objType file
+antibody CTCF
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-28
+dateSubmitted 2009-03-21
+dateUnrestricted 2009-12-21
+fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep1V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 555
+view RawData
+
+metaObject wgEncodeOpenChromChipHepg2CtcfRawDataRep2
+objType file
+antibody CTCF
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-28
+dateSubmitted 2009-03-21
+dateUnrestricted 2009-12-21
+fileName wgEncodeOpenChromChipHepg2CtcfRawDataRep2V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 555
+view RawData
 
 metaObject wgEncodeOpenChromChipHepg2CtcfSig
 objType table
@@ -2028,7 +2656,7 @@ dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromChipHepg2CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HepG2
 origAssembly hg18
 project wgEncode
@@ -2050,14 +2678,33 @@ dateUnrestricted 2009-12-13
 fileIndex wgEncodeOpenChromChipHepg2InputAln.bam.bai
 fileName wgEncodeOpenChromChipHepg2InputAln.bam
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2InputAln
 project wgEncode
 setType input
 subId 1608
 view Alignments
+
+metaObject wgEncodeOpenChromChipHepg2InputRawData
+objType file
+antibody Input
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-03-13
+dateUnrestricted 2009-12-13
+fileName wgEncodeOpenChromChipHepg2InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+labVersion Illumina, pooled
+origAssembly hg18
+project wgEncode
+setType input
+subId 274
+view RawData
 
 metaObject wgEncodeOpenChromChipHepg2InputSig
 objType table
@@ -2072,7 +2719,7 @@ dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
 fileName wgEncodeOpenChromChipHepg2InputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
@@ -2094,10 +2741,9 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2Pol2AlnRep1
 project wgEncode
 replicate 1
 subId 1526
@@ -2116,10 +2762,9 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2Pol2AlnRep2
 project wgEncode
 replicate 2
 subId 1526
@@ -2138,10 +2783,9 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam.bai
 fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHepg2Pol2AlnRep3
 project wgEncode
 replicate 3
 subId 1526
@@ -2159,7 +2803,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2179,13 +2823,73 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipHepg2Pol2Pk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Pk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep1
+objType file
+antibody Pol2
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 589
+view RawData
+
+metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep2
+objType file
+antibody Pol2
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 589
+view RawData
+
+metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep3
+objType file
+antibody Pol2
+cell HepG2
+composite wgEncodeOpenChromChip
+controlId HepG2/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep3.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 589
+view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2Sig
 objType table
@@ -2199,7 +2903,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipHepg2Pol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HepG2
 origAssembly hg18
 project wgEncode
@@ -2220,10 +2924,9 @@ dateUnrestricted 2010-07-01
 fileIndex wgEncodeOpenChromChipHuvecCmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHuvecCmycAlnRep1
 project wgEncode
 replicate 1
 subId 1542
@@ -2241,7 +2944,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 fileName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2261,13 +2964,32 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 fileName wgEncodeOpenChromChipHuvecCmycPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHuvecCmycRawData
+objType file
+antibody c-Myc
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-01
+dateUnrestricted 2010-07-01
+fileName wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType exp
+subId 635
+view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCmycSig
 objType table
@@ -2281,7 +3003,7 @@ dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
 fileName wgEncodeOpenChromChipHuvecCmycSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
 origAssembly hg18
 project wgEncode
@@ -2302,10 +3024,9 @@ dateUnrestricted 2010-06-25
 fileIndex wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHuvecCtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1537
@@ -2324,10 +3045,9 @@ dateUnrestricted 2010-06-25
 fileIndex wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHuvecCtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1537
@@ -2345,7 +3065,7 @@ dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 fileName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2365,13 +3085,53 @@ dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 fileName wgEncodeOpenChromChipHuvecCtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHuvecCtcfRawDataRep1
+objType file
+antibody CTCF
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-25
+dateUnrestricted 2010-06-25
+fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 548
+view RawData
+
+metaObject wgEncodeOpenChromChipHuvecCtcfRawDataRep2
+objType file
+antibody CTCF
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-25
+dateUnrestricted 2010-06-25
+fileName wgEncodeOpenChromChipHuvecCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 548
+view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCtcfSig
 objType table
@@ -2385,7 +3145,7 @@ dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
 fileName wgEncodeOpenChromChipHuvecCtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
 origAssembly hg18
 project wgEncode
@@ -2407,14 +3167,32 @@ dateUnrestricted 2010-06-24
 fileIndex wgEncodeOpenChromChipHuvecInputAln.bam.bai
 fileName wgEncodeOpenChromChipHuvecInputAln.bam
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHuvecInputAln
 project wgEncode
 setType input
 subId 1607
 view Alignments
+
+metaObject wgEncodeOpenChromChipHuvecInputRawData
+objType file
+antibody Input
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+fileName wgEncodeOpenChromChipHuvecInputRawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType input
+subId 544
+view RawData
 
 metaObject wgEncodeOpenChromChipHuvecInputSig
 objType table
@@ -2429,7 +3207,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromChipHuvecInputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
@@ -2451,10 +3229,9 @@ dateUnrestricted 2010-06-28
 fileIndex wgEncodeOpenChromChipHuvecPol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHuvecPol2AlnRep1
 project wgEncode
 replicate 1
 subId 1540
@@ -2473,10 +3250,9 @@ dateUnrestricted 2010-06-28
 fileIndex wgEncodeOpenChromChipHuvecPol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipHuvecPol2AlnRep2
 project wgEncode
 replicate 2
 subId 1540
@@ -2494,7 +3270,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2514,13 +3290,53 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeOpenChromChipHuvecPol2Pk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2Pk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHuvecPol2RawDataRep1
+objType file
+antibody Pol2
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-28
+dateUnrestricted 2010-06-28
+fileName wgEncodeOpenChromChipHuvecPol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 552
+view RawData
+
+metaObject wgEncodeOpenChromChipHuvecPol2RawDataRep2
+objType file
+antibody Pol2
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-28
+dateUnrestricted 2010-06-28
+fileName wgEncodeOpenChromChipHuvecPol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 552
+view RawData
 
 metaObject wgEncodeOpenChromChipHuvecPol2Sig
 objType table
@@ -2534,7 +3350,7 @@ dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeOpenChromChipHuvecPol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
 origAssembly hg18
 project wgEncode
@@ -2555,10 +3371,9 @@ dateUnrestricted 2009-12-20
 fileIndex wgEncodeOpenChromChipK562CmycAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562CmycAlnRep1
 project wgEncode
 replicate 1
 subId 1543
@@ -2577,10 +3392,9 @@ dateUnrestricted 2009-12-20
 fileIndex wgEncodeOpenChromChipK562CmycAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562CmycAlnRep2
 project wgEncode
 replicate 2
 subId 1543
@@ -2599,10 +3413,9 @@ dateUnrestricted 2009-12-20
 fileIndex wgEncodeOpenChromChipK562CmycAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562CmycAlnRep3
 project wgEncode
 replicate 3
 subId 1543
@@ -2620,7 +3433,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2640,13 +3453,76 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromChipK562CmycPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipK562CmycRawDataRep1
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipK562CmycRawDataRep1V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 482
+view RawData
+
+metaObject wgEncodeOpenChromChipK562CmycRawDataRep2
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipK562CmycRawDataRep2V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 482
+view RawData
+
+metaObject wgEncodeOpenChromChipK562CmycRawDataRep3
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipK562CmycRawDataRep3V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 482
+view RawData
 
 metaObject wgEncodeOpenChromChipK562CmycSig
 objType table
@@ -2660,7 +3536,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeOpenChromChipK562CmycSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_K562
 origAssembly hg18
 project wgEncode
@@ -2681,10 +3557,9 @@ dateUnrestricted 2009-12-20
 fileIndex wgEncodeOpenChromChipK562CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1538
@@ -2703,10 +3578,9 @@ dateUnrestricted 2009-12-20
 fileIndex wgEncodeOpenChromChipK562CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1538
@@ -2725,10 +3599,9 @@ dateUnrestricted 2009-12-20
 fileIndex wgEncodeOpenChromChipK562CtcfAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562CtcfAlnRep3
 project wgEncode
 replicate 3
 subId 1538
@@ -2746,7 +3619,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2766,13 +3639,76 @@ dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromChipK562CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipK562CtcfRawDataRep1
+objType file
+antibody CTCF
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipK562CtcfRawDataRep1V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 481
+view RawData
+
+metaObject wgEncodeOpenChromChipK562CtcfRawDataRep2
+objType file
+antibody CTCF
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipK562CtcfRawDataRep2V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 481
+view RawData
+
+metaObject wgEncodeOpenChromChipK562CtcfRawDataRep3
+objType file
+antibody CTCF
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-03-20
+dateUnrestricted 2009-12-20
+fileName wgEncodeOpenChromChipK562CtcfRawDataRep3V2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 481
+view RawData
 
 metaObject wgEncodeOpenChromChipK562CtcfSig
 objType table
@@ -2786,7 +3722,7 @@ dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeOpenChromChipK562CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_K562
 origAssembly hg18
 project wgEncode
@@ -2808,14 +3744,33 @@ dateUnrestricted 2009-08-05
 fileIndex wgEncodeOpenChromChipK562InputAln.bam.bai
 fileName wgEncodeOpenChromChipK562InputAln.bam
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562InputAln
 project wgEncode
 setType input
 subId 1606
 view Alignments
+
+metaObject wgEncodeOpenChromChipK562InputRawData
+objType file
+antibody Input
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2008-12-05
+dateUnrestricted 2009-08-05
+fileName wgEncodeOpenChromChipK562InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+labVersion Illumina
+origAssembly hg18
+project wgEncode
+setType input
+subId 109
+view RawData
 
 metaObject wgEncodeOpenChromChipK562InputSig
 objType table
@@ -2830,7 +3785,7 @@ dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
 fileName wgEncodeOpenChromChipK562InputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
@@ -2852,10 +3807,9 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeOpenChromChipK562Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562Pol2AlnRep1
 project wgEncode
 replicate 1
 subId 1541
@@ -2874,10 +3828,9 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeOpenChromChipK562Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipK562Pol2AlnRep2
 project wgEncode
 replicate 2
 subId 1541
@@ -2895,7 +3848,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -2915,13 +3868,53 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipK562Pol2Pk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Pk
 view Peaks
+
+metaObject wgEncodeOpenChromChipK562Pol2RawDataRep1
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeOpenChromChipK562Pol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 588
+view RawData
+
+metaObject wgEncodeOpenChromChipK562Pol2RawDataRep2
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeOpenChromChip
+controlId K562/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeOpenChromChipK562Pol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 588
+view RawData
 
 metaObject wgEncodeOpenChromChipK562Pol2Sig
 objType table
@@ -2935,7 +3928,7 @@ dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_K562
 origAssembly hg18
 project wgEncode
@@ -2943,7 +3936,7 @@ subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Sig
 view Signal
 
-metaObject wgEncodeOpenChromChipMcf7CmycVehAlnRep1
+metaObject wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
 objType file
 antibody c-Myc
 cell MCF-7
@@ -2952,11 +3945,186 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
-fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
+fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7CmycVehAlnRep1
+labVersion align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
+project wgEncode
+replicate 1
+subId 2503
+treatment estrogen
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycEstroAlnRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
+grant Crawford
+lab UT-A(Iyer)
+labVersion align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep2
+project wgEncode
+replicate 2
+subId 2503
+treatment estrogen
+view Alignments
+
+metaObject wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A(Iyer)
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2503
+tableName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal
+treatment estrogen
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycEstroPkRep1
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A(Iyer)
+labVersion p-value cutoff: 0.05
+project wgEncode
+replicate 1
+subId 2503
+tableName wgEncodeOpenChromChipMcf7CmycEstroPkRep1
+treatment estrogen
+view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A(Iyer)
+parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep1
+project wgEncode
+replicate 1
+subId 2503
+treatment estrogen
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A(Iyer)
+parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep2
+project wgEncode
+replicate 2
+subId 2503
+treatment estrogen
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycEstroSig
+objType table
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
+grant Crawford
+lab UT-A(Iyer)
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+subId 2503
+tableName wgEncodeOpenChromChipMcf7CmycEstroSig
+treatment estrogen
+view Signal
+
+metaObject wgEncodeOpenChromChipMcf7CmycRawDataRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-28
+dateUnrestricted 2010-09-28
+fileName wgEncodeOpenChromChipMcf7CmycRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 883
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycRawDataRep2
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-28
+dateUnrestricted 2010-09-28
+fileName wgEncodeOpenChromChipMcf7CmycRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 883
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CmycVehAlnRep1
+objType file
+antibody c-Myc
+cell MCF-7
+composite wgEncodeOpenChromChip
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2504
@@ -2968,15 +4136,14 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7CmycVehAlnRep2
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2504
@@ -2988,13 +4155,13 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2504
@@ -3007,13 +4174,13 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 subId 2504
@@ -3026,14 +4193,13 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep1.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7CmycVehRawSignalRep1
+lab UT-A
 project wgEncode
 replicate 1
 subId 2504
@@ -3045,14 +4211,13 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep2.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7CmycVehRawSignalRep2
+lab UT-A
 project wgEncode
 replicate 2
 subId 2504
@@ -3064,13 +4229,13 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
 subId 2504
@@ -3091,10 +4256,9 @@ dateUnrestricted 2010-09-28
 fileIndex wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipMcf7CtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1580
@@ -3113,10 +4277,9 @@ dateUnrestricted 2010-09-28
 fileIndex wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipMcf7CtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1580
@@ -3134,7 +4297,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -3147,15 +4310,14 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2502
@@ -3167,15 +4329,14 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2502
@@ -3187,13 +4348,13 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2502
@@ -3206,13 +4367,13 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 subId 2502
@@ -3225,14 +4386,13 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep1.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7CtcfEstroRawSignalRep1
+lab UT-A
 project wgEncode
 replicate 1
 subId 2502
@@ -3244,14 +4404,13 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep2.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7CtcfEstroRawSignalRep2
+lab UT-A
 project wgEncode
 replicate 2
 subId 2502
@@ -3263,13 +4422,13 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
 subId 2502
@@ -3289,13 +4448,53 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipMcf7CtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipMcf7CtcfRawDataRep1
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-28
+dateUnrestricted 2010-09-28
+fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 884
+view RawData
+
+metaObject wgEncodeOpenChromChipMcf7CtcfRawDataRep2
+objType file
+antibody CTCF
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-28
+dateUnrestricted 2010-09-28
+fileName wgEncodeOpenChromChipMcf7CtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 884
+view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CtcfSig
 objType table
@@ -3309,7 +4508,7 @@ dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipMcf7CtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 origAssembly hg18
 project wgEncode
@@ -3322,15 +4521,14 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7CtcfVehAlnRep1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2505
@@ -3342,15 +4540,14 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7CtcfVehAlnRep2
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2505
@@ -3362,13 +4559,13 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2505
@@ -3381,13 +4578,13 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 subId 2505
@@ -3400,14 +4597,13 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep1.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7CtcfVehRawSignalRep1
+lab UT-A
 project wgEncode
 replicate 1
 subId 2505
@@ -3419,14 +4615,13 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep2.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7CtcfVehRawSignalRep2
+lab UT-A
 project wgEncode
 replicate 2
 subId 2505
@@ -3438,13 +4633,13 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
 subId 2505
@@ -3466,10 +4661,9 @@ dateUnrestricted 2010-09-22
 fileIndex wgEncodeOpenChromChipMcf7InputAln.bam.bai
 fileName wgEncodeOpenChromChipMcf7InputAln.bam
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipMcf7InputAln
 project wgEncode
 setType input
 subId 1834
@@ -3488,7 +4682,7 @@ dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 fileName wgEncodeOpenChromChipMcf7InputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
@@ -3502,15 +4696,14 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7Pol2AlnRep1
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2495
@@ -3521,15 +4714,14 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
-labVersion  align_on_cluster_bwa.pl v 1
-parentTable wgEncodeOpenChromChipMcf7Pol2AlnRep2
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2495
@@ -3540,13 +4732,13 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2495
@@ -3558,13 +4750,13 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2PkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 subId 2495
@@ -3576,14 +4768,13 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep1.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7Pol2RawSignalRep1
+lab UT-A
 project wgEncode
 replicate 1
 subId 2495
@@ -3594,14 +4785,13 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep2.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
-parentTable wgEncodeOpenChromChipMcf7Pol2RawSignalRep2
+lab UT-A
 project wgEncode
 replicate 2
 subId 2495
@@ -3612,18 +4802,37 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2Sig
 view Signal
+
+metaObject wgEncodeOpenChromChipMcf7RawData
+objType file
+antibody Input
+cell MCF-7
+composite wgEncodeOpenChromChip
+controlId MCF-7/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-22
+dateUnrestricted 2010-09-22
+fileName wgEncodeOpenChromChipMcf7RawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType input
+subId 866
+view RawData
 
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep1
 objType file
@@ -3638,10 +4847,9 @@ dateUnrestricted 2010-06-30
 fileIndex wgEncodeOpenChromChipNhekCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipNhekCtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1539
@@ -3660,10 +4868,9 @@ dateUnrestricted 2010-06-30
 fileIndex wgEncodeOpenChromChipNhekCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipNhekCtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1539
@@ -3681,7 +4888,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -3701,13 +4908,53 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromChipNhekCtcfPk.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipNhekCtcfRawDataRep1
+objType file
+antibody CTCF
+cell NHEK
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeOpenChromChipNhekCtcfRawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 624
+view RawData
+
+metaObject wgEncodeOpenChromChipNhekCtcfRawDataRep2
+objType file
+antibody CTCF
+cell NHEK
+composite wgEncodeOpenChromChip
+controlId modelled
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeOpenChromChipNhekCtcfRawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 624
+view RawData
 
 metaObject wgEncodeOpenChromChipNhekCtcfSig
 objType table
@@ -3721,7 +4968,7 @@ dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromChipNhekCtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
@@ -3742,10 +4989,9 @@ dateUnrestricted 2010-10-02
 fileIndex wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipProgfibCtcfAlnRep1
 project wgEncode
 replicate 1
 subId 1657
@@ -3764,10 +5010,9 @@ dateUnrestricted 2010-10-02
 fileIndex wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipProgfibCtcfAlnRep2
 project wgEncode
 replicate 2
 subId 1657
@@ -3785,7 +5030,7 @@ dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 fileName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -3805,7 +5050,7 @@ dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 fileName wgEncodeOpenChromChipProgfibCtcfPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -3826,7 +5071,7 @@ dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
 fileName wgEncodeOpenChromChipProgfibCtcfSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
 project wgEncode
@@ -3848,10 +5093,9 @@ dateUnrestricted 2010-09-22
 fileIndex wgEncodeOpenChromChipProgfibInputAln.bam.bai
 fileName wgEncodeOpenChromChipProgfibInputAln.bam
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipProgfibInputAln
 project wgEncode
 setType input
 subId 1832
@@ -3870,7 +5114,7 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 fileName wgEncodeOpenChromChipProgfibInputSig.bigWig
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
@@ -3892,10 +5136,9 @@ dateUnrestricted 2010-10-10
 fileIndex wgEncodeOpenChromChipProgfibPol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipProgfibPol2AlnRep1
 project wgEncode
 replicate 1
 subId 1652
@@ -3914,10 +5157,9 @@ dateUnrestricted 2010-10-10
 fileIndex wgEncodeOpenChromChipProgfibPol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromChipProgfibPol2AlnRep2
 project wgEncode
 replicate 2
 subId 1652
@@ -3935,7 +5177,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -3955,7 +5197,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeOpenChromChipProgfibPol2PkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -3976,7 +5218,7 @@ dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeOpenChromChipProgfibPol2Sig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
 project wgEncode
@@ -3984,4 +5226,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 1349303022
+# MAGIC: -257062899

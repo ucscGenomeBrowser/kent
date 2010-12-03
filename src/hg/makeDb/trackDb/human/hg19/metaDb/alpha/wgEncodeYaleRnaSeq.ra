@@ -3,7 +3,7 @@ objType table
 cell GM12878
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
@@ -39,7 +39,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeYaleRnaSeqK562Ama50PolyaAln.bam
@@ -58,7 +58,7 @@ objType file
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeYaleRnaSeqK562Ama50PolyaRawData.fastq.gz
@@ -76,7 +76,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeYaleRnaSeqK562Ama50PolyaSig.bigWig
@@ -112,7 +112,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
@@ -132,7 +132,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
@@ -186,7 +186,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
@@ -206,7 +206,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2010-09-24
 dateUnrestricted 2010-06-24
@@ -243,7 +243,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-23
 dateSubmitted 2009-03-17
 dateUnrestricted 2009-12-17
@@ -279,7 +279,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeYaleRnaSeqK562PolyaAln.bam
@@ -298,7 +298,7 @@ objType file
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeYaleRnaSeqK562PolyaRawData.fastq.gz
@@ -316,7 +316,7 @@ objType table
 cell K562
 composite wgEncodeYaleRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeYaleRnaSeqK562PolyaSig.bigWig
@@ -330,4 +330,4 @@ tableName wgEncodeYaleRnaSeqK562PolyaSig
 treatment None
 view Signal
 
-# MAGIC: 111809576
+# MAGIC: -1028851776

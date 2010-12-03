@@ -34,13 +34,14 @@ population, and this likely contributes to
 observed unevenness in sequence coverage across transcripts. </P>
 
 <P>These tracks show 
-<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=readType">1x32 n.t. or 2x75 n.t. sequence reads</A>
+<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=readType">1x32 n.t. or 2x75 n.t. or 1x75 n.t. directed sequence reads</A>
  of cDNA obtained from biological replicate samples 
 (different culture plates) of the ENCODE 
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>.
  The 32 n.t. sequences were aligned to the human genome (hg18) and UCSC 
 known-gene splice junctions using different
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=mapAlgorithm">sequence alignment programs</A>.
+The 1x75D n.t. reads are strand-specific reads.
 The 2x75 n.t. reads were mapped serially, first with the Bowtie program 
 (Langmead <EM>et al.</EM>, 2009) 
 against the genome and UCSC known-gene splice junctions (<I>Splice Sites</I>). 
@@ -76,13 +77,6 @@ The RPKM measure assists in visualizing the relative amount of a given transcrip
 Alignments are colored by cell type.
 </DL>
 </P>
-
-<dl>
-<dt>Naming Conventions</dt>
-<dd>Directional assays based on the read type are indicated by a "D" in the short label to the left of the browser image in dense mode and in the read type label. </dd>
-<dd>Undirectional assays based on the read type are indicated by a "U" in the short label to the left of the browser image in dense mode and by the absence of a letter in the read type label.</dd>
-</dl>
-
 
 <H2>Methods</H2>
 

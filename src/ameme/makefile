@@ -1,6 +1,6 @@
 include ../inc/common.mk
 
-L += -lpng -lm -lz
+L += -lm -lz
 MYLIBDIR = ../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 

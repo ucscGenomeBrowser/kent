@@ -438,40 +438,26 @@ type bed 6 +
 nextItemButton on
 noScoreFilter .
 
-track pgSnpHgwdev override
-
+# Overrides for track pgSnp:
     track pgKb1Comb override
-    parent pgSnpHgwdev
     pgSiftPredTab pgKb1Sift
     pgPolyphenPredTab pgPolyKb1
 
     track pgNb1 override
-    parent pgSnpHgwdev
     pgSiftPredTab pgNb1Sift
     pgPolyphenPredTab pgPolyNb1
 
     track pgMd8 override
-    parent pgSnpHgwdev
     pgSiftPredTab pgMd8Sift
     pgPolyphenPredTab pgPolyMd8
 
     track pgTk1 override
-    parent pgSnpHgwdev
     pgSiftPredTab pgTk1Sift
     pgPolyphenPredTab pgPolyTk1
 
     track pgAbtSolid override
-    parent pgSnpHgwdev
     pgSiftPredTab pgAbtSift
     pgPolyphenPredTab pgPolyAbt
-
-    track pgYoruban2
-    parent pgSnpHgwdev
-    shortLabel YRI '8507, SOLiD
-    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
-    group varRep
-    priority 20
-    color 128,0,128
 
 
 track pgPop
@@ -742,8 +728,8 @@ type netAlign homIni13 chainHomIni13
 otherDb homIni13
 
 track chainHomNea0
-shortLabel Neanderthal Chain
-longLabel Neanderthal Chain
+shortLabel Neandertal Chain
+longLabel Neandertal Chain
 group x
 priority 300
 visibility hide
@@ -4237,9 +4223,10 @@ group x
 priority 53.5
 visibility hide
 type wigMaf
-speciesOrder panTro20 panTro21 panTro22 panTro23 panTro24 panTro25 panTro26 panTro27 ponAbe20 ponAbe21 ponAbe22 ponAbe23 ponAbe24 ponAbe25 ponAbe26 ponAbe27 ponAbe28 rheMac20 rheMac21 rheMac22 rheMac23 rheMac24 rheMac25 rheMac26
-
+#speciesOrder panTro20 panTro21 panTro22 panTro23 panTro24 panTro25 panTro26 panTro27 ponAbe20 ponAbe21 ponAbe22 ponAbe23 ponAbe24 ponAbe25 ponAbe26 ponAbe27 ponAbe28 rheMac20 rheMac21 rheMac22 rheMac23 rheMac24 rheMac25 rheMac26
 frames multizPrimateFrames
+speciesOrder hg180 hg181 panTro20 panTro21 panTro22 panTro23 ponAbe20 ponAbe21 rheMac20 rheMac21 rheMac22 rheMac23
+
 
 track cactusBed
 shortLabel cactusBed

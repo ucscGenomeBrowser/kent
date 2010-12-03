@@ -6,7 +6,8 @@ include wgEncodeSuper.ra
 include wgEncodeUwAffyExonArray.ra
 include wgEncodeSunyAlbanyGeneSt.ra
 include wgEncodeSunyAlbanyTiling.ra
-include wgEncodeHaibRrbs.ra
+include wgEncodeSunySwitchgear.ra
+include wgEncodeHaibMethylRrbs.ra
 include wgEncodeHaibTfbs.ra
 include wgEncodeSydhTfbs.ra
 include wgEncodeSydhHistone.ra

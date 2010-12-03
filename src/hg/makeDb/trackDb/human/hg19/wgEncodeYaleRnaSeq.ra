@@ -6,7 +6,7 @@ longLabel ENCODE Yale RNA-seq
 group expression
 superTrack wgEncodeRnaSeqSuper
 subGroup1 view Views Signal=Signal Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K652&nbsp;(Tier_1) 
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) 
 subGroup3 treatment Treatment AMA50=AMA50ug9h IFNg6h=IFNg6h IFNg30=IFNg30 IFNa30=IFNa30 IFNa6h=IFNa6h None=None 
 subGroup4 rnaExtract RnaExtract nonPolyA=PolyA- polyA=PolyA+
 dimensions dimensionX=cellType dimensionY=treatment dimensionB=rnaExtract

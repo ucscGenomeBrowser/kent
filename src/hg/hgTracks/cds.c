@@ -58,7 +58,7 @@ static void drawScaledBoxSampleWithText(struct hvGfx *hvg,
                                         double scale, int xOff, int y,
                                         int height, Color color, int score,
                                         MgFont *font, char *text, bool zoomed,
-                                        int winStart, int maxPixels, boolean isCoding)
+                                        int winStart, int maxPixels, boolean isCoding, boolean justifyString)
 /* Draw a box scaled from chromosome to window coordinates with
    a codon or set of 3 or less bases drawn in the box. */
 {
@@ -81,11 +81,19 @@ if (zoomed)
         w = 1;
 
     if (chromEnd - chromStart == 3 && isCoding)
-        spreadBasesString(hvg,x1,y,w,height,whiteIndex(),
-		     font,text,strlen(text), TRUE);
+        {
+        if (justifyString)
+            spreadBasesString(hvg, x1, y, w, height, whiteIndex(),  font, text, strlen(text),  TRUE);
+        else
+            hvGfxTextCentered(hvg, x1, y, w, height, whiteIndex(), font, text);
+        }
     else if (chromEnd - chromStart < 3 && isCoding)
-        spreadBasesString(hvg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
-		     text,strlen(text), TRUE);
+        {
+        if (justifyString)
+            spreadBasesString(hvg, x1, y, w, height, cdsColor[CDS_PARTIAL_CODON], font, text, strlen(text), TRUE);
+        else
+            hvGfxTextCentered(hvg, x1, y, w, height, cdsColor[CDS_PARTIAL_CODON], font, text);
+        }
     else
         {
         int thisX,thisX2;
@@ -656,7 +664,7 @@ else
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = baseColorCodonsFromGenePred(lf, gp, colorStopStart);
+    sfList = baseColorCodonsFromGenePred(lf, gp, colorStopStart, FALSE);
     genePredFree(&gp);
     }
 return(sfList);
@@ -1000,7 +1008,9 @@ for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
         sf->start = winEnd - sf->start + winStart - 3;
         sf->end = sf->start + 3;
         }
-    sf->grayIx = codonToGrayIx(codon, sf->start % 6 < 3, NULL, FALSE, TRUE);
+    // Base offsets mod 6 for alternating colors: 0,1,2 --> first codon, 3,4,5 --> second codon.
+    bool codonFirstColor = (sf->start % 6 < 3);
+    sf->grayIx = codonToGrayIx(codon, codonFirstColor, NULL, FALSE, TRUE);
     zeroBytes(codon, 4);
     slAddHead(&sfList, sf);
     }
@@ -1009,7 +1019,7 @@ return sfList;
 }
 
 struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf, 
-	struct genePred *gp, boolean colorStopStart)
+        struct genePred *gp, boolean colorStopStart, boolean codonNumbering)
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary. */
@@ -1047,6 +1057,9 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 
     bool altColor = FALSE;
     unsigned cds5Prime = posStrand ? cdsStart : cdsEnd;
+    int width = winEnd - winStart;
+    // width cutoff really should be based on (a) how many codons this gene has, (2) the current font and (3) image width.
+    int codonIndex = !codonNumbering || width > 60 ? 0 : 1;
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
 	{
         int exonStart = starts[i];
@@ -1173,6 +1186,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 			codonToGrayIx(tempCodonSeq, altColor, &foundStart, 
 				      !posStrand, colorStopStart) :
 			GRAYIX_CDS_ERROR;
+                    sf->codonIndex = codonIndex;
 		    slAddHead(&sfList, sf);
 		    }
                 break;
@@ -1219,6 +1233,8 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
                 errAbort("%s: Too much dna (%d - %d = %d)<br>\n", lf->name, 
 			 currentEnd, currentStart, currentSize);
 
+            if (codonIndex)
+                sf->codonIndex = codonIndex++;
             slAddHead(&sfList, sf);
             if(posStrand)
                 currentStart = currentEnd;
@@ -1354,7 +1370,7 @@ if(mrnaS >= 0)
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, dyMrnaSeq->string,
-				    zoomedToBaseLevel, winStart, maxPixels, isCoding);
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
 	}
     else if (drawOpt == baseColorDrawItemCodons)
 	{
@@ -1374,7 +1390,7 @@ if(mrnaS >= 0)
 	    drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 					color, lf->score, font, mrnaCodon,
 					zoomedToCodonLevel, winStart,
-					maxPixels, isCoding);
+					maxPixels, isCoding, TRUE);
 	    }
 	else
 	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1389,7 +1405,7 @@ if(mrnaS >= 0)
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 
-				    zoomedToBaseLevel, winStart, maxPixels, isCoding);
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
 	freeMem(diffStr);
 	}
     else if (drawOpt == baseColorDrawDiffCodons)
@@ -1411,7 +1427,7 @@ if(mrnaS >= 0)
 		drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, 
 					    heightPer, color, lf->score, font,
 					    mrnaCodon, zoomedToCodonLevel,
-					    winStart, maxPixels, isCoding);
+					    winStart, maxPixels, isCoding, TRUE);
 		}
 	    else
 		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1443,8 +1459,10 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
                        Color originalColor)
 /* Draw codon/base-colored item. */
 {
-char codon[2] = " ";
+char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
+if (sf->codonIndex)
+    safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)
  * so don't waste time drawing the differences here: */
@@ -1456,7 +1474,7 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
     {
     drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score, font, codon, 
-                                zoomedToCodonLevel, winStart, maxPixels, TRUE);
+                                zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
     }
 else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons && drawOpt != baseColorDrawOff)
@@ -1816,7 +1834,7 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     if (zoomedToText)
         drawScaledBoxSampleWithText(hvg, sf->start, sf->end, scale, insideX, y,
 				    height, color, 1.0, font, codon, TRUE,
-				    winStart, maxPixels, TRUE);
+				    winStart, maxPixels, TRUE, TRUE);
     else
         /* zoomed in just enough to see colored boxes */
         drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y, height, color);

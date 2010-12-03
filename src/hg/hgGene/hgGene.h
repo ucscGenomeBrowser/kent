@@ -42,6 +42,7 @@ struct section
 
     /* Some FlyBase specific stuff. */
     char *flyBaseTable;	/* Which table to use. */
+    char *rgdGeneTable;	/* Which table to use. */
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
@@ -63,6 +64,10 @@ struct section *sequenceSection(struct sqlConnection *conn,
 struct section *swissProtCommentsSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create SwissProt comments section. */
+
+struct section *rgdGeneRawSection(struct sqlConnection *conn,
+        struct hash *sectionRa);
+/* Create rgdGeneRaw section */
 
 struct section *flyBaseRolesSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
@@ -109,6 +114,10 @@ struct section *altSpliceSection(struct sqlConnection *conn,
 /* Create altSplice section. */
 
 struct section *ctdSection(struct sqlConnection *conn, 
+	struct hash *sectionRa);
+/* Create CTD section. */
+
+struct section *ctdRgdGene2Section(struct sqlConnection *conn, 
 	struct hash *sectionRa);
 /* Create CTD section. */
 
@@ -174,6 +183,11 @@ boolean checkDatabases(char *databases);
 
 boolean isFly();
 /* Return true if organism is D. melanogaster. */
+
+boolean isRgdGene(struct sqlConnection *conn);
+/* Return true if the gene set is RGD Genes. */
+
+char *getRgdGeneUniProtAcc(char *genId, struct sqlConnection *conn);
 
 char *getFlyBaseId(struct sqlConnection *conn, char *geneId);
 /* Return flyBase ID of gene if any. */

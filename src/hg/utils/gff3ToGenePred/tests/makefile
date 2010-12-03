@@ -7,7 +7,7 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 
 all::
 
-test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest multCdsOutOfExonTest \
+test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest
 
 
@@ -21,6 +21,10 @@ noGeneMRnaTest: mkout
 
 geneMRnaHonorTest: mkout
 	${gff3ToGenePred} -honorStartStopCodons input/geneMRna.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+discontinuousTest: mkout
+	${gff3ToGenePred} input/discontinuous.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 # was only reporting the first error

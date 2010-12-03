@@ -53,37 +53,48 @@ if (genomeDb == NULL)
 safef(query, sizeof(query), "%s.knownToVisiGene", genomeDb);
 if (sqlTableExists(conn, query))
     {
-    struct slName *imageList, *image;
-    safef(query, sizeof(query), 
-        "select imageProbe.image from probe,imageProbe "
-	"where probe.gene=%d and imageProbe.probe=probe.id", geneId);
-    imageList = sqlQuickList(conn, query);
-    if (imageList != NULL)
-        {
-	struct dyString *dy = dyStringNew(0);
-	char *knownGene = NULL;
+    struct dyString *dy = dyStringNew(0);
+    char *knownGene = NULL;
+    if (sqlCountColumnsInTable(conn, query) == 3)
+	{
 	dyStringPrintf(dy, 
-	   "select name from %s.knownToVisiGene ", genomeDb);
-	dyStringAppend(dy,
-	   "where value in(");
-	for (image = imageList; image != NULL; image = image->next)
+	   "select name from %s.knownToVisiGene where geneId = %d", genomeDb, geneId);
+	}
+    else
+	{
+	struct slName *imageList, *image;
+	safef(query, sizeof(query), 
+	    "select imageProbe.image from probe,imageProbe "
+	    "where probe.gene=%d and imageProbe.probe=probe.id", geneId);
+	imageList = sqlQuickList(conn, query);
+	if (imageList != NULL)
 	    {
-	    dyStringPrintf(dy, "'%s'", image->name);
-	    if (image->next != NULL)
-	        dyStringAppendC(dy, ',');
+	    dyStringPrintf(dy, 
+	       "select name from %s.knownToVisiGene ", genomeDb);
+	    dyStringAppend(dy,
+	       "where value in(");
+	    for (image = imageList; image != NULL; image = image->next)
+		{
+		dyStringPrintf(dy, "'%s'", image->name);
+		if (image->next != NULL)
+		    dyStringAppendC(dy, ',');
+		}
+	    dyStringAppend(dy, ")");
+	    slFreeList(&imageList);
 	    }
-	dyStringAppend(dy, ")");
+	}
+    if (dy->stringSize > 0)
+	{
 	knownGene = sqlQuickString(conn, dy->string);
 	if (knownGene != NULL)
 	    {
 	    dyStringClear(dy);
 	    dyStringPrintf(dy, "../cgi-bin/hgGene?db=%s&hgg_gene=%s&hgg_chrom=none",
-	    	genomeDb, knownGene);
+		genomeDb, knownGene);
 	    url = dyStringCannibalize(&dy);
 	    }
-	dyStringFree(&dy);
-	slFreeList(&imageList);
 	}
+    dyStringFree(&dy);
     }
 freez(&genomeDb);
 return url;

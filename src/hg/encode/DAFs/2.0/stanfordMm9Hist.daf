@@ -1,12 +1,12 @@
 # Data Agreement File for Stanford/Yale ChIP-seq project for Histone Modification Experiments for mm9  
 
-#$Revision: 1.6 $
+#$Revision: 1.7 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated DDF should look like this:
-#files   view    cell   treatment    antibody        sex     age     strain  control replicate  setType controlId       seqPlatform     labVersion
+#files   view    cell   treatment    antibody        sex     age   control replicate  setType controlId       seqPlatform     labVersion
 
 
 #Explanation of DDF terms
@@ -36,7 +36,7 @@ lab               Stanford
 dataType          ChipSeq 
 compositeSuffix   SydhHist
 group             regulation
-variables         cell,strain, antibody, treatment, input
+variables         cell, antibody, treatment, control
 assembly          mm9
 
 medianFragmentLength 200

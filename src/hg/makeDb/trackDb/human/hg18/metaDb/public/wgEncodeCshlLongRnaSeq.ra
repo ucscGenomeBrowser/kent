@@ -8,7 +8,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -27,7 +27,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -46,7 +46,7 @@ dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -66,7 +66,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -85,7 +85,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -103,7 +103,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -121,7 +121,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -139,7 +139,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -158,7 +158,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -176,7 +176,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -194,7 +194,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -212,7 +212,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -230,7 +230,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -249,7 +249,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -267,7 +267,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -285,7 +285,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -303,7 +303,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -321,7 +321,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -340,7 +340,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -358,7 +358,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -377,7 +377,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep1Gm12878CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -395,7 +395,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep1K562CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -413,7 +413,7 @@ dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqRawDataRep1K562CytosolLongpolyaV2.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -431,7 +431,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep2Gm12878CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -449,7 +449,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep2K562CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2

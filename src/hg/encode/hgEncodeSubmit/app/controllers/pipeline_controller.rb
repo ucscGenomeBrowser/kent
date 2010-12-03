@@ -15,7 +15,7 @@ class PipelineController < ApplicationController
   before_filter :check_user_is_owner, :except => 
         [ :new, :create, :list, :show_active, :show_user, :show, 
         :valid_status, :load_status, :unload_status, :upload_status, 
-        :show_tools, :mass_tools, :mass_ftp, :mass_url ]
+        :show_tools, :mass_tools, :mass_ftp, :mass_url, :delete_archive ]
   
   layout 'main'
   
@@ -81,14 +81,16 @@ class PipelineController < ApplicationController
     end
     @errText = ""
     case @project.status
+      when "upload failed"
+	@errText = getUploadErrText(@project)
+      when "expand failed"
+	@errText = getExpandErrText(@project)
       when "validate failed"
         @errText = getValidateErrText(@project)
       when "load failed"
         @errText = getLoadErrText(@project)
       when "unload failed"
 	@errText = getUnloadErrText(@project)
-      when "upload failed"
-	@errText = getUploadErrText(@project)
       when "uploading"
 	# old wget method
 	#upText = getUploadErrText(@project)
@@ -161,6 +163,11 @@ class PipelineController < ApplicationController
     @errText = getUploadErrText(@project)
   end
 
+  def expand_status
+    @project = Project.find(params[:id])
+    @errText = getExpandErrText(@project)
+  end
+
   def show_daf
     @project = Project.find(params[:id])
     @dafName,@dafText = getDafText(@project)
@@ -210,7 +217,7 @@ class PipelineController < ApplicationController
       redirect_to :action => 'show', :id => @project.id
       return
     end
-    if (@project.status == "uploaded") or (@project.status == "validate failed")
+    if (@project.status == "expanded") or (@project.status == "validate failed")
       new_status @project, "validate requested"
       unless queue_job @project.id, "validate_background(#{@project.id}, \"#{allowReloads}\")"
         flash[:error] = "System error - queued_jobs save failed."
@@ -259,7 +266,7 @@ class PipelineController < ApplicationController
         if @project.project_archives.length == 0
 	  @project.status = "new"
 	else
-	  @project.status = "uploaded"
+	  @project.status = "expanded"
 	end
         new_status @project, @project.status
       end

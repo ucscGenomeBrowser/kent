@@ -18,10 +18,7 @@ report the number of sequencing reads covering that CpG and the percentage of th
 reads that are methylated.
 </p>
 
-<H2> Release Notes</H2>
-This is release 1 of this track.
-
-<h2>Track Conventions</h2>
+<h2>Display Conventions and Configuration</h2>
 Methylation status is represented with an 11-color gradient using the following convention:
 <ul>
 <li>red = 100% of molecules sequenced are methylated</li>
@@ -43,7 +40,16 @@ is set at 10X coverage.
 
 <a name="Methods"></a><h2>Methods</h2>
 DNA methylation at CpG sites was assayed with a modified version of Reduced 
-Representation Bisulfite Sequencing (RRBS; Meissner et al., 2008).
+Representation Bisulfite Sequencing (RRBS; Meissner <span style="font-style: italic">
+et al</span>., 2008).
+
+<h3>Growth protocol</h3>
+RRBS was performed on cell lines grown by many ENCODE production groups.
+The production group that grew the cells and isolated genomic DNA is
+indicated in the "obtainedBy" columns of the data table above. 
+RRBS was carried out by the Myers production group at 
+the HudsonAlpha Institute for Biotechnology.
+
 
 <h3>Isolation of genomic DNA</h3>
 Genomic DNA is isolated from biological replicates of each cell line
@@ -51,7 +57,7 @@ using the QIAGEN DNeasy Blood & Tissue Kit according to the instructions
 provided by the manufacturer. DNA concentrations for each genomic DNA
 preparation are determined using fluorescent DNA binding dye and a 
 fluorometer (Invitrogen Quant-iT dsDNA High Sensitivity Kit and 
-Qubit Fluorometer). Typically, 1 ug of DNA is used to make an RRBS library;
+Qubit Fluorometer). Typically, 1 &micro;g of DNA is used to make an RRBS library;
 however, we have also had success in making libraries with 200 ng genomic
 DNA from rare or precious samples.
 
@@ -75,7 +81,7 @@ thymines resulting in a thymine in the PCR products wherever an
 unmethylated cytosine existed in the genomic DNA. The sample is
 now ready for sequencing on the Illumina sequencing platform.
 These libraries were sequenced with an Illumina Genome Analyzer
-IIx according to the manufacturer's recommendations.
+IIx according to the manufacturer's recommendations
 <A HREF="http://hudsonalpha.org/myers-lab/protocols" TARGET=_BLANK>here</A>.</P> 
 
 <h3>Data analysis</h3>
@@ -93,47 +99,40 @@ methylation and number of reads is reported for each CpG.
 
 <a name="Credits"></a><h2>Credits</h2>
 <p>
-<li>Dr. K-T Varley; 
+<li>
 <A HREF="mailto:&#107;t&#118;&#97;&#114;&#108;&#101;y&#64;&#104;&#117;&#100;&#115;on&#97;&#108;&#112;&#104;&#97;.
-&#111;&#114;&#103;">
-&#107;t&#118;&#97;&#114;&#108;&#101;y&#64;&#104;&#117;&#100;&#115;on&#97;&#108;&#112;&#104;&#97;.
-&#111;&#114;&#103;</A></li>
+&#111;&#114;&#103;">Dr. K-T Varley</A></li>
 <!-- above address is ktvarley at hudsonalpha.org -->
-<li>Dr. Jason Gertz; 
+<li>
 <A HREF="mailto:&#106;g&#101;&#114;&#116;z&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;">
-&#106;g&#101;&#114;&#116;z&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;</A></li>
+&#111;&#114;&#103;">Dr. Jason Gertz</A></li>
 <!-- above address is jgertz at hudsonalpha.org -->
-<li>Dr. Richard M. Myers; 
+<li>
 <A HREF="mailto:&#114;m&#121;&#101;&#114;s&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;">
-&#114;m&#121;&#101;&#114;s&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;</A></ul>
+&#111;&#114;&#103;">Dr. Richard M. Myers</A></ul>
 <!-- above address is rmyers at hudsonalpha.org -->
 
 <p>
 Contact:
-Dr. Florencia Pauli;<A HREF="mailto:&#102;&#112;a&#117;l&#105;&#64;&#104;ud&#115;&#111;&#110;&#97;l&#112;&#104;&#97;.
-&#111;&#114;&#103;">
-&#102;&#112;a&#117;l&#105;&#64;&#104;ud&#115;&#111;&#110;&#97;l&#112;&#104;&#97;.
-&#111;&#114;&#103;</A>
+<A HREF="mailto:&#102;&#112;a&#117;l&#105;&#64;&#104;ud&#115;&#111;&#110;&#97;l&#112;&#104;&#97;.
+&#111;&#114;&#103;">Dr. Florencia Pauli</A>
 <!-- above address is rrauch at stanford.edu -->
 <br />
 
 <H2> References </H2>
 <p>
  Meissner A, Mikkelsen TS, Gu H, Wernig M, Hanna J, 
- Sivachenko A, Zhang X, Bernstein BE, Nusbaum C, Jaffe DB, Gnirke A, Jaenisch R, Lander ES.                                           
+ Sivachenko A, Zhang X, Bernstein BE, Nusbaum C, Jaffe DB, <span style="font-style: italic">
+et al</span>.
  <A HREF="http://www.nature.com/nature/journal/v454/n7205/full/nature07107.html"
  class="external text" title="http://www.nature.com/nature/journal/v454/n7205/full/nature07107.html"
  rel="nofollow" TARGET = _BLANK>Genome-scale DNA methylation maps of pluripotent and 
  differentiated cells</A>.
-    <em>Nature</em>  2008 Aug 7;454(7205):766-70.
+    <em>Nature</em>. 2008 Aug 7;454(7205):766-70.
 </p>
 
 <P>
-Meissner A, Gnirke A, Bell GW, Ramsahoye B, Lander ES, Jaenisch R
+Meissner A, Gnirke A, Bell GW, Ramsahoye B, Lander ES, Jaenisch R.
 <A HREF="http://nar.oxfordjournals.org/content/33/18/5868.full"
 class="external text" title="http://nar.oxfordjournals.org/content/33/18/5868.full"
 rel="nofollow" TARGET = _BLANK>Reduced representation bisulfite sequencing for 

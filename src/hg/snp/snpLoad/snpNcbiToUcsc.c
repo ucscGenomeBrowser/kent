@@ -853,9 +853,7 @@ if (expanded == NULL)
 
 dyStringClear(expanded);
 /* Common case: no expansion required; don't bother with regex. */
-if (isEmpty(refNcbiEnc))
-    lineFileAbort(lf, "Empty (as opposed to missing) refNcbi value.\n");
-if (isMissing(refNcbiEnc))
+if (isEmpty(refNcbiEnc) || isMissing(refNcbiEnc))
     {
     dyStringAppend(expanded, "unknown");
     writeError("Missing refNCBI");
@@ -979,7 +977,7 @@ else
     }
 }
 
-#define MAX_SNPSIZE 1024
+#define MAX_SNPSIZE 16 * 1024
 
 char *processUcscAllele(struct lineFile *lf, char *refNCBI, char strand,
 			struct twoBitFile *twoBit)
@@ -1226,7 +1224,7 @@ const char *observedNamedFormat =
     "[0-9]+ ?BP ((INDEL|INSERTION|DELETED))?\\)"
     "\\/-(\\/[ACGT]+)*$";
 const char *observedNamedOddballFormat =
-    "^\\([A-Z0-9 ]+\\)?(\\/\\([A-Z0-9 ]+\\))*" /* there's all sorts of stuff in there now */
+    "^\\([A-Z0-9 .:=-]+\\)?(\\/\\([A-Z0-9 ]+\\))*" /* there's all sorts of stuff in there now */
     "(\\/-)?(\\/\\(?[A-Z0-9 ]+)*\\)*$";
 /* class=no-var (6): no SNPs use this class (intended for null results). */
 const char *observedMixedFormat =
@@ -1513,7 +1511,8 @@ struct coords
  * hashing would be more memory efficient.  Until then, just use an array 
  * as big as the hash would need to alloc. */
 /* SNP130: now 18M items, max ID 74315166. */
-#define MAX_SNPID 80 * 1024 * 1024
+/* SNP132: 30M items, max ID 121909398 */
+#define MAX_SNPID 120 * 1024 * 1024
 int lastRsId = 0;
 struct coords **mappings = NULL;
 
