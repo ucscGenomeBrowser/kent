@@ -304,7 +304,7 @@ view Signal
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -328,7 +328,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -352,7 +352,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12CtcfIggyalePk
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -376,7 +376,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -399,7 +399,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -422,7 +422,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleSig
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
@@ -1004,7 +1004,7 @@ view Signal
 metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1028,7 +1028,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1052,7 +1052,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsCh12P300IggrabPk
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1076,7 +1076,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1099,7 +1099,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1122,7 +1122,7 @@ view RawData
 metaObject wgEncodeSydhTfbsCh12P300IggrabSig
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
@@ -1707,21 +1707,21 @@ tableName wgEncodeSydhTfbsCh12Usf2IggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelCmybh141StdAlnRep1
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
 objType file
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141StdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelCmybh141StdAlnRep1
+parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1729,21 +1729,21 @@ subId 2542
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCmybh141StdAlnRep2
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
 objType file
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141StdAlnRep2.bam
+fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelCmybh141StdAlnRep2
+parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1751,43 +1751,43 @@ subId 2542
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelCmybh141StdPk
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabPk
 objType table
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelCmybh141IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2542
-tableName wgEncodeSydhTfbsMelCmybh141StdPk
+tableName wgEncodeSydhTfbsMelCmybh141IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelCmybh141StdRawDataRep1
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1
 objType file
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141StdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelCmybh141StdRawSignalRep1
+parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1795,21 +1795,21 @@ subId 2542
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCmybh141StdRawDataRep2
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2
 objType file
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141StdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelCmybh141StdRawSignalRep2
+parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1817,25 +1817,25 @@ subId 2542
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelCmybh141StdSig
+metaObject wgEncodeSydhTfbsMelCmybh141IggrabSig
 objType table
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMelCmybh141StdSig.bigWig
+fileName wgEncodeSydhTfbsMelCmybh141IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2542
-tableName wgEncodeSydhTfbsMelCmybh141StdSig
+tableName wgEncodeSydhTfbsMelCmybh141IggrabSig
 treatment None
 view Signal
 
@@ -1982,7 +1982,7 @@ view Signal
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2006,7 +2006,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2030,7 +2030,7 @@ view Alignments
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdPk
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2054,7 +2054,7 @@ view Peaks
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep1
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2077,7 +2077,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep2
 objType file
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2100,7 +2100,7 @@ view RawData
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdSig
 objType table
 age immortalized
-antibody CTCF
+antibody CTCF_(C-20)
 cell MEL
 composite wgEncodeSydhTfbs
 control std
@@ -2403,20 +2403,20 @@ tableName wgEncodeSydhTfbsMelGata1IggratSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdAln
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleAln
 objType file
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhTfbsMelInputDmso20StdAln.bam.bai
-fileName wgEncodeSydhTfbsMelInputDmso20StdAln.bam
+fileIndex wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam.bai
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleAln.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2426,19 +2426,19 @@ subId 1862
 treatment DMSO_2.0pct
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdRawData
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleRawData
 objType file
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20StdRawData.fastq.gz
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleRawData.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2448,19 +2448,19 @@ subId 1862
 treatment DMSO_2.0pct
 view RawData
 
-metaObject wgEncodeSydhTfbsMelInputDmso20StdSig
+metaObject wgEncodeSydhTfbsMelInputDmso20IggyaleSig
 objType table
 age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/DMSO_2.0pct/Input/std
+control IgG-Yale
+controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20StdSig.bigWig
+fileName wgEncodeSydhTfbsMelInputDmso20IggyaleSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2468,7 +2468,7 @@ project wgEncode
 setType input
 strain Unknown
 subId 1862
-tableName wgEncodeSydhTfbsMelInputDmso20StdSig
+tableName wgEncodeSydhTfbsMelInputDmso20IggyaleSig
 treatment DMSO_2.0pct
 view Signal
 
@@ -2862,20 +2862,20 @@ tableName wgEncodeSydhTfbsMelJundIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelMaxIggmusAlnRep1
+metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep1
 objType file
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2886,20 +2886,20 @@ subId 1863
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelMaxIggmusAlnRep2
+metaObject wgEncodeSydhTfbsMelMaxIggrabAlnRep2
 objType file
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMelMaxIggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2910,19 +2910,19 @@ subId 1863
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelMaxIggmusPk
+metaObject wgEncodeSydhTfbsMelMaxIggrabPk
 objType table
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggmusPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelMaxIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -2930,23 +2930,23 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1863
-tableName wgEncodeSydhTfbsMelMaxIggmusPk
+tableName wgEncodeSydhTfbsMelMaxIggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelMaxIggmusRawDataRep1
+metaObject wgEncodeSydhTfbsMelMaxIggrabRawDataRep1
 objType file
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggmusRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelMaxIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2957,19 +2957,19 @@ subId 1863
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelMaxIggmusRawDataRep2
+metaObject wgEncodeSydhTfbsMelMaxIggrabRawDataRep2
 objType file
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggmusRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelMaxIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -2980,19 +2980,19 @@ subId 1863
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelMaxIggmusSig
+metaObject wgEncodeSydhTfbsMelMaxIggrabSig
 objType table
 age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggmusSig.bigWig
+fileName wgEncodeSydhTfbsMelMaxIggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3000,25 +3000,25 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1863
-tableName wgEncodeSydhTfbsMelMaxIggmusSig
+tableName wgEncodeSydhTfbsMelMaxIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelNelfeStdAlnRep1
+metaObject wgEncodeSydhTfbsMelNelfeIggrabAlnRep1
 objType file
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeStdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelNelfeIggrabRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelNelfeStdAlnRep1
+parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3026,21 +3026,21 @@ subId 2543
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelNelfeStdAlnRep2
+metaObject wgEncodeSydhTfbsMelNelfeIggrabAlnRep2
 objType file
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeStdAlnRep2.bam
+fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelNelfeStdAlnRep2
+parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3048,43 +3048,43 @@ subId 2543
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelNelfeStdPk
+metaObject wgEncodeSydhTfbsMelNelfeIggrabPk
 objType table
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeStdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelNelfeIggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2543
-tableName wgEncodeSydhTfbsMelNelfeStdPk
+tableName wgEncodeSydhTfbsMelNelfeIggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelNelfeStdRawDataRep1
+metaObject wgEncodeSydhTfbsMelNelfeIggrabRawDataRep1
 objType file
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeStdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelNelfeStdRawSignalRep1
+parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3092,21 +3092,21 @@ subId 2543
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelNelfeStdRawDataRep2
+metaObject wgEncodeSydhTfbsMelNelfeIggrabRawDataRep2
 objType file
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeStdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelNelfeStdRawSignalRep2
+parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3114,42 +3114,42 @@ subId 2543
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelNelfeStdSig
+metaObject wgEncodeSydhTfbsMelNelfeIggrabSig
 objType table
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelNelfeStdSig.bigWig
+fileName wgEncodeSydhTfbsMelNelfeIggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2543
-tableName wgEncodeSydhTfbsMelNelfeStdSig
+tableName wgEncodeSydhTfbsMelNelfeIggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep1
+metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep1.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3160,20 +3160,20 @@ subId 1864
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep2
+metaObject wgEncodeSydhTfbsMelP300IggrabAlnRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsMelP300IggrabAlnRep2.bam
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3184,19 +3184,19 @@ subId 1864
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelP300IggmusPk
+metaObject wgEncodeSydhTfbsMelP300IggrabPk
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelP300IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3204,23 +3204,23 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1864
-tableName wgEncodeSydhTfbsMelP300IggmusPk
+tableName wgEncodeSydhTfbsMelP300IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep1
+metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep1
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3231,19 +3231,19 @@ subId 1864
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep2
+metaObject wgEncodeSydhTfbsMelP300IggrabRawDataRep2
 objType file
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelP300IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford-m
 project wgEncode
@@ -3254,19 +3254,19 @@ subId 1864
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelP300IggmusSig
+metaObject wgEncodeSydhTfbsMelP300IggrabSig
 objType table
 age immortalized
-antibody p300
+antibody p300_(N-15)
 cell MEL
 composite wgEncodeSydhTfbs
-control IgG-mus
-controlId MEL/None/Input/IgG-mus
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusSig.bigWig
+fileName wgEncodeSydhTfbsMelP300IggrabSig.bigWig
 grant Snyder
 lab Stanford-m
 labVersion PeakSeq1.0
@@ -3274,7 +3274,7 @@ project wgEncode
 setType exp
 strain Unknown
 subId 1864
-tableName wgEncodeSydhTfbsMelP300IggmusSig
+tableName wgEncodeSydhTfbsMelP300IggrabSig
 treatment None
 view Signal
 
@@ -3550,21 +3550,21 @@ tableName wgEncodeSydhTfbsMelRad21Dmso20StdSig
 treatment DMSO_2.0pct
 view Signal
 
-metaObject wgEncodeSydhTfbsMelRad21StdAlnRep1
+metaObject wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdAlnRep1.bam
+fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdAlnRep1
+parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3572,21 +3572,21 @@ subId 2541
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21StdAlnRep2
+metaObject wgEncodeSydhTfbsMelRad21IggrabAlnRep2
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdAlnRep2.bam
+fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdAlnRep2
+parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3594,43 +3594,43 @@ subId 2541
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsMelRad21StdPk
+metaObject wgEncodeSydhTfbsMelRad21IggrabPk
 objType table
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsMelRad21IggrabPk.narrowPeak.gz
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2541
-tableName wgEncodeSydhTfbsMelRad21StdPk
+tableName wgEncodeSydhTfbsMelRad21IggrabPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsMelRad21StdRawDataRep1
+metaObject wgEncodeSydhTfbsMelRad21IggrabRawDataRep1
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdRawSignalRep1
+parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3638,21 +3638,21 @@ subId 2541
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21StdRawDataRep2
+metaObject wgEncodeSydhTfbsMelRad21IggrabRawDataRep2
 objType file
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsMelRad21StdRawSignalRep2
+parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3660,25 +3660,25 @@ subId 2541
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsMelRad21StdSig
+metaObject wgEncodeSydhTfbsMelRad21IggrabSig
 objType table
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
-control std
-controlId MEL/None/Input/std
+control IgG-rab
+controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
-fileName wgEncodeSydhTfbsMelRad21StdSig.bigWig
+fileName wgEncodeSydhTfbsMelRad21IggrabSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2541
-tableName wgEncodeSydhTfbsMelRad21StdSig
+tableName wgEncodeSydhTfbsMelRad21IggrabSig
 treatment None
 view Signal
 
@@ -3964,4 +3964,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -2037779363
+# MAGIC: 637541770

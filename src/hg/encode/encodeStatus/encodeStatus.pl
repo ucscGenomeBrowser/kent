@@ -71,19 +71,9 @@ for my $i (0 .. @statuses - 1) {
         $db->execute("INSERT INTO project_status_logs (project_id, status, created_at, who) \
                         VALUES (?, ?, NOW(), ?)", $id, $newStatus, getlogin());
         print "Project '$project' successfully updated from '$oldStatus' to '$newStatus'\n";
-        if($newStatus eq 'approved') {
-            my $pushQFile = "$dir/out/$Encode::pushQFile";
-            if(-e $pushQFile) {
-                # We probably s/d change the code to just run this once we enter production phase (if $instance eq 'prod')
-                print <<END;
-You must execute this command to add the pushQ entry:
-
-hgsql --host=mysqlbeta qapushq < $pushQFile
-END
-            } else {
-                die "Can't find pushQFile '$pushQFile'";
-            }
-        }
+# There used to be a report that said :
+# You must execute this command to add the pushQ entry: hgsql --host=mysqlbeta qapushq < $pushQFile END
+# This is not how we enter things in the pushQ, so I removed this message.
         exit 0;
     }
 }
