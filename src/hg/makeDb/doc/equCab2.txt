@@ -2135,7 +2135,7 @@ True on other chromosomes; e.g.: RefSeq Gene TPH2 - chr28:559352-671879
 
 Update_time: 2008-09-11 12:08:02
 
-markd says don't worry about it - probably a blat change.
+# markd says don't worry about it - probably a blat change.
 
 ##########################################################################
 #  re-verify all.joiner entries (DONE - 2008-09-15 - larrym)
@@ -2419,6 +2419,47 @@ TMPDIR=/scratch/tmp
 
     cat fb.oviAri1.chainEquCab2Link.txt
     #   940763026 bases of 1201271277 (78.314%) in intersection
+
+
+############################################################################
+# DBSNP BUILD 130 -> SNP130 (IN PROGRESS 12/3/10 angie)
+    mkdir -p /hive/data/outside/dbSNP/130/horse
+    cd /hive/data/outside/dbSNP/130/horse
+    cat > config.ra <<EOF
+db equCab2
+build 130
+buildAssembly 2_1
+orgDir horse_9796
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log &
+    tail -f do.log
+#*** b130_ContigInfo_2_1 has 9688 contig_acc values
+#*** that are not in /hive/data/genomes/equCab2/chrom.sizes .
+#*** They are listed in /hive/data/outside/dbSNP/130/horse/dbSnpContigsNotInUcsc.txt
+#
+#*** b130_ContigInfo_2_1 has coords for 84 sequences; these have been written to
+#*** /hive/data/outside/dbSNP/130/horse/suggested.lft .
+#*** 9604 lines of b130_ContigInfo_2_1.bcp.gz either had no lift-coords
+#*** or had unrecognized chrom names; see 
+#*** /hive/data/outside/dbSNP/130/horse/cantLiftUpSeqNames.txt .
+#
+#*** You must account for those in config.ra, in the liftUp file
+#*** and/or the ignoreDbSnpContigs regex.
+#*** Then run again with -continue=translate .
+
+    # suggested.lft looks reasonable.  We don't already have an equivalent
+    # in equCab2/jkStuff
+    mv suggested.lft /hive/data/genomes/equCab2/jkStuff/liftNcbiContigs.lft
+    echo "liftUp /hive/data/genomes/equCab2/jkStuff/liftNcbiContigs.lft" \
+      >> config.ra
+    # cantLiftUpSeqNames.txt seems to be all-Un, and Un seems like a specific
+    # enough string to safely use with egrep -vw (see doDbSnp.pl -help).
+    echo "ignoreDbSnpContigs Un" >> config.ra
+    # Try again with updated config:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=translate >>& do.log &
+    tail -f do.log
+
+# doDbSnp.pl still needs some debugging, to be continued...
 
 
 ############################################################################

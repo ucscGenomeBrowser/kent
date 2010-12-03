@@ -12339,11 +12339,12 @@ hgLoadBed hg19 rnaCluster chrom/*.bed
     wg $ftpSnpDb/organism_data/b132_SNPMapInfo_37_1.bcp.gz
     # SNP has univar_id, validation status and heterozygosity
     wg $ftpSnpDb/organism_data/SNP.bcp.gz
-    # New info as of 132: allele freq, 'clinical' bit, submitted SNP info
+    # New info as of 132: allele freq, 'clinical' bit, SNP submitter handles
     wg $ftpSnpDb/organism_data/SNPAlleleFreq.bcp.gz
     wg $ftpSnpDb/organism_data/SNP_bitfield.bcp.gz
     wg $ftpSnpDb/organism_data/Batch.bcp.gz
     wg $ftpSnpDb/organism_data/SubSNP.bcp.gz
+    wg $ftpSnpDb/organism_data/SNPSubSNPLink.bcp.gz
 
     # Get schema
     cd /hive/data/outside/dbSNP/132/human/schema
