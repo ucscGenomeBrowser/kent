@@ -10867,7 +10867,8 @@ else
 }
 
 /* reserve space no more than 20 unique OMIM entries */
-char omimGeneBuffer[2000];
+#define OMIM_MAX_DESC_LEN 160
+char omimGeneBuffer[20 * OMIM_MAX_DESC_LEN];
 
 char *omimGeneDiseaseList(struct track *tg, struct bed *item)
 /* Return list of diseases associated with a OMIM entry */
@@ -10897,7 +10898,7 @@ while ((row != NULL) && i<20)
 	safef(chp, 3, "; ");
 	chp++;chp++;
 	}
-    safef(chp, 100, "%s", row[0]);
+    safecpy(chp, OMIM_MAX_DESC_LEN, row[0]);
     chp = chp+strlen(row[0]);
     row = sqlNextRow(sr);
     i++;
