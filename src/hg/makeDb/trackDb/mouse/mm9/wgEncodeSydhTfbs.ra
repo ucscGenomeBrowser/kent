@@ -142,22 +142,22 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1865 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelCtcfDmso20StdPk
+	        track wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
 	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=CTCFC20 cellType=MEL control=std treatment=DMSO20
+	        subGroups view=Peaks factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=1857 dateSubmitted=2010-07-09
 
-	        track wgEncodeSydhTfbsMelRad21Dmso20StdPk
+	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 D Pk
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=RAD21 cellType=MEL control=std treatment=DMSO20
+	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
 	        # subId=2539 dateSubmitted=2010-10-20
@@ -600,12 +600,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1865 dateSubmitted=2010-07-08
 
-	        track wgEncodeSydhTfbsMelCtcfDmso20StdSig
+	        track wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=CTCFC20 cellType=MEL control=std treatment=DMSO20
+	        subGroups view=Signal factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type bigWig 1.000000 93856.000000
 	        color 46,0,184
 	        # subId=1857 dateSubmitted=2010-07-09
@@ -620,12 +620,12 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=1862 dateSubmitted=2010-07-09
 
-	        track wgEncodeSydhTfbsMelRad21Dmso20StdSig
+	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
 	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 D Sg
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=RAD21 cellType=MEL control=std treatment=DMSO20
+	        subGroups view=Signal factor=RAD21 cellType=MEL control=IGGrab treatment=DMSO20
 	        type bigWig 1.000000 64232.000000
 	        color 46,0,184
 	        # subId=2539 dateSubmitted=2010-10-20
