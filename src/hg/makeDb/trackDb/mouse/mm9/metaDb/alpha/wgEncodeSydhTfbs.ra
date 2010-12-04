@@ -15,6 +15,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 tableName wgEncodeSydh
@@ -39,6 +40,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
@@ -62,6 +64,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
@@ -85,6 +88,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1157
 tableName wgEncodeSydhTfbsCh12CjunIggrabPk
@@ -109,6 +113,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
@@ -132,6 +137,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
@@ -155,6 +161,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1157
 tableName wgEncodeSydhTfbsCh12CjunIggrabSig
@@ -179,6 +186,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
@@ -202,6 +210,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
@@ -225,6 +234,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1159
 tableName wgEncodeSydhTfbsCh12CmycIggrabPk
@@ -249,6 +259,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
@@ -272,6 +283,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
@@ -295,6 +307,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1159
 tableName wgEncodeSydhTfbsCh12CmycIggrabSig
@@ -320,6 +333,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
@@ -344,6 +358,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
@@ -367,6 +382,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1858
 tableName wgEncodeSydhTfbsCh12CtcfIggyalePk
@@ -391,6 +407,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
@@ -414,6 +431,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
@@ -437,6 +455,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1858
 tableName wgEncodeSydhTfbsCh12CtcfIggyaleSig
@@ -461,6 +480,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
@@ -484,6 +504,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
@@ -507,6 +528,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1153
 tableName wgEncodeSydhTfbsCh12E2f4IggrabPk
@@ -531,6 +553,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
@@ -554,6 +577,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
@@ -577,6 +601,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1153
 tableName wgEncodeSydhTfbsCh12E2f4IggrabSig
@@ -600,6 +625,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1154
 treatment None
@@ -622,6 +648,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1154
 treatment None
@@ -645,6 +672,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1154
 tableName wgEncodeSydhTfbsCh12InputIggmusSig
@@ -668,6 +696,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1125
 treatment None
@@ -690,6 +719,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1125
 treatment None
@@ -713,6 +743,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1125
 tableName wgEncodeSydhTfbsCh12InputIggrabSig
@@ -737,6 +768,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
@@ -760,6 +792,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
@@ -783,6 +816,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1126
 tableName wgEncodeSydhTfbsCh12JundIggrabPk
@@ -807,6 +841,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
@@ -830,6 +865,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
@@ -853,6 +889,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1126
 tableName wgEncodeSydhTfbsCh12JundIggrabSig
@@ -878,6 +915,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
@@ -902,6 +940,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
@@ -925,6 +964,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1859
 tableName wgEncodeSydhTfbsCh12MaxIggrabPk
@@ -949,6 +989,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
@@ -972,6 +1013,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
@@ -995,6 +1037,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1859
 tableName wgEncodeSydhTfbsCh12MaxIggrabSig
@@ -1020,6 +1063,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
@@ -1044,6 +1088,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
@@ -1067,6 +1112,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1855
 tableName wgEncodeSydhTfbsCh12P300IggrabPk
@@ -1091,6 +1137,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
@@ -1114,6 +1161,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
@@ -1137,6 +1185,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1855
 tableName wgEncodeSydhTfbsCh12P300IggrabSig
@@ -1161,6 +1210,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
@@ -1184,6 +1234,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
@@ -1207,6 +1258,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1155
 tableName wgEncodeSydhTfbsCh12Pol2IggmusPk
@@ -1231,6 +1283,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
@@ -1254,6 +1307,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
@@ -1277,6 +1331,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1155
 tableName wgEncodeSydhTfbsCh12Pol2IggmusSig
@@ -1302,6 +1357,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
@@ -1326,6 +1382,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
@@ -1349,6 +1406,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 tableName wgEncodeSydhTfbsCh12Rad21IggrabPk
@@ -1373,6 +1431,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
@@ -1396,6 +1455,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
@@ -1419,6 +1479,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1860
 tableName wgEncodeSydhTfbsCh12Rad21IggrabSig
@@ -1443,6 +1504,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
@@ -1466,6 +1528,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
@@ -1489,6 +1552,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1156
 tableName wgEncodeSydhTfbsCh12TbpIggmusPk
@@ -1513,6 +1577,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
@@ -1536,6 +1601,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
@@ -1559,6 +1625,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1156
 tableName wgEncodeSydhTfbsCh12TbpIggmusSig
@@ -1584,6 +1651,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
@@ -1608,6 +1676,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
@@ -1631,6 +1700,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1861
 tableName wgEncodeSydhTfbsCh12Usf2IggmusPk
@@ -1655,6 +1725,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
@@ -1678,6 +1749,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
@@ -1701,6 +1773,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1861
 tableName wgEncodeSydhTfbsCh12Usf2IggmusSig
@@ -1709,6 +1782,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
 objType file
+age immortalized
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1725,12 +1799,15 @@ parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2542
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
 objType file
+age immortalized
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1747,12 +1824,15 @@ parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2542
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabPk
 objType table
+age immortalized
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1768,6 +1848,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2542
 tableName wgEncodeSydhTfbsMelCmybh141IggrabPk
 treatment None
@@ -1775,6 +1857,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1
 objType file
+age immortalized
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1791,12 +1874,15 @@ parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2542
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2
 objType file
+age immortalized
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1813,12 +1899,15 @@ parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2542
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelCmybh141IggrabSig
 objType table
+age immortalized
 antibody c-Myb_(H-141)
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1834,6 +1923,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2542
 tableName wgEncodeSydhTfbsMelCmybh141IggrabSig
 treatment None
@@ -1857,6 +1948,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1163
 treatment None
@@ -1880,6 +1972,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1163
 treatment None
@@ -1903,6 +1996,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1163
 tableName wgEncodeSydhTfbsMelCmycIggrabPk
@@ -1927,6 +2021,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1163
 treatment None
@@ -1950,6 +2045,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1163
 treatment None
@@ -1973,6 +2069,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1163
 tableName wgEncodeSydhTfbsMelCmycIggrabSig
@@ -1998,6 +2095,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1857
 treatment DMSO_2.0pct
@@ -2022,6 +2120,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1857
 treatment DMSO_2.0pct
@@ -2045,6 +2144,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1857
 tableName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
@@ -2069,6 +2169,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1857
 treatment DMSO_2.0pct
@@ -2092,6 +2193,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1857
 treatment DMSO_2.0pct
@@ -2115,6 +2217,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1857
 tableName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
@@ -2140,6 +2243,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1193
 treatment None
@@ -2164,6 +2268,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1193
 treatment None
@@ -2187,6 +2292,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1193
 tableName wgEncodeSydhTfbsMelE2f4IggrabPk
@@ -2211,6 +2317,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1193
 treatment None
@@ -2234,6 +2341,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1193
 treatment None
@@ -2257,6 +2365,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1193
 tableName wgEncodeSydhTfbsMelE2f4IggrabSig
@@ -2281,6 +2390,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1165
 treatment None
@@ -2304,6 +2414,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1165
 treatment None
@@ -2327,6 +2438,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1165
 tableName wgEncodeSydhTfbsMelGata1IggratPk
@@ -2351,6 +2463,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1165
 treatment None
@@ -2374,6 +2487,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1165
 treatment None
@@ -2397,6 +2511,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1165
 tableName wgEncodeSydhTfbsMelGata1IggratSig
@@ -2421,6 +2536,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1862
 treatment DMSO_2.0pct
@@ -2443,6 +2559,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1862
 treatment DMSO_2.0pct
@@ -2466,6 +2583,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1862
 tableName wgEncodeSydhTfbsMelInputDmso20IggyaleSig
@@ -2489,6 +2607,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1162
 treatment None
@@ -2511,6 +2630,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1162
 treatment None
@@ -2534,6 +2654,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1162
 tableName wgEncodeSydhTfbsMelInputIggmusSig
@@ -2557,6 +2678,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1164
 treatment None
@@ -2579,6 +2701,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1164
 treatment None
@@ -2602,6 +2725,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1164
 tableName wgEncodeSydhTfbsMelInputIggrabSig
@@ -2625,6 +2749,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1167
 treatment None
@@ -2647,6 +2772,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1167
 treatment None
@@ -2670,6 +2796,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1167
 tableName wgEncodeSydhTfbsMelInputIggratSig
@@ -2693,6 +2820,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -2715,6 +2843,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -2739,6 +2868,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1192
 treatment None
@@ -2763,6 +2893,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1192
 treatment None
@@ -2786,6 +2917,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1192
 tableName wgEncodeSydhTfbsMelJundIggrabPk
@@ -2810,6 +2942,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1192
 treatment None
@@ -2833,6 +2966,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1192
 treatment None
@@ -2856,6 +2990,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1192
 tableName wgEncodeSydhTfbsMelJundIggrabSig
@@ -2881,6 +3016,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1863
 treatment None
@@ -2905,6 +3041,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1863
 treatment None
@@ -2928,6 +3065,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1863
 tableName wgEncodeSydhTfbsMelMaxIggrabPk
@@ -2952,6 +3090,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1863
 treatment None
@@ -2975,6 +3114,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1863
 treatment None
@@ -2998,6 +3138,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1863
 tableName wgEncodeSydhTfbsMelMaxIggrabSig
@@ -3006,6 +3147,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelNelfeIggrabAlnRep1
 objType file
+age immortalized
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3022,12 +3164,15 @@ parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2543
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelNelfeIggrabAlnRep2
 objType file
+age immortalized
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3044,12 +3189,15 @@ parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2543
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelNelfeIggrabPk
 objType table
+age immortalized
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3065,6 +3213,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2543
 tableName wgEncodeSydhTfbsMelNelfeIggrabPk
 treatment None
@@ -3072,6 +3222,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelNelfeIggrabRawDataRep1
 objType file
+age immortalized
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3088,12 +3239,15 @@ parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2543
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelNelfeIggrabRawDataRep2
 objType file
+age immortalized
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3110,12 +3264,15 @@ parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2543
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelNelfeIggrabSig
 objType table
+age immortalized
 antibody NELFe
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3131,6 +3288,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2543
 tableName wgEncodeSydhTfbsMelNelfeIggrabSig
 treatment None
@@ -3155,6 +3314,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1864
 treatment None
@@ -3179,6 +3339,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1864
 treatment None
@@ -3202,6 +3363,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1864
 tableName wgEncodeSydhTfbsMelP300IggrabPk
@@ -3226,6 +3388,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1864
 treatment None
@@ -3249,6 +3412,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1864
 treatment None
@@ -3272,6 +3436,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1864
 tableName wgEncodeSydhTfbsMelP300IggrabSig
@@ -3296,6 +3461,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1161
 treatment None
@@ -3319,6 +3485,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1161
 treatment None
@@ -3342,6 +3509,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1161
 tableName wgEncodeSydhTfbsMelPol2IggmusPk
@@ -3366,6 +3534,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1161
 treatment None
@@ -3389,6 +3558,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1161
 treatment None
@@ -3412,6 +3582,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1161
 tableName wgEncodeSydhTfbsMelPol2IggmusSig
@@ -3420,6 +3591,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3436,12 +3608,15 @@ parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2539
 treatment DMSO_2.0pct
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3458,12 +3633,15 @@ parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2539
 treatment DMSO_2.0pct
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 objType table
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3479,6 +3657,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2539
 tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 treatment DMSO_2.0pct
@@ -3486,6 +3666,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3502,12 +3683,15 @@ parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2539
 treatment DMSO_2.0pct
 view RawData
 
 metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3524,12 +3708,15 @@ parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2539
 treatment DMSO_2.0pct
 view RawData
 
 metaObject wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
 objType table
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3545,6 +3732,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2539
 tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
 treatment DMSO_2.0pct
@@ -3552,6 +3741,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3568,12 +3758,15 @@ parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2541
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelRad21IggrabAlnRep2
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3590,12 +3783,15 @@ parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2541
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelRad21IggrabPk
 objType table
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3611,6 +3807,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2541
 tableName wgEncodeSydhTfbsMelRad21IggrabPk
 treatment None
@@ -3618,6 +3816,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelRad21IggrabRawDataRep1
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3634,12 +3833,15 @@ parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+sex M
+strain Unknown
 subId 2541
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelRad21IggrabRawDataRep2
 objType file
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3656,12 +3858,15 @@ parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+sex M
+strain Unknown
 subId 2541
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelRad21IggrabSig
 objType table
+age immortalized
 antibody Rad21
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3677,6 +3882,8 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
+strain Unknown
 subId 2541
 tableName wgEncodeSydhTfbsMelRad21IggrabSig
 treatment None
@@ -3700,6 +3907,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1160
 treatment None
@@ -3723,6 +3931,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1160
 treatment None
@@ -3746,6 +3955,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1160
 tableName wgEncodeSydhTfbsMelTbpIggmusPk
@@ -3770,6 +3980,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1160
 treatment None
@@ -3793,6 +4004,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1160
 treatment None
@@ -3816,6 +4028,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1160
 tableName wgEncodeSydhTfbsMelTbpIggmusSig
@@ -3841,6 +4054,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1865
 treatment None
@@ -3865,6 +4079,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1865
 treatment None
@@ -3888,6 +4103,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1865
 tableName wgEncodeSydhTfbsMelUsf2IggmusPk
@@ -3912,6 +4128,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1865
 treatment None
@@ -3935,6 +4152,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1865
 treatment None
@@ -3958,10 +4176,11 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1865
 tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -470369006
+# MAGIC: 893619172
