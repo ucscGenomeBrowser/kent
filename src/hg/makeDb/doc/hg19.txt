@@ -13074,3 +13074,15 @@ hgLoadBed hg19 darned allChroms.bed
 # added darned.html
 # added trackDb.ra entry
 #############################################################################
+# lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
+    # down load from JHU
+    ssh genbank
+    sudo su - genbank
+    cd /cluster/data/genbank
+    ./bin/lsSnpPdbDownloadStep hg19
+    # load into hgwdev database
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ./bin/lsSnpPdbDbLoadStep hg19
+    # once this has been QAed, will auto-update from genbank scripts
+#############################################################################
