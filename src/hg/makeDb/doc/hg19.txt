@@ -13059,3 +13059,18 @@ EOF
     hgLoadBed hg19 microsat microsat.bed
 
 #############################################################################
+# Add Human RNA-editing track hg18 (Done, galt, 7/12/2010)
+
+# DARNED=DAtabase of RNa EDiting
+#http://darned.ucc.ie/
+#University College Cork
+
+mkdir -p /hive/data/genomes/hg19/bed/darned
+cd /hive/data/genomes/hg19/bed/darned
+# create go.csh to download and compose allChroms.bed
+./go.csh
+hgLoadBed hg19 darned allChroms.bed
+# at human, level
+# added darned.html
+# added trackDb.ra entry
+#############################################################################

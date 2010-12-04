@@ -7053,6 +7053,12 @@ tag NRE
 type dataType
 description Negative Regulatory Elements
 
+term Proteogenomics
+tag protgeno
+type dataType
+label Proteogenomics
+description Mass Spec Proteogenomic Mapping
+
 # tag not standard to match hg18
 term RnaPet
 tag PET

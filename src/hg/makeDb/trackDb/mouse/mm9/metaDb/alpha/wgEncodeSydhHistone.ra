@@ -17,6 +17,7 @@ lab Yale-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -41,6 +42,7 @@ lab Yale-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -64,6 +66,7 @@ lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 tableName wgEncodeSydhHistCh12H3k4me3IggyalePk
@@ -88,6 +91,7 @@ lab Yale-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -111,6 +115,7 @@ lab Yale-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -134,6 +139,7 @@ lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 tableName wgEncodeSydhHistCh12H3k4me3IggyaleSig
@@ -158,6 +164,7 @@ grant Snyder
 lab Yale-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 treatment None
@@ -180,6 +187,7 @@ grant Snyder
 lab Yale-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 treatment None
@@ -203,6 +211,7 @@ lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 tableName wgEncodeSydhHistCh12InputIggyaleSig
@@ -227,6 +236,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -250,6 +260,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -273,6 +284,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1166
 tableName wgEncodeSydhHistMelH3k4me3IggyalePk
@@ -297,6 +309,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -320,6 +333,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -343,6 +357,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1166
 tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
@@ -366,6 +381,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -388,6 +404,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -411,10 +428,11 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: -377834691
+# MAGIC: -377783445
