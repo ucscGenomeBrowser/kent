@@ -1863,7 +1863,7 @@ vendorName  zen-bio
 vendorId
 orderUrl http://www.zen-bio.com/
 termId BTO:0000575
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:000057
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000575
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Hepatocytes_Crawford_protocol.pdf
 
 term HFL11W
@@ -2359,9 +2359,9 @@ tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth (chenowej @ ninds.nih.gov), Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId
 orderUrl
-termId BTO:0000001
+termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000001
-protocol Duke/UNC/UTA/EBI_OpeiPS_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:iPS_Crawford_protocol.pdf
 
 term Jurkat
 tag Jurkat
@@ -2969,7 +2969,7 @@ vendorId
 orderUrl
 termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002316
-protocol Stellate_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Stellate_Crawford_protocol.pdf
 
 term T98G
 tag T98G
