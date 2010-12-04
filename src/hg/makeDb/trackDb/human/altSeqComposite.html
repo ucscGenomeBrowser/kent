@@ -1,20 +1,17 @@
 <H2>Description</H2>
 <P>
-This track indicates alternative sequence from the GRCh37 reference sequence.
-The haplotype sequences and the patch sequence have been separated into
-two separate tracks.  Items marked in blue have alternate haplotypes.
-Items marked in red indicate areas of the sequence that have been
-corrected and will update to new sequence in the next release.
-</P>
-<P>
-The locations were established by NCBI and specified in
-the ALT_REF_LOCI_?/placed_scaffolds/alt_locus_scaf2primary.pos files at:
-<A HREF="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/"
-TARGET=_blank>Homo_sapiens/GRCh37/</A>
-and the patch2 release:
-<A HREF="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p2/PATCHES/alt_scaffolds/alt_scaffold_placement.txt"
-TARGET=_blank>NCBI FTP</A> site.
-</P>
+This track shows patches put out by 
+<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/" 
+target=_blank>GRC</a> to the GRCh37 reference sequence. 
+</p>
+<h3>Patches/Haplotypes</h3>
+<p>
+Items in the <em>Patches</em> track indicate areas of the sequence that have 
+been corrected and will update to new sequence in the next release. Items 
+in the <em>Haplotype</em> track were either designated as alternate loci or 
+were novel patches.
+</p>
+
 <H3>Alignment</H3>
 <P>
 The <em>Alignment</em> track is the PSL representation of the <em>Chain</em> 
@@ -97,6 +94,20 @@ level above.
 </UL></P>
 
 <H2>Methods</H2>
+<h3>Patches/Haplotype tracks</h3>
+<P>
+The locations of the Patches and Haplotypes were established by NCBI and 
+specified in the ALT_REF_LOCI_?/placed_scaffolds/alt_locus_scaf2primary.pos 
+files at: 
+<A HREF="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/"
+TARGET=_blank>ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/</A>
+ALT_REF_LOCI_*/placed_scaffolds/alt_locus_scaf*primary.pos
+and the patch2 release site:
+<A HREF="ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p2/PATCHES/alt_scaffolds/alt_scaffold_placement.txt"
+TARGET=_blank>ftp://ftp.ncbi.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/</A>
+GRCh37.p*/PATCHES/alt_scaffolds/alt_scaffold_placement.txt
+</p>
+
 <H3>Chain track</H3>
 <P>
 The lastz alignments between the human sequence and the alternate sequence
