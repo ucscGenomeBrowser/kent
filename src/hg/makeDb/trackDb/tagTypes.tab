@@ -40,8 +40,8 @@ cdsEvidence genePred
 cell bed bedGraph
 centerLabelsDense *
 chainColor chain
-chainLinearGap netAlign chain bed
-chainMinScore netAlign chain bed
+chainLinearGap netAlign chain bed psl
+chainMinScore netAlign chain bed psl
 chainNormScoreAvailable netAlign bed chain
 chimpDb bed
 chimpMacaqueOrthoTable bed
@@ -185,8 +185,8 @@ mafDotDefault wigMaf
 mafFile customTracks
 mafTrack bed
 mapDispatcher expRatio
-matrix netAlign bed chain
-matrixHeader netAlign bed chain
+matrix netAlign bed chain psl
+matrixHeader netAlign bed chain psl
 maxChromName customTracks
 maxHeightPixels *
 maxItems *
