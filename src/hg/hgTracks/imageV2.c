@@ -294,8 +294,11 @@ if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") !=
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"url\": \"%s\",", trackDbSetting(track->tdb, "url"));
 
 // Close with some standard vars
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,\n\t\t\"visibility\": %d\n\t}",
-    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,",
+    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack);
+if(track->limitedVis != track->visibility)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"limitedVis\": %d,", track->limitedVis);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"visibility\": %d\n\t}", track->visibility);
 }
 
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
