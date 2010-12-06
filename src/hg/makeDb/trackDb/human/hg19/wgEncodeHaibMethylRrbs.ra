@@ -5,7 +5,7 @@ superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl RRBS
 longLabel CpG Methylation by RRBS from ENCODE/HudsonAlpha
 group regulation
-subGroup1 cellType Cell_Line K562=K562&nbsp;<i>Tier1</i> GM12878=GM12878&nbsp;<i>Tier1</i> H1hESC=H1-hESC&nbsp;<i>Tier1</i> HeLaS3=HeLa-S3&nbsp;<i>Tier2</i> HepG2=HepG2&nbsp;<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 CMK=CMK Fibrobl=Fibrobl GM12878XiMat=GM12878-Xi-Mat GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube IMR90=IMR90  Jurkat=Jurkat LNCaP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast PanIslets=PanIslets ProgFib=ProgFib RPTEC=RPTEC SAEC=SAEC SKNSHRA=SK-N-SH_RA SKMC=SKMC 
+subGroup1 cellType Cell_Line K562=K562&nbsp;(Tier_1) GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 CMK=CMK Fibrobl=Fibrobl GM12878XiMat=GM12878-Xi-Mat GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiCi HSMM=HSMM  HSMMt=HSMMtube IMR90=IMR90  Jurkat=Jurkat LNCaP=LNCaP  MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MELANO=Melano NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 Osteobl=Osteoblast PanIslets=PanIslets ProgFib=ProgFib RPTEC=RPTEC SAEC=SAEC SKNSHRA=SK-N-SH_RA SKMC=SKMC 
 subGroup2 view View Sites=Sites
 subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
 subGroup4 treatment Treatment None=None ANDRO=Methyltrienolone(androgen) TAM=Tamoxifen
@@ -25,7 +25,6 @@ noInherit on
 origAssembly hg19
 
     track wgEncodeHaibRrbsViewSites
-    release alpha
     shortLabel Sites 
     view Sites 
     visibility dense
@@ -34,7 +33,6 @@ origAssembly hg19
     scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites
         shortLabel GM12878 2
         longLabel GM12878 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -44,7 +42,6 @@ origAssembly hg19
         # subId=1174 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites
         shortLabel GM12878 1
         longLabel GM12878 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -55,7 +52,6 @@ origAssembly hg19
 
 
         track wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCT-116 2
         longLabel HCT-116 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -64,7 +60,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HRPEpiC 2
         longLabel HRPEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -73,7 +68,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Jurkat 2
         longLabel Jurkat Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -82,7 +76,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HRE 2
         longLabel HRE Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -91,7 +84,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Jurkat 1
         longLabel Jurkat Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -100,7 +92,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HRPEpiC 1
         longLabel HRPEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -109,7 +100,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HRE 1
         longLabel HRE Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -118,7 +108,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCT-116 1
         longLabel HCT-116 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -127,7 +116,6 @@ origAssembly hg19
         # subId=1222 dateSubmitted=2010-07-15
 
         track wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NT2-D1 2
         longLabel NT2-D1 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -136,7 +124,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 2
         longLabel MCF-7 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -145,7 +132,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 1
         longLabel MCF-7 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -154,7 +140,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 2
         longLabel MCF-7 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -163,7 +148,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NB4 2
         longLabel NB4 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -172,7 +156,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NHBE 2
         longLabel NHBE Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -181,7 +164,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel SKMC 2
         longLabel SKMC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -190,7 +172,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NT2-D1 2
         longLabel NT2-D1 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -199,7 +180,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 1
         longLabel MCF-7 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -208,7 +188,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel SKMC 1
         longLabel SKMC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -217,7 +196,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NB4 1
         longLabel NB4 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -226,7 +204,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NHBE 1
         longLabel NHBE Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -235,7 +212,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NT2-D1 1
         longLabel NT2-D1 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -244,7 +220,6 @@ origAssembly hg19
         # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel CMK 2
         longLabel CMK Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -253,7 +228,6 @@ origAssembly hg19
         # subId=1218 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel CMK 1
         longLabel CMK Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -262,7 +236,6 @@ origAssembly hg19
         # subId=1218 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Fibrobl 2
         longLabel Fibrobl Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -271,7 +244,6 @@ origAssembly hg19
         # subId=1218 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Fibrobl 1
         longLabel Fibrobl Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -280,7 +252,6 @@ origAssembly hg19
         # subId=1218 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMMtube 2
         longLabel HSMMtube Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -289,7 +260,6 @@ origAssembly hg19
         # subId=1218 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMMtube 1
         longLabel HSMMtube Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -298,7 +268,6 @@ origAssembly hg19
         # subId=1218 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19239 1
         longLabel GM19239 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -307,7 +276,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19240 2
         longLabel GM19240 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -316,7 +284,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HAEpiC 2
         longLabel HAEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -325,7 +292,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCF 2
         longLabel HCF Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -334,7 +300,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19240 1
         longLabel GM19240 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -343,7 +308,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCF 1
         longLabel HCF Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -352,7 +316,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HAEpiC 1
         longLabel HAEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -361,7 +324,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19239 2
         longLabel GM19239 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -370,7 +332,6 @@ origAssembly hg19
         # subId=1219 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG04449 2
         longLabel AG04449 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -379,7 +340,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG10803 2
         longLabel AG10803 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -388,7 +348,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG09309 2
         longLabel AG09309 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -397,7 +356,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG09319 2
         longLabel AG09319 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -406,7 +364,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG04450 2
         longLabel AG04450 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -415,7 +372,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG09319 1
         longLabel AG09319 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -424,7 +380,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG04450 1
         longLabel AG04450 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -433,7 +388,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG10803 1
         longLabel AG10803 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -442,7 +396,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG04449 1
         longLabel AG04449 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -451,7 +404,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel AG09309 1
         longLabel AG09309 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -460,7 +412,6 @@ origAssembly hg19
         # subId=1217 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12891 2
         longLabel GM12891 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -469,7 +420,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12891 1
         longLabel GM12891 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -478,7 +428,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12892 1
         longLabel GM12892 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -487,7 +436,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12892 2
         longLabel GM12892 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -496,7 +444,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites
         shortLabel K562 2
         longLabel K562 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -506,7 +453,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites
         shortLabel K562 1
         longLabel K562 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -516,7 +462,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel H1-hESC 1
         longLabel H1-hESC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -526,7 +471,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HepG2 1
         longLabel HepG2 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -536,7 +480,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HepG2 2
         longLabel HepG2 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -546,7 +489,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel H1-hESC 2
         longLabel H1-hESC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -556,7 +498,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HeLa-S3 2
         longLabel HeLa-S3 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -566,7 +507,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HeLa-S3 1
         longLabel HeLa-S3 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -576,7 +516,6 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HIPEpiC 1
         longLabel HIPEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -585,7 +524,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HIPEpiC 2
         longLabel HIPEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -594,7 +532,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HMEC 1
         longLabel HMEC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -603,7 +540,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HMEC 2
         longLabel HMEC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -612,7 +548,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HNPCEpiC 1
         longLabel HNPCEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -621,7 +556,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HNPCEpiC 2
         longLabel HNPCEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -630,7 +564,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HRCEpiC 1
         longLabel HRCEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -639,7 +572,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HRCEpiC 2
         longLabel HRCEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -648,7 +580,6 @@ origAssembly hg19
         # subId=1221 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCM 1
         longLabel HCM Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -657,7 +588,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCM 2
         longLabel HCM Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -666,7 +596,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEEpiC 1
         longLabel HEEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -675,7 +604,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEEpiC 2
         longLabel HEEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -684,7 +612,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEK293 1
         longLabel HEK293 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -693,7 +620,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEK293 2
         longLabel HEK293 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -702,7 +628,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HepG2 1
         longLabel HepG2 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -712,7 +637,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HepG2 2
         longLabel HepG2 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -722,7 +646,6 @@ origAssembly hg19
         # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCPEpiC 2
         longLabel HCPEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -731,7 +654,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCPEpiC 1
         longLabel HCPEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -740,7 +662,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEK293 2
         longLabel HEK293 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -749,7 +670,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEK293 1
         longLabel HEK293 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -758,7 +678,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HPAEpiC 2
         longLabel HPAEpiC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -767,7 +686,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HPAEpiC 1
         longLabel HPAEpiC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -776,7 +694,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel LNCaP 1
         longLabel LNCaP Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -786,7 +703,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel LNCaP 2
         longLabel LNCaP Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -796,7 +712,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 2
         longLabel MCF-7 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -805,7 +720,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 1
         longLabel MCF-7 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -814,7 +728,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NHDF-neo 2
         longLabel NHDF-neo Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -823,7 +736,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NHDF-neo 1
         longLabel NHDF-neo Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -832,7 +744,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel SAEC 2
         longLabel SAEC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -841,7 +752,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel SAEC 1
         longLabel SAEC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -850,7 +760,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel SK-N-SH_RA 2
         longLabel SK-N-SH_RA Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -859,7 +768,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel SK-N-SH_RA 1
         longLabel SK-N-SH_RA Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -868,7 +776,6 @@ origAssembly hg19
         # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsPanisletsSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 2
         longLabel PanIslets Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -877,7 +784,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsPanisletsSitesRep5
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 5
         longLabel PanIslets Methyl-RRBS Sites rep 5 from ENCODE/HudsonAlpha
@@ -886,7 +792,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsPanisletsSitesRep4
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 4
         longLabel PanIslets Methyl-RRBS Sites rep 4 from ENCODE/HudsonAlpha
@@ -895,7 +800,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsPanisletsSitesRep3
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 3
         longLabel PanIslets Methyl-RRBS Sites rep 3 from ENCODE/HudsonAlpha
@@ -904,7 +808,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsPanisletsSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 1
         longLabel PanIslets Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -913,7 +816,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsMelanoSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Melano 1
         longLabel Melano Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -922,7 +824,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsMelanoSitesRep3
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Melano 3
         longLabel Melano Methyl-RRBS Sites rep 3 from ENCODE/HudsonAlpha
@@ -931,7 +832,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsMelanoSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Melano 2
         longLabel Melano Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -940,7 +840,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsProgfibSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel ProgFib 2
         longLabel ProgFib Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -949,7 +848,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsRptecSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel RPTEC 2
         longLabel RPTEC Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -958,7 +856,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsHsmmSitesRep3
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMM 3
         longLabel HSMM Methyl-RRBS Sites rep 3 from ENCODE/HudsonAlpha
@@ -967,7 +864,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsHsmmSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMM 2
         longLabel HSMM Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -976,7 +872,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsHsmmSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMM 1
         longLabel HSMM Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -985,7 +880,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsProgfibSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel ProgFib 1
         longLabel ProgFib Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -994,7 +888,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsRptecSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel RPTEC 1
         longLabel RPTEC Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -1003,7 +896,6 @@ origAssembly hg19
         # subId=2471 dateSubmitted=2010-09-29
 
         track wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12878-XiMat 1
         longLabel GM12878-XiMat Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -1012,7 +904,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12878-XiMat 2
         longLabel GM12878-XiMat Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -1021,7 +912,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel IMR90 2
         longLabel IMR90 Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -1030,7 +920,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel IMR90 1
         longLabel IMR90 Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -1039,7 +928,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 2
         longLabel MCF10A-Er-Src Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -1048,7 +936,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 1
         longLabel MCF10A-Er-Src Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -1057,7 +944,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 2
         longLabel MCF10A-Er-Src Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -1066,7 +952,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 1
         longLabel MCF10A-Er-Src Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -1075,7 +960,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NH-A 2
         longLabel NH-A Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha
@@ -1084,7 +968,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NH-A 1
         longLabel NH-A Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -1093,7 +976,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Osteobl 1
         longLabel Osteobl Methyl-RRBS Sites rep 1 from ENCODE/HudsonAlpha
@@ -1102,7 +984,6 @@ origAssembly hg19
         # subId=2395 dateSubmitted=2010-11-15
 
         track wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2
-        release alpha
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Osteobl 2
         longLabel Osteobl Methyl-RRBS Sites rep 2 from ENCODE/HudsonAlpha

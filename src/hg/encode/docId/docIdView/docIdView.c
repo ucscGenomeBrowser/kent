@@ -1,4 +1,4 @@
-/* docIdMetaShow - cgi to show metadata from docId table. */
+/* docIdView - cgi to show metadata from docId table. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -28,9 +28,9 @@ char *docIdDirBeta = "http://hgdownload-test.cse.ucsc.edu/goldenPath/betaDocId";
 
 void addValue(struct dyString *str, char *value)
 {
-if (value != NULL)
+if ((value != NULL) && !sameString(value, "None"))
     {
-    dyStringPrintf(str, "%s; ", value);
+    dyStringPrintf(str, "%s, ", value);
     }
 }
 
@@ -55,7 +55,7 @@ printf("<th>cell type</th>");
 printf("<th>metadata</th>");
 printf("<th>view</th>");
 printf("<th>fileType</th>");
-printf("<th>File</th>");
+printf("<th>file</th>");
 printf("<th>lab</th>");
 printf("<th>assembly</th>");
 printf("<th>subId</th>");
@@ -75,6 +75,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     verbose(2, "submitter %s\n", docIdSub->submitter);
 
     cgiDecode(docIdSub->metaData, docIdSub->metaData, strlen(docIdSub->metaData));
+    //printf("tempFile %s\n", tempFile);
     FILE *f = mustOpen(tempFile, "w");
     fwrite(docIdSub->metaData, strlen(docIdSub->metaData), 1, f);
     fclose(f);
@@ -98,7 +99,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     addValue(str,  mdbObjFindValue(mdbObj, "treatment"));
     addValue(str,  mdbObjFindValue(mdbObj, "rnaExtract"));
     addValue(str,  mdbObjFindValue(mdbObj, "localization"));
-    printf("<td>%s<a href=docIdMetaShow?docId=%s&db=%s&meta=\"\"> ...</a></td>", str->string,buffer, database);
+    printf("<td>%s<a href=docIdView?docId=%s&db=%s&meta=\"\"> ...</a></td>", str->string,buffer, database);
+    freeDyString(&str);
         
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "view"));
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "type"));
@@ -107,10 +109,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         docIdDecorate(docIdComposite,docIdSub->ix));
     char *lab = mdbObjFindValue(mdbObj, "lab");
     char *subId = mdbObjFindValue(mdbObj, "subId");
-    printf("<td><a href=docIdMetaShow?docId=%s&db=%s&lab=\"%s\"> %s</a></td>",buffer, database, subId, lab);
+    printf("<td><a href=docIdView?docId=%s&db=%s&lab=\"%s\"> %s</a></td>",buffer, database, subId, lab);
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "assembly"));
     printf("<td>%s</td> ",   subId);
-    printf("<td><a href=docIdMetaShow?docId=%s&db=%s&report=\"\"> report</a></td>", buffer, database);
+    printf("<td><a href=docIdView?docId=%s&db=%s&report=\"\"> report</a></td>", buffer, database);
     printf("</tr>\n");
     }
 
@@ -133,7 +135,7 @@ trashDirFile(&tn, "docId", "meta", ".txt");
 char *tempFile = tn.forCgi;
 boolean beenHere = FALSE;
 
-printf("<a href=docIdMetaShow?db=%s> Return </a><BR>", database);
+printf("<a href=docIdView?db=%s> Return </a><BR>", database);
 safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -180,7 +182,7 @@ struct sqlResult *sr;
 char **row;
 boolean beenHere = FALSE;
 
-printf("<a href=docIdMetaShow?db=%s> Return </a><BR>", database);
+printf("<a href=docIdView?db=%s> Return </a><BR>", database);
 safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -208,7 +210,7 @@ char query[10 * 1024];
 struct sqlResult *sr;
 char **row;
 
-printf("<a href=docIdMetaShow?db=%s> Return </a><BR>", database);
+printf("<a href=docIdView?db=%s> Return </a><BR>", database);
 safef(query, sizeof query, "select user_id from %s where id = %s ", "projects",subId);
 char *userId = sqlQuickString(conn, query);
 

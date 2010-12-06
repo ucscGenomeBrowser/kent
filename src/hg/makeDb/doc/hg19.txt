@@ -7795,6 +7795,11 @@ done
     hgLoadPsl hg19 affyU133.psl
     hgLoadSeq hg19 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
+    # Added knownToU133 table
+    hgMapToGene hg19 affyU133 knownGene knownToU133
+    # trim unwanted chip-prefix to be backwards compatible with hg17 and hg18
+    hgsql hg19 -e 'update knownToU133 set value=substring(value,7)'
+
 ##########################################################################
 # GNF ATLAS 2 (Done - 2009-09-30 - Jim)
     # Align probes from GNF1H chip.
@@ -10280,7 +10285,7 @@ EOF
     #     58592  
 
 
-    # Added knownToU133Plus2 track
+    # Added knownToU133Plus2 table
     hgMapToGene hg19 affyU133Plus2 knownGene knownToU133Plus2
 
 
@@ -10339,7 +10344,7 @@ EOF
     #   Updating seq table
     #   All done
 
-    # Added knownToU95 track
+    # Added knownToU95 table
     hgMapToGene hg19 affyU95 knownGene knownToU95
 
 #############################################################################
@@ -13053,4 +13058,31 @@ EOF
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed hg19 microsat microsat.bed
 
+#############################################################################
+# Add Human RNA-editing track hg18 (Done, galt, 7/12/2010)
+
+# DARNED=DAtabase of RNa EDiting
+#http://darned.ucc.ie/
+#University College Cork
+
+mkdir -p /hive/data/genomes/hg19/bed/darned
+cd /hive/data/genomes/hg19/bed/darned
+# create go.csh to download and compose allChroms.bed
+./go.csh
+hgLoadBed hg19 darned allChroms.bed
+# at human, level
+# added darned.html
+# added trackDb.ra entry
+#############################################################################
+# lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
+    # down load from JHU
+    ssh genbank
+    sudo su - genbank
+    cd /cluster/data/genbank
+    ./bin/lsSnpPdbDownloadStep hg19
+    # load into hgwdev database
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ./bin/lsSnpPdbDbLoadStep hg19
+    # once this has been QAed, will auto-update from genbank scripts
 #############################################################################

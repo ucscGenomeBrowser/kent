@@ -156,16 +156,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrPk
-        release alpha
-        parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in LHSR cells)
-        subGroups view=Peaks cellType=LHSR treatment=AANONE
-        type narrowPeak
-        origAssembly hg18
-        # subId=1547 dateSubmitted=2010-06-17
-
         track wgEncodeOpenChromFaireNhbePk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
@@ -176,15 +166,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1574 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrAndroPk
-        release alpha
-        parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel LHSR Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=Peaks cellType=LHSR treatment=ANDRO
-        type narrowPeak
-        origAssembly hg18
-        # subId=1610 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifna4hPk
         release alpha
@@ -393,16 +374,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrSig
-        release alpha
-        parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in LHSR cells)
-        subGroups view=SIG cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 0.469500
-        origAssembly hg18
-        # subId=1547 dateSubmitted=2010-06-17
-
         track wgEncodeOpenChromFaireNhbeSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
@@ -413,15 +384,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1574 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrAndroSig
-        release alpha
-        parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel LHSR F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in LHSR cells, with Methyltrienolone treatment)
-        subGroups view=SIG cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 0.497500
-        origAssembly hg18
-        # subId=1610 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifna4hSig
         release alpha
@@ -630,15 +592,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireLhsrBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in LHSR cells)
-        subGroups view=SIGBO cellType=LHSR treatment=AANONE
-        type bigWig 0.000000 1397.000000
-        origAssembly hg18
-        # subId=1547 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireNhbeBaseOverlapSignal
         release alpha
@@ -649,16 +602,6 @@ wgEncode 1
         type bigWig 0.000000 1465.000000
         origAssembly hg18
         # subId=1574 dateSubmitted=2010-06-17
-
-        track wgEncodeOpenChromFaireLhsrAndroBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel LHSR Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in LHSR cells, with Methyltrienolone treatment )
-        subGroups view=SIGBO cellType=LHSR treatment=ANDRO
-        type bigWig 0.000000 1289.000000
-        origAssembly hg18
-        # subId=1610 dateSubmitted=2010-06-18
 
         track wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
         release alpha
