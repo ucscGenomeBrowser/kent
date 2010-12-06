@@ -15,6 +15,8 @@ use HgStepManager;
 
 my $stepper = new HgStepManager(
     [ { name => 'download',   func => \&downloadFiles },
+#*** translate needs separate step for loading the local dbSNP db, so we don't have to 
+#*** drop the db every time we need to -continue translate.
       { name => 'translate',  func => \&translateData },
       { name => 'load',       func => \&loadTables },
     ]
@@ -535,11 +537,13 @@ sub checkSequenceNames {
   }
   &HgAutomate::run("$HgAutomate::runSSH $workhorse $ucscSeqCommand");
   my $hg19MitoTweak = ($db eq 'hg19') ? "| grep -vw ^NC_012920" : "";
+#*** ssh and pipes don't really jive.  mini-script?
   &HgAutomate::run("$HgAutomate::runSSH $workhorse " .
 		   "zcat $runDir/data/$ContigInfo.bcp.gz $grepOutLabels  $grepOutContigs" .
 		   "| cut -f $contigAccCol $hg19MitoTweak | sort " .
 		   "  > $runDir/dbSnpContigs.txt;");
   &HgAutomate::verbose(1, "FYI First 10 UCSC sequences not in dbSNP (if any):\n");
+#*** Also, HgAutomate::run should probably use SafePipe internally when there is a |
   &HgAutomate::run("comm -23 $runDir/ucscSeqs.txt $runDir/dbSnpContigs.txt | head");
   &HgAutomate::run("comm -13 $runDir/ucscSeqs.txt $runDir/dbSnpContigs.txt " .
 		   "  > $runDir/dbSnpContigsNotInUcsc.txt");
@@ -605,7 +609,8 @@ giant file, and indexes the giant fasta file.";
         endif
       endif
 #    endif
-    set tmpDir = `mktemp -d -p \$TMPDIR/$base.translate.XXXXXX`
+    set tmpDir = `mktemp -d \$TMPDIR/$base.translate.XXXXXX`
+    chmod 775 \$tmpDir
     pushd \$tmpDir
 
     # load dbSNP database tables into local mysql
@@ -644,14 +649,18 @@ giant file, and indexes the giant fasta file.";
     hgsql $tmpDb -e 'drop table $ContigLoc; \\
                          rename table ContigLocFix to $ContigLoc;'
 
+    # mysql warnings about missing values in numeric columns cause hgLoadSqlTab
+    # to return nonzero, and then this script terminates.  So fix missing values
+    # to \\N (mysql's file representation of NULL):
     zcat $dataDir/SNP.bcp.gz \\
-    | perl -wpe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g;' \\
+    | perl -pe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g; chomp; \@w = split("\\t"); \\
+                foreach \$col (1,2,3,4,5,7,11) { \$w[\$col] = "\\\\N" if (\$w[\$col] eq ""); } \\
+                \$_ = join("\\t", \@w) . "\\n";' \\
     | hgLoadSqlTab -oldTable $tmpDb SNP placeholder stdin
 
 #*** Add SNPAllele etc.
 
     foreach t ($ContigInfo $ContigLoc $ContigLocusId $MapInfo SNP)
-     echo -n "\${t}:\\t"
       hgsql -N -B $tmpDb -e 'select count(*) from '\$t
     end
 
@@ -660,9 +669,9 @@ giant file, and indexes the giant fasta file.";
     # Also extract NCBI's annotations of coding SNPs' effects on translation.
     # We extract $ContigLocusId info only for reference assembly mapping.
     # Some SNP's functional annotations are for an alternate assembly, so we will
-    # have no NCBI functional annotations to display for those (but our own are 
+    # have no NCBI functional annotations to display for those (but our own are
     # available).
-    # Add indices to tables for a big join (5 or 6 minutes):
+    # Add indices to tables for a big join:
     hgsql $tmpDb -e \\
       'alter table $ContigInfo add index (ctg_id); \\
        alter table $ContigLocusId add index (ctg_id);'
@@ -672,7 +681,6 @@ giant file, and indexes the giant fasta file.";
                            where cli.ctg_id = ci.ctg_id;' \\
       > ncbiFuncAnnotations.txt
     wc -l ncbiFuncAnnotations.txt
-#19828052 ncbiFuncAnnotations.txt
     # Ignore function code 8 (cds-reference, just means that some allele matches reference)
     # and glom functions for each SNP id:
     cut -f 1-4,6,11 ncbiFuncAnnotations.txt \\
@@ -704,6 +712,7 @@ CREATE TABLE ucscFunc (
         INDEX ctg_id (ctg_id)
 );
 EOF
+    sleep 1
     hgLoadSqlTab $tmpDb ucscFunc{,.sql,.txt}
     # ucscFunc coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
     # We need to leave the coords alone here so ucscFunc can be joined below.
@@ -720,7 +729,6 @@ EOF
              cl.ctg_id = ci.ctg_id' \\
       > ncbiFuncInsertions.ctg.bed
     wc -l ncbiFuncInsertions.ctg.bed
-#1099530 ncbiFuncInsertions.ctg.bed
 
     # Extract observed allele, molType and snp class from FASTA headers gnl
     foreach rej (AltOnly NotOn)
@@ -730,14 +738,14 @@ EOF
       endif
     end
 
-#*** This would be a good place to check for missing sequences
+#*** This would be a good place to check for missing flanking sequences
 
     zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
     | grep '^>gnl' \\
     | perl -wpe 's/^\\S+rs(\\d+) .*mol="(\\w+)"\\|class=(\\d+)\\|alleles="([^"]+)"\\|build.*/\$1\\t\$4\\t\$2\\t\$3/ || die "Parse error line \$.:\\n\$_\\n\\t";' \\
     | sort -nu \\
       > ucscGnl.txt
-#547.545u 92.641s 6:08.04 173.9% 0+0k 0+0io 0pf+0w
+#*** compare output of following 2 commands:
     wc -l ucscGnl.txt
 #30144822 ucscGnl.txt
 # weird -- it shrunk from the original 30152349
@@ -777,13 +785,13 @@ EOF
        LEFT JOIN ucscFunc as uf ON uf.snp_id = cl.snp_id and uf.ctg_id = cl.ctg_id \\
                                 and uf.asn_from = cl.asn_from;' \\
       > ucscNcbiSnp.ctg.bed
-#73.036u 12.668s 25:32.42 5.5%   0+0k 0+0io 0pf+0w
     wc -l ucscNcbiSnp.ctg.bed
 #34610479 ucscNcbiSnp.ctg.bed
 
-    # There are some weird cases of length=1 but locType=range... in all the cases 
-    # that I checked, the length really seems to be 1 so I'm not sure where they got 
+    # There are some weird cases of length=1 but locType=range... in all the cases
+    # that I checked, the length really seems to be 1 so I'm not sure where they got
     # the locType=range.  Tweak locType in those cases so we can keep those SNPs:
+#*** probably send warning to file instead of stderr, since we want to add to endNotes:
     $catOrGrepOutMito ucscNcbiSnp.ctg.bed \\
     | awk -F"\\t" 'BEGIN{OFS="\\t";} \\
            \$2 == \$3 && \$14 == 1 {\$14=2; \\
@@ -804,7 +812,7 @@ _EOF_
 _EOF_
 		    );
   }
-  $bossScript->add(<<_EOF_
+#*** add stderr output of awk command to endnotes at this point..:
 #TODO: examine these again, report to dbSNP:
 #118203330
 #118203339
@@ -817,9 +825,6 @@ _EOF_
 #118203428
 #118203433
 #588     single-base, locType=range, tweaked locType
-#217.470u 28.776s 2:54.46 141.1% 0+0k 0+0io 0pf+0w
-_EOF_
-		  );
   if ($db eq 'hg19') {
     $bossScript->add(<<_EOF_
     # For liftOver, convert 0-base fully-closed to 0-based half-open because liftOver
@@ -847,43 +852,21 @@ _EOF_
     # Updated snpNcbiToUCSC for new MAX_SNPID (80M -> 120M), 
     # new named alleles oddball formats: CHLC.GGAA2D04, GDB:190880, SHGC-35515, =D22S272
     # new MAX_SNPSIZE (1k -> 16k)
+#*** add output to endNotes:
     snpNcbiToUcsc ucscNcbiSnp.bed $HgAutomate::clusterData/$db/$db.2bit $snpBase
-#spaces stripped from observed:
-#chr12   6093134 6093134 rs41402545
-#count of snps with weight  0 = 69071
-#count of snps with weight  1 = 29465124
-#count of snps with weight  2 = 523595
-#count of snps with weight  3 = 3037908
-#count of snps with weight 10 = 1514756
-#Skipped 976 snp mappings due to errors -- see ${snpBase}Errors.bed
-#214.507u 7.542s 4:38.56 79.7%   0+0k 0+0io 0pf+0w
+#*** add output to endNotes:
     head ${snpBase}Errors.bed
-#chr1    11082586        11082587        rs80356737      Unexpected refNCBI "AT" for locType "between" (3) -- expected "-"
-#chr1    11082586        11082587        rs80356737      rs80356737 is 1 bases long but refNCBI is different length: AT
-#chr1    43392806        43392807        rs80359840      Unexpected refNCBI "CA" for locType "between" (3) -- expected "-"
-#chr1    43392806        43392807        rs80359840      rs80359840 is 1 bases long but refNCBI is different length: CA
-#chr1    43395420        43395421        rs80359834      Unexpected refNCBI "AC" for locType "between" (3) -- expected "-"
-#chr1    43395420        43395421        rs80359834      rs80359834 is 1 bases long but refNCBI is different length: AC
-#chr1    43395659        43395660        rs80359833      Unexpected refNCBI "AG" for locType "between" (3) -- expected "-"
-#chr1    43395659        43395660        rs80359833      rs80359833 is 1 bases long but refNCBI is different length: AG
-#chr1    43396801        43396802        rs80359831      Unexpected refNCBI "GC" for locType "between" (3) -- expected "-"
-#chr1    43396801        43396802        rs80359831      rs80359831 is 1 bases long but refNCBI is different length: GC
+#*** add output to endNotes:
     wc -l snp*
-#  33026121 $snpBase.bed
-#        22 $snpBase.sql
-#       976 ${snpBase}Errors.bed
-#        18 ${snpBase}ExceptionDesc.tab
-#   4945948 ${snpBase}Exceptions.bed
-    # 7M new snps, not a big increase in exceptions (snp131 had 4281351)
 
     # Make one big fasta file.
-#*** It's a monster: 23G!  Can we split by hashing rsId?
+#*** It's a monster: 23G for hg19 snp132!  Can we split by hashing rsId?
     zcat $runDir/rs_fasta/rs_ch*.fas.gz \\
     | perl -wpe 's/^>gnl\\|dbSNP\\|(rs\\d+) .*/>\$1/ || ! /^>/ || die;' \\
       > $snpBase.fa
-#611.912u 114.850s 7:40.41 157.8%        0+0k 0+0io 0pf+0w
     # Check for duplicates.
     grep ^\\>rs $snpBase.fa | sort > seqHeaders
+#*** compare output of following 2 commands:
     wc -l seqHeaders
 #30144822 seqHeaders
     uniq seqHeaders | wc -l
@@ -892,8 +875,6 @@ _EOF_
     # and keep only the columns that we need: acc and file_offset.
     # Index it and translate to snpSeq table format.
     hgLoadSeq -test placeholder $snpBase.fa
-#30144822 sequences
-#52.698u 14.570s 9:18.88 12.0%   0+0k 0+0io 0pf+0w
     cut -f 2,6 seq.tab > ${snpBase}Seq.tab
     rm seq.tab
 
@@ -924,16 +905,19 @@ sub loadTables {
 				      $dbHost, $runDir, $whatItDoes, $CONFIG);
   $bossScript->add(<<_EOF_
     #*** HgAutomate should probably have a sub that generates these lines given a prefix:
-    if (\$TMPDIR == "" || ! -d \$TMPDIR) then
+#breaks if TMPDIR not set -- which with -f I guess it wouldn't be:
+#    if ("\$TMPDIR" == "" || ! -d \$TMPDIR) then
       if (-d /data/tmp) then
         setenv TMPDIR /data/tmp
-      elsif (-d /tmp) then
-        setenv TMPDIR /tmp
       else
-        echo "Can't find TMPDIR"
-        exit 1
+        if (-d /tmp) then
+          setenv TMPDIR /tmp
+        else
+          echo "Can't find TMPDIR"
+          exit 1
+        endif
       endif
-    endif
+#    endif
 
     # Load up main track tables.
     hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd \\
@@ -944,38 +928,26 @@ sub loadTables {
       -renameSqlTable \\
       ${snpBase}Exceptions.bed.gz
 
-    hgLoadSqlTab $db ${snpBase}ExceptionDesc \$HOME/kent/src/hg/lib/snp125ExceptionDesc.sql \\
-      ${snpBase}ExceptionDesc.tab.gz
+    zcat ${snpBase}ExceptionDesc.tab.gz \\
+    | hgLoadSqlTab $db ${snpBase}ExceptionDesc \$HOME/kent/src/hg/lib/snp125ExceptionDesc.sql stdin
 
     # Load up sequences.
     mkdir -p /gbdb/$db/snp
+    if (-l /gbdb/$db/snp/$snpBase.fa) then
+      rm /gbdb/$db/snp/$snpBase.fa
+    endif
     ln -s $runDir/$snpBase.fa /gbdb/$db/snp/$snpBase.fa
-    hgLoadSqlTab $db ${snpBase}Seq \$HOME/kent/src/hg/lib/snpSeq.sql ${snpBase}Seq.tab
+    zcat ${snpBase}Seq.tab.gz \\
+    | hgLoadSqlTab $db ${snpBase}Seq \$HOME/kent/src/hg/lib/snpSeq.sql stdin
 
     # Put in a link where one would expect to find the track build dir...
+    if (-l $HgAutomate::clusterData/$db/bed/$snpBase) then
+      rm $HgAutomate::clusterData/$db/bed/$snpBase
+    endif
     ln -s $runDir $HgAutomate::clusterData/$db/bed/$snpBase
 
     # Look at the breakdown of exception categories:
-    cut -f 5 ${snpBase}Exceptions.bed | sort | uniq -c | sort -nr
-#3644435 MultipleAlignments
-# 964493 ObservedMismatch
-#  90035 SingleClassTriAllelic
-#  77552 SingleClassZeroSpan
-#  43631 ObservedTooLong
-#  33650 MixedObserved
-#  26701 FlankMismatchGenomeShorter
-#  25574 SingleClassLongerSpan
-#  12222 RefAlleleMismatch
-#  11525 DuplicateObserved
-#   8340 SingleClassQuadAllelic
-#   4463 NamedDeletionZeroSpan
-#   2052 FlankMismatchGenomeLonger
-#    806 ObservedContainsIupac
-#    317 NamedInsertionNonzeroSpan
-#    150 FlankMismatchGenomeEqual
-#      1 RefAlleleRevComp
-#      1 ObservedWrongFormat
-#TODO: Sent a few bug reports to dbSNP
+    zcat ${snpBase}Exceptions.bed.gz | cut -f 5 | sort | uniq -c | sort -nr
 _EOF_
     );
 
@@ -1012,7 +984,7 @@ $endNotes = "";
 $stepper->execute();
 
 my $stopStep = $stepper->getStopStep();
-my $upThrough = ($stopStep eq 'trackDb') ? "" :
+my $upThrough = ($stopStep eq 'load') ? "" :
   "  (through the '$stopStep' step)";
 
 HgAutomate::verbose(1,

@@ -2422,7 +2422,7 @@ TMPDIR=/scratch/tmp
 
 
 ############################################################################
-# DBSNP BUILD 130 -> SNP130 (IN PROGRESS 12/3/10 angie)
+# DBSNP BUILD 130 -> SNP130 (DONE 12/6/10 angie)
     mkdir -p /hive/data/outside/dbSNP/130/horse
     cd /hive/data/outside/dbSNP/130/horse
     cat > config.ra <<EOF
@@ -2440,7 +2440,7 @@ EOF
 #*** b130_ContigInfo_2_1 has coords for 84 sequences; these have been written to
 #*** /hive/data/outside/dbSNP/130/horse/suggested.lft .
 #*** 9604 lines of b130_ContigInfo_2_1.bcp.gz either had no lift-coords
-#*** or had unrecognized chrom names; see 
+#*** or had unrecognized chrom names; see
 #*** /hive/data/outside/dbSNP/130/horse/cantLiftUpSeqNames.txt .
 #
 #*** You must account for those in config.ra, in the liftUp file
@@ -2458,8 +2458,17 @@ EOF
     # Try again with updated config:
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=translate >>& do.log &
     tail -f do.log
-
-# doDbSnp.pl still needs some debugging, to be continued...
+# 110668 MultipleAlignments
+#    662 ObservedMismatch
+#    144 SingleClassLongerSpan
+#    101 SingleClassZeroSpan
+#     35 FlankMismatchGenomeShorter
+#     30 FlankMismatchGenomeLonger
+#      3 FlankMismatchGenomeEqual
+#
+# *** All done!
+    # doDbSnp.pl needs to show much more info and guidance for the developer
+    # at the end.  But at least the processing works now!  :)
 
 
 ############################################################################
