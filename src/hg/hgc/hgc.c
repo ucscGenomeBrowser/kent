@@ -8930,6 +8930,9 @@ char query2[256];
 struct sqlResult *sr2;
 char **row2;
 char *strand={"+"};
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *chrom = cartString(cart, "c");
 
 printf("<H3>Patient %s </H3>", itemName);
 
@@ -8959,15 +8962,7 @@ printf("<A HREF=\"%s%s\" target=_blank>",
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
-safef(query, sizeof(query),
-      "select chrom, chromStart, chromEnd from decipher where name ='%s'", itemName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    {
-    printPosOnChrom(row[0], atoi(row[1]), atoi(row[2]), strand, TRUE, itemName);
-    }
-sqlFreeResult(&sr);
+printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 /* print UCSC Genes in the reported region */
 safef(query, sizeof(query),
