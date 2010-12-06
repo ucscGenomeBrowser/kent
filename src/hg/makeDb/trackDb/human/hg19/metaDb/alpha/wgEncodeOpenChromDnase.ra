@@ -3020,80 +3020,6 @@ tableName wgEncodeOpenChromDnaseK562Sig
 treatment None
 view Signal
 
-metaObject wgEncodeOpenChromDnaseLhsrRawDataRep1
-objType file
-cell LHSR
-composite wgEncodeOpenChromDnase
-controlId modelled
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-18
-dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrRawDataRep1.fastq.gz
-grant Crawford
-lab Duke
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 848
-view RawData
-
-metaObject wgEncodeOpenChromDnaseLhsrRawDataRep1Andro
-objType file
-cell LHSR
-composite wgEncodeOpenChromDnase
-controlId modelled
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-19
-dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrRawDataRep1Andro.fastq.gz
-grant Crawford
-lab Duke
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 851
-treatment androgen
-view RawData
-
-metaObject wgEncodeOpenChromDnaseLhsrRawDataRep2
-objType file
-cell LHSR
-composite wgEncodeOpenChromDnase
-controlId modelled
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-18
-dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrRawDataRep2.fastq.gz
-grant Crawford
-lab Duke
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 848
-view RawData
-
-metaObject wgEncodeOpenChromDnaseLhsrRawDataRep2Andro
-objType file
-cell LHSR
-composite wgEncodeOpenChromDnase
-controlId modelled
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-19
-dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrRawDataRep2Andro.fastq.gz
-grant Crawford
-lab Duke
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 851
-treatment androgen
-view RawData
-
 metaObject wgEncodeOpenChromDnaseLncapAlnRep1
 objType file
 cell LNCaP
@@ -4475,4 +4401,4 @@ tableName wgEncodeOpenChromDnaseProgfibSig
 treatment None
 view Signal
 
-# MAGIC: -1535867978
+# MAGIC: -260143681

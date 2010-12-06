@@ -1979,80 +1979,6 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
 
-metaObject wgEncodeOpenChromFaireLhsrRawDataRep1
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-controlId modelled
-dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrRawDataRep1.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 873
-view RawData
-
-metaObject wgEncodeOpenChromFaireLhsrRawDataRep1Andro
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-controlId modelled
-dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrRawDataRep1Andro.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 874
-treatment androgen
-view RawData
-
-metaObject wgEncodeOpenChromFaireLhsrRawDataRep2
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-controlId modelled
-dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrRawDataRep2.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 873
-view RawData
-
-metaObject wgEncodeOpenChromFaireLhsrRawDataRep2Andro
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-controlId modelled
-dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrRawDataRep2Andro.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 874
-treatment androgen
-view RawData
-
 metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
 cell Medullo
@@ -2530,4 +2456,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -977472992
+# MAGIC: 298323039
