@@ -1,3 +1,123 @@
+metaObject wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1
+objType file
+cell BG02ES-EBD
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL111
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2
+objType file
+cell BG02ES-EBD
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL112
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep1
+objType table
+cell BG02ES-EBD
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep2
+objType table
+cell BG02ES-EBD
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqBg02esHpaAlnRep1
+objType file
+cell BG02ES
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL84
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqBg02esHpaRegionsRep1
+objType table
+cell BG02ES
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqBg02esHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqBg02esHpaRegionsRep1
+treatment None
+view Regions
+
 metaObject wgEncodeHaibMethylSeqGm12878HpaAlnRep1
 objType file
 cell GM12878
@@ -802,6 +922,366 @@ tableName wgEncodeHaibMethylSeqH1hescRegionsRep2
 treatment None
 view Regions
 
+metaObject wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1
+objType file
+cell H9ES-AFP-
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL43
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1
+objType file
+cell H9ES-AFP+
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL42
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1
+objType table
+cell H9ES-AFP+
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqH9escmHpaAlnRep1
+objType file
+cell H9ES-CM
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL46
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqH9escmHpaRegionsRep1
+objType table
+cell H9ES-CM
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9escmHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqH9escmHpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqH9esebdHpaAlnRep1
+objType file
+cell H9ES-EBD
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL86
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqH9esebHpaAlnRep1
+objType file
+cell H9ES-EB
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL44
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqH9eseHpaAlnRep1
+objType file
+cell H9ES-E
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL24
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqH9eseHpaRegionsRep1
+objType table
+cell H9ES-E
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9eseHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqH9eseHpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqH9esHpaAlnRep1
+objType file
+cell H9ES
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL26
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqH9esHpaRegionsRep1
+objType table
+cell H9ES
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqH9esHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqH9esHpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqHalHpaAlnRep1
+objType file
+cell HAL
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHalHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL37
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqHalHpaRegionsRep1
+objType table
+cell HAL
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHalHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqHalHpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqHct116HpaAlnRep1
+objType file
+cell HCT-116
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL8
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqHct116HpaAlnRep2
+objType file
+cell HCT-116
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL33
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqHct116HpaRegionsRep1
+objType table
+cell HCT-116
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHct116HpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqHct116HpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqHct116HpaRegionsRep2
+objType table
+cell HCT-116
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHct116HpaRegionsRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqHct116HpaRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqHct116MspAlnRep1
+objType file
+cell HCT-116
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHct116MspAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL10
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme msp
+subId 1875
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibMethylSeqHelas3HpaAlnRep1
 objType file
 cell HeLa-S3
@@ -1210,6 +1690,86 @@ tableName wgEncodeHaibMethylSeqHepg2RegionsRep2
 treatment None
 view Regions
 
+metaObject wgEncodeHaibMethylSeqHfl11wHpaAlnRep1
+objType file
+cell HFL11W
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL113
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqHfl11wHpaRegionsRep1
+objType table
+cell HFL11W
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHfl11wHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqHfl11wHpaRegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqHfl24wHpaAlnRep1
+objType file
+cell HFL24W
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labVersion SL114
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibMethylSeqHfl24wHpaRegionsRep1
+objType table
+cell HFL24W
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeHaibMethylSeqHfl24wHpaRegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme hpa
+subId 1875
+tableName wgEncodeHaibMethylSeqHfl24wHpaRegionsRep1
+treatment None
+view Regions
+
 metaObject wgEncodeHaibMethylSeqK562HpaAlnRep1
 objType file
 cell K562
@@ -1410,4 +1970,4 @@ tableName wgEncodeHaibMethylSeqK562RegionsRep2
 treatment None
 view Regions
 
-# MAGIC: 1481037855
+# MAGIC: 1537275029
