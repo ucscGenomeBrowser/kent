@@ -322,13 +322,13 @@ sub translateSql {
   $/ = "\nGO\n\n\n";
   my $tableCount = 0;
   while (<$SQLIN>) {
-    next unless /^CREATE TABLE \[(b${build}_(SNP)?)?($tables)(_$buildAssembly)?\]/;
+    next unless /^CREATE TABLE \[($tables)\]/;
     s/[\[\]]//g;  s/GO\n\n/;/;  s/smalldatetime/datetime/g;
     s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g;
     s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g;
     s/nvarchar/varchar/g;  s/set quoted/--set quoted/g;
     s/(image|varchar\s+\(\d+\))/BLOB/g;
-    print $SQLOUT;
+    print $SQLOUT $_;
     $tableCount++;
   }
   close($SQLIN);
@@ -340,7 +340,7 @@ sub translateSql {
   while (<$SQLIN>) {
     next unless /^CREATE TABLE \[$tables\]/;
     s/[\[\]]//g;  s/GO\n\n\n/;\n/;  s/smalldatetime/datetime/g;
-    print $SQLOUT;
+    print $SQLOUT $_;
     $tableCount++;
   }
   close($SQLIN);
@@ -422,12 +422,12 @@ _EOF_
 
   $bossScript->execute();
 
+  &translateSql();
   # Check for multiple reference assembly labels -- developer may need to exclude some.
   my @labels = &getDbSnpAssemblyLabels();
   if (@labels > 1) {
     &demandAssemblyLabel(@labels);
   }
-  &translateSql();
 }
 
 
@@ -471,7 +471,6 @@ sub tryToMakeLiftUp {
   }
   close($CS);
   my $ciPipe = "zcat $runDir/data/$ContigInfo.bcp.gz $grepOutLabels $grepOutContigs |";
-HgAutomate::verbose(1, "running '$ciPipe'\n");
   my $CI = &HgAutomate::mustOpen($ciPipe);
   my $liftUpFile = "$buildDir/$commonName/suggested.lft";
   my $LU = &HgAutomate::mustOpen(">$liftUpFile");
@@ -571,7 +570,6 @@ sub translateData {
   my @rejectLabels = &checkAssemblySpec();
   my $grepOutLabels = @rejectLabels ? "| egrep -vw '(" . join('|', @rejectLabels) . ")' " : "";
   my $grepOutContigs = $ignoreDbSnpContigs ? "| egrep -vw '$ignoreDbSnpContigs'" : "";
-HgAutomate::verbose(1, "grepOutContigs = '$grepOutContigs'\n");
   my $catOrGrepOutMito = ($db eq 'hg19') ? "grep -vw ^NC_012920" : "cat";
   my $runDir = "$buildDir/$commonName";
 
@@ -594,16 +592,19 @@ giant file, and indexes the giant fasta file.";
     # Work in local tmp disk to save some I/O time, and copy results back to
     # $runDir when done.
     #*** HgAutomate should probably have a sub that generates these lines given a prefix:
-    if (\$TMPDIR == "" || ! -d \$TMPDIR) then
+#breaks if TMPDIR not set -- which with -f I guess it wouldn't be:
+#    if ("\$TMPDIR" == "" || ! -d \$TMPDIR) then
       if (-d /data/tmp) then
         setenv TMPDIR /data/tmp
-      elsif (-d /tmp) then
-        setenv TMPDIR /tmp
       else
-        echo "Can't find TMPDIR"
-        exit 1
+        if (-d /tmp) then
+          setenv TMPDIR /tmp
+        else
+          echo "Can't find TMPDIR"
+          exit 1
+        endif
       endif
-    endif
+#    endif
     set tmpDir = `mktemp -d -p \$TMPDIR/$base.translate.XXXXXX`
     pushd \$tmpDir
 
@@ -612,7 +613,7 @@ giant file, and indexes the giant fasta file.";
     hgsql $tmpDb < $runDir/schema/table.sql
 
     foreach t ($ContigInfo $MapInfo $ContigLocusId)
-      zcat $dataDir/\$t.gz $grepOutLabels $grepOutContigs\\
+      zcat $dataDir/\$t.bcp.gz $grepOutLabels $grepOutContigs\\
       | perl -wpe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g;' \\
       | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
     end
@@ -629,7 +630,7 @@ giant file, and indexes the giant fasta file.";
     # Keep lines only if they have a word match to some reference contig ID.
     # That probably will allow some false positives from coord matches,
     # but we can clean those up afterward.
-    zcat $dataDir/$ContigInfo.bcpgz $grepOutLabels\\
+    zcat $dataDir/$ContigInfo.bcp.gz $grepOutLabels\\
     | cut -f $ctgIdCol | sort -n > $ContigInfo.ctg_id.txt
     zcat $dataDir/$ContigLoc.bcp.gz \\
     | grep -Fwf $ContigInfo.ctg_id.txt \\
@@ -643,7 +644,7 @@ giant file, and indexes the giant fasta file.";
     hgsql $tmpDb -e 'drop table $ContigLoc; \\
                          rename table ContigLocFix to $ContigLoc;'
 
-    zcat $dataDir/SNP.gz \\
+    zcat $dataDir/SNP.bcp.gz \\
     | perl -wpe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g;' \\
     | hgLoadSqlTab -oldTable $tmpDb SNP placeholder stdin
 
