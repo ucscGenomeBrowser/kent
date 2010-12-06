@@ -2030,8 +2030,8 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
         char numBuf[SMALLBUF];
         sprintLongWithCommas(numBuf, maxSafeHeight);
         if (safeHeight)  // Only one message
-            warn("Image is over %s pixels high (%d pix) at track:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
-                (flatTrack->next != NULL?"<BR>Additional tracks may have been set to hide at this zoom level.":""));
+            warn("Image is over %s pixels high (%d pix) atthe following track which is now hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
+                (flatTrack->next != NULL?"<BR>Additional tracks may have also been hidden at this zoom level.":""));
         safeHeight = FALSE;
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
