@@ -1723,6 +1723,10 @@ group map
 priority 25
 chromosomes  chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
 otherDb hg19Patch2
+chainMinScore 2000
+chainLinearGap medium
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
 html altSeqComposite
 dataVersion GRCh37 Patch 2 update, August 2010
 
@@ -1781,10 +1785,6 @@ dataVersion GRCh37 Patch 2 update, August 2010
     visibility pack
     parent altSeqComposite
     spectrum on
-    chainMinScore 3000
-    chainLinearGap medium
-    matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-    matrixHeader A, C, G, T
 
         track chainHg19Patch2
         parent altSeqCompositeViewchain
@@ -1800,10 +1800,6 @@ dataVersion GRCh37 Patch 2 update, August 2010
     view net
     visibility full
     parent altSeqComposite
-    chainMinScore 3000
-    chainLinearGap medium
-    matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-    matrixHeader A, C, G, T
 
         track netHg19Patch2
         parent altSeqCompositeViewnet

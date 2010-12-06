@@ -7,6 +7,9 @@ include trackDb.chainNet.ra
 # Neandertal tracks
 include trackDb.nt.ra
 
+# Denisova tracks
+include trackDb.denisova.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)

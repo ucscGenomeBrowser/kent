@@ -1848,6 +1848,24 @@ sex U
 tier 3
 protocol Yale_TFBS:HEK293b_Snyder_protocol.pdf
 
+term  Hepatocytes 
+tag  Hepatocytes 
+type Cell Line
+tier 3
+organism Human
+target  Hepatocytes 
+description  Primary Human Hepatocytes 
+lineage  Liver perfused by enzymes to generate single cell suspension 
+karyotype  normal 
+sex  U 
+tissue  Liver 
+vendorName  zen-bio
+vendorId
+orderUrl http://www.zen-bio.com/
+termId BTO:0000575
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000575
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Hepatocytes_Crawford_protocol.pdf
+
 term HFL11W
 tag HFL11W
 type Cell Line
@@ -2093,6 +2111,24 @@ sex U
 tier 3
 protocol UW_Stam:HPAF_Stam_protocol.pdf
 
+term HPDE6-E6E7 
+tag HPDE6E6E7 
+type Cell Line
+tier 3
+organism Human
+target HPDE6-E6E7 
+description  immortalized human pancreatic duct cells 
+lineage  normal human pancreatic duct cells immortalized with E6E7 gene of HPV 
+karyotype  Unknown 
+sex  F 
+tissue  Pancreatic Duct 
+vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute 
+vendorId
+orderUrl
+termId BTO:0002362
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002362
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:HPDE6-E6E7_Crawford_protocol.pdf
+
 term HPdLF
 tag HPdLF
 type Cell Line
@@ -2247,6 +2283,42 @@ termId BTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001079
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:HTR8svn_Crawford_protocol.pdf
 
+term  Huh-7 
+tag  Huh7 
+type Cell Line
+tier 3
+organism Human
+target  Huh-7 
+description  Hepatocellular carcinoma 
+lineage  Hepatocyte derived carcinoma taken from a liver tumor 
+karyotype  Unknown 
+sex  M 
+tissue  Liver 
+vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University 
+vendorId
+orderUrl
+termId BTO:0001950
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001950
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Huh-7_Crawford_protocol.pdf
+
+term  Huh-7.5 
+tag  Huh7.5 
+type Cell Line
+tier 3
+organism Human
+target  Huh-7.5 
+description  Hepatocellular carcinoma 
+lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication 
+karyotype  Unknown 
+sex  M 
+tissue  Liver 
+vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University 
+vendorId
+orderUrl
+termId BTO:0001950
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001950
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Huh-7.5_Crawford_protocol.pdf
+
 term HVMF
 tag HVMF
 type Cell Line
@@ -2272,6 +2344,24 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 sex U
 tier 3
 protocol UW_Stam:IMR90_Stam_protocol.pdf
+
+term  iPS 
+tag  iPS 
+type Cell Line
+tier 3
+organism Human
+target  iPS 
+description  induced pluripotent stem cell 
+lineage  induced pluripotent stem cell derived from skin fibroblast 
+karyotype  Unknown 
+sex  U 
+tissue  iPS stem cell derived from skin fibroblast 
+vendorName  Josh Chenoweth (chenowej @ ninds.nih.gov), Laboratory of Molecular Biology, National Institutes of Health, NINDS
+vendorId
+orderUrl
+termId BTO:0000001 (nonspecific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000001
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:iPS_Crawford_protocol.pdf
 
 term Jurkat
 tag Jurkat
@@ -2862,6 +2952,24 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:00
 sex U
 tier 3
 protocol UW_Stam:SkMC_Stam_protocol.pdf
+
+term  Stellate 
+tag  Stellate 
+type Cell Line
+tier 3
+organism Human
+target  Stellate 
+description  Human Hepatic Stellate Cells 
+lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient 
+karyotype  normal 
+sex  F 
+tissue  Liver 
+vendorName  Steve Choi (steve.choi @ duke.edu) at Duke University 
+vendorId
+orderUrl
+termId BTO:0002316
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002316
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Stellate_Crawford_protocol.pdf
 
 term T98G
 tag T98G
@@ -7052,6 +7160,12 @@ term Nre
 tag NRE
 type dataType
 description Negative Regulatory Elements
+
+term Proteogenomics
+tag protgeno
+type dataType
+label Proteogenomics
+description Mass Spec Proteogenomic Mapping
 
 # tag not standard to match hg18
 term RnaPet
