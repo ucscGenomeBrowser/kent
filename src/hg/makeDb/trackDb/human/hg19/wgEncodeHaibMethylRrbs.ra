@@ -13,7 +13,7 @@ subGroup5 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Stanford=Stanford Duke=
 dimensions dimensionX=obtainedBy dimensionY=cellType dimensionD=rep dimensionC=treatment 
 dimensionCchecked None
 dimensionDchecked rep1
-sortOrder cellType=+ obtainedBy=+ rep=+
+sortOrder cellType=+ obtainedBy=+ rep=+ treatment=+
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment 
 dragAndDrop subTracks
 # visibilityViewDefaults  Sites=hide
