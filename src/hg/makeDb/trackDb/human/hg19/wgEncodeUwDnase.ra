@@ -2,6 +2,16 @@
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
 # Notes:
+#       - Track Long Label:  DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
+#       - Track Short Label: UW DNaseI HS
+#       - View Long Labels: [cell] DNaseI HS [view] Rep [rep #] from ENCODE/UW 
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier
+#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
+#       - Default View selections
+#               - Hotspots = pack
+#               - Peaks = pack
+#               - Raw Signal = full
 #	- Short Labels: 
 #		Template: [cell] [view] [replicate #]
 #		- Views: For consistency sake view will be two letters
@@ -23,11 +33,6 @@
 #			- HMVEC-dNeo = HMVEC-dN 
 #			- HMVEC-LBl = HMVEC-lB 
 #			- HMVEC-LLy = HMVEC-lL
-#	- cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
-#	- Default Tracks on: Peaks,Hotspots,Raw Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
-#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
-#       - Track Long Label:  DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
-#       - View Long Labels: [cell] DNaseI HS [view] Rep [rep #] from ENCODE/UW 
 
 track wgEncodeUwDnase
 compositeTrack on

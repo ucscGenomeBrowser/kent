@@ -7,6 +7,11 @@
 #       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW 
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
 #       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
+#	- Default View selections
+#		- Hotspots = pack
+#		- Peaks = pack
+#		- Signal = full
+#		- Raw Signal = hide
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
 #       - Short Labels: 
 #               Template: [cell] [view] 
