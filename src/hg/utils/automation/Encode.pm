@@ -245,9 +245,13 @@ sub getControlledVocabTags
     my %termRa = RAFile::readRaFile("$configPath/$vocabConfigFile", "term");
     foreach my $term (keys %termRa) {
         my $type = $termRa{$term}->{type};
-        my $tag = $termRa{$term}->{tag};
         die "no type for $term" unless defined($type);
-        die "no tag for $term" unless defined($tag);
+
+        # use term for tag if there is no tag
+        my $tag = $termRa{$term}->{tag};
+        if (!defined($tag)) {
+            $tag = $term
+        }
         $tags{$type}->{$tag} = $termRa{$term};
     }
     return %tags;

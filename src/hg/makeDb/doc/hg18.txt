@@ -21380,7 +21380,8 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V9 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V9 done 3/26/10
 # DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
@@ -21388,14 +21389,14 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # DGV V5 done 7/16/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg18/bed/dgv.v9
-    cd /hive/data/genomes/hg18/bed/dgv.v9
+    mkdir /hive/data/genomes/hg18/bed/dgv.v10
+    cd /hive/data/genomes/hg18/bed/dgv.v10
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg18.v10.nov.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg18.v10.nov.2010.txt
     # shuffle fields into bed8+
-    foreach f (*.v9.*.txt)
+    foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -21415,13 +21416,11 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    # Save previous version for comparison:
-    hgsql hg18 -e 'rename table dgv to dgvV8'
     hgLoadBed hg18 dgv *.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 89427 elements of size 15
+#Loaded 101923 elements of size 15
       hgsql hg18 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#38
+#42
 
 # 11-04-2009 color change from brown to magenta:
 # old color
@@ -31041,3 +31040,77 @@ close($OUTD); close($OUTM); close($OUTU);
 # --------------------------
 
 #########################################################################
+# DENISOVA (ANCIENT HUMAN) (DONE 11/16/10 angie)
+    mkdir /hive/data/genomes/hg18/bed/denisova
+    cd /hive/data/genomes/hg18/bed/denisova
+    # Use username and password emailed by Ed Green 9/30/10
+    alias wg     wget -r --user=xxx --password=xxx
+    wg ftp://cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Catalog_of_changes/\*
+    # Ed says we don't need files with 'hcca' or 'hcscca' in the names
+    # (only hg18 or panTro2).
+    find . -name \*h\*cca\* -exec echo rm {} \;
+    # Inspect & execute output of the find command to save a bit of space (11G of 83G).
+
+    # Combine the two sequence-lib files for Denisova into one bam.  First ensure that
+    # the headers are identical:
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam > h1
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam > h2
+    cmp h1 h2
+    # No output, and they seem to be sorted by position, good to go:
+    samtools merge SL3003_SL3004_100122-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam
+#1023.571u 22.997s 17:34.24 99.2%        0+0k 0+0io 0pf+0w
+    # Build BAM index (.bam.bai) files.
+    samtools index SL3003_SL3004_100122-hg18.bam
+#94.811u 3.560s 1:51.16 88.4%    0+0k 0+0io 0pf+0w
+    pushd cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2
+    foreach f (*.bam)
+      echo $f
+      samtools index $f
+    end
+    popd
+
+    # Make /gbdb/ links and load database tables
+    mkdir /gbdb/hg18/denisova
+    ln -s `pwd`/SL3003_SL3004_100122-hg18.bam{,.bai} /gbdb/hg18/denisova/
+    mkdir /gbdb/hg18/denisova/modernHumanSeq
+    find `pwd` -name MMS\*hg18\*.bam\* -exec echo ln -s {} /gbdb/hg18/denisova/modernHumanSeq/ \;
+    # Inspect & execute output of the find command.
+
+    hgBbiDbLink hg18 bamSLDenisova /gbdb/hg18/denisova/SL3003_SL3004_100122-hg18.bam
+    foreach f (/gbdb/hg18/denisova/modernHumanSeq/MMS*.bam)
+      set track = `echo $f | perl -wpe 's/.*(MMS\d+)_HGDP\d+_(\w+)\..*/bam$1$2/ || die; s/_//;'`
+      echo $track
+      hgBbiDbLink hg18 $track $f
+    end
+
+#########################################################################
+# BUILD R-DMR TRACK.  DONE (Fan 7/23/2010)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/gs.19/build36/bed/rdmr
+cd /hive/data/genomes/gs.19/build36/bed/rdmr
+
+# download the supplemental data file, ng.471-S2.txt.
+
+cp -p ng.471-S2.txt rdmrRaw.tab
+# remove the header lines at the beginning of rdmrRaw.tab
+vi rdmrRaw.tab
+
+# load rdmrRaw table
+hgsql hg18 -e 'drop table rdmrRaw'
+hgsql hg18 < ~/kent/src/hg/lib/rdmrRaw.sql
+hgsql hg18 -e 'load data local infile "rdmrRaw.tab" into table rdmrRaw'
+
+# create rdmr table
+
+hgsql hg18 -N -e 'select chrom, chromStart-1, chromEnd, gene from rdmrRaw'
+>rdmr.tab
+
+hgLoadBed hg18 rdmr rdmr.tab
+
+#########################################################################
+

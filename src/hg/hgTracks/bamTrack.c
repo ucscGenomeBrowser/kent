@@ -750,12 +750,6 @@ hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
 hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
 }
 
-static void dontLoadItems(struct track *tg)
-/* Don't load anything, just draw warning. */
-{
-return;
-}
-
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {

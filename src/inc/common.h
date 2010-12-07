@@ -1337,8 +1337,29 @@ __attribute__((format(printf, 1, 2)))
 
 // SETTING_ON set of macros are frequently used comparisons of string values for boolean questions.
 // Notice the subtle difference between NOT_ON and IS_OFF.  NOT_ON could be NULL but IS_OFF must be explicitly set
-#define SETTING_IS_ON(setting)    (setting && (sameWord(setting,"on") || sameWord(setting,"true") || sameWord(setting,"enabled") || atoi(setting) != 0))
+#define SETTING_IS_ON(setting)    (setting && (sameWord(setting,"on") || sameWord(setting,"true") || sameWord(setting,"yes") || sameWord(setting,"enabled") || atoi(setting) != 0))
 #define SETTING_NOT_ON(setting)   (!SETTING_IS_ON(setting))
-#define SETTING_IS_OFF(setting)   (setting && (sameWord(setting,"off") || sameWord(setting,"false") || sameWord(setting,"disabled") || atoi(setting) == 0))
+#define SETTING_IS_OFF(setting)   (setting && (sameWord(setting,"off") || sameWord(setting,"false") || sameWord(setting,"no") || sameWord(setting,"disabled") || sameWord(setting,"0")))
+
+// Standard bit mask macros
+#define BITS_ADD(    flags,bits) ((flags) = ((flags) |  (bits)))
+#define BITS_REMOVE( flags,bits) ((flags) = ((flags) & ~(bits)))
+#define BITS_ARE_ON( flags,bits) (((flags) & (bits)) == (bits))
+#define BITS_ARE_OFF(flags,bits) (((flags) & (bits)) == 0)
+
+// It is sometimes useful to distinguish between 3 "boolean" states: TRUE, FALSE and UNKNOWN
+enum enumBool
+    {
+    beUnknown=0,              // Not yet set
+    ebYes=1,                  // already set to TRUE
+    ebNo=-1                   // already set to FALSE
+    };
+#define SET_TO_YES(ebool) { (ebool) = ebYes; }
+#define SET_TO_NO(ebool)  { (ebool) = ebNo; }
+#define IS_YES(ebool)     ((ebool) == ebYes)
+#define IS_NO(ebool)      ((ebool) == ebNo)
+#define IS_KNOWN(ebool)   (IS_YES(ebool) || IS_NO(ebool))
+#define IS_TRUE           IS_YES
+#define IS_FALSE          IS_NO
 
 #endif /* COMMON_H */

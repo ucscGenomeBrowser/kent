@@ -7,6 +7,9 @@ include trackDb.chainNet.ra
 # Neandertal tracks
 include trackDb.nt.ra
 
+# Denisova tracks
+include trackDb.denisova.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -915,6 +918,57 @@ snpExceptions snp131Exceptions
 snpExceptionDesc snp131ExceptionDesc
 snpSeq snp131Seq
 
+track snp131Composite
+compositeTrack on
+shortLabel SNPs (131) Comp
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) -- Composite version
+group varRep
+priority 99.093
+visibility dense 
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
+snpExceptions snp131Exceptions
+snpExceptionDesc snp131ExceptionDesc
+snpSeq snp131Seq
+subGroup1 view Views common=Common_SNPs misc=Misc_SNPs nonu=Non-Unique_SNPs
+dimensions dimX=view
+#configurable on
+
+    track snp131Common
+    parent snp131Composite
+    shortLabel Common SNPs (131)
+    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) from HapMap and/or 1000Genomes
+    subGroups view=common
+    visibility pack
+    priority 1
+
+    track snp131Misc
+    parent snp131Composite
+    shortLabel Misc SNPs (131)
+    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) not from HapMap and/or 1000Genomes
+    subGroups view=misc
+    visibility dense
+    priority 2
+
+    track snp131NonUnique
+    parent snp131Composite
+    shortLabel Non-Unique SNPs
+    longLabel Non-uniquely Mapped Simple Nucleotide Polymorphisms (dbSNP build 131)
+    subGroups view=nonu
+    visibility hide
+    priority 3
+
+
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
@@ -1169,6 +1223,23 @@ color 150,0,150
 type bed 4 +
 
 track dgv
+release alpha
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+priority 144.8
+visibility hide
+color 0,100,0
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report:
+url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
+dataVersion v10
+
+track dgv
+release beta,public
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
@@ -3506,79 +3577,218 @@ longLabel Personal Genome Variants
 group varRep
 priority 500
 visibility hide
+subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_1off=Single-Genome_Projects
+subGroup2 id Genome A_KB1=KB1 B_NB1=NB1 C_MD8=MD8 D_TK1=TK1 E_ABT=ABT F_12878=NA12878 G_12891=NA12891 H_12892=NA12892 I_19240=NA19240 J_19238=NA19238 K_19239=NA19239 L_Venter=Venter M_Watson=Watson N_18507=NA18507 O_YH=YH P_SJK=SJK Q_AK1=AK1 R_Quake=Quake RS_Irish=Irish S_Saqqaq=Saqqaq
+dragAndDrop subTracks
+configurable on
+dimensions dimX=view dimY=id
+sortOrder view=+ id=+
 type bed 4 +
 
-    track pgVenter
+    track pgSnpPSU
+    shortLabel PSU Bushmen
+    view A_PSU
+    visibility pack
     parent pgSnp
-    shortLabel Venter
-    longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
-    group varRep
-    priority 1
-    color 128,0,128
 
-    track pgWatson
-    parent pgSnp
-    shortLabel Watson
-    longLabel James Watson (CSHL)
-    group varRep
-    priority 2
-    color 153,0,0
+        track pgKb1Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=A_KB1
+        shortLabel KB1 indels
+        longLabel KB1 indels from 454 and Illumina
 
-    track pgYoruban3
-    parent pgSnp
-    shortLabel YRI NA18507
-    longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
-    group varRep
-    priority 5
-    color 128,0,128
+        track pgKb1Comb
+        parent pgSnpPSU
+	subGroups view=A_PSU id=A_KB1
+        shortLabel KB1
+        longLabel KB1 Genome Variants, combination of 454, Illumina, and genotyping
+        pgDbLink pgKb1PhenCode pgKb1Snpedia pgKb1Hgmd
 
-    track pgYh1
-    parent pgSnp
-    shortLabel YanHuang
-    longLabel Han Chinese Individual (YanHuang Project)
-    group varRep
-    priority 6
-    color 0,128,128
+        track pgNb1
+        parent pgSnpPSU
+	subGroups view=A_PSU id=B_NB1
+        shortLabel NB1
+        longLabel NB1 Genome Variants (all SNPs, 2X genome plus 16x exome)
+        pgDbLink pgNb1PhenCode pgNb1Snpedia pgNb1Hgmd
 
-    track pgSjk
-    parent pgSnp
-    shortLabel SJK
-    longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
-    group varRep
-    priority 7
-    color 0,128,128
+        track pgNb1Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=B_NB1
+        shortLabel NB1 indels
+        longLabel NB1 Genome Variants indels
 
-    track pgNA12878
-    parent pgSnp
-    shortLabel CEU daught '2878
-    longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
-    group varRep
-    priority 8
-    color 128,64,0
+        track pgMd8
+        parent pgSnpPSU
+	subGroups view=A_PSU id=C_MD8
+        shortLabel MD8
+        longLabel MD8 Genome Variants (all SNPs, 16x exome)
+        pgDbLink pgMd8PhenCode pgMd8Snpedia pgNb1Hgmd
 
-    track pgNA12891
-    parent pgSnp
-    shortLabel CEU father '2891
-    longLabel CEU Trio Father NA12891 (1000 Genomes Project)
-    group varRep
-    priority 9
-    color 128,64,0
+        track pgMd8Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=C_MD8
+        shortLabel MD8 indels
+        longLabel MD8 Genome Variants indels
 
-    track pgNA12892
-    parent pgSnp
-    shortLabel CEU mother '2892
-    longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
-    group varRep
-    priority 10
-    color 128,64,0
+        track pgTk1
+        parent pgSnpPSU
+	subGroups view=A_PSU id=D_TK1
+        shortLabel TK1
+        longLabel TK1 Genome Variants (all SNPs, 16x exome)
+        pgDbLink pgTk1PhenCode pgTk1Snpedia pgTk1Hgmd
 
-    track pgNA19240
+        track pgTk1Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=D_TK1
+        shortLabel TK1 indels
+        longLabel TK1 Genome Variants indels
+
+        track pgAbtSolid
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT
+        longLabel ABT Genome Variants, SOLiD
+        pgDbLink pgAbtPhenCode pgAbtSnpedia pgAbtHgmd
+
+        track pgAbt454
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT exome
+        longLabel ABT Genome Variants, 454 exome
+
+        track pgAbt454indels
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT exome indels
+        longLabel ABT Genome Variants, 454 exome indels
+
+        track pgAbtIllum
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT Illum
+        longLabel ABT Genome Variants, Illumina 7.2X
+
+    track pgSnp1kG
+    shortLabel 1000GenomesPilot
+    view B_1kG
+    visibility pack
     parent pgSnp
-    shortLabel YRI daught '9240
-    longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
-    group varRep
-    priority 11
-    color 128,64,0
+
+        track pgNA12878
+        parent pgSnp1kG
+	subGroups view=B_1kG id=F_12878
+        shortLabel CEU daught '2878
+        longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA12891
+        parent pgSnp1kG
+	subGroups view=B_1kG id=G_12891
+        shortLabel CEU father '2891
+        longLabel CEU Trio Father NA12891 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA12892
+        parent pgSnp1kG
+	subGroups view=B_1kG id=H_12892
+        shortLabel CEU mother '2892
+        longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA19240
+        parent pgSnp1kG
+	subGroups view=B_1kG id=I_19240
+        shortLabel YRI daught '9240
+        longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA19238
+        parent pgSnp1kG
+	subGroups view=B_1kG id=J_19238
+        shortLabel YRI mother '9238
+        longLabel YRI Trio Mother NA19238 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA19239
+        parent pgSnp1kG
+	subGroups view=B_1kG id=K_19239
+        shortLabel YRI father '9239
+        longLabel YRI Trio Father NA19239 (1000 Genomes Project)
+        color 128,64,0
+
+    track pgSnp1off
+    shortLabel Single Genomes
+    view C_1off
+    visibility pack
+    parent pgSnp
+
+        track pgVenter
+        parent pgSnp1off
+	subGroups view=C_1off id=L_Venter
+        shortLabel Venter
+        longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
+        color 128,0,128
+
+        track pgWatson
+        parent pgSnp1off
+	subGroups view=C_1off id=M_Watson
+        shortLabel Watson
+        longLabel James Watson (CSHL)
+        color 153,0,0
+
+        track pgYoruban3
+        parent pgSnp1off
+	subGroups view=C_1off id=N_18507
+        shortLabel YRI NA18507
+        longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
+        color 128,0,128
+
+        track pgYh1
+        parent pgSnp1off
+	subGroups view=C_1off id=O_YH
+        shortLabel YanHuang
+        longLabel Han Chinese Individual (YanHuang Project)
+        color 0,128,128
+
+        track pgSjk
+        parent pgSnp1off
+	subGroups view=C_1off id=P_SJK
+        shortLabel SJK
+        longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
+        color 0,128,128
+
+        track pgAk1
+        parent pgSnp1off
+	subGroups view=C_1off id=Q_AK1
+        shortLabel AK1
+        longLabel Anonymous Korean individual, AK1 (Genomic Medicine Institute)
+        color 0,128,64
+
+        track pgQuake
+        parent pgSnp1off
+	subGroups view=C_1off id=R_Quake
+        shortLabel S. Quake
+        longLabel Stephen Quake (Stanford)
+
+        track pgIrish
+        parent pgSnp1off
+        subGroups view=C_1off id=RS_Irish
+        shortLabel Irish Male
+        longLabel Anonymous Irish Male
+        color 0,100,100
+
+        track pgSaqqaq
+        parent pgSnp1off
+	subGroups view=C_1off id=S_Saqqaq
+        shortLabel Saqqaq
+        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq (Saqqaq Genome Project)
+
+        track pgSaqqaqHc
+        parent pgSnp1off
+	subGroups view=C_1off id=S_Saqqaq
+        shortLabel Saqqaq HC
+        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
+
 
 track pgSnpHgwdev
 compositeTrack on
@@ -3590,152 +3800,25 @@ visibility hide
 type bed 4 +
 
     track pgKb1Illum
-    parent pgSnpHgwdev off
-    shortLabel KB1
+    parent pgSnpHgwdev
+    shortLabel KB1 Illumina
     longLabel KB1 Genome Variants, Illumina 23.2X
     priority 1
 
     track pgKb1454
-    parent pgSnpHgwdev off
-    shortLabel KB1
+    parent pgSnpHgwdev
+    shortLabel KB1 454
     longLabel KB1 Genome Variants, 454
     priority 2
 
-    track pgKb1Indel
+    track pgYoruban2
     parent pgSnpHgwdev
-    shortLabel KB1 indels
-    longLabel KB1 indels from 454 and Illumina
-    priority 3
-
-    track pgKb1Comb
-    parent pgSnpHgwdev
-    shortLabel KB1
-    longLabel KB1 Genome Variants, combination of 454, Illumina, and genotyping
-    priority 4
-    pgDbLink pgKb1PhenCode pgKb1Snpedia pgKb1Hgmd
-    visibility pack
-
-    track pgNb1
-    parent pgSnpHgwdev
-    shortLabel NB1
-    longLabel NB1 Genome Variants (all SNPs, 2X genome plus 16x exome)
-    visibility pack
-    pgDbLink pgNb1PhenCode pgNb1Snpedia pgNb1Hgmd
-    priority 5
-
-    track pgNb1Indel
-    parent pgSnpHgwdev
-    shortLabel NB1 indels
-    longLabel NB1 Genome Variants indels
-    visibility pack
-    priority 6
-
-    track pgMd8
-    parent pgSnpHgwdev
-    shortLabel MD8
-    longLabel MD8 Genome Variants (all SNPs, 16x exome)
-    visibility pack
-    pgDbLink pgMd8PhenCode pgMd8Snpedia pgNb1Hgmd
-    priority 7
-
-    track pgMd8Indel
-    parent pgSnpHgwdev
-    shortLabel MD8 indels
-    longLabel MD8 Genome Variants indels
-    visibility pack
-    priority 8
-
-    track pgTk1
-    parent pgSnpHgwdev
-    shortLabel TK1
-    longLabel TK1 Genome Variants (all SNPs, 16x exome)
-    visibility pack
-    pgDbLink pgTk1PhenCode pgTk1Snpedia pgTk1Hgmd
-    priority 9
-
-    track pgTk1Indel
-    parent pgSnpHgwdev
-    shortLabel TK1 indels
-    longLabel TK1 Genome Variants indels
-    visibility pack
-    priority 10
-
-    track pgAbtSolid
-    parent pgSnpHgwdev
-    shortLabel ABT
-    longLabel ABT Genome Variants, SOLiD
-    visibility pack
-    pgDbLink pgAbtPhenCode pgAbtSnpedia pgAbtHgmd
-    priority 11
-
-    track pgAbt454
-    parent pgSnpHgwdev off
-    shortLabel ABT exome
-    longLabel ABT Genome Variants, 454 exome
-    visibility hide
-    priority 12
-
-    track pgAbt454indels
-    parent pgSnpHgwdev off
-    shortLabel ABT exome indels
-    longLabel ABT Genome Variants, 454 exome indels
-    visibility hide
-    priority 13
-
-    track pgAbtIllum
-    parent pgSnpHgwdev off
-    shortLabel ABT Illum
-    longLabel ABT Genome Variants, Illumina 7.2X
-    visibility hide
-    priority 14
-
-    track pgAk1
-    parent pgSnpHgwdev
-    shortLabel AK1
-    longLabel Anonymous Korean individual, AK1 (Genomic Medicine Institute)
-    color 0,128,64
-    priority 50
-
-    track pgQuake
-    parent pgSnpHgwdev
-    shortLabel S. Quake
-    longLabel Stephen Quake (Stanford)
-    priority 51
-
-    track pgIrish
-    parent pgSnpHgwdev
-    shortLabel Irish male
-    longLabel Anonymous Irish male
-    color 0,100,100
-    priority 53
-
-    track pgSaqqaq
-    parent pgSnpHgwdev
-    shortLabel Saqqaq
-    longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq (Saqqaq Genome Project)
-    priority 55
-
-    track pgSaqqaqHc
-    parent pgSnpHgwdev off
-    shortLabel Saqqaq hc
-    longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
-    priority 56
-
-    track pgNA19238
-    subTrack pgSnpHgwdev
-    shortLabel YRI '9238
-    longLabel YRI Trio Mother NA19238 (1000 Genomes Project)
+    shortLabel YRI '8507, SOLiD
+    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
     group varRep
-    priority 57
-    color 128,64,0
+    priority 20
+    color 128,0,128
 
-    track pgNA19239
-    subTrack pgSnpHgwdev
-    shortLabel YRI '9239
-    longLabel YRI Trio Father NA19239 (1000 Genomes Project)
-    group varRep
-    priority 58
-    color 128,64,0
 
 track darned
 shortLabel Human RNA Editing

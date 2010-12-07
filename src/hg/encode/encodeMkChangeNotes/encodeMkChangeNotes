@@ -150,7 +150,7 @@ def main(argv=None):
     # some re we will be using
     table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+|pairedTagAlign|shortFrags)$")
     gbdb = re.compile("^(wig|tagAlign|bigWig|bam)$")
-    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm1|fpkm2|insDistrib)$")
+    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm|fpkm1|fpkm2|insDistrib|insDist|junction)$")
 
     # if new relase, add the full path to all files
     path_prefix = ""

@@ -253,6 +253,13 @@ susScr2.refseq.mrna.native.load = no
     hgsql -e 'update defaultDb set name="susScr2" where name="susScr1";' \
 	hgcentraltest
 
+# Zoomed position in on RR a little, to match what is currently on hgwdev
+# and hgwbeta.
+# (DONE - 2010-12-02 - Brooke)
+    hgsql -h genome-centdb -e \
+    'update dbDb set defaultPos="chr13:57394416-57400490" where name="susScr2"' \
+    hgcentral
+
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
 #	(DONE - 2010-03-26 - Hiram)

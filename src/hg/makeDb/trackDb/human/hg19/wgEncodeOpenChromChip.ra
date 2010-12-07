@@ -377,6 +377,15 @@ wgEncode 1
         type narrowPeak
         # subId=2516 dateSubmitted=2010-10-20
 
+        track wgEncodeOpenChromChipMcf7CmycEstroPkRep1
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel MCF-7 c-Myc Pk 
+        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (c-Myc in MCF-7 cells)
+        subGroups view=Peaks factor=CMYC cellType=MCF7 treatment=ESTRO
+        type narrowPeak
+        # subId=2503 dateSubmitted=2010-10-16
+
 
     track wgEncodeOpenChromChipViewSignal
     shortLabel Signal (F-Seq Density)
@@ -826,6 +835,15 @@ wgEncode 1
         type bigWig 0.000000 5.225800
         # subId=2516 dateSubmitted=2010-10-20
 
+        track wgEncodeOpenChromChipMcf7CmycEstroSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel MCF-7 c-Myc Sig
+        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (c-Myc in MCF-7 cells)
+        subGroups view=SIG factor=CMYC cellType=MCF7 treatment=ESTRO
+        type bigWig 0.000000 0.801700
+        # subId=2503 dateSubmitted=2010-10-16
+
 
     track wgEncodeOpenChromChipViewSigBo
     shortLabel Signal (Base Overlap)
@@ -1181,4 +1199,13 @@ wgEncode 1
         subGroups treatment=NONE view=SIGBO factor=CTCF cellType=Gliobla
         type bigWig 0.000000 4832.000000
         # subId=2516 dateSubmitted=2010-10-20
+
+        track wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel MCF-7 c-Myc
+        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (c-Myc in MCF-7 cells)
+        subGroups view=SIGBO factor=CMYC cellType=MCF7 treatment=ESTRO
+        type bigWig 0.000000 2368.000000
+        # subId=2503 dateSubmitted=2010-10-16
 

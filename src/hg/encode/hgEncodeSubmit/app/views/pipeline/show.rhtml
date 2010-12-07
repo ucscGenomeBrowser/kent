@@ -99,13 +99,13 @@ if (not busy) and authorized and ((not nonActive) or advancedView)
     needLoadLink = true
   end
 
-  if @project.status == "uploaded" \
+  if @project.status == "expanded" \
   or @project.status == "validate failed" 
     needValidateLink = true
   end
 
   if @project.status == "new" \
-  or @project.status == "uploaded" \
+  or @project.status == "expanded" \
   or @project.status == "upload failed" \
   or @project.status == "validate failed" \
   or @project.status == "load failed" \
@@ -121,7 +121,9 @@ if (not busy) and authorized and ((not nonActive) or advancedView)
     needUnloadLink = true
   end
 
-  if advancedView and @project_status != "new"
+  if (@project.status == "expand failed") \
+  or (@project.status == "uploaded") \
+  or (advancedView and @project_status != "new")
     needReexpandAllLink = true
   end
 

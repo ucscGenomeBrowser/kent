@@ -24,6 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 #include "web.h"
+#include "hPrint.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -170,9 +171,7 @@ if(showShortLabel)
     dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
-//#ifdef OMIT
 struct hash *cvTermTypes = mdbCvTermTypeHash();
-//#endif///def OMIT
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
@@ -194,7 +193,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         // If antibody and metadata contains input={sameValue} then just print input
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
-//#ifdef OMIT
+
         if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
             {
             struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
@@ -207,7 +206,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                         label = mdbVar->var;
                     char *linkOfType = controlledVocabLink(NULL,"type",mdbVar->var,label,label,NULL);
                     char *cvDefined=hashFindVal(cvTerm,"cvDefined");
-                    if (cvDefined != NULL && differentWord(cvDefined,"no") && differentWord(cvDefined,"0"))
+                    if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
                         {
                         char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
                         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
@@ -227,7 +226,6 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     }
                 }
             }
-//#endif///def OMIT
         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
@@ -245,14 +243,14 @@ if(safeObj == NULL || safeObj->vars == NULL)
 return FALSE;
 
 printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, showLongLabel?"true":"false", title);
+        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false", title);
 if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
     {
-    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->table,
+    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track,
         metadataAsHtmlTable(db,tdb,showLongLabel,TRUE,trackHash) );
     }
 else
-    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->table);
+    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->track);
 return TRUE;
 }
 
@@ -280,7 +278,19 @@ if(schemaLink)
     }
 if(downloadLink)
     {
-    makeNamedDownloadsLink(db, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    // special case exception (hg18:NHGRI BiPs are in 7 different dbs but only hg18 has downloads):
+    char *targetDb = trackDbSetting(tdb, "compareGenomeLinks");
+    if (targetDb != NULL)
+        {
+        targetDb = cloneFirstWordByDelimiter(targetDb,'=');
+        if (!startsWith("hg",targetDb))
+            freez(&targetDb);
+        }
+    if (targetDb == NULL)
+        targetDb = cloneString(db);
+
+    makeNamedDownloadsLink(targetDb, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
+    freez(&targetDb);
     if(metadataLink)
         printf(",");
     }
@@ -1042,16 +1052,24 @@ if (gotCds && gotSeq)
     }
 else if (gotCds)
     {
+    char buf[256];
+    char *disabled = NULL;
+    safef(buf, sizeof(buf), "onchange='codonColoringChanged(\"%s\")'", name);
     puts("<P><B>Color track by codons:</B>");
     cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
-			curValue, NULL);
+			curValue, buf);
 #ifndef BAM_CFG_UI_CHANGES
     printf("<BR>");
 #endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
+    safef(buf, sizeof(buf), "%s.%s", name, CODON_NUMBERING_SUFFIX);
+    puts("<br /><b>Show codon numbering</b>:\n");
+    if(curOpt == baseColorDrawOff)
+        disabled = "disabled";
+    cgiMakeCheckBoxJS(buf, cartUsualBoolean(cart, buf, FALSE), disabled);
     }
 else if (gotSeq)
     {
@@ -6138,12 +6156,13 @@ jsIncludeFile("ui.dropdownchecklist.js",NULL);
 webIncludeResourceFile("ui.dropdownchecklist.css");
 
 // TODO:
-// 1) Make this work with matrix
-// 2) Scroll long lists should be configurable through tdb setting
+// 1) Scroll long lists should be configurable through tdb setting
 //    #define FILTER_COMPOSITE_OPEN_SIZE 16
-// 3) columnCount (Number of filterBoxes per row) should be configurable through tdb setting
+// 2) columnCount (Number of filterBoxes per row) should be configurable through tdb setting
 
-printf("<B>Filter subtracks by:</B> (select multiple %sitems - %s)<BR>\n",(membersForAll->dimMax == dimA?"":"categories and "),FILTERBY_HELP_LINK);
+printf("<B>Filter subtracks %sby:</B> (select multiple %sitems - %s)<BR>\n",
+       (membersForAll->members[dimX] != NULL || membersForAll->members[dimY] != NULL ? "further ":""),
+       (membersForAll->dimMax == dimA?"":"categories and "),FILTERBY_HELP_LINK);
 printf("<TABLE><TR valign='top'>\n");
 
 // Do All [+][-] buttons
@@ -6268,30 +6287,35 @@ if (dimensionX || dimensionY) // Must be an X or Y dimension
         }
     }
 
-if(!hCompositeUiByFilter(db, cart, parentTdb, formName))
+// If there is no matrix and if there is a filterComposite, then were are done.
+if(dimensionX == NULL && dimensionY == NULL)
     {
-    char javascript[JBUFSIZE];
-    //puts("<B>Select subtracks by characterization:</B><BR>");
-    printf("<B>Select subtracks by ");
-    if(dimensionX && !dimensionY)
-        safef(javascript, sizeof(javascript), "%s:</B>",dimensionX->groupTitle);
-    else if(!dimensionX && dimensionY)
-        safef(javascript, sizeof(javascript), "%s:</B>",dimensionY->groupTitle);
-    else if(dimensionX && dimensionY)
-        safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->groupTitle,dimensionY->groupTitle);
-    else
-        safef(javascript, sizeof(javascript), "multiple variables:</B>");
-    puts(strLower(javascript));
+    if (hCompositeUiByFilter(db, cart, parentTdb, formName))
+        return FALSE;
+    }
 
-    if(!subgroupingExists(parentTdb,"view"))
-        puts("(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on subtrack selection' TARGET=_BLANK>help</A>)\n");
+// Tell the user what to do:
+char javascript[JBUFSIZE];
+//puts("<B>Select subtracks by characterization:</B><BR>");
+printf("<B>Select subtracks by ");
+if(dimensionX && !dimensionY)
+    safef(javascript, sizeof(javascript), "%s:</B>",dimensionX->groupTitle);
+else if(!dimensionX && dimensionY)
+    safef(javascript, sizeof(javascript), "%s:</B>",dimensionY->groupTitle);
+else if(dimensionX && dimensionY)
+    safef(javascript, sizeof(javascript), "%s and %s:</B>",dimensionX->groupTitle,dimensionY->groupTitle);
+else
+    safef(javascript, sizeof(javascript), "multiple variables:</B>");
+puts(strLower(javascript));
 
-    puts("<BR>\n");
+if(!subgroupingExists(parentTdb,"view"))
+    puts("(<A HREF=\"../goldenPath/help/multiView.html\" title='Help on subtrack selection' TARGET=_BLANK>help</A>)\n");
 
-    if(membersForAll->abcCount > 0)
-        {
-        displayABCdimensions(db,cart,parentTdb,subtrackRefList,membersForAll);
-        }
+puts("<BR>\n");
+
+if(membersForAll->abcCount > 0 && membersForAll->filters == FALSE)
+    {
+    displayABCdimensions(db,cart,parentTdb,subtrackRefList,membersForAll);
     }
 
 if(dimensionX == NULL && dimensionY == NULL) // Could have been just filterComposite. Must be an X or Y dimension
@@ -6396,6 +6420,9 @@ if(dimensionY && cntY>MATRIX_BOTTOM_BUTTONS_AFTER)
 
 puts("</TD></TR></TABLE>");
 puts("<BR>\n");
+
+// If any filter additional filter composites, they can be added at the end.
+hCompositeUiByFilter(db, cart, parentTdb, formName);
 
 return TRUE;
 }
@@ -6774,7 +6801,7 @@ if (subtrackOverride)
     return vis;
 
 // subtracks without explicit (cart) vis but are selected, should get inherited vis
-if (vis == tvHide && tdbIsContainerChild(tdb))
+if (tdbIsContainerChild(tdb))
     {
     if (checkBoxToo && fourStateVisible(subtrackFourStateChecked(tdb,cart)))
         vis = tvFull; // to be limited by ancestry
@@ -6869,3 +6896,36 @@ sqlFreeResult(&sr);
 webPrintLinkTableEnd();
 }
 
+
+boolean hPrintPennantIcon(struct trackDb *tdb)
+// Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
+{
+char *setting = trackDbSetting(tdb, "pennantIcon");
+if(setting != NULL)
+    {
+    setting = cloneString(setting);
+    char *icon = htmlEncodeText(nextWord(&setting),FALSE);
+    if (setting)
+        {
+        char *url = nextWord(&setting);
+        if (setting)
+            {
+            char *hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
+            hPrintf("<a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' src='../images/%s'></a>\n",hint,url,icon);
+            freeMem(hint);
+            }
+        else
+            hPrintf("<a href='%s' TARGET=ucscHelp><img height='16' width='16' src='../images/%s'></a>\n",url,icon);
+        }
+    else
+        hPrintf("<img height='16' width='16' src='%s'>\n",icon);
+    freeMem(icon);
+    return TRUE;
+    }
+else if(trackDbSetting(tdb, "wgEncode") != NULL)
+    {
+    hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
+    return TRUE;
+    }
+return FALSE;
+}

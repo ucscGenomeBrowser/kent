@@ -84,6 +84,7 @@ if(s != NULL && differentWord(s,"missing"))
     {
     char *docSetting = cloneString(s);
     char *settings=docSetting;
+    int count=0;
     while((s = nextWord(&settings)) != NULL)
         {
         char *docTitle = NULL;
@@ -100,8 +101,12 @@ if(s != NULL && differentWord(s,"missing"))
             }
         safef(docUrl,  sizeof(docUrl),  "%s%s", dir, fileName);
         safef(docFile, sizeof(docFile), "%s%s", hDocumentRoot(), docUrl);
-        //if (fileExists(documentFile))
-            printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+        if (count>0)
+            printf("<BR>");
+        count++;
+        docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
+        printf(" <A TARGET=_BLANK HREF=%s>%s</A>\n", docUrl,docTitle);
+        freeMem(docTitle);
         }
     freeMem(docSetting);
     }

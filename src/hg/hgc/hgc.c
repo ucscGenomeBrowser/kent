@@ -8930,6 +8930,9 @@ char query2[256];
 struct sqlResult *sr2;
 char **row2;
 char *strand={"+"};
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *chrom = cartString(cart, "c");
 
 printf("<H3>Patient %s </H3>", itemName);
 
@@ -8959,15 +8962,7 @@ printf("<A HREF=\"%s%s\" target=_blank>",
 printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
-safef(query, sizeof(query),
-      "select chrom, chromStart, chromEnd from decipher where name ='%s'", itemName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row != NULL)
-    {
-    printPosOnChrom(row[0], atoi(row[1]), atoi(row[2]), strand, TRUE, itemName);
-    }
-sqlFreeResult(&sr);
+printPosOnChrom(chrom, start, end, strand, TRUE, itemName);
 
 /* print UCSC Genes in the reported region */
 safef(query, sizeof(query),
@@ -9845,6 +9840,175 @@ if (startsWith("hg", database))
     printf("%s</A><BR>\n", rl->name);
     }
 printStanSource(rl->mrnaAcc, "mrna");
+}
+
+void prKnownGeneInfo(struct sqlConnection *conn, char *rnaName,
+                   char *sqlRnaName, struct refLink *rl)
+/* print basic details information and links for a Known Gene */
+{
+struct sqlResult *sr;
+char **row;
+char query[256];
+int ver = gbCdnaGetVersion(conn, rl->mrnaAcc);
+char *cdsCmpl = NULL;
+
+printf("<td valign=top nowrap>\n");
+
+printf("<H2>Known Gene %s</H2>\n", rl->name);
+printf("<B>KnownGene:</B> <A HREF=\"");
+printEntrezNucleotideUrl(stdout, rl->mrnaAcc);
+if (ver > 0)
+    printf("\" TARGET=_blank>%s.%d</A>", rl->mrnaAcc, ver);
+else
+    printf("\" TARGET=_blank>%s</A>", rl->mrnaAcc);
+fflush(stdout);
+
+puts("<BR>");
+char *desc = gbCdnaGetDescription(conn, rl->mrnaAcc);
+if (desc != NULL)
+    {
+    printf("<B>Description:</B> ");
+    htmlTextOut(desc);
+    printf("<BR>\n");
+    }
+    
+printCcdsForSrcDb(conn, rl->mrnaAcc);
+
+cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
+if (cdsCmpl != NULL)
+    {
+    printf("<B>CDS:</B> %s<BR>", cdsCmpl);
+    }
+if (rl->omimId != 0)
+    {
+    printf("<B>OMIM:</B> <A HREF=\"");
+    printEntrezOMIMUrl(stdout, rl->omimId);
+    printf("\" TARGET=_blank>%d</A><BR>\n", rl->omimId);
+    }
+if (rl->locusLinkId != 0)
+    {
+    printf("<B>Entrez Gene:</B> ");
+    printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%d\" TARGET=_blank>",
+    	rl->locusLinkId);
+    printf("%d</A><BR>\n", rl->locusLinkId);
+
+    if ( (strstr(database, "mm") != NULL) && hTableExists(database, "MGIid"))
+    	{
+        char *mgiID;
+	safef(query, sizeof(query), "select MGIid from MGIid where LLid = '%d';",
+		rl->locusLinkId);
+
+	sr = sqlGetResult(conn, query);
+	if ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    printf("<B>Mouse Genome Informatics:</B> ");
+	    mgiID = cloneString(row[0]);
+
+	    printf("<A HREF=\"http://www.informatics.jax.org/searches/accession_report.cgi?id=%s\" TARGET=_BLANK>%s</A><BR>\n",mgiID, mgiID);
+	    }
+	else
+	    {
+	    /* per Carol Bult from Jackson Lab 4/12/02, JAX do not always agree
+	     * with Locuslink on seq to gene association.
+	     * Thus, not finding a MGIid even if a LocusLink ID
+	     * exists is always a possibility. */
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+printStanSource(rl->mrnaAcc, "mrna");
+}
+
+void doKnownGene(struct trackDb *tdb, char *rnaName)
+/* Process click on a known gene. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *kgId = cartString(cart, "i");
+char *sqlRnaName = rnaName;
+char *summary = NULL;
+struct refLink rlR;
+struct refLink *rl;
+int start = cartInt(cart, "o");
+int left = cartInt(cart, "l");
+int right = cartInt(cart, "r");
+char *chrom = cartString(cart, "c");
+/* Make sure to escape single quotes for DB parseability */
+if (strchr(rnaName, '\''))
+    {
+    sqlRnaName = replaceChars(rnaName, "'", "''");
+    }
+/* get refLink entry */
+if (strstr(rnaName, "NM_") != NULL)
+    {
+    safef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'", sqlRnaName);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) == NULL)
+    	errAbort("Couldn't find %s in refLink table - database inconsistency.", rnaName);
+    rl = refLinkLoad(row);
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    rlR.name    = strdup(kgId);
+    rlR.mrnaAcc = strdup(kgId);
+    rlR.locusLinkId = 0;
+    rl = &rlR;
+    }
+
+cartWebStart(cart, database, "Known Gene");
+printf("<table border=0>\n<tr>\n");
+prKnownGeneInfo(conn, rnaName, sqlRnaName, rl);
+
+printf("</tr>\n</table>\n");
+
+/* optional summary text */
+summary = getRefSeqSummary(conn, kgId);
+if (summary != NULL)
+    {
+    htmlHorizontalLine();
+    printf("<H3>Summary of %s</H3>\n", kgId);
+    printf("<P>%s</P>\n", summary);
+    freeMem(summary);
+    }
+htmlHorizontalLine();
+
+/* print alignments that track was based on */
+{
+char *aliTbl;
+
+if (strstr(kgId, "NM_"))
+    {
+    aliTbl = strdup("refSeqAli");
+    }
+else
+    {
+    aliTbl = strdup("all_mrna");
+    }
+struct psl *pslList = getAlignments(conn, aliTbl, rl->mrnaAcc);
+printf("<H3>mRNA/Genomic Alignments</H3>");
+printAlignments(pslList, start, "htcCdnaAli", aliTbl, kgId);
+}
+htmlHorizontalLine();
+
+struct palInfo *palInfo = NULL;
+
+if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+    {
+    AllocVar(palInfo);
+    palInfo->chrom = chrom;
+    palInfo->left = left;
+    palInfo->right = right;
+    palInfo->rnaName = rnaName;
+    }
+
+geneShowPosAndLinksPal(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
+		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
 }
 
 void doRefGene(struct trackDb *tdb, char *rnaName)
@@ -22837,6 +23001,10 @@ else if (sameWord(table, "ensGene") || sameWord (table, "ensGeneNonCoding"))
 else if (sameWord(table, "xenoRefGene"))
     {
     doRefGene(tdb, item);
+    }
+else if (sameWord(table, "knownGene"))
+    {
+    doKnownGene(tdb, item);
     }
 else if (sameWord(table, "refGene"))
     {

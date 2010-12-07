@@ -325,5 +325,22 @@ struct hash *mdbCvTermTypeHash();
 struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
 
+#define CV_SEARCH_SUPPORTS_FREETEXT
+#ifdef CV_SEARCH_SUPPORTS_FREETEXT
+enum mdbCvSearchable
+// metadata Variavble are only certain declared types
+    {
+    cvsNotSearchable        =0,  // Txt is default
+    cvsSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
+    cvsSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
+    cvsSearchByFreeText     =3,  // Search by free text field (NOT YET IMPLEMENTED)
+    cvsSearchByDateRange    =4,  // Search by discovered date range (NOT YET IMPLEMENTED)
+    cvsSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
+    };
+
+enum mdbCvSearchable mdbCvSearchMethod(char *term);
+// returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
+#endif//ndef CV_SEARCH_SUPPORTS_FREETEXT
+
 #endif /* MDB_H */
 

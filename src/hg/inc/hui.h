@@ -632,6 +632,7 @@ enum baseColorDrawOpt
 
 /* Drawing mode per-track cart variable suffix: */
 #define BASE_COLOR_VAR_SUFFIX "baseColorDrawOpt"
+#define CODON_NUMBERING_SUFFIX "codonNumbering"
 
 /* trackDb settings: */
 #define BASE_COLOR_USE_CDS "baseColorUseCds"
@@ -1167,5 +1168,8 @@ int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
 
 void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled);
 /* Sets the fourState Checked in the cart and updates cached state */
+
+boolean hPrintPennantIcon(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
 
 #endif /* HUI_H */

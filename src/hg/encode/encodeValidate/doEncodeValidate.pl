@@ -305,7 +305,8 @@ our %formatCheckers = (
     junction  => \&validateFreepass,
     fpkm1  => \&validateFreepass,
     fpkm2  => \&validateFreepass,
-    insDistrib  => \&validateFreepass,
+    fpkm => \&validateFreepass,
+    insDist  => \&validateFreepass,
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
@@ -1252,6 +1253,7 @@ sub validationSettings {
             if ($paramList ne "") {
                 HgAutomate::verbose(2, "validationSettings $type $fileType params:$paramList\n");
             }
+            $paramList .= " -doReport";
             return $paramList;
         } else {
             for my $setting (@set) {
@@ -1273,6 +1275,10 @@ sub validationSettings {
 
 ############################################################################
 # Main
+
+# if you want to use a different path for executed binaries, this
+# is how you do it
+# $ENV{PATH} = "/cluster/home/braney/bin/x86_64:" . $ENV{PATH};
 
 my @ddfHeader;		# list of field names on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
@@ -2185,6 +2191,38 @@ if($submitPath =~ /(\d+)$/) {
              $daf->{assembly}, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
+
+my @cmds;
+push @cmds, "docIdSubmitDir encpipeline_prod $submitPath  /hive/groups/encode/dcc/pipeline/downloads/docId";
+my $safe = SafePipe->new(CMDS => \@cmds,  DEBUG => $opt_verbose - 1);
+if(my $err = $safe->exec()) {
+    my $err = $safe->stderr();
+    printf "Could not submit to docId system: " . $err;
+    exit 1;
+}
+
+# commenting this out until we decide to roll-out name changes
+
+# undef(@cmds);
+# push @cmds, "mv $submitPath/out/trackDb.ra  $submitPath/out/trackDb.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/trackDb.ra.preDocId" ;
+
+# $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/trackDb.ra",  DEBUG => $opt_verbose - 1);
+# if(my $err = $safe->exec()) {
+#    my $err = $safe->stderr();
+#    printf "Could not edit trackDb.ra " . $err;
+#    exit 1;
+#}
+
+#undef(@cmds);
+#push @cmds, "mv $submitPath/out/load.ra  $submitPath/out/load.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/load.ra.preDocId";
+
+#$safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/load.ra",  DEBUG => $opt_verbose - 1);
+#if(my $err = $safe->exec()) {
+#    my $err = $safe->stderr();
+#    printf "Could not edit load.ra " . $err;
+#    exit 1;
+#}
+
 $time0=$timeStart;
 doTime("done. ") if $opt_timing;
 exit 0;

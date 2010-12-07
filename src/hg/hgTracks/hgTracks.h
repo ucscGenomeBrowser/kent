@@ -235,6 +235,10 @@ struct track
 
     int loadTime;	/* Time it takes to load (for performance tuning) */
     int drawTime;	/* Time it takes to draw (for performance tuning) */
+
+    enum enumBool remoteDataSource; /* The data for this track is from a remote source */
+                   /* Slow retrieval means image can be rendered via an AJAX callback. */
+    boolean customTrack; /* Need to explicitly declare this is a custom track */
     };
 
 
@@ -272,6 +276,7 @@ struct simpleFeature
     int start, end;			/* Start/end in browser coordinates. */
     int qStart, qEnd;			/* query start/end */
     int grayIx;                         /* Level of gray usually. */
+    int codonIndex;                     /* 1-based codon index (ignored if 0) */
     };
 
 /* Some details of how to draw linked features. */
@@ -1243,11 +1248,27 @@ void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
 
-#ifdef SUBTRACKS_HAVE_VIS
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
-#endif//def SUBTRACKS_HAVE_VIS
+
+void dontLoadItems(struct track *tg);
+/* No-op loadItems when we aren't going to try. */
+
+//#define REMOTE_TRACK_AJAX_CALLBACK
+#ifdef REMOTE_TRACK_AJAX_CALLBACK
+#define REMOTE_TRACK_HEIGHT (tl.fontHeight*2)
+
+boolean trackShouldUseAjaxRetrieval(struct track *track);
+/* Tracks with remote data sources should berendered via an ajax callback */
+
+#else//ifndef
+
+#define REMOTE_TRACK_HEIGHT 0
+#define trackShouldUseAjaxRetrieval(track)  FALSE
+
+#endif//ndef REMOTE_TRACK_AJAX_CALLBACK
+
 
 #endif /* HGTRACKS_H */
 

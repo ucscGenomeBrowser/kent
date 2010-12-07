@@ -1762,78 +1762,6 @@ if (pVariable != NULL)
 return NULL;
 }
 
-// NEVER CHECKED IN.
-//#define NORMALIZE_CLOSEST_TO_HOME
-#ifdef NORMALIZE_CLOSEST_TO_HOME
-static void cartPairNormalize(struct cart *cart,struct cart *oldCart,char **lowestVar,char **lowestVal,char *parentVar,char *parentVal)
-/* Removes the lower level variable if it is the same as parent OR if the parent just changed */
-{
-if(parentVal)
-    {
-    if(*lowestVal)
-        {
-        if(sameString(*lowestVal,parentVal)) // same so don't need lowest
-            {
-            cartRemove(cart,*lowestVar);
-            *lowestVal = NULL;
-            }
-        else // Is parent newer?
-            {
-            char *oldVal = hashFindVal(oldCart->hash, parentVar);
-            if(oldVal == NULL || differentString(oldVal,parentVal)) // parent updated
-                {
-                oldVal = hashFindVal(oldCart->hash, *lowestVar);
-                if(oldVal && sameString(oldVal,*lowestVal)) // lowest not updated
-                    {
-                    cartRemove(cart,*lowestVar); // parent newer
-                    *lowestVal = NULL;
-                    }
-                }
-            }
-        }
-    if(*lowestVal == NULL)
-        {
-        *lowestVal = parentVal;
-        //safecpy(*lowestVar, sizeof *lowestVar, parentVar);
-        strcpy(*lowestVar, parentVar); // NOTE: these two must be same size!
-        }
-    }
-}
-
-char *cartNormalizeVariableClosestToHome(struct cart *cart,struct cart *oldCart,struct trackDb *tdb,boolean oneLevel, char *suffix)
-/* returns the ClosestToHome cart variable, but will remove any cart variable
-   most recently superceded */
-{
-char childVar[512];
-safef(childVar, sizeof childVar, "%s.%s", tdb->track,suffix);
-char *lowestVar = childVar;
-char *lowestVal = hashFindVal(cart->hash, childVar);
-if(!tdbIsCompositeChild(tdb))
-    return lowestVal;
-char *oldVal = cartOptionalString(oldCart, childVar);
-if(oldVal && differentString(oldVal,lowestVal))
-    return lowestVal; // It is newest and nothing needs to be removed
-
-// Find the closest to home parent
-char parentVar[512];
-char *parentVal = NULL;
-char *stView;
-if (tdbIsView(viewTdb,&stView))
-    {
-    safef(parentVar,sizeof parentVar,"%s.%s.%s",tdb->parent->track,stView,suffix);
-    parentVal = hashFindVal(cart->hash, parentVar);
-    cartPairNormalize(cart,oldCart,&lowestVar,&lowestVal,parentVar,parentVal);
-    }
-if(!oneLevel)
-    {
-    safef(parentVar,sizeof parentVar,"%s.%s",tdb->parent->track,suffix);
-    parentVal = hashFindVal(cart->hash, parentVar);
-    cartPairNormalize(cart,oldCart,&lowestVar,&lowestVal,parentVar,parentVal);
-    }
-return lowestVal?lowestVal:parentVal;
-}
-#endif//def NORMALIZE_CLOSEST_TO_HOME
-
 void cartRemoveVariableClosestToHome(struct cart *cart, struct trackDb *tdb, boolean compositeLevel, char *suffix)
 /* Looks for then removes a cart variable from lowest level on up:
    subtrackName.suffix, then compositeName.view.suffix, then compositeName.suffix */
@@ -2122,65 +2050,7 @@ WARN("Set %s to 'show'",tdb->parent->track);
 return TRUE;
 }
 
-// Shaping composite vis by subtrack specific vis comes in 3 flavors:
-// Simple) No shaping.  Subtrack specific vis overrides composite/view level but does not alter it
-// Plan A) When composite is in default settings only, then composite/vis is shaped to reflect current subtrack vis
-// Plan B) Whenever there is subtrack level vis, the composite and view vis are shaped to show maximum subtrack vis,
-//         while subtracks with inherited vis may be given subtrack specific vis to return them to that state
-#define COMPOSITE_VIS_SHAPING_PLAN_A
-#define COMPOSITE_VIS_SHAPING_PLAN_B
 
-#ifndef COMPOSITE_VIS_SHAPING_PLAN_B
-static boolean cartVarsNoneFoundForTdb(struct cart *cart,struct hash *subVisHash,struct trackDb *tdb)
-{
-struct slPair *cartVar,*cartVars = cartVarsWithPrefix(cart,tdb->track);
-if (cartVars != NULL)
-    {
-    for (cartVar = cartVars; cartVar != NULL; cartVar = cartVar->next)
-        {
-        if (tdbIsCompositeView(tdb) || !hashFindVal(subVisHash, cartVar->name)) // subVisHash does not contain anything prefixed by view!
-            {
-            // If composite vis changed but it is the same as trackDb default then ignore it
-            if (tdbIsContainer(tdb)
-            &&  sameString(cartVar->name,tdb->track)
-            &&  sameString((char *)cartVar->val,hStringFromTv(tdb->visibility)) )
-                continue;
-
-            // If view vis changed but it is the same as trackDb default then ignore it
-            if (tdbIsContainer(tdb)
-            && endsWith((char *)cartVar->val,".vis"))
-                {
-                // find out view
-                char *val = skipBeyondDelimit(cartVar->name,'.');
-                char *viewFound = cloneFirstWordByDelimiter(val,'.');
-                if (viewFound)
-                    {
-                    // find tdb for View
-                    struct trackDb *viewTdb;
-                    for (viewTdb=tdb->subtracks; viewTdb!=NULL; viewTdb=viewTdb->next)
-                        {
-                        char *viewOfTdb = NULL;
-                        if (tdbIsView(viewTdb,&viewOfTdb) && sameString(viewOfTdb,viewFound))
-                            {
-                            if(sameString((char *)cartVar->val,hStringFromTv(viewTdb->visibility)) )
-                                continue;
-                            break;
-                            }
-                        }
-                    }
-                }
-            WARN("cartVarsNoneFoundForTdb: %s=%s",cartVar->name,(char *)cartVar->val);
-            slFreeList(&cartVars);
-            return FALSE; // Any view cart vars means non-default so do not "shape" composite
-            }
-        }
-    slFreeList(&cartVars);
-    }
-return TRUE;
-}
-#endif///ndef COMPOSITE_VIS_SHAPING_PLAN_B
-
-#if defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 static int cartTdbParentShapeVis(struct cart *cart,struct trackDb *parent,char *view,struct hash *subVisHash,boolean reshapeFully)
 // This shapes one level of vis (view or container) based upon subtrack specific visibility.  Returns count of tracks affected
 {
@@ -2247,7 +2117,7 @@ if (visMax != visOrig || reshapeFully)
             {
             if (!hashFindVal(subVisHash, subtrack->track))   // if the subtrack doesn't have individual vis AND...
                 {
-                if (reshapeFully || visMax == tvHide)
+                if (reshapeFully || visOrig == tvHide)
                     {
                     subtrackFourStateCheckedSet(subtrack, cart,FALSE,fourStateEnabled(fourState)); // uncheck
                     cartRemove(cart,subtrack->track);  // Remove it if it exists, just in case
@@ -2266,16 +2136,6 @@ if (visMax != visOrig || reshapeFully)
                 cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited vis and non-selected should not have vis
             }
         }
-
-    // OUCH!  This cannot be until all the views are dealt with!
-    //if (tdbIsCompositeView(parent))
-    //    {
-    //    visOrig = tdbVisLimitedByAncestry(cart, parent->parent, FALSE);
-    //    cartSetString(cart,parent->parent->track,"full");    // Now set composite to full.
-    //    if (visOrig == tvHide && tdbIsSuperTrackChild(parent->parent))
-    //        cartTdbOverrideSuperTracks(cart,parent->parent,FALSE);      // deal with superTrack vis! cleanup
-    //    }
-
     }
 else if (tdbIsMultiTrack(parent))
     {
@@ -2293,15 +2153,11 @@ if (countUnchecked + countVisChanged)
 
 return (countUnchecked + countVisChanged);
 }
-#endif/// defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 
-boolean cartTdbTreeMatchSubtrackVis(struct cart *cart,struct trackDb *tdbContainer)
+boolean cartTdbTreeReshapeIfNeeded(struct cart *cart,struct trackDb *tdbContainer)
 /* When subtrack vis is set via findTracks, and composite has no cart settings,
    then "shape" composite to match found */
 {
-#if !defined(COMPOSITE_VIS_SHAPING_PLAN_A) && !defined(COMPOSITE_VIS_SHAPING_PLAN_B)
-    return FALSE;  // Don't do any shaping
-#else/// if defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 if (!tdbIsContainer(tdbContainer))
     return FALSE;  // Don't do any shaping
 
@@ -2337,49 +2193,10 @@ if (hashNumEntries(subVisHash) == 0)
     }
 
 // Next look for any cart settings other than subtrack vis/sel
-#ifdef COMPOSITE_VIS_SHAPING_PLAN_B
 // New directive means that if composite is hidden, then ignore previous and don't bother checking cart.
 boolean reshapeFully = (tdbVisLimitedByAncestry(cart, tdbContainer, FALSE) == tvHide);
 boolean hasViews = tdbIsCompositeView(tdbContainer->subtracks);
 
-#else///ifndef COMPOSITE_VIS_SHAPING_PLAN_B
-boolean reshapeFully = cartVarsNoneFoundForTdb(cart,subVisHash,tdbContainer);
-boolean hasViews = FALSE;
-tdbView = tdbContainer->subtracks;
-if (tdbIsCompositeView(tdbView))
-    {
-    hasViews = TRUE;
-    if (reshapeFully)
-        {
-        for( ;tdbView != NULL; tdbView = tdbView->next )
-            {
-            if(!cartVarsNoneFoundForTdb(cart,subVisHash,tdbView))
-                {
-                reshapeFully = FALSE;
-                break;
-                }
-            }
-        }
-    }
-
-// How about subtrack level settings?  Assume that compositePrefix caught them? If views then YES
-if (reshapeFully && !hasViews)
-    {
-    for(subtrack = tdbContainer->subtracks;subtrack != NULL; subtrack = subtrack->next )
-        {
-        if (!cartVarsNoneFoundForTdb(cart,subVisHash,subtrack));
-            {
-            reshapeFully = FALSE;
-            break;
-            }
-        }
-    }
-if (!reshapeFully)
-    {
-    hashFree(&subVisHash);
-    return FALSE; // Any view cart vars means non-default so do not "shape" composite
-    }
-#endif///ndef COMPOSITE_VIS_SHAPING_PLAN_B
 WARN("reshape: %s",reshapeFully?"Fully":"Incrementally");
 
 // Now shape views and composite to match subtrack specific visibility
@@ -2394,6 +2211,7 @@ if (hasViews)
         }
     if (count > 0)
         {
+        // At least on view was shaped, so all views will get explicit vis.  This means composite must be set to full
         enum trackVisibility visOrig = tdbVisLimitedByAncestry(cart, tdbContainer, FALSE);
         cartSetString(cart,tdbContainer->track,"full");    // Now set composite to full.
         if (visOrig == tvHide && tdbIsSuperTrackChild(tdbContainer))
@@ -2404,8 +2222,13 @@ else // If no views then composite is not set to fuul but to max of subtracks
     count = cartTdbParentShapeVis(cart,tdbContainer,NULL,subVisHash,reshapeFully);
 
 hashFree(&subVisHash);
+
+// If reshaped, be sure to set flag to stop composite cleanup
+#define RESHAPED_COMPOSITE "reshaped"
+if (count > 0)
+    tdbExtrasAddOrUpdate(tdbContainer,RESHAPED_COMPOSITE,(void *)(long)TRUE); // Exists for the life of the cgi only
+
 return TRUE;
-#endif/// defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 }
 
 boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars)
@@ -2414,6 +2237,10 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 {
 boolean anythingChanged = cartTdbOverrideSuperTracks(newCart,tdb,TRUE);
 if (!tdbIsContainer(tdb))
+    return anythingChanged;
+
+// If composite has been reshaped then don't clean it up
+if ((boolean)(long)tdbExtrasGetOrDefault(tdb,RESHAPED_COMPOSITE,(void *)(long)FALSE))
     return anythingChanged;
 
 // vis is a special additive case! composite or view level changes then remove subtrack vis

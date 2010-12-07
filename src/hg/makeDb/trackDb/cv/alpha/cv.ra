@@ -35,7 +35,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&P
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 color 153,38,0
 sex F
 tier 1
@@ -53,7 +53,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 termId BTO:0000664
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000664
 color 46,0,184
 sex F
 tier 1
@@ -71,7 +71,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 termId BTO:0000664
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000664
 color 46,0,184
 sex F
 tier 1
@@ -89,7 +89,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage endoderm
 karyotype cancer
 termId BTO:0000559
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000559
 color 189,0,157
 sex M
 tier 2
@@ -107,7 +107,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage endoderm
 karyotype cancer
 termId BTO:0000559
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000559
 color 189,0,157
 sex M
 tier 2
@@ -125,7 +125,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage ectoderm
 karyotype cancer
 termId BTO:0000568
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000568
 color 0,119,158
 sex F
 tier 2
@@ -143,7 +143,7 @@ protocol HeLa-S3:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_
 #lineage ectoderm
 #karyotype cancer
 #termId BTO:0000568
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000568
 #color 0,119,158
 #tier 3
 #protocol Protocol:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
@@ -160,7 +160,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392
 lineage mesoderm
 karyotype normal
 termId BTO:0001949
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001949
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001949
 color 224,75,0
 sex U
 tier 2
@@ -178,7 +178,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_
 lineage ectoderm
 karyotype normal
 termId BTO:0000375
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000375
 color 179,0,134
 sex F
 tier 3
@@ -196,7 +196,7 @@ orderUrl http://www.cellulardynamics.com/
 lineage embryonic stem cells
 karyotype normal
 termId CL:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL0000007&termName=early%20embryonic%20cell
 color 0,107,27
 sex M
 tier 1
@@ -217,8 +217,8 @@ vendorName DSMZ
 vendorId 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
 termId BTO:0001521 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001521&termName=pancreatic%20adenocarcinoma%20cell%20line
-protocol Open_Chromatin:8988T_Crawford_protocol.pdf
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001521
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:8988T_Crawford_protocol.pdf
 
 term A549
 tag A549
@@ -232,10 +232,10 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "This line was initiated in 1972 by D.J. Giard, et al. through explant culture of lung carcinomatous tissue from a 58-year-old Caucasian male." - ATCC
 karyotype cancer
 termId BTO:0000018
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000018
 sex M
 tier 3
-protocol HudsonAlpha:A549_protocol.pdf Open_Chromatin:A549_Crawford_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
+protocol HudsonAlpha:A549_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:A549_Crawford_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
 tag AG04449
@@ -326,11 +326,11 @@ tissue Heart
 vendorName Lonza
 vendorId CC-2571
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001685
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001685
 sex U
 tier 3
 termId BTO:0001685
-protocol Open_Chromatin:AoSMC_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:AoSMC_Crawford_protocol.pdf
 
 term Astrocy
 tag Astrocy
@@ -344,10 +344,589 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E
 lineage
 karyotype normal
 termId BTO:0000099
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099
 sex U
 tier 3
-protocol Open_Chromatin:Astrocytes_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Astrocytes_Crawford_protocol.pdf
+
+term BC_Bladder_01-11002
+tag BCBladder0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA Extract
+tissue Urinary Bladder
+lineage Urinary Bladder
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234010-05_B402059
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001418
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001418
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Colon_01-11002
+tag BCColon0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Colon
+lineage Colon
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234090-05_A903056; BioChain_CP-S10-R1234090-20_B402074
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000269
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000269
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Esophagus_01-11002
+tag BCEsophagus0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Esophagus
+lineage Esophagus
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234106-05_A803198; BioChain_CP-S10-R1234106-20_B402075
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000959
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000959
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Kidney_01-11002
+tag BCKidney0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Kidney
+lineage Kidney
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234142-05_B402060; BioChain_CP-S10-R1234142-20_A808055
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000671
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000671
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Liver_01-11002
+tag BCLiver0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Liver
+lineage Liver
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234149-05_B209118; BioChain_CP-S10-R1234149-20_B304045
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000759
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000759
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Lung_01-11002
+tag BCLung0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Lung
+lineage Lung
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234152-05_A610240; BioChain_CP-S10-R1234152-20_A906114
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000763
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000763
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Skeletal_Muscle_01-11002
+tag BCSkeletalMuscle0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Skeletal muscle
+lineage Skeletal muscle
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234171-05_A610262; BioChain_CP-S10-R1234171-20_A808148
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001103
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001103
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Skin_01-11002
+tag BCSkin0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA Extract
+tissue Skin
+lineage Skin
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234218-05_B402066
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001253
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001253
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Small_Intestine_01-11002
+tag BCSmallIntestine0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA and RNA Extract
+tissue Small intestine
+lineage Small intestine
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234226-05_B402067; BioChain_CP-S10-R1234226-20_A612138
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000651
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000651
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Spleen_01-11002
+tag BCSpleen0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; RNA Extract
+tissue Spleen
+lineage Spleen
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S10-R1234246-20_A612140
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001281
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001281
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Stomach_01-11002
+tag BCStomach0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA Extract
+tissue Stomach
+lineage Stomach
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234248-05_A808008
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001307
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001307
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Colon_H12817N
+tag BCColonH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Colon
+lineage Colon
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234090-05_B111123; BioChain_CP-S10-R1234090-20_B111053
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000269
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000269
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Esophagus_H12817N
+tag BCEsophagusH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA Extract
+tissue Esophagus
+lineage Esophagus
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234106-05_B302113
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000959
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000959
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Kidney_H12817N
+tag BCKidneyH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Kidney
+lineage Kidney
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234142-05_B402061; BioChain_CP-S10-R1234142-20_B111054
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000671
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000671
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Lung_H12817N
+tag BCLungH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Lung
+lineage Lung
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234152-05_B402062; BioChain_CP-S10-R1234152-20_B207133
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000763
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000763
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Pancreas_H12817N
+tag BCPancreasH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Pancreas
+lineage Pancreas
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234188-05_B402063; BioChain_CP-S10-R1234188-20_B402076
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000988
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000988
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Penis_H12817N
+tag BCPenisH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA Extract
+tissue Penis
+lineage Penis
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234194-05_B402064
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000405
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000405
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Prostate_Gland_H12817N
+tag BCProstateGlandH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA Extract
+tissue Prostate gland
+lineage Prostate gland
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-D1234201-05_B101058
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001129
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001129
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Skeletal_Muscle_H12817N
+tag BCSkeletalMuscleH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Skeletal muscle
+lineage Skeletal muscle
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234171-05_B402065; BioChain_CP-S10-R1234230-20_A911037
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001103
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001103
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Jejunum_H12817N
+tag BCJejunumH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Jejunum
+lineage Jejunum
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234230-05_B402068; BioChain_CP-S10-R1234230-20_A911037
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000657
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000657
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Spleen_H12817N
+tag BCSpleenH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Spleen
+lineage Spleen
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234246-05_B402069; BioChain_CP-S10-R1234246-20_B304070
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001281
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001281
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Stomach_H12817N
+tag BCStomachH12817N
+type Cell Line
+tier 3
+organism Human
+description Donor H12817N; Age 71; Caucasian; DNA and RNA Extract
+tissue Stomach
+lineage Stomach
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_CP-S13-D1234248-05_B402070; BioChain_CP-S10-R1234248-20_B402077
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001307
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001307
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Adipose_UHN00001
+tag BCAdiposeUHN00001
+type Cell Line
+tier 3
+organism Human
+description Donor UHN0001; Age 35; African American; DNA Extract
+tissue Adipose tissue
+lineage Adipose tissue
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234003_A701166
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001487
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001487
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Adrenal_Gland_H12803N
+tag BCAdrenalGlandH12803N
+type Cell Line
+tier 3
+organism Human
+description Donor H12803N; Age 88; Caucasian; DNA Extract
+tissue Adrenal gland
+lineage Adrenal gland
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D1234004_B103117
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000047
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000047
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Brain_H11058N
+tag BCBrainH11058N
+type Cell Line
+tier 3
+organism Human
+description Donor H11058N; Age 66; Asian; DNA Extract
+tissue Brain
+lineage Brain
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234035_A810101
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000142
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000142
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Breast_02-03015
+tag BCBreast0203015
+type Cell Line
+tier 3
+organism Human
+description Donor 02-03015; Age 21; Caucasian; DNA Extract
+tissue Breast
+lineage Breast
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234086_A710031
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000149
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000149
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Pericardium_H12529N
+tag BCPericardiumH12529N
+type Cell Line
+tier 3
+organism Human
+description Donor H12529N; Age 70; Caucasian; DNA Extract
+tissue Pericardium
+lineage Pericardium
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D1234133_A712271
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0000717
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000717
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Left_Ventricle_N41
+tag BCLeftVentricleN41
+type Cell Line
+tier 3
+organism Human
+description Donor N41; Age 26; Asian; DNA Extract
+tissue Left ventrible
+lineage Left ventrible
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D1234138_A705026
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001629
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001629
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Leukocyte_UHN00204
+tag BCLeukocyteUHN00204
+type Cell Line
+tier 3
+organism Human
+description Donor UHN00204; Age 54; Caucasian; DNA Extract
+tissue Peripheral blood mononuclear cell
+lineage Peripheral blood mononuclear cell
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234148_A612197
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001025
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001025
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Placenta_UHN00189
+tag BCPlacentaUHN00189
+type Cell Line
+tier 3
+organism Human
+description Donor UHN00189; Age 29; Native Indian; DNA Extract
+tissue Placenta
+lineage Placenta
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234200_A603104
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001078
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001078
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Rectum_N29
+tag BCRectumN29
+type Cell Line
+tier 3
+organism Human
+description Donor N29; Age 29; Asian; DNA Extract
+tissue Rectum
+lineage Rectum
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234206_A712205
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001158
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001158
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Testis_N30
+tag BCTestisN30
+type Cell Line
+tier 3
+organism Human
+description Donor N30; Age 41; Asian; DNA Extract
+tissue Testis
+lineage Testis
+karyotype Normal
+sex M
+vendorName BioChain
+vendorId BioChain_D4234260_A711169
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001363
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001363
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Cervix_BN0773
+tag BCCervixBN0773
+type Cell Line
+tier 3
+organism Human
+description Donor BN0773; Age 44; Asian; DNA Extract
+tissue Uterine cervix
+lineage Uterine cervix
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234275_A511454
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001421
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001421
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
+term BC_Uterus_BN0765
+tag BCUterusBN0765
+type Cell Line
+tier 3
+organism Human
+description Donor BN0765; Age 44; Asian; DNA Extract
+tissue Uterus
+lineage Uterus
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_D4234274_A810099
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001424
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001424
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf
+
 
 term BE2_C
 tag BE2C
@@ -359,7 +938,7 @@ vendorName ATCC
 vendorId CRL-2268
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2268&Template=cellBiology
 termId BTO:0000932 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000932
 sex M
 tier 3
 protocol HudsonAlpha:BE2-C_Myers_protocol.pdf
@@ -406,7 +985,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "The line was established from skin taken from normal foreskin." - ATCC
 karyotype normal
 termId BTO:0001255
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001255
 sex M
 tier 3
 protocol UW_Stam:BJ-tert_Stam_protocol.pdf
@@ -423,7 +1002,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage hTERT/BJ fibroblasts expressing T antigens of SV40 virus
 karyotype normal
 termId BTO:0001255
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001255
 sex M
 tier 3
 protocol Yale_TFBS(Struhl):BJ-tert-T_Struhl_protocol.pdf
@@ -440,7 +1019,7 @@ orderUrl https://struhl.med.harvard.edu/
 lineage hTERT/BJ fibroblasts expressing T antigens of SV40 virus and H-RasV12
 karyotype normal
 termId BTO:0001255
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001255
 sex M
 tier 3
 protocol Yale_TFBS(Struhl):BJ-tert-HRas_Struhl_protocol.pdf
@@ -458,7 +1037,7 @@ orderUrl https://struhl.med.harvard.edu/
 lineage Foreskin fibroblasts
 karyotype normal
 termId BTO:0001255
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001255
 sex M
 tier 3
 protocol Yale_TFBS(Struhl):BJ-5ta_Struhl_protocol.pdf
@@ -477,8 +1056,8 @@ vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
 vendorId
 orderUrl
 termId BTO:0001546
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001546&termName=chronic%20lymphocytic%20leukemia%20cell
-protocol Open_Chromatin:CLL_Crawford_protocol.pdf
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001546
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:CLL_Crawford_protocol.pdf
 
 term Caco-2
 tag Caco2
@@ -492,7 +1071,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage
 karyotype cancer
 termId BTO:0000195
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000195&termName=Caco-2%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000195
 sex M
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
@@ -508,10 +1087,10 @@ orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
 lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
 karyotype unknown
 termId BTO:0000252
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252&termName=chorion
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000252
 sex U
 tier 3
-protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
 term CMK
 tag CMK
@@ -537,10 +1116,10 @@ orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
 lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
 karyotype unknown
 termId BTO:0001360
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360&termName=decidua
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001360
 sex F
 tier 3
-protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
 term ECC-1
 tag ECC1
@@ -571,10 +1150,10 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=AG08470&P
 lineage
 karyotype normal
 termId BTO:0000452
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000452
 sex F
 tier 3
-protocol Open_Chromatin:fibroblast_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:fibroblast_Crawford_protocol.pdf
 
 term FibroP
 tag FIBROP
@@ -583,11 +1162,11 @@ organism Human
 description normal fibroblasts taken from individuals with Parkinson's disease
 tissue Skin
 vendorName Paul Tesar (Case Western)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000452
 termId BTO:0000452
 sex U
 tier 3
-protocol Open_Chromatin:FibroP_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:FibroP_Crawford_protocol.pdf
 
 term Gliobla
 tag Gliobla
@@ -597,10 +1176,10 @@ description (aka H54) Glioblastoma
 tissue Brain
 vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0000527
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000527
 sex U
 tier 3
-protocol Open_Chromatin:D54_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:D54_Crawford_protocol.pdf
 
 term GM06990
 tag GM06990
@@ -614,7 +1193,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM06990&P
 lineage CEPH/Utah - European Caucasion; Epstein-Barr Virus
 karyotype relatively normal
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex F
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
@@ -629,7 +1208,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM10847
 vendorName Coriell
 vendorId GM10847
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -646,7 +1225,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&P
 lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
 karyotype relatively normal
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex M
 tier 3
 protocol UW_Stam:GM12801_Stam_protocol.pdf
@@ -662,7 +1241,7 @@ vendorName Coriell
 vendorId GM12864
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12864&PgId=166
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
 protocol UW_Stam:GM12864_Stam_protocol.pdf
@@ -678,7 +1257,7 @@ vendorName Coriell
 vendorId GM12865
 orderUrl http://ccr.coriell.org/sections/Search/Sample_Detail.aspx?Ref=GM12865&PgId=166
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
 protocol UW_Stam:GM12865_Stam_protocol.pdf
@@ -694,7 +1273,7 @@ vendorName Coriell
 vendorId GM12872
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12872&PgId=166
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex M
 tier 3
 protocol UW_Stam:GM12872_Stam_protocol.pdf
@@ -710,7 +1289,7 @@ vendorName Coriell
 vendorId GM12873
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12873&PgId=166
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex F
 tier 3
 protocol UW_Stam:GM12873_Stam_protocol.pdf
@@ -726,7 +1305,7 @@ vendorName Coriell
 vendorId GM12874
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12874&PgId=166
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex M
 tier 3
 protocol UW_Stam:GM12874_Stam_protocol.pdf
@@ -742,7 +1321,7 @@ vendorName Coriell
 vendorId GM12875
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12875&PgId=166
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex F
 tier 3
 protocol UW_Stam:GM12875_Stam_protocol.pdf
@@ -757,7 +1336,7 @@ vendorName Cloned for maternal X inactivation by Hunt Willard's at Duke Universi
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for maternal X inactivation
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol HudsonAlpha:GM12878-XiMat_Myers_protocol.pdf
@@ -772,7 +1351,7 @@ vendorName Cloned for paternal X inactivation by Hunt Willard's at Duke Universi
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for paternal X inactivation
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol HudsonAlpha:GM12878-XiPat_Myers_protocol.pdf
@@ -788,10 +1367,10 @@ vendorName Coriell
 vendorId GM12891
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12891
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex M
 tier 3
-protocol Open_Chromatin:GM12891_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM12891_Crawford_protocol.pdf
 
 term GM12892
 tag GM12892
@@ -804,10 +1383,10 @@ vendorName Coriell
 vendorId GM12892
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12892
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex F
 tier 3
-protocol Open_Chromatin:GM12892_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM12892_Crawford_protocol.pdf
 
 term GM15510
 tag GM15510
@@ -819,7 +1398,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM15510
 vendorName Coriell
 vendorId GM15510
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex U
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -834,7 +1413,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18505
 vendorName Coriell
 vendorId GM18505
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -851,10 +1430,10 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18507
 lineage International HapMap Project - Yoruba in Ibadan, Nigeria; Epstein-Barr Virus
 karyotype relatively normal
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062
 sex M
 tier 3
-protocol Open_Chromatin:GM18507_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM18507_protocol.pdf
 
 term GM18526
 tag GM18526
@@ -866,7 +1445,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18526
 vendorName Coriell
 vendorId GM18526
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -881,7 +1460,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM18951
 vendorName Coriell
 vendorId GM18951
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -896,7 +1475,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19099
 vendorName Coriell
 vendorId GM19099
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -911,7 +1490,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19193
 vendorName Coriell
 vendorId GM19193
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002026
 sex F
 tier 3
 protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
@@ -927,10 +1506,10 @@ vendorName Coriell
 vendorId GM19238
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19238
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol Open_Chromatin:GM19238_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM19238_Crawford_protocol.pdf
 
 term GM19239
 tag GM19239
@@ -943,10 +1522,10 @@ vendorName Coriell
 vendorId GM19239
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19239
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol Open_Chromatin:GM19239_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM19239_Crawford_protocol.pdf
 
 term GM19240
 tag GM19240
@@ -959,10 +1538,10 @@ vendorName Coriell
 vendorId GM19240
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM19240
 termId BTO:0002062 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol Open_Chromatin:GM19240_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM19240_Crawford_protocol.pdf
 
 term H7-hESC
 tag H7es
@@ -1109,6 +1688,23 @@ orderUrl http://www.asterand.com/Asterand/
 sex U
 protocol HudsonAlpha:HAL_Myers_protocol.pdf
 
+term HA-sp
+tag HA-sp
+type Cell Line
+organism human
+description Human astrocytes spinal cord
+tissue Spinal cord
+vendorName Sciencell
+vendorId 1820
+orderUrl http://www.sciencellonline.com/site/products/1820.php
+karyotype Normal
+lineage Astrocytic
+termId BTO:0000099
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099
+sex U
+tier 3
+protocol UW_Stam:HA-sp_Stam_protocol.pdf
+
 term HBMEC
 tag HBMEC
 type Cell Line
@@ -1200,7 +1796,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage endoderm
 karyotype cancer
 termId BTO:0002254
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002254
 sex M
 tier 3
 protocol Yale_TFBS:HCT-116_protocol.pdf UW_Stam:HCT116_Stam_protocol.pdf
@@ -1230,7 +1826,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage endoderm
 karyotype cancer
 termId BTO:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000007
 sex U
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
@@ -1247,10 +1843,28 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage endoderm
 karyotype cancer
 termId BTO:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000007
 sex U
 tier 3
 protocol Yale_TFBS:HEK293b_Snyder_protocol.pdf
+
+term  Hepatocytes 
+tag  Hepatocytes 
+type Cell Line
+tier 3
+organism Human
+target  Hepatocytes 
+description  Primary Human Hepatocytes 
+lineage  Liver perfused by enzymes to generate single cell suspension 
+karyotype  normal 
+sex  U 
+tissue  Liver 
+vendorName  zen-bio
+vendorId
+orderUrl http://www.zen-bio.com/
+termId BTO:0000575
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000575
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Hepatocytes_Crawford_protocol.pdf
 
 term HFL11W
 tag HFL11W
@@ -1288,7 +1902,7 @@ orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1
 lineage
 karyotype normal
 termId BTO:0000519 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000519&termName=gingiva
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000519
 sex U
 tier 3
 protocol UW_Stam:HGF_Stam_protocol.pdf
@@ -1331,7 +1945,7 @@ vendorId CCL-240
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-240&Template=cellBiology
 lineage
 termId BTO:0000738
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000738&termName=HL-60%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000738
 karyotype cancer, female
 sex F
 tier 3
@@ -1349,10 +1963,10 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_
 lineage
 karyotype
 termId BTO:0002178
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002178
 sex U
 tier 3
-protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
+protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
 term HMF
 tag HMF
@@ -1497,6 +2111,24 @@ sex U
 tier 3
 protocol UW_Stam:HPAF_Stam_protocol.pdf
 
+term HPDE6-E6E7 
+tag HPDE6E6E7 
+type Cell Line
+tier 3
+organism Human
+target HPDE6-E6E7 
+description  immortalized human pancreatic duct cells 
+lineage  normal human pancreatic duct cells immortalized with E6E7 gene of HPV 
+karyotype  Unknown 
+sex  F 
+tissue  Pancreatic Duct 
+vendorName  Dr. Ming-Sound Tsao, Ontario Cancer Institute 
+vendorId
+orderUrl
+termId BTO:0002362
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002362
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:HPDE6-E6E7_Crawford_protocol.pdf
+
 term HPdLF
 tag HPdLF
 type Cell Line
@@ -1535,7 +2167,7 @@ orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1
 lineage
 karyotype normal
 termId BTO:0000059 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000059
 sex U
 tier 3
 protocol UW_Stam:HRCEpiC_Stam_protocol.pdf
@@ -1552,7 +2184,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_
 lineage
 karyotype normal
 termId BTO:0000059 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000059&termName=renal%20epithelium
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000059
 sex U
 tier 3
 protocol UW_Stam:HRE_Stam_protocol.pdf
@@ -1581,10 +2213,10 @@ vendorId CC-2580
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
 karyotype normal
 termId BTO:0000256 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000256
 sex U
 tier 3
-protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -1597,10 +2229,10 @@ vendorId CC-2580
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
 karyotype normal
 termId BTO:0001760 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760&termName=myotube
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001760
 sex U
 tier 3
-protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -1613,7 +2245,7 @@ vendorName ATCC
 vendorId CCL­121
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-121&Template=cellBiology
 termId BTO:0001282
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001282&termName=HT-1080%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001282
 sex M
 tier 3
 protocol HudsonAlpha:HT1080_Myers_protocol.pdf
@@ -1629,7 +2261,7 @@ vendorId HTB-11
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-11&Template=cellBiology
 karyotype hyperdiploid female with a modal chromosome number of 47
 termId BTO:0000932 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000932
 sex F
 tier 3
 protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
@@ -1649,7 +2281,43 @@ vendorId HTR8svn
 orderUrl http://anatomy.queensu.ca/faculty/graham.cfm
 termId BTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001079
-protocol Open_Chromatin:HTR8svn_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:HTR8svn_Crawford_protocol.pdf
+
+term  Huh-7 
+tag  Huh7 
+type Cell Line
+tier 3
+organism Human
+target  Huh-7 
+description  Hepatocellular carcinoma 
+lineage  Hepatocyte derived carcinoma taken from a liver tumor 
+karyotype  Unknown 
+sex  M 
+tissue  Liver 
+vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University 
+vendorId
+orderUrl
+termId BTO:0001950
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001950
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Huh-7_Crawford_protocol.pdf
+
+term  Huh-7.5 
+tag  Huh7.5 
+type Cell Line
+tier 3
+organism Human
+target  Huh-7.5 
+description  Hepatocellular carcinoma 
+lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication 
+karyotype  Unknown 
+sex  M 
+tissue  Liver 
+vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University 
+vendorId
+orderUrl
+termId BTO:0001950
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001950
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Huh-7.5_Crawford_protocol.pdf
 
 term HVMF
 tag HVMF
@@ -1677,6 +2345,24 @@ sex U
 tier 3
 protocol UW_Stam:IMR90_Stam_protocol.pdf
 
+term  iPS 
+tag  iPS 
+type Cell Line
+tier 3
+organism Human
+target  iPS 
+description  induced pluripotent stem cell 
+lineage  induced pluripotent stem cell derived from skin fibroblast 
+karyotype  Unknown 
+sex  U 
+tissue  iPS stem cell derived from skin fibroblast 
+vendorName  Josh Chenoweth (chenowej @ ninds.nih.gov), Laboratory of Molecular Biology, National Institutes of Health, NINDS
+vendorId
+orderUrl
+termId BTO:0000001 (nonspecific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000001
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:iPS_Crawford_protocol.pdf
+
 term Jurkat
 tag Jurkat
 type Cell Line
@@ -1689,7 +2375,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "The Jurkat cell line was established from the peripheral blood of a 14 year old boy by Schneider et al., and was originally designated JM." - ATCC
 karyotype cancer
 termId BTO:0001948
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001948
 sex M
 tier 3
 protocol HudsonAlpha:Jurkat_protocol.pdf UW_Stam:Jurkat_Stam_protocol.pdf
@@ -1705,10 +2391,10 @@ orderUrl http://physicians.dana-farber.org/directory/profile.asp?dbase=main&sets
 lineage Genetically engineered from Human prostate epithelial cells. Multiple human donors, all of whom are HIV-1, Hepatitis B and Hepatitis C negative.
 karyotype Diploid
 #termId BTO:0001389 (non-specific)
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001948
 sex M
 tier 3
-protocol Open_Chromatin:LHSR_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:LHSR_Crawford_protocol.pdf
 
 term LNCaP
 tag LNCaP
@@ -1722,11 +2408,11 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "LNCaP clone FGC was isolated in 1977 by J.S. Horoszewicz, et al., from a needle aspiration biopsy of the left supraclavicular lymph node of a 50-year-old Caucasian male (blood type B+) with confirmed diagnosis of metastatic prostate carcinoma." - ATCC
 karyotype cancer
 termId BTO:0002021
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002021
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002021
 color 0,119,158
 sex M
 tier 3
-protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -1740,10 +2426,10 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage
 karyotype cancer
 termId BTO:0000093
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000093
 sex F
 tier 3
-protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
 #tag MCF10A
@@ -1757,7 +2443,7 @@ protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Far
 #lineage Caucasian
 #karyotype stable, near-diploid
 #termId BTO:0001939
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001939
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001939
 #sex F
 #tier 3
 #protocol Yale_TFBS(Struhl):MCF-10A_Struhl_protocol.pdf
@@ -1805,10 +2491,10 @@ description Medulloblastoma
 tissue Brain
 vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
 termId BTO:0001359
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001359
 sex U
 tier 3
-protocol Open_Chromatin:D721_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:D721_Crawford_protocol.pdf
 
 term Melano
 tag MELANO
@@ -1819,11 +2505,11 @@ tissue Skin
 vendorName ScienCell
 vendorId 2200
 orderUrl http://www.sciencellonline.com/site/products/2200.php
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000847
 sex U
 tier 3
 termId BTO:0000847
-protocol Open_Chromatin:Melano_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Melano_Crawford_protocol.pdf
 
 term Myometr
 tag MYOMETR
@@ -1832,11 +2518,11 @@ organism Human
 tissue Myometrium
 description Myometrial cells
 vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, PA)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000907
 termId BTO:0000907
 sex F
 tier 3
-protocol Open_Chromatin:Myometr_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Myometr_Crawford_protocol.pdf
 
 term NB4
 tag NB4
@@ -1852,7 +2538,7 @@ orderUrl
 lineage
 karyotype cancer
 termId BTO:0002489
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002489
 sex U
 tier 3
 protocol Yale_TFBS:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
@@ -1866,7 +2552,7 @@ description normal human astrocytes
 vendorName Lonza
 vendorId CC-2565
 orderUrl https://shop.lonza.com/shop/prd/normal-human-astrocytes/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699D16C95C8F18852001A4B525E10/
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099&termName=astrocyte
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099
 sex U
 tier 3
 termId BTO:0000099
@@ -1881,11 +2567,11 @@ description normal human bronchial epithelial cells
 vendorName Lonza
 vendorId CC-2541
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002022
 sex U
 tier 3
 termId BTO:0002022
-protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:NHBE_Crawford_protocol.pdf
 
 term NHDF-Ad
 tag NHDF-Ad
@@ -1898,7 +2584,7 @@ vendorId CC-2511, CC-2511T225
 orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36999591CFE2F18852001A4B525E10%29/.do
 sex F
 tier 3
-protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf
+protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf Broad_Histone:NHDF-Ad_Bernstein_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
@@ -1925,7 +2611,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_
 lineage
 karyotype
 termId BTO:0000161 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000161&termName=lung%20fibroblast%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000161
 sex U
 tier 3
 protocol Broad_Histone:NHLF_Bernstein_protocol.pdf UW_Stam:NHLF_Stam_protocol.pdf
@@ -1942,7 +2628,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "The NTERA-2 cl.D1 cell line is a pluripotent human testicular embryonal carcinoma cell line derived by cloning the NTERA-2 cell line." - ATCC
 karyotype cancer
 termId BTO:0000946
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000946
 sex M
 tier 3
 protocol Yale_TFBS:NT2-D1_protocol.pdf
@@ -1959,10 +2645,10 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2166E
 lineage
 karyotype normal
 termId BTO:0001593
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593&termName=osteoblast
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001593
 sex U
 tier 3
-protocol Open_Chromatin:Osteoblast_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf Broad_Histone:Osteoblast_Bernstein_protocol.pdf
 
 term ovcar-3
 tag ovcar3
@@ -1976,7 +2662,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "The NIH:OVCAR-3 line was established in 1982 by T.C. Hamilton, et al. from the malignant ascites of a patient with progressive adenocarcinoma of the ovary." - ATCC
 karyotype cancer
 termId BTO:0000812
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000812&termName=OVCAR-3%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000812
 sex F
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
@@ -1993,7 +2679,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage
 karyotype cancer, male
 termId BTO:0000304
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000304&termName=PANC-1%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000304
 sex M
 tier 3
 protocol HudsonAlpha:PANC-1_Myers_protocol.pdf UW_Stam:PANC-1_Stam_protocol.pdf
@@ -2008,10 +2694,10 @@ vendorName National Disease Research Interchange (NDRI).
 vendorId
 orderUrlhttp://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
 termId BTO:0000991 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000991
 sex U
 tier 3
-protocol Open_Chromatin:PanIsletD_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIsletD_Crawford_protocol.pdf
 
 term PanIslets
 tag PanIslets
@@ -2023,10 +2709,10 @@ vendorName Refer to protocol documents for differing sources
 vendorId
 orderUrl
 termId BTO:0000991 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000991
 sex M
 tier 3
-protocol Open_Chromatin:PanIslets_Crawford_protocol.pdf Open_Chromatin(Lieb):PanIslets_Lieb_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIslets_Crawford_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin(Lieb):PanIslets_Lieb_protocol.pdf
 
 term PBDE
 tag PBDE
@@ -2058,7 +2744,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage ectoderm
 karyotype cancer
 termId BTO:0000690 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000690
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000690
 sex M
 tier 3
 protocol HudsonAlpha:PFSK-1_protocol.pdf
@@ -2073,10 +2759,10 @@ vendorName Dr. Cal Cotton at Case Western Reserve University
 orderUrl https://www.case.edu/cgi-bin/directory/pb_lookup.cgi?search_text=calvin+cotton&submit.x=0&submit.y=0&submit=Search&search_method=regular&page_num=1
 lineage primary
 termId BTO:0001120 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120&termName=epithelial%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001120
 sex U
 tier 3
-protocol Open_Chromatin:pHTE_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:pHTE_Crawford_protocol.pdf
 
 term PrEC
 tag PrEC
@@ -2109,16 +2795,18 @@ orderUrl http://www.progeriaresearch.org/
 lineage
 karyotype progeria
 termId BTO:0001255 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001255
 sex U
 tier 3
-protocol Open_Chromatin:progeria_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:progeria_Crawford_protocol.pdf
 
+#
+# This cell type has no protocol, and does not seem to ever have been used.
 term prostate
 tag prostate
 type Cell Line
 organism Human
-description prostate tissue purchased for Gingeras project (provisional)
+description prostate tissue purchased for Gingeras project
 tissue Prostate
 vendorName ATCC
 vendorId
@@ -2126,10 +2814,10 @@ orderUrl http://www.atcc.org/
 lineage
 karyotype
 termId BTO:0001129
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001129
 tier 3
 sex M
-#protocol ???
+#protocol 
 
 term Raji
 tag Raji
@@ -2174,7 +2862,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_
 lineage
 karyotype normal
 termId BTO:0002022 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022&termName=bronchial%20epithelial%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002022
 sex U
 tier 3
 protocol UW_Stam:SAEC_Stam_protocol.pdf
@@ -2208,7 +2896,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "SK-N-MC was isolated in September of l971 and was found to have moderate dopamine - beta - hydroxylase activity as well as formaldehyde induced fluorescence indicative of intracellular catecholamines." - ATCC
 karyotype cancer
 termId BTO:0002372 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002372
 sex F
 tier 3
 protocol HudsonAlpha:SK-N-MC_protocol.pdf
@@ -2226,7 +2914,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage "SK-N-MC was isolated in September of l971 and was found to have moderate dopamine - beta - hydroxylase activity as well as formaldehyde induced fluorescence indicative of intracellular catecholamines." - ATCC
 karyotype cancer
 termId BTO:0002372 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002372
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002372
 sex F
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
@@ -2243,7 +2931,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage Parental Cell Line: HTB-11
 karyotype The cells possess a unique marker comprised of a chromosome 1 with a complex insertion of an additional copy of a 1q segment into the long arm, resulting in trisomy of 1q
 termId BTO:0000793
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000932&termName=neuroblastoma%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000932
 sex F
 tier 3
 protocol SYDH_TFBS(Farnham):SK-SY5Y_Farnham_protocol.pdf
@@ -2260,10 +2948,28 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_
 lineage
 karyotype
 termId BTO:0001801 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001801&termName=skeletal%20muscle%20cancer%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001801
 sex U
 tier 3
 protocol UW_Stam:SkMC_Stam_protocol.pdf
+
+term  Stellate 
+tag  Stellate 
+type Cell Line
+tier 3
+organism Human
+target  Stellate 
+description  Human Hepatic Stellate Cells 
+lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient 
+karyotype  normal 
+sex  F 
+tissue  Liver 
+vendorName  Steve Choi (steve.choi @ duke.edu) at Duke University 
+vendorId
+orderUrl
+termId BTO:0002316
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002316
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Stellate_Crawford_protocol.pdf
 
 term T98G
 tag T98G
@@ -2276,7 +2982,7 @@ vendorName ATCC
 vendorId CRL­1690
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-1690&Template=cellBiology
 termId BTO:0001583
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001583&termName=T98G%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001583
 sex M
 tier 3
 protocol HudsonAlpha:T98G_Myers_protocol.pdf
@@ -2293,10 +2999,10 @@ tissue Epithelium
 lineage Passage 2 primary, non-immortalized, human trachea and bronchial epithelial cells. Donor: 21 y.o. male
 karyotype unknown, presumed normal diploid
 termId BTO:0001389 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389&termName=tracheal%20epithelium
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001389
 sex M
 tier 3
-protocol Open_Chromatin:TBEC_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:TBEC_Crawford_protocol.pdf
 
 term Th1
 tag Th1
@@ -2310,7 +3016,7 @@ orderUrl
 lineage
 karyotype
 termId BTO:0001678
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001678&termName=Th1%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001678
 sex U
 tier 3
 protocol UW_Stam:Stam_15_protocols.pdf
@@ -2327,7 +3033,7 @@ orderUrl
 lineage
 karyotype
 termId BTO:0001679
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001679&termName=Th2%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001679
 sex U
 tier 3
 protocol UW_Stam:Th2_Stam_protocol.pdf
@@ -2345,7 +3051,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 #lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
 karyotype hypotriploid
 termId BTO:0001248
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001248
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001248
 sex F
 tier 3
 protocol HudsonAlpha:T47D_Myers_protocol.pdf
@@ -2363,9 +3069,9 @@ tissue urothelium
 vendorName lab of Dr. D Sens (University of N. Dakota)
 vendorId Urothelia
 orderUrl http://pathology.med.und.nodak.edu/dept_home/MaryAnn.cfm
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO001267
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:001267
 termId BTO:0001267
-protocol Open_Chromatin:Urothelia_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Urothelia_Crawford_protocol.pdf
 
 term U87
 tag U87
@@ -2378,7 +3084,7 @@ vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
 karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
 termId BTO:0002036
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0002036
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002036
 sex F
 tier 3
 protocol HudsonAlpha:U-87_Myers_protocol.pdf
@@ -2396,7 +3102,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage J. Ponten and E. Saksela derived this line (originally 2T) in 1964 from a moderately differentiated sarcoma of the tibia of a 15 year old girl. Viruses were not detected during co-cultivation with WI-38 cells or in CF tests against SV40, RSV or adenoviruses. Mycoplasma contamination was detected and eliminated in 1972.
 karyotype Cancer
 termId BTO:0000970
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000970&termName=osteosarcoma%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000970
 sex F
 tier 3
 protocol SYDH_TFBS(Farnham):U2OS_Farnham_protocol.pdf
@@ -2413,7 +3119,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage
 karyotype
 termId BTO:0001178 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001178&termName=retinoblastoma%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001178
 sex M
 tier 3
 protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
@@ -2963,8 +3669,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-8975
 orderUrl http://www.scbt.com/datasheet-8975-ap-2alpha-h-79-antibody.html
 lab Farnham
-targetId GeneCard:GC06M010503
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A&search=TFAP2A_id=GC06M010503
+targetId GeneCard:TFAP2A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2A
 validation missing
 
 term AP-2gamma
@@ -2977,8 +3683,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-8977
 orderUrl http://www.scbt.com/datasheet-8977-ap-2gamma-h-77-antibody.html
 lab Farnham
-targetId GeneCard:GC20P054637
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C&search=TFAP2C_id=GC20P054637
+targetId GeneCard:GTFAP2C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TFAP2C
 validation missing
 
 term ATF3
@@ -2991,7 +3697,7 @@ orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-188
 lab Struhl, Myers
-targetId GeneCard:GC-1p212738
+targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
 validation ATF3(Immunoblot)_Myers:human_ATF3_validation_Myers.pdf
 
@@ -2999,14 +3705,14 @@ term BAF155
 tag BAF155
 type Antibody
 target BAF155
-antibodyDescription BAF155 (Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
+antibodyDescription BAF155 (SMARCC1, Brg1-Associated Factor, 155 kD) is a ubiquitous component of the SWI/SNF chromatin-remodeling complex.
 targetDescription BAF155 (H-76) is a rabbit polyclonal antibody raised against amino acids 998-1073 of BAF155 of human origin.
 orderUrl http://www.scbt.com/datasheet-10756-baf155-h-76-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10756
 lab Snyder
-targetId GeneCard:GC03M047602
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC03M047602
+targetId GeneCard:SMARCC1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC1
 validation missing
 
 term BAF170
@@ -3019,8 +3725,8 @@ orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10757
 lab Snyder
-targetId GeneCard:GC12M054843
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M054843
+targetId GeneCard:SMARCC2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
 validation missing
 
 term BATF
@@ -3033,7 +3739,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-100974
 orderUrl http://www.scbt.com/datasheet-100974-b-atf-ww8-antibody.html
 lab Myers
-targetId GeneCard:GC14P075058
+targetId GeneCard:BATF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BATF
 validation missing
 
@@ -3047,7 +3753,7 @@ vendorName Abcam
 vendorId ab19489
 orderUrl http://www.abcam.com/Ctip1-antibody-18B12DE6-ab19489.html
 lab Myers
-targetId GeneCard:GC02M060589
+targetId GeneCard:BCL11A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
 validation missing
 
@@ -3061,7 +3767,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-185
 orderUrl http://www.scbt.com/datasheet-185-bcl-3-c-14-antibody.html
 lab Myers
-targetId GeneCard:GC19P049943
+targetId GeneCard:BCL3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
 validation BCL3(Immunoblot):human_BCl3_C-14_validation_Myers.pdf
 
@@ -3075,7 +3781,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-1-101388
 orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
 lab Myers
-targetId GeneCard:GC06M136621
+targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
 validation BCLAF1(Immunoblot):human_BCLAF1_M33-P5B11_validation_Myers.pdf
 
@@ -3089,8 +3795,8 @@ vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 2663
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
-targetId GeneCard:GC05P070787
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P070787
+targetId GeneCard:BDP1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BDP1
 validation missing
 
 term BHLHE40
@@ -3103,7 +3809,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-101023
 orderUrl http://www.scbt.com/datasheet-101023-dec1-s-8-antibody.html
 lab Myers
-targetId GeneCard:GC19M047286
+targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf
 
@@ -3117,7 +3823,7 @@ vendorName Bethyl Labratories
 vendorId A300-000A
 orderUrl http://www.bethyl.com/product/A300-000A/BRCA1_Antibody/
 lab Snyder
-targetId GeneCard:GC17M041197
+targetId GeneCard:BRCA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRCA1
 validation missing
 
@@ -3131,8 +3837,8 @@ vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 128
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
-targetId GeneCard:GC14M104746
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14M104746
+targetId GeneCard:BRF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF1
 validation missing
 
 term BRF2
@@ -3145,22 +3851,22 @@ vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 4295
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
-targetId GeneCard:GC08M037820
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2&search=Brf2
+targetId GeneCard:BRF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BRF2
 validation missing
 
 term Brg1
 tag BRG1
 type Antibody
 target BRG1
-antibodyDescription Brg1 is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
+antibodyDescription Brg1 (SMARCA4) is an ATPase subunit of the SWI/SNF chromatin-remodeling complex.
 targetDescription Brg-1 (G-7) is a mouse monoclonal antibody raised against amino acids 209-296 mapping near the N-terminus of Brg-1 of human origin.
 orderUrl http://www.scbt.com/datasheet-16189-ini1-c-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId 16189
 lab Snyder
-targetId GeneCard:GC19P010932
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19P010932
+targetId GeneCard:SMARCA4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCA4
 validation missing
 
 term c-Fos
@@ -3173,8 +3879,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-7202
 orderUrl http://www.scbt.com/product.php?datasheet=7202
 lab Snyder
-targetId GeneCard:GC14P074815
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC14P074815
+targetId GeneCard:FOS
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation missing
 
 term c-Jun
@@ -3187,8 +3893,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-1694
 orderUrl http://www.scbt.com/product.php?datasheet=1694
 lab Snyder
-targetId GeneCard:GC01M058958
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
+targetId GeneCard:JUN
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUN
 validation missing
 
 term c-Myb_(H-141)
@@ -3201,7 +3907,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-7874
 orderUrl http://www.scbt.com/datasheet-7874-c-myb-h-141-antibody.html
 lab Snyder
-targetId GeneCard:GC06P135544
+targetId GeneCard:MYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYB
 validation missing
 
@@ -3216,8 +3922,8 @@ vendorId sc-764
 orderUrl http://www.scbt.com/product.php?datasheet=764
 lab Iyer, Snyder
 lots H0107
-targetId GeneCard:GC08P128817
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08P128817
+targetId GeneCard:MYC
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYC
 validation missing
 
 term CCNT2
@@ -3257,7 +3963,7 @@ orderUrl http://www.abcam.com/CHD2-antibody-ab68301.html
 vendorName Abcam
 vendorId ab68301
 lab Snyder
-targetId GeneCard:GC15P093443
+targetId GeneCard:CHD2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CHD2
 validation missing
 
@@ -3273,8 +3979,8 @@ vendorId 07-729
 orderUrl http://www.millipore.com/catalogue/item/07-729
 lab Bernstein, Iyer
 lots 1350637, DAM1472197
-targetId GeneCard:GC16P066153
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
+targetId GeneCard:CTCF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
 term CTCF_(C-20)
@@ -3287,8 +3993,8 @@ orderUrl http://www.scbt.com/datasheet-15914-ctcf-c-20-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-15914
 lab Snyder
-targetId GeneCard:GC16P066153
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
+targetId GeneCard:CTCF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
 
 #(comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
@@ -3303,8 +4009,8 @@ orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229303
 vendorName BD Biosciences
 vendorId 612042
 lab Farnham
-targetId GeneCard:GC04M001195
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1&search=ctbp1=GC04M001195
+targetId GeneCard:CTBP1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP1
 validation missing
 
 ##This does not appear in metaDb
@@ -3318,8 +4024,8 @@ orderUrl http://www.bdbiosciences.com/ptProduct.jsp?prodId=229326
 vendorName BD Biosciences
 vendorId 612044
 lab Farnham
-targetId GeneCard:GC10M126666
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2&search=ctbp2=GC10M126666
+targetId GeneCard:CTBP2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2
 validation CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
 
 term E2F1
@@ -3332,8 +4038,8 @@ orderUrl http://www.millipore.com/catalogue/item/05-379#
 vendorName Millipore
 vendorId 05-379
 lab Farnham
-targetId GeneCard:GC20M031727
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1
+targetId GeneCard:E2F1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
 term E2F4
@@ -3346,8 +4052,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-866
 orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
 lab Farnham
-targetId GeneCard:GC16P065783
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P065783
+targetId GeneCard:E2F4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F4
 validation E2F4(Immunoprecipitation-Western_blot,ChIP):human_E2F4_validation_Farnham.pdf
 
 term E2F6
@@ -3360,9 +4066,24 @@ vendorName Santa Cruz Biotech
 vendorId sc-22823
 orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
 lab Farnham
-targetId GeneCard:GC02M011536
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M011536
+targetId GeneCard:E2F6
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf
+
+term  E2F6_(H-50) 
+tag  E2F6H50 
+type Antibody
+target  E2F6_(H-50) 
+antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 232-281 mapping at the C-terminus of E2F-6 of human origin. 
+targetDescription  This gene encodes a member of the E2F transcription factor protein family. E2F family members play a crucial role in control of the cell cycle and of the action of tumor suppressor proteins. They are also a target of the transforming proteins of small DNA tumor viruses. Many E2F proteins contain several evolutionarily conserved domains: a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. The encoded protein of this gene is atypical because it lacks the transactivation and tumor suppressor protein association domains. It contains a modular suppression domain and is an inhibitor of E2F-dependent transcription. The protein is part of a multimeric protein complex that contains a histone methyltransferase and the transcription factors Mga and Max. Multiple transcript variants have been reported for this gene, but it has not been clearly demonstrated that they encode valid isoforms (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-22823
+orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
+lab  Myers 
+lots  D1206 
+targetId E2F6
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
+validation E2F6_H-50(Immunoblot)_Myers:human_E2F6_H-50_validation_Myers.pdf
 
 term EBF
 tag EBF
@@ -3374,9 +4095,24 @@ vendorName Santa Cruz Biotech
 vendorId sc-137065
 orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
 lab Myers
-targetId GeneCard:GC05M158059
+targetId GeneCard:EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation missing
+
+term  EBF1_(C-8) 
+tag  EBF1C8 
+type Antibody
+target  EBF1_(C-8) 
+antibodyDescription  Mouse monoclonal IgG, raised against a.a. 1-300 mapping at the N-terminus of EBF of human origin. 
+targetDescription  Early B-cell factor 1.  Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity). 
+vendorName Santa Cruz Biotech 
+vendorId sc-137065
+orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
+lab  Myers 
+lots  J0505 
+targetId EBF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
+validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
 
 term ELK4
 tag ELK4
@@ -3389,7 +4125,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-13030
 lab Farnham
 targetId GeneCard:ELK4
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4&search=elk4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELK4
 validation missing
 
 term ERalpha_a
@@ -3418,7 +4154,7 @@ vendorId MAb-009-050
 orderUrl http://www.diagenode.com/en/catalog/antibodies-3/nuclear-receptor-30/product/er-alpha-monoclonal-antibody-185
 lab Ruan
 targetId GeneCard:ESR1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1
 validation missing
 
 term Egr-1
@@ -3431,8 +4167,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-110
 orderUrl http://www.scbt.com/product.php?datasheet=110
 lab Farnham
-targetId GeneCard:GC20M031727
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1&search=Egr-1
+targetId GeneCard:EGR1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EGR1
 validation Egr-1(Immunoblot):human_Egr-1_588_validation_Myers.pdf
 
 term ERRA
@@ -3470,7 +4206,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-604
 orderUrl http://www.scbt.com/datasheet-604-fra-2-q-20-antibody.html
 lab Myers
-targetId GeneCard:GC02P028527
+targetId GeneCard:FOSL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
 validation FOSL2(Immunoblot):human_FOSL2_Q-20_validation_Myers.pdf
 
@@ -3484,8 +4220,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-6553
 orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
 lab Myers
-targetId GeneCard:GC14M038059
-targetUrlhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
+targetId GeneCard:FOXA1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1(Immunoblot):human_FOXA1_C-20_validation_Myers.pdf
 
 term FOXP2
@@ -3498,8 +4234,8 @@ vendorName Abcam
 vendorId ab16046
 orderUrl http://www.abcam.com/index.html?datasheet=16046
 lab Myers
-targetId GeneCard:GC07P113482
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC07P113482
+targetId GeneCard:FOXP2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXP2
 validation missing
 
 term GABP
@@ -3526,8 +4262,8 @@ antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
 vendorId   ;
 orderUrl
-targetId GeneCard:GC0XP048529
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1&search=gata1=GC0XP048529
+targetId GeneCard:GATA1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
 lab Farnham
 validation missing
 
@@ -3554,8 +4290,8 @@ antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
 vendorId   ;
 orderUrl
-targetId GeneCard:GC03M129680
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
+targetId GeneCard:GATA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
 
@@ -3568,7 +4304,7 @@ antibodyDescription Mouse monoclonal IgG.
 vendorName Santa Cruz Biotech
 vendorId  sc-267
 orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
-targetId GeneCard:GC03M128198
+targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
 validation GATA2(Immunoblot):human_GATA2_CG2-96_validation_Myers.pdf
@@ -3584,7 +4320,7 @@ vendorId sc-1004
 orderUrl http://www.scbt.com/product.php?datasheet=1004
 lab Myers
 lots A2508, E1908
-targetId GeneCard:GC04M149219
+targetId GeneCard:NR3C2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NR3C2
 validation GR(Immunoblot):human_GR_M-20_validation_Myers.pdf
 
@@ -3612,8 +4348,8 @@ orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-225
 lab Struhl
-targetId GeneCard:GC01M089030
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M089030
+targetId GeneCard:GTF2B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation missing
 
 term GTF2F1_(RAP-74)
@@ -3626,8 +4362,8 @@ orderUrl http://www.abcam.com/TFIIF-antibody-ChIP-Grade-ab28179.html
 vendorName Abcam
 vendorId ab28179
 lab Snyder
-targetId GeneCard:GC19M006330
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M006330
+targetId GeneCard:GTF2F1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2F1
 validation GTF2F1(Western_blot,Immunoprecipitation):human_GTF2F1_RAP-74_validation_Snyder.pdf
 
 
@@ -3636,15 +4372,15 @@ term H2A.Z
 tag H2AZ
 type Antibody
 target H2AZ
-antibodyDescription (provisional) Unknown at this timeRabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2AZ.
+antibodyDescription Rabbit polyclonal antibody raised against a peptide corresponding to the C-terminus of H2AZ.
 targetDescription H2A.Z is a sequence variant of Histone H2A.
 orderUrl http://www.millipore.com/catalogue/item/07-594
 vendorName Upstate (Millipore)
 vendorId 07-594
 lab Bernstein
 lots DAM1540736
-targetId GeneCard:GC04M101116
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ&search=H2A
+targetId GeneCard:H2AFZ
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=H2AFZ
 validation missing
 
 term H3K4me1
@@ -3658,9 +4394,9 @@ vendorName Abcam
 vendorId ab8895
 lab Bernstein
 lots 383111
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K4me1(Dot_plot):human_H3K4me1_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf
 
 term H3K4me2
 tag H3K4me2
@@ -3673,9 +4409,9 @@ vendorName Abcam
 vendorId ab7766
 lab Bernstein
 lots 56293
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K4me2(Dot_plot):human_H3K4me2_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K4me2(Dot_blot):human_H3K4me2_validation_Bernstein.pdf
 
 term H3K4me3
 tag H3K4me3
@@ -3691,9 +4427,9 @@ orderUrl http://www.millipore.com/catalogue/item/07-473
 #orderUrl http://www.abcam.com/index.html?datasheet=8580
 lab Bernstein
 lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K4me3(Dot_plot):human_H3K4me3_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf
 
 ##This does not appear in metaDb
 term H3K4me3B
@@ -3708,8 +4444,8 @@ vendorId 9751S
 orderUrl http://www.cellsignal.com/products/9751.html
 lab Farnham
 lots 1,2
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K4me3B(Western_blot,Competitor_peptides):human_H3K4me3B_validation_Farnham.pdf
 
 term H3K9ac
@@ -3724,8 +4460,8 @@ vendorName Abcam
 vendorId ab4441
 lab Bernstein
 lots 455103
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K9acB
@@ -3740,8 +4476,8 @@ vendorName Millipore
 vendorId 07-352
 lab Farnham
 lots
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K9me1
@@ -3755,8 +4491,8 @@ vendorName Abcam
 vendorId ab8896
 lab Bernstein
 lots 104560
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation missing
 
 term H3K9me3
@@ -3769,9 +4505,9 @@ vendorName Abcam
 vendorId ab8898
 orderUrl http://www.abcam.com/index.html?datasheet=8898
 lab Farnham
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K9me3(Dot_plot):human_H3K9me3_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
 
 term H3K27ac
 tag H3K27ac
@@ -3784,9 +4520,9 @@ vendorName Abcam
 vendorId ab4729
 lab Bernstein
 lots 31456
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K27ac(Dot_plot):human_H3K27ac_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K27ac(Dot_blot):human_H3K27ac_validation_Bernstein.pdf
 
 term H3K27me3
 tag H3K27me3
@@ -3799,9 +4535,9 @@ vendorName Millipore
 vendorId 07-449
 lab Bernstein
 lots DAM1387952
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K27me3(Dot_plot):human_H3K27me3_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf
 
 ##This does not appear in metaDb
 term H3K27me3B
@@ -3816,8 +4552,8 @@ vendorName Cell Signaling
 vendorId 9733S
 lab Farnham
 lots 1
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K27me3B(Western_blot,Peptide_ELISA):human_H3K27me3B_validation_Farnham.pdf
 
 term H3K36me3
@@ -3831,9 +4567,9 @@ vendorName Abcam
 vendorId ab9050
 lab Bernstein
 lots 136353
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K36me3(Dot_plot):human_H3K36me3_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf
 
 term H3K36me3B
 tag H3K36me3B
@@ -3847,8 +4583,8 @@ vendorName Cell Signaling
 vendorId 9763S
 lab Farnham
 lots
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
 validation H3K36me3B(Western_blot,Peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
 
 term H3K79me2
@@ -3862,9 +4598,9 @@ vendorName Active Motif
 vendorId 39143
 lab Bernstein
 lots 177/0100800
-targetId GeneCard:GC01M148078
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K79me2(Dot_plot):human_H3K79me2_validation_Bernstein.pdf
+targetId GeneCard:HIST2H3C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H3C
+validation H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
 
 term H4K20me1
 tag H4K20me1
@@ -3877,9 +4613,9 @@ vendorName Abcam
 vendorId ab9051
 lab Bernstein
 lots 104513
-targetId GeneCard:GC01P148070
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P148070
-validation H4K20me1(Dot_plot):human_H4K20me1_validation_Bernstein.pdf
+targetId GeneCard:HIST2H4A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HIST2H4A
+validation H4K20me1(Dot_blot):human_H4K20me1_validation_Bernstein.pdf
 
 term HA-E2F1
 tag HAE2F1
@@ -3890,26 +4626,9 @@ orderUrl https://store.crpinc.com/datasheet.aspx?catalogno=MMS-101P
 vendorName Covance
 vendorId MMS-101P
 lab Farnham
-targetId GeneCard:GC20M031727
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
+targetId GeneCard:E2F1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
-
-term HA-sp
-tag HA-sp
-type Cell Line
-organism human
-description Human astrocytes spinal cord
-tissue Spinal cord
-vendorName Sciencell
-vendorId 1820
-orderUrl http://www.sciencellonline.com/site/products/1820.php
-karyotype Normal
-lineage Astrocytic
-termId BTO:0000099
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099
-sex U
-tier 3
-protocol UW_Stam:HA-sp_Stam_protocol.pdf
 
 
 term HEY1
@@ -3922,7 +4641,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-16424
 orderUrl http://www.scbt.com/datasheet-16424-hrt1-c-20-antibody.html
 lab Myers
-targetId GeneCard:GC08M080838
+targetId GeneCard:HEY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HEY1
 validation missing
 
@@ -3952,8 +4671,8 @@ orderUrl http://www.scbt.com/datasheet-6556-hnf-4alpha-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-6556
 lab Snyder
-targetId GeneCard:GC20P042984
-targetUrl http://www.genecards.org//index.php?path=/Search/keyword/HNF4A
+targetId GeneCard:HNF4A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation missing
 
 term HNF4A_(H-171)
@@ -3966,7 +4685,7 @@ orderUrl http://www.scbt.com/datasheet-8987-hnf-4alpha-h-171-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-8987
 lab Myers
-targetId GeneCard:GC20P042984
+targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf
 
@@ -3980,23 +4699,23 @@ orderUrl http://www.scbt.com/datasheet-9144-hsf1-h-311-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-9144
 lab Snyder
-targetId GeneCard:GC08P145515
-targetUrl http://www.genecards.org//index.php?path=/Search/keyword/HSF1/0/20
+targetId GeneCard:HSF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HSF1
 validation missing
 
 term Ini1
 tag INI1
 type Antibody
 target INI1
-antibodyDescription Ini1 (BAF47) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
+antibodyDescription Ini1 (BAF47, SMARCB1) is a ubiquitous 47 kD component of the SWI/SNF chromatin-remodeling complex.
 targetDescription Ini1 (C-20) is an affinity purified goat polyclonal antibody raised against a peptide mapping near the C-terminus
 of Ini1 of human origin.
 orderUrl http://www.scbt.com/datasheet-17796-brg-1-g-7-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-17796
 lab Snyder
-targetId GeneCard:GC22P022453
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC22P022453
+targetId GeneCard:SMARCB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCB1
 validation missing
 
 term IRF1
@@ -4023,7 +4742,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-9082
 orderUrl http://www.scbt.com/datasheet-9082-irf-3-fl-425-antibody.html
 lab Snyder
-targetId GeneCard:IRF1
+targetId GeneCard:IRF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
 
@@ -4037,9 +4756,24 @@ vendorName Santa Cruz Biotech
 vendorId sc-6059
 orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
 lab Myers
-targetId GeneCard:GC06P000336
+targetId GeneCard:IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
 validation missing
+
+term  IRF4_(M-17) 
+tag  IRF4M17 
+type Antibody
+target  IRF4_(M-17) 
+antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin. 
+targetDescription  The protein encoded by this gene belongs to the IRF (interferon regulatory factor) family.  It functions as a lymphocyte specific transcription factor and negatively regulates TLR signaling by selectively competing with IRF5.  A chromosomal translocation involving this gene and the IgH locus, t(6;14)(p25;q32), may be a cause of multiple myeloma (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-6059
+orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
+lab  Myers 
+lots  IO1O6 
+targetId IRF4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
+validation IRF4_M-17(Immunoblot)_Myers:human_IRF4_M-17_validation_Myers.pdf
 
 term JunD
 tag JUND
@@ -4051,8 +4785,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-74
 orderUrl http://www.scbt.com/product.php?datasheet=74
 lab Snyder
-targetId GeneCard:GC19M018254
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M018254
+targetId GeneCard:JUND
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation missing
 
 term KAP1
@@ -4065,8 +4799,8 @@ vendorName Abcam
 vendorId ab10483
 orderUrl http://www.abcam.com/index.html?datasheet=10483
 lab Farnham
-targetId GeneCard:GC19P063747
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
+targetId GeneCard:TRIM2B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
 
 term LEF1_(C-19)
@@ -4079,7 +4813,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-8592
 orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
 lab Myers
-targetId GeneCard:GC04M108968
+targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation LEF1(Immunoblot):human_LEF1_C-19_validation_Myers.pdf
 
@@ -4094,9 +4828,26 @@ vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/product.php?datasheet=197
 lab Snyder
-targetId GeneCard:GC14M064542
+targetId GeneCard:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
 validation missing
+
+term  MAX_(C-17) 
+tag  MAXC17 
+type Antibody
+target  MAX_(C-17) 
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin. 
+targetDescription  The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-197
+orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
+lab  Myers 
+lots  J0809 
+targetId MAX
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
+validation MAX_C-17(Immunoblot)_Myers:human_MAX_C-17_validation_Myers.pdf
+
+
 
 ##This does not appear in metaDb
 term MEF2A
@@ -4109,8 +4860,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-313
 orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
 lab Myers
-targetId GeneCard:GC15P100107
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A&search=mef2a
+targetId GeneCard:MEF2A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
 validation MEF2A(Immunoblot):human_MEF2A_validation_Myers.pdf
 
 term NELFe
@@ -4123,8 +4874,8 @@ orderUrl http://www.scbt.com/datasheet-32912-nelf-e-h-140-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-32912
 lab Struhl
-targetId GeneCard:GC06M032027
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC06M032027
+targetId GeneCard:RDBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RDBP
 validation missing
 
 term NF-E2
@@ -4138,8 +4889,8 @@ vendorId sc-291
 orderUrl http://www.scbt.com/product.php?datasheet=291
 lab Snyder
 lots D1703
-targetId GeneCard:GC12M052972
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
+targetId GeneCard:NFE2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2
 validation missing
 
 term NF-E2_(H-230)
@@ -4152,8 +4903,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-22827
 orderUrl http://www.scbt.com/product.php?datasheet=22827
 lab Snyder
-targetId GeneCard:GC12M052972
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
+targetId GeneCard:NFE2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2
 validation missing
 
 term NFKB
@@ -4166,8 +4917,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-372
 orderUrl http://www.scbt.com/datasheet-372-nfkappab-p65-c-20-antibody.html
 lab Snyder
-targetId GeneCard:GC04P103641
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1&search=NF-kappa-B
+targetId GeneCard:NFKB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFKB1
 validation missing
 
 term NF-YA
@@ -4180,7 +4931,7 @@ vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId  ;
 orderUrl
 lab Struhl
-targetId GeneCard:GC06P041148
+targetId GeneCard:NFYA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYA
 validation missing
 
@@ -4194,7 +4945,7 @@ vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
 vendorId  ;
 orderUrl
 lab Struhl
-targetId GeneCard:GC12M103013
+targetId GeneCard:NFYB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFYB
 validation missing
 
@@ -4208,8 +4959,8 @@ vendorName Abcam
 vendorId ab55744
 orderUrl http://www.abcam.com/NRF1-antibody-ab55744.html
 lab Snyder
-targetId GeneCard:GC07P129038
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1&search=nrf1
+targetId GeneCard:NRF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NRF1
 validation missing
 
 term Nrf2
@@ -4264,8 +5015,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-585
 orderUrl  http://www.scbt.com/product.php?datasheet=585
 lab Myers
-targetId GeneCard:GC22P041487
-targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20
+targetId GeneCard:EP300
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
 
 term p300_(N-15)
@@ -4278,8 +5029,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-584
 orderUrl http://www.scbt.com/datasheet-584-p300-n-15-antibody.html
 lab Snyder
-targetId GeneCard:GC22P041487
-targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20
+targetId GeneCard:EP300
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
 
 term p300_(F-4)
@@ -4292,8 +5043,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-48343
 orderUrl http://www.scbt.com/datasheet-48343-p300-f-4-antibody.html
 lab Snyder
-targetId GeneCard:GC22P041487
-targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20
+targetId GeneCard:EP300
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
 
 term PAX5-C20
@@ -4306,7 +5057,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-1974
 orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 lab Myers
-targetId GeneCard:GC09M036828
+targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation PAX5-C20(Immunoblot):human_PAX5_C-20_validation_Myers.pdf
 
@@ -4320,7 +5071,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-1975
 orderUrl http://www.scbt.com/datasheet-1975-pax-5-n-19-antibody.html
 lab Myers
-targetId GeneCard:GC09M036828
+targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation PAX5-N19(Immunoblot):human_PAX5_N-19_validation_Myers.pdf
 
@@ -4334,7 +5085,7 @@ vendorName Abcam
 vendorId ab12000
 orderUrl http://www.abcam.com/PAX5-antibody-ab12000.html
 lab Hardison
-targetId GeneCard:GC09M036828
+targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation PAX_N-15(Western_blot):mouse_PAX_N-15_validation_Hardison.pdf
 
@@ -4348,8 +5099,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-891
 orderUrl  http://www.scbt.com/product.php?datasheet=891
 lab Myers
-targetId GeneCard:GC09P128508
-targetUrl http://www.genecards.org//index.php?path=/Search/keyword/Pbx3/0/20
+targetId GeneCard:PBX3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PBX3
 validation missing
 
 term PGC1A
@@ -4363,8 +5114,8 @@ orderUrl http://www.scbt.com/datasheet-13067-pgc-1-h-300-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-13067
 lab Snyder
-targetId GeneCard:GC04M023544
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC04M023544]
+targetId GeneCard:PPARGC1A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PPARGC1A
 validation missing
 
 term Pol2
@@ -4393,8 +5144,8 @@ vendorName Covance
 vendorId MMS-128P
 lab Bernstein
 lots 147337002
-targetId
-targetUrl
+targetId GeneCard:POLR2A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation missing
 
 term Pol2-4H8
@@ -4408,7 +5159,7 @@ vendorName Abcam
 vendorId ab5408
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
 lab Myers
-targetId GeneCard:GC17P007329
+targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation missing
 
@@ -4422,7 +5173,7 @@ vendorName Abcam
 vendorId ab5095
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-phospho-S2-antibody-ChIP-Grade-ab5095.html
 lab Snyder
-targetId GeneCard:GC17P007387
+targetId GeneCard:POLR2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation missing
 
@@ -4450,7 +5201,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-233
 orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 lab Myers
-targetId GeneCard:GC19M047286
+targetId GeneCard:POU2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
 validation POU2F2(Immunoblot):human_POU2F2_C-20_validation_Myers.pdf
 
@@ -4464,7 +5215,7 @@ vendorName Cell Signaling Technology
 vendorId 9115
 orderUrl http://www.cellsignal.com/products/9115.html#references
 lab Snyder
-targetId GeneCard:GC06P106579
+targetId GeneCard:PRDM1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PRDM1
 validation missing
 
@@ -4491,10 +5242,11 @@ antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=992
 vendorName Abcam
 vendorId ab992
+lots 940739, 891751 
 lab Snyder
-targetId GeneCard:GC08M117927
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC08M117927
-validation missing
+targetId GeneCard:RAD21
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
+validation RAD21(Immunoblot)_Myers:human_RAD21_validation_Myers.pdf
 
 term RPC155
 tag RPC155
@@ -4506,8 +5258,8 @@ vendorName Donated by Dr. RJ White, The Beatson Institute for Cancer Research
 vendorId 1900
 orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-and-Growth/Robert-J-White-Gene-Transcription.html
 lab Struhl
-targetId GeneCard:GC10M079405
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10M079405
+targetId GeneCard:POLR3A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
 validation missing
 
 term RFX5_(N-494)
@@ -4520,7 +5272,7 @@ orderUrl http://www.rockland-inc.com//store/200-401-194-14562-O4L_9248.aspx
 vendorName Rockland Immunochemicals
 vendorId 200-401-194
 lab Snyder
-targetId GeneCard:GC01M151313
+targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
 validation RFX5(Western_blot,Immunoprecipitation):human_RFX5_N-494_validation_Snyder.pdf
 
@@ -4534,7 +5286,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-553
 orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 lab Myers
-targetId GeneCard:GC09P136358
+targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
 validation missing
 
@@ -4548,8 +5300,8 @@ vendorName Proteintech Group
 vendorId  11231-1-AP
 orderUrl http://www.ptglab.com/data/image/pdf/E__web_pdf_11231-1-AP.pdf
 lab Farnham
-targetId GeneCard:GC01P149165
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1&search=setdb1
+targetId GeneCard:SETDB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation missing
 
 term Sin3Ak-20
@@ -4576,8 +5328,8 @@ vendorName Abcam
 vendorId ab48192
 orderUrl http://www.abcam.com/SIRT6-antibody-ab48192.html
 lab Struhl
-targetId GeneCard:GC19M004125
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M004125
+targetId GeneCard:SIRT6
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIRT6
 validation missing
 
 term SIX5
@@ -4590,7 +5342,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-55706
 orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 lab Myers
-targetId GeneCard:GC19M050959
+targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
 validation missing
 
@@ -4604,9 +5356,25 @@ vendorName Santa Cruz Biotech
 vendorId sc-17824
 orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 lab Myers
-targetId GeneCard:GC12P052060
+targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
 validation SP1(Immunoblot):human_SP1_E-3_validation_Myers.pdf
+
+term  SP4_(V-20) 
+tag  SP4V20 
+type Antibody
+target  SP4_(V-20) 
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Sp4 of human origin. 
+targetDescription  Binds to GT and GC boxes promoters elements. Probable transcriptional activator. 
+vendorName Santa Cruz Biotech 
+vendorId sc-645
+orderUrl http://www.scbt.com/datasheet-645-sp4-v-20-antibody.html
+lab  Myers 
+lots  F2609 
+targetId SP4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
+validation SP4_V-20(Immunoblot)_Myers:human_SP4_V-20_validation_Myers.pdf
+
 
 term SREBP1
 tag SREBP1
@@ -4647,8 +5415,8 @@ vendorId sc-335
 orderUrl http://www.scbt.com/product.php?datasheet=335
 lab Myers / Wold
 lots F3006 L2005 H2604
-targetId GeneCard:GC06P043247
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC06P043247
+targetId GeneCard:SRF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SRF
 validation SRF(Immunoblot):human_SRF_G-20_validation_Myers.pdf
 
 term STAT1
@@ -4662,8 +5430,8 @@ vendorId sc-345
 orderUrl http://www.scbt.com/product.php?datasheet=345
 lab Snyder
 lots G2406 and K2106
-targetId GeneCard:GC02M191542
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M191542
+targetId GeneCard:STAT1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=STAT1
 validation missing
 
 term STAT2
@@ -4676,8 +5444,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-476x
 orderUrl http://www.scbt.com/product.php?datasheet=476
 lab Snyder
-targetId GeneCard:GC12M055021
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M055021
+targetId GeneCard:STAT2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT2
 validation missing
 
 term STAT3
@@ -4690,8 +5458,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-482
 orderUrl http://www.scbt.com/datasheet-482-stat3-c-20-antibody.html
 lab Snyder
-targetId GeneCard:GC17M037718
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC17M037718ss
+targetId GeneCard:STAT3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=STAT3
 validation STAT3(Western_blot,Immunoprecipitation):human_STAT3_validation_Snyder.pdf
 
 term SUZ12
@@ -4704,8 +5472,8 @@ vendorName Antibody made by Farnham lab
 vendorId   ;
 orderUrl
 lab Farnham
-targetId GeneCard:GC17P027289
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12&search=suz12
+targetId GeneCard:SUZ12
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SUZ12
 validation missing
 
 term TAF1
@@ -4721,6 +5489,22 @@ geneId 6872
 lab Myers / Wold
 lots K0905 F2706
 validation missing
+
+term  TAF7_(SQ-8) 
+tag  TAF7SQ8 
+type Antibody
+target  TAF7_(SQ-8) 
+antibodyDescription  Mouse monoclonal IgG, raised against recombinant TAF II p55 (TAF7) of human origin. 
+targetDescription  The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5. The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors. This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators. The protein is required for transcription by promoters targeted by RNA polymerase II (RefSeq). 
+228
+vendorName Santa Cruz Biotech
+vendorId sc-101167
+orderUrl http://www.scbt.com/datasheet-101167-taf-ii-p55-sq-8-antibody.html
+lab  Myers 
+lots  J1509 
+targetId TAF7
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
+validation TAF7_SQ-8(Immunoblot)_Myers:human_TAF7_SQ-8_validation_Myers.pdf
 
 term TAL1_(SC-12984)
 tag TAL1SC12984
@@ -4759,7 +5543,7 @@ vendorId ab62126
 orderUrl http://www.abcam.com/TATA-binding-protein-TBP-antibody-mAbcam-62126-Nuclear-Loading-Control-and-ChIP-Grade-ab62126.html
 lab Snyder
 targetId GeneCard:TBP
-targetUrl hhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation TBP(Immunoblot):human_TBP_validation_Snyder.pdf
 
 term TCF12
@@ -4772,7 +5556,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-357
 orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 lab Myers
-targetId GeneCard:GC15P054998
+targetId GeneCard:TCF12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
 validation TCF12(Immunoblot):human_TCF12_A-20_validation_Myers.pdf
 
@@ -4787,7 +5571,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-349
 orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
 lab Myers
-targetId GeneCard:GC19M001560
+targetId GeneCard:TCF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF3
 validation TCF3(Immunoblot):human_TCF3_V-18_validation_Myers.pdf
 
@@ -4801,8 +5585,8 @@ vendorName Cell Signaling Technology
 vendorId 2569S
 orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham/Myers
-targetId GeneCard:GC18M051045
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC18M051045
+targetId GeneCard:TCF4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
 validation missing
 
 term TCF7L2
@@ -4815,8 +5599,8 @@ vendorName Cell Signaling Tech
 vendorId H2569S
 orderUrl http://www.cellsignal.com/products/2569.html
 lab Farnham
-targetId GeneCard:GC10P114700
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC10P114700
+targetId GeneCard:TCF7L2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF7L2
 validation missing
 
 ##This does not appear in metaDb
@@ -4829,8 +5613,8 @@ targetDescription TFIIB is a general transcription factor that is believed to pl
 vendorName Santa Cruz Biotechnology
 vendorId sc-225
 orderUrl http://www.scbt.com/datasheet-225-tfiib-c-18-antibody.html
-targetId GeneCard:GC01M089030
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M089030
+targetId GeneCard:GTF2B
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 lots J1905
 lab Struhl
 validation missing
@@ -4858,7 +5642,7 @@ targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, 
 vendorName Donated by Dr. J.D.Engel, University of Michigan
 vendorId  ;
 lab Farnham
-targetId GeneCard:GC03P014964
+targetId GeneCard:nr2c2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
 validation missing
 
@@ -4872,8 +5656,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-229
 orderUrl http://www.scbt.com/product.php?datasheet=229
 lab Myers
-targetId GeneCard:GC01M159275
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M159275
+targetId GeneCard:USF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
 validation USF-1(Immunoblot):human_USF-1_C-20_validation_Myers.pdf
 
 term USF2
@@ -4890,6 +5674,21 @@ targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
 validation USF2(Immunoblot):human_USF2_validation_Snyder.pdf
 
+term USF2_(C-20) 
+tag USF2C20 
+type Antibody
+target  USF2_(C-20) 
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of USF-2 of mouse origin.  Recommended for detection of USF-2 p44 of mouse, rat and human. 
+targetDescription  This gene encodes a member of the basic helix-loop-helix leucine zipper family, and can function as a cellular transcription factor. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs. Two transcript variants encoding distinct isoforms have been identified for this gene (RefSeq). 
+vendorName Santa Cruz Biotech 
+vendorId sc-862
+orderUrl http://www.scbt.com/datasheet-862-usf-2-c-20-antibody.html
+lab  Myers 
+lots  J0908 
+targetId GeneCard:USF2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
+validation USF2_C-20(Immunoblot)_Myers:human_USF2_C-20_validation_Myers.pdf
+
 term WHIP
 tag WHIP
 type Antibody
@@ -4904,18 +5703,18 @@ targetId GeneCard:WRNIP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=WRNIP1
 validation missing
 
-term WHIP
+term XRCC4
 tag XRCC4
 type Antibody
-target WHIP
+target XRCC4
 targetDescription Recognizes the XRCC4 protein (X ray cross complementation protein). XRCC4 is a ubiquitous protein reported to have a role in DNA double-stranded break repair and in V(D)J recombination.
 antibodyDescription Rabbit polyclonal
 orderUrl http://www.abcam.com/index.html?datasheet=145
 vendorName Abcam
 vendorId ab145
 lab Snyder
-targetId GeneCard:GC05P082409
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P082409
+targetId GeneCard:XRCC4
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=XRCC4
 validation XRCC4(Immunoblot):human_XRCC4_validation_Snyder.pdf
 
 term YY1
@@ -4928,8 +5727,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-1703X
 orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
 lab Farnham
-targetId GeneCard:GC14P099774
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
+targetId GeneCard:YY1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
 validation missing
 
 term YY1_(C-20)
@@ -4942,8 +5741,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-281
 orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
 lab Myers
-targetId GeneCard:GC14P099774
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
+targetId GeneCard:YY1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
 validation YY1(Immunoblot):human_YY1_C-20_validation_Myers.pdf
 
 term ZBTB33
@@ -4957,7 +5756,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-23871
 orderUrl http://www.scbt.com/datasheet-23871-kaiso-6f8-antibody.html
 lab Myers
-targetId GeneCard:GC0XP119268
+targetId GeneCard:ZBTB33
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
 validation ZBTB33(Immunoblot):human_ZBTB33_6F8_validation_Myers.pdf
 
@@ -4971,8 +5770,8 @@ vendorName Novus Biologicals
 vendorId H00010127-A01
 orderUrl http://www.novusbio.com/data_sheet/index/H00010127-A01
 lab Farnham
-targetId GeneCard:GC16P003273
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P003273
+targetId GeneCard:ZNF263
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF263
 validation missing
 
 term ZNF274
@@ -4986,8 +5785,8 @@ vendorId H00010782-A01
 orderUrl http://www.abnova.com/products/products_detail.asp?Catalog_id=H00010782-A01
 lab Farnham
 lots 060729QCS1
-targetId GeneCard:GC19P063386
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
+targetId GeneCard:ZNF274
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274
 validation ZN274(Western_blot,Immunoprecipitation,siRNA):human_ZNF274_validation_Farnham.pdf
 
 term ZZZ3
@@ -5000,7 +5799,7 @@ orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
 vendorName Lazlo Tora, Institut de G?n?tique et de Biologie Mol?culaire et Cellulaire
 vendorId  ;
 lab Struhl
-targetId GeneCard:GC01M077742
+targetId GeneCard:ZZZ3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
 
@@ -5212,7 +6011,7 @@ vendorId AF4185
 orderUrl http://www.rndsystems.com/
 lab Snyder
 lots ZIJ01
-targetId GeneCard:GC10P11195
+targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
 validation missing
 
@@ -5229,8 +6028,8 @@ vendorId 05-950
 orderUrl http://www.millipore.com/catalogue/item/05-950
 lab Tenenbaum
 lots
-targetId GeneCard:GC0XP070503
-targetUrl http://www.ncbi.nlm.nih.gov/gene/4841
+targetId GeneCard:NONO
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NONO
 validation
 
 ##This does not appear in metaDb
@@ -6215,34 +7014,6 @@ tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
 type protocol
 
-##### Growth Protocols used, still of type protocol
-##### This is being used by Hudson Alpha and possibly CSHL.  They would like the cell type and the term to be able to link to the correct protocol
-
-
-term UW_Stam
-tag uwStamGrowProt
-description Cells grown using the UW_Stam growth protocol.
-type protocol
-
-term Open_Chromatin
-tag openChromGrowProt
-description Cells grown using the Open_Chromatin growth protocol.
-type protocol
-
-term HudsonAlpha
-tag hudsonAlphaGrowProt
-description Cells grown using the HudsonAlpha growth protocol.
-type protocol
-
-term Yale_TFBS
-tag YaleGrowProt
-description Cells grown using the Yale TFBS growth protocol.
-type protocol
-
-term Yale_TFBS(Struhl)
-tag YaleStruhlGrowProt
-description Cells grown using the Yale TFBS(Struhl) growth protocol.
-type protocol
 
 ### phase
 term G1
@@ -6389,6 +7160,12 @@ term Nre
 tag NRE
 type dataType
 description Negative Regulatory Elements
+
+term Proteogenomics
+tag protgeno
+type dataType
+label Proteogenomics
+description Mass Spec Proteogenomic Mapping
 
 # tag not standard to match hg18
 term RnaPet
@@ -7007,6 +7784,18 @@ labPiFull Greg Crawford
 grantPi Hardison
 organism mouse
 
+term PSU-m
+tag PSU
+type lab
+label Hardison - Penn State University
+description Hardison - Penn State University
+labInst PSU
+labPi Hardison
+labPiFull Ross Hardison
+grantPi Hardison
+organism mouse
+
+
 term UChicago-m
 tag UChicago
 type lab
@@ -7181,7 +7970,7 @@ tag ren
 type grant
 description Ren
 grantInst LICR
-project LICR
+projectName LICR 
 
 term Hardison
 tag hardison
@@ -7200,7 +7989,7 @@ projectName
 term Giddings
 tag giddings
 type grant
-description Diggings
+description Giddings 
 grantInst University of North Carolina
 projectName UNC-Giddings
 
@@ -7226,9 +8015,10 @@ projectName UNC-Giddings
 term typeOfTerm
 type typeOfTerm
 label Term types defined
-description Types of terms used frequently in controlled vocabulary or metadata should be defined here. (Provisional)
+description Types of terms used frequently in controlled vocabulary or metadata should be defined here. 
 searchable no
-cvDefined no
+cvDefined yes
+validation cv.ra
 hidden yes
 
 term accession
@@ -7275,11 +8065,14 @@ validation [0-9][0-9][0-9][A-Z]*
 term cellType
 type typeOfTerm
 label Cell, tissue or DNA sample
-description Cell line or tissue used as the source of experimental material. (Provisional)
+description Cell line or tissue used as the source of experimental material.
 searchable select
 cvDefined yes
 validation cv
-### Warning should be term cell but this is already in localization!
+### Warning should be "term cell line", but the term here has to be a single 
+### word.  Or, "term cell line" in the cell type definitions should be 
+### "term cellType", but that requires changing a huge amount of existing code.
+### (11/18/10)
 
 term composite
 type typeOfTerm
@@ -7304,7 +8097,7 @@ term controlId
 type typeOfTerm
 label ControlId - explicit relationship
 #label Control ID - Specific dataset used as the control
-description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment. (Provisional)
+description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment. 
 searchable no
 cvDefined no
 validate none
@@ -7321,7 +8114,7 @@ validate cv
 term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
-description The ENCODE project declares specific data freezes for data to be used in papers or analysis. (Provisional)
+description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
 searchable select
 cvDefined no
 validate ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
@@ -7361,39 +8154,39 @@ validation date nine months more than dateSubmitted
 term fileIndex
 type typeOfTerm
 label BAM Index file
-description The name of the index file in the downloads directory associated with a particular track or raw data file. (Provisional)
+description  The name of the index file (.bai) that is associated with a particular bam file.
 searchable no
 cvDefined no
 validate Matches the fileName prefix with the suffix .bai
 #hidden yes
-#Cricket thinks, but could be wrong that the index file is only for bam files.  So the description should read:
-#description The name of the index file (.bai) that is associated with a particular bam file.
+
 
 term fileName
 type typeOfTerm
 label File Name for downloading
-description The name of a downloadable file associated with a particular track in the browser. (Provisional)
+description The name of a downloadable file associated with a particular track in the browser. 
 searchable no
 cvDefined no
-validate Exists?
+validate Exists
 
 term fragLength
 type typeOfTerm
 label Mean Length of DNA fragments
-description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. (Provisional)
+description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. 
 searchable no
 cvDefined no
-# Collapse with fragSize?
-#Cricket fill in with Special story
+# Cricket's special story (11/19/10): in fields.ra we have fragLength
+# and medianFragLength.  fragLength and medianFragLength appear to be
+# redundant, and should be collapsed into fragLength
+
 
 term fragSize
 type typeOfTerm
 label Length of GIS DNA PET fragments
-description (Provisional)
+description length of GIS DNA PET fragments, which has different values than fragLength
 searchable no
 cvDefined yes
-# WHAT IS THIS?
-#Cricket fill in with special story
+# With more investigation, this could be collapsed in with fragLength (11/19/10)
 
 term freezeDate
 type typeOfTerm
@@ -7408,7 +8201,7 @@ term geoSample
 type typeOfTerm
 label GEO sample accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
-searchable select
+searchable freeText
 cvDefined no
 validate GSM[0-9]*
 
@@ -7424,7 +8217,7 @@ term geoSeries
 type typeOfTerm
 label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
-searchable select
+searchable freeText
 cvDefined no
 validate GSE[0-9]*
 
@@ -7465,7 +8258,7 @@ term labExpId
 type typeOfTerm
 label Lab provided identifier
 description An ID provided by a lab that uniquely identifies an experiment (dataset) to that lab.
-searchable select
+searchable freeText
 cvDefined no
 validate none
 
@@ -7481,7 +8274,7 @@ term labVersion
 type typeOfTerm
 label Lab specific details
 description Free text field for labs to record miscellaneous details of their experiments and submitted data sets.
-searchable select
+searchable freeText
 cvDefined no
 validate none
 
@@ -7504,7 +8297,7 @@ validate cv
 term mapAlgorithm
 type typeOfTerm
 label Mapping algorithm
-description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome. (Provisional)
+description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome. 
 searchable select
 cvDefined yes
 validate cv
@@ -7634,7 +8427,7 @@ term softwareVersion
 type typeOfTerm
 label Lab specific informatics
 description A free-text field for a lab to declare the software and computational methods used in an experiment.
-searchable select
+searchable freeText
 cvDefined no
 validate none
 
@@ -7650,7 +8443,7 @@ term subId
 type typeOfTerm
 label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
-searchable select
+searchable freeText
 cvDefined no
 validate [0-9]*
 

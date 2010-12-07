@@ -24,14 +24,14 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Myers
-lab               Caltech
+lab               Caltech(Wold)
 dataType          RnaSeq
 compositeSuffix   CaltechRnaSeq
 group             expression
 variables         cell,readType,mapAlgorithm,insertLength
 assembly          hg19
 
-validationSettings validateFiles.fastq:mmCheckOneInN=100;validateFiles.bam:mmCheckOneInN=100,mismatches=3 
+validationSettings validateFiles.fastq:mmCheckOneInN=100;validateFiles.bam:mmCheckOneInN=100,mismatches=6 
 
 # Track/view definition
 view             Signal
@@ -123,7 +123,7 @@ downloadOnly     no
 
 view             InsLength
 longLabelPrefix  Caltech RNA-seq Insert Length Distribution
-type             insdist
+type             insDist
 hasReplicates    yes
 required         no
 downloadOnly     yes

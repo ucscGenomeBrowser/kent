@@ -93,7 +93,7 @@ enum baseColorDrawOpt baseColorGetDrawOpt(struct track *tg);
 
 
 struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf,
-	struct genePred *gp, boolean colorStopStart);
+        struct genePred *gp, boolean colorStopStart, boolean codonNumbering);
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary. */

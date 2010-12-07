@@ -433,16 +433,16 @@ function validateFloat(obj,min,max)
     }
 }
 
-function metadataShowHide(tableName,showLonglabel,showShortLabel)
+function metadataShowHide(trackName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
-    var divit = $("#div_"+tableName+"_meta");
+    var divit = $("#div_"+trackName+"_meta");
     if($(divit).css('display') == 'none') {
-        $("#div_"+tableName+"_cfg").hide();  // Hide any configuration when opening metadata
+        $("#div_"+trackName+"_cfg").hide();  // Hide any configuration when opening metadata
 
         if($(divit).find('table').length == 0) {
-            lookupMetadata(tableName,showLonglabel,showShortLabel);
+            lookupMetadata(trackName,showLonglabel,showShortLabel);
         }
     }
     $(divit).toggle();  // jQuery hide/show
@@ -961,4 +961,11 @@ function showLoadingImage(id)
 function hideLoadingImage(id)
 {
     $('#' + id).remove();
+}
+
+function codonColoringChanged(name)
+{
+// Updated disabled state of codonNumbering checkbox based on current value of track coloring select.
+    var val = $("select[name='" + name + ".baseColorDrawOpt'] option:selected").text();
+    $("input[name='" + name + ".codonNumbering']").attr('disabled', val == "OFF");
 }

@@ -67,13 +67,15 @@ void docIdSubOutput(struct docIdSub *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *docIdDecorate(int num);
+char *docIdDecorate(char *composite, int num);
 
-void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
+char *docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
     char *docIdDir, char *type);
 
 char *docIdGetPath(char *docId, char *docIdDir, char *suffix, char *submitPath);
 
 boolean fileIsCompressed(char *fileName);
+
+char *docDecorateType(char *type);
 #endif /* DOCIDSUB_H */
 

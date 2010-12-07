@@ -17,6 +17,7 @@ lab Yale-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -41,6 +42,7 @@ lab Yale-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -64,6 +66,7 @@ lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 tableName wgEncodeSydhHistCh12H3k4me3IggyalePk
@@ -88,6 +91,7 @@ lab Yale-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -111,6 +115,7 @@ lab Yale-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -134,6 +139,7 @@ lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 tableName wgEncodeSydhHistCh12H3k4me3IggyaleSig
@@ -158,6 +164,7 @@ grant Snyder
 lab Yale-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 treatment None
@@ -180,6 +187,7 @@ grant Snyder
 lab Yale-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 treatment None
@@ -203,152 +211,11 @@ lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 tableName wgEncodeSydhHistCh12InputIggyaleSig
 treatment None
-view Signal
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam.bai
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam
-grant Snyder
-lab Stanford-m
-project wgEncode
-replicate 1
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view Alignments
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam.bai
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam
-grant Snyder
-lab Stanford-m
-project wgEncode
-replicate 2
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view Alignments
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
-objType table
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk.narrowPeak.gz
-grant Snyder
-lab Stanford-m
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-strain Unknown
-subId 1353
-tableName wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
-treatment DMSO_2.0pct
-view Peaks
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep1
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford-m
-project wgEncode
-replicate 1
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view RawData
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep2
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford-m
-project wgEncode
-replicate 2
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view RawData
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
-objType table
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig.bigWig
-grant Snyder
-lab Stanford-m
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-strain Unknown
-subId 1353
-tableName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
-treatment DMSO_2.0pct
 view Signal
 
 metaObject wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1
@@ -369,6 +236,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -392,6 +260,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -415,6 +284,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1166
 tableName wgEncodeSydhHistMelH3k4me3IggyalePk
@@ -439,6 +309,7 @@ lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -462,6 +333,7 @@ lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -485,6 +357,7 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1166
 tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
@@ -508,6 +381,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -530,6 +404,7 @@ grant Snyder
 lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -553,10 +428,11 @@ lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 895369415
+# MAGIC: -377783445

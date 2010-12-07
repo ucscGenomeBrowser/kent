@@ -18,14 +18,10 @@ subTextStatic(subList, trixPath, buf, len);
 boolean isSearchTracksSupported(char *database, struct cart *cart)
 // Return TRUE if searchTracks is supported for this database and javascript is supported too
 {
-#ifdef TRACK_SEARCH
 if (!advancedJavascriptFeaturesEnabled(cart))
     return FALSE;
 
 char trixFile[HDB_MAX_PATH_STRING];
 getSearchTrixFile(database, trixFile, sizeof(trixFile));
 return fileExists(trixFile);
-#else
-return FALSE;
-#endif
 }

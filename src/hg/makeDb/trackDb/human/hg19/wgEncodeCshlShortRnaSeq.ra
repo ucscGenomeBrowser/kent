@@ -1,7 +1,7 @@
 track wgEncodeCshlShortRnaSeq
 compositeTrack on
 shortLabel CSHL Sm RNA-seq
-longLabel ENCODE CSHL small RNA-seq
+longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
 subGroup1 view Views 1-Transfrags=TransFrags 2-PlusRawSignal=Plus_Raw_Signal 3-MinusRawSignal=Minus_Raw_Signal 4-Alignments=Alignments 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) prostate=Prostate 
@@ -15,7 +15,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-superTrack wgEncodeRnaSeqSuper
+superTrack wgEncodeRnaSeqSuper dense
 
     track wgEncodeCshlShortRnaSeqViewAlignments
     shortLabel Alignments
@@ -365,7 +365,7 @@ superTrack wgEncodeRnaSeqSuper
     track wgEncodeCshlShortRnaSeqViewTransfrags
     shortLabel Transfrags
     view 1-Transfrags
-    visibility full 
+    visibility pack 
     subTrack wgEncodeCshlShortRnaSeq
     scoreFilter 0
     scoreFilterLimits 0:1000

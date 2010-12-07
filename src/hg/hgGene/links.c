@@ -145,7 +145,14 @@ if (sameString(link->name, "protBrowser"))
     /* use UniProt accession instead of displayID, because display ID sometimes changes */
     if (swissProtAcc == NULL || swissProtAcc[0] == 0)
         return NULL;
-    safef(query, sizeof(query), "../cgi-bin/pbTracks?db=%s&proteinID=%s", database, swissProtAcc);
+    if (isRgdGene(conn))
+    	{
+	safef(query, sizeof(query), "../cgi-bin/pbGlobal?proteinID=%s", swissProtAcc);
+    	}
+    else
+	{
+    	safef(query, sizeof(query), "../cgi-bin/pbTracks?db=%s&proteinID=%s", database, swissProtAcc);
+    	}
     return(cloneString(query));
     }
 if (sameString(link->name, "tbSchema"))

@@ -168,5 +168,5 @@ track chainNetMonDom5 override
 matrixHeader A, C, G, T
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 
-track refSeqAnnon override
-refSeqAnnonVersion 1.2
+track refSeqAnno override
+refSeqAnnoVersion 1.2

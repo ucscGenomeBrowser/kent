@@ -176,14 +176,12 @@ puts(
 puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
-#ifdef TRACK_SEARCH
 if(isSearchTracksSupported(db,cart))
     {
     puts("<TD VALIGN=\"TOP\">");
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     puts("</TD>");
     }
-#endif///def TRACK_SEARCH
 
 // custom track button. disable hgCustom button on GSID server, until
 // necessary additional work is authorized.
