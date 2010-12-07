@@ -1,7 +1,8 @@
 /* hubConnect - stuff to manage connections to track hubs.  Most of this is mediated through
  * the hubConnect table in the hgCentral database.  Here there are routines to translate between
  * hub symbolic names and hub URLs,  to see if a hub is up or down or sideways (up but badly
- * formatted) etc. */
+ * formatted) etc.  Note that there is no C structure corresponding to a row in the hubConnect 
+ * table by design.  We just want field-by-field access to this. */
 
 #include "common.h"
 #include "linefile.h"
