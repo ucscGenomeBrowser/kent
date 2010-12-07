@@ -13087,3 +13087,44 @@ hgLoadBed hg19 darned allChroms.bed
     ./bin/lsSnpPdbDbLoadStep hg19
     # once this has been QAed, will auto-update from genbank scripts
 #############################################################################
+
+#############################################################################
+# Agilent arrays (2010-12-01 Andy)
+cd /hive/data/genomes/hg19/bed/agilentProbes/
+# first move all the lifted versions out of the way
+mkdir lifted.2009-07-28/
+mv * lifted.2009-07-28/
+# FTP download from ftp.agilent.com using given user/pass from Anniek De-witte
+# (anniek_de-witte@agilent.com)
+# downloaded files are gzipped beds. The files are typically located in a 
+# directory called "FOR_UCSC" or something like that.  The user/pass and the
+# directory are deleted after it's confirmed they're received, so it's not
+# too helpful to mention specifics here.
+ftp -u user -p password ftp.agilent.com
+> cd directory
+> get 014693_D_BED_20100501.bed.gz
+> get 014698_D_BED_20100501.bed.gz
+> get 014950_D_BED_20100501.bed.gz
+> get 021529_D_BED_20100501.bed.gz
+> get 021850_D_BED_20100430.bed.gz
+> get 021924_D_BED_20100501.bed.gz
+> get 022060_D_BED_20100501.bed.gz
+> get 023642_D_BED_20100430.bed.gz
+> get 028081_D_BED_20101014.bed.gz
+> get 029830_D_BED_20100922.bed.gz
+# unzip everything
+gunzip *
+ln -s 022060_D_BED_20100501.bed agilent4x180k.bed
+ln -s 021529_D_BED_20100501.bed agilentCgh1x1m.bed
+ln -s 014693_D_BED_20100501.bed agilentCgh1x244k.bed
+ln -s 014698_D_BED_20100501.bed agilentCgh2x105k.bed
+ln -s 021850_D_BED_20100430.bed agilentCgh2x400k.bed
+ln -s 014950_D_BED_20100501.bed agilentCgh4x44k.bed
+ln -s 021924_D_BED_20100501.bed agilentCgh8x60k.bed
+ln -s 028081_D_BED_20101014.bed agilentCghSnp2x400k.bed
+ln -s 029830_D_BED_20100922.bed agilentCghSnp4x180k.bed
+ln -s 023642_D_BED_20100430.bed agilentHrd1x1m.bed
+for bed in agilent*.bed; do
+    tail -n +2 $bed | hgLoadBed hg19 ${bed%.bed} stdin
+done
+rm bed.tab
