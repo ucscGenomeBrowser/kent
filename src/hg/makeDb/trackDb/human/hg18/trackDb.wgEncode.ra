@@ -507,7 +507,7 @@ compositeTrack on
 shortLabel Duke Affy Exon
 longLabel ENCODE Duke Affy All-Exon Arrays
 group expression
-subGroup1 cellType Cell_Line Astrocy=Astrocy Chorion=Chorion Fibrobl=Fibrobl GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 Gliobla=Gliobla HELA=HeLa-S3_<i>Tier2</i> HELA-ifa=HeLa-S3_<i>IFN&alpha;</i> HELA-ifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HMEC=HMEC HUVEC=HUVEC_<i>Tier2</i> LHSR=LHSR LHSR=LHSR LHSR-a=LHSR_<i>androgen</i> LNCaP=LNCaP LNCaP-a=LNCaP_<i>androgen</i> MCF7=MCF-7 MCF7-a=MCF-7_<i>androgen</i> MCF7-e=MCF-7_<i>estrogen</i> MCF7-v=MCF-7_<i>vehicle</i> Medullo=Medullo NHEK=NHEK_<i>Tier2</i> Osteobl=Osteobl ProgFib=ProgFib
+subGroup1 cellType Cell_Line Astrocy=Astrocy Chorion=Chorion Fibrobl=Fibrobl GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 Gliobla=Gliobla HELA=HeLa-S3_<i>Tier2</i> HELA-ifa=HeLa-S3_<i>IFN&alpha;</i> HELA-ifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HMEC=HMEC HUVEC=HUVEC_<i>Tier2</i> LHSR=LHSR LHSR=LHSR LHSR-a=LHSR_<i>androgen</i> LNCaP=LNCaP LNCaP-a=LNCaP_<i>androgen</i> MCF7=MCF-7 MCF7-a=MCF-7_<i>androgen</i> MCF7-e=MCF-7_<i>estrogen</i> MCF7-v=MCF-7_<i>vehicle</i> Medullo=Medullo NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib
 subGroup2 rep Replicate rep1=1 rep2=2 rep3=3
 dimensions dimensionY=cellType dimensionX=rep
 boxedCfg on
@@ -1015,7 +1015,7 @@ compositeTrack on
 shortLabel UW Affy Exon
 longLabel ENCODE UW Affy All-Exon Arrays
 group expression
-subGroup1 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAE=HAE HCF=HCF HCM=HCM HCPE=HCPE HEE=HEE HIPE=HIPE HMEC=HMEC HNPCE=HNPCE HRCEpiC=HRCEpiC HRE=HRE HRPE=HRPE Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
+subGroup1 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAE=HAE HCF=HCF HCM=HCM HCPE=HCPE HEE=HEE HIPE=HIPE HMEC=HMEC HNPCE=HNPCE HRCEpiC=HRCEpiC HRE=HRE HRPE=HRPE Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 subGroup2 rep Replicate rep1=1 rep2=2
 # dimensions dimensionX=cellType dimensionY=rep
 dimensions dimensionX=rep dimensionY=cellType
@@ -1480,7 +1480,7 @@ wgEncode 1
     subTrack wgEncodeUwAffyExonArray off
     shortLabel NHEK 1
     longLabel ENCODE UW Affy All-Exon Array Signal Replicate 1 (in NHEK cells)
-    subGroups cellType=2NHEK rep=rep1
+    subGroups cellType=NHEK rep=rep1
     color 179,0,134
     type broadPeak
 
