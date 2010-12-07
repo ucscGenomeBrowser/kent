@@ -13,6 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "customTrack.h"
+#include "hubConnect.h"
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "hPrint.h"
@@ -200,6 +201,16 @@ if (!hIsGsidServer() && !hIsCgbServer())
     puts("</FORM>");
     }
 puts("</TD>");
+
+if (hubConnectTableExists())
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    printf(
+	"<FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
+        "../cgi-bin/hgHubConnect", "import tracks");
+    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    puts("</FORM></TD>");
+    }
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");
