@@ -106,12 +106,13 @@ if ( "$mode" == "review") then
 	echo "Created  dirs $GIT_REPORT_HIST/{branch,review,review2} on $HOST [${0}: `date`]"
     endif
 else
-if ( "$mode" == "review2") then
-    # For review2, history is NEXTNN
-    set GIT_REPORT_HIST=git-reports-history/v${NEXTNN}
-else
-    # For branches, history is BRANCHNN
-    set GIT_REPORT_HIST=git-reports-history/v${BRANCHNN}
+    if ( "$mode" == "review2") then
+        # For review2, history is NEXTNN
+        set GIT_REPORT_HIST=git-reports-history/v${NEXTNN}
+    else
+        # For branches, history is BRANCHNN
+        set GIT_REPORT_HIST=git-reports-history/v${BRANCHNN}
+    endif
 endif
 # check history dir exists
 if ( ! -d $GIT_REPORT_HIST ) then
@@ -132,10 +133,11 @@ cd $WEEKLYBLD
 if ( "$mode" == "review") then
     set cmd="git-reports $prevTag $thisTag $TODAY $REVIEWDAY v${NEXTNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review"
 else    
-if ( "$mode" == "review2") then
-    set cmd="git-reports $prevTag $thisTag $REVIEWDAY $REVIEW2DAY v${NEXTNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review2"
-else    
-    set cmd="git-reports $prevTag $thisTag $REVIEW2DAY $TODAY v${BRANCHNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} branch"
+    if ( "$mode" == "review2") then
+        set cmd="git-reports $prevTag $thisTag $REVIEWDAY $REVIEW2DAY v${NEXTNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} review2"
+    else    
+        set cmd="git-reports $prevTag $thisTag $REVIEW2DAY $TODAY v${BRANCHNN} ${BUILDHOME}/build-kent $GIT_REPORTS_ROOT/${GIT_REPORT_HIST} branch"
+    endif    
 endif    
 
 echo "$cmd"
@@ -157,16 +159,17 @@ echo "<ul>" >> index.html
 if ( "$mode" == "review") then
     echo "<li><a href="review/index.html">Design/Review - Day 2 - v$NEXTNN</a> ($TODAY to $REVIEWDAY)" >> index.html
     echo "<li><a href="/git-reports-history/">Previous versions</a> " >> index.html
-else
-if ( "$mode" == "review2") then
-    echo "<li><a href="review2/index.html">Design/Review2 - Day 9 - v$NEXTNN</a> ($REVIEWDAY to $REVIEW2DAY)" >> index.html
-    echo "<li><a href="review/index.html">Design/Review - Day 2 - v$NEXTNN</a> ($TODAY to $REVIEWDAY)" >> index.html
-    echo "<li><a href="/git-reports-history/">Previous versions</a> " >> index.html
-else
-    echo "<li><a href="branch/index.html">Branch - Day 16 - v$BRANCHNN</a> ($REVIEW2DAY to $TODAY)" >> index.html
-    echo "<li><a href="review2/index.html">Design/Review2 Branch - Day 9 - v$BRANCHNN</a> ($REVIEWDAY to $REVIEW2DAY)" >> index.html
-    echo "<li><a href="review/index.html">Design/Review - Day 2 - v$BRANCHNN</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
-    echo "<li><a href="/git-reports-history/">Previous versions</a>" >> index.html
+    else
+    if ( "$mode" == "review2") then
+        echo "<li><a href="review2/index.html">Design/Review2 - Day 9 - v$NEXTNN</a> ($REVIEWDAY to $REVIEW2DAY)" >> index.html
+        echo "<li><a href="review/index.html">Design/Review - Day 2 - v$NEXTNN</a> ($TODAY to $REVIEWDAY)" >> index.html
+        echo "<li><a href="/git-reports-history/">Previous versions</a> " >> index.html
+    else
+        echo "<li><a href="branch/index.html">Branch - Day 16 - v$BRANCHNN</a> ($REVIEW2DAY to $TODAY)" >> index.html
+        echo "<li><a href="review2/index.html">Design/Review2 Branch - Day 9 - v$BRANCHNN</a> ($REVIEWDAY to $REVIEW2DAY)" >> index.html
+        echo "<li><a href="review/index.html">Design/Review - Day 2 - v$BRANCHNN</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
+        echo "<li><a href="/git-reports-history/">Previous versions</a>" >> index.html
+    endif    
 endif    
 echo "</body></html>" >> index.html
 cd $WEEKLYBLD
