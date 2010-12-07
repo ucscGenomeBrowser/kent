@@ -368,7 +368,7 @@ wgEncode 1
 
         track wgEncodeUwDgfGm06990Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel GM06990 Raw
+        shortLabel GM06990 
         longLabel GM06990 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=GM06990
         type bigWig 1.000000 57178.000000
@@ -376,7 +376,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SK-N-SH_RA Raw
+        shortLabel SK-N-SH_RA
         longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKNSHRA
         type bigWig 1.000000 36298.000000
@@ -384,7 +384,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHepg2Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HepG2 Raw
+        shortLabel HepG2
         longLabel HepG2 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HepG2
         type bigWig 1.000000 102081.000000
@@ -393,7 +393,7 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Raw
         parent wgEncodeUwDgfViewzRaw
-        shortLabel K562 Raw
+        shortLabel K562
         longLabel K562 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=K562
         type bigWig 1.000000 218367.000000
@@ -402,7 +402,7 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th1 Raw
+        shortLabel Th1
         longLabel Th1 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=Th1
         type bigWig 1.000000 108696.000000
@@ -410,7 +410,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSkmcRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SKMC Raw
+        shortLabel SKMC
         longLabel SKMC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKMC
         type bigWig 1.000000 178347.000000
@@ -418,7 +418,7 @@ wgEncode 1
 
         track wgEncodeUwDgfNhdfadRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel NHDF-Ad Raw
+        shortLabel NHDF-Ad
         longLabel NHDF-Ad DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=NHDF-Ad
         type bigWig 1.000000 91896.000000
@@ -426,7 +426,7 @@ wgEncode 1
 
         track wgEncodeUwDgfH7esRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel H7-hESC Raw
+        shortLabel H7-hESC
         longLabel H7-hESC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=H7es
         type bigWig 1.000000 326258.000000
@@ -434,7 +434,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHaeRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HAEpiC Raw
+        shortLabel HAEpiC
         longLabel HAEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HAE
         type bigWig 1.000000 110519.000000
@@ -442,7 +442,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHmfRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HMF Raw
+        shortLabel HMF
         longLabel HMF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HMF
         type bigWig 1.000000 220489.000000
@@ -450,7 +450,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHcpeRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HCPEpiC Raw
+        shortLabel HCPEpiC
         longLabel HCPEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HCPE
         type bigWig 1.000000 96000.000000
@@ -458,7 +458,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHmvecdbladRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HMVEC-dBl-Ad Raw
+        shortLabel HMVEC-dBl-Ad
         longLabel HMVEC-dBl-Ad DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HMVECdBlAd
         type bigWig 1.000000 145895.000000
