@@ -118,6 +118,7 @@
 #include "transMapTracks.h"
 #include "retroTracks.h"
 #include "pcrResult.h"
+#include "variome.h"
 #endif /* GBROWSE */
 
 #ifdef LOWELAB
@@ -10935,6 +10936,156 @@ tg->itemColor = igtcColor;
 tg->itemNameColor = igtcColor;
 }
 
+void loadVariome(struct track *tg)
+/* Load the items from the variome table (based on wikiTrackLoadItems) */
+{
+struct bed *bed;
+struct sqlConnection *conn = wikiConnect();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+char where[256];
+struct linkedFeatures *lfList = NULL, *lf;
+int scoreMin = 0;
+int scoreMax = 99999;
+
+safef(where, ArraySize(where), "db='%s'", database);
+
+sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, where, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct variome *item = variomeLoad(row);
+    AllocVar(bed);
+    bed->chrom = cloneString(item->chrom);
+    bed->chromStart = item->chromStart;
+    bed->chromEnd = item->chromEnd;
+    bed->name = cloneString(item->name);
+    bed->score = item->score;
+    safecpy(bed->strand, sizeof(bed->strand), item->strand);
+    bed->thickStart = item->chromStart;
+    bed->thickEnd = item->chromEnd;
+    bed->itemRgb = bedParseRgb(item->color);
+    bed8To12(bed);
+    lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->filterColor=bed->itemRgb;
+
+    /* overload itemAttr fields to be able to pass id to hgc click box */
+    struct itemAttr *id;
+    AllocVar(id);
+    id->chromStart = item->id;
+    lf->itemAttr = id;
+    slAddHead(&lfList, lf);
+    variomeFree(&item);
+    }
+sqlFreeResult(&sr);
+
+slSort(&lfList, linkedFeaturesCmp);
+
+// add special item to allow creation of new entries
+AllocVar(bed);
+bed->chrom = chromName;
+bed->chromStart = winStart;
+bed->chromEnd = winEnd;
+bed->name = cloneString("Make new entry");
+bed->score = 100;
+bed->strand[0] = ' ';  /* no barbs when strand is unknown */
+bed->thickStart = winStart;
+bed->thickEnd = winEnd;
+bed->itemRgb = 0xcc0000;
+bed8To12(bed);
+lf = lfFromBedExtra(bed, scoreMin, scoreMax);
+lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+lf->filterColor=bed->itemRgb;
+slAddHead(&lfList, lf);
+
+tg->items = lfList;
+wikiDisconnect(&conn);
+}
+
+void variomeMapItem(struct track *tg, struct hvGfx *hvg, void *item,
+        char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
+/* create a special map box item with different i=hgcClickName and
+ * pop-up statusLine with the item name
+ */
+{
+char *hgcClickName = tg->mapItemName(tg, item);
+char *statusLine = tg->itemName(tg, item);
+mapBoxHgcOrHgGene(hvg, start, end, x, y, width, height, tg->track,
+                          hgcClickName, statusLine, NULL, FALSE, NULL);
+}
+
+char *variomeMapItemName(struct track *tg, void *item)
+/* Return the unique id track item. */
+{
+struct itemAttr *ia;
+char id[64];
+int iid = 0;
+struct linkedFeatures *lf = item;
+if (lf->itemAttr != NULL)
+    {
+    ia = lf->itemAttr;
+    iid = (int)(ia->chromStart);
+    }
+safef(id,ArraySize(id),"%d", iid);
+return cloneString(id);
+}
+
+void addVariomeWikiTrack(struct track **pGroupList)
+/* Add variome wiki track and append to group list. */
+{
+if (wikiTrackEnabled(database, NULL))
+    {
+    struct track *tg = trackNew();
+    static char longLabel[80];
+    struct trackDb *tdb;
+    struct sqlConnection *wikiConn = wikiConnect();
+    if (! sqlTableExists(wikiConn,"variome"))
+        errAbort("variome table missing for wiki track");
+
+    linkedFeaturesMethods(tg);
+    AllocVar(tdb);
+    tg->track = "variome";
+    tg->table = "variome";
+    tg->canPack = TRUE;
+    tg->visibility = tvHide;
+    tg->hasUi = TRUE;
+    tg->shortLabel = cloneString("New variants");
+    safef(longLabel, sizeof(longLabel), "New variant submission for microattribtution review");
+    tg->longLabel = longLabel;
+    tg->loadItems = loadVariome;
+    tg->itemName = linkedFeaturesName;
+    tg->mapItemName = variomeMapItemName;
+    tg->mapItem = variomeMapItem;
+    tg->priority = 500.4;
+    tg->defaultPriority = 500.4;
+    tg->groupName = cloneString("varRep");
+    tg->defaultGroupName = cloneString("varRep");
+    tg->exonArrows = FALSE;
+    tg->nextItemButtonable = TRUE;
+    tdb->track = cloneString(tg->track);
+    tdb->table = cloneString(tg->table);
+    tdb->shortLabel = cloneString(tg->shortLabel);
+    tdb->longLabel = cloneString(tg->longLabel);
+    tdb->useScore = 1;
+    tdb->grp = cloneString(tg->groupName);
+    tdb->priority = tg->priority;
+    trackDbPolish(tdb);
+    tg->tdb = tdb;
+
+    slAddHead(pGroupList, tg);
+    wikiDisconnect(&wikiConn);
+    }
+}
+
+void variomeMethods (struct track *tg)
+/* load variome track (wikiTrack) */
+{
+tg->loadItems = loadVariome;
+tg->mapItemName = variomeMapItemName;
+tg->mapItem = variomeMapItem;
+}
+
 void logoLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
@@ -11723,6 +11874,7 @@ registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
 registerTrackHandler("igtc", igtcMethods );
 registerTrackHandler("cactusBed", cactusBedMethods );
+registerTrackHandler("variome", variomeMethods);
 /* Lowe lab related */
 #ifdef LOWELAB
 registerTrackHandler("refSeq", archaeaGeneMethods);

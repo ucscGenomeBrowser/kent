@@ -4057,7 +4057,14 @@ if (restrictionEnzymesOk())
     slSafeAddHead(&trackList, cuttersTg());
     }
 if (wikiTrackEnabled(database, NULL))
+    {
     addWikiTrack(&trackList);
+    struct sqlConnection *conn = wikiConnect();
+    if (sqlTableExists(conn, "variome"))
+        addVariomeWikiTrack(&trackList);
+    wikiDisconnect(&conn);
+    }
+    
 #ifdef SOON
 loadDataHubs(&trackList);
 #endif /* SOON */
