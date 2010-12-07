@@ -86,16 +86,19 @@ db xxxYyyN
     species that we have been processing since before this convention, the
     pattern is xyN.
 
+orgDir XXXXX_NNNNN
+  - Subdirectory of ftp://ftp.ncbi.nlm.nih.gov/snp/database/organism_data/
+    e.g. human_9606 or fruitfly_7227 (commonName_taxonomyId)
+
 build NNN
-  - The dbSNP build identifier (e.g. 132 in November 2010).
+  - The dbSNP build identifier (e.g. 132 for species updated in November 2010).
 
 buildAssembly NN_N
   - The assembly identifier used in dbSNP's table/dumpfile names (e.g. 37_1
-    for human 132).
-
-orgDir XXXXX_NNNNN
-  - Subdirectory of ftp://ftp.ncbi.nlm.nih.gov/snp/database/organism_data/
-    e.g. human_9606 (commonName_taxonomyId)
+    for human 132).  From the directory listing of
+    ftp://ftp.ncbi.nih.gov/snp/database/organism_data/ , click into orgDir
+    and look for file names like b(1[0-9][0-9])_*_([0-9]_[0-9]).bcp.gz .
+    The first number is build; the second number_number is buildAssembly.
 
 -----------------------------------------------------------------------------
 Conditionally required config.ra settings:
@@ -290,7 +293,7 @@ sub demandAssemblyLabel {
 _EOF_
     ;
   $message .= join("\n", @labels);
-  my $refAssemblyLabelDef = "refAssembly " . join(',', @labels);
+  my $refAssemblyLabelDef = "refAssemblyLabel " . join(',', @labels);
   $message .= <<_EOF_
 
  *** Add refAssemblyLabel to $CONFIG.  If keeping all labels, it will
@@ -318,18 +321,19 @@ sub translateSql {
   my @orgTables = ($ContigInfo, $ContigLoc, $ContigLocusId, $MapInfo);
   push @orgTables, qw( SNP SNPAlleleFreq SNP_bitfield Batch SubSNP SNPSubSNPLink );
   my $tables = join('|', @orgTables);
-  my $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/${orgDir}_table.sql.gz |");
+  my $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/${orgDir}_table.sql.gz |" .
+				   "sed -re 's/\r//g;' |");
   my $SQLOUT = HgAutomate::mustOpen("> $schemaDir/table.sql");
   my $sepBak = $/;
-  $/ = "\nGO\n\n\n";
+  $/ = "\nGO\n\n";
   my $tableCount = 0;
   while (<$SQLIN>) {
-    next unless /^CREATE TABLE \[($tables)\]/;
-    s/[\[\]]//g;  s/GO\n\n/;/;  s/smalldatetime/datetime/g;
+    next unless /^\n*CREATE TABLE \[($tables)\]/;
+    s/[\[\]]//g;  s/\nGO\n/;/;  s/smalldatetime/datetime/g;
     s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g;
     s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g;
     s/nvarchar/varchar/g;  s/set quoted/--set quoted/g;
-    s/(image|varchar\s+\(\d+\))/BLOB/g;
+    s/(image|varchar\s+\(\d+\))/BLOB/g;  s/tinyint/tinyint unsigned/g;
     print $SQLOUT $_;
     $tableCount++;
   }
@@ -341,7 +345,7 @@ sub translateSql {
 				   "sed -re 's/\r//g;' |");
   while (<$SQLIN>) {
     next unless /^CREATE TABLE \[$tables\]/;
-    s/[\[\]]//g;  s/GO\n\n\n/;\n/;  s/smalldatetime/datetime/g;
+    s/[\[\]]//g;  s/\nGO\n/;\n/;  s/smalldatetime/datetime/g;
     print $SQLOUT $_;
     $tableCount++;
   }
@@ -427,7 +431,7 @@ _EOF_
   &translateSql();
   # Check for multiple reference assembly labels -- developer may need to exclude some.
   my @labels = &getDbSnpAssemblyLabels();
-  if (@labels > 1) {
+  if (@labels > 1 && !$refAssemblyLabel) {
     &demandAssemblyLabel(@labels);
   }
 }
@@ -637,9 +641,14 @@ giant file, and indexes the giant fasta file.";
     # but we can clean those up afterward.
     zcat $dataDir/$ContigInfo.bcp.gz $grepOutLabels\\
     | cut -f $ctgIdCol | sort -n > $ContigInfo.ctg_id.txt
+    # mysql warnings about missing values in numeric columns cause hgLoadSqlTab
+    # to return nonzero, and then this script terminates.  So fix missing values
+    # to \\N (mysql's file representation of NULL):
     zcat $dataDir/$ContigLoc.bcp.gz \\
     | grep -Fwf $ContigInfo.ctg_id.txt \\
-    | perl -wpe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g;' \\
+    | perl -pe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g; chomp; \@w = split("\\t"); \\
+                foreach \$col (5,6,10,14..21) { \$w[\$col] = "\\\\N" if (\$w[\$col] eq ""); } \\
+                \$_ = join("\\t", \@w) . "\\n";' \\
     | hgLoadSqlTab -oldTable $tmpDb $ContigLoc placeholder stdin
     # There are usually some empty-value warnings to ignore.
     # Get rid of those false positives:
@@ -649,12 +658,10 @@ giant file, and indexes the giant fasta file.";
     hgsql $tmpDb -e 'drop table $ContigLoc; \\
                          rename table ContigLocFix to $ContigLoc;'
 
-    # mysql warnings about missing values in numeric columns cause hgLoadSqlTab
-    # to return nonzero, and then this script terminates.  So fix missing values
-    # to \\N (mysql's file representation of NULL):
     zcat $dataDir/SNP.bcp.gz \\
-    | perl -pe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g; chomp; \@w = split("\\t"); \\
-                foreach \$col (1,2,3,4,5,7,11) { \$w[\$col] = "\\\\N" if (\$w[\$col] eq ""); } \\
+    | perl -pe 's/(\\d\\d:\\d\\d:\\d\\d)\\.d+/\$1/g; chomp; \@w = split("\\t"); \\
+                foreach \$col (1..5,7..11) { \$w[\$col] = "\\\\N" if (\$w[\$col] eq ""); } \\
+                if (\$w[11] > 127) {} \\
                 \$_ = join("\\t", \@w) . "\\n";' \\
     | hgLoadSqlTab -oldTable $tmpDb SNP placeholder stdin
 

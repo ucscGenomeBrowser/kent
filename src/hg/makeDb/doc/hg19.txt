@@ -13074,6 +13074,7 @@ hgLoadBed hg19 darned allChroms.bed
 # at human, level
 # added darned.html
 # added trackDb.ra entry
+
 #############################################################################
 # lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
     # down load from JHU
@@ -13086,4 +13087,48 @@ hgLoadBed hg19 darned allChroms.bed
     cd /cluster/data/genbank
     ./bin/lsSnpPdbDbLoadStep hg19
     # once this has been QAed, will auto-update from genbank scripts
+
+#############################################################################
+# NEW SNP132 (IN PROGRESS 12/6/10 angie)
+
+    mkdir -p /hive/data/outside/dbSNP/132test/human
+    cd /hive/data/outside/dbSNP/132test/human
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (human_9606 in this case).
+    # Then click into that directory and look for file names like 
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly.
+    # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606
+build 132
+buildAssembly 37_1
+liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test >& do.log & tail -f do.log
+# *** This release contains more than one assembly label.
+# *** Please examine this list in case we need to exclude any of these:
+#
+#CRA_TCAGchr7v2
+#Celera
+#GRCh37
+#HuRef
+# *** Add refAssemblyLabel to config.ra.  If keeping all labels, it will
+# *** look like this:
+#
+#refAssemblyLabel CRA_TCAGchr7v2,Celera,GRCh37,HuRef
+#
+# *** Edit out any of those that are not included in hg19 (e.g. Celera).
+# *** Then restart this script with -continue=translate .
+    # GRCh37 is the only one that corresponds to hg19, so add it to config.ra:
+    echo "refAssemblyLabel GRCh37" >> config.ra
+
+    # Try again with updated config:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test -continue=translate >>& do.log &
+    tail -f do.log
+
+
 #############################################################################
