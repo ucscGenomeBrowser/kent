@@ -8,7 +8,7 @@ shortLabel UW DNaseI HS
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
 subGroup1 view Views aPeaks=Peaks cHot=Hot_Spots zRawSig=Raw_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i>&nbsp;(Epiderm_kerat) AG04449=AG04449&nbsp;(f-thigh_fib) AG04450=AG04450&nbsp;(f-lung_fib) AG09309=AG09309&nbsp;(Ad-toe_skin_fib) AG09319=AG09319&nbsp;(Ad-Gum_fib) AG10803=AG10803&nbsp;(Ad-abdom_fib) BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC&nbsp;(amniot_epith) HCF=HCF&nbsp;(cardiac_fib) HCM=HCM&nbsp;(cardiomyo) HCPE=HCPEpiC&nbsp;(chor_plex_epi) HEE=HEEpiC&nbsp;(Esopha_epi) HGF=HGF&nbsp;(Ging_Fib) HIPE=HIPEpiC&nbsp;(Iris_pigm_epi) HL60=HL-60 HMEC=HMEC&nbsp;(Mammar_epi) HNPCE=HNPCEpiC&nbsp;(non-pigm_cil_epi) HRC=HRCEpiC&nbsp;(Renal_cortical_epi) HRE=HRE&nbsp;(Renal_epi) HRPE=HRPEpiC&nbsp;(Ret_pigm_epi) Jurkat=Jurkat JurkatG1=Jurkat_<i>(G1_phase)</i> MCF7=MCF-7 NB4=NB4 NHDFneo=NHDF-neo&nbsp;(Dermal_fib) NHLF=NHLF&nbsp;(Lung_Fib) PANC1=PANC-1 SAEC=SAEC&nbsp;(small_airway_epi) SKMC=SKMC&nbsp;(skel_musc) SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
+subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1H1=H1-hESC_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> AG04449=AG04449&nbsp;(f-thigh_fib) AG04450=AG04450&nbsp;(f-lung_fib) AG09309=AG09309&nbsp;(Ad-toe_skin_fib) AG09319=AG09319&nbsp;(Ad-Gum_fib) AG10803=AG10803&nbsp;(Ad-abdom_fib) BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC&nbsp;(amniot_epith) HCF=HCF&nbsp;(cardiac_fib) HCM=HCM&nbsp;(cardiomyo) HCPE=HCPEpiC&nbsp;(chor_plex_epi) HEE=HEEpiC&nbsp;(Esopha_epi) HGF=HGF&nbsp;(Ging_Fib) HIPE=HIPEpiC&nbsp;(Iris_pigm_epi) HL60=HL-60 HMEC=HMEC&nbsp;(Mammar_epi) HNPCE=HNPCEpiC&nbsp;(non-pigm_cil_epi) HRC=HRCEpiC&nbsp;(Renal_cortical_epi) HRE=HRE&nbsp;(Renal_epi) HRPE=HRPEpiC&nbsp;(Ret_pigm_epi) Jurkat=Jurkat JurkatG1=Jurkat_<i>(G1_phase)</i> MCF7=MCF-7 NB4=NB4 NHDFneo=NHDF-neo&nbsp;(Dermal_fib) NHEK=NHEK&nbsp;(Epiderm_kerat) NHLF=NHLF&nbsp;(Lung_Fib) PANC1=PANC-1 SAEC=SAEC&nbsp;(small_airway_epi) SKMC=SKMC&nbsp;(skel_musc) SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
 subGroup3 rank Rank 1st=1st 2nd=2nd
 dimensions dimensionY=cellType dimensionX=rank
 sortOrder cellType=+ rank=+ view=+
@@ -92,7 +92,7 @@ wgEncode 1
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel H1-hESC Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in H1-hESC cells)
-        subGroups view=aPeaks cellType=2H1 rank=1st
+        subGroups view=aPeaks cellType=1H1 rank=1st
         type narrowPeak
         color 0,107,27
 
@@ -233,7 +233,7 @@ wgEncode 1
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
         shortLabel NHEK Pk 1
         longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in NHEK cells)
-        subGroups view=aPeaks cellType=2NHEK rank=1st
+        subGroups view=aPeaks cellType=NHEK rank=1st
         color 179,0,134
         type narrowPeak
 
@@ -652,7 +652,7 @@ wgEncode 1
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel H1-hESC 1
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in H1-hESC cells)
-        subGroups view=cHot cellType=2H1 rank=1st
+        subGroups view=cHot cellType=1H1 rank=1st
         type broadPeak
         color 0,107,27
 
@@ -793,7 +793,7 @@ wgEncode 1
         subTrack wgEncodeUwDnaseSeqViewcHot off
         shortLabel NHEK 1
         longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in NHEK cells)
-        subGroups view=cHot cellType=2NHEK rank=1st
+        subGroups view=cHot cellType=NHEK rank=1st
         color 179,0,134
         type broadPeak
 
@@ -1214,7 +1214,7 @@ wgEncode 1
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel H1-hESC Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in H1-hESC cells)
-        subGroups view=zRawSig cellType=2H1 rank=1st
+        subGroups view=zRawSig cellType=1H1 rank=1st
         type wig 1.00 117718.00
         color 0,107,27
 
@@ -1355,7 +1355,7 @@ wgEncode 1
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
         shortLabel NHEK Raw 1
         longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in NHEK cells)
-        subGroups view=zRawSig cellType=2NHEK rank=1st
+        subGroups view=zRawSig cellType=NHEK rank=1st
         color 179,0,134
         type wig 1.00 96912.00
 

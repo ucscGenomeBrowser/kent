@@ -5622,3 +5622,25 @@ hgsql rn4 -e 'drop table rgdGene2ToKeggEntrez'
 hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToKeggEntrez.sql
 hgsql rn4 -e 'load data local infile "rgdGene2ToKeggEntrez.tab" into table rgdGene2ToKeggEntrez'
 
+#############################################################################
+# Agilent arrays (2010-12-01 Andy)
+cd /hive/data/genomes/rn4/bed/agilentCgh/
+# FTP download from ftp.agilent.com using given user/pass from Anniek De-witte
+# (anniek_de-witte@agilent.com)
+# downloaded files are gzipped beds. The files are typically located in a 
+# directory called "FOR_UCSC" or something like that.  The user/pass and the
+# directory are deleted after it's confirmed they're received, so it's not
+# too helpful to mention specifics here.
+ftp -u user -p password ftp.agilent.com
+> cd directory
+> get 027064_D_BED_20100225.bed.gz
+> get 027065_D_BED_20100318.bed.gz
+# unzip everything
+gunzip 027*.bed.gz
+ln -s 027065_D_BED_20100318.bed agilentCgh1x1m.bed
+ln -s 027064_D_BED_20100225.bed agilentCgh4x180k.bed
+for bed in agilent*.bed; do
+    tail -n +2 $bed | hgLoadBed rn4 ${bed%.bed} stdin
+done
+rm bed.tab
+

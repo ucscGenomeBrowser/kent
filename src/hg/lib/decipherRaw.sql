@@ -5,7 +5,6 @@ CREATE TABLE decipherRaw (
   chr    varchar(40),
   mean_ratio float,
   classification_type varchar(255),
-  parent char (1),
   phenotype varchar(255),
   key id (id)
 ) TYPE=MyISAM;
