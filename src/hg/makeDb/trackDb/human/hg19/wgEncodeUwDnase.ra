@@ -21,10 +21,11 @@
 #		- HMVEC-LBl = HMVECLB 
 #		- HMVEC-LLy = HMVECLL
 #	- cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
-#	- Default Tracks on: Peaks,Hotspots,Raw Signals for 1 and 2 replicates for Tier 1 cell lines
-#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
-#       - Track Long Label: Standardize as Encode (dataType) from Univeristy
-#       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
+#	- Default Tracks on: Peaks,Hotspots,Raw Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
+#       - Track Long Label: Standardize as DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
+#       - View Long Labels: 
+
 track wgEncodeUwDnase
 compositeTrack on
 superTrack wgEncodeDNAseSuper dense
@@ -33,7 +34,6 @@ longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Wa
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy  HNPCE=HNPCEpiC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp(G1_phase) MCF7=MCF-7 NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
-#subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 1H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> NHEK=NHEK_<i>Tier2</i>&nbsp;(Epiderm_kerat) AG04449=AG04449&nbsp;(f-thigh_fib) AG04450=AG04450&nbsp;(f-lung_fib) AG09309=AG09309&nbsp;(Ad-toe_skin_fib) AG09319=AG09319&nbsp;(Ad-Gum_fib) AG10803=AG10803&nbsp;(Ad-abdom_fib) BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC&nbsp;(amniot_epith) HCF=HCF&nbsp;(cardiac_fib) HCM=HCM&nbsp;(cardiomyo) HCPE=HCPEpiC&nbsp;(chor_plex_epi) HEE=HEEpiC&nbsp;(Esopha_epi) HGF=HGF&nbsp;(Ging_Fib) HIPE=HIPEpiC&nbsp;(Iris_pigm_epi) HL60=HL-60 HMEC=HMEC&nbsp;(Mammar_epi) HNPCE=HNPCEpiC&nbsp;(non-pigm_cil_epi) HRCE=HRCEpiC&nbsp;(Renal_cortical_epi) HRE=HRE&nbsp;(Renal_epi) HRPE=HRPEpiC&nbsp;(Ret_pigm_epi) Jurkat=Jurkat JurkatG1=Jurkat_<i>(G1_phase)</i> MCF7=MCF-7 NB4=NB4 NHDFneo=NHDF-neo&nbsp;(Dermal_fib) NHLF=NHLF&nbsp;(Lung_Fib) PANC1=PANC-1 SAEC=SAEC&nbsp;(small_airway_epi) SKMC=SKMC&nbsp;(skel_musc) SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th3
 subGroup3 rep Replicate 1=1 2=2
 dimensions dimensionY=cellType dimensionX=rep
 sortOrder cellType=+ rep=+ view=+
