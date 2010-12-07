@@ -135,7 +135,7 @@ wgEncode 1
     track wgEncodeUwDgfViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility dense
+    visibility pack
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
