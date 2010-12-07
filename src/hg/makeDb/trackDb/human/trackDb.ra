@@ -7,6 +7,9 @@ include trackDb.chainNet.ra
 # Neandertal tracks
 include trackDb.nt.ra
 
+# Denisova tracks
+include trackDb.denisova.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -2465,61 +2468,6 @@ expScale 3.0
 expStep 0.5
 expTable sestanBrainAtlasExps
 groupings sestanBrainAtlasGroups
-
-track YaleBrainComposite
-compositeTrack on
-shortLabel Yale Brain Comp
-longLabel Yale Brain Composite
-group expression
-visibility pack
-priority 50.2
-type expRatio
-expScale 3.0
-expStep 0.5
-configurable on
-groupings sestanBrainAtlasGroups2
-#minMax 0,15
-#linesAt 5,10
-
-track sestanBrainAtlas2
-parent YaleBrainComposite
-shortLabel Brain Stage2
-longLabel Sestan Lab Human Brain Atlas Microarrays Stage 2
-group expression
-priority 2
-configurable on
-#visibility hide
-#expScale 3.0
-#expStep 0.5
-expTable sestanBrainAtlasExps2
-groupings sestanBrainAtlasGroups2
-
-track sestanBrainAtlas3
-parent YaleBrainComposite
-shortLabel Brain Stage3 
-longLabel Sestan Lab Human Brain Atlas Microarrays Stage 3
-group expression
-priority 3
-configurable on
-#visibility dense
-#expScale 3.0
-#expStep 0.5
-expTable sestanBrainAtlasExps2
-groupings sestanBrainAtlasGroups2
-
-track sestanBrainAtlas4
-parent YaleBrainComposite
-shortLabel Brain Stage4 
-longLabel Sestan Lab Human Brain Atlas Microarrays Stage 4
-group expression
-priority 4
-configurable on
-#visibility dense
-#expScale 3.0
-#expStep 0.5
-expTable sestanBrainAtlasExps2
-groupings sestanBrainAtlasGroups2
-
 
 track agilentCgh
 release alpha

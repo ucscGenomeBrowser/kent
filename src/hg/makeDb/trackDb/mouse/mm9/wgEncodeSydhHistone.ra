@@ -1,16 +1,19 @@
 # Stanford/Yale/UC Davis/Harvard ChiP-seq Histone(wrangler:vsmalladi assited by Cricket)
 # Notes:
-# - Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human all Peaks and Signals excluding Inputs will be turned on
-# -Dimensions:
+# 	- Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human all Peaks and Signals excluding Inputs will be turned on
+# 	- Dimensions:
 #		X - Cell Line
 #		Y - Factor
 #		Z - Treatment
-
+#	
+#	- shortLabels
+#		Pekas - Pk
+#		Signal - Sg
 track wgEncodeSydhHist
 release alpha
 compositeTrack on
 shortLabel Stan/Yale Histone
-longLabel Histone Modifications by ChIP-seq from ENCODE Stanford/Yale
+longLabel Histone Modifications by ChIP-seq from ENCODE/Stanford/Yale
 group regulation
 priority 0
 type bed 3
@@ -23,6 +26,7 @@ subGroup4 control Control IGGYale=IgG-Yale
 subGroup5 treatment Treatment None=None DMSO20=DMSO_2.0pct
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
 dimensionZchecked None,DMSO20
+filterComposite dimZ=multi
 sortOrder cellType=+ factor=+ view=+ treatment=+ 
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
@@ -36,14 +40,14 @@ wgEncode 1
 	release alpha
 	shortLabel Peaks
 	view Peaks
-	visibility pack
+	visibility dense
 	viewUi on
 	subTrack wgEncodeSydhHist
 	signalFilter 0
 	signalFilterLimits 0:18241
-	pValueFilter 0
+	pValueFilter 2
 	pValueFilterLimits 0:300
-	qValueFilter 0
+	qValueFilter 2
 	qValueFilterLimits 0:300
   
 		#### Submission 1166 ####
@@ -56,17 +60,6 @@ wgEncode 1
     		type narrowPeak
     		color 46,0,184 
     		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=H3K4me3 setType=exp treatment=None inputType=MEL/None/Input/IgG-Yale control=IgG-Yale view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1166 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhHist tableName=wgEncodeSydhHistMelH3k4me3IggyalePk fileName=wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
-
-	        track wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
-	        release alpha
-	        parent wgEncodeSydhHistViewPeaks 
-	        shortLabel MEL H3K4me3 D Pk
-                longLabel MEL H3K4me3 2% DMSO Histone Modifications Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=H3K4me3 cellType=MEL control=IGGYale treatment=DMSO20
-	        type narrowPeak
-	        color 46,0,184
-	        # subId=1353 dateSubmitted=2010-07-09
-
 
 		
 		#### Submission 1194 ####
@@ -111,7 +104,7 @@ wgEncode 1
     		release alpha
     		subTrack wgEncodeSydhHistViewSig off
     		shortLabel MEL IgGYale Sg 
-                longLabel MEL Input Histone Modifications Signal from ENCODE/Stanford/Yale
+                longLabel MEL IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=None
     		type bigWig 1 80497
     		color 46,0,184
@@ -133,18 +126,9 @@ wgEncode 1
 		release alpha
     		subTrack wgEncodeSydhHistViewSig off 
     		shortLabel CH12 IgGYale Sg
-                longLabel CH12 Input Histone Modifications Signal from ENCODE/Stanford/Yale
+                longLabel CH12 IgG-Yale Input Histone Modifications Signal from ENCODE/Stanford/Yale
     		subGroups view=Signal factor=zInputIGGYALE cellType=CH12 control=IGGYale treatment=None
     		type bigWig 1.000000 59055.000000
     		color 153,38,0
     		metadata project=wgEncode grant=Snyder lab=Yale dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-Yale control=IgG-Yale view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1195 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhHist tableName=wgEncodeSydhHistCh12InputIggyaleSig fileName=wgEncodeSydhHistCh12InputIggyaleSig.bigWig.gz
 
-	        track wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
-	        release alpha
-	        parent wgEncodeSydhHistViewSig 
-	        shortLabel MEL H3K4me3 D Sg
-                longLabel MEL H3K4me3 2% DMSO Histone Modifications Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=H3K4me3 cellType=MEL control=IGGYale treatment=DMSO20
-	        type bigWig 1.000000 38729.000000
-	        color 46,0,184
-	        # subId=1353 dateSubmitted=2010-07-09

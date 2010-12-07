@@ -10867,7 +10867,8 @@ else
 }
 
 /* reserve space no more than 20 unique OMIM entries */
-char omimGeneBuffer[2000];
+#define OMIM_MAX_DESC_LEN 256
+char omimGeneBuffer[20 * OMIM_MAX_DESC_LEN];
 
 char *omimGeneDiseaseList(struct track *tg, struct bed *item)
 /* Return list of diseases associated with a OMIM entry */
@@ -10897,7 +10898,7 @@ while ((row != NULL) && i<20)
 	safef(chp, 3, "; ");
 	chp++;chp++;
 	}
-    safef(chp, 100, "%s", row[0]);
+    safecpy(chp, OMIM_MAX_DESC_LEN, row[0]);
     chp = chp+strlen(row[0]);
     row = sqlNextRow(sr);
     i++;
@@ -10942,21 +10943,12 @@ if (color)
 		    mgFontStringWidth(font, sPhenotypes),
                     heightPer, MG_BLACK, font, sPhenotypes);
         }
-    if (tg->drawName && vis != tvSquish)
-	{
-	/* Clip here so that text will tend to be more visible... */
-	char *s = tg->itemName(tg, bed);
-	w = x2-x1;
-	if (w > mgFontStringWidth(font, s))
-	    {
-	    Color textColor = hvGfxContrastingColor(hvg, color);
-	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
-	    }
-	}
+
     if (vis != tvDense)
    	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
     }
+
 if (tg->subType == lfWithBarbs)
     {
     int dir = 0;

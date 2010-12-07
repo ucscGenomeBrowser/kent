@@ -244,17 +244,22 @@ return kindOfChild;
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
+
+
+static void jsonTdbSettingsInit(struct dyString **jsonTdbSettingsString)
+// Inititializes trackDbJson
+{
+*jsonTdbSettingsString = newDyString(1024);
+dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d, \"configureBy\": \"popup\", \"kindOfParent\": 0}", rulerMode);
+}
+
 void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable)
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 {
-if (*jsonTdbSettingsString==NULL)
-    {
-    *jsonTdbSettingsString = newDyString(1024);
-    dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d},\n", rulerMode);
-    }
-else
-    dyStringAppend(*jsonTdbSettingsString, ",\n");
+if(*jsonTdbSettingsString == NULL)
+    jsonTdbSettingsInit(jsonTdbSettingsString);
+dyStringAppend(*jsonTdbSettingsString, ", \n");
 
 // track name and type
 dyStringPrintf(*jsonTdbSettingsString, "\t\"%s\": {", track->track);
@@ -294,8 +299,11 @@ if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") !=
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"url\": \"%s\",", trackDbSetting(track->tdb, "url"));
 
 // Close with some standard vars
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,\n\t\t\"visibility\": %d\n\t}",
-    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,",
+    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack);
+if(track->limitedVis != track->visibility)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"limitedVis\": %d,", track->limitedVis);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"visibility\": %d\n\t}", track->visibility);
 }
 
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
@@ -1873,6 +1881,7 @@ hPrintf(" class='tableWithDragAndDrop'");
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
 struct dyString *jsonTdbVars = NULL;
+jsonTdbSettingsInit(&jsonTdbVars);
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;

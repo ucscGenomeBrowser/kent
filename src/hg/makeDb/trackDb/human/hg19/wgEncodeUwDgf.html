@@ -56,6 +56,9 @@ DNaseI-induced DNA cut) coincides with the given position.
 <DD>The density of tags mapping within a 150 bp sliding window
 (at a 20 bp step across the genome).
 </DL>
+NOTE: The view names in this track are reversed from conventions used in
+other ENCODE tracks, where the less processed signal is termed 'Raw'.
+<P>
 <P>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM> 
 cleavage sites across the genome mapped using the Digital DNaseI methodology 
 (see below).  Data have been normalized to 25 million reads per cell type.  
@@ -73,7 +76,7 @@ intact nuclei, followed by isolating DNaseI 'double-hit' fragments as
 described in Sabo <EM>et al.</EM> (2006), and direct sequencing of
 fragment ends (which correspond to <EM>in vivo</EM> DNaseI cleavage
 sites) using the Solexa platform (27 bp reads).  High-quality reads were
-mapped to the genome using Bowtie 0.12.5 for hg19 while Eland was used for hg18;
+mapped to the GRCh37/hg19 human genome using Bowtie 0.12.5 (Eland was used to map to NCBI36/hg18);
 only unique mappings were kept. DNaseI sensitivity is directly reflected 
 in raw tag density (<I>Signal</I>), which is shown
 in the track as density of tags mapping within a 150 bp sliding window

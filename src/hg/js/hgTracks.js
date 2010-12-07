@@ -2059,9 +2059,11 @@ function handleUpdateTrackMap(response, status)
         var json = eval("(" + a[1] + ")");
         if(json && json[this.id]) {
             var visibility = visibilityStrsOrder[json[this.id].visibility];
-            if(this.newVisibility && this.newVisibility != visibility) {
-                alert("Unable to change visibility to " + this.newVisibility + ".\n\nThis occurs when there are too many items to display the track in " + this.newVisibility + " mode.");
-            }
+            var limitedVis;
+            if(json[this.id].limitedVis)
+                limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
+            if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
+                alert("There are too many items to display the track in " + this.newVisibility + " mode.");
             updateVisibility(this.id, visibility);
         } else {
             showWarning("Invalid trackDbJson received from the server");
@@ -2570,7 +2572,7 @@ function updateMetaDataHelpLinks(index)
 
 function windowOpenFailedMsg()
 {
-    alert("Your web browser prevented us from opening a new window.\n\nYou need to change your browser settings to allow popups from " + document.domain);
+    alert("Your web browser prevented us from opening a new window.\n\nPlease change your browser settings to allow pop-up windows from " + document.domain + ".");
 }
 
 function updateVisibility(track, visibility)

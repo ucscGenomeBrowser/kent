@@ -76,6 +76,9 @@ set snpDb127 hg18,bosTau3
 set snpDb126 hg18,mm8
 set snpDb125 hg17,panTro1,canFam1,rn4
 
+# LS/SNP databases
+set lsSnpDb hg18,hg19
+
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
 
@@ -1510,6 +1513,11 @@ identifier ctdGeneSymbol
     hgFixed.ctdSorted.GeneSymbol dupeOk
     $hg.kgXref.geneSymbol minCheck=0.30
 
+identifier rdmrGene
+"R-DMR Gene"
+    $hg.rdmr.name dupeOk
+    $hg.rdmrRaw.gene minCheck=0.95
+
 identifier gadId
 "GAD Gene ID"
     $hg.kgXref.geneSymbol dupeOk
@@ -2809,22 +2817,27 @@ identifier hg19ContigDiff
 identifier lsSnpPdbProtId
 "lsSnpPdb table protId field"
     uniProt.extDbRef.acc dupeOk
-    hg18.lsSnpPdb.protId
+    $lsSnpDb.lsSnpPdb.protId
 
 identifier lsSnpPdbKgId
 "lsSnpPdb table protId field"
-    hg18.kgXref.spID dupeOk
-    hg18.lsSnpPdb.protId
+    $lsSnpDb.kgXref.spID dupeOk
+    $lsSnpDb.lsSnpPdb.protId
 
 identifier lsSnpPdbPdbId
 "lsSnpPdb table pdbId field"
     uniProt.extDbRef.extAcc1 dupeOk
-    hg18.lsSnpPdb.pdbId minCheck=0.99
+    $lsSnpDb.lsSnpPdb.pdbId minCheck=0.99
 
-identifier lsSnpPdbSnpId
+identifier lsSnpPdbSnpHg18
 "lsSnpPdb table snpId field"
     hg18.snp129.name dupeOk
     hg18.lsSnpPdb.snpId
+
+identifier lsSnpPdbSnpHg19
+"lsSnpPdb table snpId field"
+    hg19.snp131.name dupeOk
+    hg19.lsSnpPdb.snpId
 
 identifier consIndelsId
 "consIndels tables name field"
@@ -3542,3 +3555,6 @@ tablesIgnored susScr2
 tablesIgnored calJac3
     bacEnds
     bacEndCalJac3Singles
+
+tablesIgnored rheMac2
+    refSeqAnno

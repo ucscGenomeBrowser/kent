@@ -8,6 +8,8 @@ wgEncodeCshlShortRnaSeq.ra \
 wgEncodeAffyRnaChip.ra \
 wgEncodeUwDnase.ra \
 wgEncodeUwDgf.ra \
+wgEncodeHaibMethylRrbs.ra \
+wgEncodeAffyRnaChip.ra \
 
 include ../../../../makefile.metaDb
 

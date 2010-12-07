@@ -1,5 +1,5 @@
-# Data Agreement File for Myers/HudsonAlpha Methyl Illumina experiments
-# $Revision: 1.2 $
+# Data Agreement File for Myers/HudsonAlpha Methyl Illumina Bead Array experiments
+# $Revision: 1.3 $
 
 # The header for the associated DDF should look like this:
 #files	view	cell	treatment	replicate	labVersion 	origAssembly	labExpId
@@ -24,23 +24,20 @@ dafVersion      2.0
 # Lab info
 grant           Myers
 lab             HudsonAlpha
-dataType        Methyl27
-#This will need to change for Methyl450 data
-compositeSuffix HaibMethylIllumina
-variables       cell,treatment,obtainedBy
+dataType        MethylBead
+#Is this OK name with Flo
+compositeSuffix HaibMethylBead
+variables       cell,treatment
 assembly        hg19
 
 validationSettings none
 
 
-
 # Track/view definition
+# Is this view name OK with Flo
 view             Sites
-longLabelPrefix  HudsonAlpha Methylation by Illumina Arrays
-type             bed 9
+longLabelPrefix  HudsonAlpha Methylation by Illumina Bead Arrays
+type             bed9
 hasReplicates    yes
 required         yes 
-
-
-
 
