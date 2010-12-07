@@ -907,7 +907,7 @@ return expanded->string;
 void checkNcbiChrStart(int ncbiChrStart)
 /* Compare NCBI's lifted chrom start to ours: */
 {
-if (ncbiChrStart != 0 && !strstr(chr, "_hap") &&
+if (ncbiChrStart != -1 && !strstr(chr, "_hap") &&
     ncbiChrStart != chrStart)
     writeError("chromStart (%d) does not match phys_pos_from (%d).",
 	       chrStart, ncbiChrStart);
@@ -1657,7 +1657,7 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     int locTypeNum = missingOrInt(lf, row, 13);
     int weight     = missingOrInt(lf, row, 14);
     /* Extra input column for comparing NCBI's chrom coords vs. ours: */
-    int ncbiChrStart = lineFileNeedFullNum(lf, row, 15);
+    int ncbiChrStart = missingOrInt(lf, row, 15);
 
     skipIt = FALSE;
 

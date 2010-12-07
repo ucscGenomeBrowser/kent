@@ -265,100 +265,6 @@ sub checkConfig {
 #########################################################################
 # * step: download [fileServer]
 
-sub getDbSnpAssemblyLabels {
-  return ('ref') if ($opt_debug);
-  my @labels;
-  my $LAB = HgAutomate::mustOpen("$assemblyLabelFile");
-  while (<$LAB>) {
-    chomp;
-    push @labels, $_;
-  }
-  close($LAB);
-  if (@labels == 0) {
-    die "$assemblyLabelFile is empty -- has $ContigInfo format changed?";
-  }
-  return @labels;
-}
-
-
-sub demandAssemblyLabel {
-  # Show developer the valid assembly labels, at least one of which must
-  # appear in $CONFIG's refAssemblyLabel value.
-  my @labels = @_;
-  my $message =  <<_EOF_
-
- *** This release contains more than one assembly label.
- *** Please examine this list in case we need to exclude any of these:
-
-_EOF_
-    ;
-  $message .= join("\n", @labels);
-  my $refAssemblyLabelDef = "refAssemblyLabel " . join(',', @labels);
-  $message .= <<_EOF_
-
- *** Add refAssemblyLabel to $CONFIG.  If keeping all labels, it will
- *** look like this:
-
-$refAssemblyLabelDef
-
- *** Edit out any of those that are not included in $db (e.g. Celera).
- *** Then restart this script with -continue=translate .
-
-_EOF_
-    ;
-  die $message;
-} # checkAssemblyLabel
-
-  # Check for multiple reference assembly labels -- developer may need to exclude some.
-
-
-sub translateSql {
-  return if ($opt_debug);
-  # Translate dbSNP's flavor of SQL create statements into mySQL.
-  # This is computationally trivial so it doesn't matter where it runs.
-  my $schemaDir = "$buildDir/$commonName/schema";
-  # First the organism-specific tables from $ftpSnpDb:
-  my @orgTables = ($ContigInfo, $ContigLoc, $ContigLocusId, $MapInfo);
-  push @orgTables, qw( SNP SNPAlleleFreq SNP_bitfield Batch SubSNP SNPSubSNPLink );
-  my $tables = join('|', @orgTables);
-  my $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/${orgDir}_table.sql.gz |" .
-				   "sed -re 's/\r//g;' |");
-  my $SQLOUT = HgAutomate::mustOpen("> $schemaDir/table.sql");
-  my $sepBak = $/;
-  $/ = "\nGO\n\n";
-  my $tableCount = 0;
-  while (<$SQLIN>) {
-    next unless /^\n*CREATE TABLE \[($tables)\]/;
-    s/[\[\]]//g;  s/\nGO\n/;/;  s/smalldatetime/datetime/g;
-    s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g;
-    s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g;
-    s/nvarchar/varchar/g;  s/set quoted/--set quoted/g;
-    s/(image|varchar\s+\(\d+\))/BLOB/g;  s/tinyint/tinyint unsigned/g;
-    print $SQLOUT $_;
-    $tableCount++;
-  }
-  close($SQLIN);
-  # And shared table from $ftpShared, described in a separate sql file:
-  my @sharedTables = qw( Allele );
-  $tables = join('|', @sharedTables);
-  $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/dbSNP_main_table.sql.gz |" .
-				   "sed -re 's/\r//g;' |");
-  while (<$SQLIN>) {
-    next unless /^CREATE TABLE \[$tables\]/;
-    s/[\[\]]//g;  s/\nGO\n/;\n/;  s/smalldatetime/datetime/g;
-    print $SQLOUT $_;
-    $tableCount++;
-  }
-  close($SQLIN);
-  close($SQLOUT);
-  $/ = $sepBak;
-  my $expected = (@orgTables + @sharedTables);
-  if ($tableCount != $expected) {
-    die "Expected to process $expected CREATE statements but got $tableCount\n\t";
-  }
-} # translateSql
-
-
 sub downloadFiles {
   # Fetch database dump files via anonymous FTP from NCBI
   # and translate dbSNP SQL to mySQL.
@@ -427,18 +333,104 @@ _EOF_
     );
 
   $bossScript->execute();
-
-  &translateSql();
-  # Check for multiple reference assembly labels -- developer may need to exclude some.
-  my @labels = &getDbSnpAssemblyLabels();
-  if (@labels > 1 && !$refAssemblyLabel) {
-    &demandAssemblyLabel(@labels);
-  }
 }
 
 
 #########################################################################
 # * step: translate [workhorse]
+
+sub translateSql {
+  return if ($opt_debug);
+  # Translate dbSNP's flavor of SQL create statements into mySQL.
+  # This is computationally trivial so it doesn't matter where it runs.
+  my $schemaDir = "$buildDir/$commonName/schema";
+  # First the organism-specific tables from $ftpSnpDb:
+  my @orgTables = ($ContigInfo, $ContigLoc, $ContigLocusId, $MapInfo);
+  push @orgTables, qw( SNP SNPAlleleFreq SNP_bitfield Batch SubSNP SNPSubSNPLink );
+  my $tables = join('|', @orgTables);
+  my $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/${orgDir}_table.sql.gz |" .
+				   "sed -re 's/\r//g;' |");
+  my $SQLOUT = HgAutomate::mustOpen("> $schemaDir/table.sql");
+  my $sepBak = $/;
+  $/ = "\nGO\n\n";
+  my $tableCount = 0;
+  while (<$SQLIN>) {
+    next unless /^\n*CREATE TABLE \[($tables)\]/;
+    s/[\[\]]//g;  s/\nGO\n/;/;  s/smalldatetime/datetime/g;
+    s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g;
+    s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g;
+    s/nvarchar/varchar/g;  s/set quoted/--set quoted/g;
+    s/(image|varchar\s+\(\d+\))/BLOB/g;  s/tinyint/tinyint unsigned/g;
+    print $SQLOUT $_;
+    $tableCount++;
+  }
+  close($SQLIN);
+  # And shared table from $ftpShared, described in a separate sql file:
+  my @sharedTables = qw( Allele );
+  $tables = join('|', @sharedTables);
+  $SQLIN = HgAutomate::mustOpen("zcat $schemaDir/dbSNP_main_table.sql.gz |" .
+				   "sed -re 's/\r//g;' |");
+  while (<$SQLIN>) {
+    next unless /^CREATE TABLE \[$tables\]/;
+    s/[\[\]]//g;  s/\nGO\n/;\n/;  s/smalldatetime/datetime/g;
+    print $SQLOUT $_;
+    $tableCount++;
+  }
+  close($SQLIN);
+  close($SQLOUT);
+  $/ = $sepBak;
+  my $expected = (@orgTables + @sharedTables);
+  if ($tableCount != $expected) {
+    die "Expected to process $expected CREATE statements but got $tableCount\n\t";
+  }
+} # translateSql
+
+
+sub getDbSnpAssemblyLabels {
+  # Return a list of assembly labels extracted from $ContigInfo.
+  return ('ref') if ($opt_debug);
+  my @labels;
+  my $LAB = HgAutomate::mustOpen("$assemblyLabelFile");
+  while (<$LAB>) {
+    chomp;
+    push @labels, $_;
+  }
+  close($LAB);
+  if (@labels == 0) {
+    die "$assemblyLabelFile is empty -- has $ContigInfo format changed?";
+  }
+  return @labels;
+}
+
+
+sub demandAssemblyLabel {
+  # Show developer the valid assembly labels, at least one of which must
+  # appear in $CONFIG's refAssemblyLabel value.
+  my @labels = @_;
+  my $message =  <<_EOF_
+
+ *** This release contains more than one assembly label.
+ *** Please examine this list in case we need to exclude any of these:
+
+_EOF_
+    ;
+  $message .= join("\n", @labels);
+  my $refAssemblyLabelDef = "refAssemblyLabel " . join(',', @labels);
+  $message .= <<_EOF_
+
+ *** Add refAssemblyLabel to $CONFIG.  If keeping all labels, it will
+ *** look like this:
+
+$refAssemblyLabelDef
+
+ *** Edit out any of those that are not included in $db (e.g. Celera).
+ *** Then restart this script with -continue=translate .
+
+_EOF_
+    ;
+  die $message;
+} # demandAssemblyLabel
+
 
 sub checkAssemblySpec {
   # If $assemblyLabelFile contains more than one label, make sure that
@@ -575,7 +567,10 @@ sub translateData {
   # Part of this involves loading up some of their database tables
   # locally and running a big left join query to pull the columns
   # of interest together.
+  &translateSql();
+  # Check for multiple reference assembly labels -- developer may need to exclude some.
   my @rejectLabels = &checkAssemblySpec();
+  # Prepare grep -v statements to exclude assembly labels or contigs if specified:
   my $grepOutLabels = @rejectLabels ? "| egrep -vw '(" . join('|', @rejectLabels) . ")' " : "";
   my $grepOutContigs = $ignoreDbSnpContigs ? "| egrep -vw '$ignoreDbSnpContigs'" : "";
   my $catOrGrepOutMito = ($db eq 'hg19') ? "grep -vw ^NC_012920" : "cat";
@@ -835,10 +830,10 @@ _EOF_
   if ($db eq 'hg19') {
     $bossScript->add(<<_EOF_
     # For liftOver, convert 0-base fully-closed to 0-based half-open because liftOver
-    # doesn't deal with 0-base items.  Fake out phys_pos_from to 0 because many coords
-    # will differ, oh well.
+    # doesn't deal with 0-base items.  Fake out phys_pos_from to -1 (missing) because
+    # many coords will differ, oh well.
     grep -w NC_012920 ucscNcbiSnp.ctg.bed \\
-    | awk -F"\\t" 'BEGIN{OFS="\\t";} {\$3 += 1; \$16 = 0; print;}' \\
+    | awk -F"\\t" 'BEGIN{OFS="\\t";} {\$3 += 1; \$16 = -1; print;}' \\
     | liftOver -bedPlus=3 stdin \\
         $hg19MitoLiftOver stdout chrM.unmapped \\
     | awk -F"\\t" 'BEGIN{OFS="\\t";} {\$3 -= 1; print;}' \\
@@ -856,9 +851,6 @@ _EOF_
 #34610476 ucscNcbiSnp.bed
 
     # Translate NCBI's encoding into UCSC's, and perform a bunch of checks.
-    # Updated snpNcbiToUCSC for new MAX_SNPID (80M -> 120M), 
-    # new named alleles oddball formats: CHLC.GGAA2D04, GDB:190880, SHGC-35515, =D22S272
-    # new MAX_SNPSIZE (1k -> 16k)
 #*** add output to endNotes:
     snpNcbiToUcsc ucscNcbiSnp.bed $HgAutomate::clusterData/$db/$db.2bit $snpBase
 #*** add output to endNotes:
@@ -883,7 +875,7 @@ _EOF_
     # Index it and translate to snpSeq table format.
     hgLoadSeq -test placeholder $snpBase.fa
     cut -f 2,6 seq.tab > ${snpBase}Seq.tab
-    rm seq.tab
+    rm seq.tab seqHeaders
 
 # Compress (where possible -- not .fa unfortunately) and copy results back to
 # $runDir
