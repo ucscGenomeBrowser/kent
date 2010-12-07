@@ -2,11 +2,11 @@
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
 # Notes:
-#	- Short Labels: 7 charactesr for cell type, 2 characters for view, 6 characters (other information, rank or maybe treatment )
+#	- Short Labels: 
 #	- Views: For consistency sake view will be two letters
 #		- Peaks = Pk
-#		- Raw Signal = Ra
-#		- Hotspots = Hs
+#		- Raw Signal = Sig
+#		- Hotspots = 
 #	- Rank: rank:#
 #	- Cell Line begining with HMVEC: To shorten use the Cell name and the following abbreviations:
 #		- Bl = B
@@ -25,15 +25,11 @@
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
 #       - Track Long Label: Standardize as Encode (dataType) from Univeristy
 #       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
-#       - View Displays: Deafult view filters:
-#               - Peaks-??
-#               - HotSpots-??
-#               - Raw Signal-??
 track wgEncodeUwDnase
 compositeTrack on
 superTrack wgEncodeDNAseSuper dense
 shortLabel UW DNaseI HS
-longLabel ENCODE DNaseI Hypersensitivity by Digital DNaseI from Univ. of Washington
+longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line  1GM12878=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2)  AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy  HNPCE=HNPCEpiC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp(G1_phase) MCF7=MCF-7 NB4=NB4 NHA=NH-A NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
