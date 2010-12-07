@@ -50,10 +50,11 @@ char *tempFile = tn.forCgi;
 
     // <Data type> <Cell Type> <Key Metadata> <View>
 printf("<table border=1><tr>");
+printf("<th>date submitted</th>");
 printf("<th>dataType</th>");
 printf("<th>cell type</th>");
 printf("<th>metadata</th>");
-printf("<th>view</th>");
+// printf("<th>view</th>");
 printf("<th>fileType</th>");
 printf("<th>file</th>");
 printf("<th>lab</th>");
@@ -92,6 +93,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         docIdDir = docIdDirBeta;
 
     printf("<tr>");
+    printf("<td>%s</td> ",   docIdSub->submitDate);
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "dataType"));
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "cell"));
     struct dyString *str = newDyString(100);
@@ -102,7 +104,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<td>%s<a href=docIdView?docId=%s&db=%s&meta=\"\"> ...</a></td>", str->string,buffer, database);
     freeDyString(&str);
         
-    printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "view"));
+//    printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "view"));
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "type"));
     printf("<td><a href=%s> %s</a></td>", 
         docIdGetPath(buffer, docIdDir, docIdType, NULL) , 
