@@ -5,8 +5,8 @@
 track wgEncodeUwDgf
 compositeTrack on
 superTrack wgEncodeDNAseSuper dense
-shortLabel UW DNase DGF
-longLabel Digital DNase Genomic Footprinting from ENCODE/Univ. of Washington
+shortLabel UW DNaseI DGF
+longLabel DNaseI Digital Genomic Fingerprinting from ENCODE/University of Washington
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
