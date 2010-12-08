@@ -20,6 +20,7 @@ wgEncode 1
 origAssembly hg19
 
     track wgEncodeSunyAlbanyGeneStView
+    release alpha
     shortLabel SunyAlbany RipChip
     view RbpAssocRna
     visibility pack

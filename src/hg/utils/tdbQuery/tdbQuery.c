@@ -630,6 +630,8 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
     char *fileName = fileLevel->name;
     struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
     verbose(2, "Read %d records starting from %s\n", slCount(fileRecords), fileName);
+    fileRecords = filterOnRelease(fileRecords, currentReleaseBit);
+    verbose(2, "After filterOnRelease %d records\n", slCount(fileRecords));
     linkUpParents(fileRecords, parentField, currentReleaseBit);
     checkDupeKeys(fileRecords, TRUE);
     struct tdbRecord *record, *nextRecord;
@@ -937,8 +939,6 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
     inheritFromParents(recordList, "parent", "noInherit", releaseBit, lm);
-    recordList = filterOnRelease(recordList, releaseBit);
-    verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
     linkUpParents(recordList, "parent", releaseBit);
     checkDupeKeys(recordList, FALSE);
 

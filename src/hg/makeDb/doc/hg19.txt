@@ -7856,6 +7856,9 @@ done
     hgLoadBed hg19 gnfAtlas2 gnfAtlas2.bed
     # Loaded 36357 elements of size 15
 
+    # Added knownToGnf1h table
+    hgMapToGene hg19 affyGnf1h knownGene knownToGnf1h
+
 ##########################################################################
 # BUILD NIBB IMAGE PROBES (DONE 2009-10-12 JK)
 
