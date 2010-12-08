@@ -8378,7 +8378,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 11/1/10 angie)
+# NHGRI GWAS CATALOG (DONE 12/7/10 angie)
+# Updated 11/1/10
 # Updated 10/6/10
 # Updated 9/1/10
 # Updated 8/2/10
@@ -8404,7 +8405,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4791 elements of size 22
+#Loaded 4972 elements of size 22
 
 
 ######################################################################## 
