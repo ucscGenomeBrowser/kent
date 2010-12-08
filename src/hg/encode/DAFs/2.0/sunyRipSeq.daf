@@ -20,38 +20,35 @@ dafVersion        2.0
 grant             Tenenbaum
 lab               SunyAlbany
 dataType          RipSeq  
-#dataType          RnaSeq  
 compositeSuffix   SunyRipSeq
-#compositeSuffix   SunyRnaSeq
 group             regulation
 variables         cell,ripTgtProtien  
 assembly          hg19
 
-
-validationSettings validateFiles.bam:mismatches=7,nMatch
+validationSettings validateFiles.bam:mismatches=3,nMatch
 noAutoCreate     yes
 
 # Track/view definition
-view             Transfrags
+view             Peaks     
 longLabelPrefix  SUNY RNA-seq Analysis 
 type             bed6+    
 hasReplicates    no
-required         no
+required         yes
 
-view             PlusRawSignal
-longLabelPrefix  SUNY RNA-seq Plus Strand Raw Signal
-type             bigWig
-hasReplicates    no
-required         no
+view             Alignments   
+longLabelPrefix  SUNY RNA-seq Alignments
+type             bam
+hasReplicates    yes
+required         yes
 
-view             MinusRawSignal
-longLabelPrefix  SUNY RNA-seq Minus Strand Raw Signal
+view             Signal
+longLabelPrefix  SUNY RNA-seq Signal
 type             bigWig
-hasReplicates    no 
-required         no
+hasReplicates    yes
+required         yes
 
 view             RawData
 type             fastq
-hasReplicates    no
-required         no
+hasReplicates    yes
+required         yes
 downloadOnly     yes

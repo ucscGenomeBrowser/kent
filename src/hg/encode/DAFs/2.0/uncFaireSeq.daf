@@ -28,7 +28,7 @@ group            regulation
 variables        cell
 assembly         hg19
 
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=32;
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,nMathc,isSort,matchFirst=32;
 
 # Track/view definition
 view             Peaks
