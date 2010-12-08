@@ -19,6 +19,39 @@
 #       - View Displays: Deafult view filters:
 #               - Peaks - ??
 #               - Signal -??
+# Broad has requested alternate coloring based on antibody rather than cell:
+# Have not implemented settings for it yet but could be:
+# colorScheme 1:Color_by_Cell_line 2:Color_by_Histone_Mark
+# Pol2      #colorScheme2 0,100,0
+# CTCF                              ## Missing
+# EZH2      #colorScheme2 200,0,0   ## ASSUMED TO BE H2A.Z
+# H3K4me1   #colorScheme2 0,110,0
+# H3K4me2   #colorScheme2 0,130,0
+# H3K4me3   #colorScheme2 0,150,0
+# H3K27ac                           ## Missing
+# H3K9me1   #colorScheme2 30,0,0
+# H3K9me2   #colorScheme2 80,0,0    ## NONE FOUND
+# H3K9me3   #colorScheme2 100,0,0
+# H3K27ac                           ## Missing
+# H3K27me3  #colorScheme2 255,0,0
+# H3K36me3  #colorScheme2 0,0,150
+# H3K36me2  #colorScheme2 0,0,130   ## NONE FOUND
+# H4K20me3  #colorScheme2 150,0,0   ## Assumed to be H4K20me1
+# H3K79me2                          ## Missing
+# WCE       #colorScheme2 0,0,0
+
+#track wgEncodeHistoneDownloads
+#release alpha
+##compositeTrack on
+#superTrack wgEncodeHistoneSuper dense
+#shortLabel Nothing but files
+#longLabel ENCODE Fictitious Histone Modifications by ChIP-Seq (Downloadable Files Only)
+#group regulation
+#priority 0
+##type bed 3
+#type downloadsOnly
+#wgEncode 1
+#dataVersion through the ENCODE Jan 2013 Freeze
 
 track wgEncodeBroadHistone
 compositeTrack on
@@ -40,7 +73,7 @@ nextItemButton on
 useScore 0
 noInherit on
 #settingsByView Peaks:pValueFilter=0.0,pValueFilterLimits=0:100,signalValueFilter0.0,signalValueLimits=0:45000 Signal:viewLimits=1:20,minLimit=-1,maxLimit=473622.75,autoScale=off,maxHeightPixels=100:32:16,windowingFunction=mean zRAW:viewLimits=1:20,minLimit=1,maxLimit=21178,autoScale=off,maxHeightPixels=100:16:16,windowingFunction=mean
-dataVersion through the ENCODE Jun 2010 Freeze
+dataVersion through the ENCODE Jan 2011 Freeze
 
     track wgEncodeBroadHistoneViewPeaks
     shortLabel Peaks
@@ -66,6 +99,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,110,0
         # subId=2796 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878CtcfStdPk
@@ -99,6 +133,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 255,0,0
         # subId=2802 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k36me3StdPk
@@ -110,6 +145,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,0,150
         # subId=2803 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k4me1StdPk
@@ -121,6 +157,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,110,0
         # subId=2804 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k4me2StdPk
@@ -132,6 +169,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,130,0
         # subId=2805 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k4me3StdPk
@@ -143,6 +181,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,150,0
         # subId=2806 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k9acStdPk
@@ -165,6 +204,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 150,0,0
         # subId=2808 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescCtcfStdPk
@@ -198,6 +238,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 255,0,0
         # subId=2812 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k36me3StdPk
@@ -209,6 +250,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,0,150
         # subId=2813 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k4me2StdPk
@@ -220,6 +262,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,130,0
         # subId=2814 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k4me3StdPk
@@ -231,6 +274,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,150,0
         # subId=2815 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k9acStdPk
@@ -253,6 +297,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 150,0,0
         # subId=2817 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecCtcfStdPk
@@ -283,6 +328,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K27me3 cellType=HMEC
         type broadPeak
         origAssembly hg18
+        #colorScheme2 255,0,0
         # subId=2821 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k36me3StdPk
@@ -293,6 +339,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K36me3 cellType=HMEC
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,0,150
         # subId=2822 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k4me1StdPk
@@ -303,6 +350,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me1 cellType=HMEC
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,110,0
         # subId=2823 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k4me2StdPk
@@ -313,6 +361,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me2 cellType=HMEC
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,130,0
         # subId=2824 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k4me3StdPk
@@ -323,6 +372,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me3 cellType=HMEC
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,150,0
         # subId=2825 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k9acStdPk
@@ -343,6 +393,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H4K20me1 cellType=HMEC
         type broadPeak
         origAssembly hg18
+        #colorScheme2 150,0,0
         # subId=2827 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtCtcfStdPk
@@ -363,6 +414,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H2AZ cellType=HSMMt
         type broadPeak
         origAssembly hg19
+        #colorScheme2 200,0,0
         # subId=2830 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k27acStdPk
@@ -383,6 +435,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K36me3 cellType=HSMMt
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=2832 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k4me1StdPk
@@ -393,6 +446,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me1 cellType=HSMMt
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,110,0
         # subId=2833 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k4me2StdPk
@@ -403,6 +457,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me2 cellType=HSMMt
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,130,0
         # subId=2834 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k4me3StdPk
@@ -413,6 +468,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me3 cellType=HSMMt
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,150,0
         # subId=2835 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k79me2StdPk
@@ -443,6 +499,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H4K20me1 cellType=HSMMt
         type broadPeak
         origAssembly hg19
+        #colorScheme2 150,0,0
         # subId=2838 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmCtcfStdPk
@@ -473,6 +530,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K27me3 cellType=HSMM
         type broadPeak
         origAssembly hg18
+        #colorScheme2 255,0,0
         # subId=2842 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k36me3StdPk
@@ -483,6 +541,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K36me3 cellType=HSMM
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,0,150
         # subId=2843 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k4me1StdPk
@@ -493,6 +552,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me1 cellType=HSMM
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,110,0
         # subId=2844 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k4me2StdPk
@@ -503,6 +563,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me2 cellType=HSMM
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,130,0
         # subId=2845 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k4me3StdPk
@@ -513,6 +574,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me3 cellType=HSMM
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,150,0
         # subId=2846 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k79me2StdPk
@@ -543,6 +605,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K09me3 cellType=HSMM
         type broadPeak
         origAssembly hg19
+        #colorScheme2 100,0,0
         # subId=2849 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH4k20me1StdPk
@@ -553,6 +616,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H4K20me1 cellType=HSMM
         type broadPeak
         origAssembly hg18
+        #colorScheme2 150,0,0
         # subId=2850 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3CtcfStdPk
@@ -586,6 +650,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,0,150
         # subId=2854 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k4me2StdPk
@@ -597,6 +662,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,130,0
         # subId=2855 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k4me3StdPk
@@ -608,6 +674,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,150,0
         # subId=2856 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k79me2StdPk
@@ -641,6 +708,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 150,0,0
         # subId=2859 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3Pol2bStdPk
@@ -652,6 +720,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,100,0
         # subId=2860 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2CtcfStdPk
@@ -674,6 +743,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 189,0,157
+        #colorScheme2 200,0,0
         # subId=2863 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k27acStdPk
@@ -696,6 +766,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 255,0,0
         # subId=2865 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k36me3StdPk
@@ -707,6 +778,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 0,0,150
         # subId=2866 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k4me2StdPk
@@ -718,6 +790,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 0,130,0
         # subId=2867 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k4me3StdPk
@@ -729,6 +802,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 0,150,0
         # subId=2868 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k79me2StdPk
@@ -762,6 +836,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 150,0,0
         # subId=2871 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecCtcfStdPk
@@ -795,6 +870,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 255,0,0
         # subId=2875 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k4me1StdPk
@@ -806,6 +882,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,110,0
         # subId=2876 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k4me2StdPk
@@ -817,6 +894,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,130,0
         # subId=2877 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k4me3StdPk
@@ -828,6 +906,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,150,0
         # subId=2878 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k9acStdPk
@@ -850,6 +929,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 30,0,0
         # subId=2880 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH4k20me1StdPk
@@ -861,6 +941,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 150,0,0
         # subId=2881 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecPol2bStdPk
@@ -872,6 +953,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,100,0
         # subId=2882 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562CtcfStdPk
@@ -905,6 +987,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 255,0,0
         # subId=2886 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k36me3StdPk
@@ -916,6 +999,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,0,150
         # subId=2887 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k4me1StdPk
@@ -927,6 +1011,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,110,0
         # subId=2888 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k4me2StdPk
@@ -938,6 +1023,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,130,0
         # subId=2889 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k4me3StdPk
@@ -949,6 +1035,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,150,0
         # subId=2890 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k9acStdPk
@@ -971,6 +1058,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 30,0,0
         # subId=2892 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H4k20me1StdPk
@@ -982,6 +1070,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 150,0,0
         # subId=2893 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562Pol2bStdPk
@@ -993,6 +1082,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,100,0
         # subId=2894 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaCtcfStdPk
@@ -1023,6 +1113,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K27me3 cellType=NHA
         type broadPeak
         origAssembly hg19
+        #colorScheme2 255,0,0
         # subId=2898 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k36me3StdPk
@@ -1033,6 +1124,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K36me3 cellType=NHA
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=2899 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k4me1StdPk
@@ -1043,6 +1135,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me1 cellType=NHA
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,110,0
         # subId=2900 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k4me3StdPk
@@ -1053,6 +1146,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me3 cellType=NHA
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,150,0
         # subId=2901 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekCtcfStdPk
@@ -1086,6 +1180,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 255,0,0
         # subId=2905 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k36me3StdPk
@@ -1097,6 +1192,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,0,150
         # subId=2906 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k4me1StdPk
@@ -1108,6 +1204,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,110,0
         # subId=2907 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k4me2StdPk
@@ -1119,6 +1216,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,130,0
         # subId=2908 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k4me3StdPk
@@ -1130,6 +1228,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,150,0
         # subId=2909 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k9acStdPk
@@ -1152,6 +1251,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 30,0,0
         # subId=2911 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH4k20me1StdPk
@@ -1163,6 +1263,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 150,0,0
         # subId=2912 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekPol2bStdPk
@@ -1174,6 +1275,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,100,0
         # subId=2913 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfCtcfStdPk
@@ -1204,6 +1306,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K27me3 cellType=NHLF
         type broadPeak
         origAssembly hg18
+        #colorScheme2 255,0,0
         # subId=2917 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k36me3StdPk
@@ -1214,6 +1317,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K36me3 cellType=NHLF
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,0,150
         # subId=2918 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k4me1StdPk
@@ -1224,6 +1328,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me1 cellType=NHLF
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,110,0
         # subId=2919 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k4me2StdPk
@@ -1234,6 +1339,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me2 cellType=NHLF
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,130,0
         # subId=2920 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k4me3StdPk
@@ -1244,6 +1350,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me3 cellType=NHLF
         type broadPeak
         origAssembly hg18
+        #colorScheme2 0,150,0
         # subId=2921 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k9acStdPk
@@ -1264,6 +1371,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H4K20me1 cellType=NHLF
         type broadPeak
         origAssembly hg18
+        #colorScheme2 150,0,0
         # subId=2923 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H2azStdPk
@@ -1275,6 +1383,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 153,38,0
+        #colorScheme2 200,0,0
         # subId=2978 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneGm12878H3k79me2StdPk
@@ -1297,6 +1406,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 153,38,0
+        #colorScheme2 100,0,0
         # subId=2980 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHelas3H3k27me3StdPk
@@ -1308,6 +1418,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 255,0,0
         # subId=2982 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHsmmH2azStdPk
@@ -1318,6 +1429,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H2AZ cellType=HSMM
         type broadPeak
         origAssembly hg19
+        #colorScheme2 200,0,0
         # subId=2981 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHuvecH3k36me3StdPk
@@ -1329,6 +1441,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,0,150
         # subId=2970 dateSubmitted=2010-11-12
 
         track wgEncodeBroadHistoneK562H2azStdPk
@@ -1340,6 +1453,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 46,0,184
+        #colorScheme2 200,0,0
         # subId=2983 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H3k79me2StdPk
@@ -1362,6 +1476,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type broadPeak
         origAssembly hg19
         color 46,0,184
+        #colorScheme2 100,0,0
         # subId=2985 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblCtcfStdPk
@@ -1382,6 +1497,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H2AZ cellType=OSTBL
         type broadPeak
         origAssembly hg19
+        #colorScheme2 200,0,0
         # subId=2987 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k27acStdPk
@@ -1402,6 +1518,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K36me3 cellType=OSTBL
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=2989 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me1StdPk
@@ -1412,6 +1529,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me1 cellType=OSTBL
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,110,0
         # subId=2990 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me2StdPk
@@ -1422,6 +1540,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me2 cellType=OSTBL
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,130,0
         # subId=2991 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k9me3StdPk
@@ -1432,6 +1551,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K09me3 cellType=OSTBL
         type broadPeak
         origAssembly hg19
+        #colorScheme2 100,0,0
         # subId=2992 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneNhdfadCtcfStdPk
@@ -1462,6 +1582,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K27me3 cellType=NHDFa
         type broadPeak
         origAssembly hg19
+        #colorScheme2 255,0,0
         # subId=3008 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k36me3StdPk
@@ -1472,6 +1593,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K36me3 cellType=NHDFa
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=3009 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me2StdPk
@@ -1482,6 +1604,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me2 cellType=NHDFa
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,130,0
         # subId=3010 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me3StdPk
@@ -1492,6 +1615,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Peaks factor=H3K04me3 cellType=NHDFa
         type broadPeak
         origAssembly hg19
+        #colorScheme2 0,150,0
         # subId=3011 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k9acStdPk
@@ -1545,6 +1669,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K36me3 cellType=HSMMt
         type bigWig 0.040000 15984.040039
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=1683 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k36me3StdSig
@@ -1556,6 +1681,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 5547.879883
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 0,0,150
         # subId=1684 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k27me3StdSig
@@ -1566,6 +1692,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K27me3 cellType=NHLF
         type bigWig 0.040000 9652.440430
         origAssembly hg18
+        #colorScheme2 255,0,0
         # subId=1685 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtControlStdSig
@@ -1576,6 +1703,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=zCTRL cellType=HSMMt
         type bigWig 0.040000 44143.320312
         origAssembly hg19
+        #colorScheme2 0,0,0
         # subId=1686 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k4me2StdSig
@@ -1586,6 +1714,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me2 cellType=HSMM
         type bigWig 0.040000 10200.320312
         origAssembly hg18
+        #colorScheme2 0,130,0
         # subId=1687 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k9me1StdSig
@@ -1597,6 +1726,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 5266.720215
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 30,0,0
         # subId=1688 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k27me3StdSig
@@ -1608,6 +1738,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 6214.319824
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 255,0,0
         # subId=1689 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k36me3StdSig
@@ -1618,6 +1749,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K36me3 cellType=HMEC
         type bigWig 0.040000 10746.120117
         origAssembly hg18
+        #colorScheme2 0,0,150
         # subId=1690 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k27me3StdSig
@@ -1628,6 +1760,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K27me3 cellType=HSMM
         type bigWig 0.040000 10213.759766
         origAssembly hg18
+        #colorScheme2 255,0,0
         # subId=1691 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k9acStdSig
@@ -1671,6 +1804,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 8289.919922
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,150,0
         # subId=1695 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k4me3StdSig
@@ -1682,6 +1816,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 13314.719727
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,150,0
         # subId=1696 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k4me2StdSig
@@ -1693,6 +1828,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 3108.399902
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,130,0
         # subId=1697 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecControlStdSig
@@ -1704,6 +1840,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 13452.160156
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,0,0
         # subId=1698 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH4k20me1StdSig
@@ -1714,6 +1851,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H4K20me1 cellType=NHLF
         type bigWig 0.040000 7711.879883
         origAssembly hg18
+        #colorScheme2 150,0,0
         # subId=1699 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H4k20me1StdSig
@@ -1725,6 +1863,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 12717.959961
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 150,0,0
         # subId=1700 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k27acStdSig
@@ -1756,6 +1895,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me1 cellType=NHLF
         type bigWig 0.040000 14138.480469
         origAssembly hg18
+        #colorScheme2 0,110,0
         # subId=1703 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH2azStdSig
@@ -1766,6 +1906,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H2AZ cellType=HSMMt
         type bigWig 0.040000 16899.519531
         origAssembly hg19
+        #colorScheme2 200,0,0
         # subId=1704 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k9acStdSig
@@ -1788,6 +1929,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 4277.000000
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 0,150,0
         # subId=1706 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfCtcfStdSig
@@ -1829,6 +1971,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=zCTRL cellType=NHLF
         type bigWig 0.040000 13342.759766
         origAssembly hg18
+        #colorScheme2 0,0,0
         # subId=1710 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H4k20me1StdSig
@@ -1840,6 +1983,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 25408.839844
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 150,0,0
         # subId=1711 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k27me3StdSig
@@ -1851,6 +1995,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 13777.200195
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 255,0,0
         # subId=1712 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k4me1StdSig
@@ -1861,6 +2006,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me1 cellType=HSMM
         type bigWig 0.040000 9619.360352
         origAssembly hg18
+        #colorScheme2 0,110,0
         # subId=1713 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k4me2StdSig
@@ -1872,6 +2018,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 4060.560059
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,130,0
         # subId=1714 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH4k20me1StdSig
@@ -1882,6 +2029,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H4K20me1 cellType=HSMM
         type bigWig 0.040000 13583.440430
         origAssembly hg18
+        #colorScheme2 150,0,0
         # subId=1715 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k4me3StdSig
@@ -1892,6 +2040,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me3 cellType=HSMMt
         type bigWig 0.040000 12015.919922
         origAssembly hg19
+        #colorScheme2 0,150,0
         # subId=1716 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k9me3StdSig
@@ -1902,6 +2051,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K09me3 cellType=HSMM
         type bigWig 0.040000 53900.359375
         origAssembly hg19
+        #colorScheme2 100,0,0
         # subId=1717 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k27acStdSig
@@ -1923,6 +2073,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 9153.400391
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 0,0,0
         # subId=1719 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k9me1StdSig
@@ -1934,6 +2085,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 22709.759766
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 30,0,0
         # subId=1720 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k27me3StdSig
@@ -1945,6 +2097,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 10269.200195
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 255,0,0
         # subId=1721 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k36me3StdSig
@@ -1956,6 +2109,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 6577.279785
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,0,150
         # subId=1722 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k4me3StdSig
@@ -1967,6 +2121,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 9976.839844
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,150,0
         # subId=1723 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k79me2StdSig
@@ -1988,6 +2143,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 3680.399902
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,110,0
         # subId=1725 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k36me3StdSig
@@ -1999,6 +2155,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 9564.440430
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,0,150
         # subId=1726 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecPol2bStdSig
@@ -2010,6 +2167,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 8296.240234
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,100,0
         # subId=1727 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH4k20me1StdSig
@@ -2020,6 +2178,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H4K20me1 cellType=HSMMt
         type bigWig 0.040000 16533.359375
         origAssembly hg19
+        #colorScheme2 150,0,0
         # subId=1728 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k9me1StdSig
@@ -2031,6 +2190,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 6102.680176
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 30,0,0
         # subId=1729 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k79me2StdSig
@@ -2063,6 +2223,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 5846.080078
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,130,0
         # subId=1732 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k27me3StdSig
@@ -2074,6 +2235,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 3975.879883
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 255,0,0
         # subId=1733 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k36me3StdSig
@@ -2085,6 +2247,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 16712.320312
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,0,150
         # subId=1734 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k4me1StdSig
@@ -2096,6 +2259,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 7340.479980
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,110,0
         # subId=1735 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekPol2bStdSig
@@ -2107,6 +2271,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 3405.360107
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,100,0
         # subId=1737 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k27acStdSig
@@ -2127,6 +2292,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me2 cellType=NHLF
         type bigWig 0.040000 12378.839844
         origAssembly hg18
+        #colorScheme2 0,130,0
         # subId=1739 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k27acStdSig
@@ -2159,6 +2325,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 48100.679688
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,100,0
         # subId=1743 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k79me2StdSig
@@ -2181,6 +2348,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 9565.759766
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,150,0
         # subId=1745 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k9acStdSig
@@ -2233,6 +2401,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K36me3 cellType=NHLF
         type bigWig 0.040000 15557.639648
         origAssembly hg18
+        #colorScheme2 0,0,150
         # subId=1750 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k4me3StdSig
@@ -2244,6 +2413,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 25109.240234
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,150,0
         # subId=1751 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562ControlStdSig
@@ -2255,6 +2425,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 17321.439453
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,0,0
         # subId=1752 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k27acStdSig
@@ -2277,6 +2448,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 4187.120117
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,0,150
         # subId=1754 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k4me2StdSig
@@ -2288,6 +2460,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 35817.640625
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,130,0
         # subId=1755 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k4me3StdSig
@@ -2298,6 +2471,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me3 cellType=HSMM
         type bigWig 0.040000 37810.921875
         origAssembly hg18
+        #colorScheme2 0,150,0
         # subId=1756 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k4me2StdSig
@@ -2308,6 +2482,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me2 cellType=HMEC
         type bigWig 0.040000 9754.000000
         origAssembly hg18
+        #colorScheme2 0,130,0
         # subId=1757 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H4k20me1StdSig
@@ -2319,6 +2494,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 12546.959961
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 150,0,0
         # subId=1758 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k4me1StdSig
@@ -2329,6 +2505,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me1 cellType=HMEC
         type bigWig 0.040000 12081.799805
         origAssembly hg18
+        #colorScheme2 0,110,0
         # subId=1759 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescControlStdSig
@@ -2340,6 +2517,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 10153.759766
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,0,0
         # subId=1760 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k4me2StdSig
@@ -2351,6 +2529,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 4438.439941
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 0,130,0
         # subId=1761 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k36me3StdSig
@@ -2361,6 +2540,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K36me3 cellType=HSMM
         type bigWig 0.040000 11937.519531
         origAssembly hg18
+        #colorScheme2 0,0,150
         # subId=1762 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH4k20me1StdSig
@@ -2372,6 +2552,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 13583.559570
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 150,0,0
         # subId=1763 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k4me1StdSig
@@ -2382,6 +2563,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me1 cellType=HSMMt
         type bigWig 0.040000 6873.759766
         origAssembly hg19
+        #colorScheme2 0,110,0
         # subId=1764 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k9acStdSig
@@ -2403,6 +2585,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me2 cellType=HSMMt
         type bigWig 0.040000 7831.160156
         origAssembly hg19
+        #colorScheme2 0,130,0
         # subId=1766 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtCtcfStdSig
@@ -2434,6 +2617,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K27me3 cellType=HMEC
         type bigWig 0.040000 10112.240234
         origAssembly hg18
+        #colorScheme2 255,0,0
         # subId=1770 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3ControlStdSig
@@ -2445,6 +2629,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 94318.796875
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,0,0
         # subId=1771 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k27acStdSig
@@ -2466,6 +2651,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=zCTRL cellType=HSMM
         type bigWig 0.040000 15504.480469
         origAssembly hg18
+        #colorScheme2 0,0,0
         # subId=1773 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH4k20me1StdSig
@@ -2477,6 +2663,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 23103.880859
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 150,0,0
         # subId=1774 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekControlStdSig
@@ -2488,6 +2675,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 10613.160156
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 0,0,0
         # subId=1775 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k27acStdSig
@@ -2509,6 +2697,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 9300.160156
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,130,0
         # subId=1777 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k4me1StdSig
@@ -2520,6 +2709,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 4498.640137
         origAssembly hg18
         color 224,75,0
+        #colorScheme2 0,110,0
         # subId=1778 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k4me3StdSig
@@ -2530,6 +2720,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me3 cellType=NHLF
         type bigWig 0.040000 25393.160156
         origAssembly hg18
+        #colorScheme2 0,150,0
         # subId=1779 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k36me3StdSig
@@ -2541,6 +2732,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 40261.800781
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 0,0,150
         # subId=1780 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescCtcfStdSig
@@ -2573,6 +2765,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 10892.639648
         origAssembly hg18
         color 0,107,27
+        #colorScheme2 0,110,0
         # subId=1783 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH4k20me1StdSig
@@ -2584,6 +2777,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 6310.120117
         origAssembly hg18
         color 179,0,134
+        #colorScheme2 150,0,0
         # subId=1784 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH4k20me1StdSig
@@ -2594,6 +2788,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H4K20me1 cellType=HMEC
         type bigWig 0.040000 18010.759766
         origAssembly hg18
+        #colorScheme2 150,0,0
         # subId=1785 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecControlStdSig
@@ -2604,6 +2799,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=zCTRL cellType=HMEC
         type bigWig 0.040000 12705.320312
         origAssembly hg18
+        #colorScheme2 0,0,0
         # subId=1786 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2CtcfStdSig
@@ -2626,6 +2822,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 12507.360352
         origAssembly hg18
         color 189,0,157
+        #colorScheme2 255,0,0
         # subId=1788 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562Pol2bStdSig
@@ -2637,6 +2834,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 16058.919922
         origAssembly hg18
         color 46,0,184
+        #colorScheme2 0,100,0
         # subId=1789 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecCtcfStdSig
@@ -2670,6 +2868,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 25146.679688
         origAssembly hg19
         color 189,0,157
+        #colorScheme2 200,0,0
         # subId=1792 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k4me3StdSig
@@ -2680,6 +2879,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me3 cellType=HMEC
         type bigWig 0.040000 14119.879883
         origAssembly hg18
+        #colorScheme2 0,150,0
         # subId=1793 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k9acStdSig
@@ -2713,6 +2913,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 10034.400391
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,0,0
         # subId=1879 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k27acStdSig
@@ -2735,6 +2936,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 51675.199219
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 255,0,0
         # subId=1881 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k36me3StdSig
@@ -2746,6 +2948,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 11943.519531
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,0,150
         # subId=1882 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k4me1StdSig
@@ -2757,6 +2960,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 6971.479980
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,110,0
         # subId=1883 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k4me2StdSig
@@ -2768,6 +2972,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 6559.600098
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,130,0
         # subId=1884 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k4me3StdSig
@@ -2779,6 +2984,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 77082.320312
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 0,150,0
         # subId=1885 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k9acStdSig
@@ -2801,6 +3007,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 8058.640137
         origAssembly hg18
         color 153,38,0
+        #colorScheme2 150,0,0
         # subId=1887 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaCtcfStdSig
@@ -2821,6 +3028,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=zCTRL cellType=NHA
         type bigWig 0.040000 54769.359375
         origAssembly hg19
+        #colorScheme2 0,0,0
         # subId=1889 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k27acStdSig
@@ -2841,6 +3049,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K27me3 cellType=NHA
         type bigWig 0.040000 15338.599609
         origAssembly hg19
+        #colorScheme2 255,0,0
         # subId=1891 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k36me3StdSig
@@ -2851,6 +3060,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K36me3 cellType=NHA
         type bigWig 0.040000 14461.040039
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=1892 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k4me1StdSig
@@ -2861,6 +3071,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me1 cellType=NHA
         type bigWig 0.040000 7228.799805
         origAssembly hg19
+        #colorScheme2 0,110,0
         # subId=1893 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k4me3StdSig
@@ -2871,6 +3082,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me3 cellType=NHA
         type bigWig 0.040000 18680.640625
         origAssembly hg19
+        #colorScheme2 0,150,0
         # subId=1894 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H2azStdSig
@@ -2882,6 +3094,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 5573.080078
         origAssembly hg19
         color 153,38,0
+        #colorScheme2 200,0,0
         # subId=2978 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneGm12878H3k79me2StdSig
@@ -2904,6 +3117,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 44431.519531
         origAssembly hg19
         color 153,38,0
+        #colorScheme2 100,0,0
         # subId=2980 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHelas3H3k27me3StdSig
@@ -2915,6 +3129,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 24157.039062
         origAssembly hg19
         color 0,119,158
+        #colorScheme2 255,0,0
         # subId=2982 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHsmmH2azStdSig
@@ -2925,6 +3140,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H2AZ cellType=HSMM
         type bigWig 0.040000 9646.160156
         origAssembly hg19
+        #colorScheme2 200,0,0
         # subId=2981 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H2azStdSig
@@ -2936,6 +3152,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 9285.080078
         origAssembly hg19
         color 46,0,184
+        #colorScheme2 200,0,0
         # subId=2983 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H3k79me2StdSig
@@ -2958,6 +3175,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 44343.121094
         origAssembly hg19
         color 46,0,184
+        #colorScheme2 100,0,0
         # subId=2985 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblCtcfStdSig
@@ -2978,6 +3196,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H2AZ cellType=OSTBL
         type bigWig 0.040000 56248.921875
         origAssembly hg19
+        #colorScheme2 200,0,0
         # subId=2987 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k27acStdSig
@@ -2998,6 +3217,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K36me3 cellType=OSTBL
         type bigWig 0.040000 31413.000000
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=2989 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me1StdSig
@@ -3008,6 +3228,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me1 cellType=OSTBL
         type bigWig 0.040000 12418.000000
         origAssembly hg19
+        #colorScheme2 0,110,0
         # subId=2990 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me2StdSig
@@ -3018,6 +3239,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me2 cellType=OSTBL
         type bigWig 0.040000 13407.240234
         origAssembly hg19
+        #colorScheme2 0,130,0
         # subId=2991 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k9me3StdSig
@@ -3028,6 +3250,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K09me3 cellType=OSTBL
         type bigWig 0.040000 82158.562500
         origAssembly hg19
+        #colorScheme2 100,0,0
         # subId=2992 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneNhdfadCtcfStdSig
@@ -3058,6 +3281,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K27me3 cellType=NHDFa
         type bigWig 0.040000 16666.439453
         origAssembly hg19
+        #colorScheme2 255,0,0
         # subId=3008 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k36me3StdSig
@@ -3068,6 +3292,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K36me3 cellType=NHDFa
         type bigWig 0.040000 24724.080078
         origAssembly hg19
+        #colorScheme2 0,0,150
         # subId=3009 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me2StdSig
@@ -3078,6 +3303,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me2 cellType=NHDFa
         type bigWig 0.040000 13155.320312
         origAssembly hg19
+        #colorScheme2 0,130,0
         # subId=3010 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me3StdSig
@@ -3088,6 +3314,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         subGroups view=Signal factor=H3K04me3 cellType=NHDFa
         type bigWig 0.040000 26645.640625
         origAssembly hg19
+        #colorScheme2 0,150,0
         # subId=3011 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k9acStdSig
@@ -3099,4 +3326,24 @@ dataVersion through the ENCODE Jun 2010 Freeze
         type bigWig 0.040000 14526.120117
         origAssembly hg19
         # subId=3012 dateSubmitted=2010-11-19
+
+        track wgEncodeBroadHistoneOsteoblControlStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel Ostbl Control Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, Osteobl cells)
+        subGroups view=Signal factor=zCTRL cellType=OSTBL
+        type bigWig 0.040000 32139.839844
+        origAssembly hg19
+        # subId=3073 dateSubmitted=2010-12-06
+
+        track wgEncodeBroadHistoneNhdfadControlStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NHDFa Control Sg
+        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NHDF-Ad cells)
+        subGroups view=Signal factor=zCTRL cellType=NHDFa
+        type bigWig 0.040000 16604.000000
+        origAssembly hg19
+        # subId=3074 dateSubmitted=2010-12-06
 
