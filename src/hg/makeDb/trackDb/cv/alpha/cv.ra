@@ -6977,7 +6977,7 @@ type treatment
 
 term TGFb
 tag TGFb
-description PROVISIONAL 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
+description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
 
 term TNFa
 tag TNFa
