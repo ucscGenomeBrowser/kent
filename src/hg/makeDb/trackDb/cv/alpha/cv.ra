@@ -1174,7 +1174,13 @@ type Cell Line
 organism Human
 description (aka H54) Glioblastoma
 tissue Brain
-vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
+vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu) 
+orderUrl <A HREF="mailto:&#98;&#105;&#103;&#110;&#101;00&#49;&#64;&#109;&#99;.
+du&#107;&#101;.
+&#101;&#100;&#117;">
+&#98;&#105;&#103;&#110;&#101;00&#49;&#64;&#109;&#99;.
+du&#107;&#101;.
+&#101;&#100;&#117;</A>.
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000527
 sex U
