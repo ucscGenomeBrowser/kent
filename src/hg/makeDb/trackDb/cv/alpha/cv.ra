@@ -6975,6 +6975,10 @@ tag TAM
 description 36h, 1uM tamoxifen (Myers)
 type treatment
 
+term TGFb
+tag TGFb
+description PROVISIONAL 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
+
 term TNFa
 tag TNFa
 description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
