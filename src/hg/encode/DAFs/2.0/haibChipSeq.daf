@@ -1,4 +1,4 @@
-# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.8 $
+# Data Agreement File for Myers/HudsonAlpha ChIP-seq experiments  $Revision: 1.9 $
 
 
 # The header for the associated DDF should look like this:
@@ -35,7 +35,7 @@ assembly          hg19
 medianFragmentLength 225
 fragmentLengthRange  150-300
 dafVersion        2.0
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=32,nMatch;validateFiles.fastq:quick=100
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=32,nMatch
 
 # Track/view definition
 view             Peaks
