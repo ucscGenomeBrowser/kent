@@ -4,11 +4,11 @@ shortLabel PSU-m ChipSeq
 longLabel ENCODE PSU-m Hardison ChipSeq
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line CH12=CH12 G1E=G1E G1E_E4_E2=G1E-E4+E2
+subGroup2 cellType Cell_Line CH12=CH12 G1E=G1E G1E_E4_E2=G1E-E4+E2 MEL=MEL
 subGroup3 factor Factor Input=Input CTCF=CTCF POL24H8=Pol2-4H8 GATA1SC265=GATA1_(SC-265)
 subGroup4 sex Sex F=F M=M
 subGroup5 age Age immortal=immortalized E0=E0
-subGroup6 strain Strain 2a4b=B10.H-2aH-4bp/Wts S129=129
+subGroup6 strain Strain 2a4b=B10.H-2aH-4bp/Wts S129=129 C57BL6=C57BL/6
 subGroup7 control Control Input=Input
 dimensions dimensionX=cellType dimensionY=factor
 sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
@@ -85,6 +85,16 @@ wgEncode 1
         color 153,38,0
         # subId=3033 dateSubmitted=2010-11-26
 
+        track wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputPk
+        release alpha
+        parent wgEncodePsuTfbsViewPeaks 
+        shortLabel MEL CTCF Pk
+        longLabel ENCODE PSU TFBS Peaks (CTCF in MEL cells)
+        subGroups view=Peaks age=immortal factor=CTCF cellType=MEL control=Input sex=M strain=C57BL6
+        type broadPeak
+        color 46,0,184
+        # subId=3044 dateSubmitted=2010-12-01
+
 	#####Signal Tracks###########
 	track wgEncodePsuViewSignal
         release alpha
@@ -147,3 +157,13 @@ wgEncode 1
         type bigWig 1.000000 163.000000
         color 153,38,0
         # subId=3033 dateSubmitted=2010-11-26
+
+        track wgEncodePsuTfbsMelCtcfMImmortalC57bl6InputSig
+        release alpha
+        parent wgEncodePsuViewSignal 
+        shortLabel MEL CTCF Sig
+        longLabel ENCODE PSU TFBS Signal (CTCF in MEL cells)
+        subGroups view=Signal age=immortal factor=CTCF cellType=MEL control=Input sex=M strain=C57BL6
+        type bigWig 1.000000 227.000000
+        color 46,0,184
+        # subId=3044 dateSubmitted=2010-12-01
