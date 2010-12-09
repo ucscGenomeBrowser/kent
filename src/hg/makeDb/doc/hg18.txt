@@ -31088,6 +31088,11 @@ close($OUTD); close($OUTM); close($OUTU);
       hgBbiDbLink hg18 $track $f
     end
 
+    # to see the grp table:
+    hgsql -e "select * from grp order by priority;" hg18
+    # add new denisova group:
+    hgsql hg18 -e "INSERT INTO grp VALUES ('denisova', 'Denisova Assembly and Analysis', 6.6, 0);"
+
 #########################################################################
 # BUILD R-DMR TRACK.  DONE (Fan 7/23/2010)
 
