@@ -137,6 +137,20 @@ else
 return overlap;
 }
 
+int bedLength(struct bed *bed)
+/* Return the number of bases aligned in this bed alignment */
+{
+int length = 0;
+int ii;
+
+for(ii = 0; ii < bed->blockCount; ii++)
+    {
+    length += bed->blockSizes[ii];
+    }
+return(length);
+}
+
+
 struct bed *mostOverlappingBed(struct binKeeper *bk, struct genePred *gp)
 /* Find bed in bk that overlaps most with gp.  Return NULL if no overlap. */
 {
@@ -150,9 +164,20 @@ for (el = elList; el != NULL; el = el->next)
     overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
     if (overlap > bestOverlap)
         {
-	bestOverlap = overlap;
-	bestBed = bed;
-	}
+        bestOverlap = overlap;
+        bestBed = bed;
+        }
+    else if (overlap == bestOverlap)
+        {
+        // If two beds have the same number of overlapping bases to
+        // the gene prediction, then take the bed with the greatest proportion of
+        // overlapping bases, i.e. the shorter one.
+        if (bedLength(bed) < bedLength(bestBed))
+            {
+            bestOverlap = overlap;
+            bestBed = bed;
+            }
+        }
     }
 return bestBed;
 }
