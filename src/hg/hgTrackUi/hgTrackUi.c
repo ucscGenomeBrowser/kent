@@ -2549,8 +2549,15 @@ if (ct)
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("&nbsp;");
     if (differentString(tdb->type, "chromGraph"))
-        cgiMakeOnClickButton("document.customTrackForm.submit();return false;",
-                                "Update custom track");
+        {
+        char buf[256];
+        if(ajax)
+            // reference to a separate form doesn't work in modal dialog, so change window.location directly.
+            safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;", hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
+        else
+            safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
+        cgiMakeOnClickButton(buf, "Update custom track");
+        }
     }
 
 if (!tdbIsSuper(tdb))
@@ -2578,7 +2585,7 @@ printf("<BR>\n");
 specificUi(tdb, ct, ajax);
 puts("</FORM>");
 
-if (ct)
+if (ct && !ajax)
     {
     /* hidden form for custom tracks CGI */
     printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
