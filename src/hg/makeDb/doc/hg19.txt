@@ -13169,9 +13169,9 @@ gzip Rfam.fasta
 # and coverage.
 mkdir -p hg19
 blat -q=rna -minIdentity=85 /hive/data/genomes/hg19/hg19.2bit Rfam.human.fasta \
-    hg19/Rfam.human.psl
-pslCDnaFilter -globalNearBest=0.01 -minCover=0.85 hg19/Rfam.human.psl \
-    hg19/Rfam.human.bestHits.psl
+    hg19/Rfam.psl
+pslCDnaFilter -globalNearBest=0.01 -minCover=0.85 hg19/Rfam.psl \
+    hg19/Rfam.bestHits.psl
 
 # Load
-hgLoadPsl -table="Rfam" hg19 hg19/Rfam.human.bestHits.psl
+hgLoadPsl -table="Rfam" hg19 hg19/Rfam.bestHits.psl
