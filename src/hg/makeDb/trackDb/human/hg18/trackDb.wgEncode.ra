@@ -507,7 +507,7 @@ compositeTrack on
 shortLabel Duke Affy Exon
 longLabel ENCODE Duke Affy All-Exon Arrays
 group expression
-subGroup1 cellType Cell_Line Astrocy=Astrocy Chorion=Chorion Fibrobl=Fibrobl GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 Gliobla=Gliobla HELA=HeLa-S3_<i>Tier2</i> HELA-ifa=HeLa-S3_<i>IFN&alpha;</i> HELA-ifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HMEC=HMEC HUVEC=HUVEC_<i>Tier2</i> LHSR=LHSR LHSR=LHSR LHSR-a=LHSR_<i>androgen</i> LNCaP=LNCaP LNCaP-a=LNCaP_<i>androgen</i> MCF7=MCF-7 MCF7-a=MCF-7_<i>androgen</i> MCF7-e=MCF-7_<i>estrogen</i> MCF7-v=MCF-7_<i>vehicle</i> Medullo=Medullo NHEK=NHEK_<i>Tier2</i> Osteobl=Osteobl ProgFib=ProgFib
+subGroup1 cellType Cell_Line Astrocy=Astrocy Chorion=Chorion Fibrobl=Fibrobl GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 Gliobla=Gliobla HELA=HeLa-S3_<i>Tier2</i> HELA-ifa=HeLa-S3_<i>IFN&alpha;</i> HELA-ifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HMEC=HMEC HUVEC=HUVEC_<i>Tier2</i> LHSR=LHSR LHSR=LHSR LHSR-a=LHSR_<i>androgen</i> LNCaP=LNCaP LNCaP-a=LNCaP_<i>androgen</i> MCF7=MCF-7 MCF7-a=MCF-7_<i>androgen</i> MCF7-e=MCF-7_<i>estrogen</i> MCF7-v=MCF-7_<i>vehicle</i> Medullo=Medullo NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib
 subGroup2 rep Replicate rep1=1 rep2=2 rep3=3
 dimensions dimensionY=cellType dimensionX=rep
 boxedCfg on
@@ -527,7 +527,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Astrocy cells)
     subGroups  cellType=Astrocy rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Astrocy treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy
     subTrack wgEncodeDukeAffyExonArray off
@@ -535,7 +534,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Astrocy cells)
     subGroups  cellType=Astrocy rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Astrocy treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion
     subTrack wgEncodeDukeAffyExonArray off
@@ -543,7 +541,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Chorion cells)
     subGroups  cellType=Chorion rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Chorion treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl
     subTrack wgEncodeDukeAffyExonArray off
@@ -551,7 +548,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Fibrobl cells)
     subGroups  cellType=Fibrobl rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Fibrobl treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl
     subTrack wgEncodeDukeAffyExonArray off
@@ -559,7 +555,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Fibrobl cells)
     subGroups  cellType=Fibrobl rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Fibrobl treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla
     subTrack wgEncodeDukeAffyExonArray off
@@ -567,7 +562,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Gliobla cells)
     subGroups  cellType=Gliobla rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Gliobla treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla
     subTrack wgEncodeDukeAffyExonArray off
@@ -575,7 +569,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Gliobla cells)
     subGroups  cellType=Gliobla rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Gliobla treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878
     subTrack wgEncodeDukeAffyExonArray
@@ -584,7 +577,6 @@ wgEncode 1
     subGroups  cellType=GM12878 rep=rep1
     type broadPeak
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12878 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878
     subTrack wgEncodeDukeAffyExonArray
@@ -593,7 +585,6 @@ wgEncode 1
     subGroups  cellType=GM12878 rep=rep2
     type broadPeak
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12878 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878
     subTrack wgEncodeDukeAffyExonArray
@@ -602,7 +593,6 @@ wgEncode 1
     subGroups  cellType=GM12878 rep=rep3
     type broadPeak
     color 153,38,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12878 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891
     subTrack wgEncodeDukeAffyExonArray off
@@ -610,7 +600,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12891 cells)
     subGroups  cellType=GM12891 rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12891 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891
     subTrack wgEncodeDukeAffyExonArray off
@@ -618,7 +607,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12891 cells)
     subGroups  cellType=GM12891 rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12891 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892
     subTrack wgEncodeDukeAffyExonArray off
@@ -626,7 +614,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12892 cells)
     subGroups  cellType=GM12892 rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12892 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892
     subTrack wgEncodeDukeAffyExonArray off
@@ -634,7 +621,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12892 cells)
     subGroups  cellType=GM12892 rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM12892 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507
     subTrack wgEncodeDukeAffyExonArray off
@@ -642,7 +628,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM18507 cells)
     subGroups  cellType=GM18507 rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM18507 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507
     subTrack wgEncodeDukeAffyExonArray off
@@ -650,7 +635,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM18507 cells)
     subGroups  cellType=GM18507 rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM18507 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507
     subTrack wgEncodeDukeAffyExonArray off
@@ -658,7 +642,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in GM18507 cells)
     subGroups  cellType=GM18507 rep=rep3
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM18507 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238
     subTrack wgEncodeDukeAffyExonArray off
@@ -666,7 +649,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19238 cells)
     subGroups  cellType=GM19238 rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19238 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238
     subTrack wgEncodeDukeAffyExonArray off
@@ -674,7 +656,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19238 cells)
     subGroups  cellType=GM19238 rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19238 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239
     subTrack wgEncodeDukeAffyExonArray off
@@ -682,7 +663,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19239 cells)
     subGroups  cellType=GM19239 rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19239 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239
     subTrack wgEncodeDukeAffyExonArray off
@@ -690,7 +670,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19239 cells)
     subGroups  cellType=GM19239 rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19239 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240
     subTrack wgEncodeDukeAffyExonArray off
@@ -698,7 +677,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19240 cells)
     subGroups  cellType=GM19240 rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19240 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240
     subTrack wgEncodeDukeAffyExonArray off
@@ -706,7 +684,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19240 cells)
     subGroups  cellType=GM19240 rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=GM19240 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3
     subTrack wgEncodeDukeAffyExonArray off
@@ -715,7 +692,6 @@ wgEncode 1
     subGroups  cellType=HELA rep=rep1
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3
     subTrack wgEncodeDukeAffyExonArray off
@@ -724,7 +700,6 @@ wgEncode 1
     subGroups  cellType=HELA rep=rep2
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3
     subTrack wgEncodeDukeAffyExonArray off
@@ -733,7 +708,6 @@ wgEncode 1
     subGroups  cellType=HELA rep=rep3
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h
     subTrack wgEncodeDukeAffyExonArray off
@@ -742,7 +716,6 @@ wgEncode 1
     subGroups  cellType=HELA-ifa rep=rep1
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNa4h  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h
     subTrack wgEncodeDukeAffyExonArray off
@@ -751,7 +724,6 @@ wgEncode 1
     subGroups  cellType=HELA-ifa rep=rep2
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNa4h  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h
     subTrack wgEncodeDukeAffyExonArray off
@@ -760,7 +732,6 @@ wgEncode 1
     subGroups  cellType=HELA-ifg rep=rep1
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNg4h  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h
     subTrack wgEncodeDukeAffyExonArray off
@@ -769,7 +740,6 @@ wgEncode 1
     subGroups  cellType=HELA-ifg rep=rep2
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HeLa-S3 treatment=IFNg4h  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2
     subTrack wgEncodeDukeAffyExonArray off
@@ -778,7 +748,6 @@ wgEncode 1
     subGroups  cellType=HEPG2 rep=rep1
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2
     subTrack wgEncodeDukeAffyExonArray off
@@ -787,7 +756,6 @@ wgEncode 1
     subGroups  cellType=HEPG2 rep=rep2
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2
     subTrack wgEncodeDukeAffyExonArray off
@@ -796,7 +764,6 @@ wgEncode 1
     subGroups  cellType=HEPG2 rep=rep3
     type broadPeak
     color 189,0,157
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HepG2 treatment=None  replicate=3 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec
     subTrack wgEncodeDukeAffyExonArray off
@@ -804,7 +771,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HMEC cells)
     subGroups  cellType=HMEC rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HMEC treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec
     subTrack wgEncodeDukeAffyExonArray off
@@ -812,7 +778,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HMEC cells)
     subGroups  cellType=HMEC rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HMEC treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec
     subTrack wgEncodeDukeAffyExonArray off
@@ -821,7 +786,6 @@ wgEncode 1
     subGroups  cellType=HUVEC rep=rep1
     type broadPeak
     color 224,75,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HUVEC treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec
     subTrack wgEncodeDukeAffyExonArray off
@@ -830,7 +794,6 @@ wgEncode 1
     subGroups  cellType=HUVEC rep=rep2
     type broadPeak
     color 224,75,0
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=HUVEC treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro
     subTrack wgEncodeDukeAffyExonArray off
@@ -838,7 +801,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LHSR cells)
     subGroups  cellType=LHSR-a rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=androgen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro
     subTrack wgEncodeDukeAffyExonArray off
@@ -846,7 +808,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LHSR cells)
     subGroups  cellType=LHSR-a rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=androgen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr
     subTrack wgEncodeDukeAffyExonArray off
@@ -854,7 +815,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LHSR cells)
     subGroups  cellType=LHSR rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr
     subTrack wgEncodeDukeAffyExonArray off
@@ -862,7 +822,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LHSR cells)
     subGroups  cellType=LHSR rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LHSR treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro
     subTrack wgEncodeDukeAffyExonArray off
@@ -871,7 +830,6 @@ wgEncode 1
     subGroups  cellType=LNCaP-a rep=rep1
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=androgen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro
     subTrack wgEncodeDukeAffyExonArray off
@@ -880,7 +838,6 @@ wgEncode 1
     subGroups  cellType=LNCaP-a rep=rep1
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=androgen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap
     subTrack wgEncodeDukeAffyExonArray off
@@ -889,7 +846,6 @@ wgEncode 1
     subGroups  cellType=LNCaP rep=rep1
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap
     subTrack wgEncodeDukeAffyExonArray off
@@ -898,7 +854,6 @@ wgEncode 1
     subGroups  cellType=LNCaP rep=rep2
     type broadPeak
     color 0,119,158
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=LNCaP treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7
     subTrack wgEncodeDukeAffyExonArray off
@@ -906,7 +861,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
     subGroups  cellType=MCF7 rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7 fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro
     subTrack wgEncodeDukeAffyExonArray off
@@ -914,7 +868,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
     subGroups  cellType=MCF7-e rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=estrogen  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro
     subTrack wgEncodeDukeAffyExonArray off
@@ -922,7 +875,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
     subGroups  cellType=MCF7-e rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=estrogen  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle
     subTrack wgEncodeDukeAffyExonArray off
@@ -930,7 +882,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
     subGroups  cellType=MCF7-v rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=vehicle  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle
     subTrack wgEncodeDukeAffyExonArray off
@@ -938,7 +889,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
     subGroups  cellType=MCF7-v rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=MCF-7 treatment=vehicle  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo
     subTrack wgEncodeDukeAffyExonArray off
@@ -946,7 +896,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Medullo cells)
     subGroups  cellType=Medullo rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Medullo treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo
     subTrack wgEncodeDukeAffyExonArray off
@@ -954,7 +903,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Medullo cells)
     subGroups  cellType=Medullo rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Medullo treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek
     subTrack wgEncodeDukeAffyExonArray off
@@ -963,7 +911,6 @@ wgEncode 1
     subGroups  cellType=NHEK rep=rep1
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=NHEK treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek
     subTrack wgEncodeDukeAffyExonArray off
@@ -972,7 +919,6 @@ wgEncode 1
     subGroups  cellType=NHEK rep=rep2
     type broadPeak
     color 179,0,134
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=NHEK treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl
     subTrack wgEncodeDukeAffyExonArray off
@@ -980,7 +926,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Osteobl cells)
     subGroups  cellType=Osteobl rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Osteobl treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl
     subTrack wgEncodeDukeAffyExonArray off
@@ -988,7 +933,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Osteobl cells)
     subGroups  cellType=Osteobl rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=Osteobl treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib
     subTrack wgEncodeDukeAffyExonArray off
@@ -996,7 +940,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in ProgFib cells)
     subGroups  cellType=ProgFib rep=rep1
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=ProgFib treatment=None  replicate=1 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib fileName=wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib.broadPeak.gz
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Progfib
     subTrack wgEncodeDukeAffyExonArray off
@@ -1004,7 +947,6 @@ wgEncode 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in ProgFib cells)
     subGroups  cellType=ProgFib rep=rep2
     type broadPeak
-    metadata project=wgEncode grant=Crawford lab=Duke dataType=AffyExonArray cell=ProgFib treatment=None  replicate=2 labVersion=1.0 dataVersion="ENCODE Jan 2010 Freeze" subId=829 dateSubmitted=2009-12-16 dateUnrestricted=2010-09-16 composite=wgEncodeDukeAffyExonArray tableName=wgEncodeDukeAffyExonArraySimpleSignalRep2Progfib fileName=wgEncodeDukeAffyExonArraySimpleSignalRep2Progfib.broadPeak.gz
 
 
 
@@ -1015,7 +957,7 @@ compositeTrack on
 shortLabel UW Affy Exon
 longLabel ENCODE UW Affy All-Exon Arrays
 group expression
-subGroup1 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAE=HAE HCF=HCF HCM=HCM HCPE=HCPE HEE=HEE HIPE=HIPE HMEC=HMEC HNPCE=HNPCE HRCEpiC=HRCEpiC HRE=HRE HRPE=HRPE Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
+subGroup1 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAE=HAE HCF=HCF HCM=HCM HCPE=HCPE HEE=HEE HIPE=HIPE HMEC=HMEC HNPCE=HNPCE HRCEpiC=HRCEpiC HRE=HRE HRPE=HRPE Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 subGroup2 rep Replicate rep1=1 rep2=2
 # dimensions dimensionX=cellType dimensionY=rep
 dimensions dimensionX=rep dimensionY=cellType
@@ -1480,7 +1422,7 @@ wgEncode 1
     subTrack wgEncodeUwAffyExonArray off
     shortLabel NHEK 1
     longLabel ENCODE UW Affy All-Exon Array Signal Replicate 1 (in NHEK cells)
-    subGroups cellType=2NHEK rep=rep1
+    subGroups cellType=NHEK rep=rep1
     color 179,0,134
     type broadPeak
 
@@ -2191,7 +2133,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type broadPeak
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2200,7 +2141,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
         type broadPeak
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2209,7 +2149,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CellTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2218,7 +2157,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=K562 localization=0-cell rnaExtract=total
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2227,7 +2165,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2236,7 +2173,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2245,7 +2181,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2254,7 +2189,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2263,7 +2197,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2272,7 +2205,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2281,7 +2213,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2291,7 +2222,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2300,7 +2230,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=K562 localization=60-nucleolus rnaExtract=total
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2310,7 +2239,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2320,7 +2248,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
@@ -2330,7 +2257,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2340,7 +2266,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2350,7 +2275,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2360,7 +2284,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2370,7 +2293,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2379,7 +2301,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2388,7 +2309,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
 
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya
@@ -2398,7 +2318,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2407,7 +2326,6 @@ wgEncode 1
         subGroups view=FiltTransfrags cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -2416,7 +2334,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in HepG2 nucleolus)
         subGroups view=FiltTransfrags cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags on
@@ -2425,7 +2342,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 nucleolus)
         subGroups view=FiltTransfrags cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipViewTransfrags
     shortLabel Raw Transfrags
@@ -2444,7 +2360,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type broadPeak
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2453,7 +2368,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
         type broadPeak
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2462,7 +2376,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562CellTotal
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2471,7 +2384,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=K562 localization=0-cell rnaExtract=total
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CellTotal fileName=wgEncodeAffyRnaChipTransfragsK562CellTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2480,7 +2392,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2489,7 +2400,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2498,7 +2408,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2507,7 +2416,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2516,7 +2424,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2525,7 +2432,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2534,7 +2440,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2544,7 +2449,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal.broadPeak.gz
 
 
         track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
@@ -2555,7 +2459,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2565,7 +2468,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2575,7 +2477,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
         subTrack wgEncodeAffyRnaChipViewTransfrags
@@ -2585,7 +2486,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2595,7 +2495,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2605,7 +2504,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2615,7 +2513,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2625,7 +2522,6 @@ wgEncode 1
         type broadPeak
         noInherit on
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2634,7 +2530,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2643,7 +2538,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2652,7 +2546,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2661,7 +2554,6 @@ wgEncode 1
         subGroups view=Transfrags cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewTransfrags off
@@ -2670,7 +2562,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Transfrags (Total RNA in HepG2 nucleolus)
         subGroups view=Transfrags cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewTransfrags on
@@ -2679,7 +2570,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Transfrags (Total RNA in GM12878 nucleolus)
         subGroups view=Transfrags cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal.broadPeak.gz
 
     track wgEncodeAffyRnaChipViewFiltRawSignal
     shortLabel Filtered Signal
@@ -2699,7 +2589,6 @@ wgEncode 1
         type wig -62124.00 545.00
         spanList 1
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2709,7 +2598,6 @@ wgEncode 1
         type wig -62728.00 56449.00
         spanList 1
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2719,7 +2607,6 @@ wgEncode 1
         type wig -56486.00 45415.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562CellTotal
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2729,7 +2616,6 @@ wgEncode 1
         type wig -40989.00 59494.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2739,7 +2625,6 @@ wgEncode 1
         type wig -49290.00 43018.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2749,7 +2634,6 @@ wgEncode 1
         type wig -55473.00 56092.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2759,7 +2643,6 @@ wgEncode 1
         type wig -42328.00 61956.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2769,7 +2652,6 @@ wgEncode 1
         type wig -52880.00 48739.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2779,7 +2661,6 @@ wgEncode 1
         type wig -52768.00 58546.00
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2789,7 +2670,6 @@ wgEncode 1
         type wig -61519.00 60470.00
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2799,7 +2679,6 @@ wgEncode 1
         type wig -58491.00 61097.00
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2812,7 +2691,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2821,7 +2699,6 @@ wgEncode 1
         subGroups view=FiltRawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
         type wig -46635.00 54187.00
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2834,7 +2711,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2847,7 +2723,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
@@ -2860,7 +2735,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2873,7 +2747,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2886,7 +2759,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2899,7 +2771,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2912,7 +2783,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2921,7 +2791,6 @@ wgEncode 1
         subGroups view=FiltRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type wig -56603.00 59926.00
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2930,7 +2799,6 @@ wgEncode 1
         subGroups view=FiltRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
         type wig -58826.00 51082.00
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2939,7 +2807,6 @@ wgEncode 1
         subGroups view=FiltRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type wig -50511.00 56743.00
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2948,7 +2815,6 @@ wgEncode 1
         subGroups view=FiltRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
         type wig -52210.00 51521.00
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
@@ -2957,7 +2823,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in HepG2 nucleolus)
         subGroups view=FiltRawSignal cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type wig -57857.00 57814.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal on
@@ -2966,7 +2831,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 nucleolus)
         subGroups view=FiltRawSignal cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type wig -47390.50 56660.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal.wig.gz
 
     track wgEncodeAffyRnaChipViewRawSignal
     shortLabel Raw Signal
@@ -2986,7 +2850,6 @@ wgEncode 1
         type wig -62124.00 50627.00
         spanList 1
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -2996,7 +2859,6 @@ wgEncode 1
         type wig -62728.00 58726.00
         spanList 1
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3006,7 +2868,6 @@ wgEncode 1
         type wig -56486.00 59077.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562CellTotal
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3016,7 +2877,6 @@ wgEncode 1
         type wig -43345.00 59494.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipRawSignalK562CellTotal.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3026,7 +2886,6 @@ wgEncode 1
         type wig -47465.00 52826.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3036,7 +2895,6 @@ wgEncode 1
         type wig -52894.00 56092.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3046,7 +2904,6 @@ wgEncode 1
         type wig -58407.00 60582.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3056,7 +2913,6 @@ wgEncode 1
         type wig -50161.00 55400.00
         spanList 1
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3066,7 +2922,6 @@ wgEncode 1
         type wig -59319.00 55161.00
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3076,7 +2931,6 @@ wgEncode 1
         type wig -61519.00 60416.00
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3086,7 +2940,6 @@ wgEncode 1
         type wig -58491.00 56453.00
         spanList 1
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3099,7 +2952,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal fileName=tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3112,7 +2964,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalK562NucleolusTotal.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3125,7 +2976,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3138,7 +2988,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalGm12878CellTotal
         subTrack wgEncodeAffyRnaChipViewRawSignal
@@ -3151,7 +3000,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipRawSignalGm12878CellTotal.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3164,7 +3012,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3177,7 +3024,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3190,7 +3036,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3203,7 +3048,6 @@ wgEncode 1
         windowingFunction mean
         maxHeightPixels 100:16:16
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3212,7 +3056,6 @@ wgEncode 1
         subGroups view=RawSignal cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type wig -56603.00 59926.00
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3221,7 +3064,6 @@ wgEncode 1
         subGroups view=RawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
         type wig -58826.00 50541.50
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3230,7 +3072,6 @@ wgEncode 1
         subGroups view=RawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type wig -50466.00 50711.00
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3239,7 +3080,6 @@ wgEncode 1
         subGroups view=RawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
         type wig -48036.00 58899.00
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewRawSignal off
@@ -3248,7 +3088,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in HepG2 nucleolus)
         subGroups view=RawSignal cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type wig -57857.00 57814.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal.wig.gz
 
         track wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewRawSignal on
@@ -3257,7 +3096,6 @@ wgEncode 1
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 nucleolus)
         subGroups view=RawSignal cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type wig -57050.00 56660.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal.wig.gz
 
 # SUNY Albany genechp (wrangler: braney)
 
@@ -3299,7 +3137,6 @@ wgEncode 1
         subGroups view=RbpAssocRna cellType=GM12878 ripAntibody=Nov_69522 ripTgtProtein=zCTL_T7Tag
         type broadPeak
         useScore 1
-        metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=GM12878 ripAntibody=Nov_69522 ripTgtProtein=T7Tag view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag.broadPeak.gz
 
         track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
         subTrack wgEncodeSunyalbanyRnaGeneChipViewRbpAssocRna
@@ -3307,7 +3144,6 @@ wgEncode 1
         longLabel ENCODE SUNY Albany RBP Associated RNA (T7Tag Control in K562 cells)
         subGroups view=RbpAssocRna cellType=K562 ripAntibody=Nov_69522 ripTgtProtein=zCTL_T7Tag
         type broadPeak
-        metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=Nov_69522 ripTgtProtein=T7Tag view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag.broadPeak.gz
 
         track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
         subTrack wgEncodeSunyalbanyRnaGeneChipViewRbpAssocRna
@@ -3316,7 +3152,6 @@ wgEncode 1
         subGroups view=RbpAssocRna cellType=GM12878 ripAntibody=SC_5261 ripTgtProtein=ELAVL1
         type broadPeak
         color 0,107,27
-        metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=GM12878 ripAntibody=SC_5261 ripTgtProtein=ELAVL1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1.broadPeak.gz
 
         track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
         subTrack wgEncodeSunyalbanyRnaGeneChipViewRbpAssocRna
@@ -3325,7 +3160,6 @@ wgEncode 1
         subGroups view=RbpAssocRna cellType=K562 ripAntibody=SC_5261 ripTgtProtein=ELAVL1
         type broadPeak
         color 0,107,27
-        metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=SC_5261 ripTgtProtein=ELAVL1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1.broadPeak.gz
 
         track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
         subTrack wgEncodeSunyalbanyRnaGeneChipViewRbpAssocRna
@@ -3334,7 +3168,6 @@ wgEncode 1
         subGroups view=RbpAssocRna cellType=K562 ripAntibody=SC_21027 ripTgtProtein=IGF2BP1
         type broadPeak
         color 0,40,158
-        metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=SC_21027 ripTgtProtein=IGF2BP1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1.broadPeak.gz
 
         track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
         subTrack wgEncodeSunyalbanyRnaGeneChipViewRbpAssocRna
@@ -3343,7 +3176,6 @@ wgEncode 1
         subGroups view=RbpAssocRna cellType=GM12878 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1
         type broadPeak
         color 133,0,33
-        metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=GM12878 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1.broadPeak.gz
 
         track wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
         subTrack wgEncodeSunyalbanyRnaGeneChipViewRbpAssocRna
@@ -3352,7 +3184,6 @@ wgEncode 1
         subGroups view=RbpAssocRna cellType=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1
         type broadPeak
         color 133,0,33
-        metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1.broadPeak.gz
 
 
 
@@ -3365,7 +3196,6 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 include wgEncodeYaleChIPseq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
-include wgEncodeHudsonalphaChipSeq.new.ra
 include wgEncodeHudsonalphaChipSeq.ra
 
 
@@ -3444,7 +3274,6 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
     idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeManualV3 fileName=wgEncodeGencodeManualV3.gtf.gz
 
     track wgEncodeGencodeAutoV3
     subTrack wgEncodeSangerGencode
@@ -3455,7 +3284,6 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     #urlLabel Vega Transcript:
     #idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV3 where name="%s"     ### there are not OTT ids for level 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV3 fileName=wgEncodeGencodeAutoV3.gtf.gz
 
     track wgEncodeGencodePolyaV3
     subTrack wgEncodeSangerGencode off
@@ -3463,7 +3291,6 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (Oct 2009)
     type genePred
     priority 4
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V3c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV3 fileName=wgEncodeGencodePolyaV3.gtf.gz
 
 searchName wgEncodeGencodeManualV3
 searchTable wgEncodeGencodeManualV3
@@ -3636,7 +3463,6 @@ type bed 9
         subGroups cellType=GM12878 view=Regions
         cell GM12878
         itemRgb on
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsGM12878 fileName=wgEncodeHudsonalphaCnvRegionsGM12878.bed.gz subId=449
         priority 2
 
         track wgEncodeHudsonalphaCnvRegionsHepG2
@@ -3645,7 +3471,6 @@ type bed 9
         subTrack wgEncodeHudsonalphaCnvViewRegions
         subGroups cellType=HepG2 view=Regions
         cell HepG2
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsHepG2 fileName=wgEncodeHudsonalphaCnvRegionsHepG2.bed.gz subId=449
         priority 4
 
         track wgEncodeHudsonalphaCnvRegionsK562
@@ -3654,7 +3479,6 @@ type bed 9
         subTrack wgEncodeHudsonalphaCnvViewRegions
         subGroups cellType=K562 view=Regions
         cell K562
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Regions dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvRegionsK562 fileName=wgEncodeHudsonalphaCnvRegionsK562.bed.gz subId=449
         priority 6
 
     track wgEncodeHudsonalphaCnvViewSignal
@@ -3673,7 +3497,6 @@ type bed 9
         cell GM12878
         color 153,38,0
         priority 1
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=GM12878 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalGM12878 fileName=wgEncodeHudsonalphaCnvSignalGM12878.bedGraph4.gz  subId=449
 
         track wgEncodeHudsonalphaCnvSignalHepG2
         subTrack wgEncodeHudsonalphaCnvViewSignal
@@ -3683,7 +3506,6 @@ type bed 9
         cell HepG2
         color 189,0,157
         type bedGraph 4
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=HepG2 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalHepG2 fileName=wgEncodeHudsonalphaCnvSignalHepG2.bedGraph4.gz subId=449
         priority 3
 
         track wgEncodeHudsonalphaCnvSignalK562
@@ -3694,7 +3516,6 @@ type bed 9
         cell K562
         color 46,0,184
         type bedGraph 4
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=CNV cell=K562 view=Signal dataVersion="ENCODE July 2009 Freeze" dateSubmitted=2008-11-20 dateUnrestricted=2009-08-20 dateResubmitted=2009-07-24 composite=wgEncodeHudsonalphaCnv tableName=wgEncodeHudsonalphaCnvSignalK562 fileName=wgEncodeHudsonalphaCnvSignalK562.bedGraph4.gz subId=449
         priority 5
 
 
@@ -4102,7 +3923,6 @@ wgEncode 1
         maxLimit 175406
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal off
@@ -4115,7 +3935,6 @@ wgEncode 1
         maxLimit 13556
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
@@ -4128,7 +3947,6 @@ wgEncode 1
         maxLimit 20925
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView1-PlusRawSignal on
@@ -4141,7 +3959,6 @@ wgEncode 1
         minLimit 0
         maxLimit 45103
         transformFunc NONE
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqPlusRawSignalRep1H1hescCellLongpolya
 
     track wgEncodeGisRnaSeqView2-MinusRawSignal
     shortLabel Minus Raw Signal
@@ -4165,7 +3982,6 @@ wgEncode 1
         maxLimit 56250
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal off
@@ -4178,7 +3994,6 @@ wgEncode 1
         maxLimit 10333
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
@@ -4191,7 +4006,6 @@ wgEncode 1
         maxLimit 13935
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView2-MinusRawSignal on
@@ -4204,7 +4018,6 @@ wgEncode 1
         maxLimit 48723
         color 0,107,27
         transformFunc NONE
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqMinusRawSignalRep1H1hescCellLongpolya
 
     track wgEncodeGisRnaSeqView3-AllRawSignal
     shortLabel All Raw Signal
@@ -4228,7 +4041,6 @@ wgEncode 1
         maxLimit 175407
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
@@ -4241,7 +4053,6 @@ wgEncode 1
         maxLimit 13556
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep2K562CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
@@ -4254,7 +4065,6 @@ wgEncode 1
         maxLimit 20925
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1Gm12878CytosolLongpolya
 
         track wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView3-AllRawSignal off
@@ -4267,7 +4077,6 @@ wgEncode 1
         minLimit 0
         maxLimit 48723
         transformFunc NONE
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAllRawSignalRep1H1hescCellLongpolya
 
     track wgEncodeGisRnaSeqView4-Alignments
     shortLabel Alignments
@@ -4288,7 +4097,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1K562CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
@@ -4303,7 +4111,6 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep2K562CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
@@ -4318,7 +4125,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1Gm12878CytosolLongpolya.tagAlign.gz
 
         track wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView4-Alignments off
@@ -4333,7 +4139,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya fileName=wgEncodeGisRnaSeqAlignmentsRep1H1hescCellLongpolya.tagAlign.gz
 
     track wgEncodeGisRnaSeqView5-SplitAlign
     shortLabel Split Alignments
@@ -4356,7 +4161,6 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
     #    configurable on
         type bed 6
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=SplitAlign replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya fileName=wgEncodeGisRnaSeqSplitAlignRep1K562CytosolLongpolya.pairedTagAlign.gz
 
         track wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya
         subTrack wgEncodeGisRnaSeqView5-SplitAlign off
@@ -4373,7 +4177,6 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
     #    configurable on
         type bed 6
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=RnaSeq cell=H1-hESC rnaExtract=longPolyA localization=cell view=SplitAlign replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=758 dateSubmitted=2009-10-29 dateUnrestricted=2010-07-29 composite=wgEncodeGisRnaSeq tableName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya fileName=wgEncodeGisRnaSeqSplitAlignRep1H1hescCellLongpolya.pairedTagAlign.gz
 
 # GIS DNA Pet (wrangler: braney)
 
@@ -4413,7 +4216,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=1k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=256 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK5621k fileName=wgEncodeGisDnaPetAlignmentsK5621k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsK56210k
         subTrack wgEncodeGisDnaPetViewAlignments on
@@ -4429,7 +4231,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=257 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56210k fileName=wgEncodeGisDnaPetAlignmentsK56210k.pairedTagAlign.gz
 
 	track wgEncodeGisDnaPetAlignmentsK56220k
         subTrack wgEncodeGisDnaPetViewAlignments off
@@ -4443,7 +4244,6 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
 	showDiffBasesMaxZoom 10000.0
-	metadata project=wgEncode grant=Gingeras lab=Gis(Ruan) dataType=DnaPet cell=K562 fragSize=20k view=Alignments dataVersion="ENCODE June 2010 Freeze" subId=1075 dateSubmitted=2010-04-05 dateUnrestricted=2011-01-05 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56220k fileName=wgEncodeGisDnaPetAlignmentsK56220k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm128781k
         subTrack wgEncodeGisDnaPetViewAlignments off
@@ -4459,7 +4259,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=1k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=253 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128781k fileName=wgEncodeGisDnaPetAlignmentsGm128781k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm128785k
         subTrack wgEncodeGisDnaPetViewAlignments off
@@ -4475,7 +4274,6 @@ wgEncode 1
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
     #    configurable on
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=5k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=254 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128785k fileName=wgEncodeGisDnaPetAlignmentsGm128785k.pairedTagAlign.gz
 
         track wgEncodeGisDnaPetAlignmentsGm1287810k
         subTrack wgEncodeGisDnaPetViewAlignments on
@@ -4489,7 +4287,6 @@ wgEncode 1
         baseColorTickColor lighterShade
         showDiffBasesAllScales .
         showDiffBasesMaxZoom 10000.0
-        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=255 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm1287810k fileName=wgEncodeGisDnaPetAlignmentsGm1287810k.pairedTagAlign.gz
 
 
 # Helicos RNA-seq (wrangler: braney)
@@ -4525,8 +4322,6 @@ wgEncode 1
         shortLabel K562cyto pA+ Tag
         longLabel ENCODE Helicos RNA-seq Tags (PolyA+ RNA in K562 cytosol)
         subGroups view=Alignments
-        #subGroups view=Alignments cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-        #type tagAlign
         type bigBed 6
         baseColorDefault diffBases
         baseColorUseSequence nameIsSequence
@@ -4534,7 +4329,6 @@ wgEncode 1
         showDiffBasesMaxZoom 10000.0
         color 46,0,184
         configurable on
-        metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqAlignmentsK562CytosolLongpolya.tagAlign.gz
 
     track wgEncodeHelicosRnaSeqViewyRawSignal
     shortLabel Raw Signal
@@ -4547,7 +4341,6 @@ wgEncode 1
         shortLabel K562cyto pA+ Sig
         longLabel ENCODE Helicos RNA-seq Raw Signal (PolyA+ RNA in K562 cytosol)
         subGroups view=yRawSignal
-        #subGroups view=yRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type wig 1.00 65535.00
         noInherit on
         spanList first
@@ -4555,7 +4348,6 @@ wgEncode 1
         maxHeightPixels 100:16:16
         color 46,0,184
         configurable on
-        metadata project=wgEncode grant=Gingeras lab=Helicos dataType=RnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=249 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeHelicosRnaSeq tableName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya fileName=wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya.wig.gz
 
 # CSHL short rna-seq (wrangler: braney)
 track wgEncodeCshlShortRnaSeq
@@ -4592,7 +4384,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 cytosol)
         subGroups view=1-Transfrags cellType=GM12878 localization=20-cytosol
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4601,7 +4392,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in GM12878 nucleus)
         subGroups view=1-Transfrags cellType=GM12878 localization=30-nucleus
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4610,7 +4400,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 chromatin)
         subGroups view=1-Transfrags cellType=K562 localization=50-chromatin
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
@@ -4619,7 +4408,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 cytosol)
         subGroups view=1-Transfrags cellType=K562 localization=20-cytosol
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4628,7 +4416,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleus)
         subGroups view=1-Transfrags cellType=K562 localization=30-nucleus
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4637,7 +4424,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleolus)
         subGroups view=1-Transfrags cellType=K562 localization=60-nucleolus
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4646,7 +4432,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 nucleoplasm)
         subGroups view=1-Transfrags cellType=K562 localization=40-nucleoplasm
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4655,7 +4440,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in K562 polysome)
         subGroups view=1-Transfrags cellType=K562 localization=10-polysome
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags on
@@ -4664,7 +4448,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Transfrags (small RNA in prostate cell)
         subGroups view=1-Transfrags cellType=prostate localization=0-cell
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort fileName=wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4673,7 +4456,6 @@ noInherit on
         subGroups view=1-Transfrags cellType=GM12878 localization=0-cell
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Jan 2010 Freeze" subId=1056 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort.broadPeak.gz
 
         track wgEncodeCshlShortRnaSeqTransfragsK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView1-Transfrags off
@@ -4682,7 +4464,6 @@ noInherit on
         subGroups view=1-Transfrags cellType=K562 localization=0-cell
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cell view=Transfrags dataVersion="ENCODE Jan 2010 Freeze" subId=1056 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqTransfragsK562CellShort fileName=wgEncodeCshlShortRnaSeqTransfragsK562CellShort.broadPeak.gz
 
     track wgEncodeCshlShortRnaSeqView2-PlusRawSignal
     shortLabel Plus Raw Signal
@@ -4708,7 +4489,6 @@ noInherit on
         maxLimit 3557599
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=cytosol view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4721,7 +4501,6 @@ noInherit on
         maxLimit 5055640
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=chromatin view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4734,7 +4513,6 @@ noInherit on
         maxLimit 25082
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=polysome view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
@@ -4747,7 +4525,6 @@ noInherit on
         maxLimit 449639
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=cytosol view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4760,7 +4537,6 @@ noInherit on
         maxLimit 5059134
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleoplasm view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal on
@@ -4773,7 +4549,6 @@ noInherit on
         maxLimit 1611371
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4786,7 +4561,6 @@ noInherit on
         maxLimit 641103
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4799,7 +4573,6 @@ noInherit on
         maxLimit 516729
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleus view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4812,7 +4585,6 @@ noInherit on
         maxLimit 968064
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleolus view=PlusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4821,7 +4593,6 @@ noInherit on
         subGroups view=2-PlusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
 
         track wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal off
@@ -4830,7 +4601,6 @@ noInherit on
         subGroups view=2-PlusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short type=wig localization=cell view=PlusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
 
     track wgEncodeCshlShortRnaSeqView3-MinusRawSignal
     shortLabel Minus Raw Signal
@@ -4856,7 +4626,6 @@ noInherit on
         maxLimit 3557416
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=cytosol view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4869,7 +4638,6 @@ noInherit on
         maxLimit 3376353
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=chromatin view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4882,7 +4650,6 @@ noInherit on
         maxLimit 203241
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=polysome view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
@@ -4895,7 +4662,6 @@ noInherit on
         maxLimit 333231
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=cytosol view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4908,7 +4674,6 @@ noInherit on
         maxLimit 1595004
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleoplasm view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal on
@@ -4921,7 +4686,6 @@ noInherit on
         maxLimit 1611371
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4934,7 +4698,6 @@ noInherit on
         maxLimit 4876484
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4947,7 +4710,6 @@ noInherit on
         maxLimit 768499
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4960,7 +4722,6 @@ noInherit on
         maxLimit 1076632
         transformFunc NONE
         type bedGraph 4
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short type=wig localization=nucleolus view=MinusRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4969,7 +4730,6 @@ noInherit on
         subGroups view=3-MinusRawSignal cellType=GM12878 localization=0-cell
         type bedGraph 4
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
 
         track wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
@@ -4978,7 +4738,6 @@ noInherit on
         subGroups view=3-MinusRawSignal cellType=K562 localization=0-cell
         type bedGraph 4
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short type=wig localization=cell view=MinusRawSignal dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
 
     track wgEncodeCshlShortRnaSeqView4-Alignments
     shortLabel Alignments
@@ -4999,7 +4758,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 cytosol)
         subGroups view=4-Alignments cellType=GM12878 localization=20-cytosol
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5014,7 +4772,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in GM12878 nucleus)
         subGroups view=4-Alignments cellType=GM12878 localization=30-nucleus
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=GM12878 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5029,7 +4786,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 chromatin)
         subGroups view=4-Alignments cellType=K562 localization=50-chromatin
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=chromatin view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
@@ -5044,7 +4800,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 cytosol)
         subGroups view=4-Alignments cellType=K562 localization=20-cytosol
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=cytosol view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5059,7 +4814,6 @@ noInherit on
         showDiffBasesMaxZoom 10000.0
         subGroups view=4-Alignments cellType=K562 localization=30-nucleus
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5074,7 +4828,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleolus)
         subGroups view=4-Alignments cellType=K562 localization=60-nucleolus
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleolus view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5089,7 +4842,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 nucleoplasm)
         subGroups view=4-Alignments cellType=K562 localization=40-nucleoplasm
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=nucleoplasm view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5104,7 +4856,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in K562 polysome)
         subGroups view=4-Alignments cellType=K562 localization=10-polysome
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=K562 rnaExtract=short localization=polysome view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments on
@@ -5119,7 +4870,6 @@ noInherit on
         longLabel ENCODE CSHL RNA-seq Tags (small RNA in prostate cell)
         subGroups view=4-Alignments cellType=prostate localization=0-cell
         type bigBed 6
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=ShortRnaSeq cell=prostate rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Sep 2009 Freeze" subId=535 dateSubmitted=2009-09-23 dateUnrestricted=2010-06-23 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5128,7 +4878,6 @@ noInherit on
         subGroups view=4-Alignments cellType=GM12878 localization=0-cell
         type bigBed 6
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=GM12878 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1017 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort.tagAlign.gz
 
         track wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
         subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
@@ -5137,7 +4886,6 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=0-cell
         type bigBed 6
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=RnaSeq cell=K562 rnaExtract=short localization=cell view=Alignments dataVersion="ENCODE Jan 2010 Freeze" subId=1000 dateSubmitted=2010-01-14 dateUnrestricted=2010-10-14 composite=wgEncodeCshlShortRnaSeq tableName=wgEncodeCshlShortRnaSeqAlignmentsK562CellShort fileName=wgEncodeCshlShortRnaSeqAlignmentsK562CellShort.tagAlign.gz
 
 # CSHL long rna-seq (wrangler: braney)
 track wgEncodeCshlLongRnaSeq

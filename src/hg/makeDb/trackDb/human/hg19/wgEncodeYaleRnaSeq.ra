@@ -20,6 +20,7 @@ wgEncode 1
 noInherit on
 
     track wgEncodeYaleRnaSeqViewSignal
+    release alpha
     shortLabel Signal
     view Signal
     visibility dense
@@ -57,6 +58,7 @@ noInherit on
 
 
     track wgEncodeYaleRnaSeqViewAlignments
+    release alpha
     shortLabel Alignments
     view Alignments
     visibility hide 

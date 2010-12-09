@@ -2030,8 +2030,8 @@ for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatT
         char numBuf[SMALLBUF];
         sprintLongWithCommas(numBuf, maxSafeHeight);
         if (safeHeight)  // Only one message
-            warn("Image is over %s pixels high (%d pix) at track:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
-                (flatTrack->next != NULL?"<BR>Additional tracks may have been set to hide at this zoom level.":""));
+            warn("Image is over %s pixels high (%d pix) at the following track which is now hidden:<BR>\"%s\".%s", numBuf, totalHeight, track->tdb->longLabel,
+                (flatTrack->next != NULL?"<BR>Additional tracks may have also been hidden at this zoom level.":""));
         safeHeight = FALSE;
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
@@ -3607,13 +3607,13 @@ if (!psOutput)
     /* Print NCBI MapView anchor */
     if (sameString(database, "hg18"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=36\" TARGET=_blank class=\"topbar\">",
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=previous\" TARGET=_blank class=\"topbar\">",
             skipChr(chromName), winStart+1, winEnd);
         hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
         }
     if (sameString(database, "hg19"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=37\" TARGET=_blank class=\"topbar\">",
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
             skipChr(chromName), winStart+1, winEnd);
         hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
         }

@@ -269,7 +269,10 @@ boolean needComma = FALSE;
 for (i = 0;  i < count;  i++)
     {
     if (i == 0 && differentStringNullOk(strings[i], "unknown"))
-	fprintf(f, "'unknown',");
+	{
+	fprintf(f, "'unknown'");
+	needComma = TRUE;
+	}
     if (isNotEmpty(strings[i]) && stringsUsed[i])
 	{
 	fprintf(f, "%s'%s'", (needComma ? "," : ""), strings[i]);
