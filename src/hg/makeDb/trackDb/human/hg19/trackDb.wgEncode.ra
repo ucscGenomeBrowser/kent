@@ -19,7 +19,7 @@ include wgEncodeUwHistone.ra
 include wgEncodeUwDgf.ra
 include wgEncodeUwDnase.ra
 include wgEncodeHaibMethylSeq.ra
-include wgEncodeHaibMethyl27.ra
+include wgEncodeHaibMethylArray.ra
 include wgEncodeGisRnaSeq.ra
 include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
