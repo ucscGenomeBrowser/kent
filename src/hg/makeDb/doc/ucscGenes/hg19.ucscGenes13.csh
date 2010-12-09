@@ -45,6 +45,7 @@ set tmpSuffix = "Foo13"
 set tempDb = ${tempPrefix}${tmpSuffix}
 set bioCycTempDb = tmpBioCyc${tmpSuffix}
 
+
 # Table for SNPs
 set snpTable = snp130
 
@@ -70,6 +71,8 @@ set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/090218/sgdPep.faa
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
+set rfam = /hive/data/outside/Rfam/110710/
+
 
 # Tracks
 set multiz = multiz4way
@@ -126,12 +129,34 @@ else
     echo -n "" > ccds.bed
     echo -n "" > refToCcds.tab
 endif
+
+# Get tRNA for human (or else just an empty file)
+if ($db =~ hg* && \
+  `hgsql -N $db -e "show tables;" | grep -E -c "tRNAs|chromInfo"` == 2) then
+    hgsql -N $db -e "select chrom,chromStart,chromEnd,name,score,strand from tRNAs" > tRNAs.bed 
+else
+    echo -n "" > trna.bed
+    echo -n "" > refToCcds.tab
+endif
+
+# Get the Rfams that overlap with blocks that are syntenic to Mm9.
+# FIXME: this should be generalized for other species
+mkdir -p rfam
+pslToBed $db/Rfam.bestHits.psl rfam/rfam.all.bed
+bedToExons rfam/rfam.all.bed rfam/rfam.exons.bed
+hgLoadBed $db rfamExons rfam/rfam.exons.bed
+hgsql -E "SELECT DISTINCT r.name FROM rfamExons r, chainMm9 c WHERE r.bin = c.bin AND r.chrom = c.tName AND r.chromStart < c.tStart AND r.chromEnd < c.tEnd" \
+ | awk '{ print "grep \"" $1 "\" rfam/rfam.all.bed"}' |bash \
+ > rfam/rfam.syntenic.bed
+hgsql -E "DROP TABLE rfamExons"
  
 # Create directories full of alignments split by chromosome.
-mkdir -p est refSeq mrna
+mkdir -p est refSeq mrna trna
 pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
+bedSplitOnChrom trna.bed trna
+bedSplitOnChrom rfam/rfam.syntenic.bed rfam
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
@@ -149,6 +174,14 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e ccds/$c.bed) then
 	  echo creating empty ccds/$c.bed
           echo -n "" >ccds/$c.bed
+    endif
+    if (! -e trna/$c.bed) then
+	  echo creating empty trna/$c.bed
+          echo -n "" >trna/$c.bed
+    endif
+    if (! -e rfam/$c.bed) then
+	  echo creating empty rfam/$c.bed
+          echo -n "" >rfam/$c.bed
     endif
 end
 
@@ -200,7 +233,7 @@ end
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
-    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna \
+    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna trna/$c.bed trna rfam/$c.bed rfam \
 	bedToGraph/$c.txg
 end
 
@@ -219,6 +252,8 @@ endif # BRACKET
 cat > trim.weights <<end
 refSeq  100
 ccds    50
+trna    50
+rfam    20
 mrna    2
 txOrtho 1
 exoniphy 1
