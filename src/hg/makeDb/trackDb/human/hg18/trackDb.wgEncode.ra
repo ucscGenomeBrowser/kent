@@ -420,13 +420,6 @@ compareGenomeLinks panTro2=Chimpanzee_(March_2006) rheMac2=Rhesus_(January_2006)
 wgEncode 1
 filterBy score:Annotation=800|A)_UCSC_genes,600|B)_GenBank_mRNA_annotations,400|C)_spliced_ESTs
 metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE July 2009 Freeze" subId=294 dateSubmitted=2009-04-27 dateUnrestricted=2010-01-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.hg18.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=hg18 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBipOld fileName=wgEncodeNhgriBip.hg18.bed8.gz.old
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=bosTau4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.bosTau4.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=canFam2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.canFam2.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=mm9 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.mm9.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=panTro2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.panTro2.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rheMac2 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rheMac2.bed8.gz
-#metadata project=wgEncode grant=Elnitski lab=NHGRI dataType=BiP cell=Reference_Genome species=rn4 dataVersion="ENCODE Feb 2009 Freeze" subId=200 dateSubmitted=2009-01-27 dateUnrestricted=2009-10-27 tableName=wgEncodeNhgriBip fileName=wgEncodeNhgriBip.rn4.bed8.gz
 
 # NHGRI (Elnitski) Negative Regulatory Elements (wrangler: tdreszer)
 
@@ -5176,65 +5169,6 @@ wgEncode 1
 include wgEncodeGisPet.ra
 
 include wgEncodeHudsonalphaRnaSeq.ra
-
-# Chai tracks (wrangler: braney)
-track wgEncodeMarguliesChai
-compositeTrack on
-shortLabel Margulies Chai
-longLabel ENCODE Margulies Chai
-group compGeno
-subGroup1 view Views Signal=Signal ConsSig=ConsSig ConsBed=ConsBed
-#subGroup2 cellType Cell_Line GM12878=GM12878
-#subGroup1 cellType Cell_Line GM12878=GM12878
-#dimensions dimensionX=cellType
-sortOrder view=+
-controlledVocabulary encode/cv.ra cellType
-dragAndDrop subTracks
-#visibilityViewDefaults  Signal=full
-priority 0
-type bed 3
-wgEncode 1
-noInherit on
-
-    track wgEncodeMarguliesChaiConsBedView
-    shortLabel ConsBed
-    view ConsBed
-    configurable on
-    visibility full
-    subTrack wgEncodeMarguliesChai
-    type bed 3
-    noInherit on
-
-	track wgEncodeMarguliesChaiConsBedRep1Gm12878
-	subTrack wgEncodeMarguliesChaiConsBedView
-        shortLabel Chai FDR bed
-        longLabel Chai FDR bed
-        subGroups view=ConsBed
-        type bed 3
-	noInherit on
-        noScoreFilter on
-	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
-
-    track wgEncodeMarguliesChaiConsSigView
-    shortLabel ConsSig
-    view ConsSig
-    visibility full
-    subTrack wgEncodeMarguliesChai
-    maxHeightPixels 100:24:16
-    windowingFunction maximum
-    autoScale on
-
-	track wgEncodeMarguliesChaiConsSigRep1Gm12878
-	release alpha
-	subTrack wgEncodeMarguliesChaiConsSigView
-	shortLabel Chai
-	longLabel Chai
-	subGroups view=ConsSig
-	type bigWig 0 10000
-	autoScale on
-	configurable on
-	color 153,38,0
-	metadata project=wgEncode grant=Margulies lab=Margulies dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeMarguliesOrchidSignalRep1Gm12878 fileName=wgEncodeMarguliesOrchidSignalRep1Gm12878.bedGraph4.gz
 
 # BU ORChID (wrangler: Brian)
 include wgEncodeBuOrchid.ra
