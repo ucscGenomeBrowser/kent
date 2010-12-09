@@ -2,7 +2,7 @@
 track wgEncodeHaibTfbs
 release alpha
 compositeTrack on
-superTrack wgEncodeTfBindingSuper dense
+superTrack wgEncodeTfBindingSuper full
 shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 group regulation
@@ -25,7 +25,6 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protoco
 priority 0
 type bed 3
 wgEncode 1
-origAssembly hg19
 nextItemButton on
 noInherit on
 #dataVersion through the ENCODE Jan 2010 Freeze
@@ -36,8 +35,8 @@ noInherit on
     release alpha
     shortLabel Peaks
     view Peaks
-    visibility pack
-    viewUi on
+    visibility dense
+   # viewUi on
     subTrack wgEncodeHaibTfbs
     scoreFilter 0
     scoreFilterLimits 0:1000
@@ -327,7 +326,7 @@ noInherit on
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsH1hescNrsfPcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks
         shortLabel H1hES NRSF   Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in H1-hESC cells)
         subGroups view=Peaks factor=NRSF cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -778,7 +777,7 @@ noInherit on
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks 
         shortLabel GM878 TAF1   Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in GM12878 cells)
         subGroups view=Peaks factor=TAF1 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -919,7 +918,7 @@ noInherit on
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks
         shortLabel GM878 Pol24H Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in GM12878 cells)
         subGroups view=Peaks factor=POL24H8 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -1060,7 +1059,7 @@ noInherit on
         #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks
         shortLabel GM878 SIX5   Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SIX5 in GM12878 cells)
         subGroups view=Peaks factor=SIX5 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -2343,14 +2342,15 @@ noInherit on
     track wgEncodeHaibTfbsViewRawSignal
     release alpha
     shortLabel Raw Signal
+    visibility full
     view RawSignal
     subTrack wgEncodeHaibTfbs
     minLimit 1
     maxLimit 47957.00
-    viewLimits 1:137
+    viewLimits 1:5
     autoScale off
-    maxHeightPixels 100:16:16
-    windowingFunction mean
+    maxHeightPixels 100:32:16
+    windowingFunction maximum
 
         track wgEncodeHaibTfbsK562Atf3Pcr1xRawRep1
         release alpha
@@ -2761,7 +2761,7 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878NrsfPcr2xRawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel GM12878 NRSF Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (NRSF in GM12878 cells)
         subGroups view=RawSignal factor=NRSF cellType=GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -2848,7 +2848,7 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878Pol2Pcr2xRawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel GM12878 Pol2 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
         subGroups view=RawSignal factor=POL2 cellType=GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -2937,7 +2937,7 @@ noInherit on
 
         track wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel H1-hESC SIX5 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (SIX5 in H1-hESC cells)
         subGroups view=RawSignal factor=SIX5 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -3887,7 +3887,7 @@ noInherit on
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101RawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel K562 Pol2-4H8 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2-4H8 in K562 cells)
         subGroups view=RawSignal factor=POL24H8 cellType=K562 protocol=V0416101 treatment=None rep=rep1
@@ -3967,7 +3967,7 @@ noInherit on
 
         track wgEncodeHaibTfbsK562Taf1V0416101RawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel K562 TAF1 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (TAF1 in K562 cells)
         subGroups view=RawSignal factor=TAF1 cellType=K562 protocol=V0416101 treatment=None rep=rep1
