@@ -13132,3 +13132,46 @@ for bed in agilent*.bed; do
     tail -n +2 $bed | hgLoadBed hg19 ${bed%.bed} stdin
 done
 rm bed.tab
+
+
+#################################################################################
+# Rfam (2010-12-08 Melissa)
+#
+# This track contains genomic re-alignments of sequences from the Rfam full alignment
+# sets.  Rfam contains hand-curated alignments of RNA families (Rfam seed) that are 
+# used to train homology models.  These models are applied to finding family members
+# in human by searching GenBank contig sequences from human.  The hits that meet
+# a specific threshold (hand-curated for each family) are pruned to a maximal 
+# percent identity, to yield a larger set of the sequences in each family 
+# (Rfam full).  This track represents our best estimates of the genomic 
+# locations of each Rfam full hit, limiting to those with good alignments to
+# the genomic sequence.  Why didn't we do a liftUp using the genomic
+# coordinates of the contigs?  We don't have those coordinates.  In addition,
+# a sequence can align well to a contig, but not as well to the genome.
+#
+# This data is used in building UCSC Genes.
+#
+
+# Download Rfam.fasta.gz, which is the set of sequences aligned in Rfam full.
+mkdir -p /hive/data/outside/Rfam/110710/  
+cd /hive/data/outside/Rfam/110710/  
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/Rfam.fasta.gz
+gunzip Rfam.fasta.gz
+
+# Extract the subset annotated as in human
+grep -i "Homo Sapiens" Rfam.fasta |awk '{ print $1}' \
+   |sed 's/^>//' > human.sequenceIds.txt
+faSomeRecords Rfam.fasta human.sequenceIds.txt Rfam.human.fasta
+gzip Rfam.fasta
+
+# Align the human sequences to the genome, retaining the best and
+# near-best hits and limiting to those hits with good percent identity
+# and coverage.
+mkdir -p hg19
+blat -q=rna -minIdentity=85 /hive/data/genomes/hg19/hg19.2bit Rfam.human.fasta \
+    hg19/Rfam.human.psl
+pslCDnaFilter -globalNearBest=0.01 -minCover=0.85 hg19/Rfam.human.psl \
+    hg19/Rfam.human.bestHits.psl
+
+# Load
+hgLoadPsl -table="Rfam" hg19 hg19/Rfam.human.bestHits.psl
