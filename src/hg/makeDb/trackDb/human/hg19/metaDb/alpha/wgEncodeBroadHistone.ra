@@ -20438,7 +20438,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
-fileIndex .wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep1.bam.bai
+fileIndex wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep1.bam.bai
 fileName wgEncodeBroadHistoneOsteoblH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
@@ -21082,4 +21082,4 @@ subId 2992
 tableName wgEncodeBroadHistoneOsteoblH3k9me3StdSig
 view Signal
 
-# MAGIC: -1086729519
+# MAGIC: -1086729565
