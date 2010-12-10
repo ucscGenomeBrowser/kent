@@ -4,6 +4,7 @@ track chainNetOryLat2 override
 priority 210.3
 
 track chainNetOryLat1 override
+release alpha
 priority 210.3
 chainMinScore 5000
 chainLinearGap loose
