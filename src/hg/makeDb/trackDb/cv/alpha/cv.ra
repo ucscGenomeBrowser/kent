@@ -7204,6 +7204,13 @@ type dataType
 label RNA-seq
 description sequencing of short RNAs
 
+term SwitchGear 
+tag SwitchGear 
+type dataType
+label SwitchGear
+description Provisional SwitchGear Genomics 3' UTR reporter assay 
+
+
 #This is not in the metaDB currently
 term TfbsValid
 tag tfbsValid
