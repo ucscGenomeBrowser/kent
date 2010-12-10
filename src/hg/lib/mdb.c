@@ -1409,6 +1409,45 @@ if(raStyle) // NOTE: currently only supporting validation of RA files
     fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
 }
 
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude)
+// returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
+{
+if (mdbObj!=NULL)
+    {
+    struct dyString *dyLine = dyStringNew(128);
+    struct mdbVar *mdbVar = NULL;
+
+    // If hash available, force objType to front
+    if (!objTypeExclude && mdbObj->varHash != NULL)
+        {
+        mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
+        dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+        }
+    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+        {
+        if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
+            {
+            if (mdbVar->varType == vtTxt)
+                dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            }
+        }
+    char *line = dyStringCannibalize(&dyLine);
+    if (line)
+        {
+        int len = strlen(line);
+        if (len == 0)
+            {
+            freeMem(line);
+            return NULL;
+            }
+        if (line[len-1] == ' ')
+            line[len-1] = '\0';
+        return line;
+        }
+    }
+return NULL;
+}
+
 void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle)
 // prints objs and var=val pairs as formatted metadata lines or ra style
 {
@@ -1794,6 +1833,32 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     }
     if(words != NULL)
         freeMem(words);
+}
+
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
+// Removes var from set of mdbObjs but only if all that have it have a commmon val
+// Returns the val if removed, else NULL
+{
+char *val = NULL;
+struct mdbObj *mdb = NULL;
+for(mdb = mdbList; mdb; mdb=mdb->next)
+    {
+    char *thisVal = mdbObjFindValue(mdb,var);
+    if (thisVal == NULL) // If var isn't found in some, that is okay
+        continue;
+    if (val == NULL)
+        val = thisVal;
+    else if(differentWord(val,thisVal))
+        return NULL;
+    }
+
+if (val)
+    {
+    val = cloneString(val);
+    for(mdb = mdbList;mdb;mdb=mdb->next)
+        mdbObjRemoveVars(mdb,var);
+    }
+return val;
 }
 
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis)
