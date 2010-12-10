@@ -13090,7 +13090,7 @@ hgLoadBed hg19 darned allChroms.bed
     # once this has been QAed, will auto-update from genbank scripts
 
 #############################################################################
-# NEW SNP132 (IN PROGRESS 12/6/10 angie)
+# NEW SNP132 (IN PROGRESS 12/8/10 angie)
 
     mkdir -p /hive/data/outside/dbSNP/132test/human
     cd /hive/data/outside/dbSNP/132test/human
@@ -13122,17 +13122,22 @@ EOF
 #refAssemblyLabel CRA_TCAGchr7v2,Celera,GRCh37,HuRef
 #
 # *** Edit out any of those that are not included in hg19 (e.g. Celera).
-# *** Then restart this script with -continue=translate .
+# *** Then restart this script with -continue=loadDnSnp .
     # GRCh37 is the only one that corresponds to hg19, so add it to config.ra:
     echo "refAssemblyLabel GRCh37" >> config.ra
 
     # Try again with updated config:
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test -continue=translate >>& do.log &
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue=loadDbSnp >>& do.log &
     tail -f do.log
 
+    # Needed to tweak hg19-specific liftOver awk; run again from bigJoin but don't load:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin -stop translate >>& do.log &
+    tail -f do.log
 
-#############################################################################
 
 #############################################################################
 # Agilent arrays (2010-12-01 Andy)
@@ -13174,3 +13179,5 @@ for bed in agilent*.bed; do
     tail -n +2 $bed | hgLoadBed hg19 ${bed%.bed} stdin
 done
 rm bed.tab
+
+#############################################################################

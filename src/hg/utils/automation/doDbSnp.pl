@@ -14,10 +14,11 @@ use HgStepManager;
 
 
 my $stepper = new HgStepManager(
-    [ { name => 'download',   func => \&downloadFiles },
-#*** translate needs separate step for loading the local dbSNP db, so we don't have to 
-#*** drop the db every time we need to -continue translate.
-      { name => 'translate',  func => \&translateData },
+    [ { name => 'download',   func => \&download },
+      { name => 'loadDbSnp',  func => \&loadDbSnp },
+      { name => 'addToDbSnp', func => \&addToDbSnp },
+      { name => 'bigJoin',    func => \&bigJoin },
+      { name => 'translate',  func => \&translate },
       { name => 'load',       func => \&loadTables },
     ]
 			       );
@@ -40,7 +41,7 @@ my $groupLabelCol = 12;
 # This is for an hg19-specific mess: we unintentionally used a mitochondrion
 # that is not the revised Cambridge Reference Sequence (rCRS) that is the
 # standard.  dbSNP produces rCRS coords, which must be translated to our
-# chrM.  Since there are small indels, liftOver is required.  See snp131
+# chrM.  Since there are some indels, liftOver is required.  See snp131
 # section of makeDb/doc/hg19.txt for how this chain file was generated.
 my $hg19MitoLiftOver = '/hive/data/outside/dbSNP/131/human/NC_012920ToChrM.over.chain';
 
@@ -63,14 +64,20 @@ options:
 						'workhorse' => '$workhorse',
 					        'fileServer' => '$fileServer');
   print STDERR "
-Automates the first steps of building a genome database:
-    download:   FTP dbSNP database dump files from NCBI.  Examine them
-                for assembly IDs and halt if there is ambiguity that
-                needs to be resolved by developer.
-    translate:  Work the dbSNP tables and fasta headers into our local
-                BED+ representation.
-                Note: the workhorse machine used for this step must have mysql.
-    load:       Load snp* tables into our database.
+Automates our processing of dbSNP files into our snpNNN track:
+    download:   FTP dbSNP database dump files and flanking sequence fasta
+                from NCBI.
+    loadDbSnp:  Create a local mysql database and load the dbSNP files into
+                it, possibly excluding SNPs mapped to alternate assemblies
+                or contigs that we don't know how to lift to the reference.
+    addToDbSnp: Add information from fasta headers, and concatenated function
+                codes, to the local dbSNP mysql database.
+    bigJoin:    Run a large left-join query to extract the columns from
+                various dbSNP tables into our snpNNN columns and lift from
+                contigs up to chroms if necessary.
+    translate:  Run snpNcbiToUcsc on the join output to perform final checks
+                and conversion of numeric codes into strings.
+    load:       Load snpNNN* tables into our database.
 To see detailed information about what should appear in config.ra,
 run \"$base -help\".
 ";
@@ -265,7 +272,7 @@ sub checkConfig {
 #########################################################################
 # * step: download [fileServer]
 
-sub downloadFiles {
+sub download {
   # Fetch database dump files via anonymous FTP from NCBI
   # and translate dbSNP SQL to mySQL.
 #*** It would be nice to kick off the ftp of rs_fasta files in parallel because
@@ -333,11 +340,11 @@ _EOF_
     );
 
   $bossScript->execute();
-}
+} # download
 
 
 #########################################################################
-# * step: translate [workhorse]
+# * step: loadDbSnp [workhorse]
 
 sub translateSql {
   return if ($opt_debug);
@@ -400,7 +407,7 @@ sub getDbSnpAssemblyLabels {
     die "$assemblyLabelFile is empty -- has $ContigInfo format changed?";
   }
   return @labels;
-}
+} # getDbSnpAssemblyLabels
 
 
 sub demandAssemblyLabel {
@@ -424,7 +431,7 @@ _EOF_
 $refAssemblyLabelDef
 
  *** Edit out any of those that are not included in $db (e.g. Celera).
- *** Then restart this script with -continue=translate .
+ *** Then restart this script with -continue=loadDbSnp .
 
 _EOF_
     ;
@@ -556,24 +563,21 @@ sub checkSequenceNames {
 $ContigInfoLiftUp
 *** You must account for those in $CONFIG, in the liftUp file
 *** and/or the ignoreDbSnpContigs regex.
-*** Then run again with -continue=translate .
+*** Then run again with -continue=loadDbSnp .
 ";
   }
 } # checkSequenceNames
 
 
-sub translateData {
-  # Extract what we need from dbSNP's dump files and fasta headers.
-  # Part of this involves loading up some of their database tables
-  # locally and running a big left join query to pull the columns
-  # of interest together.
+sub loadDbSnp {
+  # Do some consistency checks, create a local mysql database, and load
+  # dbSNP's dump files into it.
   &translateSql();
   # Check for multiple reference assembly labels -- developer may need to exclude some.
   my @rejectLabels = &checkAssemblySpec();
   # Prepare grep -v statements to exclude assembly labels or contigs if specified:
   my $grepOutLabels = @rejectLabels ? "| egrep -vw '(" . join('|', @rejectLabels) . ")' " : "";
   my $grepOutContigs = $ignoreDbSnpContigs ? "| egrep -vw '$ignoreDbSnpContigs'" : "";
-  my $catOrGrepOutMito = ($db eq 'hg19') ? "grep -vw ^NC_012920" : "cat";
   my $runDir = "$buildDir/$commonName";
 
   &checkSequenceNames($runDir, $grepOutLabels, $grepOutContigs);
@@ -581,36 +585,36 @@ sub translateData {
   my $snpBase = "snp$build";
   my $tmpDb = $db . $snpBase;
   my $dataDir = "$runDir/data";
-  my $whatItDoes =
-"It loads a subset of dbSNP tables into a local mysql database,
-adds info from fasta headers to the local database $tmpDb,
-does a big join to pull the columns into the same order as in
-the final $snpBase table,
-lifts up contig coords to chrom if necessary,
-processes fasta headers while concatenating fasta into one
-giant file, and indexes the giant fasta file.";
-  my $bossScript = new HgRemoteScript("$runDir/translate.csh",
+  # mysql warnings about datetime values that end with non-integer
+  # seconds and missing values in numeric columns cause hgLoadSqlTab
+  # to return nonzero, and then this script terminates.  Fix datetimes
+  # and change missing values to \\N (mysql's file encoding of NULL):
+  my $cleanDbSnpSql = 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; ' .
+    's/\t(\t|\n)/\t\\\\N$1/g; s/\t(\t|\n)/\t\\\\N$1/g;';
+
+  my $whatItDoes = "It loads a subset of dbSNP tables into a local mysql database.";
+  my $bossScript = new HgRemoteScript("$runDir/loadDbSnp.csh",
 				      $workhorse, $runDir, $whatItDoes, $CONFIG);
   $bossScript->add(<<_EOF_
     # Work in local tmp disk to save some I/O time, and copy results back to
     # $runDir when done.
-    #*** HgAutomate should probably have a sub that generates these lines given a prefix:
-#breaks if TMPDIR not set -- which with -f I guess it wouldn't be:
-#    if ("\$TMPDIR" == "" || ! -d \$TMPDIR) then
-      if (-d /data/tmp) then
-        setenv TMPDIR /data/tmp
+
+    #*** HgAutomate should probably have a sub that generates these lines:
+    if (-d /data/tmp) then
+      setenv TMPDIR /data/tmp
+    else
+      if (-d /tmp) then
+        setenv TMPDIR /tmp
       else
-        if (-d /tmp) then
-          setenv TMPDIR /tmp
-        else
-          echo "Can't find TMPDIR"
-          exit 1
-        endif
+        echo "Can't find TMPDIR"
+        exit 1
       endif
-#    endif
+    endif
+
     set tmpDir = `mktemp -d \$TMPDIR/$base.translate.XXXXXX`
     chmod 775 \$tmpDir
-    pushd \$tmpDir
+    cd \$tmpDir
+    echo \$tmpDir > $runDir/workingDir
 
     # load dbSNP database tables into local mysql
     hgsql -e 'create database $tmpDb'
@@ -618,7 +622,7 @@ giant file, and indexes the giant fasta file.";
 
     foreach t ($ContigInfo $MapInfo $ContigLocusId)
       zcat $dataDir/\$t.bcp.gz $grepOutLabels $grepOutContigs\\
-      | perl -wpe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g;' \\
+      | perl -wpe '$cleanDbSnpSql' \\
       | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
     end
 
@@ -636,14 +640,9 @@ giant file, and indexes the giant fasta file.";
     # but we can clean those up afterward.
     zcat $dataDir/$ContigInfo.bcp.gz $grepOutLabels\\
     | cut -f $ctgIdCol | sort -n > $ContigInfo.ctg_id.txt
-    # mysql warnings about missing values in numeric columns cause hgLoadSqlTab
-    # to return nonzero, and then this script terminates.  So fix missing values
-    # to \\N (mysql's file representation of NULL):
     zcat $dataDir/$ContigLoc.bcp.gz \\
     | grep -Fwf $ContigInfo.ctg_id.txt \\
-    | perl -pe 's/(\\d\\d:\\d\\d:\\d\\d)\\.0/\$1/g; chomp; \@w = split("\\t"); \\
-                foreach \$col (5,6,10,14..21) { \$w[\$col] = "\\\\N" if (\$w[\$col] eq ""); } \\
-                \$_ = join("\\t", \@w) . "\\n";' \\
+    | perl -wpe '$cleanDbSnpSql' \\
     | hgLoadSqlTab -oldTable $tmpDb $ContigLoc placeholder stdin
     # There are usually some empty-value warnings to ignore.
     # Get rid of those false positives:
@@ -654,19 +653,49 @@ giant file, and indexes the giant fasta file.";
                          rename table ContigLocFix to $ContigLoc;'
 
     zcat $dataDir/SNP.bcp.gz \\
-    | perl -pe 's/(\\d\\d:\\d\\d:\\d\\d)\\.d+/\$1/g; chomp; \@w = split("\\t"); \\
-                foreach \$col (1..5,7..11) { \$w[\$col] = "\\\\N" if (\$w[\$col] eq ""); } \\
-                if (\$w[11] > 127) {} \\
-                \$_ = join("\\t", \@w) . "\\n";' \\
+    | perl -wpe '$cleanDbSnpSql' \\
     | hgLoadSqlTab -oldTable $tmpDb SNP placeholder stdin
 
-#*** Add SNPAllele etc.
+    # New additions to our pipeline as of 132:
 
-    foreach t ($ContigInfo $ContigLoc $ContigLocusId $MapInfo SNP)
-      hgsql -N -B $tmpDb -e 'select count(*) from '\$t
+    zcat $buildDir/shared/Allele.bcp.gz \\
+    | perl -wpe '$cleanDbSnpSql' \\
+    | hgLoadSqlTab -oldTable $tmpDb Allele placeholder stdin
+
+    foreach t (Batch SNPAlleleFreq SNPSubSNPLink SNP_bitfield SubSNP)
+      zcat $dataDir/\$t.bcp.gz \\
+      | perl -wpe '$cleanDbSnpSql' \\
+      | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
     end
 
-    #################### EXTRACT INFO FROM NCBI TABLES ####################
+    foreach t ($ContigInfo $ContigLoc $ContigLocusId $MapInfo SNP \\
+               Allele Batch SNPAlleleFreq SNPSubSNPLink SNP_bitfield SubSNP)
+      hgsql -N -B $tmpDb -e 'select count(*) from '\$t
+    end
+_EOF_
+		  );
+
+  $bossScript->execute();
+} # loadDbSnp
+
+
+#########################################################################
+# * step: addToDbSnp [workhorse]
+
+sub addToDbSnp {
+  my $runDir = "$buildDir/$commonName";
+  my $snpBase = "snp$build";
+  my $tmpDb = $db . $snpBase;
+  my $whatItDoes =
+"It pre-processes functional annotations into a new table $tmpDb.ucscFunc
+and extracts info from fasta headers into a new table $tmpDb.ucscGnl.";
+
+  my $bossScript = new HgRemoteScript("$runDir/addToDbSnp.csh",
+				      $workhorse, $runDir, $whatItDoes, $CONFIG);
+  $bossScript->add(<<_EOF_
+    set tmpDir = `cat $runDir/workingDir`
+    cd \$tmpDir
+
     # Glom each SNP's function codes together and load up a new $tmpDb table.
     # Also extract NCBI's annotations of coding SNPs' effects on translation.
     # We extract $ContigLocusId info only for reference assembly mapping.
@@ -768,6 +797,30 @@ EOF
     hgsql $tmpDb -e \\
       'alter table SNP        add index (snp_id); \\
        alter table $MapInfo    add index (snp_id);'
+_EOF_
+		  );
+
+  $bossScript->execute();
+} # addToDbSnp
+
+
+#########################################################################
+# * step: bigJoin [workhorse]
+
+sub bigJoin {
+  my $runDir = "$buildDir/$commonName";
+  my $snpBase = "snp$build";
+  my $tmpDb = $db . $snpBase;
+  my $catOrGrepOutMito = ($db eq 'hg19') ? "grep -vw ^NC_012920" : "cat";
+  my $whatItDoes =
+"It does a large left join to bring together all of the columns that we want
+in $snpBase.";
+
+  my $bossScript = new HgRemoteScript("$runDir/bigJoin.csh",
+				      $workhorse, $runDir, $whatItDoes, $CONFIG);
+  $bossScript->add(<<_EOF_
+    set tmpDir = `cat $runDir/workingDir`
+    cd \$tmpDir
 
 #***TODO: add SNPAlleleFreq to this query and snpNcbiToUcsc (bitfield/"clinical" too)
 
@@ -848,7 +901,31 @@ _EOF_
   }
     $bossScript->add(<<_EOF_
     wc -l ucscNcbiSnp.bed
-#34610476 ucscNcbiSnp.bed
+_EOF_
+		  );
+
+  $bossScript->execute();
+} # bigJoin
+
+
+#########################################################################
+# * step: translate [workhorse]
+
+sub translate {
+  my $runDir = "$buildDir/$commonName";
+  my $snpBase = "snp$build";
+  my $tmpDb = $db . $snpBase;
+  my $whatItDoes =
+"It runs snpNcbiToUcsc to make final $snpBase.* files for loading,
+concatenates flanking sequence fasta files into one giant indexed file,
+cleans up intermediate files and moves results from the temporary
+working directory to $runDir.";
+
+  my $bossScript = new HgRemoteScript("$runDir/translate.csh",
+				      $workhorse, $runDir, $whatItDoes, $CONFIG);
+  $bossScript->add(<<_EOF_
+    set tmpDir = `cat $runDir/workingDir`
+    cd \$tmpDir
 
     # Translate NCBI's encoding into UCSC's, and perform a bunch of checks.
 #*** add output to endNotes:
@@ -881,16 +958,16 @@ _EOF_
 # $runDir
 gzip *.txt *.bed *.tab
 cp -p * $runDir/
-rm *
+rm \$tmpDir/*
 
 # return to $runDir and clean up tmpDir
-popd
+cd $runDir
 rmdir \$tmpDir
 _EOF_
     );
 
   $bossScript->execute();
-}
+} # translate
 
 
 #########################################################################
@@ -903,20 +980,17 @@ sub loadTables {
   my $bossScript = new HgRemoteScript("$runDir/load.csh",
 				      $dbHost, $runDir, $whatItDoes, $CONFIG);
   $bossScript->add(<<_EOF_
-    #*** HgAutomate should probably have a sub that generates these lines given a prefix:
-#breaks if TMPDIR not set -- which with -f I guess it wouldn't be:
-#    if ("\$TMPDIR" == "" || ! -d \$TMPDIR) then
-      if (-d /data/tmp) then
-        setenv TMPDIR /data/tmp
+    #*** HgAutomate should probably have a sub that generates these lines:
+    if (-d /data/tmp) then
+      setenv TMPDIR /data/tmp
+    else
+      if (-d /tmp) then
+        setenv TMPDIR /tmp
       else
-        if (-d /tmp) then
-          setenv TMPDIR /tmp
-        else
-          echo "Can't find TMPDIR"
-          exit 1
-        endif
+        echo "Can't find TMPDIR"
+        exit 1
       endif
-#    endif
+    endif
 
     # Load up main track tables.
     hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd \\
@@ -955,7 +1029,7 @@ _EOF_
 #*** Tell developer to ask cluster-admin to pack the $snpBase table (or whatever tables we'll push)
 #*** Show summaries e.g. exception breakdown to developer, esp. ones that dbSNP really should
 #*** be prodded about.
-}
+} # loadTables
 
 
 #########################################################################
