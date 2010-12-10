@@ -21,6 +21,7 @@ noInherit on
 wgEncode 1
 
     track wgEncodeGisRnaPetViewClusters
+    release alpha
     shortLabel Clusters
     view Clusters
     visibility full
@@ -233,6 +234,7 @@ wgEncode 1
         # subId=2120 dateSubmitted=2010-10-09
 
     track wgEncodeGisRnaPetViewAlignments
+    release alpha
     shortLabel Alignments
     view Alignments
     visibility hide 
@@ -452,6 +454,7 @@ wgEncode 1
 
 # These settings are all copied from Riken Cage I am not sure if they are right
     track wgEncodeGisRnaPetViewMinusRawSig
+    release alpha
     shortLabel MinusRawSig
     view MinusRawSig
     visibility full
@@ -667,6 +670,7 @@ wgEncode 1
 #These settings are all copied from RikeCage, I am not sure if they are right
 
     track wgEncodeGisRnaPetViewPlusRawSig
+    release alpha
     shortLabel PlusRawSig
     view PlusRawSig
     visibility full

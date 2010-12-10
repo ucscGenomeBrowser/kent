@@ -130,7 +130,6 @@ replicate 1
 restrictionEnzyme hpa
 softwareVersion SL605
 subId 887
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1H1hescMsp
@@ -151,7 +150,6 @@ replicate 1
 restrictionEnzyme msp
 softwareVersion SL605
 subId 887
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Helas3HpaPcr2x
@@ -172,7 +170,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Helas3MspPcr2x
@@ -193,7 +190,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Hepg2HpaPcr2x
@@ -214,7 +210,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1Hepg2MspPcr2x
@@ -235,7 +230,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep1K562Hpa
@@ -408,7 +402,6 @@ replicate 2
 restrictionEnzyme hpa
 softwareVersion SL659
 subId 887
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2H1hescMsp
@@ -429,7 +422,6 @@ replicate 2
 restrictionEnzyme msp
 softwareVersion SL659
 subId 887
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Helas3HpaPcr2x
@@ -450,7 +442,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Helas3MspPcr2x
@@ -471,7 +462,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Hepg2HpaPcr2x
@@ -492,7 +482,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2Hepg2MspPcr2x
@@ -513,7 +502,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 905
-treatment None
 view Alignments
 
 metaObject wgEncodeHudsonalphaMethylSeqAlignmentsRep2K562Hpa
@@ -686,7 +674,6 @@ replicate 1
 restrictionEnzyme hpa
 softwareVersion SL605
 subId 887
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1H1hescMsp
@@ -707,7 +694,6 @@ replicate 1
 restrictionEnzyme msp
 softwareVersion SL605
 subId 887
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Helas3HpaPcr2x
@@ -728,7 +714,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Helas3MspPcr2x
@@ -749,7 +734,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Hepg2HpaPcr2x
@@ -770,7 +754,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme hpa
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1Hepg2MspPcr2x
@@ -791,7 +774,6 @@ protocol PCR2x
 replicate 1
 restrictionEnzyme msp
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep1K562Hpa
@@ -964,7 +946,6 @@ replicate 2
 restrictionEnzyme hpa
 softwareVersion SL659
 subId 887
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2H1hescMsp
@@ -985,7 +966,6 @@ replicate 2
 restrictionEnzyme msp
 softwareVersion SL659
 subId 887
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Helas3HpaPcr2x
@@ -1006,7 +986,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Helas3MspPcr2x
@@ -1027,7 +1006,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Hepg2HpaPcr2x
@@ -1048,7 +1026,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme hpa
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2Hepg2MspPcr2x
@@ -1069,7 +1046,6 @@ protocol PCR2x
 replicate 2
 restrictionEnzyme msp
 subId 905
-treatment None
 view RawData
 
 metaObject wgEncodeHudsonalphaMethylSeqRawDataRep2K562Hpa
@@ -1125,6 +1101,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02es
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
 objType table
@@ -1141,6 +1118,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Bg02esebd
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Gm12878
 objType table
@@ -1214,7 +1192,23 @@ restrictionEnzyme None
 softwareVersion SL605
 subId 887
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H1hesc
-treatment None
+view Regions
+
+metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
+objType table
+cell H9ES
+composite wgEncodeHudsonalphaMethylSeq
+dataType MethylSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-02-10
+dateUnrestricted 2009-11-10
+fileName wgEncodeHudsonalphaMethylSeqRegionsRep1H9es.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+replicate 1
+subId 204
+tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9es
 view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
@@ -1232,6 +1226,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpNeg
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
 objType table
@@ -1248,6 +1243,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esafpPos
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
 objType table
@@ -1264,6 +1260,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9escm
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
 objType table
@@ -1280,6 +1277,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9ese
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
 objType table
@@ -1296,6 +1294,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9eseb
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
 objType table
@@ -1312,6 +1311,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1H9esebd
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
 objType table
@@ -1328,6 +1328,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hal
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
 objType table
@@ -1344,6 +1345,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hct116
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x
 objType table
@@ -1364,7 +1366,6 @@ restrictionEnzyme None
 softwareVersion MACS
 subId 905
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Helas3Pcr2x
-treatment None
 view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x
@@ -1386,7 +1387,6 @@ restrictionEnzyme None
 softwareVersion MACS
 subId 905
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hepg2Pcr2x
-treatment None
 view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
@@ -1404,6 +1404,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl11w
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
 objType table
@@ -1420,6 +1421,7 @@ project wgEncode
 replicate 1
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep1Hfl24w
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep1K562
 objType table
@@ -1454,6 +1456,7 @@ project wgEncode
 replicate 2
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Bg02esebd
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Gm12878
 objType table
@@ -1527,7 +1530,6 @@ restrictionEnzyme None
 softwareVersion SL659
 subId 887
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2H1hesc
-treatment None
 view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
@@ -1545,6 +1547,7 @@ project wgEncode
 replicate 2
 subId 204
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Hct116
+view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
 objType table
@@ -1565,7 +1568,6 @@ restrictionEnzyme None
 softwareVersion MACS
 subId 905
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Helas3Pcr2x
-treatment None
 view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x
@@ -1587,7 +1589,6 @@ restrictionEnzyme None
 softwareVersion MACS
 subId 905
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2Hepg2Pcr2x
-treatment None
 view Regions
 
 metaObject wgEncodeHudsonalphaMethylSeqRegionsRep2K562
@@ -1608,4 +1609,4 @@ subId 387
 tableName wgEncodeHudsonalphaMethylSeqRegionsRep2K562
 view Regions
 
-# MAGIC: -215291705
+# MAGIC: 1841333711

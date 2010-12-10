@@ -3607,13 +3607,13 @@ if (!psOutput)
     /* Print NCBI MapView anchor */
     if (sameString(database, "hg18"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=36\" TARGET=_blank class=\"topbar\">",
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=previous\" TARGET=_blank class=\"topbar\">",
             skipChr(chromName), winStart+1, winEnd);
         hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
         }
     if (sameString(database, "hg19"))
         {
-        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=37\" TARGET=_blank class=\"topbar\">",
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
             skipChr(chromName), winStart+1, winEnd);
         hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
         }

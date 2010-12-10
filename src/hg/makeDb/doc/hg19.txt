@@ -7856,6 +7856,9 @@ done
     hgLoadBed hg19 gnfAtlas2 gnfAtlas2.bed
     # Loaded 36357 elements of size 15
 
+    # Added knownToGnf1h table
+    hgMapToGene hg19 affyGnf1h knownGene knownToGnf1h
+
 ##########################################################################
 # BUILD NIBB IMAGE PROBES (DONE 2009-10-12 JK)
 
@@ -8378,7 +8381,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 11/1/10 angie)
+# NHGRI GWAS CATALOG (DONE 12/7/10 angie)
+# Updated 11/1/10
 # Updated 10/6/10
 # Updated 9/1/10
 # Updated 8/2/10
@@ -8404,7 +8408,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4791 elements of size 22
+#Loaded 4972 elements of size 22
 
 
 ######################################################################## 
@@ -13087,3 +13091,131 @@ hgLoadBed hg19 darned allChroms.bed
     ./bin/lsSnpPdbDbLoadStep hg19
     # once this has been QAed, will auto-update from genbank scripts
 #############################################################################
+
+#############################################################################
+# Agilent arrays (2010-12-01 Andy)
+cd /hive/data/genomes/hg19/bed/agilentProbes/
+# first move all the lifted versions out of the way
+mkdir lifted.2009-07-28/
+mv * lifted.2009-07-28/
+# FTP download from ftp.agilent.com using given user/pass from Anniek De-witte
+# (anniek_de-witte@agilent.com)
+# downloaded files are gzipped beds. The files are typically located in a 
+# directory called "FOR_UCSC" or something like that.  The user/pass and the
+# directory are deleted after it's confirmed they're received, so it's not
+# too helpful to mention specifics here.
+ftp -u user -p password ftp.agilent.com
+> cd directory
+> get 014693_D_BED_20100501.bed.gz
+> get 014698_D_BED_20100501.bed.gz
+> get 014950_D_BED_20100501.bed.gz
+> get 021529_D_BED_20100501.bed.gz
+> get 021850_D_BED_20100430.bed.gz
+> get 021924_D_BED_20100501.bed.gz
+> get 022060_D_BED_20100501.bed.gz
+> get 023642_D_BED_20100430.bed.gz
+> get 028081_D_BED_20101014.bed.gz
+> get 029830_D_BED_20100922.bed.gz
+# unzip everything
+gunzip *
+ln -s 022060_D_BED_20100501.bed agilent4x180k.bed
+ln -s 021529_D_BED_20100501.bed agilentCgh1x1m.bed
+ln -s 014693_D_BED_20100501.bed agilentCgh1x244k.bed
+ln -s 014698_D_BED_20100501.bed agilentCgh2x105k.bed
+ln -s 021850_D_BED_20100430.bed agilentCgh2x400k.bed
+ln -s 014950_D_BED_20100501.bed agilentCgh4x44k.bed
+ln -s 021924_D_BED_20100501.bed agilentCgh8x60k.bed
+ln -s 028081_D_BED_20101014.bed agilentCghSnp2x400k.bed
+ln -s 029830_D_BED_20100922.bed agilentCghSnp4x180k.bed
+ln -s 023642_D_BED_20100430.bed agilentHrd1x1m.bed
+for bed in agilent*.bed; do
+    tail -n +2 $bed | hgLoadBed hg19 ${bed%.bed} stdin
+done
+rm bed.tab
+
+
+#################################################################################
+# Rfam (2010-12-08 Melissa)
+#
+# This track contains genomic re-alignments of sequences from the Rfam full alignment
+# sets.  Rfam contains hand-curated alignments of RNA families (Rfam seed) that are 
+# used to train homology models.  These models are applied to finding family members
+# in human by searching GenBank contig sequences from human.  The hits that meet
+# a specific threshold (hand-curated for each family) are pruned to a maximal 
+# percent identity, to yield a larger set of the sequences in each family 
+# (Rfam full).  This track represents our best estimates of the genomic 
+# locations of each Rfam full hit, limiting to those with good alignments to
+# the genomic sequence.  Why didn't we do a liftUp using the genomic
+# coordinates of the contigs?  We don't have those coordinates.  In addition,
+# a sequence can align well to a contig, but not as well to the genome.
+#
+# This data is used in building UCSC Genes.
+#
+
+# Download Rfam.fasta.gz, which is the set of sequences aligned in Rfam full.
+mkdir -p /hive/data/outside/Rfam/110710/  
+cd /hive/data/outside/Rfam/110710/  
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/Rfam.fasta.gz
+gunzip Rfam.fasta.gz
+
+# Extract the subset annotated as in human
+grep -i "Homo Sapiens" Rfam.fasta |awk '{ print $1}' \
+   |sed 's/^>//' > human.sequenceIds.txt
+faSomeRecords Rfam.fasta human.sequenceIds.txt Rfam.human.fasta
+gzip Rfam.fasta
+
+# Align the human sequences to the genome, retaining the best and
+# near-best hits and limiting to those hits with good percent identity
+# and coverage.
+mkdir -p hg19
+blat -q=rna -minIdentity=85 /hive/data/genomes/hg19/hg19.2bit Rfam.human.fasta \
+    hg19/Rfam.psl
+pslCDnaFilter -globalNearBest=0.01 -minCover=0.85 hg19/Rfam.psl \
+    hg19/Rfam.bestHits.psl
+
+# Load
+hgLoadPsl -table="Rfam" hg19 hg19/Rfam.bestHits.psl
+
+
+
+#####################################################
+# Vista Enhancers (galt 2010-12-09 done)
+#
+# Vista from Lawrence-Berkeley has assayed
+# 301 human conserved non-coding intra- and inter-
+# genic elements for their ability to promote
+# lacZ in mouse embryos.  A positive looks like
+# a mouse with a purple spine.
+#
+
+mkdir /hive/data/genomes/hg19/bed/vistaEnhancers
+cd /hive/data/genomes/hg19/bed/vistaEnhancers
+
+# download data file from the vista browser (coordinates are for hg19)
+wget -O enhancerbrowser.datadownload.txt 'http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?page_size=100;show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1'
+
+# give elements with positive label a score of 900, 
+# give elements with negative label a score of 200.
+# print to 5-field bed file
+cat enhancerbrowser.datadownload.txt \
+        | grep ">" \
+        | sed -e 's#^<pre>##' \
+        | sed -e 's#</pre>$##' \
+        | grep "^>Human" \
+        | sed -e 's#^>Human|##' \
+        | tr :- ' ' \
+        | sed -e 's/positive/900/'\
+        | sed -e 's/negative/200/' \
+        | awk '{print $1"\t"$2"\t"$3"\telement_"$6"\t"$8}' \
+        | grep -P -v "^chr\t" \  
+        > vistaEnhancers.bed
+hgLoadBed hg19 vistaEnhancers vistaEnhancers.bed
+#Loaded 1339 elements of size 5
+
+
+# add to hg19/trackDb.ra
+track vistaEnhancers override
+url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+
+
+#####################################################

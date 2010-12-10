@@ -24,9 +24,8 @@ dafVersion      2.0
 # Lab info
 grant           Myers
 lab             HudsonAlpha
-dataType        MethylBead
-#Is this OK name with Flo
-compositeSuffix HaibMethylBead
+dataType        MethylArray
+compositeSuffix HaibMethylArray
 variables       cell,treatment
 assembly        hg19
 
@@ -40,4 +39,3 @@ longLabelPrefix  HudsonAlpha Methylation by Illumina Bead Arrays
 type             bed9
 hasReplicates    yes
 required         yes 
-

@@ -4,6 +4,9 @@
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
 
+#large composites
+# include uMassBrainHistone.ra
+
 track stsMap override
 visibility hide
 
@@ -1482,6 +1485,16 @@ track snp131NonClinical override
 snpSeqFile /gbdb/hg19/snp/snp131.fa
 
 track snp131 override
+release beta,public
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
+
+track snp131 override
 release alpha
 visibility hide
 chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
@@ -1806,3 +1819,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
         type netAlign hg19Patch2 chainHg19Patch2
         html chainNet
 	priority 5
+
+track vistaEnhancers override
+url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+

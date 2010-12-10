@@ -7,6 +7,6 @@ table refLink
     string protAcc;	"protein accession"
     uint geneName;	"pointer to geneName table"
     uint prodName;	"pointer to prodName table"
-    uint locusLinkId;	"Locus Link ID"
+    uint locusLinkId;	"Entrez ID (formerly LocusLink ID)"
     uint omimId;	"OMIM ID"
     )

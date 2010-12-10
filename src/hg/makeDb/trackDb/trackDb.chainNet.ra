@@ -1411,6 +1411,7 @@ chainLinearGap medium
 html chainNet
 
     track chainNetOryLat1Viewchain
+    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -1428,6 +1429,7 @@ html chainNet
         html chainNet
 
     track chainNetOryLat1Viewnet
+    release alpha
     shortLabel Net
     view net
     visibility full
@@ -2775,6 +2777,7 @@ spectrum on
 html chainNet
 
     track chainNetCavPor2Viewchain
+    release alpha
     shortLabel Chain
     view chain
     visibility pack
@@ -2791,6 +2794,7 @@ html chainNet
         html chainNet
 
     track chainNetCavPor2Viewnet
+    release alpha
     shortLabel Net
     view net
     visibility full
@@ -3699,6 +3703,7 @@ html chainNet
 
     track chainNetFelCatV17eViewchain
     shortLabel Chain
+    release alpha
     view chain
     visibility pack
     parent chainNetFelCatV17e
@@ -3706,6 +3711,7 @@ html chainNet
 
         track chainFelCatV17e
         parent chainNetFelCatV17eViewchain
+        release alpha
         subGroups view=chain
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
@@ -3713,12 +3719,14 @@ html chainNet
         html chainNet
 
     track chainNetFelCatV17eViewnet
+    release alpha
     shortLabel Net
     view net
     visibility full
     parent chainNetFelCatV17e
 
         track netFelCatV17e
+        release alpha
         parent chainNetFelCatV17eViewnet
         subGroups view=net
         shortLabel $o_Organism Net

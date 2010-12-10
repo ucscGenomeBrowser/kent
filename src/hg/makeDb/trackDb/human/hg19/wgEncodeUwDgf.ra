@@ -1,12 +1,31 @@
 
 
 # UW DGF (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Track Long Label:  DNaseI Digital Genomic Fingerprinting from ENCODE/University of Washington
+#	- Track Short Label: UW DNaseI DGF
+#       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW 
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier.
+#       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
+#	- Default View selections
+#		- Hotspots = pack
+#		- Peaks = pack
+#		- Signal = full
+#		- Raw Signal = hide
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
+#       - Short Labels: 
+#               Template: [cell] [view] 
+#               - Views: For consistency sake view will be two letters
+#			- Hot Spots =
+#                       - Peaks = Pk
+#                       - Signal = Sig
+#                       - Raw Signal = 
 
 track wgEncodeUwDgf
 compositeTrack on
 superTrack wgEncodeDNAseSuper dense
-shortLabel UW DNase DGF
-longLabel Digital DNase Genomic Footprinting from ENCODE/Univ. of Washington
+shortLabel UW DNaseI DGF
+longLabel DNaseI Digital Genomic Fingerprinting from ENCODE/University of Washington
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
@@ -36,7 +55,7 @@ wgEncode 1
         track wgEncodeUwDgfGm06990Hotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel GM06990
-        longLabel GM06990 Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel GM06990 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=GM06990
         type broadPeak
         # subId=1682 dateSubmitted=2010-06-21
@@ -44,7 +63,7 @@ wgEncode 1
         track wgEncodeUwDgfSknshraHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel SK-N-SH_RA
-        longLabel SK-N-SH_RA Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel SK-N-SH_RA DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKNSHRA
         type broadPeak
         # subId=1795 dateSubmitted=2010-06-21
@@ -52,7 +71,7 @@ wgEncode 1
         track wgEncodeUwDgfHepg2Hotspots
         parent wgEncodeUwDgfViewHotspots 
         shortLabel HepG2
-        longLabel HepG2 Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel HepG2 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HepG2
         type broadPeak
         color 189,0,157
@@ -61,7 +80,7 @@ wgEncode 1
         track wgEncodeUwDgfK562Hotspots
         parent wgEncodeUwDgfViewHotspots
         shortLabel K562
-        longLabel K562 Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel K562 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=K562
         type broadPeak
         color 46,0,184
@@ -70,7 +89,7 @@ wgEncode 1
         track wgEncodeUwDgfTh1Hotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel Th1
-        longLabel Th1 Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel Th1 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=Th1
         type broadPeak
         # subId=1816 dateSubmitted=2010-06-21
@@ -78,7 +97,7 @@ wgEncode 1
         track wgEncodeUwDgfSkmcHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel SKMC
-        longLabel SKMC Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel SKMC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKMC
         type broadPeak
         # subId=2045 dateSubmitted=2010-07-25
@@ -86,7 +105,7 @@ wgEncode 1
         track wgEncodeUwDgfNhdfadHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel NHDF-Ad
-        longLabel NHDF-Ad Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel NHDF-Ad DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=NHDF-Ad
         type broadPeak
         # subId=2046 dateSubmitted=2010-07-25
@@ -94,7 +113,7 @@ wgEncode 1
         track wgEncodeUwDgfH7esHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel H7-hESC
-        longLabel H7-hESC Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel H7-hESC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=H7es
         type broadPeak
         # subId=2047 dateSubmitted=2010-07-25
@@ -102,7 +121,7 @@ wgEncode 1
         track wgEncodeUwDgfHaeHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HAEpiC
-        longLabel HAEpiC Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel HAEpiC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HAE
         type broadPeak
         # subId=2048 dateSubmitted=2010-07-25
@@ -110,7 +129,7 @@ wgEncode 1
         track wgEncodeUwDgfHmfHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HMF
-        longLabel HMF Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel HMF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HMF
         type broadPeak
         # subId=2049 dateSubmitted=2010-07-25
@@ -118,7 +137,7 @@ wgEncode 1
         track wgEncodeUwDgfHcpeHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HCPEpiC
-        longLabel HCPEpiC Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel HCPEpiC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HCPE
         type broadPeak
         # subId=2050 dateSubmitted=2010-07-25
@@ -126,7 +145,7 @@ wgEncode 1
         track wgEncodeUwDgfHmvecdbladHotspots
         parent wgEncodeUwDgfViewHotspots off
         shortLabel HMVEC-dBl-Ad
-        longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Hotspots from ENCODE/UW
+        longLabel HMVEC-dBl-Ad DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HMVECdBlAd
         type broadPeak
         # subId=2051 dateSubmitted=2010-07-25
@@ -135,7 +154,7 @@ wgEncode 1
     track wgEncodeUwDgfViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility dense
+    visibility pack
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -147,7 +166,7 @@ wgEncode 1
         track wgEncodeUwDgfGm06990Pk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel GM06990 Pk
-        longLabel GM06990 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel GM06990 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=GM06990
         type narrowPeak
         # subId=1682 dateSubmitted=2010-06-21
@@ -155,7 +174,7 @@ wgEncode 1
         track wgEncodeUwDgfSknshraPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel SK-N-SH_RA Pk
-        longLabel SK-N-SH_RA Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel SK-N-SH_RA DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA
         type narrowPeak
         # subId=1795 dateSubmitted=2010-06-21
@@ -163,7 +182,7 @@ wgEncode 1
         track wgEncodeUwDgfHepg2Pk
         parent wgEncodeUwDgfViewPeaks 
         shortLabel HepG2 Pk
-        longLabel HepG2 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel HepG2 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HepG2
         type narrowPeak
         color 189,0,157
@@ -172,7 +191,7 @@ wgEncode 1
         track wgEncodeUwDgfK562Pk
         parent wgEncodeUwDgfViewPeaks
         shortLabel K562 Pk
-        longLabel K562 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel K562 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=K562
         type narrowPeak
         color 46,0,184
@@ -181,7 +200,7 @@ wgEncode 1
         track wgEncodeUwDgfTh1Pk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel Th1 Pk
-        longLabel Th1 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel Th1 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=Th1
         type narrowPeak
         # subId=1816 dateSubmitted=2010-06-21
@@ -189,7 +208,7 @@ wgEncode 1
         track wgEncodeUwDgfSkmcPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel SKMC Pk
-        longLabel SKMC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel SKMC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=SKMC
         type narrowPeak
         # subId=2045 dateSubmitted=2010-07-25
@@ -197,7 +216,7 @@ wgEncode 1
         track wgEncodeUwDgfNhdfadPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel NHDF-Ad Pk
-        longLabel NHDF-Ad Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel NHDF-Ad DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=NHDF-Ad
         type narrowPeak
         # subId=2046 dateSubmitted=2010-07-25
@@ -205,7 +224,7 @@ wgEncode 1
         track wgEncodeUwDgfH7esPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel H7-hESC Pk
-        longLabel H7-hESC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel H7-hESC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=H7es
         type narrowPeak
         # subId=2047 dateSubmitted=2010-07-25
@@ -213,7 +232,7 @@ wgEncode 1
         track wgEncodeUwDgfHaePk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HAEpiC Pk
-        longLabel HAEpiC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel HAEpiC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HAE
         type narrowPeak
         # subId=2048 dateSubmitted=2010-07-25
@@ -221,7 +240,7 @@ wgEncode 1
         track wgEncodeUwDgfHmfPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HMF Pk
-        longLabel HMF Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel HMF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HMF
         type narrowPeak
         # subId=2049 dateSubmitted=2010-07-25
@@ -229,7 +248,7 @@ wgEncode 1
         track wgEncodeUwDgfHcpePk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HCPEpiC Pk
-        longLabel HCPEpiC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel HCPEpiC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HCPE
         type narrowPeak
         # subId=2050 dateSubmitted=2010-07-25
@@ -237,7 +256,7 @@ wgEncode 1
         track wgEncodeUwDgfHmvecdbladPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel HMVEC-dBl-Ad Pk
-        longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
+        longLabel HMVEC-dBl-Ad DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdBlAd
         type narrowPeak
         # subId=2051 dateSubmitted=2010-07-25
@@ -258,7 +277,7 @@ wgEncode 1
         track wgEncodeUwDgfGm06990Sig
         parent wgEncodeUwDgfViewSignal off
         shortLabel GM06990 Sig
-        longLabel GM06990 Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel GM06990 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=GM06990
         type bigWig 1.000000 9745.000000
         # subId=1682 dateSubmitted=2010-06-21
@@ -266,7 +285,7 @@ wgEncode 1
         track wgEncodeUwDgfSknshraSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel SK-N-SH_RA Sig
-        longLabel SK-N-SH_RA Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel SK-N-SH_RA DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=SKNSHRA
         type bigWig 1.000000 6713.000000
         # subId=1795 dateSubmitted=2010-06-21
@@ -274,7 +293,7 @@ wgEncode 1
         track wgEncodeUwDgfHepg2Sig
         parent wgEncodeUwDgfViewSignal 
         shortLabel HepG2 Sig
-        longLabel HepG2 Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel HepG2 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=HepG2
         type bigWig 1.000000 23188.000000
         color 189,0,157
@@ -283,7 +302,7 @@ wgEncode 1
         track wgEncodeUwDgfK562Sig
         parent wgEncodeUwDgfViewSignal
         shortLabel K562 Sig
-        longLabel K562 Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel K562 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=K562
         type bigWig 1.000000 70530.000000
         color 46,0,184
@@ -292,7 +311,7 @@ wgEncode 1
         track wgEncodeUwDgfTh1Sig
         parent wgEncodeUwDgfViewSignal off
         shortLabel Th1 Sig
-        longLabel Th1 Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel Th1 DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=Th1
         type bigWig 1.000000 15550.000000
         # subId=1816 dateSubmitted=2010-06-21
@@ -300,7 +319,7 @@ wgEncode 1
         track wgEncodeUwDgfSkmcSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel SKMC Sig
-        longLabel SKMC Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel SKMC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=SKMC
         type bigWig 1.000000 31113.000000
         # subId=2045 dateSubmitted=2010-07-25
@@ -308,7 +327,7 @@ wgEncode 1
         track wgEncodeUwDgfNhdfadSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel NHDF-Ad Sig
-        longLabel NHDF-Ad Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel NHDF-Ad DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=NHDF-Ad
         type bigWig 1.000000 25248.000000
         # subId=2046 dateSubmitted=2010-07-25
@@ -316,7 +335,7 @@ wgEncode 1
         track wgEncodeUwDgfH7esSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel H7-hESC Sig
-        longLabel H7-hESC Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel H7-hESC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=H7es
         type bigWig 1.000000 99682.000000
         # subId=2047 dateSubmitted=2010-07-25
@@ -324,7 +343,7 @@ wgEncode 1
         track wgEncodeUwDgfHaeSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel HAEpiC Sig
-        longLabel HAEpiC Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel HAEpiC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=HAE
         type bigWig 1.000000 30034.000000
         # subId=2048 dateSubmitted=2010-07-25
@@ -332,7 +351,7 @@ wgEncode 1
         track wgEncodeUwDgfHmfSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel HMF Sig
-        longLabel HMF Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel HMF DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=HMF
         type bigWig 1.000000 77693.000000
         # subId=2049 dateSubmitted=2010-07-25
@@ -340,7 +359,7 @@ wgEncode 1
         track wgEncodeUwDgfHcpeSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel HCPEpiC Sig
-        longLabel HCPEpiC Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel HCPEpiC DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=HCPE
         type bigWig 1.000000 28712.000000
         # subId=2050 dateSubmitted=2010-07-25
@@ -348,7 +367,7 @@ wgEncode 1
         track wgEncodeUwDgfHmvecdbladSig
         parent wgEncodeUwDgfViewSignal off
         shortLabel HMVEC-dBl-Ad Sig
-        longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Per-base signal from ENCODE/UW
+        longLabel HMVEC-dBl-Ad DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=HMVECdBlAd
         type bigWig 1.000000 34767.000000
         # subId=2051 dateSubmitted=2010-07-25
@@ -368,24 +387,24 @@ wgEncode 1
 
         track wgEncodeUwDgfGm06990Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel GM06990 Raw
-        longLabel GM06990 Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel GM06990 
+        longLabel GM06990 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=GM06990
         type bigWig 1.000000 57178.000000
         # subId=1682 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSknshraRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SK-N-SH_RA Raw
-        longLabel SK-N-SH_RA Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel SK-N-SH_RA
+        longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKNSHRA
         type bigWig 1.000000 36298.000000
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HepG2 Raw
-        longLabel HepG2 Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel HepG2
+        longLabel HepG2 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HepG2
         type bigWig 1.000000 102081.000000
         color 189,0,157
@@ -393,8 +412,8 @@ wgEncode 1
 
         track wgEncodeUwDgfK562Raw
         parent wgEncodeUwDgfViewzRaw
-        shortLabel K562 Raw
-        longLabel K562 Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel K562
+        longLabel K562 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=K562
         type bigWig 1.000000 218367.000000
         color 46,0,184
@@ -402,64 +421,64 @@ wgEncode 1
 
         track wgEncodeUwDgfTh1Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th1 Raw
-        longLabel Th1 Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel Th1
+        longLabel Th1 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=Th1
         type bigWig 1.000000 108696.000000
         # subId=1816 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSkmcRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SKMC Raw
-        longLabel SKMC Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel SKMC
+        longLabel SKMC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKMC
         type bigWig 1.000000 178347.000000
         # subId=2045 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfNhdfadRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel NHDF-Ad Raw
-        longLabel NHDF-Ad Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel NHDF-Ad
+        longLabel NHDF-Ad DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=NHDF-Ad
         type bigWig 1.000000 91896.000000
         # subId=2046 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfH7esRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel H7-hESC Raw
-        longLabel H7-hESC Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel H7-hESC
+        longLabel H7-hESC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=H7es
         type bigWig 1.000000 326258.000000
         # subId=2047 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHaeRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HAEpiC Raw
-        longLabel HAEpiC Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel HAEpiC
+        longLabel HAEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HAE
         type bigWig 1.000000 110519.000000
         # subId=2048 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmfRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HMF Raw
-        longLabel HMF Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel HMF
+        longLabel HMF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HMF
         type bigWig 1.000000 220489.000000
         # subId=2049 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHcpeRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HCPEpiC Raw
-        longLabel HCPEpiC Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel HCPEpiC
+        longLabel HCPEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HCPE
         type bigWig 1.000000 96000.000000
         # subId=2050 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmvecdbladRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HMVEC-dBl-Ad Raw
-        longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Raw signal from ENCODE/UW
+        shortLabel HMVEC-dBl-Ad
+        longLabel HMVEC-dBl-Ad DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HMVECdBlAd
         type bigWig 1.000000 145895.000000
         # subId=2051 dateSubmitted=2010-07-25
