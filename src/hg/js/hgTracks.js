@@ -1555,7 +1555,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    if(window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
+                    if(window.open("../cgi-bin/hgc?g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
                         windowOpenFailedMsg();
                     }
                 } else {
@@ -2064,6 +2064,8 @@ function handleUpdateTrackMap(response, status)
                 limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
             if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
                 alert("There are too many items to display the track in " + this.newVisibility + " mode.");
+            var rec = trackDbJson[this.id];
+            rec.limitedVis = json[this.id].limitedVis;
             updateVisibility(this.id, visibility);
         } else {
             showWarning("Invalid trackDbJson received from the server");
