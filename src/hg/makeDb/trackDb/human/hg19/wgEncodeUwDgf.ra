@@ -16,10 +16,10 @@
 #       - Short Labels: 
 #               Template: [cell] [view] 
 #               - Views: For consistency sake view will be two letters
-#			- Hot Spots =
+#			- Hot Spots = Hspt
 #                       - Peaks = Pk
 #                       - Signal = Sig
-#                       - Raw Signal = 
+#                       - Raw Signal = Raw
 
 track wgEncodeUwDgf
 compositeTrack on
@@ -29,7 +29,7 @@ longLabel DNaseI Digital Genomic Fingerprinting from ENCODE/University of Washin
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
-subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1) HepG2=HepG2&nbsp;(Tier_2) GM06990=GM06990 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad NHDF-Ad=NHDF-Ad SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
+subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HepG2=HepG2&nbsp;(Tier_2) GM06990=GM06990 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad NHDF-Ad=NHDF-Ad SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 noInherit on
@@ -54,7 +54,7 @@ wgEncode 1
 
         track wgEncodeUwDgfGm06990Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel GM06990
+        shortLabel GM06990 Hspt
         longLabel GM06990 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=GM06990
         type broadPeak
@@ -62,7 +62,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel SK-N-SH_RA
+        shortLabel SK-N-SH_RA Hspt
         longLabel SK-N-SH_RA DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKNSHRA
         type broadPeak
@@ -70,25 +70,25 @@ wgEncode 1
 
         track wgEncodeUwDgfHepg2Hotspots
         parent wgEncodeUwDgfViewHotspots 
-        shortLabel HepG2
+        shortLabel HepG2 Hspt
         longLabel HepG2 DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=HepG2
+        subGroups view=Hotspots cellType=2HepG2
         type broadPeak
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Hotspots
         parent wgEncodeUwDgfViewHotspots
-        shortLabel K562
+        shortLabel K562 Hspt
         longLabel K562 DNaseI DGF Hotspots from ENCODE/UW
-        subGroups view=Hotspots cellType=K562
+        subGroups view=Hotspots cellType=1K562
         type broadPeak
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfTh1Hotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel Th1
+        shortLabel Th1 Hspt
         longLabel Th1 DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=Th1
         type broadPeak
@@ -96,7 +96,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSkmcHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel SKMC
+        shortLabel SKMC Hspt
         longLabel SKMC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKMC
         type broadPeak
@@ -104,7 +104,7 @@ wgEncode 1
 
         track wgEncodeUwDgfNhdfadHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel NHDF-Ad
+        shortLabel NHDF-Ad Hspt
         longLabel NHDF-Ad DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=NHDF-Ad
         type broadPeak
@@ -112,7 +112,7 @@ wgEncode 1
 
         track wgEncodeUwDgfH7esHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel H7-hESC
+        shortLabel H7-hESC Hspt
         longLabel H7-hESC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=H7es
         type broadPeak
@@ -120,7 +120,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHaeHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel HAEpiC
+        shortLabel HAEpiC Hspt
         longLabel HAEpiC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HAE
         type broadPeak
@@ -128,7 +128,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHmfHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel HMF
+        shortLabel HMF Hspt
         longLabel HMF DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HMF
         type broadPeak
@@ -136,7 +136,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHcpeHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel HCPEpiC
+        shortLabel HCPEpiC Hspt
         longLabel HCPEpiC DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HCPE
         type broadPeak
@@ -144,7 +144,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHmvecdbladHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel HMVEC-dBl-Ad
+        shortLabel HMVEC-dBl-Ad Hspt
         longLabel HMVEC-dBl-Ad DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HMVECdBlAd
         type broadPeak
@@ -183,7 +183,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks 
         shortLabel HepG2 Pk
         longLabel HepG2 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=HepG2
+        subGroups view=Peaks cellType=2HepG2
         type narrowPeak
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
@@ -192,7 +192,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewPeaks
         shortLabel K562 Pk
         longLabel K562 DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=K562
+        subGroups view=Peaks cellType=1K562
         type narrowPeak
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
@@ -294,7 +294,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal 
         shortLabel HepG2 Sig
         longLabel HepG2 DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=HepG2
+        subGroups view=Signal cellType=2HepG2
         type bigWig 1.000000 23188.000000
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
@@ -303,7 +303,7 @@ wgEncode 1
         parent wgEncodeUwDgfViewSignal
         shortLabel K562 Sig
         longLabel K562 DNaseI DGF Per-base Signal from ENCODE/UW
-        subGroups view=Signal cellType=K562
+        subGroups view=Signal cellType=1K562
         type bigWig 1.000000 70530.000000
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
@@ -387,7 +387,7 @@ wgEncode 1
 
         track wgEncodeUwDgfGm06990Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel GM06990 
+        shortLabel GM06990 Raw 
         longLabel GM06990 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=GM06990
         type bigWig 1.000000 57178.000000
@@ -395,7 +395,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SK-N-SH_RA
+        shortLabel SK-N-SH_RA Raw
         longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKNSHRA
         type bigWig 1.000000 36298.000000
@@ -403,25 +403,25 @@ wgEncode 1
 
         track wgEncodeUwDgfHepg2Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HepG2
+        shortLabel HepG2 Raw
         longLabel HepG2 DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=HepG2
+        subGroups view=zRaw cellType=2HepG2
         type bigWig 1.000000 102081.000000
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfK562Raw
         parent wgEncodeUwDgfViewzRaw
-        shortLabel K562
+        shortLabel K562 Raw
         longLabel K562 DNaseI DGF Raw Signal from ENCODE/UW
-        subGroups view=zRaw cellType=K562
+        subGroups view=zRaw cellType=1K562
         type bigWig 1.000000 218367.000000
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfTh1Raw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel Th1
+        shortLabel Th1 Raw
         longLabel Th1 DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=Th1
         type bigWig 1.000000 108696.000000
@@ -429,7 +429,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSkmcRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SKMC
+        shortLabel SKMC Raw
         longLabel SKMC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKMC
         type bigWig 1.000000 178347.000000
@@ -437,7 +437,7 @@ wgEncode 1
 
         track wgEncodeUwDgfNhdfadRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel NHDF-Ad
+        shortLabel NHDF-Ad Raw
         longLabel NHDF-Ad DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=NHDF-Ad
         type bigWig 1.000000 91896.000000
@@ -445,7 +445,7 @@ wgEncode 1
 
         track wgEncodeUwDgfH7esRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel H7-hESC
+        shortLabel H7-hESC Raw
         longLabel H7-hESC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=H7es
         type bigWig 1.000000 326258.000000
@@ -453,7 +453,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHaeRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HAEpiC
+        shortLabel HAEpiC Raw
         longLabel HAEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HAE
         type bigWig 1.000000 110519.000000
@@ -461,7 +461,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHmfRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HMF
+        shortLabel HMF Raw
         longLabel HMF DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HMF
         type bigWig 1.000000 220489.000000
@@ -469,7 +469,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHcpeRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HCPEpiC
+        shortLabel HCPEpiC Raw
         longLabel HCPEpiC DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HCPE
         type bigWig 1.000000 96000.000000
@@ -477,7 +477,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHmvecdbladRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel HMVEC-dBl-Ad
+        shortLabel HMVEC-dBl-Ad Raw
         longLabel HMVEC-dBl-Ad DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=HMVECdBlAd
         type bigWig 1.000000 145895.000000
