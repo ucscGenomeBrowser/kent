@@ -35,6 +35,22 @@
 #			- Stanford = L3
 #			- Duke = L4			
 
+#	- Pick one lab for Experiments that have more than 1 lab. Decision was based on largest size of files of both replicates added. The following tracks have been commented out and will be dropped as display 
+#	  when confirmation is reached with lab.:
+#	          Cell  	Lab
+#		- HEK293	UW
+#		- HepG2		Hudson Alpha
+#		- MCF-7		Stanford
+#		- MCF-7		UW
+#		- NT2-D1	UW
+#		Will display the following Cells from lab
+#                 Cell          Lab
+#               - HEK293        Stanford
+#               - HepG2         Duke
+#               - MCF-7         Duke
+#               - NT2-D1        Stanford
+
+
 track wgEncodeHaibMethylRrbs
 compositeTrack on
 superTrack wgEncodeDnaMethylSuper dense
@@ -46,10 +62,9 @@ subGroup2 view View Sites=Sites
 subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
 subGroup4 treatment Treatment None=None ANDRO=Methyltrienolone(androgen) TAM=Tamoxifen
 subGroup5 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Stanford=Stanford Duke=Duke
-dimensions dimensionX=obtainedBy dimensionY=cellType dimensionD=rep dimensionC=treatment 
-dimensionCchecked None
+dimensions dimensionX=treatment dimensionY=cellType dimensionD=rep
 dimensionDchecked rep1
-sortOrder cellType=+ obtainedBy=+ rep=+ treatment=+
+sortOrder cellType=+ rep=+ treatment=+
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment 
 dragAndDrop subTracks
 # visibilityViewDefaults  Sites=hide
@@ -175,13 +190,13 @@ origAssembly hg19
         type bed 9
         # subId=1223 dateSubmitted=2010-07-13
 
-        track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel MCF-7 L1 2
-        longLabel MCF-7 By UW Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=MCF7 obtainedBy=UW treatment=None rep=rep2
-        type bed 9
-        # subId=1223 dateSubmitted=2010-07-13
+#        track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel MCF-7 L1 2
+#        longLabel MCF-7 By UW Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=MCF7 obtainedBy=UW treatment=None rep=rep2
+#        type bed 9
+#        # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
@@ -207,21 +222,21 @@ origAssembly hg19
         type bed 9
         # subId=1223 dateSubmitted=2010-07-13
 
-        track wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel NT2-D1 L1 2
-        longLabel NT2-D1 By UW Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=NT2D1 obtainedBy=UW treatment=None rep=rep2
-        type bed 9
-        # subId=1223 dateSubmitted=2010-07-13
+#        track wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel NT2-D1 L1 2
+#        longLabel NT2-D1 By UW Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=NT2D1 obtainedBy=UW treatment=None rep=rep2
+#        type bed 9
+#        # subId=1223 dateSubmitted=2010-07-13
 
-        track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel MCF-7 L1 1
-        longLabel MCF-7 By UW Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=MCF7 obtainedBy=UW treatment=None rep=rep1
-        type bed 9
-        # subId=1223 dateSubmitted=2010-07-13
+#        track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel MCF-7 L1 1
+#        longLabel MCF-7 By UW Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=MCF7 obtainedBy=UW treatment=None rep=rep1
+#        type bed 9
+#        # subId=1223 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites off
@@ -506,23 +521,23 @@ origAssembly hg19
         color 0,107,27
         # subId=1152 dateSubmitted=2010-07-16
 
-        track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel HepG2 L2 1
-        longLabel HepG2 By HAIB Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=HepG2 obtainedBy=HAIB treatment=None rep=rep1
-        type bed 9
-        color 189,0,157
-        # subId=1152 dateSubmitted=2010-07-16
+#        track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel HepG2 L2 1
+#        longLabel HepG2 By HAIB Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=HepG2 obtainedBy=HAIB treatment=None rep=rep1
+#        type bed 9
+#        color 189,0,157
+#        # subId=1152 dateSubmitted=2010-07-16
 
-        track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel HepG2 L2 2
-        longLabel HepG2 By HAIB Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=HepG2 obtainedBy=HAIB treatment=None rep=rep2
-        type bed 9
-        color 189,0,157
-        # subId=1152 dateSubmitted=2010-07-16
+#        track wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel HepG2 L2 2
+#        longLabel HepG2 By HAIB Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=HepG2 obtainedBy=HAIB treatment=None rep=rep2
+#        type bed 9
+#        color 189,0,157
+#        # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
@@ -647,21 +662,21 @@ origAssembly hg19
         type bed 9
         # subId=1220 dateSubmitted=2010-07-13
 
-        track wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel HEK293 L1 1
-        longLabel HEK293 By UW Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=HEK293 obtainedBy=UW treatment=None rep=rep1
-        type bed 9
-        # subId=1220 dateSubmitted=2010-07-13
+#        track wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel HEK293 L1 1
+#        longLabel HEK293 By UW Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=HEK293 obtainedBy=UW treatment=None rep=rep1
+#        type bed 9
+#        # subId=1220 dateSubmitted=2010-07-13
 
-        track wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel HEK293 L1 2
-        longLabel HEK293 By UW Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=HEK293 obtainedBy=UW treatment=None rep=rep2
-        type bed 9
-        # subId=1220 dateSubmitted=2010-07-13
+#        track wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel HEK293 L1 2
+#        longLabel HEK293 By UW Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=HEK293 obtainedBy=UW treatment=None rep=rep2
+#        type bed 9
+#        # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites off
@@ -747,21 +762,21 @@ origAssembly hg19
         color 0,119,158
         # subId=2348 dateSubmitted=2010-09-22
 
-        track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel MCF-7 L3 2
-        longLabel MCF-7 By Stanford Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=MCF7 obtainedBy=Stanford treatment=None rep=rep2
-        type bed 9
-        # subId=2348 dateSubmitted=2010-09-22
+#        track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel MCF-7 L3 2
+#        longLabel MCF-7 By Stanford Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=MCF7 obtainedBy=Stanford treatment=None rep=rep2
+#        type bed 9
+#        # subId=2348 dateSubmitted=2010-09-22
 
-        track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
-        parent wgEncodeHaibRrbsViewSites off
-        shortLabel MCF-7 L3 1
-        longLabel MCF-7 By Stanford Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
-        subGroups view=Sites cellType=MCF7 obtainedBy=Stanford treatment=None rep=rep1
-        type bed 9
-        # subId=2348 dateSubmitted=2010-09-22
+#        track wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
+#        parent wgEncodeHaibRrbsViewSites off
+#        shortLabel MCF-7 L3 1
+#        longLabel MCF-7 By Stanford Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+#        subGroups view=Sites cellType=MCF7 obtainedBy=Stanford treatment=None rep=rep1
+#        type bed 9
+#        # subId=2348 dateSubmitted=2010-09-22
 
         track wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
