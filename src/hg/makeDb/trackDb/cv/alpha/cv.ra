@@ -2161,9 +2161,9 @@ type Cell Line
 organism Human
 description Human Renal Cortical Epithelial cells (normal)
 tissue Epithelium
-vendorName ScienCell
-vendorId #4110
-orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_32&products_id=44
+vendorName Lonza
+vendorId CC-2554
+orderUrl http://www.lonza.com/
 lineage
 karyotype normal
 termId BTO:0000059 (non-specific)

@@ -1,0 +1,155 @@
+track wgEncodePsuHistone
+compositeTrack on
+shortLabel PSU Histone
+longLabel Histone Modifications by ChIP-seq from ENCODE/PSU
+group regulation
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line  G1E=G1E G1E_E4_E2=G1E-E4+E2
+subGroup3 factor Factor Input=Input H3K4me1=H3K4me1 H3K4me3=H3K4me3 H3K27me3=H3K27me3
+subGroup4 sex Sex  M=M
+subGroup5 age Age E0=E0
+subGroup6 strain Strain S129=129 
+subGroup7 control Control Input=Input
+dimensions dimensionX=cellType dimensionY=factor
+sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
+controlledVocabulary encode/cv.ra cellType factor sex age strain control
+dragAndDrop subTracks
+visibilityViewDefaults  Peaks=dense Signal=full
+noInherit on
+priority 0
+type bed 3
+wgEncode 1
+
+
+        #####Peak Tracks###########
+	track wgEncodePsuHistoneViewPeaks
+	release alpha
+	shortLabel Peaks
+	view Peaks
+	visibility dense
+	#viewUi on
+	subTrack wgEncodePsuHistone
+	signalFilter 0
+	signalFilterLimits 0:18241
+	pValueFilter 0
+	pValueFilterLimits 0:300
+	qValueFilter 0
+	qValueFilterLimits 0:300
+
+        	track wgEncodePsuHistoneG1ee4e2H3k4me1ME0S129InputPk
+        	release alpha
+        	parent wgEncodePsuHistoneViewPeaks 
+        	shortLabel G1E-E4+E2 H3K4me1 Pk
+        	longLabel ENCODE PSU TFBS Peaks (H3K4me1 in G1E-E4+E2 cells)
+        	subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E_E4_E2 control=Input sex=M strain=S129
+        	type broadPeak
+        	color 153,38,0
+        	# subId=3040 dateSubmitted=2010-12-01
+
+	
+        	track wgEncodePsuHistoneG1ee4e2H3k27me3ME0S129InputPk
+        	release alpha
+        	parent wgEncodePsuHistoneViewPeaks 
+        	shortLabel G1E-E4+E2 H3K27me3 Pk
+        	longLabel ENCODE PSU TFBS Peaks (H3K27me3 in G1E-E4+E2 cells)
+        	subGroups view=Peaks age=E0 factor=H3K27me3 cellType=G1E_E4_E2 control=Input sex=M strain=S129
+        	type broadPeak
+        	color 153,38,0
+        	# subId=3039 dateSubmitted=2010-12-01
+
+	
+        	track wgEncodePsuHistoneG1ee4e2H3k4me3ME0S129InputPk
+        	release alpha
+        	parent wgEncodePsuHistoneViewPeaks 
+        	shortLabel G1E-E4+E2 H3K4me3 Pk
+        	longLabel ENCODE PSU TFBS Peaks (H3K4me3 in G1E-E4+E2 cells)
+        	subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E_E4_E2 control=Input sex=M strain=S129
+        	type broadPeak
+        	color 153,38,0
+        	# subId=3041 dateSubmitted=2010-12-02
+
+
+        	track wgEncodePsuHistoneG1eH3k4me3ME0S129InputPk
+        	release alpha
+        	parent wgEncodePsuHistoneViewPeaks 
+        	shortLabel G1E H3K4me3 Pk
+        	longLabel ENCODE PSU TFBS Peaks (H3K4me3 in G1E cells)
+        	subGroups view=Peaks age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
+        	type broadPeak
+        	color 153,38,0
+        	# subId=3042 dateSubmitted=2010-12-02
+
+        	track wgEncodePsuHistoneG1eH3k4me1ME0S129InputPk
+        	release alpha
+        	parent wgEncodePsuHistoneViewPeaks
+        	shortLabel G1E H3K4me1 Pk
+        	longLabel ENCODE PSU TFBS Peaks (H3K4me1 in G1E cells)
+        	subGroups view=Peaks age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
+        	type broadPeak
+        	color 153,38,0
+        	# subId=3043 dateSubmitted=2010-12-01
+
+        #####Signal Tracks###########
+	track wgEncodePsuHistoneViewSignal
+	release alpha
+	shortLabel Signal
+	view Signal
+	visibility full
+	#viewUi on
+	subTrack wgEncodePsuHistone
+	viewLimits 2:15
+	autoScale off
+	maxHeightPixels 100:16:16
+	windowingFunction mean
+
+      		track wgEncodePsuHistoneG1ee4e2H3k4me1ME0S129InputSig
+       		release alpha
+        	parent wgEncodePsuHistoneViewSignal
+        	shortLabel G1E-E4+E2 H3K4me1 Sig
+        	longLabel ENCODE PSU TFBS Signal (H3K4me1 in G1E-E4+E2 cells)
+        	subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E_E4_E2 control=Input sex=M strain=S129
+        	type bigWig 1.000000 158.000000
+        	color 153,38,0
+        	# subId=3040 dateSubmitted=2010-12-01
+
+        	track wgEncodePsuHistoneG1ee4e2H3k27me3ME0S129InputSig
+        	release alpha
+        	parent wgEncodePsuHistoneViewSignal 
+        	shortLabel G1E-E4+E2 H3K27me3 Sig
+        	longLabel ENCODE PSU TFBS Signal (H3K27me3 in G1E-E4+E2 cells)
+        	subGroups view=Signal age=E0 factor=H3K27me3 cellType=G1E_E4_E2 control=Input sex=M strain=S129
+        	type bigWig 1.000000 265.000000
+        	color 153,38,0
+        	# subId=3039 dateSubmitted=2010-12-01
+
+        	track wgEncodePsuHistoneG1ee4e2H3k4me3ME0S129InputSig
+        	release alpha
+        	parent wgEncodePsuHistoneViewSignal 
+        	shortLabel G1E-E4+E2 H3K4me3 Sig
+        	longLabel ENCODE PSU TFBS Signal (H3K4me3 in G1E-E4+E2 cells)
+        	subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E_E4_E2 control=Input sex=M strain=S129
+        	type bigWig 1.000000 336.000000
+        	color 153,38,0
+        	# subId=3041 dateSubmitted=2010-12-02
+
+        	track wgEncodePsuHistoneG1eH3k4me3ME0S129InputSig
+        	release alpha
+        	parent wgEncodePsuHistoneViewSignal 
+        	shortLabel G1E H3K4me3 Sig
+        	longLabel ENCODE PSU TFBS Signal (H3K4me3 in G1E cells)
+        	subGroups view=Signal age=E0 factor=H3K4me3 cellType=G1E control=Input sex=M strain=S129
+        	type bigWig 1.000000 300.000000
+        	color 153,38,0
+        	# subId=3042 dateSubmitted=2010-12-02
+
+        	track wgEncodePsuHistoneG1eH3k4me1ME0S129InputSig
+        	release alpha
+        	parent wgEncodePsuHistoneViewSignal 
+        	shortLabel G1E H3K4me1 Sig
+        	longLabel ENCODE PSU TFBS Signal (H3K4me1 in G1E cells)
+        	subGroups view=Signal age=E0 factor=H3K4me1 cellType=G1E control=Input sex=M strain=S129
+        	type bigWig 1.000000 144.000000
+        	color 153,38,0
+        	# subId=3043 dateSubmitted=2010-12-01
+
+
