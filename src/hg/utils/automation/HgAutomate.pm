@@ -77,6 +77,7 @@ my @allClusters = (keys %cluster);
         { root => '/hive/data/genomes', clusterLocality => 0.3,
 	  distrHost => ['swarm'], distrCommand => '',
 	  inputFor => ['memk', 'encodek', 'swarm'],
+	  outputFor => ['memk', 'encodek', 'swarm'], },
 #        { root => '/hive/data/genomes', clusterLocality => 0.3,
 #	  distrHost => ['pk', 'swarm'], distrCommand => '',
 #	  inputFor => ['pk', 'memk', 'encodek', 'swarm'],
