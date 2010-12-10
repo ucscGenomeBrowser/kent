@@ -13175,3 +13175,47 @@ pslCDnaFilter -globalNearBest=0.01 -minCover=0.85 hg19/Rfam.psl \
 
 # Load
 hgLoadPsl -table="Rfam" hg19 hg19/Rfam.bestHits.psl
+
+
+
+#####################################################
+# Vista Enhancers (galt 2010-12-09 done)
+#
+# Vista from Lawrence-Berkeley has assayed
+# 301 human conserved non-coding intra- and inter-
+# genic elements for their ability to promote
+# lacZ in mouse embryos.  A positive looks like
+# a mouse with a purple spine.
+#
+
+mkdir /hive/data/genomes/hg19/bed/vistaEnhancers
+cd /hive/data/genomes/hg19/bed/vistaEnhancers
+
+# download data file from the vista browser (coordinates are for hg19)
+wget -O enhancerbrowser.datadownload.txt 'http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?page_size=100;show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1'
+
+# give elements with positive label a score of 900, 
+# give elements with negative label a score of 200.
+# print to 5-field bed file
+cat enhancerbrowser.datadownload.txt \
+        | grep ">" \
+        | sed -e 's#^<pre>##' \
+        | sed -e 's#</pre>$##' \
+        | grep "^>Human" \
+        | sed -e 's#^>Human|##' \
+        | tr :- ' ' \
+        | sed -e 's/positive/900/'\
+        | sed -e 's/negative/200/' \
+        | awk '{print $1"\t"$2"\t"$3"\telement_"$6"\t"$8}' \
+        | grep -P -v "^chr\t" \  
+        > vistaEnhancers.bed
+hgLoadBed hg19 vistaEnhancers vistaEnhancers.bed
+#Loaded 1339 elements of size 5
+
+
+# add to hg19/trackDb.ra
+track vistaEnhancers override
+url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+
+
+#####################################################
