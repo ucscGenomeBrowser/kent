@@ -9,7 +9,7 @@
 //   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 
 // UNCOMMENT CONTEXT_MENU to allow right-click funtionality
-// #define CONTEXT_MENU
+#define CONTEXT_MENU
 
 //  UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
