@@ -853,7 +853,7 @@ struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **t
 // Make hash of trackDb items for this chromosome, including composites, not just the subtracks.
 // May pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
 #define makeTrackHashWithComposites(db,chrom,withComposites) trackHashMakeWithComposites(db,chrom,NULL,withComposites)
-#define makeTrackHash(db,chrom,FALSE) trackHashMakeWithComposites(db,chrom,NULL,FALSE)
+#define makeTrackHash(db,chrom) trackHashMakeWithComposites(db,chrom,NULL,FALSE)
 
 char *genePredDropDown(struct cart *cart, struct hash *trackHash,
                                         char *formName, char *varName);
