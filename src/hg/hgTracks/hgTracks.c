@@ -4031,7 +4031,7 @@ if (wikiTrackEnabled(database, NULL))
         addVariomeWikiTrack(&trackList);
     wikiDisconnect(&conn);
     }
-    
+
 #ifdef SOON
 loadDataHubs(&trackList);
 #endif /* SOON */
@@ -4055,7 +4055,9 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (s != NULL && !track->limitedVisSet)
 	track->visibility = hTvFromString(s);
-    if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
+    if (tdbIsCompositeChild(track->tdb))
+        track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
+    else if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
 	{
 	struct trackDb *parent = track->tdb->parent;
 	char *parentShow = NULL;
