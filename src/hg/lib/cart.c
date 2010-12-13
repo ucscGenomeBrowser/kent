@@ -2126,14 +2126,17 @@ if (visMax != visOrig || reshapeFully)
                     cartRemove(cart,subtrack->track);  // Remove it if it exists, just in case
                     countUnchecked++;
                     }
+                else if (visOrig != tvHide)
+                    {
+                    if (tdbIsMultiTrack(parent))
+                        cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited
+                    else
+                        cartSetString(cart,subtrack->track,hStringFromTv(visOrig));
+                    countVisChanged++;
+                    }
                 }
             else if (tdbIsMultiTrack(parent))
                 cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited vis and non-selected should not have vis
-            else if (visOrig != tvHide)
-                {
-                cartSetString(cart,subtrack->track,hStringFromTv(visOrig));
-                countVisChanged++;
-                }
             }
         }
     }
