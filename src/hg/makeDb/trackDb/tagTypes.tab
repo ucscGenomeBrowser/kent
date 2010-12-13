@@ -173,7 +173,7 @@ itemClassTbl bed genePred
 itemCount customTracks
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedGraph bed
+itemRgb bedDetail bedGraph bed
 linesAt chromGraph
 longLabel *
 longlabel genePred

@@ -13217,3 +13217,23 @@ url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&ex
     hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
 
 ##############################################################################
+
+##############################################################################
+# GAD View Lift (DONE, Andy 2010-12-12)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir gad
+cd gad/
+echo "select * from gad" | hgsql hg18 | tail -n +2 > hg18.bed
+liftOver hg18.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.{bed,unmapped}
+hgLoadBed -noBin hg19 gad hg19.bed
+rm bed.tab
+wc -l *.bed
+#  1883 hg18.bed
+#  1860 hg19.bed
+grep -i split hg19.unmapped | wc -l
+#18
+grep -i part hg19.unmapped | wc -l
+#5
+
+#############################################################################

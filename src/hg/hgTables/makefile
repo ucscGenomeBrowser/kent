@@ -20,6 +20,7 @@ rsyncDataOpts = --times --recursive --executability --omit-dir-times --cvs-exclu
 my::
 	rm -f ${CGI_BIN}-${USER}/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-${USER}
+	rm -rf ${CGI_BIN}-${USER}/greatData
 	rsync ${rsyncDataOpts} greatData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/greatData
 	chmod a+r ${CGI_BIN}-${USER}/all.joiner
@@ -28,6 +29,7 @@ my::
 alpha::
 	rm -f ${CGI_BIN}/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}
+	rm -rf ${CGI_BIN}/greatData
 	rsync ${rsyncDataOpts} greatData ${CGI_BIN}/
 	chmod -R a+rX ${CGI_BIN}/greatData
 	chmod a+r ${CGI_BIN}/all.joiner
@@ -36,6 +38,7 @@ alpha::
 beta::
 	rm -f ${CGI_BIN}-beta/all.joiner
 	cp ../makeDb/schema/all.joiner ${CGI_BIN}-beta
+	rm -rf ${CGI_BIN}-beta/greatData
 	rsync ${rsyncDataOpts} greatData ${CGI_BIN}-beta/
 	chmod -R a+rX ${CGI_BIN}-beta/greatData
 	chmod a+r ${CGI_BIN}-beta/all.joiner
@@ -44,6 +47,7 @@ beta::
 install::
 	rm -f ${DESTDIR}${CGI_BIN}/all.joiner
 	cp ../makeDb/schema/all.joiner ${DESTDIR}${CGI_BIN}
+	rm -rf ${DESTDIR}${CGI_BIN}/greatData
 	rsync ${rsyncDataOpts} greatData ${DESTDIR}${CGI_BIN}/
 	chmod -R a+rX ${DESTDIR}${CGI_BIN}/greatData
 	chmod a+r ${DESTDIR}${CGI_BIN}/all.joiner

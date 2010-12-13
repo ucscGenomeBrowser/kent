@@ -2651,6 +2651,8 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->track))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
+    if (sameString(tdb->type, "downloadsOnly")) // These tracks should not even be seen by6 hgTracks. (FIXME: Until we want to see them in cfg list and searchTracks!)
+        continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
     if (slCount(tdb->subtracks) != 0)
@@ -4022,7 +4024,14 @@ if (restrictionEnzymesOk())
     slSafeAddHead(&trackList, cuttersTg());
     }
 if (wikiTrackEnabled(database, NULL))
+    {
     addWikiTrack(&trackList);
+    struct sqlConnection *conn = wikiConnect();
+    if (sqlTableExists(conn, "variome"))
+        addVariomeWikiTrack(&trackList);
+    wikiDisconnect(&conn);
+    }
+    
 #ifdef SOON
 loadDataHubs(&trackList);
 #endif /* SOON */
