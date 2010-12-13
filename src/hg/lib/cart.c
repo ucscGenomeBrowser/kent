@@ -1748,7 +1748,10 @@ if (compositeLevel)
 for ( ; tdb != NULL; tdb = tdb->parent)
     {
     char buf[512];
-    safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
+    if (suffix[0] == '.' || suffix[0] == '_')
+        safef(buf, sizeof buf, "%s%s", tdb->track,suffix);
+    else
+        safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
     char *cartSetting = hashFindVal(cart->hash, buf);
     if (cartSetting != NULL)
 	{
