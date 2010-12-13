@@ -969,3 +969,607 @@ function codonColoringChanged(name)
     var val = $("select[name='" + name + ".baseColorDrawOpt'] option:selected").text();
     $("input[name='" + name + ".codonNumbering']").attr('disabled', val == "OFF");
 }
+
+
+//////////// Sorting ////////////
+// Sorting a table by columns relies upon the sortColumns structure
+
+// The sortColumns structure looks like:
+//{
+//    char *  tags[];     // a list of field names in sort order (e.g. 'cell', 'shortLabel')
+//    boolean reverse[];  // the sort direction for each sort field
+//    int     cellIxs[];  // The indexes of the columns in the table to be sorted
+//    boolean useAbbr[];  // Compare on Abbr or on innerHtml?
+//}
+// These 2 globals are used by setTimeout, so that rows can be hidden while sorting and javascript timeout is less likely
+var gSortColumns;
+var gTbody
+
+function tableSort(tbody,fnCompare,sortColumns)
+{// Sorts table based upon rules passed in by function reference
+ // Expects tbody to not sort thead, but could take table
+
+    // The sort routine available is javascript array.sort(), which cannot sort rows directly
+    // Until we have jQuery >=v1.4, we cannot easily convert tbody.rows[] inot a javascript array
+    // So we will make our own array, sort, then then walk through the table and reorder
+    // FIXME: Until better methods are developed, only sortOrder based sorts are supported and fnCompare is obsolete
+
+    // Create array of the primary sort column's text
+    var cols = new Array();
+    var trs = tbody.rows;
+    var cellIx = sortColumns.cellIxs[0];
+    var useAbbr = sortColumns.useAbbr[0];
+    $(trs).each(function(i) {
+        var th = this.cells[cellIx];
+        if(useAbbr)
+            cols.push(th.abbr);
+        else
+            cols.push($(th).text());
+    });
+
+    // Sort the array
+    cols.sort();
+    if(sortColumns.reverse[0])
+        cols.reverse();
+
+    // Now reorder the table
+    for(var cIx=0;cIx<cols.length;cIx++) {
+        trs = tbody.rows;
+        var match = false;
+        for(var rIx=0;rIx<trs.length;rIx++) {
+            var th = trs[rIx].cells[cellIx];
+            if(useAbbr)
+                match = (th.abbr == cols[cIx]);
+            else
+                match = ($(th).text() == cols[cIx]);
+            if(match) {
+                tbody.appendChild(tbody.removeChild(trs[rIx])); // Always append to end in order
+                break;
+            }
+        }
+    }
+
+   /* This is obslete and inefficient code.
+    var trs=0,moves=0;
+    var colOrder = new Array();
+    var cIx=0;
+    var trTopIx,trCurIx,trBottomIx=tbody.rows.length - 1;
+    for(trTopIx=0;trTopIx < trBottomIx;trTopIx++) {
+        trs++;
+        var topRow = tbody.rows[trTopIx];
+        for(trCurIx = trTopIx + 1; trCurIx <= trBottomIx; trCurIx++) {
+            var curRow = tbody.rows[trCurIx];
+            var compared = fnCompare(topRow,curRow);
+            if (compared < 0) {
+                tbody.insertBefore(tbody.removeChild(curRow), topRow);
+                topRow = curRow; // New top!
+                moves++;
+            }
+        }
+    }
+    */
+    gTbody=tbody;
+    gSortColumns=sortColumns;
+    setTimeout('tableSortFinish(gTbody,gSortColumns)',5); // Avoid javascript timeouts!
+}
+
+function tableSortFinish(tbody,sortColumns)
+{// Additional sort cleanup.
+ // This is in a separate function to allow calling with setTimeout() which will prevent javascript timeouts (I hope)
+    tableSetPositions(tbody);
+    if ($(tbody).hasClass('altColors'))
+        sortedTableAlternateColors(tbody,sortColumns);
+     $(tbody).show();
+}
+
+///// Following compare functions are not currentl;y used since sorting rows must be done indirectly
+function trCompareColumnInnerHtml(tr1,tr2) // NOT USED and will not be until sorting directly by row is avaiable
+{// Compares a set of columns based upon the contents of their first sortField's innerHTML
+    if (tr1.cells[gSortColumns.cellIxs[0]].innerHTML < tr2.cells[gSortColumns.cellIxs[0]].innerHTML)
+        return (gSortColumns.reverse[0] ? -1: 1);
+    else if (tr1.cells[gSortColumns.cellIxs[0]].innerHTML > tr2.cells[gSortColumns.cellIxs[0]].innerHTML)
+        return (gSortColumns.reverse[0] ? 1: -1);
+    return 0;
+}
+
+function trCompareColumnAbbr(tr1,tr2) // NOT USED and will not be until sorting directly by row is avaiable
+{// Compares a set of columns based upon the contents of their first sortField's abbr
+    if (tr1.cells[gSortColumns.cellIxs[0]].abbr < tr2.cells[gSortColumns.cellIxs[0]].abbr)
+        return (gSortColumns.reverse[0] ? -1: 1);
+    else if (tr1.cells[gSortColumns.cellIxs[0]].abbr > tr2.cells[gSortColumns.cellIxs[0]].abbr)
+        return (gSortColumns.reverse[0] ? 1: -1);
+    return 0;
+}
+
+function trCompareByColumn(tr1,tr2) // NOT USED and will not be until sorting directly by row is avaiable
+{// Compares a set of columns based upon the contents of their first sortField's abbr
+    if (sortColumns.useAbbr[0])
+        return trCompareColumnAbbr(tr1,tr2);
+    else
+        return trCompareColumnInnerHtml(tr1,tr2);
+}
+
+function tableSortByColumns(tbody,sortColumns)
+{// Will sort the table based on the abbr values on a set of <TH> colIds
+ // Expects tbody to not sort thead, but could take table
+    $(tbody).hide();
+    gTbody=tbody;
+    gSortColumns=sortColumns;
+    setTimeout('tableSort(gTbody,trCompareByColumn,gSortColumns)',5); // This allows hiding the rows while sorting!
+}
+
+function trAlternateColors(tbody,rowGroup,cellIx)
+{// Will alternate colors for visible table rows.
+ // If cellIx(s) provided then color changes when the column(s) abbr or els innerHtml changes
+ // If no cellIx is provided then alternates on rowGroup (5= change color 5,10,15,...)
+ // Expects tbody to not color thead, but could take table
+    var darker   = false; // == false will trigger first row to be change color = darker
+
+    if (arguments.length<3) { // No columns to check so alternate on rowGroup
+
+        if (rowGroup == undefined || rowGroup == 0)
+            rowGroup = 1;
+        var curCount = 0; // Always start with a change
+        $(tbody).find('tr:visible').each( function(i) {
+            if (curCount == 0 ) {
+                curCount  = rowGroup;
+                darker = (!darker);
+            }
+            //$(this).css('backgroundColor', curColor );
+            if (darker) {
+                $(this).removeClass("bgLevel1");
+                $(this).addClass(   "bgLevel2");
+            } else {
+                $(this).removeClass("bgLevel2");
+                $(this).addClass(   "bgLevel1");
+            }
+            curCount--;
+        });
+
+    } else {
+
+        var lastContent = "startWithChange";
+        var cIxs = new Array();
+        for(var aIx=2;aIx<arguments.length;aIx++) {   // multiple columns
+            cIxs[aIx-2] = arguments[aIx];
+        }
+        $(tbody).find('tr:visible').each( function(i) {
+            curContent = "";
+            for(var ix=0;ix<cIxs.length;ix++) {
+                if (this.cells[cIxs[ix]]) {
+                    curContent += (this.cells[cIxs[ix]].abbr != "" ?
+                                this.cells[cIxs[ix]].abbr       :
+                                this.cells[cIxs[ix]].innerHTML );
+                }
+            }
+            if (lastContent != curContent ) {
+                lastContent  = curContent;
+                darker = (!darker);
+            }
+            //$(this).css('backgroundColor', curColor );
+            if (darker) {
+                $(this).removeClass("bgLevel1");
+                $(this).addClass(   "bgLevel2");
+            } else {
+                $(this).removeClass("bgLevel2");
+                $(this).addClass(   "bgLevel1");
+            }
+        });
+    }
+}
+
+function sortedTableAlternateColors(tbody)
+{ // Will alternate colors based upon sort columns (which may be passed in as second arg, or discovered)
+// Expects tbody to not color thead, but could take table
+    var sortColumns;
+    if (arguments.length > 1)
+        sortColumns = arguments[1];
+    else {
+        var table = tbody;
+        if ($(table).is('tbody'))
+            table = $(tbody).parent();
+        sortColumns = new sortColumnsGetFromTable(table);
+    }
+
+    if (sortColumns) {
+        if (sortColumns.cellIxs.length==1)
+            trAlternateColors(tbody,0,sortColumns.cellIxs[0]);
+        else if (sortColumns.cellIxs.length==2)
+            trAlternateColors(tbody,0,sortColumns.cellIxs[0],sortColumns.cellIxs[1]);
+        else // Three columns is plenty
+            trAlternateColors(tbody,0,sortColumns.cellIxs[0],sortColumns.cellIxs[1],sortColumns.cellIxs[2]);
+    } else {
+        trAlternateColors(tbody,5); // alternates every 5th row
+    }
+}
+
+function sortOrderFromColumns(sortColumns)
+{// Creates the trackDB setting entry sortOrder subGroup1=+ ... from a sortColumns structure
+    fields = new Array();
+    for(var ix=0;ix < sortColumns.cellIxs.length;ix++) {
+        if (sortColumns.tags[ix] != undefined && sortColumns.tags[ix].length > 0)
+            fields[ix] = sortColumns.tags[ix] + "=" + (sortColumns.reverse[ix] ? "-":"+");
+        else
+            fields[ix] = sortColumns.cellIxs[ix] + "=" + (sortColumns.reverse[ix] ? "-":"+");
+    }
+    var sortOrder = fields.join(' ');
+    //warn("sortOrderFromColumns("+sortColumns.cellIxs.length+"):["+sortOrder+"]");
+    return sortOrder;
+}
+
+function sortOrderUpdate(table,sortColumns,addSuperscript)
+{// Updates the sortOrder in a sortable table
+    if (addSuperscript == undefined)
+        addSuperscript = false;
+    if ($(table).is('tbody'))
+        table = $(table).parent();
+    var tr = $(table).find('tr.sortable')[0];
+    if (tr) {
+        //warn("sortOrderUpdate("+sortColumns.cellIxs.length+")");
+        for(cIx=0;cIx<sortColumns.cellIxs.length;cIx++) {
+            var th = tr.cells[sortColumns.cellIxs[cIx]];
+            $(th).each(function(i) {
+                // First remove old sort classes
+                var classList = $( this ).attr("class").split(" ");
+                if (classList.length < 2) // assertable
+                    return;
+                classList = aryRemove(classList,"sortable");
+                while( classList.length > 0 ) {
+                    var class = classList.pop();
+                    if (class.indexOf("sort") == 0)
+                        $(this).removeClass(class);
+                }
+
+                // Now add current sort classes
+                $(this).addClass("sort"+(cIx+1));
+                if (sortColumns.reverse[cIx])
+                    $(this).addClass("sortRev");
+
+                // update any superscript
+                sup = $(this).find('sup')[0];
+                if (sup || addSuperscript) {
+                    var content = (sortColumns.reverse[cIx] == false ? "&darr;":"&uarr;");
+
+                    if (sortColumns.cellIxs.length>1) { // Number only if more than one
+                        if (cIx < 5)  // Show numbering and direction only for the first 5
+                            content += (cIx+1);
+                        else
+                            content = "";
+                    }
+
+                    if (sup)
+                        sup.innerHTML = content;
+                    else
+                        $(th).append("<sup>"+content+"</sup>");
+                }
+            });
+        }
+        // There may be a hidden input that gets updated to the cart
+        var inp = $(tr).find('input.sortOrder')[0];
+        if (inp)
+            $(inp).val(sortOrderFromColumns(sortColumns));
+    }
+}
+
+function sortOrderFromTr(tr)
+{// Looks up the sortOrder input value from a *.sortable header row of a sortable table
+    var inp = $(tr).find('input.sortOrder')[0];
+    if (inp)
+        return $(inp).val();
+    else {
+        // create something like "cellType=+ rep=+ protocol=+ treatment=+ factor=+ view=+"
+        var fields = new Array();
+        var cells = $(tr).find('th.sortable');
+        $(cells).each(function (i) {
+            var classList = $( this ).attr("class").split(" ");
+            if (classList.length < 2) // assertable
+                return;
+            classList = aryRemove(classList,"sortable");
+            var reverse = false;
+            var sortIx = -1;
+            while( classList.length > 0 ) {
+                var class = classList.pop();
+                if (class.indexOf("sort") == 0) {
+                    if (class == "sortRev")
+                        reverse = true;
+                    else {
+                        class = class.substring(4);  // clip off the "sort" portion
+                        var ix = parseInt(class);
+                        if (ix != NaN) {
+                            sortIx = ix;
+                        }
+                    }
+                }
+            }
+            if (sortIx >= 0) {
+                if (this.id != undefined && this.id.length > 0)
+                    fields[sortIx] = this.id + "=" + (reverse ? "-":"+");
+                else
+                    fields[sortIx] = this.cellIndex + "=" + (reverse ? "-":"+");
+            }
+        });
+        if (fields.length > 0) {
+            if (fields[0] == undefined)
+                fields.shift();  // 1 based sort ix and 0 based fields ix
+            return fields.join(' ');
+        }
+    }
+    return "";
+}
+function sortColumnsGetFromSortOrder(sortOrder)
+{// Creates sortColumns struct (without cellIxs[]) from a trackDB.sortOrder setting string
+    this.tags = new Array();
+    this.reverse = new Array();
+    var fields = sortOrder.split(" "); // sortOrder looks like: "cell=+ factor=+ view=+"
+    while(fields.length > 0) {
+        var pair = fields.shift().split("=");  // Take first and split into
+        if (pair.length == 2) {
+            this.tags.push(pair[0]);
+            this.reverse.push(pair[1] != '+');
+        }
+    }
+}
+function sortColumnsGetFromTr(tr,silent)
+{// Creates a sortColumns struct from the entries in the 'tr.sortable' heading row of a sortable table
+    this.inheritFrom = sortColumnsGetFromSortOrder;
+    var sortOrder = sortOrderFromTr(tr);
+    if (sortOrder.length == 0 && silent == undefined) {
+        warn("Unable to obtain sortOrder from sortable table.");   // developer needs to know something is wrong
+        return;
+    }
+
+    this.inheritFrom(sortOrder);
+    // Add an additional array
+    this.cellIxs = new Array();
+    this.useAbbr = new Array();
+    var ths = $(tr).find('th.sortable');
+    for(var tIx=0;tIx<this.tags.length;tIx++) {
+        for(ix=0; ix<ths.length; ix++) {
+            if (ths[ix].id != undefined && ths[ix].id == this.tags[tIx])
+                this.cellIxs[tIx] = ths[ix].cellIndex;
+            else if (ths[ix].cellIndex == this.tags[tIx])
+                this.cellIxs[tIx] = ths[ix].cellIndex;
+            this.useAbbr = (ths[ix].abbr.length > 0);
+        }
+    }
+    if (this.cellIxs.length == 0 && silent == undefined) {
+        warn("Unable to find any sortOrder.cells for sortable table.  ths.length:"+ths.length + " tags.length:"+this.tags.length + " sortOrder:["+sortOrder+"]");
+        return;
+    }
+}
+
+function sortColumnsGetFromTable(table)
+{// Creates a sortColumns struct from the contents of a 'table.sortable'
+    this.inheritNow = sortColumnsGetFromTr;
+    var tr = $(table).find('tr.sortable')[0];
+    //if (tr == undefined && debug) warn("Couldn't find 'tr.sortable' rows:"+table.rows.length);
+    this.inheritNow(tr);
+}
+
+
+function _tableSortOnButtonPressEncapsulated(anchor)
+{// Updates the sortColumns struct and sorts the table when a column header has been pressed
+ // If the current primary sort column is pressed, its direction is toggled then the table is sorted
+ // If a secondary sort column is pressed, it is moved to the primary spot and sorted in fwd direction
+    var th=$(anchor).closest('th')[0];  // Note that anchor is <a href> within th, not th
+    var tr=$(th).parent();
+    var theOrder = new sortColumnsGetFromTr(tr);
+    var oIx = th.cellIndex;
+    for(oIx=0;oIx<theOrder.cellIxs.length;oIx++) {
+        if (theOrder.cellIxs[oIx] == th.cellIndex)
+            break;
+    }
+    if (oIx == theOrder.cellIxs.length) {
+        warn("Failure to find '"+th.id+"' in sort columns."); // Developer must be warned that something is wrong with sortable table setup
+        return;
+    }
+    // assert(th.id == theOrder.tags[oIx] || th.id == undefined);
+    if (oIx > 0) { // Need to reorder
+        var newOrder = new sortColumnsGetFromTr(tr);
+        var nIx=0; // button pushed puts this 'tagId' column first in new order
+        newOrder.tags[nIx] = theOrder.tags[oIx];
+        newOrder.reverse[nIx] = false;  // When moving to the first position sort forward
+        newOrder.cellIxs[nIx] = theOrder.cellIxs[oIx];
+        for(var ix=0;ix<theOrder.cellIxs.length;ix++) {
+            if (ix != oIx) {
+                nIx++;
+                newOrder.tags[nIx]    = theOrder.tags[ix];
+                newOrder.reverse[nIx] = theOrder.reverse[ix];
+                newOrder.cellIxs[nIx] = theOrder.cellIxs[ix];
+            }
+        }
+        theOrder = newOrder;
+    } else { // if (oIx == 0) {   // need to reverse directions
+        theOrder.reverse[oIx] = (theOrder.reverse[oIx] == false);
+    }
+    var table=$(tr).closest("table.sortable")[0];
+    if (table) { // assertable
+        sortOrderUpdate(table,theOrder);  // Must update sortOrder first!
+        var tbody = $(table).find("tbody.sortable")[0];
+        //if (tbody == undefined && debug) warn("Couldn't find 'tbody.sortable' 5");
+        tableSortByColumns(tbody,theOrder);
+    }
+    return;
+
+}
+
+function tableSortOnButtonPress(anchor,tagId)
+{
+    var table = $( anchor ).closest("table.sortable")[0];
+    if (table) {
+        waitOnFunction( _tableSortOnButtonPressEncapsulated, anchor, tagId);
+    }
+    return false;  // called by link so return false means don't try to go anywhere
+}
+
+function tableSortUsingSortColumns(table) // NOT USED
+{// Sorts a table body based upon the marked columns
+    var columns = new sortColumnsGetFromTable(table);
+    tbody = $(table).find("tbody.sortable")[0];
+    if (tbody)
+        tableSortByColumns(tbody,columns);
+}
+
+function hintOverSortableColumnHeader(th) // NOT USED
+{// Upodates the sortColumns struct and sorts the table when a column headder has been pressed
+    //th.title = "Click to make this the primary sort column, or toggle direction";
+    //var tr=th.parentNode;
+    //th.title = "Current Sort Order: " + sortOrderFromTr(tr);
+}
+
+function tableSetPositions(table)
+{// Sets the value for the input.trPos of a table row.  Typically this is a "priority" for a track
+ // This gets called by sort or dragAndDrop in order to allow the new order to affect hgTracks display
+    var inputs = $(table).find("input.trPos");
+    $( inputs ).each( function(i) {
+        var tr = $( this ).closest('tr')[0];
+        $( this ).val( $(tr).attr('rowIndex') );
+    });
+}
+
+///// Following functions are for Sorting by priority
+function trFindPosition(tr)
+{
+// returns the position (*.priority) of a sortable table row
+    var inp = $(tr).find('input.trPos')[0];
+    if (inp)
+        return $(inp).val();
+    return 999999;
+}
+
+function trComparePriority(tr1,tr2)  // UNUSED FUNCTION
+{
+// Compare routine for sorting by *.priority
+    var priority1 = trFindPosition(tr1);
+    var priority2 = trFindPosition(tr2);
+    return priority2 - priority1;
+}
+
+function tablesSortAtStartup()
+{// Called at startup if you want javascript to initialize and sort all your class='sortable' tables
+ // IMPORTANT: This function WILL ONLY sort by first column.
+ // If there are multiple sort columns, please presort the list for accurtacy!!!
+    var tables = $("table.sortable");
+    $(tables).each(function(i) {
+        sortTableInitialize(this,true); // Will initialize superscripts
+        tableSortUsingSortColumns(this);
+    });
+}
+
+function sortTableInitialize(table,addSuperscript,altColors)
+{// Called if you want javascript to initialize your class='sortable' table.
+ // A sortable table requires:
+ // TABLE.sortable: TABLE class='sortable' containing a THEAD header and sortable TBODY filled with the rows to sort.
+ // THEAD.sortable: (NOTE: created if not found) The THEAD can contain multiple rows must contain:
+ //   TR.sortable: exactly 1 header TH (table row) class='sortable' which will declare the sort columnns:
+ //   TH.sortable: 1 or more TH (table column headers) with class='sortable sort1 [sortRev]' (or sort2, sort3) declaring sort order and whether reversed
+ //     e.g. <TH id='factor' class='sortable sortRev sort3' nowrap>...</TH>  (this means that factor is currently the third sort column and reverse sorted)
+ //     (NOTE: If no TH.sortable is found, then every th in the TR.sortable will be converted for you and will be in sort1,2,3 order.)
+ //     ONCLICK: Each TH.sortable must call tableSortOnButtonPress(this) directly or indirectly in the onclick event :
+ //       e.g. <TH id='factor' class='sortable sortRev sort3' nowrap title='Sort list on this column' onclick="return tableSortOnButtonPress(this);">
+ //       (NOTE: If no onclick function is found in a TH.sortable, then it will automatically be added.)
+ //     SUP: Each TH.sortable *may* contain a <sup> which will be filled with an up or down arrow and the column's sort order: e.g. <sup>&darr;2</sup>
+ //       (NOTE: If no sup is found but addSuperscript is requested, then they will be added.)
+ // TBODY.sortable: (NOTE: created if not found) The TBODY class='sortable' contains the table rows that get sorted:
+ //   TBODY->TR & ->TD: Each row contains a TD for each sortable column. The innerHTML (entire contents) of the cell will be used for sorting.
+ //   TRICK: You can use the 'abbr' field to subtly alter the sortable contents.  Otherwise sorts on td contents ($(td).text()).
+ //          Use the abbr field to make case-insensitive sorts or force exceptions to alpha-text order (e.g. ZCTRL vs Control forcing controls to bottom)
+ //          e.g. <TD id='wgEncodeBroadHistoneGm12878ControlSig_factor' nowrap abbr='ZCTRL' align='left'>Control</TD>
+ //          IMPORTANT: You must add abbr='use' to the TH.sortable definitions.
+ // Finally if you want the tableSort to alternate the table row colors (using #FFFEE8 and #FFF9D2) then TBODY.sortable should also have class 'altColors'
+ // NOTE: This class can be added by using the altColors option to this function
+ //
+ // PRESERVING TO CART: To send the sort column on a form 'submit', the header tr (TR.sortable) needs a named hidden input of class='sortOrder' as:
+ //   e.g.: <INPUT TYPE=HIDDEN NAME='wgEncodeBroadHistone.sortOrder' class='sortOrder' VALUE="factor=- cell=+ view=+">
+ //   AND each sortable column header (TH.sortable) must have id='{name}' which is the name of the sortable field (e.g. 'factor', 'shortLabel')
+ //   The value preserves the column sort order and direction based upon the id={name} of each sort column.
+ //   In the example, while 'cell' may be the first column, the table is currently reverse ordered by 'factor', then by cell and view.
+ // And to send the sorted row orders on form 'submit', each TBODY->TR will need a named hidden input field of class='trPos':
+ //   e.g. <INPUT TYPE=HIDDEN NAME='wgEncodeHaibTfbsA549ControlPcr2xDexaRawRep1.priority' class='trPos' VALUE="2">
+ //   A reason to preserve the order in ther cart is if the order will affect other cgis.  For instance: sort subtracks and see that order in the hgTracks image.
+
+    if ($(table).hasClass('sortable') == false) {
+        warn('Table is not sortable');
+        return;
+    }
+    var tr = $(table).find('tr.sortable')[0];
+    if(tr == undefined) {
+        tr = $(table).find('tr')[0];
+        if(tr == undefined) {
+            warn('Sortable table has no rows');
+            return;
+        }
+        $(tr).addClass('sortable');
+        //warn('Made first row tr.sortable');
+    }
+    if ($(table).find('tr.sortable').length != 1) {
+        warn('sortable table contains more than 1 header row declaring sort columns.');
+        return;
+    }
+
+    // If not TBODY is found, then create, wrapping all but those already in a thead
+    tbody = $(table).find('tbody')[0];
+    if(tbody == undefined) {
+        trs = $(table).find('tr').not('thead tr');
+        $(trs).wrapAll("<TBODY class='sortable' />")
+        tbody = $(table).find('tbody')[0];
+        //warn('Wrapped all trs not in thead.sortable in tbody.sortable');
+    }
+    if ($(tbody).hasClass('sortable') == false) {
+        $(tbody).addClass('sortable');
+        //warn('Added sortable class to tbody');
+    }
+    if(altColors != undefined && $(tbody).hasClass('altColors') == false) {
+        $(tbody).addClass('altColors');
+        //warn('Added altColors class to tbody.sortable');
+    }
+    $(tbody).hide();
+
+    // If not THEAD is found, then create, wrapping first row.
+    thead = $(table).find('thead')[0];
+    if(thead == undefined) {
+        $(tr).wrapAll("<THEAD class='sortable' />")
+        thead = $(table).find('thead')[0];
+        $(thead).insertBefore(tbody);
+        //warn('Wrapped tr.sortable with thead.sortable');
+    }
+    if ($(thead).hasClass('sortable') == false) {
+        $(thead).addClass('sortable');
+        //warn('Added sortable class to thead');
+    }
+
+    var sortColumns = new sortColumnsGetFromTr(tr,"silent");
+    if (sortColumns == undefined || sortColumns.cellIxs.length == 0) {
+        // could mark all columns as sortable!
+        $(tr).find('th').each(function (ix) {
+            $(this).addClass('sortable');
+            $(this).addClass('sort'+(ix+1));
+            //warn("Added class='sortable sort"+(ix+1)+"' to th:"+this.innerHTML);
+        });
+        sortColumns = new sortColumnsGetFromTr(tr,"silent");
+        if (sortColumns == undefined || sortColumns.cellIxs.length == 0) {
+            warn("sortable table's header row contains no sort columns.");
+            return;
+        }
+    }
+    // Can wrap all columnn headers with link
+    $(tr).find("th.sortable").each(function (ix) {
+        //if ( $(this).queue('click').length == 0 ) {
+        if ( $(this).attr('onclick') == undefined ) {
+            $(this).click( function () { tableSortOnButtonPress(this);} );
+        }
+        if ( $(this).attr('title').length == 0) {
+            $(this).attr('title',"Sort list on '" + $(this).text() + "'." );
+        }
+    })
+    // Now update all of those cells
+    sortOrderUpdate(table,sortColumns,addSuperscript);
+
+    // Alternate colors if requested
+    if(altColors != undefined)
+        sortedTableAlternateColors(tbody);
+
+    // Finally, make visible
+    $(tbody).show();
+}
+

@@ -156,7 +156,7 @@ description Human Umbilical Vein Endothelial Cell
 tissue Endothelium
 vendorName Lonza
 vendorId CC-2517
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392C76A4F18C7C001A4B525E10&layout=6_1_65_52_7&uiarea=2)/.do
+orderUrl http://www.lonza.com/
 lineage mesoderm
 karyotype normal
 termId BTO:0001949
@@ -174,7 +174,7 @@ description Normal Human Epidermal Keratinocytes
 tissue Skin
 vendorName Lonza
 vendorId CC-2501
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1F8CCA53E1F18C7C001A4B525E10&cpgnum=1)/.do
+orderUrl http://www.lonza.com
 lineage ectoderm
 karyotype normal
 termId BTO:0000375
@@ -310,7 +310,7 @@ description Normal Human Aortic Adventitial Fibroblast Cells
 tissue Heart
 vendorName Lonza
 vendorId CC-7014, CC-7014T75
-orderUrl https://shop.lonza.com/shop/prd/human-aortic-adventitial-fibroblasts/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36999591D0C0F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 termUrl
 sex F
 tier 3
@@ -325,7 +325,7 @@ description aortic smooth muscle cells
 tissue Heart
 vendorName Lonza
 vendorId CC-2571
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+orderUrl http://www.lonza.com/
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001685
 sex U
 tier 3
@@ -340,7 +340,7 @@ description Normal human astrocytes
 tissue Brain
 vendorName Lonza
 vendorId CC-2565
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+orderUrl http://www.lonza.com/
 lineage
 karyotype normal
 termId BTO:0000099
@@ -1174,7 +1174,7 @@ type Cell Line
 organism Human
 description (aka H54) Glioblastoma
 tissue Brain
-vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
+vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu) 
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000527
 sex U
@@ -1959,7 +1959,7 @@ description Human Mammary Epithelial Cells
 tissue Breast
 vendorName Lonza
 vendorId CC-3150
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA1FDC0AF834F18C7C001A4B525E10&cpgnum=1)/.do
+orderUrl http://www.lonza.com/
 lineage
 karyotype
 termId BTO:0002178
@@ -1989,7 +1989,7 @@ description Normal Human Lymphatic Microvascular Endothelial Cells, Lung-Derived
 tissue Blood
 vendorName Lonza
 vendorId CC-2814, CC-2814T25
-orderUrl https://shop.lonza.com/shop/prd/human-lung-lymphatic-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699839AD5E2F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 sex F
 tier 3
 protocol UW_Stam:HMVEC-LLy_Stam_protocol.pdf
@@ -2002,7 +2002,7 @@ description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Der
 tissue Blood
 vendorName Lonza
 vendorId CC-2811, CC-2811T75
-orderUrl https://shop.lonza.com/shop/prd/adult-human-dermal-blood-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD7C1F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 sex F
 tier 3
 protocol UW_Stam:HMVEC-dBl-Ad_Stam_protocol.pdf
@@ -2015,7 +2015,7 @@ description Normal Neonatal Human Blood Microvascular Endothelial Cells, Dermal-
 tissue Blood
 vendorName Lonza
 vendorId CC-2813, CC-2813T75
-orderUrl https://shop.lonza.com/shop/prd/neo-human-dermal-blood-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD7F1F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 sex M
 tier 3
 protocol UW_Stam:HMVEC-dBl-Neo_Stam_protocol.pdf
@@ -2028,7 +2028,7 @@ description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Der
 tissue Blood
 vendorName Lonza
 vendorId CC-2810, CC-2810T75
-orderUrl https://shop.lonza.com/shop/prd/adult-human-dermal-lymp-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD821F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 sex F
 tier 3
 protocol UW_Stam:HMVEC-dLy-Ad_Stam_protocol.pdf
@@ -2041,7 +2041,7 @@ description Normal Neonatal Human Lymphatic Microvascular Endothelial Cells, Der
 tissue Blood
 vendorName Lonza
 vendorId CC-2812, CC-2812T25
-orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36997D9DD857F18852001A4B525E10%29/.do
+orderUrl http://www.lonza.com/
 sex M
 tier 3
 protocol UW_Stam:HMVEC-dLy-Neo_Stam_protocol.pdf
@@ -2054,7 +2054,7 @@ description Normal Neonatal Human Microvascular Endothelial Cells (single Donnor
 tissue Blood
 vendorName Lonza
 vendorId CC-2505, CC-2505T225
-orderUrl https://shop.lonza.com/shop/prd/neo-human-dermal-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF369977A0DA71F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 sex M
 tier 3
 protocol UW_Stam:HMVEC-dNeo_Stam_protocol.pdf
@@ -2067,7 +2067,7 @@ description Normal Human Blood Microvascular Endothelial Cells, Lung-Derived
 tissue Blood
 vendorName Lonza
 vendorId CC-2815, CC-2815T75
-orderUrl https://shop.lonza.com/shop/prd/human-lung-blood-mv-endothelial-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699839AD5A8F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 sex F
 tier 3
 protocol UW_Stam:HMVEC-Lbl_Stam_protocol.pdf
@@ -2161,9 +2161,9 @@ type Cell Line
 organism Human
 description Human Renal Cortical Epithelial cells (normal)
 tissue Epithelium
-vendorName ScienCell
-vendorId #4110
-orderUrl http://www.sciencellonline.com/index.php?main_page=product_info&cPath=1_22_5_32&products_id=44
+vendorName Lonza
+vendorId CC-2554
+orderUrl http://www.lonza.com/
 lineage
 karyotype normal
 termId BTO:0000059 (non-specific)
@@ -2180,7 +2180,7 @@ description Human Renal Epithelial cells (normal)
 tissue Epithelium
 vendorName Lonza
 vendorId CC-2556
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA20FB87F582F18C7C001A4B525E10&cpgnum=1)/.do
+orderUrl http://www.lonza.com/
 lineage
 karyotype normal
 termId BTO:0000059 (non-specific)
@@ -2210,7 +2210,7 @@ description Normal Human Skeletal Muscle Myoblasts
 tissue Muscle
 vendorName Lonza
 vendorId CC-2580
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
+orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000256
@@ -2226,7 +2226,7 @@ description Normal Human Skeletal Muscle Myotubes
 tissue Muscle
 vendorName Lonza
 vendorId CC-2580
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA219D97F774F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_75_65_8_11&uiarea=2)/.do
+orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001760
@@ -2551,7 +2551,7 @@ tissue Nervous
 description normal human astrocytes
 vendorName Lonza
 vendorId CC-2565
-orderUrl https://shop.lonza.com/shop/prd/normal-human-astrocytes/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699D16C95C8F18852001A4B525E10/
+orderUrl http://www.lonza.com/
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099
 sex U
 tier 3
@@ -2566,7 +2566,7 @@ tissue Epithelium
 description normal human bronchial epithelial cells
 vendorName Lonza
 vendorId CC-2541
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+orderUrl http://www.lonza.com/
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002022
 sex U
 tier 3
@@ -2581,7 +2581,7 @@ tissue Skin
 description Adult Normal Human Dermal Fibroblasts
 vendorName Lonza
 vendorId CC-2511, CC-2511T225
-orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36999591CFE2F18852001A4B525E10%29/.do
+orderUrl http://www.lonza.com/
 sex F
 tier 3
 protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf Broad_Histone:NHDF-Ad_Bernstein_protocol.pdf
@@ -2594,7 +2594,7 @@ tissue Skin
 description Neonatal Human Dermal Fibroblasts
 vendorName Lonza
 vendorId CC-2509
-orderUrl http://www.lonza.com/group/en/products_services/products/cat4.html
+orderUrl http://www.lonza.com/
 sex U
 tier 3
 protocol UW_Stam:NHDF-neo_Stam_protocol.pdf
@@ -2607,7 +2607,7 @@ tissue Lung
 description Normal Human Lung Fibroblasts
 vendorName Lonza
 vendorId CC-2512
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_75_65_8_11&uiarea=2&carea=DCEA1D607089ACF18C7C001A4B525E10&cpgnum=1)/.do
+orderUrl http://www.lonza.com/
 lineage
 karyotype
 termId BTO:0000161 (non-specific)
@@ -2641,7 +2641,7 @@ description Normal human osteoblasts (NHOst)
 tissue Bone
 vendorName Lonza
 vendorId CC-2538
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2166EFB7B0F18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
+orderUrl http://www.lonza.com/
 lineage
 karyotype normal
 termId BTO:0001593
@@ -2773,7 +2773,7 @@ description Human Prostate Epithelial Cell line
 tissue Prostate
 vendorName Lonza
 VendorId CC-2555
-orderUrl https://shop.lonza.com/shop/prd/human-prostate-epithelial-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699AD8CEEBBF18852001A4B525E10/
+orderUrl http://www.lonza.com/
 lineage Epithelial
 karyotype Normal
 termId BTO:0002398
@@ -2845,7 +2845,7 @@ description Renal Proximal Tubule Epithelial Cells
 tissue Epithelium
 vendorName Lonza
 vendorId CC-2553, CC-2553T225
-orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF3699B3878B6CF18852001A4B525E10%29/.do
+orderUrl http://www.lonza.com/
 sex U
 tier 3
 protocol UW_Stam:RPTEC_Stam_protocol.pdf
@@ -2858,7 +2858,7 @@ description Small Airway Epithelial Cells
 tissue Epithelium
 vendorName Lonza
 vendorId CC-2547
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA173DD30B73F18C7C001A4B525E10&cpgnum=1)/.do
+orderUrl http://www.lonza.com/
 lineage
 karyotype normal
 termId BTO:0002022 (non-specific)
@@ -2944,7 +2944,7 @@ description Human Skeletal Muscle Cells
 tissue Muscle
 vendorName Lonza
 vendorId CC-2561
-orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_71_61_7_10&uiarea=2&carea=DCEA21A59CABF8F18C7C001A4B525E10&cpgnum=1)/.do
+orderUrl http://www.lonza.com/
 lineage
 karyotype
 termId BTO:0001801 (non-specific)
@@ -6975,6 +6975,11 @@ tag TAM
 description 36h, 1uM tamoxifen (Myers)
 type treatment
 
+term TGFb
+tag TGFb
+description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)
+type treatment
+
 term TNFa
 tag TNFa
 description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
@@ -7198,6 +7203,13 @@ tag shortRnaSeq
 type dataType
 label RNA-seq
 description sequencing of short RNAs
+
+term Switchgear 
+tag Switchgear 
+type dataType
+label SwitchGear
+description Provisional SwitchGear Genomics 3' UTR reporter assay 
+
 
 #This is not in the metaDB currently
 term TfbsValid

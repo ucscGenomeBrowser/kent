@@ -2,16 +2,16 @@
 track wgEncodeHaibTfbs
 release alpha
 compositeTrack on
-superTrack wgEncodeTfBindingSuper dense
+superTrack wgEncodeTfBindingSuper full
 shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line A549=A549 ECC1=ECC-1 GM12878=GM12878&nbsp;(Tier_1) GM12891=GM12891 GM12892=GM12892 H1hESC=H1-hESC&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier&nbsp;2) HTB11=HTB-11 K562=K562&nbsp;(Tier&nbsp;1) PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC T47D=T-47D U87=U87
-subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF1M33=BCLAF1_(M33) BHLHE40=BHLHE40 CTCF=CTCF E2F6H50=E2F6_(H-50) EBF=EBF EGR1=Egr-1 ERaa=ERalpha_a ETS1=ETS1 FOXA1C20=FOXA1_(C-20) FOSL2=FOSL2 GABP=GABP GATA2=GATA2 GATA2CG2=GATA2_(CG2-96) GR=GR HEY1=HEY1 HNF4AH171=HNF4A_(H-171) IRF4=IRF4 JUND=JunD LEF1C19=LEF1_(C-19) MEF2A=MEF2A NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SRF=SRF TAF1=TAF1 TCF12=TCF12 USF1=USF-1 YY1=YY1 YY1C20=YY1_(C20) ZBTB33=ZBTB33 zControl=Input(control)
+subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF1M33=BCLAF1_(M33) BHLHE40=BHLHE40 CTCF=CTCF E2F6H50=E2F6_(H-50) EBF=EBF EBF1C8=EBF1_(C-8) EGR1=Egr-1 ERaa=ERalpha_a ETS1=ETS1 FOXA1C20=FOXA1_(C-20) FOSL2=FOSL2 GABP=GABP GATA2=GATA2 GATA2CG2=GATA2_(CG2-96) GR=GR HEY1=HEY1 HNF4AH171=HNF4A_(H-171) IRF4=IRF4 JUND=JunD LEF1C19=LEF1_(C-19) MAX=Max MEF2A=MEF2A NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RAD21=RAD21 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SRF=SRF TAF1=TAF1 TCF12=TCF12 USF1=USF-1 YY1=YY1 YY1C20=YY1_(C20) ZBTB33=ZBTB33 zControl=Input(control)
 subGroup4 protocol Protocol PCR1x=PCR1x PCR2x=PCR2x V0416101=v041610.1 V0416102=v041610.2
 subGroup5 treatment Treatment DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEXd=DEX_500pM DMSO2=DMSO_0.02pct ESTRADIa1h=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1h=Genistein_100nM None=None
-subGroup6 rep Replicate rep1=1 rep2=2
+subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
 dimensions dimX=cellType dimY=factor dimA=protocol dimB=treatment dimC=rep
 dimensionAchecked PCR1x,PCR2x,V0416101,V0416102
 dimensionBchecked None
@@ -25,7 +25,6 @@ controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protoco
 priority 0
 type bed 3
 wgEncode 1
-origAssembly hg19
 nextItemButton on
 noInherit on
 #dataVersion through the ENCODE Jan 2010 Freeze
@@ -36,8 +35,8 @@ noInherit on
     release alpha
     shortLabel Peaks
     view Peaks
-    visibility pack
-    viewUi on
+    visibility dense
+   # viewUi on
     subTrack wgEncodeHaibTfbs
     scoreFilter 0
     scoreFilterLimits 0:1000
@@ -327,7 +326,7 @@ noInherit on
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsH1hescNrsfPcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks
         shortLabel H1hES NRSF   Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in H1-hESC cells)
         subGroups view=Peaks factor=NRSF cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -778,7 +777,7 @@ noInherit on
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Taf1Pcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks 
         shortLabel GM878 TAF1   Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in GM12878 cells)
         subGroups view=Peaks factor=TAF1 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -919,7 +918,7 @@ noInherit on
 		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks
         shortLabel GM878 Pol24H Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in GM12878 cells)
         subGroups view=Peaks factor=POL24H8 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -1060,7 +1059,7 @@ noInherit on
         #Turn on Rep 1 for Tier 1 and Tier 2 cell lines (K562,GM12878, H1-hESC) for  NSRF,POL2,POL2-4H8,TAF1,SIX5
         track wgEncodeHaibTfbsGm12878Six5Pcr1xPkRep1
         release alpha
-        subTrack wgEncodeHaibTfbsViewPeaks on
+        subTrack wgEncodeHaibTfbsViewPeaks
         shortLabel GM878 SIX5   Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SIX5 in GM12878 cells)
         subGroups view=Peaks factor=SIX5 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
@@ -2336,6 +2335,88 @@ noInherit on
         type broadPeak
         # subId=2428 dateSubmitted=2010-11-15
 
+        track wgEncodeHaibTfbsK562Sin3ak20V0416101PkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 Sin3Ak-20 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (Sin3Ak-20 in K562 cells)
+        subGroups view=Peaks factor=SIN3AK20 cellType=K562 protocol=V0416101 treatment=None rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=3058 dateSubmitted=2010-12-03
+
+        track wgEncodeHaibTfbsK562Sin3ak20V0416101PkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 Sin3Ak-20 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (Sin3Ak-20 in K562 cells)
+        subGroups view=Peaks factor=SIN3AK20 cellType=K562 protocol=V0416101 treatment=None rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=3058 dateSubmitted=2010-12-03
+
+
+        track wgEncodeHaibTfbsK562E2f6h50V0416102PkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 E2F6_(H-50) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (E2F6_(H-50) in K562 cells)
+        subGroups view=Peaks factor=E2F6H50 cellType=K562 protocol=V0416102 treatment=None rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=3069 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562E2f6h50V0416102PkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 E2F6_(H-50) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (E2F6_(H-50) in K562 cells)
+        subGroups view=Peaks factor=E2F6H50 cellType=K562 protocol=V0416102 treatment=None rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=3069 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562MaxV0416102PkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 Max Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (Max in K562 cells)
+        subGroups view=Peaks factor=MAX cellType=K562 protocol=V0416102 treatment=None rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=3070 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562MaxV0416102PkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 Max Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (Max in K562 cells)
+        subGroups view=Peaks factor=MAX cellType=K562 protocol=V0416102 treatment=None rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=3070 dateSubmitted=2010-12-08
+
+
+        track wgEncodeHaibTfbsK562GabpV0416101PkRep4
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 GABP Pk 4
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 4 (GABP in K562 cells)
+        subGroups view=Peaks factor=GABP cellType=K562 protocol=V0416101 treatment=None rep=rep4
+        type broadPeak
+        color 46,0,184
+        # subId=3080 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562GabpV0416101PkRep5
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 GABP Pk 5
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 5 (GABP in K562 cells)
+        subGroups view=Peaks factor=GABP cellType=K562 protocol=V0416101 treatment=None rep=rep5
+        type broadPeak
+        color 46,0,184
+        # subId=3080 dateSubmitted=2010-12-08
+
 
 
     #Raw Signal Track HAIB TFBS#
@@ -2343,14 +2424,15 @@ noInherit on
     track wgEncodeHaibTfbsViewRawSignal
     release alpha
     shortLabel Raw Signal
+    visibility full
     view RawSignal
     subTrack wgEncodeHaibTfbs
     minLimit 1
     maxLimit 47957.00
-    viewLimits 1:137
+    viewLimits 1:5
     autoScale off
-    maxHeightPixels 100:16:16
-    windowingFunction mean
+    maxHeightPixels 100:32:16
+    windowingFunction maximum
 
         track wgEncodeHaibTfbsK562Atf3Pcr1xRawRep1
         release alpha
@@ -2761,7 +2843,7 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878NrsfPcr2xRawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel GM12878 NRSF Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (NRSF in GM12878 cells)
         subGroups view=RawSignal factor=NRSF cellType=GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -2848,7 +2930,7 @@ noInherit on
 
         track wgEncodeHaibTfbsGm12878Pol2Pcr2xRawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel GM12878 Pol2 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2 in GM12878 cells)
         subGroups view=RawSignal factor=POL2 cellType=GM12878 protocol=PCR2x treatment=None rep=rep1
@@ -2937,7 +3019,7 @@ noInherit on
 
         track wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel H1-hESC SIX5 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (SIX5 in H1-hESC cells)
         subGroups view=RawSignal factor=SIX5 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
@@ -3887,7 +3969,7 @@ noInherit on
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101RawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel K562 Pol2-4H8 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (Pol2-4H8 in K562 cells)
         subGroups view=RawSignal factor=POL24H8 cellType=K562 protocol=V0416101 treatment=None rep=rep1
@@ -3967,7 +4049,7 @@ noInherit on
 
         track wgEncodeHaibTfbsK562Taf1V0416101RawRep1
         release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
+        parent wgEncodeHaibTfbsViewRawSignal
         shortLabel K562 TAF1 Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 1 (TAF1 in K562 cells)
         subGroups view=RawSignal factor=TAF1 cellType=K562 protocol=V0416101 treatment=None rep=rep1
@@ -4196,3 +4278,597 @@ noInherit on
         type bigWig 0.189646 252.561005
         color 189,0,157
         # subId=3029 dateSubmitted=2010-11-29
+
+        track wgEncodeHaibTfbsGm12891ControlPcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 Control Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Control in GM12891 cells)
+        subGroups view=RawSignal factor=zControl cellType=GM12891 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.159233 195.537994
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12892ControlV0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12892 Control Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Control in GM12892 cells)
+        subGroups view=RawSignal factor=zControl cellType=GM12892 protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.173756 207.464996
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsHepg2ControlPcr1xRawRep3
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HepG2 Control Raw 3
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 3 (Control in HepG2 cells)
+        subGroups view=RawSignal factor=zControl cellType=HEPG2 protocol=PCR1x treatment=None rep=rep3
+        type bigWig 0.104589 143.966995
+        color 189,0,157
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12892Pol24h8V0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12892 Pol2-4H8 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in GM12892 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=GM12892 protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.166554 187.289993
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12892Taf1V0416102RawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12892 TAF1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (TAF1 in GM12892 cells)
+        subGroups view=RawSignal factor=TAF1 cellType=GM12892 protocol=V0416102 treatment=None rep=rep2
+        type bigWig 0.187722 242.817993
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12892Pol2V0416102RawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12892 Pol2 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2 in GM12892 cells)
+        subGroups view=RawSignal factor=POL2 cellType=GM12892 protocol=V0416102 treatment=None rep=rep2
+        type bigWig 0.161976 204.171005
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 ZBTB33 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (ZBTB33 in GM12878 cells)
+        subGroups view=RawSignal factor=ZBTB33 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.206141 160.584000
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 Pol2-4H8 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2-4H8 in GM12891 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=GM12891 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.173227 200.164001
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Pol2Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 Pol2 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2 in GM12891 cells)
+        subGroups view=RawSignal factor=POL2 cellType=GM12891 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.177341 224.912003
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Taf1Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 TAF1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (TAF1 in GM12891 cells)
+        subGroups view=RawSignal factor=TAF1 cellType=GM12891 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.183743 174.326004
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Pou2f2Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 POU2F2 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (POU2F2 in GM12891 cells)
+        subGroups view=RawSignal factor=POU2F2 cellType=GM12891 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.191749 145.681000
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Pol24h8Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 Pol2-4H8 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in GM12891 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=GM12891 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.209765 439.770996
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12892Pol2V0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12892 Pol2 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2 in GM12892 cells)
+        subGroups view=RawSignal factor=POL2 cellType=GM12892 protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.105092 251.485001
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Pol2Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 Pol2 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2 in GM12891 cells)
+        subGroups view=RawSignal factor=POL2 cellType=GM12891 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.158122 467.566010
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xDexdRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEXd rep=rep2
+        type bigWig 0.201001 188.690002
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xDexdRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEXd rep=rep1
+        type bigWig 0.153989 215.815002
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xDexbRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEXb rep=rep2
+        type bigWig 0.185807 165.692993
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xDexbRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEXb rep=rep1
+        type bigWig 0.159708 203.427994
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xDexcRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEXc rep=rep2
+        type bigWig 0.148563 218.201996
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xDexcRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=DEXc rep=rep1
+        type bigWig 0.150640 241.927002
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xEtoh02RawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=ETOH02 rep=rep2
+        type bigWig 0.146991 250.841003
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsA549GrPcr1xEtoh02RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel A549 GR Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (GR in A549 cells)
+        subGroups view=RawSignal factor=GR cellType=A549 protocol=PCR1x treatment=ETOH02 rep=rep1
+        type bigWig 0.149611 237.731995
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsH1hescTaf1V0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel H1-hESC TAF1 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (TAF1 in H1-hESC cells)
+        subGroups view=RawSignal factor=TAF1 cellType=H1hESC protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.212938 126.963997
+        color 0,107,27
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Pax5n19Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 PAX5-N19 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (PAX5-N19 in GM12878 cells)
+        subGroups view=RawSignal factor=PAX5N19 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.124647 134.369003
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Sp1Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 SP1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (SP1 in GM12878 cells)
+        subGroups view=RawSignal factor=SP1 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.173623 124.964996
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 HEY1 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (HEY1 in K562 cells)
+        subGroups view=RawSignal factor=HEY1 cellType=K562 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.181844 506.480011
+        color 46,0,184
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsK562Six5Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 SIX5 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (SIX5 in K562 cells)
+        subGroups view=RawSignal factor=SIX5 cellType=K562 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.180333 244.307007
+        color 46,0,184
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878BatfPcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 BATF Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (BATF in GM12878 cells)
+        subGroups view=RawSignal factor=BATF cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.181848 165.481003
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 IRF4 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (IRF4 in GM12878 cells)
+        subGroups view=RawSignal factor=IRF4 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.188264 148.587006
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Zbtb33Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 ZBTB33 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (ZBTB33 in GM12878 cells)
+        subGroups view=RawSignal factor=ZBTB33 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.176821 148.970993
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Taf1Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 TAF1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (TAF1 in GM12878 cells)
+        subGroups view=RawSignal factor=TAF1 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.215867 165.570007
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Pou2f2Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 POU2F2 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (POU2F2 in GM12891 cells)
+        subGroups view=RawSignal factor=POU2F2 cellType=GM12891 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.066188 118.774002
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12891Taf1Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 TAF1 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (TAF1 in GM12891 cells)
+        subGroups view=RawSignal factor=TAF1 cellType=GM12891 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.125512 183.593002
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 Pol2-4H8 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in GM12878 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.106921 267.355011
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Sp1Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 SP1 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (SP1 in GM12878 cells)
+        subGroups view=RawSignal factor=SP1 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.104618 140.082993
+        color 153,38,0
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsHtb11NrsfPcr2xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HTB-11 NRSF Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (NRSF in HTB-11 cells)
+        subGroups view=RawSignal factor=NRSF cellType=HTB11 protocol=PCR2x treatment=None rep=rep1
+        type bigWig 0.210706 74.168404
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsU87NrsfPcr2xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel U87 NRSF Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (NRSF in U87 cells)
+        subGroups view=RawSignal factor=NRSF cellType=U87 protocol=PCR2x treatment=None rep=rep1
+        type bigWig 0.271463 198.100006
+        # subId=3037 dateSubmitted=2010-12-01
+
+        track wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 IRF4 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (IRF4 in GM12878 cells)
+        subGroups view=RawSignal factor=IRF4 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.161846 177.746994
+        color 153,38,0
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsH1hescControlV0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel H1-hESC Control Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Control in H1-hESC cells)
+        subGroups view=RawSignal factor=zControl cellType=H1hESC protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.100579 178.729004
+        color 0,107,27
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsGm12878Ebf1c8Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 EBF1_(C-8) Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (EBF1_(C-8) in GM12878 cells)
+        subGroups view=RawSignal factor=EBF1C8 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.198833 116.863998
+        color 153,38,0
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsK562Hey1Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 HEY1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (HEY1 in K562 cells)
+        subGroups view=RawSignal factor=HEY1 cellType=K562 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.086332 751.171021
+        color 46,0,184
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsK562Six5Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 SIX5 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (SIX5 in K562 cells)
+        subGroups view=RawSignal factor=SIX5 cellType=K562 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.180118 235.235001
+        color 46,0,184
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsGm12878BatfPcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 BATF Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (BATF in GM12878 cells)
+        subGroups view=RawSignal factor=BATF cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.177558 118.165001
+        color 153,38,0
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsHepg2RxraPcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HepG2 RXRA Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (RXRA in HepG2 cells)
+        subGroups view=RawSignal factor=RXRA cellType=HEPG2 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.196682 214.923996
+        color 189,0,157
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsHepg2Pol24h8Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HepG2 Pol2-4H8 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in HepG2 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=HEPG2 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.172491 498.584015
+        color 189,0,157
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsHepg2Zbtb33Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel HepG2 ZBTB33 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (ZBTB33 in HepG2 cells)
+        subGroups view=RawSignal factor=ZBTB33 cellType=HEPG2 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.179863 183.729996
+        color 189,0,157
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsH1hescPol2V0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel H1-hESC Pol2 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2 in H1-hESC cells)
+        subGroups view=RawSignal factor=POL2 cellType=H1hESC protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.145301 113.225998
+        color 0,107,27
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsH1hescPol24h8V0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel H1-hESC Pol2-4H8 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in H1-hESC cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=H1hESC protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.167542 258.097992
+        color 0,107,27
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsH1hescNrsfV0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel H1-hESC NRSF Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (NRSF in H1-hESC cells)
+        subGroups view=RawSignal factor=NRSF cellType=H1hESC protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.215549 181.169006
+        color 0,107,27
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsGm12891Pu1Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 PU.1 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (PU.1 in GM12891 cells)
+        subGroups view=RawSignal factor=PU1 cellType=GM12891 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.135720 121.571999
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsGm12878Bcl11aPcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 BCL11A Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (BCL11A in GM12878 cells)
+        subGroups view=RawSignal factor=BCL11A cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.159611 359.764008
+        color 153,38,0
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsH1hescTaf1V0416102RawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel H1-hESC TAF1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (TAF1 in H1-hESC cells)
+        subGroups view=RawSignal factor=TAF1 cellType=H1hESC protocol=V0416102 treatment=None rep=rep2
+        type bigWig 0.221181 169.923004
+        color 0,107,27
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsK562Pol24h8Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 Pol2-4H8 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Pol2-4H8 in K562 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=K562 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.153527 493.013000
+        color 46,0,184
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsK562Pol24h8Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 Pol2-4H8 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Pol2-4H8 in K562 cells)
+        subGroups view=RawSignal factor=POL24H8 cellType=K562 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.152438 358.915985
+        color 46,0,184
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsGm12891Pu1Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12891 PU.1 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (PU.1 in GM12891 cells)
+        subGroups view=RawSignal factor=PU1 cellType=GM12891 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.177158 148.768997
+        # subId=3038 dateSubmitted=2010-11-30
+
+        track wgEncodeHaibTfbsK562Sin3ak20V0416101RawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 Sin3Ak-20 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Sin3Ak-20 in K562 cells)
+        subGroups view=RawSignal factor=SIN3AK20 cellType=K562 protocol=V0416101 treatment=None rep=rep2
+        type bigWig 0.130746 436.070007
+        color 46,0,184
+        # subId=3058 dateSubmitted=2010-12-03
+
+        track wgEncodeHaibTfbsK562Sin3ak20V0416101RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 Sin3Ak-20 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Sin3Ak-20 in K562 cells)
+        subGroups view=RawSignal factor=SIN3AK20 cellType=K562 protocol=V0416101 treatment=None rep=rep1
+        type bigWig 0.158863 235.634003
+        color 46,0,184
+        # subId=3058 dateSubmitted=2010-12-03
+
+        track wgEncodeHaibTfbsK562E2f6h50V0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 E2F6_(H-50) Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (E2F6_(H-50) in K562 cells)
+        subGroups view=RawSignal factor=E2F6H50 cellType=K562 protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.297230 676.867004
+        color 46,0,184
+        # subId=3069 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562MaxV0416102RawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 Max Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (Max in K562 cells)
+        subGroups view=RawSignal factor=MAX cellType=K562 protocol=V0416102 treatment=None rep=rep2
+        type bigWig 0.140969 134.238007
+        color 46,0,184
+        # subId=3070 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562MaxV0416102RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 Max Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (Max in K562 cells)
+        subGroups view=RawSignal factor=MAX cellType=K562 protocol=V0416102 treatment=None rep=rep1
+        type bigWig 0.272688 157.682007
+        color 46,0,184
+        # subId=3070 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562GabpV0416101RawRep4
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 GABP Raw 4
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 4 (GABP in K562 cells)
+        subGroups view=RawSignal factor=GABP cellType=K562 protocol=V0416101 treatment=None rep=rep4
+        type bigWig 0.228410 342.500000
+        color 46,0,184
+        # subId=3080 dateSubmitted=2010-12-08
+
+        track wgEncodeHaibTfbsK562GabpV0416101RawRep5
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel K562 GABP Raw 5
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 5 (GABP in K562 cells)
+        subGroups view=RawSignal factor=GABP cellType=K562 protocol=V0416101 treatment=None rep=rep5
+        type bigWig 0.381929 112.000999
+        color 46,0,184
+        # subId=3080 dateSubmitted=2010-12-08

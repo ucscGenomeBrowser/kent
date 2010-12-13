@@ -269,3 +269,29 @@ release alpha
         type bed 9
         # subId=1875 dateSubmitted=2010-12-06
 
+        track wgEncodeHaibMethylSeqH9esebdHpaRegionsRep1
+        release alpha
+        parent wgEncodeHaibMethylSeq off
+        shortLabel H9ES-EBD 1
+        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EBD cells)
+        subGroups  cellType=H9ES-EBD restrictionEnzyme=hpa rep=rep1
+        type bed 9
+        # subId=1968 dateSubmitted=2010-09-13
+
+        track wgEncodeHaibMethylSeqH9esafpminusHpaRegionsRep1
+        release alpha
+        parent wgEncodeHaibMethylSeq off
+        shortLabel H9ES-AFP- 1
+        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+        subGroups  cellType=H9ES-AFP- restrictionEnzyme=hpa rep=rep1
+        type bed 9
+        # subId=1968 dateSubmitted=2010-09-13
+
+        track wgEncodeHaibMethylSeqH9esebHpaRegionsRep1
+        release alpha
+        parent wgEncodeHaibMethylSeq off
+        shortLabel H9ES-EB 1
+        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EB cells)
+        subGroups  cellType=H9ES-EB restrictionEnzyme=hpa rep=rep1
+        type bed 9
+        # subId=1968 dateSubmitted=2010-09-13

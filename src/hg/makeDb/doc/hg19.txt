@@ -7856,6 +7856,9 @@ done
     hgLoadBed hg19 gnfAtlas2 gnfAtlas2.bed
     # Loaded 36357 elements of size 15
 
+    # Added knownToGnf1h table
+    hgMapToGene hg19 affyGnf1h knownGene knownToGnf1h
+
 ##########################################################################
 # BUILD NIBB IMAGE PROBES (DONE 2009-10-12 JK)
 
@@ -8378,7 +8381,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 11/1/10 angie)
+# NHGRI GWAS CATALOG (DONE 12/7/10 angie)
+# Updated 11/1/10
 # Updated 10/6/10
 # Updated 9/1/10
 # Updated 8/2/10
@@ -8404,7 +8408,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4791 elements of size 22
+#Loaded 4972 elements of size 22
 
 
 ######################################################################## 
@@ -10930,81 +10934,6 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 	/hive/data/genomes/hg18/hg18.2bit stdout \
 	| pslToBed stdin hg19ToHg18.10K.bed
 
-##############################################################################
-# UNIGENE/SAGE TRACK (RE-BUILT - 2010-08-06 Fan)
-
-# Create the uniGene alignments
-
-    # Download of the latest UniGene version is now automated by a
-    # cron job -- see /cluster/home/angie/crontab ,
-    # /cluster/home/angie/unigeneVers/unigene.csh .
-
-    ssh hgwdev
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806
-    cd /hive/data/genomes/hg19/bed/uniGene/100806
-
-    set Version = 225
-
-    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
-    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
-
-    ssh pk
-    set Version = 225
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
-    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
-
-    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
-    ls -1S \
-    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
-      > uniGene.lst
-    
-    cat << '_EOF_' > template.sub
-#LOOP
-/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95
-ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
-#ENDLOOP
-'_EOF_'
-
-    gensub2 genome.lst uniGene.lst template.sub para.spec
-    para create para.spec
-    mkdir psl
-    para try
-    para check
-    para push
-
-    # Completed: 93 of 93 jobs
-    # CPU time in finished jobs:      61305s    1021.74m    17.03h    0.71d  0.002 y
-    # IO & Wait Time:                  1117s      18.62m     0.31h    0.01d  0.000 y
-    # Average job time:                 671s      11.19m     0.19h    0.01d
-    # Longest finished job:            4574s      76.23m     1.27h    0.05d
-    # Submission to last job:          4709s      78.48m     1.31h    0.05d
-    # Estimated complete:                 0s       0.00m     0.00h    0.00d
-
-    pslSort dirs raw.psl tmp psl >& pslSort.log
-    cat raw.psl|\
-    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
-      stdin hg19.uniGene.pslReps.psl /dev/null
-    #Processed 800002 alignments
-    
-    gzip raw.psl
-
-    ssh hgwdev
-    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
-
-    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
-
-    mkdir -p /gbdb/hg19/uniGene
-    cd /gbdb/hg19/uniGene
-
-    rm Hs.seq.uniq.simpleHeader.fa
-    ln -s \
-    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
-    Hs.seq.uniq.simpleHeader.fa
-
-# load the sequence
-
-    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
-
 #############################################################################
 # GENSCAN PREDICTIONS (DONE - 2010-07-30 Fan)
 # 		      (PARTIALLY RE-DONE AFTER FIXING .LTF FILES - 2010-08-03 Fan)
@@ -13128,3 +13057,183 @@ for bed in agilent*.bed; do
     tail -n +2 $bed | hgLoadBed hg19 ${bed%.bed} stdin
 done
 rm bed.tab
+
+
+#################################################################################
+# Rfam (2010-12-08 Melissa)
+#
+# This track contains genomic re-alignments of sequences from the Rfam full alignment
+# sets.  Rfam contains hand-curated alignments of RNA families (Rfam seed) that are 
+# used to train homology models.  These models are applied to finding family members
+# in human by searching GenBank contig sequences from human.  The hits that meet
+# a specific threshold (hand-curated for each family) are pruned to a maximal 
+# percent identity, to yield a larger set of the sequences in each family 
+# (Rfam full).  This track represents our best estimates of the genomic 
+# locations of each Rfam full hit, limiting to those with good alignments to
+# the genomic sequence.  Why didn't we do a liftUp using the genomic
+# coordinates of the contigs?  We don't have those coordinates.  In addition,
+# a sequence can align well to a contig, but not as well to the genome.
+#
+# This data is used in building UCSC Genes.
+#
+
+# Download Rfam.fasta.gz, which is the set of sequences aligned in Rfam full.
+mkdir -p /hive/data/outside/Rfam/110710/  
+cd /hive/data/outside/Rfam/110710/  
+wget ftp://ftp.sanger.ac.uk/pub/databases/Rfam/CURRENT/Rfam.fasta.gz
+gunzip Rfam.fasta.gz
+
+# Extract the subset annotated as in human
+grep -i "Homo Sapiens" Rfam.fasta |awk '{ print $1}' \
+   |sed 's/^>//' > human.sequenceIds.txt
+faSomeRecords Rfam.fasta human.sequenceIds.txt Rfam.human.fasta
+gzip Rfam.fasta
+
+# Align the human sequences to the genome, retaining the best and
+# near-best hits and limiting to those hits with good percent identity
+# and coverage.
+mkdir -p hg19
+blat -q=rna -minIdentity=85 /hive/data/genomes/hg19/hg19.2bit Rfam.human.fasta \
+    hg19/Rfam.psl
+pslCDnaFilter -globalNearBest=0.01 -minCover=0.85 hg19/Rfam.psl \
+    hg19/Rfam.bestHits.psl
+
+# Load
+hgLoadPsl -table="Rfam" hg19 hg19/Rfam.bestHits.psl
+
+
+
+#####################################################
+# Vista Enhancers (galt 2010-12-09 done)
+#
+# Vista from Lawrence-Berkeley has assayed
+# 301 human conserved non-coding intra- and inter-
+# genic elements for their ability to promote
+# lacZ in mouse embryos.  A positive looks like
+# a mouse with a purple spine.
+#
+
+mkdir /hive/data/genomes/hg19/bed/vistaEnhancers
+cd /hive/data/genomes/hg19/bed/vistaEnhancers
+
+# download data file from the vista browser (coordinates are for hg19)
+wget -O enhancerbrowser.datadownload.txt 'http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?page_size=100;show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1'
+
+# give elements with positive label a score of 900, 
+# give elements with negative label a score of 200.
+# print to 5-field bed file
+cat enhancerbrowser.datadownload.txt \
+        | grep ">" \
+        | sed -e 's#^<pre>##' \
+        | sed -e 's#</pre>$##' \
+        | grep "^>Human" \
+        | sed -e 's#^>Human|##' \
+        | tr :- ' ' \
+        | sed -e 's/positive/900/'\
+        | sed -e 's/negative/200/' \
+        | awk '{print $1"\t"$2"\t"$3"\telement_"$6"\t"$8}' \
+        | grep -P -v "^chr\t" \  
+        > vistaEnhancers.bed
+hgLoadBed hg19 vistaEnhancers vistaEnhancers.bed
+#Loaded 1339 elements of size 5
+
+
+# add to hg19/trackDb.ra
+track vistaEnhancers override
+url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+
+
+#####################################################
+# UNIGENE/SAGE TRACK (RE-BUILT - 2010-12-10 Fan)
+
+# Create the uniGene alignments
+
+    # Download of the latest UniGene version is now automated by a
+    # cron job -- see /cluster/home/angie/crontab ,
+    # /cluster/home/angie/unigeneVers/unigene.csh .
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/101210
+    cd /hive/data/genomes/hg19/bed/uniGene/101210
+
+    set Version = 228
+
+    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
+    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
+
+    ssh swarm
+    set Version = 228
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/101210/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/101210/run.blat
+
+    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
+    ls -1S \
+    /hive/data/genomes/hg19/bed/uniGene/101210/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95 ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+
+#Completed: 93 of 93 jobs
+#CPU time in finished jobs:      68896s    1148.26m    19.14h    0.80d  0.002 y
+#IO & Wait Time:                  4789s      79.82m     1.33h    0.06d  0.000 y
+#Average job time:                 792s      13.21m     0.22h    0.01d
+#Longest finished job:            5274s      87.90m     1.47h    0.06d
+#Submission to last job:          5840s      97.33m     1.62h    0.07d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    cat raw.psl|\
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg19.uniGene.pslReps.psl /dev/null
+    
+    gzip raw.psl
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/uniGene/101210/run.blat
+
+    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
+
+    mkdir -p /gbdb/hg19/uniGene
+    cd /gbdb/hg19/uniGene
+
+    rm Hs.seq.uniq.simpleHeader.fa
+    ln -s \
+    /hive/data/genomes/hg19/bed/uniGene/101210/Hs.seq.uniq.simpleHeader.fa \
+    Hs.seq.uniq.simpleHeader.fa
+
+# load the sequence
+
+    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+
+##############################################################################
+
+##############################################################################
+# GAD View Lift (DONE, Andy 2010-12-12)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir gad
+cd gad/
+echo "select * from gad" | hgsql hg18 | tail -n +2 > hg18.bed
+liftOver hg18.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.{bed,unmapped}
+hgLoadBed -noBin hg19 gad hg19.bed
+rm bed.tab
+wc -l *.bed
+#  1883 hg18.bed
+#  1860 hg19.bed
+grep -i split hg19.unmapped | wc -l
+#18
+grep -i part hg19.unmapped | wc -l
+#5
+
+#############################################################################

@@ -6,12 +6,12 @@
 #               - Peaks = Pk
 #               - Signal = Sg
 #       - cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
-#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks for Tier 1 cell lines
+#       - Default Tracks on: 
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
 #       - Track Long Label: Standardize as Encode (dataType) from Univeristy
 #       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
 #       - View Displays: Deafult view filters:
-#               - Peaks-??
+
 
 track wgEncodeSydhTfbs
 release alpha
@@ -25,16 +25,19 @@ type bed 3
 origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
-subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2   HUVEC=HUVEC  NB4=NB4 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y U2OS=U2OS uK562=K562_<i>IFN&alpha;_30min</i> wK562=K562_<i>IFN&gamma;_30min</i> xK562=K562_<i>IFN&gamma;_6hrs</i> yMCF10AES=MCF10A-Er-Src<i>EtOH;_36hr</i> zMCF10AES=MCF10A-Er-Src<i>TAM;_36hr</i>
-subGroup3 factor Factor  BRCA1C=BRCA1_(C-1863) CEBPB=CEBPB  CHD21250=CHD2_(N-1250) cJUN=c-Jun cMYC=c-Myc CCNT2=CCNT2 CTBP2=CtBP2 ELK4=ELK4 GATA1=GATA-1 GATA2=GATA2 GTF2F1RAP=GTF2F1_(RAP-74) GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 JUND=JunD KAP1=KAP1 MAX=Max  Mxi1BHLH=Mxi1_(bHLH) P300F4=p300_(F-4) P300N15=p300_(N-15) POL2=Pol2 POL2S2=Pol2(phosphoS2) PRDM1V=PRDM1_(Val90)  NFE2H=NF-E2_(H-230) NRF1=Nrf1 RAD21=Rad21 RFX5N494=RFX5_(N-494) SETDB1=SETDB1 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP USF2=USF2  WHIP=WHIP ZNF274=ZNF274 ZZZ3=ZZZ3 zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
-subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit IGGYale=IgG_Yale UCD=UC_Davis 
-subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs ETOH01=EtOH;_36hr TAM=TAM;_36hr
-dimensions dimensionX=cellType dimensionY=factor
-#dimensions dimensionX=cellType dimensionY=factor dimensionZ=control 
-#Need to figure out how to use dimesions and make check boxes
-#dimensions dimensionX=cellType dimensionY=factor dimA=control dimB=treatment 
-#dimensionZchecked Standard,IgG_Mouse,IgG_Rabbit
-sortOrder cellType=+ factor=+ control=+ view=+
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) K562b=K562b&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HepG2b=HepG2(b)&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y  U2OS=U2OS 
+#subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC K562=K562 K562b=K562b HeLaS3=HeLa-S3 HepG2=HepG2 HepG2b=HepG2(b)   HUVEC=HUVEC GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y  U2OS=U2OS uK562=K562_<i>IFN&alpha;_30min</i> wK562=K562_<i>IFN&gamma;_30min</i> xK562=K562_<i>IFN&gamma;_6hrs</i> yMCF10AES=MCF10A-Er-Src<i>EtOH;_36hr</i> zMCF10AES=MCF10A-Er-Src<i>TAM;_36hr</i>
+subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1  BRCA1C=BRCA1_(C-1863) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD21250=CHD2_(N-1250) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GRP20=GRp20 GTF2B=GTF2B GTF2F1RAP=GTF2F1_(RAP-74)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MAX=Max  Mxi1BHLH=Mxi1_(bHLH) NFE2H=NF-E2_(H-230) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300F4=p300_(F-4) P300N15=p300_(N-15) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM1V=PRDM1_(Val90)    RAD21=Rad21 RFX5N494=RFX5_(N-494) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3i zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
+#subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1  BRCA1C=BRCA1_(C-1863) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CEBPB=CEBPB  CHD21250=CHD2_(N-1250) cFOS=c-FOS cJUN=c-Jun cMYC=c-Myc CCNT2=CCNT2 CTBP2=CtBP2 E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GRP20=GRp20 GTF2F1RAP=GTF2F1_(RAP-74) GTF2B=GTF2B HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF3=IRF3 IRF1=IRF1 JUND=JunD KAP1=KAP1 MAX=Max  Mxi1BHLH=Mxi1_(bHLH) NFKB=NFKB P300F4=p300_(F-4) P300N15=p300_(N-15) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM1V=PRDM1_(Val90)  NFE2H=NF-E2_(H-230) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFYA=NF-YA NFYB=NF-YB  RAD21=Rad21 RFX5N494=RFX5_(N-494) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3i zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputstd=Input_(<i>Standard</i>) zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
+subGroup4 control Control std=Standard IGGmus=IgG_mus IGGrab=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
+#subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
+subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs ETOH01=EtOH FORSKLN=forskolin INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM TNFa=TNFa
+#subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs ETOH01=EtOH;_36hr FORSKLN=forskolin INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM;_36hr TNFa=TNFa
+dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
+dimensionZchecked aNone
+dimensionAchecked std,IGGmus,IGGrab,UCD
+filterComposite dimZ=one dimA=multi
+sortOrder cellType=+ factor=+ control=+ treatment=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
 visibilityViewDefaults Peaks=pack  Signal=full
@@ -58,10 +61,9 @@ wgEncode 1
     qValueFilter 0
     qValueFilterLimits 0:300
 
-		#Tier 1 cell turned on by default #
 	    track wgEncodeSydhTfbsGm12878WhipIggmusPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks 
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel GM12878 WHIP   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (WHIP in GM12878 cells)
 	    subGroups view=Peaks factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
@@ -149,10 +151,9 @@ wgEncode 1
 	    color 0,107,27
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=SUZ12 treatment=None control=UCDavis setType=exp inputType=H1-hESC/None/Input/UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1175 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescSuz12UcdPk fileName=wgEncodeSydhTfbsH1hescSuz12UcdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Ccnt2StdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    CCNT2  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (CCNT2 in K562 cells)
 	    subGroups view=Peaks factor=CCNT2 cellType=K562 control=std treatment=aNone
@@ -160,10 +161,9 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=CCNT2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1147 dateSubmitted=2010-04-28 dateUnrestricted=2011-01-28 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Ccnt2StdPk fileName=wgEncodeSydhTfbsK562Ccnt2StdPk.narrowPeak.gz
 
-	    #Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Hmgn3StdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    HMGN3  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (HMGN3 in K562 cells)
 	    subGroups view=Peaks factor=HMGN3 cellType=K562 control=std treatment=aNone
@@ -177,7 +177,7 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562/a3 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
-	    subGroups view=Peaks factor=IRF1 cellType=uK562 control=std treatment=IFNa30
+	    subGroups view=Peaks factor=IRF1 cellType=K562 control=std treatment=IFNa30
 	    type narrowPeak
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNa30 control=std setType=exp inputType=K562/IFNa30/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1135 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifna30StdPk fileName=wgEncodeSydhTfbsK562Irf1Ifna30StdPk.narrowPeak.gz
@@ -188,15 +188,14 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562/g6 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
-	    subGroups view=Peaks factor=IRF1 cellType=xK562 control=std treatment=IFNg6h
+	    subGroups view=Peaks factor=IRF1 cellType=K562 control=std treatment=IFNg6h
 	    type narrowPeak
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNg6h control=std setType=exp inputType=K562/IFNg6h/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1139 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifng6hStdPk fileName=wgEncodeSydhTfbsK562Irf1Ifng6hStdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Nrf1IggrabPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    Nrf1   Pk 
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Nrf1 in K562 cells)
 	    subGroups view=Peaks factor=NRF1 cellType=K562 control=IGGrab treatment=aNone
@@ -204,10 +203,9 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Nrf1 treatment=None control=IgG-rab setType=exp inputType=K562/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1133 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Nrf1IggrabPk fileName=wgEncodeSydhTfbsK562Nrf1IggrabPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Gtf2bStdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    GTF2B  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (GTF2B in K562 cells)
 	    subGroups view=Peaks factor=GTF2B cellType=K562 control=std treatment=aNone
@@ -215,10 +213,9 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=GTF2B treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1149 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Gtf2bStdPk fileName=wgEncodeSydhTfbsK562Gtf2bStdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Usf2StdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    USF2   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (USF2 in K562 cells)
 	    subGroups view=Peaks factor=USF2 cellType=K562 control=std treatment=aNone
@@ -236,10 +233,9 @@ wgEncode 1
 	    color 189,0,157
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdPk fileName=wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
         track wgEncodeSydhTfbsGm12878Znf274UcdPk
         release alpha
-        subTrack wgEncodeSydhTfbsViewPeaks on
+        subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 ZNF274 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in GM12878 cells)
         subGroups view=Peaks factor=ZNF274 cellType=GM12878 control=UCD treatment=aNone
@@ -276,10 +272,9 @@ wgEncode 1
         type narrowPeak
     # subId=1209 dateSubmitted=2010-05-20
 
-		#Tier 1 Cell Line, deafult track on #
         track wgEncodeSydhTfbsGm12878TbpIggmusPk
         release alpha
-        subTrack wgEncodeSydhTfbsViewPeaks on
+        subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 TBP    Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in GM12878 cells)
         subGroups view=Peaks factor=TBP cellType=GM12878 control=IGGmus treatment=aNone
@@ -356,10 +351,9 @@ wgEncode 1
         color 189,0,157
     # subId=1365 dateSubmitted=2010-06-11
 
-	#Tier 1 cell turned on by default #
         track wgEncodeSydhTfbsK562Pol2s2StdPk
         release alpha
-        parent wgEncodeSydhTfbsViewPeaks on
+        parent wgEncodeSydhTfbsViewPeaks off 
         shortLabel K562    Pol2S2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in K562 cells)
         subGroups view=Peaks factor=POL2S2 cellType=K562 control=std treatment=aNone
@@ -389,7 +383,7 @@ wgEncode 1
 
         track wgEncodeSydhTfbsK562Kap1UcdPk
         release alpha
-        parent wgEncodeSydhTfbsViewPeaks 
+        parent wgEncodeSydhTfbsViewPeaks off 
         shortLabel K562 KAP1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (KAP1 in K562 cells)
         subGroups view=Peaks factor=KAP1 cellType=K562 control=UCD treatment=aNone
@@ -402,7 +396,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 c-Myc Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in K562 cells)
-        subGroups view=Peaks factor=cMYC cellType=wK562 control=std treatment=IFNg30
+        subGroups view=Peaks factor=cMYC cellType=K562 control=std treatment=IFNg30
         type narrowPeak
         color 46,0,184
         # subId=2111 dateSubmitted=2010-08-17
@@ -677,7 +671,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=STAT3 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=std treatment=TAM
         type narrowPeak
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -686,7 +680,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=POL2 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=std treatment=TAM
         type narrowPeak
         # subId=2548 dateSubmitted=2010-10-20
 
@@ -695,7 +689,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=STAT3 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=std treatment=ETOH01
         type narrowPeak
         # subId=2767 dateSubmitted=2010-10-27
 
@@ -704,7 +698,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=POL2 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=std treatment=ETOH01
         type narrowPeak
         # subId=2768 dateSubmitted=2010-10-27
 
@@ -735,10 +729,9 @@ wgEncode 1
     windowingFunction mean
    
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsGm12878WhipIggmusSig
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
+	    subTrack wgEncodeSydhTfbsViewSignal off
 	    shortLabel GM12878 WHIP   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (WHIP in GM12878 cells)
 	    subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
@@ -746,219 +739,418 @@ wgEncode 1
 	    color 153,38,0
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=GM12878 antibody=WHIP treatment=None control=IgG-mus setType=exp inputType=GM12878/None/Input/IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1178 dateSubmitted=2010-04-26 dateUnrestricted=2011-01-26 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878WhipIggmusSig fileName=wgEncodeSydhTfbsGm12878WhipIggmusSig.bigWig.gz
 
-	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 Rad21  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HeLa-S3 cells)
-	    subGroups view=Signal factor=RAD21 cellType=HeLaS3 control=IGGrab treatment=aNone 
-	    type bigWig 1 7218
-	    color 0,119,158
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=Rad21 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1134 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Rad21IggrabSig fileName=wgEncodeSydhTfbsHelas3Rad21IggrabSig.bigWig.gz
+#	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HeLa-S3 Rad21  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HeLa-S3 cells)
+#	    subGroups view=Signal factor=RAD21 cellType=HeLaS3 control=IGGrab treatment=aNone 
+#	    type bigWig 1 7218
+#	    color 0,119,158
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=Rad21 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1134 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Rad21IggrabSig fileName=wgEncodeSydhTfbsHelas3Rad21IggrabSig.bigWig.gz
 
-	    track wgEncodeSydhTfbsHelas3TbpIggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 TBP    Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HeLa-S3 cells)
-	    subGroups view=Signal factor=TBP cellType=HeLaS3 control=IGGrab treatment=aNone
-	    type bigWig 1 32937
-	    color 0,119,158
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1142 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3TbpIggrabSig fileName=wgEncodeSydhTfbsHelas3TbpIggrabSig.bigWig.gz
+        track wgEncodeSydhTfbsHelas3Rad21IggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Rad21 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in HeLa-S3 cells)
+        subGroups view=Signal factor=RAD21 cellType=HeLaS3 control=IGGrab treatment=aNone
+        type bigWig 0.000000 4480.000000
+        color 0,119,158
+        # subId=3072 dateSubmitted=2010-12-06
 
-	    track wgEncodeSydhTfbsHelas3Elk4UcdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 ELK4   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ELK4 in HeLa-S3 cells)
-	    subGroups view=Signal factor=ELK4 cellType=HeLaS3 control=UCD treatment=aNone
-	    type bigWig 1 87098
-	    color 0,119,158
-	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=ELK4 treatment=None control=UCDavis setType=exp inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1138 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Elk4UcdSig fileName=wgEncodeSydhTfbsHelas3Elk4UcdSig.bigWig.gz
+#	    track wgEncodeSydhTfbsHelas3TbpIggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HeLa-S3 TBP    Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HeLa-S3 cells)
+#	    subGroups view=Signal factor=TBP cellType=HeLaS3 control=IGGrab treatment=aNone
+#	    type bigWig 1 32937
+#	    color 0,119,158
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1142 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3TbpIggrabSig fileName=wgEncodeSydhTfbsHelas3TbpIggrabSig.bigWig.gz
 
-	    track wgEncodeSydhTfbsHelas3Irf3IggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 IRF3   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HeLa-S3 cells)
-	    subGroups view=Signal factor=IRF3 cellType=HeLaS3 control=IGGrab treatment=aNone
-	    type bigWig 1 12871
-	    color 0,119,158
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=IRF3 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1177 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Irf3IggrabSig fileName=wgEncodeSydhTfbsHelas3Irf3IggrabSig.bigWig.gz
+        track wgEncodeSydhTfbsHelas3TbpIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 TBP Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in HeLa-S3 cells)
+        subGroups view=Signal factor=TBP cellType=HeLaS3 control=IGGrab treatment=aNone
+        type bigWig 0.000000 15604.500000
+        color 0,119,158
+        # subId=3072 dateSubmitted=2010-12-06
 
-	    track wgEncodeSydhTfbsHelas3InputUcdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 Input  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa-S3 cells)
-	    subGroups view=Signal factor=zInputucd cellType=HeLaS3 control=UCD treatment=aNone
-	    type bigWig 1 8970
-	    color 0,119,158
-	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=Input treatment=None control=UCDavis setType=input inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1140 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3InputUcdSig fileName=wgEncodeSydhTfbsHelas3InputUcdSig.bigWig.gz
+#	    track wgEncodeSydhTfbsHelas3Elk4UcdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HeLa-S3 ELK4   Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ELK4 in HeLa-S3 cells)
+#	    subGroups view=Signal factor=ELK4 cellType=HeLaS3 control=UCD treatment=aNone
+#	    type bigWig 1 87098
+#	    color 0,119,158
+#	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=ELK4 treatment=None control=UCDavis setType=exp inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1138 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Elk4UcdSig fileName=wgEncodeSydhTfbsHelas3Elk4UcdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsHelas3Elk4UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 ELK4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ELK4 in HeLa-S3 cells)
+        subGroups view=Signal factor=ELK4 cellType=HeLaS3 control=UCD treatment=aNone
+        type bigWig 0.000000 42205.000000
+        color 0,119,158
+        # subId=3072 dateSubmitted=2010-12-06
+
+#	    track wgEncodeSydhTfbsHelas3Irf3IggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HeLa-S3 IRF3   Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HeLa-S3 cells)
+#	    subGroups view=Signal factor=IRF3 cellType=HeLaS3 control=IGGrab treatment=aNone
+#	    type bigWig 1 12871
+#	    color 0,119,158
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HeLa-S3 antibody=IRF3 treatment=None control=IgG-rab setType=exp inputType=HeLa-S3/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1177 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3Irf3IggrabSig fileName=wgEncodeSydhTfbsHelas3Irf3IggrabSig.bigWig.gz
+
+        track wgEncodeSydhTfbsHelas3Irf3IggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 IRF3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF3 in HeLa-S3 cells)
+        subGroups view=Signal factor=IRF3 cellType=HeLaS3 control=IGGrab treatment=aNone
+        type bigWig 0.000000 11515.700195
+        color 0,119,158
+        # subId=3072 dateSubmitted=2010-12-06
+
+#	    track wgEncodeSydhTfbsHelas3InputUcdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HeLa-S3 Input  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa-S3 cells)
+#	    subGroups view=Signal factor=zInputucd cellType=HeLaS3 control=UCD treatment=aNone
+#	    type bigWig 1 8970
+#	    color 0,119,158
+#	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HeLa-S3 antibody=Input treatment=None control=UCDavis setType=input inputType=HeLa-S3/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1140 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHelas3InputUcdSig fileName=wgEncodeSydhTfbsHelas3InputUcdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsHelas3InputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputucd cellType=HeLaS3 control=UCD treatment=aNone
+        type bigWig 0.000000 10071.400391
+        color 0,119,158
+        # subId=3072 dateSubmitted=2010-12-06
 
 
-	    track wgEncodeSydhTfbsHepg2CjunIggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   c-Jun  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Jun in HepG2 cells)
-	    subGroups view=Signal factor=cJUN cellType=HepG2 control=IGGrab treatment=aNone
-	    type bigWig 1 51236
-	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=c-Jun treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1145 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2CjunIggrabSig fileName=wgEncodeSydhTfbsHepg2CjunIggrabSig.bigWig.gz
+#	    track wgEncodeSydhTfbsHepg2CjunIggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HepG2   c-Jun  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Jun in HepG2 cells)
+#	    subGroups view=Signal factor=cJUN cellType=HepG2 control=IGGrab treatment=aNone
+#	    type bigWig 1 51236
+#	    color 189,0,157
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=c-Jun treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1145 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2CjunIggrabSig fileName=wgEncodeSydhTfbsHepg2CjunIggrabSig.bigWig.gz
 
-	    track wgEncodeSydhTfbsHepg2Pol2IggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   Pol2   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
-	    subGroups view=Signal factor=POL2 cellType=HepG2 control=IGGrab treatment=aNone
-	    type bigWig 1 40167
-	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Pol2 treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1179 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Pol2IggrabSig fileName=wgEncodeSydhTfbsHepg2Pol2IggrabSig.bigWig.gz
+        track wgEncodeSydhTfbsHepg2CjunIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 c-Jun Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in HepG2 cells)
+        subGroups view=Signal factor=cJUN cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 0.000000 31413.500000
+        color 189,0,157
+        # subId=3072 dateSubmitted=2010-12-06
 
-	    track wgEncodeSydhTfbsHepg2InputIggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   Input  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
-	    subGroups view=Signal factor=zInputrab cellType=HepG2 control=IGGrab treatment=aNone
-	    type bigWig 1 10514
-	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Input treatment=None control=IgG-rab setType=input inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1136 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2InputIggrabSig fileName=wgEncodeSydhTfbsHepg2InputIggrabSig.bigWig.gz
+#	    track wgEncodeSydhTfbsHepg2Pol2IggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HepG2   Pol2   Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
+#	    subGroups view=Signal factor=POL2 cellType=HepG2 control=IGGrab treatment=aNone
+#	    type bigWig 1 40167
+#	    color 189,0,157
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Pol2 treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1179 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Pol2IggrabSig fileName=wgEncodeSydhTfbsHepg2Pol2IggrabSig.bigWig.gz
 
-	    track wgEncodeSydhTfbsHepg2TbpIggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   TBP    Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HepG2 cells)
-	    subGroups view=Signal factor=TBP cellType=HepG2 control=IGGrab treatment=aNone
-	    type bigWig 1 33317
-	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1141 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2TbpIggrabSig fileName=wgEncodeSydhTfbsHepg2TbpIggrabSig.bigWig.gz
+        track wgEncodeSydhTfbsHepg2Pol2IggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HepG2 cells)
+        subGroups view=Signal factor=POL2 cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 0.000000 40209.199219
+        color 189,0,157
+        # subId=3072 dateSubmitted=2010-12-06
 
-	    track wgEncodeSydhTfbsH1hescSuz12UcdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel H1-hESC SUZ12  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SUZ12 in H1-hESC cells)
-	    subGroups view=Signal factor=SUZ12 cellType=H1hESC control=UCD treatment=aNone
-	    type bigWig 1 14985
-	    color 0,107,27
-	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=SUZ12 treatment=None control=UCDavis setType=exp inputType=H1-hESC/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1175 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescSuz12UcdSig fileName=wgEncodeSydhTfbsH1hescSuz12UcdSig.bigWig.gz
+#	    track wgEncodeSydhTfbsHepg2InputIggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HepG2   Input  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
+#	    subGroups view=Signal factor=zInputrab cellType=HepG2 control=IGGrab treatment=aNone
+#	    type bigWig 1 10514
+#	    color 189,0,157
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=Input treatment=None control=IgG-rab setType=input inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1136 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2InputIggrabSig fileName=wgEncodeSydhTfbsHepg2InputIggrabSig.bigWig.gz
 
-	    track wgEncodeSydhTfbsH1hescInputUcdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel H1-hESC Input  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in H1-hESC cells)
-	    subGroups view=Signal factor=zInputucd cellType=H1hESC control=UCD treatment=aNone
-	    type bigWig 1 5725
-	    color 0,107,27
-	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=Input treatment=None control=UCDavis setType=input inputType=H1-hESC/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1176 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescInputUcdSig fileName=wgEncodeSydhTfbsH1hescInputUcdSig.bigWig.gz
+        track wgEncodeSydhTfbsHepg2InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
+        subGroups view=Signal factor=zInputrab cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 0.000000 10226.700195
+        color 189,0,157
+        # subId=3072 dateSubmitted=2010-12-06
 
-		#Tier 1 Cell Line, deafult track on #
-	    track wgEncodeSydhTfbsK562Ccnt2StdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    CCNT2  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (CCNT2 in K562 cells)
-	    subGroups view=Signal factor=CCNT2 cellType=K562 control=std treatment=aNone
-	    type bigWig 1 6951
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=CCNT2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1147 dateSubmitted=2010-04-28 dateUnrestricted=2011-01-28 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Ccnt2StdSig fileName=wgEncodeSydhTfbsK562Ccnt2StdSig.bigWig.gz
+#	    track wgEncodeSydhTfbsHepg2TbpIggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HepG2   TBP    Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HepG2 cells)
+#	    subGroups view=Signal factor=TBP cellType=HepG2 control=IGGrab treatment=aNone
+#	    type bigWig 1 33317
+#	    color 189,0,157
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=HepG2 antibody=TBP treatment=None control=IgG-rab setType=exp inputType=HepG2/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1141 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2TbpIggrabSig fileName=wgEncodeSydhTfbsHepg2TbpIggrabSig.bigWig.gz
 
-		#Tier 1 Cell Line, deafult track on #
-	    track wgEncodeSydhTfbsK562Hmgn3StdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    HMGN3  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (HMGN3 in K562 cells)
-	    subGroups view=Signal factor=HMGN3 cellType=K562 control=std treatment=aNone
-	    type bigWig 1 11280
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=HMGN3 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1148 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Hmgn3StdSig fileName=wgEncodeSydhTfbsK562Hmgn3StdSig.bigWig.gz
+        track wgEncodeSydhTfbsHepg2TbpIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 TBP Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in HepG2 cells)
+        subGroups view=Signal factor=TBP cellType=HepG2 control=IGGrab treatment=aNone
+        type bigWig 0.000000 20618.800781
+        color 189,0,157
+        # subId=3072 dateSubmitted=2010-12-06
 
-		#Trial of stating treatment of IFNa30 as /a3#
-	    track wgEncodeSydhTfbsK562Irf1Ifna30StdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel K562/a3 IRF1   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
-	    subGroups view=Signal factor=IRF1 cellType=uK562 control=std treatment=IFNa30
-	    type bigWig 1 8013
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNa30 control=std setType=exp inputType=K562/IFNa30/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1135 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifna30StdSig fileName=wgEncodeSydhTfbsK562Irf1Ifna30StdSig.bigWig.gz
+#	    track wgEncodeSydhTfbsH1hescSuz12UcdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel H1-hESC SUZ12  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SUZ12 in H1-hESC cells)
+#	    subGroups view=Signal factor=SUZ12 cellType=H1hESC control=UCD treatment=aNone
+#	    type bigWig 1 14985
+#	    color 0,107,27
+#	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=SUZ12 treatment=None control=UCDavis setType=exp inputType=H1-hESC/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1175 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescSuz12UcdSig fileName=wgEncodeSydhTfbsH1hescSuz12UcdSig.bigWig.gz
 
-		#Trial of stating treatment of IFNg6h as /g6#
-	    track wgEncodeSydhTfbsK562Irf1Ifng6hStdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel K562/g6 IRF1   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
-	    subGroups view=Signal factor=IRF1 cellType=xK562 control=std treatment=IFNg6h
-	    type bigWig 1 12768
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNg6h control=std setType=exp inputType=K562/IFNg6h/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1139 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifng6hStdSig fileName=wgEncodeSydhTfbsK562Irf1Ifng6hStdSig.bigWig.gz
+        track wgEncodeSydhTfbsH1hescSuz12UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel H1-hESC SUZ12 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SUZ12 in H1-hESC cells)
+        subGroups view=Signal factor=SUZ12 cellType=H1hESC control=UCD treatment=aNone
+        type bigWig 0.000000 16121.099609
+        color 0,107,27
+        # subId=3072 dateSubmitted=2010-12-06
 
-		#Tier 1 Cell Line, deafult track on #
-	    track wgEncodeSydhTfbsK562Nrf1IggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    Nrf1   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in K562 cells)
-	    subGroups view=Signal factor=NRF1 cellType=K562 control=IGGrab treatment=aNone
-	    type bigWig 1 8153
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Nrf1 treatment=None control=IgG-rab setType=exp inputType=K562/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1133 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Nrf1IggrabSig fileName=wgEncodeSydhTfbsK562Nrf1IggrabSig.bigWig.gz
-		
-		#Tier 1 Cell Line, deafult track on #
-	    track wgEncodeSydhTfbsK562InputIggrabSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    Input  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
-	    subGroups view=Signal factor=zInputrab cellType=K562 control=IGGrab treatment=aNone
-	    type bigWig 1 6064
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Input treatment=None control=IgG-rab setType=input inputType=K562/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1132 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562InputIggrabSig fileName=wgEncodeSydhTfbsK562InputIggrabSig.bigWig.gz
+#	    track wgEncodeSydhTfbsH1hescInputUcdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel H1-hESC Input  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in H1-hESC cells)
+#	    subGroups view=Signal factor=zInputucd cellType=H1hESC control=UCD treatment=aNone
+#	    type bigWig 1 5725
+#	    color 0,107,27
+#	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=Input treatment=None control=UCDavis setType=input inputType=H1-hESC/None/Input/UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1176 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescInputUcdSig fileName=wgEncodeSydhTfbsH1hescInputUcdSig.bigWig.gz
 
-		#Tier 1 Cell Line, deafult track on #
-	    track wgEncodeSydhTfbsK562Gtf2bStdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    GTF2B  Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GTF2B in K562 cells)
-	    subGroups view=Signal factor=GTF2B cellType=K562 control=std treatment=aNone
-	    type bigWig 1 2739
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=GTF2B treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1149 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Gtf2bStdSig fileName=wgEncodeSydhTfbsK562Gtf2bStdSig.bigWig.gz
+        track wgEncodeSydhTfbsH1hescInputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel H1-hESC Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in H1-hESC cells)
+        subGroups view=Signal factor=zInputucd cellType=H1hESC control=UCD treatment=aNone
+        type bigWig 0.000000 5709.399902
+        color 0,107,27
+        # subId=3072 dateSubmitted=2010-12-06
 
-		#Tier 1 Cell Line, deafult track on #
-	    track wgEncodeSydhTfbsK562Usf2StdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    USF2   Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in K562 cells)
-	    subGroups view=Signal factor=USF2 cellType=K562 control=std treatment=aNone
-	    type bigWig 1 15189
-	    color 46,0,184
-	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdSig fileName=wgEncodeSydhTfbsK562Usf2StdSig.bigWig.gz
+#		#Tier 1 Cell Line, deafult track on #
+#	    track wgEncodeSydhTfbsK562Ccnt2StdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal on
+#	    shortLabel K562    CCNT2  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (CCNT2 in K562 cells)
+#	    subGroups view=Signal factor=CCNT2 cellType=K562 control=std treatment=aNone
+#	    type bigWig 1 6951
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=CCNT2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1147 dateSubmitted=2010-04-28 dateUnrestricted=2011-01-28 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Ccnt2StdSig fileName=wgEncodeSydhTfbsK562Ccnt2StdSig.bigWig.gz
 
-	    track wgEncodeSydhTfbsHepg2Znf274UcdSig
-	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   ZNF274 Sg
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in HepG2 cells)
-	    subGroups view=Signal factor=ZNF274 cellType=HepG2 control=UCD treatment=aNone
-	    type bigWig 1.000000 9811.000000
-	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdSig fileName=wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig.gz
+        track wgEncodeSydhTfbsK562Ccnt2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 CCNT2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CCNT2 in K562 cells)
+        subGroups view=Signal factor=CCNT2 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 4295.200195
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
 
-		#Tier 1 Cell Line, deafult track on #
+#		#Tier 1 Cell Line, deafult track on #
+#	    track wgEncodeSydhTfbsK562Hmgn3StdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal on
+#	    shortLabel K562    HMGN3  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (HMGN3 in K562 cells)
+#	    subGroups view=Signal factor=HMGN3 cellType=K562 control=std treatment=aNone
+#	    type bigWig 1 11280
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=HMGN3 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1148 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Hmgn3StdSig fileName=wgEncodeSydhTfbsK562Hmgn3StdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsK562Hmgn3StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 HMGN3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HMGN3 in K562 cells)
+        subGroups view=Signal factor=HMGN3 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 7780.600098
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
+
+#		#Trial of stating treatment of IFNa30 as /a3#
+#	    track wgEncodeSydhTfbsK562Irf1Ifna30StdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel K562/a3 IRF1   Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
+#	    subGroups view=Signal factor=IRF1 cellType=uK562 control=std treatment=IFNa30
+#	    type bigWig 1 8013
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNa30 control=std setType=exp inputType=K562/IFNa30/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1135 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifna30StdSig fileName=wgEncodeSydhTfbsK562Irf1Ifna30StdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsK562Irf1Ifna30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 IRF1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF1 in K562 cells)
+        subGroups view=Signal factor=IRF1 cellType=K562 control=std treatment=IFNa30
+        type bigWig 0.000000 6434.399902
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
+
+#		#Trial of stating treatment of IFNg6h as /g6#
+#	    track wgEncodeSydhTfbsK562Irf1Ifng6hStdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel K562/g6 IRF1   Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
+#	    subGroups view=Signal factor=IRF1 cellType=xK562 control=std treatment=IFNg6h
+#	    type bigWig 1 12768
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNg6h control=std setType=exp inputType=K562/IFNg6h/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1139 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifng6hStdSig fileName=wgEncodeSydhTfbsK562Irf1Ifng6hStdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsK562Irf1Ifng6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 IRF1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF1 in K562 cells)
+        subGroups view=Signal factor=IRF1 cellType=K562 control=std treatment=IFNg6h
+        type bigWig 0.000000 10285.099609
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
+
+#		#Tier 1 Cell Line, deafult track on #
+#	    track wgEncodeSydhTfbsK562Nrf1IggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal on
+#	    shortLabel K562    Nrf1   Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in K562 cells)
+#	    subGroups view=Signal factor=NRF1 cellType=K562 control=IGGrab treatment=aNone
+#	    type bigWig 1 8153
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Nrf1 treatment=None control=IgG-rab setType=exp inputType=K562/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1133 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Nrf1IggrabSig fileName=wgEncodeSydhTfbsK562Nrf1IggrabSig.bigWig.gz
+
+        track wgEncodeSydhTfbsK562Nrf1IggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Nrf1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in K562 cells)
+        subGroups view=Signal factor=NRF1 cellType=K562 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8573.400391
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
+#		
+#		#Tier 1 Cell Line, deafult track on #
+#	    track wgEncodeSydhTfbsK562InputIggrabSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal on
+#	    shortLabel K562    Input  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
+#	    subGroups view=Signal factor=zInputrab cellType=K562 control=IGGrab treatment=aNone
+#	    type bigWig 1 6064
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Input treatment=None control=IgG-rab setType=input inputType=K562/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1132 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562InputIggrabSig fileName=wgEncodeSydhTfbsK562InputIggrabSig.bigWig.gz
+
+        track wgEncodeSydhTfbsK562InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
+        subGroups view=Signal factor=zInputrab cellType=K562 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8156.000000
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
+
+#		#Tier 1 Cell Line, deafult track on #
+#	    track wgEncodeSydhTfbsK562Gtf2bStdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal on
+#	    shortLabel K562    GTF2B  Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GTF2B in K562 cells)
+#	    subGroups view=Signal factor=GTF2B cellType=K562 control=std treatment=aNone
+#	    type bigWig 1 2739
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=GTF2B treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1149 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Gtf2bStdSig fileName=wgEncodeSydhTfbsK562Gtf2bStdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsK562Gtf2bStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 GTF2B Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GTF2B in K562 cells)
+        subGroups view=Signal factor=GTF2B cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 5885.000000
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
+
+#		#Tier 1 Cell Line, deafult track on #
+#	    track wgEncodeSydhTfbsK562Usf2StdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal on
+#	    shortLabel K562    USF2   Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in K562 cells)
+#	    subGroups view=Signal factor=USF2 cellType=K562 control=std treatment=aNone
+#	    type bigWig 1 15189
+#	    color 46,0,184
+#	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdSig fileName=wgEncodeSydhTfbsK562Usf2StdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsK562Usf2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 USF2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (USF2 in K562 cells)
+        subGroups view=Signal factor=USF2 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 15252.900391
+        color 46,0,184
+        # subId=3072 dateSubmitted=2010-12-06
+
+#	    track wgEncodeSydhTfbsHepg2Znf274UcdSig
+#	    release alpha
+#	    subTrack wgEncodeSydhTfbsViewSignal off
+#	    shortLabel HepG2   ZNF274 Sg
+#	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in HepG2 cells)
+#	    subGroups view=Signal factor=ZNF274 cellType=HepG2 control=UCD treatment=aNone
+#	    type bigWig 1.000000 9811.000000
+#	    color 189,0,157
+#	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdSig fileName=wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig.gz
+
+        track wgEncodeSydhTfbsHepg2Znf274UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 ZNF274 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in HepG2 cells)
+        subGroups view=Signal factor=ZNF274 cellType=HepG2 control=UCD treatment=aNone
+        type bigWig 0.000000 10548.200195
+        color 189,0,157
+        # subId=3072 dateSubmitted=2010-12-06
+
         track wgEncodeSydhTfbsGm12878Znf274UcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal on
+        subTrack wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 ZNF274 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in GM12878 cells)
         subGroups view=Signal factor=ZNF274 cellType=GM12878 control=UCD treatment=aNone
@@ -966,147 +1158,282 @@ wgEncode 1
         color 153,38,0
         metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=GM12878 antibody=ZNF274 setType=exp treatment=None inputType=GM12878/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1203 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsGm12878Znf274UcdSig fileName=wgEncodeSydhTfbsGm12878Znf274UcdSig.bigWig.gz
 
+#        track wgEncodeSydhTfbsHuvecGata2UcdSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HUVEC   GATA2  Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GATA-2 in HUVEC cells)
+#        subGroups view=Signal factor=GATA2 cellType=HUVEC control=UCD treatment=aNone
+#        type bigWig 1.000000 14280.000000
+#        color 224,75,0
+#        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdSig fileName=wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig.gz
+
         track wgEncodeSydhTfbsHuvecGata2UcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HUVEC   GATA2  Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GATA-2 in HUVEC cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HUVEC GATA-2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-2 in HUVEC cells)
         subGroups view=Signal factor=GATA2 cellType=HUVEC control=UCD treatment=aNone
-        type bigWig 1.000000 14280.000000
+        type bigWig 0.000000 8893.500000
         color 224,75,0
-        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=GATA-2 setType=exp treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1204 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecGata2UcdSig fileName=wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig.gz
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsH1hescMaxUcdSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel H1-hESC Max    Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Max in H1-hESC cells)
+#        subGroups view=Signal factor=MAX cellType=H1hESC control=UCD treatment=aNone
+#        type bigWig 1.000000 4069.000000
+#        color 0,107,27
+#        metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=H1-hESC antibody=Max setType=exp treatment=None inputType=H1-hESC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1206 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescMaxUcdSig fileName=wgEncodeSydhTfbsH1hescMaxUcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsH1hescMaxUcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel H1-hESC Max    Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Max in H1-hESC cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel H1-hESC Max Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in H1-hESC cells)
         subGroups view=Signal factor=MAX cellType=H1hESC control=UCD treatment=aNone
-        type bigWig 1.000000 4069.000000
+        type bigWig 0.000000 4869.100098
         color 0,107,27
-        metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=H1-hESC antibody=Max setType=exp treatment=None inputType=H1-hESC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1206 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescMaxUcdSig fileName=wgEncodeSydhTfbsH1hescMaxUcdSig.bigWig.gz
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsHuvecInputUcdSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HUVEC   Input  Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HUVEC cells)
+#        subGroups view=Signal factor=zInputucd cellType=HUVEC control=UCD treatment=aNone
+#        type bigWig 1.000000 21529.000000
+#        color 224,75,0
+#        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=Input setType=input treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1207 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecInputUcdSig fileName=wgEncodeSydhTfbsHuvecInputUcdSig.bigWig.gz
 
         track wgEncodeSydhTfbsHuvecInputUcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HUVEC   Input  Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HUVEC cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HUVEC Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HUVEC cells)
         subGroups view=Signal factor=zInputucd cellType=HUVEC control=UCD treatment=aNone
-        type bigWig 1.000000 21529.000000
+        type bigWig 0.000000 16949.099609
         color 224,75,0
-        metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HUVEC antibody=Input setType=input treatment=None inputType=HUVEC/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1207 dateSubmitted=2010-05-20 dateUnrestricted=2011-02-20 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHuvecInputUcdSig fileName=wgEncodeSydhTfbsHuvecInputUcdSig.bigWig.gz
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsRajiPol2UcdSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel Raji    Pol2   Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in Raji cells)
+#        subGroups view=Signal factor=POL2 cellType=Raji control=UCD treatment=aNone
+#        type bigWig 1.000000 17093.000000
+#    # subId=1209 dateSubmitted=2010-05-20
 
         track wgEncodeSydhTfbsRajiPol2UcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel Raji    Pol2   Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in Raji cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel Raji Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in Raji cells)
         subGroups view=Signal factor=POL2 cellType=Raji control=UCD treatment=aNone
-        type bigWig 1.000000 17093.000000
-    # subId=1209 dateSubmitted=2010-05-20
+        type bigWig 0.000000 37915.300781
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsRajiInputUcdSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel Raji    Input  Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in Raji cells)
+#        subGroups view=Signal factor=zInputucd cellType=Raji control=UCD treatment=aNone
+#        type bigWig 1.000000 6507.000000
+#    # subId=1208 dateSubmitted=2010-05-20
 
         track wgEncodeSydhTfbsRajiInputUcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel Raji    Input  Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in Raji cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel Raji Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in Raji cells)
         subGroups view=Signal factor=zInputucd cellType=Raji control=UCD treatment=aNone
-        type bigWig 1.000000 6507.000000
-    # subId=1208 dateSubmitted=2010-05-20
+        type bigWig 0.000000 8754.400391
+        # subId=3072 dateSubmitted=2010-12-06
 
-		#Tier 1 Cell Line, deafult track on #
+#		#Tier 1 Cell Line, deafult track on #
+#        track wgEncodeSydhTfbsGm12878TbpIggmusSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal on
+#        shortLabel GM12878 TBP    Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in GM12878 cells)
+#        subGroups view=Signal factor=TBP cellType=GM12878 control=IGGmus treatment=aNone
+#        type bigWig 1.000000 54051.000000
+#        color 153,38,0
+#    # subId=1345 dateSubmitted=2010-06-11
+
         track wgEncodeSydhTfbsGm12878TbpIggmusSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal on
-        shortLabel GM12878 TBP    Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in GM12878 cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 TBP Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TBP in GM12878 cells)
         subGroups view=Signal factor=TBP cellType=GM12878 control=IGGmus treatment=aNone
-        type bigWig 1.000000 54051.000000
+        type bigWig 0.000000 25521.199219
         color 153,38,0
-    # subId=1345 dateSubmitted=2010-06-11
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsHepg2JundIggrabSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HepG2   JunD   Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (JunD in HepG2 cells)
+#        subGroups view=Signal factor=JUND cellType=HepG2 control=IGGrab treatment=aNone
+#        type bigWig 1.000000 97703.000000
+#        color 189,0,157
+#    # subId=1347 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2JundIggrabSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   JunD   Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (JunD in HepG2 cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 JunD Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in HepG2 cells)
         subGroups view=Signal factor=JUND cellType=HepG2 control=IGGrab treatment=aNone
-        type bigWig 1.000000 97703.000000
+        type bigWig 0.000000 61121.699219
         color 189,0,157
-    # subId=1347 dateSubmitted=2010-06-11
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsHepg2Nrf1IggrabSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HepG2   Nrf1   Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in HepG2 cells)
+#        subGroups view=Signal factor=NRF1 cellType=HepG2 control=IGGrab treatment=aNone
+#        type bigWig 1.000000 10552.000000
+#        color 189,0,157
+#    # subId=1348 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Nrf1IggrabSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   Nrf1   Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in HepG2 cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Nrf1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in HepG2 cells)
         subGroups view=Signal factor=NRF1 cellType=HepG2 control=IGGrab treatment=aNone
-        type bigWig 1.000000 10552.000000
+        type bigWig 0.000000 9370.299805
         color 189,0,157
-    # subId=1348 dateSubmitted=2010-06-11
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsHepg2Rad21IggrabSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HepG2   Rad21  Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HepG2 cells)
+#        subGroups view=Signal factor=RAD21 cellType=HepG2 control=IGGrab treatment=aNone
+#        type bigWig 1.000000 8537.000000
+#        color 189,0,157
+#    # subId=1349 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Rad21IggrabSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   Rad21  Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HepG2 cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Rad21 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in HepG2 cells)
         subGroups view=Signal factor=RAD21 cellType=HepG2 control=IGGrab treatment=aNone
-        type bigWig 1.000000 8537.000000
+        type bigWig 0.000000 7884.399902
         color 189,0,157
-    # subId=1349 dateSubmitted=2010-06-11
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsHepg2Usf2IggrabSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HepG2   USF2   Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in HepG2 cells)
+#        subGroups view=Signal factor=USF2 cellType=HepG2 control=IGGrab treatment=aNone
+#        type bigWig 1.000000 11782.000000
+#        color 189,0,157
+#    # subId=1357 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Usf2IggrabSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   USF2   Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in HepG2 cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 USF2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (USF2 in HepG2 cells)
         subGroups view=Signal factor=USF2 cellType=HepG2 control=IGGrab treatment=aNone
-        type bigWig 1.000000 11782.000000
+        type bigWig 0.000000 9735.400391
         color 189,0,157
-    # subId=1357 dateSubmitted=2010-06-11
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsU2osInputUcdSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel U2OS    Input  Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in U2OS cells)
+#        subGroups view=Signal factor=zInputucd cellType=U2OS control=UCD treatment=aNone
+#        type bigWig 1.000000 10233.000000
+#    # subId=1355 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsU2osInputUcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel U2OS    Input  Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in U2OS cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel U2OS Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in U2OS cells)
         subGroups view=Signal factor=zInputucd cellType=U2OS control=UCD treatment=aNone
-        type bigWig 1.000000 10233.000000
-    # subId=1355 dateSubmitted=2010-06-11
+        type bigWig 0.000000 11117.500000
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsU2osSetdb1UcdSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel U2OS    SETDB  Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in U2OS cells)
+#        subGroups view=Signal factor=SETDB1 cellType=U2OS control=UCD treatment=aNone
+#        type bigWig 1.000000 18192.000000
+#    # subId=1356 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsU2osSetdb1UcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel U2OS    SETDB  Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in U2OS cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel U2OS SETDB1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SETDB1 in U2OS cells)
         subGroups view=Signal factor=SETDB1 cellType=U2OS control=UCD treatment=aNone
-        type bigWig 1.000000 18192.000000
-    # subId=1356 dateSubmitted=2010-06-11
+        type bigWig 0.000000 10270.500000
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsHelas3Stat3IggrabSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HeLa-S3 STAT3  Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (STAT3 in HeLa-S3 cells)
+#        subGroups view=Signal factor=STAT3 cellType=HeLaS3 control=IGGrab treatment=aNone
+#        type bigWig 1.000000 10023.000000
+#        color 0,119,158
+#    # subId=1346 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHelas3Stat3IggrabSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HeLa-S3 STAT3  Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (STAT3 in HeLa-S3 cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 STAT3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in HeLa-S3 cells)
         subGroups view=Signal factor=STAT3 cellType=HeLaS3 control=IGGrab treatment=aNone
-        type bigWig 1.000000 10023.000000
+        type bigWig 0.000000 10657.400391
         color 0,119,158
-    # subId=1346 dateSubmitted=2010-06-11
+        # subId=3072 dateSubmitted=2010-12-06
+
+#        track wgEncodeSydhTfbsHepg2Irf3IggrabSig
+#        release alpha
+#        subTrack wgEncodeSydhTfbsViewSignal off
+#        shortLabel HepG2   IRF3   Sg
+#        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HepG2 cells)
+#        subGroups view=Signal factor=IRF3 cellType=HepG2 control=IGGrab treatment=aNone
+#        type bigWig 1.000000 10533.000000
+#        color 189,0,157
+#    # subId=1365 dateSubmitted=2010-06-11
 
         track wgEncodeSydhTfbsHepg2Irf3IggrabSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   IRF3   Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HepG2 cells)
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 IRF3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (IRF3 in HepG2 cells)
         subGroups view=Signal factor=IRF3 cellType=HepG2 control=IGGrab treatment=aNone
-        type bigWig 1.000000 10533.000000
+        type bigWig 0.000000 8989.900391
         color 189,0,157
-    # subId=1365 dateSubmitted=2010-06-11
+        # subId=3072 dateSubmitted=2010-12-06
 
-	#Tier 1 cell turned on by default #
         track wgEncodeSydhTfbsK562Pol2s2StdSig
         release alpha
-        parent wgEncodeSydhTfbsViewSignal 
+        parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562    Pol2S2 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in K562 cells)
         subGroups view=Signal factor=POL2S2 cellType=K562 control=std treatment=aNone
@@ -1136,7 +1463,7 @@ wgEncode 1
 
         track wgEncodeSydhTfbsK562Kap1UcdSig
         release alpha
-        parent wgEncodeSydhTfbsViewSignal 
+        parent wgEncodeSydhTfbsViewSignal off 
         shortLabel K562 KAP1 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (KAP1 in K562 cells)
         subGroups view=Signal factor=KAP1 cellType=K562 control=UCD treatment=aNone
@@ -1149,7 +1476,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Myc Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
-        subGroups view=Signal factor=cMYC cellType=wK562 control=std treatment=IFNg30
+        subGroups view=Signal factor=cMYC cellType=K562 control=std treatment=IFNg30
         type bigWig 1.000000 5759.000000
         color 46,0,184
         # subId=2111 dateSubmitted=2010-08-17
@@ -1425,7 +1752,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=STAT3 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=std treatment=TAM
         type bigWig 1.000000 15726.000000
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -1434,7 +1761,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=POL2 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Signal factor=POL2 cellType=MCF10AES control=std treatment=TAM
         type bigWig 1.000000 74444.000000
         # subId=2548 dateSubmitted=2010-10-20
 
@@ -1444,7 +1771,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=STAT3 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=std treatment=ETOH01
         type bigWig 1.000000 19260.000000
         # subId=2767 dateSubmitted=2010-10-27
 
@@ -1453,7 +1780,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=POL2 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Signal factor=POL2 cellType=MCF10AES control=std treatment=ETOH01
         type bigWig 1.000000 59340.000000
         # subId=2768 dateSubmitted=2010-10-27
 
@@ -1466,4 +1793,1666 @@ wgEncode 1
         type bigWig 1.000000 10659.000000
         color 0,119,158
         # subId=2770 dateSubmitted=2010-10-27
+
+        track wgEncodeSydhTfbsGm10847InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM10847 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM10847 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM10847 control=IGGmus treatment=aNone
+        type bigWig 0.000000 9122.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm10847InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM10847 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM10847 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM10847 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8241.500000
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm10847NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM10847 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM10847 cells)
+        subGroups view=Signal factor=NFKB cellType=GM10847 control=IGGrab treatment=aNone
+        type bigWig 0.000000 7685.799805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm10847Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM10847 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM10847 cells)
+        subGroups view=Signal factor=POL2 cellType=GM10847 control=IGGmus treatment=aNone
+        type bigWig 0.000000 11453.200195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878CfosStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 c-Fos Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Fos in GM12878 cells)
+        subGroups view=Signal factor=cFOS cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 9471.500000
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12878 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM12878 control=IGGmus treatment=aNone
+        type bigWig 0.000000 11413.400391
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12878 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM12878 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8421.900391
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878InputStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12878 cells)
+        subGroups view=Signal factor=zInputstd cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 9525.200195
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878JundStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 JunD Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in GM12878 cells)
+        subGroups view=Signal factor=JUND cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 9181.599609
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878MaxStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Max Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in GM12878 cells)
+        subGroups view=Signal factor=MAX cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 8308.000000
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12878 cells)
+        subGroups view=Signal factor=NFKB cellType=GM12878 control=IGGrab treatment=aNone
+        type bigWig 0.000000 9094.099609
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878NfkbTnfaStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12878 cells)
+        subGroups view=Signal factor=NFKB cellType=GM12878 control=std treatment=TNFa
+        type bigWig 0.000000 6696.200195
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12878 cells)
+        subGroups view=Signal factor=POL2 cellType=GM12878 control=IGGmus treatment=aNone
+        type bigWig 0.000000 21303.699219
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Pol2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12878 cells)
+        subGroups view=Signal factor=POL2 cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 26789.000000
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Pol3StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Pol3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol3 in GM12878 cells)
+        subGroups view=Signal factor=POL3 cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 11643.400391
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Rad21IggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 Rad21 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in GM12878 cells)
+        subGroups view=Signal factor=RAD21 cellType=GM12878 control=IGGrab treatment=aNone
+        type bigWig 0.000000 7561.200195
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Tr4StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 TR4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in GM12878 cells)
+        subGroups view=Signal factor=TR4 cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 8489.599609
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Xrcc4IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 WHIP Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (WHIP in GM12878 cells)
+        subGroups view=Signal factor=XRCC4 cellType=GM12878 control=IGGmus treatment=aNone
+        type bigWig 0.000000 6583.799805
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Yy1StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 YY1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (YY1 in GM12878 cells)
+        subGroups view=Signal factor=YY1 cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 15035.299805
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12878Zzz3StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12878 ZZZ3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZZZ3 in GM12878 cells)
+        subGroups view=Signal factor=ZZZ3 cellType=GM12878 control=std treatment=aNone
+        type bigWig 0.000000 16569.800781
+        color 153,38,0
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12891InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12891 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12891 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM12891 control=IGGmus treatment=aNone
+        type bigWig 0.000000 10997.200195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12891InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12891 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12891 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM12891 control=IGGrab treatment=aNone
+        type bigWig 0.000000 12307.200195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12891NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12891 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12891 cells)
+        subGroups view=Signal factor=NFKB cellType=GM12891 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8055.799805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12891Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12891 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12891 cells)
+        subGroups view=Signal factor=POL2 cellType=GM12891 control=IGGmus treatment=aNone
+        type bigWig 0.000000 12778.000000
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12892InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12892 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12892 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM12892 control=IGGmus treatment=aNone
+        type bigWig 0.000000 6636.100098
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12892InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12892 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM12892 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM12892 control=IGGrab treatment=aNone
+        type bigWig 0.000000 10143.200195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12892NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12892 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM12892 cells)
+        subGroups view=Signal factor=NFKB cellType=GM12892 control=IGGrab treatment=aNone
+        type bigWig 0.000000 10030.599609
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm12892Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM12892 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM12892 cells)
+        subGroups view=Signal factor=POL2 cellType=GM12892 control=IGGmus treatment=aNone
+        type bigWig 0.000000 15824.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm15510InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM15510 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM15510 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM15510 control=IGGmus treatment=aNone
+        type bigWig 0.000000 10053.500000
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm15510InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM15510 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM15510 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM15510 control=IGGrab treatment=aNone
+        type bigWig 0.000000 9380.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm15510NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM15510 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM15510 cells)
+        subGroups view=Signal factor=NFKB cellType=GM15510 control=IGGrab treatment=aNone
+        type bigWig 0.000000 11463.500000
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm15510Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM15510 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM15510 cells)
+        subGroups view=Signal factor=POL2 cellType=GM15510 control=IGGmus treatment=aNone
+        type bigWig 0.000000 25978.199219
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18505InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18505 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18505 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM18505 control=IGGmus treatment=aNone
+        type bigWig 0.000000 106648.500000
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18505InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18505 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18505 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM18505 control=IGGrab treatment=aNone
+        type bigWig 0.000000 9532.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18505NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18505 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM18505 cells)
+        subGroups view=Signal factor=NFKB cellType=GM18505 control=IGGrab treatment=aNone
+        type bigWig 0.000000 9172.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18505Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18505 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM18505 cells)
+        subGroups view=Signal factor=POL2 cellType=GM18505 control=IGGmus treatment=aNone
+        type bigWig 0.000000 13989.200195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18526InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18526 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18526 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM18526 control=IGGmus treatment=aNone
+        type bigWig 0.000000 12202.799805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18526InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18526 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18526 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM18526 control=IGGrab treatment=aNone
+        type bigWig 0.000000 13078.500000
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18526NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18526 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM18526 cells)
+        subGroups view=Signal factor=NFKB cellType=GM18526 control=IGGrab treatment=aNone
+        type bigWig 0.000000 12970.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18526Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18526 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM18526 cells)
+        subGroups view=Signal factor=POL2 cellType=GM18526 control=IGGmus treatment=aNone
+        type bigWig 0.000000 19671.599609
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18951InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18951 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18951 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM18951 control=IGGmus treatment=aNone
+        type bigWig 0.000000 9889.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18951InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18951 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM18951 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM18951 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8158.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18951NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18951 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM18951 cells)
+        subGroups view=Signal factor=NFKB cellType=GM18951 control=IGGrab treatment=aNone
+        type bigWig 0.000000 6628.500000
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm18951Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM18951 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM18951 cells)
+        subGroups view=Signal factor=POL2 cellType=GM18951 control=IGGmus treatment=aNone
+        type bigWig 0.000000 10967.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19099InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19099 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19099 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM19099 control=IGGmus treatment=aNone
+        type bigWig 0.000000 10618.599609
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19099InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19099 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19099 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM19099 control=IGGrab treatment=aNone
+        type bigWig 0.000000 12792.200195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19099NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19099 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM19099 cells)
+        subGroups view=Signal factor=NFKB cellType=GM19099 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8512.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19099Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19099 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM19099 cells)
+        subGroups view=Signal factor=POL2 cellType=GM19099 control=IGGmus treatment=aNone
+        type bigWig 0.000000 13585.799805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19193InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19193 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19193 cells)
+        subGroups view=Signal factor=zInputmus cellType=GM19193 control=IGGmus treatment=aNone
+        type bigWig 0.000000 9534.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19193InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19193 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in GM19193 cells)
+        subGroups view=Signal factor=zInputrab cellType=GM19193 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8317.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19193NfkbIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19193 NFKB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NFKB in GM19193 cells)
+        subGroups view=Signal factor=NFKB cellType=GM19193 control=IGGrab treatment=aNone
+        type bigWig 0.000000 7953.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsGm19193Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel GM19193 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in GM19193 cells)
+        subGroups view=Signal factor=POL2 cellType=GM19193 control=IGGmus treatment=aNone
+        type bigWig 0.000000 11612.200195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHct116InputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HCT-116 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HCT-116 cells)
+        subGroups view=Signal factor=zInputucd cellType=HCT116 control=UCD treatment=aNone
+        type bigWig 0.000000 10692.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHct116Pol2UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HCT-116 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HCT-116 cells)
+        subGroups view=Signal factor=POL2 cellType=HCT116 control=UCD treatment=aNone
+        type bigWig 0.000000 12339.400391
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHct116Tcf4UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HCT-116 TCF4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TCF4 in HCT-116 cells)
+        subGroups view=Signal factor=TCF4 cellType=HCT116 control=UCD treatment=aNone
+        type bigWig 0.000000 8673.700195
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHek293bInputStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HEK293(b) Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HEK293(b) cells)
+        subGroups view=Signal factor=zInputstd cellType=HEK293b control=std treatment=aNone
+        type bigWig 0.000000 9335.299805
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHek293bPol2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HEK293(b) Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HEK293(b) cells)
+        subGroups view=Signal factor=POL2 cellType=HEK293b control=std treatment=aNone
+        type bigWig 0.000000 15799.599609
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Ap2alphaStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 AP-2alpha Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (AP-2alpha in HeLa-S3 cells)
+        subGroups view=Signal factor=AP2alpha cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 7439.200195
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Ap2gammaStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 AP-2gamma Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (AP-2gamma in HeLa-S3 cells)
+        subGroups view=Signal factor=AP2gamma cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 5079.200195
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Baf155IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 BAF155 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BAF155 in HeLa-S3 cells)
+        subGroups view=Signal factor=BAF155 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type bigWig 0.000000 8446.500000
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Baf170IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 BAF170 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BAF170 in HeLa-S3 cells)
+        subGroups view=Signal factor=BAF170 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type bigWig 0.000000 7705.700195
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Bdp1StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 BDP1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BDP1 in HeLa-S3 cells)
+        subGroups view=Signal factor=BDP1 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 19361.199219
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Brf1StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 BRF1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF1 in HeLa-S3 cells)
+        subGroups view=Signal factor=BRF1 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 17811.699219
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Brf2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 BRF2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF2 in HeLa-S3 cells)
+        subGroups view=Signal factor=BRF2 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 21235.000000
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Brg1IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Brg1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Brg1 in HeLa-S3 cells)
+        subGroups view=Signal factor=BRG1 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type bigWig 0.000000 6834.700195
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3CfosStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 c-Fos Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Fos in HeLa-S3 cells)
+        subGroups view=Signal factor=cFOS cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 6979.799805
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3CjunIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 c-Jun Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in HeLa-S3 cells)
+        subGroups view=Signal factor=cJUN cellType=HeLaS3 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8194.099609
+        color 0,119,158
+        # subId=3053 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3CmycStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 c-Myc Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in HeLa-S3 cells)
+        subGroups view=Signal factor=cMYC cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 7654.700195
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3E2f1StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 E2F1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F1 in HeLa-S3 cells)
+        subGroups view=Signal factor=E2F1 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 14779.799805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3E2f4StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 E2F4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F4 in HeLa-S3 cells)
+        subGroups view=Signal factor=E2F4 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 9093.000000
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3E2f6StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 E2F6 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F6 in HeLa-S3 cells)
+        subGroups view=Signal factor=E2F6 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 6492.799805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Hae2f1StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 HA-E2F1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HA-E2F1 in HeLa-S3 cells)
+        subGroups view=Signal factor=HAE2F1 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 9980.799805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Ini1IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Ini1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Ini1 in HeLa-S3 cells)
+        subGroups view=Signal factor=INI1 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type bigWig 0.000000 5751.500000
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3InputIfng30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputstd cellType=HeLaS3 control=std treatment=IFNg30
+        type bigWig 0.000000 10035.299805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputmus cellType=HeLaS3 control=IGGmus treatment=aNone
+        type bigWig 0.000000 8996.000000
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3InputIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputrab cellType=HeLaS3 control=IGGrab treatment=aNone
+        type bigWig 0.000000 8775.099609
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3InputLargefragmentSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputlarge cellType=HeLaS3 control=LargeFragment treatment=aNone
+        type bigWig 0.000000 11998.299805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3InputMnaseSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputmnase cellType=HeLaS3 control=MNase treatment=aNone
+        type bigWig 0.000000 25203.800781
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3InputNakeddnaSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputnaked cellType=HeLaS3 control=NakedDNA treatment=aNone
+        type bigWig 0.000000 9010.000000
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3InputStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HeLa-S3 cells)
+        subGroups view=Signal factor=zInputstd cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 9239.799805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3JundIggrabSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 JunD Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in HeLa-S3 cells)
+        subGroups view=Signal factor=JUND cellType=HeLaS3 control=IGGrab treatment=aNone
+        type bigWig 0.000000 7203.799805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3MaxStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Max Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in HeLa-S3 cells)
+        subGroups view=Signal factor=MAX cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 6232.600098
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Nrf1IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Nrf1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Nrf1 in HeLa-S3 cells)
+        subGroups view=Signal factor=NRF1 cellType=HeLaS3 control=IGGmus treatment=aNone
+        type bigWig 0.000000 9296.200195
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Pol2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HeLa-S3 cells)
+        subGroups view=Signal factor=POL2 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 12050.500000
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Rpc155StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 RPC155 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RPC155 in HeLa-S3 cells)
+        subGroups view=Signal factor=RPC155 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 17037.800781
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Stat1Ifng30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 STAT1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in HeLa-S3 cells)
+        subGroups view=Signal factor=STAT1 cellType=HeLaS3 control=std treatment=IFNg30
+        type bigWig 0.000000 12023.900391
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Tf3c110StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 TFIIIC-110 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TFIIIC-110 in HeLa-S3 cells)
+        subGroups view=Signal factor=TF3C110 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 17044.599609
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHelas3Tr4StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HeLa-S3 TR4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in HeLa-S3 cells)
+        subGroups view=Signal factor=TR4 cellType=HeLaS3 control=std treatment=aNone
+        type bigWig 0.000000 8476.299805
+        color 0,119,158
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2CebpbForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 CEBPB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (CEBPB in HepG2 cells)
+        subGroups view=Signal factor=CEBPB cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 11672.200195
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2ErraForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 ERRA Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ERRA in HepG2 cells)
+        subGroups view=Signal factor=ERRA cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 6330.500000
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Grp20ForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 GRp20 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GRp20 in HepG2 cells)
+        subGroups view=Signal factor=GRP20 cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 11595.200195
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Hnf4aForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 HNF4A Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HNF4A in HepG2 cells)
+        subGroups view=Signal factor=HNF4A cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 6595.799805
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Hsf1ForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 HSF1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HSF1 in HepG2 cells)
+        subGroups view=Signal factor=HSF1 cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 6664.200195
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2InputForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
+        subGroups view=Signal factor=zInputstd cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 8468.099609
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2InputInslnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
+        subGroups view=Signal factor=zInputstd cellType=HepG2 control=std treatment=INSLN
+        type bigWig 0.000000 6198.600098
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2InputPravastStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2 cells)
+        subGroups view=Signal factor=zInputstd cellType=HepG2 control=std treatment=PRAVAST
+        type bigWig 0.000000 11025.599609
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Pgc1aForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 PGC1A Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (PGC1A in HepG2 cells)
+        subGroups view=Signal factor=PGC1A cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 9847.599609
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Pol2ForsklnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HepG2 cells)
+        subGroups view=Signal factor=POL2 cellType=HepG2 control=std treatment=FORSKLN
+        type bigWig 0.000000 24841.599609
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Pol2PravastStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HepG2 cells)
+        subGroups view=Signal factor=POL2 cellType=HepG2 control=std treatment=PRAVAST
+        type bigWig 0.000000 48733.699219
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Srebp1InslnStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 SREBP1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SREBP1 in HepG2 cells)
+        subGroups view=Signal factor=SREBP1 cellType=HepG2 control=std treatment=INSLN
+        type bigWig 0.000000 6511.500000
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Srebp1PravastStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 SREBP1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SREBP1 in HepG2 cells)
+        subGroups view=Signal factor=SREBP1 cellType=HepG2 control=std treatment=PRAVAST
+        type bigWig 0.000000 14243.299805
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2Srebp2PravastStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2 SREBP2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SREBP2 in HepG2 cells)
+        subGroups view=Signal factor=SREBP2 cellType=HepG2 control=std treatment=PRAVAST
+        type bigWig 0.000000 13475.799805
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2bInputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2b Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HepG2b cells)
+        subGroups view=Signal factor=zInputucd cellType=HepG2b control=UCD treatment=aNone
+        type bigWig 0.000000 11634.599609
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHepg2bTr4UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HepG2b TR4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in HepG2b cells)
+        subGroups view=Signal factor=TR4 cellType=HepG2b control=UCD treatment=aNone
+        type bigWig 0.000000 10481.000000
+        color 189,0,157
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHuvecCjunStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HUVEC c-Jun Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in HUVEC cells)
+        subGroups view=Signal factor=cJUN cellType=HUVEC control=std treatment=aNone
+        type bigWig 0.000000 12070.400391
+        color 224,75,0
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHuvecInputStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HUVEC Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HUVEC cells)
+        subGroups view=Signal factor=zInputstd cellType=HUVEC control=std treatment=aNone
+        type bigWig 0.000000 14303.700195
+        color 224,75,0
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHuvecMaxStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HUVEC Max Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in HUVEC cells)
+        subGroups view=Signal factor=MAX cellType=HUVEC control=std treatment=aNone
+        type bigWig 0.000000 13383.500000
+        color 224,75,0
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsHuvecPol2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel HUVEC Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in HUVEC cells)
+        subGroups view=Signal factor=POL2 cellType=HUVEC control=std treatment=aNone
+        type bigWig 0.000000 29937.699219
+        color 224,75,0
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Atf3StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 ATF3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ATF3 in K562 cells)
+        subGroups view=Signal factor=ATF3 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 15394.700195
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Bdp1StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 BDP1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BDP1 in K562 cells)
+        subGroups view=Signal factor=BDP1 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 14120.299805
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Brf1StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 BRF1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF1 in K562 cells)
+        subGroups view=Signal factor=BRF1 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 11787.900391
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Brf2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 BRF2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (BRF2 in K562 cells)
+        subGroups view=Signal factor=BRF2 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 13498.599609
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Brg1IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Brg1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Brg1 in K562 cells)
+        subGroups view=Signal factor=BRG1 cellType=K562 control=IGGmus treatment=aNone
+        type bigWig 0.000000 10317.900391
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CfosStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Fos Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Fos in K562 cells)
+        subGroups view=Signal factor=cFOS cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 10413.599609
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CjunIfna6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Jun Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
+        subGroups view=Signal factor=cJUN cellType=K562 control=std treatment=IFNa6h
+        type bigWig 0.000000 10884.000000
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CjunIfng30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Jun Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
+        subGroups view=Signal factor=cJUN cellType=K562 control=std treatment=IFNg30
+        type bigWig 0.000000 13385.200195
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CjunIfng6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Jun Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
+        subGroups view=Signal factor=cJUN cellType=K562 control=std treatment=IFNg6h
+        type bigWig 0.000000 12763.799805
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CjunStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Jun Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Jun in K562 cells)
+        subGroups view=Signal factor=cJUN cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 13478.500000
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CmycIfna30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Myc Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
+        subGroups view=Signal factor=cMYC cellType=K562 control=std treatment=IFNa30
+        type bigWig 0.000000 8599.299805
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CmycIfna6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Myc Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
+        subGroups view=Signal factor=cMYC cellType=K562 control=std treatment=IFNa6h
+        type bigWig 0.000000 13450.799805
+        color 46,0,184
+        # subId=3055 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CmycIfng6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Myc Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
+        subGroups view=Signal factor=cMYC cellType=K562 control=std treatment=IFNg6h
+        type bigWig 0.000000 12960.799805
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562CmycStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 c-Myc Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
+        subGroups view=Signal factor=cMYC cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 8692.299805
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Ini1IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Ini1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Ini1 in K562 cells)
+        subGroups view=Signal factor=INI1 cellType=K562 control=IGGmus treatment=aNone
+        type bigWig 0.000000 9341.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562InputIfna30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
+        subGroups view=Signal factor=zInputstd cellType=K562 control=std treatment=IFNa30
+        type bigWig 0.000000 14699.599609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562InputIfna6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
+        subGroups view=Signal factor=zInputstd cellType=K562 control=std treatment=IFNa6h
+        type bigWig 0.000000 13546.700195
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562InputIfng30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
+        subGroups view=Signal factor=zInputstd cellType=K562 control=std treatment=IFNg30
+        type bigWig 0.000000 12574.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562InputIfng6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
+        subGroups view=Signal factor=zInputstd cellType=K562 control=std treatment=IFNg6h
+        type bigWig 0.000000 15179.000000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562InputIggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
+        subGroups view=Signal factor=zInputstd cellType=K562 control=IGGmus treatment=aNone
+        type bigWig 0.000000 9144.400391
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562InputStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562 cells)
+        subGroups view=Signal factor=zInputstd cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 10295.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562JundStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 JunD Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (JunD in K562 cells)
+        subGroups view=Signal factor=JUND cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 10844.400391
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562MaxStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Max Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Max in K562 cells)
+        subGroups view=Signal factor=MAX cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 16605.800781
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562NelfeStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 NELFe Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NELFe in K562 cells)
+        subGroups view=Signal factor=NELFE cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 20343.000000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Nfe2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 NF-E2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-E2 in K562 cells)
+        subGroups view=Signal factor=NFE2 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 43274.101562
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562NfyaStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 NF-YA Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-YA in K562 cells)
+        subGroups view=Signal factor=NFYA cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 10476.400391
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562NfybStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 NF-YB Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (NF-YB in K562 cells)
+        subGroups view=Signal factor=NFYB cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 12378.799805
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Pol2Ifna30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
+        subGroups view=Signal factor=POL2 cellType=K562 control=std treatment=IFNa30
+        type bigWig 0.000000 12491.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Pol2Ifna6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
+        subGroups view=Signal factor=POL2 cellType=K562 control=std treatment=IFNa6h
+        type bigWig 0.000000 11960.299805
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Pol2Ifng30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
+        subGroups view=Signal factor=POL2 cellType=K562 control=std treatment=IFNg30
+        type bigWig 0.000000 27118.400391
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Pol2Ifng6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
+        subGroups view=Signal factor=POL2 cellType=K562 control=std treatment=IFNg6h
+        type bigWig 0.000000 21570.699219
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Pol2IggmusSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
+        subGroups view=Signal factor=POL2 cellType=K562 control=IGGmus treatment=aNone
+        type bigWig 0.000000 4259.700195
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Pol2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in K562 cells)
+        subGroups view=Signal factor=POL2 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 33625.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Pol3StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Pol3 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol3 in K562 cells)
+        subGroups view=Signal factor=POL3 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 11418.200195
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Rad21StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 Rad21 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Rad21 in K562 cells)
+        subGroups view=Signal factor=RAD21 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 16210.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Rpc155StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 RPC155 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (RPC155 in K562 cells)
+        subGroups view=Signal factor=RPC155 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 14042.099609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Sirt6StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 SIRT6 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SIRT6 in K562 cells)
+        subGroups view=Signal factor=SIRT6 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 15127.799805
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Stat1Ifna30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
+        subGroups view=Signal factor=STAT1 cellType=K562 control=std treatment=IFNa30
+        type bigWig 0.000000 12739.599609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Stat1Ifna6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
+        subGroups view=Signal factor=STAT1 cellType=K562 control=std treatment=IFNa6h
+        type bigWig 0.000000 8740.599609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Stat1Ifng30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
+        subGroups view=Signal factor=STAT1 cellType=K562 control=std treatment=IFNg30
+        type bigWig 0.000000 15428.299805
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Stat1Ifng6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 STAT1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT1 in K562 cells)
+        subGroups view=Signal factor=STAT1 cellType=K562 control=std treatment=IFNg6h
+        type bigWig 0.000000 10917.700195
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Stat2Ifna30StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 STAT2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT2 in K562 cells)
+        subGroups view=Signal factor=STAT2 cellType=K562 control=std treatment=IFNa30
+        type bigWig 0.000000 10111.900391
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Stat2Ifna6hStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 STAT2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT2 in K562 cells)
+        subGroups view=Signal factor=STAT2 cellType=K562 control=std treatment=IFNa6h
+        type bigWig 0.000000 10876.299805
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Tf3c110StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 TFIIIC-110 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TFIIIC-110 in K562 cells)
+        subGroups view=Signal factor=TF3C110 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 9467.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562Xrcc4StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562 XRCC4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (XRCC4 in K562 cells)
+        subGroups view=Signal factor=XRCC4 cellType=K562 control=std treatment=aNone
+        type bigWig 0.000000 28467.900391
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bE2f4UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b E2F4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F4 in K562b cells)
+        subGroups view=Signal factor=E2F4 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 7453.899902
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bE2f6UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b E2F6 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (E2F6 in K562b cells)
+        subGroups view=Signal factor=E2F6 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 13086.099609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bGata1UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b GATA-1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-1 in K562b cells)
+        subGroups view=Signal factor=GATA1 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 9299.099609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bGata2UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b GATA-2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (GATA-2 in K562b cells)
+        subGroups view=Signal factor=GATA2 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 10557.900391
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bInputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in K562b cells)
+        subGroups view=Signal factor=zInputucd cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 12876.099609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b SETDB1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SETDB1 in K562b cells)
+        subGroups view=Signal factor=SETDB1 cellType=K562b control=UCD treatment=MNaseD
+        type bigWig 0.000000 16409.599609
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bSetdb1UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b SETDB1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SETDB1 in K562b cells)
+        subGroups view=Signal factor=SETDB1 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 11440.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bTr4UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b TR4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TR4 in K562b cells)
+        subGroups view=Signal factor=TR4 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 14908.500000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bYy1UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b YY1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (YY1 in K562b cells)
+        subGroups view=Signal factor=YY1 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 14540.000000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bZnf263UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b ZNF263 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF263 in K562b cells)
+        subGroups view=Signal factor=ZNF263 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 4513.000000
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsK562bZnf274UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel K562b ZNF274 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in K562b cells)
+        subGroups view=Signal factor=ZNF274 cellType=K562b control=UCD treatment=aNone
+        type bigWig 0.000000 20990.199219
+        color 46,0,184
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsMcf7Hae2f1UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel MCF-7 HA-E2F1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (HA-E2F1 in MCF-7 cells)
+        subGroups view=Signal factor=HAE2F1 cellType=MCF7 control=UCD treatment=aNone
+        type bigWig 0.000000 3515.699951
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsMcf7InputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel MCF-7 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in MCF-7 cells)
+        subGroups view=Signal factor=zInputucd cellType=MCF7 control=UCD treatment=aNone
+        type bigWig 0.000000 12982.900391
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsNb4InputStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel NB4 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in NB4 cells)
+        subGroups view=Signal factor=zInputstd cellType=NB4 control=std treatment=aNone
+        type bigWig 0.000000 10120.700195
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsNb4Pol2StdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel NB4 Pol2 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in NB4 cells)
+        subGroups view=Signal factor=POL2 cellType=NB4 control=std treatment=aNone
+        type bigWig 0.000000 36878.398438
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsNt2d1InputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel NT2-D1 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in NT2-D1 cells)
+        subGroups view=Signal factor=zInputucd cellType=NT2D1 control=UCD treatment=aNone
+        type bigWig 0.000000 20529.000000
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsNt2d1Suz12UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel NT2-D1 SUZ12 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (SUZ12 in NT2-D1 cells)
+        subGroups view=Signal factor=SUZ12 cellType=NT2D1 control=UCD treatment=aNone
+        type bigWig 0.000000 15184.799805
+        # subId=3056 dateSubmitted=2010-12-02
+
+        track wgEncodeSydhTfbsNt2d1Yy1UcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel NT2-D1 YY1 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (YY1 in NT2-D1 cells)
+        subGroups view=Signal factor=YY1 cellType=NT2D1 control=UCD treatment=aNone
+        type bigWig 0.000000 13461.299805
+        # subId=3056 dateSubmitted=2010-12-02
 
