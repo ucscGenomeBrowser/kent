@@ -2651,6 +2651,8 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->track))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
+    if (sameString(tdb->type, "downloadsOnly")) // These tracks should not even be seen by6 hgTracks. (FIXME: Until we want to see them in cfg list and searchTracks!)
+        continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
     if (slCount(tdb->subtracks) != 0)
