@@ -79,8 +79,8 @@ foreach i ( $counter )
     echo    $email[$i]
     echo "   contacts $contacts"
     ## send output only to selected people
-    # set contacts="ann kuhn pauline rhead kayla"
-    # set contacts="pauline rhead ann kayla"
+    # set contacts="ann kuhn pauline rhead"
+    # set contacts="pauline rhead ann"
     echo "   contacts $contacts"
     cat Bfile 
   endif 
@@ -90,8 +90,8 @@ if ( $debug == "true" ) then
   exit
 endif
 
-# add donnak to list
-set contacts="$contacts donnak"
+# add ann to list
+set contacts="$contacts ann"
 
 # cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  " $USER
 cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
