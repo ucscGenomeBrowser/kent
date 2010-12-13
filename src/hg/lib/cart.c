@@ -2118,7 +2118,9 @@ if (visMax != visOrig || reshapeFully)
             cartRemove(cart,subtrack->track);  // Remove subtrack level vis if it isn't even checked just in case
         else  // subtrack is checked (should include subtrack level vis)
             {
-            if (!hashFindVal(subVisHash, subtrack->track))   // if the subtrack doesn't have individual vis AND...
+            if (tdbIsMultiTrack(parent))
+                cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited vis and non-selected should not have vis
+            else // NO LONGER EXCLUDE THOSE WITH INDIVIDUAL VIS//if (!hashFindVal(subVisHash, subtrack->track))   // if the subtrack doesn't have individual vis AND...
                 {
                 if (reshapeFully || visOrig == tvHide)
                     {
@@ -2128,15 +2130,13 @@ if (visMax != visOrig || reshapeFully)
                     }
                 else if (visOrig != tvHide)
                     {
-                    if (tdbIsMultiTrack(parent))
-                        cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited
-                    else
+                    //if (tdbIsMultiTrack(parent))
+                    //    cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited
+                    //else
                         cartSetString(cart,subtrack->track,hStringFromTv(visOrig));
                     countVisChanged++;
                     }
                 }
-            else if (tdbIsMultiTrack(parent))
-                cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited vis and non-selected should not have vis
             }
         }
     }
