@@ -13237,3 +13237,39 @@ grep -i part hg19.unmapped | wc -l
 #5
 
 #############################################################################
+# EVOFOLD (Done, 2010-12-13) - Galt using Jakob's procedure from hg18.txt.
+
+# RNA secondary structure predictions lifted from hg17 and filtered
+  ssh -C hgwdev
+  mkdir -p /cluster/data/hg19/bed/evofold
+  cd /cluster/data/hg19/bed/evofold
+  echo "select chrom, chromStart, chromEnd, name, score, strand, size, secStr, conf from evofold;" | hgsql hg17 | sed -e 1d > foldsHg17.bed
+  liftOver -bedPlus=6 -minMatch=1.0 foldsHg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg19.over.chain.gz tmp.bed unmapped.bed
+  # remove elements which are wrong size after lifting
+  awk '$3-$2 == $7' tmp.bed | sort -k4,4 > rawFoldsHg19.bed
+
+  # structure filters
+  # first, remove pairs that can't form in human
+  cut -f 1-6 rawFoldsHg19.bed > tmp.bed
+  # sequenceForBed can be found and compiled from here: $HOME/kent/src/hg/altSplice/altSplice/
+  nice sequenceForBed -db=hg19 -bedIn=tmp.bed -fastaOut=tmp.fa
+  cat tmp.fa | sed -e 's/\.[+-]\.chr.*$//' \
+             | sed -e '/^>/s/$/\t/' | tr -d '\n' | sed -e 's/>/\n/g' | sed -e '1d' -e '$s/$/\n/' | sort -k1,1 > foldsHg19Seq.tab
+  # Several python scripts were originally in /cluster/home/jsp/scripts/
+  # I copied them to this directory and
+  # I removed the optional "psyco" speedup library which does not work with our 64-bit python
+  join -1 4 -2 1 -o "1.4 1.8 2.2" rawFoldsHg19.bed foldsHg19Seq.tab | sed -e 's/  */\t/g' | sort -k1,1 \
+	     | ./tabFoldFilter.py > cleanFolds.tab
+  join -1 4 -2 1 -o "1.1 1.2 1.3 1.4 1.5 1.6 1.7 2.2 1.9" rawFoldsHg19.bed cleanFolds.tab | sed -e 's/  */\t/g' > tmp1.bed
+  # second, remove poor predictions
+  # scripts can be found in cvs tree at: cvsroot/jsp/scripts/. They use a few modules which can be found at: cvsroot/jsp/py_modules
+  cat tmp1.bed | ./bedRnassFilter.py --dangling --minAvrStemSize=3 | ./bedRnassFilter.sh 1 3 \
+	       | ./roundListFloats.py -c9 > foldsHg19.bed
+  # clean up
+  rm tmp.bed tmp1.bed foldsHg17.bed foldsHg19Seq.tab rawFoldsHg19.bed tmp.fa cleanFolds.tab
+
+  # upload
+  hgLoadBed -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/evofold.sql hg19 evofold foldsHg19.bed
+
+
+##########################################################################

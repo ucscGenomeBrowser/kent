@@ -1527,6 +1527,7 @@ codingAnnoLabel_snp130CodingDbSnp dbSNP
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 # Use hg18 file so we don't have to duplicate the 18G:
 snpSeqFile /gbdb/hg18/snp/snp130.fa
+origAssembly hg18
 
 track nscanGene override
 informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
@@ -1831,4 +1832,9 @@ dataVersion GRCh37 Patch 2 update, August 2010
 
 track vistaEnhancers override
 url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+
+track evofold override
+mafTrack multiz46way
+origAssembly hg17
+
 
