@@ -336,7 +336,7 @@ safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findWikiItemId(wikiItemId);
 
 addDescription(item, userName, chrom, itemStart, itemEnd, cart, database,
-	extraHeader->string, transcriptTag);
+	extraHeader->string, transcriptTag, NEW_ITEM_CATEGORY);
 dyStringFree(&extraHeader);
 return(item);
 }
@@ -350,7 +350,7 @@ if (*item)
     char transcriptTag[1024];
     safef(transcriptTag, ArraySize(transcriptTag), "%s", curGeneId);
     addDescription(*item, userName, curGeneChrom,
-	curGeneStart, curGeneEnd, cart, database, NULL, transcriptTag);
+	curGeneStart, curGeneEnd, cart, database, NULL, transcriptTag, NEW_ITEM_CATEGORY);
     }
 else
     {

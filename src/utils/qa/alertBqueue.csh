@@ -91,7 +91,7 @@ if ( $debug == "true" ) then
 endif
 
 # add ann to list
-set contacts="$contacts ann"
+set contacts="$contacts ann donna"
 
 # cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "test. ignore  " $USER
 cat Bfile | mail -c $contacts'@soe.ucsc.edu' -s "B-queue alert" $USER
