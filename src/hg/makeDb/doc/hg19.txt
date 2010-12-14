@@ -13273,3 +13273,19 @@ grep -i part hg19.unmapped | wc -l
 
 
 ##########################################################################
+# Build targetScanS track - (DONE - 2010-12-13 galt)
+#       requested by: George Bell gbell at wi.mit.edu
+    ssh hgwdev
+    mkdir -p /cluster/data/hg19/bed/targetScanS
+    cd /cluster/data/hg19/bed/targetScanS
+
+    wget --timestamping http://www.targetscan.org/vert_50/ucsc/hg19/hg19Cons_ALL_CHRS.BED
+
+    hgLoadBed hg19 targetScanS hg19Cons_ALL_CHRS.BED
+    #	Loaded 54199 elements of size 6
+    featureBits hg19 targetScanS
+    #   354163 bases of 2897316137 (0.012%) in intersection
+
+    # Create/edit/check in targetScans.html and trackDb.ra under
+    # kent/src/hg/makeDb/trackDb/human/hg19
+
