@@ -1881,7 +1881,7 @@ noInherit on
         # subId=1289 dateSubmitted=2010-06-10
 
        
-	    track wgEncodeUwTfbsGm12864InputStdRawRep1
+	track wgEncodeUwTfbsGm12864InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM864 Input   Ra1
@@ -2546,4 +2546,24 @@ noInherit on
         type bigWig 1.000000 8186.000000
         origAssembly hg19
         # subId=2781 dateSubmitted=2010-10-28
+
+        track wgEncodeUwTfbsHbmecInputStdRawRep1
+        release alpha
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HBMEC Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HBMEC cells)
+        subGroups view=zRSig factor=zInput cellType=HBMEC rep=1
+        type bigWig 1.000000 15288.000000
+        origAssembly hg19
+        # subId=2676 dateSubmitted=2010-10-23
+
+        track wgEncodeUwTfbsHcfaaInputStdRawRep1
+        release alpha
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel HCFaa Input Raw 1
+        longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HCFaa cells)
+        subGroups view=zRSig factor=zInput cellType=HCFaa  rep=1
+        type bigWig 1.000000 16198.000000
+        origAssembly hg19
+        # subId=2679 dateSubmitted=2010-10-23
 
