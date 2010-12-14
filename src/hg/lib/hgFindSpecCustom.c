@@ -360,6 +360,7 @@ for (;;)
     /* Seek to next line that starts with 'searchName' or 'searchTable' */
     for (;;)
 	{
+        char *subRelease;
 	if (!lineFileNext(lf, &line, NULL))
 	   {
 	   done = TRUE;
@@ -370,7 +371,7 @@ for (;;)
 	   lineFileReuse(lf);
 	   break;
 	   }
-        else if ((incFile = trackDbInclude(raFile, line)) != NULL)
+        else if ((incFile = trackDbInclude(raFile, line, &subRelease)) != NULL)
             {
 	    /* Set reEntered=TRUE whenever we recurse, so we don't polish
 	     * multiple times and get too many backslash-escapes. */

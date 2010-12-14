@@ -293,7 +293,7 @@ int trackDbCmp(const void *va, const void *vb);
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
 
-struct trackDb *trackDbFromRa(char *raFile);
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag);
 /* Load track info from ra file into list. */
 
 void trackDbPolish(struct trackDb *bt);
@@ -346,7 +346,7 @@ void trackDbSuperMarkup(struct trackDb *tdbList);
  * Child:    'supertrack <parent> [vis]
  * Returns NULL if there is no such setting */
 
-char *trackDbInclude(char *raFile, char *line);
+char *trackDbInclude(char *raFile, char *line, char **releaseTag);
 /* Get include filename from trackDb line.
    Return NULL if line doesn't contain include */
 
@@ -477,5 +477,8 @@ struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb);
 boolean trackDbUpdateOldTag(char **pTag, char **pVal);
 /* Look for obscolete tags and update them to new format.  Return TRUE if any update
  * is done.  Will allocate fresh memory for new tag and val if updated. */
+
+boolean trackDbCheckValidRelease(char *tag);
+/* check to make sure release tag is valid */
 #endif /* TRACKDB_H */
 
