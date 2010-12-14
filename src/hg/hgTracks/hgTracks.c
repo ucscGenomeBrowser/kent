@@ -4261,15 +4261,15 @@ for (;track != NULL; track = track->next)
     boolean shapedByubtrackOverride = FALSE;
     boolean cleanedByContainerSettings = FALSE;
 
+    // Top-down 'cleanup' MUST GO BEFORE bottom up reshaping.
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+
     if (tdbIsContainer(track->tdb))
         {
         shapedByubtrackOverride = cartTdbTreeReshapeIfNeeded(cart,track->tdb);
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-
-    // Top-down 'cleanup' can now follow reshaping because reshaping will flag itself for protection
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
