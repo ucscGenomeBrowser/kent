@@ -10,6 +10,9 @@
 #define hubConnectTableName "hubConnect"
 /* Name of our table. */
 
+#define hgHubConnectCgiDestUrl "hgHubConnect.destUrl"
+/* Cart variable to tell hgHubConnect where to go on submit. */
+
 boolean hubConnectTableExists();
 /* Return TRUE if the hubConnect table exists. */
 

@@ -13,6 +13,8 @@ CREATE TABLE hubConnect (
     lastOkTime datetime,	# Time when hub last was ok
     lastNotOkTime datetime,	# Time when hub last was not ok
     errorMessage longblob,	# If non-empty contains last error message from hub. If empty hub is ok.
+    dbCount int unsigned not null, # Number of databases hub has data for.
+    dbList longblob not null,   # Comma separated list of databases.
               #Indices
     PRIMARY KEY(id),
     INDEX(hubUrl(32))

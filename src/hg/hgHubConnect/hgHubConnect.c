@@ -23,13 +23,40 @@ static char const rcsid[] = "$Id: hgPcr.c,v 1.29 2009/09/23 18:42:17 angie Exp $
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
+static char *destUrl = "../cgi-bin/hgTracks";
 static char *pageTitle = "UCSC Track Hub Connect";
+char *database = NULL;
+char *organism = NULL;
 
+boolean nameInCommaList(char *name, char *commaList)
+/* Return TRUE if name is in comma separated list. */
+{
+if (commaList == NULL)
+    return FALSE;
+int nameLen = strlen(name);
+for (;;)
+    {
+    char c = *commaList;
+    if (c == 0)
+        return FALSE;
+    if (memcmp(name, commaList, nameLen) == 0)
+        {
+	c = commaList[nameLen];
+	if (c == 0 || c == ',')
+	    return TRUE;
+	}
+    commaList = strchr(commaList, ',');
+    if (commaList == NULL)
+        return FALSE;
+    commaList += 1;
+    }
+}
 
 void hgHubConnect()
 /* Put up the list of hubs and other controls for the page. */
 {
-printf("<FORM ACTION=\"../cgi-bin/hgHubConnect\" METHOD=\"GET\" NAME=\"mainForm\">\n");
+destUrl = cartUsualString(cart, hgHubConnectCgiDestUrl, destUrl);
+printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
 cartSaveSession(cart);
 printf(
    "<P>Track hubs are collections of tracks from outside of UCSC that can be imported into the "
@@ -38,42 +65,55 @@ printf(
    "bar and label underneath the main browser graphic, and in the configure page. To arrange "
    "for your own track hub to appear in this list, please contact genome@soe.ucsc.edu.</P>\n"
    );
+getDbAndGenome(cart, &database, &organism, oldVars);
+printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s] ", 
+	organism, hFreezeDate(database), database);
+cgiMakeButton("submit", "submit");
+printf("<BR>");
 struct sqlConnection *conn = hConnectCentral();
 char query[512];
-safef(query, sizeof(query), "select id,shortLabel,longLabel,errorMessage,hubUrl from %s", 
+safef(query, sizeof(query), "select id,shortLabel,longLabel,errorMessage,hubUrl,dbList from %s", 
 	hubConnectTableName); 
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 
-webPrintLinkTableStart();
-boolean firstRow = TRUE;
+boolean gotAnyRows = FALSE;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (firstRow)
-        firstRow = FALSE;
-    else
-        webPrintLinkTableNewRow();
     char *id = row[0], *shortLabel = row[1], *longLabel = row[2], *errorMessage = row[3],
-    	 *url = row[4];
-    if (errorMessage)
-        webPrintLinkCell("error");
-    else
+    	 *url = row[4], *dbList = row[5];
+    if (nameInCommaList(database, dbList))
 	{
-        webPrintLinkCellStart();
-	char hubName[32];
-	safef(hubName, sizeof(hubName), "hub_%u", id);
-	cartMakeCheckBox(cart, hubName, FALSE);
-	webPrintLinkCellEnd();
+	if (gotAnyRows)
+	    webPrintLinkTableNewRow();
+	else
+	    {
+	    webPrintLinkTableStart();
+	    gotAnyRows = TRUE;
+	    }
+	if (errorMessage)
+	    webPrintLinkCell("error");
+	else
+	    {
+	    webPrintLinkCellStart();
+	    char hubName[32];
+	    safef(hubName, sizeof(hubName), "hub_%s", id);
+	    cartMakeCheckBox(cart, hubName, FALSE);
+	    webPrintLinkCellEnd();
+	    }
+	webPrintLinkCell(shortLabel);
+	if (errorMessage)
+	    webPrintLinkCell(errorMessage);
+	else
+	    webPrintLinkCell(longLabel);
+	webPrintLinkCell(url);
 	}
-    webPrintLinkCell(shortLabel);
-    if (errorMessage)
-	webPrintLinkCell(errorMessage);
-    else
-        webPrintLinkCell(longLabel);
-    webPrintLinkCell(url);
     }
 sqlFreeResult(&sr);
-webPrintLinkTableEnd();
+if (gotAnyRows)
+    webPrintLinkTableEnd();
+else
+    printf("No Track Hubs for this genome assembly");
 printf("</FORM>\n");
 hDisconnectCentral(&conn);
 }
@@ -88,7 +128,7 @@ hgHubConnect();
 cartWebEnd();
 }
 
-char *excludeVars[] = {"Submit", "submit", "hc_one_url", NULL};
+char *excludeVars[] = {"Submit", "submit", "hc_one_url", hgHubConnectCgiDestUrl, NULL};
 
 int main(int argc, char *argv[])
 /* Process command line. */

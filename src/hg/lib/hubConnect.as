@@ -10,4 +10,6 @@ table hubConnect
     string lastOkTime;	"Time when hub last was ok"
     string lastNotOkTime; "Time when hub last was not ok"
     lstring errorMessage; "If non-empty contains last error message from hub. If empty hub is ok."
+    uint dbCount;	"Number of databases hub has data for."
+    string dbList[dbCount]; "Comma separated list of databases."
     )
