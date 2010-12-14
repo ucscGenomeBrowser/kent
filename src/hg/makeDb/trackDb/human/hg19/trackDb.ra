@@ -1837,4 +1837,16 @@ track evofold override
 mafTrack multiz46way
 origAssembly hg17
 
+track targetScanS
+shortLabel TS miRNA sites
+longLabel TargetScan miRNA Regulatory Sites
+group regulation
+priority 0
+visibility hide
+color 0,96,0
+scoreFilterMax 100
+type bed 6 .
+urlLabel TargetScan link:
+url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
 
