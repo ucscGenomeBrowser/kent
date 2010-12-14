@@ -11333,3 +11333,22 @@ for bed in agilent*.bed; do
     tail -n +2 $bed | hgLoadBed mm9 ${bed%.ct.bed} stdin
 done
 rm bed.tab
+
+
+##########################################################################
+# Build targetScanS track - (DONE - 2010-12-14 galt)
+#       requested by: George Bell gbell at wi.mit.edu
+    ssh hgwdev
+    mkdir -p /cluster/data/mm9/bed/targetScanS
+    cd /cluster/data/mm9/bed/targetScanS
+
+    wget --timestamping http://www.targetscan.org/mmu_50/ucsc/mm9/mm9Cons_ALL_CHRS.BED
+
+    hgLoadBed mm9 targetScanS mm9Cons_ALL_CHRS.BED
+    #	Loaded 38961 elements of size 6
+    featureBits mm9 targetScanS
+    #   253088 bases of 2620346127 (0.010%) in intersection
+
+    # Create/edit/check in targetScans.html and trackDb.ra under
+    # kent/src/hg/makeDb/trackDb/mouse/mm9
+
