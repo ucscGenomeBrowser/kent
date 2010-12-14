@@ -2,7 +2,7 @@
 
 # UW Histone (wrangler: Venkat, assisted by Tim)
 # Notes:
-#       - Track Long Label: Histone Modifications ChIP-seq from ENCODE/University of Washington
+#       - Track Long Label: Histone Modifications by ChIP-seq from ENCODE/University of Washington
 #       - Track Short Label: UW Histone 
 #       - View Long Labels: [cell] [factor] Histone Modification [view] Rep [rep #] [(FDR)] from ENCODE/UW 
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
@@ -27,7 +27,7 @@ track wgEncodeUwHistone
 compositeTrack on
 superTrack wgEncodeHistoneSuper dense
 shortLabel UW Histone
-longLabel Histone Modifications ChIP-seq from ENCODE/University of Washington
+longLabel Histone Modifications by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ Caco2=Caco-2 HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCM=HCM HCF=HCF HCPE=HCPEpiC HCT116=HCT-116 H7es=H7-HESC HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
