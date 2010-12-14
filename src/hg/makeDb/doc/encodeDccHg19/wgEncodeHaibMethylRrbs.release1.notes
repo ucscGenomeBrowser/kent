@@ -11,7 +11,7 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 118
+    Tables: 109
     Files: 121
     Gbdbs: 0
 
@@ -23,7 +23,7 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (118):
+C) New tables (109):
 wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1
 wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2
 wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1
@@ -64,14 +64,10 @@ wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1
 wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2
 wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1
 wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2
-wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
-wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
 wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1
 wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2
 wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1
 wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2
-wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
-wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
 wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
 wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2
 wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1
@@ -107,10 +103,6 @@ wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
 wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2
 wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1
 wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2
-wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
-wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
-wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
-wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
 wgEncodeHaibMethylRrbsMelanoSitesRep1
 wgEncodeHaibMethylRrbsMelanoSitesRep2
 wgEncodeHaibMethylRrbsMelanoSitesRep3
@@ -122,7 +114,6 @@ wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1
 wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2
 wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1
 wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2
-wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
 wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1
 wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2
 wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1
