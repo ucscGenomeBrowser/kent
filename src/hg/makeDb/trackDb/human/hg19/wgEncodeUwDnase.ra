@@ -6,7 +6,11 @@
 #       - Track Short Label: UW DNaseI HS
 #       - View Long Labels: [cell] DNaseI HS [view] Rep [rep #] from ENCODE/UW 
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
-#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
+#       - Default Tracks on: Peaks,Hotspots,Raw Signals for Replicate 1 for the following Cells
+#		- GM12878
+#		- H1-hESC
+#		- K562
+#		- HepG2
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
 #       - Default View selections
 #               - Hotspots = pack
@@ -17,7 +21,7 @@
 #		- Views: For consistency sake view will be two letters
 #			- Peaks = Pk
 #			- Raw Signal = Sig
-#			- Hotspots = 
+#			- Hotspots = Hspt 
 #		- Replicate: #
 #		- Cell Line begining with HMVEC: To shorten use the Cell name and the following abbreviations:
 #			- Bl = B
@@ -66,7 +70,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04450 1 
+        shortLabel AG04450 Hspt 1 
         longLabel AG04450 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=AG04450 rep=1
         type broadPeak
@@ -76,7 +80,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09309 1 
+        shortLabel AG09309 Hspt 1 
         longLabel AG09309 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=AG09309 rep=1
         type broadPeak
@@ -86,7 +90,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09319 1 
+        shortLabel AG09319 Hspt 1 
         longLabel AG09319 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=AG09319 rep=1
         type broadPeak
@@ -96,7 +100,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SAEC 1 
+        shortLabel SAEC Hspt 1 
         longLabel SAEC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=SAEC rep=1
         type broadPeak
@@ -106,7 +110,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NB4 1 
+        shortLabel NB4 Hspt 1 
         longLabel NB4 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=NB4 rep=1
         type broadPeak
@@ -116,7 +120,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHLF 1 
+        shortLabel NHLF Hspt 1 
         longLabel NHLF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=NHLF rep=1
         type broadPeak
@@ -126,7 +130,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HGF 1 
+        shortLabel HGF Hspt 1 
         longLabel HGF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HGF rep=1
         type broadPeak
@@ -136,7 +140,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM12865 1 
+        shortLabel GM12865 Hspt 1 
         longLabel GM12865 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=GM12865 rep=1
         type broadPeak
@@ -146,7 +150,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaeHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HAEpiC 1 
+        shortLabel HAEpiC Hspt 1 
         longLabel HAEpiC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HAE rep=1
         type broadPeak
@@ -156,7 +160,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HL-60 1 
+        shortLabel HL-60 Hspt 1 
         longLabel HL-60 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HL60 rep=1
         type broadPeak
@@ -166,7 +170,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMEC 1 
+        shortLabel HMEC Hspt 1 
         longLabel HMEC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMEC rep=1
         type broadPeak
@@ -176,7 +180,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SKMC 1 
+        shortLabel SKMC Hspt 1 
         longLabel SKMC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=SKMC rep=1
         type broadPeak
@@ -186,7 +190,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG10803 1 
+        shortLabel AG10803 Hspt 1 
         longLabel AG10803 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=AG10803 rep=1
         type broadPeak
@@ -196,7 +200,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrceHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRCEpiC 1 
+        shortLabel HRCEpiC Hspt 1 
         longLabel HRCEpiC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HRCE rep=1
         type broadPeak
@@ -206,7 +210,7 @@ wgEncode 1
         track wgEncodeUwDnaseHreHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRE 1 
+        shortLabel HRE Hspt 1 
         longLabel HRE DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HRE rep=1
         type broadPeak
@@ -216,7 +220,7 @@ wgEncode 1
         track wgEncodeUwDnaseCmkHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel CMK 1 
+        shortLabel CMK Hspt 1 
         longLabel CMK DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=CMK rep=1
         type broadPeak
@@ -226,7 +230,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot
-        shortLabel GM12878 1 
+        shortLabel GM12878 Hspt 1 
         longLabel GM12878 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1GM12878 rep=1
         type broadPeak
@@ -236,8 +240,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseH1hescHotspotsRep1
         release alpha,beta
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel H1-hESC 1 
+        parent wgEncodeUwDnaseViewHot
+        shortLabel H1-hESC Hspt 1 
         longLabel H1-hESC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1H1 rep=1
         type broadPeak
@@ -248,7 +252,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCF 1 
+        shortLabel HCF Hspt 1 
         longLabel HCF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HCF rep=1
         type broadPeak
@@ -258,7 +262,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel H7-hESC 1 
+        shortLabel H7-hESC Hspt 1 
         longLabel H7-hESC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=H7es rep=1
         type broadPeak
@@ -268,7 +272,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpeHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCPEpiC 1 
+        shortLabel HCPEpiC Hspt 1 
         longLabel HCPEpiC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HCPE rep=1
         type broadPeak
@@ -278,7 +282,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCM 1 
+        shortLabel HCM Hspt 1 
         longLabel HCM DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HCM rep=1
         type broadPeak
@@ -288,7 +292,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeeHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HEEpiC 1 
+        shortLabel HEEpiC Hspt 1 
         longLabel HEEpiC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HEE rep=1
         type broadPeak
@@ -298,7 +302,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HeLa-S3 1 
+        shortLabel HeLa-S3 Hspt 1 
         longLabel HeLa-S3 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=2HELA rep=1
         type broadPeak
@@ -309,7 +313,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM06990 1 
+        shortLabel GM06990 Hspt 1 
         longLabel GM06990 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=GM06990 rep=1
         type broadPeak
@@ -318,8 +322,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseHepg2HotspotsRep1
         release alpha,beta
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel HepG2 1 
+        parent wgEncodeUwDnaseViewHot
+        shortLabel HepG2 Hspt 1 
         longLabel HepG2 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=2HEPG2 rep=1
         type broadPeak
@@ -330,7 +334,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpceHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HNPCEpiC 1 
+        shortLabel HNPCEpiC Hspt 1 
         longLabel HNPCEpiC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HNPCE rep=1
         type broadPeak
@@ -340,7 +344,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpeHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRPEpiC 1 
+        shortLabel HRPEpiC Hspt 1 
         longLabel HRPEpiC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HRPE rep=1
         type broadPeak
@@ -350,7 +354,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HUVEC 1 
+        shortLabel HUVEC Hspt 1 
         longLabel HUVEC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=2HUVEC rep=1
         type broadPeak
@@ -361,7 +365,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel PANC-1 1 
+        shortLabel PANC-1 Hspt 1 
         longLabel PANC-1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=PANC1 rep=1
         type broadPeak
@@ -371,7 +375,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel MCF-7 1 
+        shortLabel MCF-7 Hspt 1 
         longLabel MCF-7 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=MCF7 rep=1
         type broadPeak
@@ -381,7 +385,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-neo 1 
+        shortLabel NHDF-neo Hspt 1 
         longLabel NHDF-neo DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=NHDFneo rep=1
         type broadPeak
@@ -391,7 +395,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhekHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHEK 1 
+        shortLabel NHEK Hspt 1 
         longLabel NHEK DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=NHEK rep=1
         type broadPeak
@@ -402,7 +406,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SK-N-SH_RA 1 
+        shortLabel SK-N-SH_RA Hspt 1 
         longLabel SK-N-SH_RA DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=SKNSHRA rep=1
         type broadPeak
@@ -412,7 +416,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh1HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th1 1 
+        shortLabel Th1 Hspt 1 
         longLabel Th1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=Th1 rep=1
         type broadPeak
@@ -422,7 +426,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Caco-2 1 
+        shortLabel Caco-2 Hspt 1 
         longLabel Caco-2 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=CACO2 rep=1
         type broadPeak
@@ -432,7 +436,7 @@ wgEncode 1
         track wgEncodeUwDnaseBjHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel BJ 1 
+        shortLabel BJ Hspt 1 
         longLabel BJ DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=BJ rep=1
         type broadPeak
@@ -442,7 +446,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot
-        shortLabel K562 1 
+        shortLabel K562 Hspt 1 
         longLabel K562 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=1K562 rep=1
         type broadPeak
@@ -453,7 +457,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh2HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th2 1 
+        shortLabel Th2 Hspt 1 
         longLabel Th2 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=Th2 rep=1
         type broadPeak
@@ -463,7 +467,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04449 1 
+        shortLabel AG04449 Hspt 1 
         longLabel AG04449 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=AG04449 rep=1
         type broadPeak
@@ -473,7 +477,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04449 2 
+        shortLabel AG04449 Hspt 2 
         longLabel AG04449 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=AG04449 rep=2
         type broadPeak
@@ -483,7 +487,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04450 2 
+        shortLabel AG04450 Hspt 2 
         longLabel AG04450 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=AG04450 rep=2
         type broadPeak
@@ -493,7 +497,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09309 2 
+        shortLabel AG09309 Hspt 2 
         longLabel AG09309 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=AG09309 rep=2
         type broadPeak
@@ -503,7 +507,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09319 2 
+        shortLabel AG09319 Hspt 2 
         longLabel AG09319 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=AG09319 rep=2
         type broadPeak
@@ -513,7 +517,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG10803 2 
+        shortLabel AG10803 Hspt 2 
         longLabel AG10803 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=AG10803 rep=2
         type broadPeak
@@ -523,7 +527,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SAEC 2 
+        shortLabel SAEC Hspt 2 
         longLabel SAEC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=SAEC rep=2
         type broadPeak
@@ -533,7 +537,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NB4 2 
+        shortLabel NB4 Hspt 2 
         longLabel NB4 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=NB4 rep=2
         type broadPeak
@@ -543,7 +547,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHLF 2 
+        shortLabel NHLF Hspt 2 
         longLabel NHLF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=NHLF rep=2
         type broadPeak
@@ -553,7 +557,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel MCF-7 2 
+        shortLabel MCF-7 Hspt 2 
         longLabel MCF-7 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=MCF7 rep=2
         type broadPeak
@@ -563,7 +567,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrceHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRCEpiC 2 
+        shortLabel HRCEpiC Hspt 2 
         longLabel HRCEpiC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HRCE rep=2
         type broadPeak
@@ -573,7 +577,7 @@ wgEncode 1
         track wgEncodeUwDnaseHreHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRE 2 
+        shortLabel HRE Hspt 2 
         longLabel HRE DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HRE rep=2
         type broadPeak
@@ -583,7 +587,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-neo 2 
+        shortLabel NHDF-neo Hspt 2 
         longLabel NHDF-neo DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=NHDFneo rep=2
         type broadPeak
@@ -593,7 +597,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel PANC-1 2 
+        shortLabel PANC-1 Hspt 2 
         longLabel PANC-1 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=PANC1 rep=2
         type broadPeak
@@ -603,7 +607,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HL-60 2 
+        shortLabel HL-60 Hspt 2 
         longLabel HL-60 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HL60 rep=2
         type broadPeak
@@ -613,7 +617,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaeHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HAEpiC 2 
+        shortLabel HAEpiC Hspt 2 
         longLabel HAEpiC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HAE rep=2
         type broadPeak
@@ -623,7 +627,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM12865 2 
+        shortLabel GM12865 Hspt 2 
         longLabel GM12865 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=GM12865 rep=2
         type broadPeak
@@ -633,7 +637,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Caco-2 2 
+        shortLabel Caco-2 Hspt 2 
         longLabel Caco-2 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=CACO2 rep=2
         type broadPeak
@@ -643,7 +647,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCF 2 
+        shortLabel HCF Hspt 2 
         longLabel HCF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HCF rep=2
         type broadPeak
@@ -653,7 +657,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCM 2 
+        shortLabel HCM Hspt 2 
         longLabel HCM DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HCM rep=2
         type broadPeak
@@ -663,7 +667,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpeHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCPEpiC 2 
+        shortLabel HCPEpiC Hspt 2 
         longLabel HCPEpiC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HCPE rep=2
         type broadPeak
@@ -673,7 +677,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeeHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HEEpiC 2 
+        shortLabel HEEpiC Hspt 2 
         longLabel HEEpiC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HEE rep=2
         type broadPeak
@@ -683,7 +687,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HGF 2 
+        shortLabel HGF Hspt 2 
         longLabel HGF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HGF rep=2
         type broadPeak
@@ -693,7 +697,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HeLa-S3 2 
+        shortLabel HeLa-S3 Hspt 2 
         longLabel HeLa-S3 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=2HELA rep=2
         type broadPeak
@@ -704,7 +708,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM06990 2 
+        shortLabel GM06990 Hspt 2 
         longLabel GM06990 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=GM06990 rep=2
         type broadPeak
@@ -714,7 +718,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HepG2 2 
+        shortLabel HepG2 Hspt 2 
         longLabel HepG2 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=2HEPG2 rep=2
         type broadPeak
@@ -725,7 +729,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpceHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HNPCEpiC 2 
+        shortLabel HNPCEpiC Hspt 2 
         longLabel HNPCEpiC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HNPCE rep=2
         type broadPeak
@@ -735,7 +739,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpeHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRPEpiC 2 
+        shortLabel HRPEpiC Hspt 2 
         longLabel HRPEpiC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HRPE rep=2
         type broadPeak
@@ -745,7 +749,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SKMC 2 
+        shortLabel SKMC Hspt 2 
         longLabel SKMC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=SKMC rep=2
         type broadPeak
@@ -755,7 +759,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SK-N-SH_RA 2 
+        shortLabel SK-N-SH_RA Hspt 2 
         longLabel SK-N-SH_RA DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=SKNSHRA rep=2
         type broadPeak
@@ -764,8 +768,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseGm12878HotspotsRep2
         release alpha,beta
-        parent wgEncodeUwDnaseViewHot
-        shortLabel GM12878 2 
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel GM12878 Hspt 2 
         longLabel GM12878 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1GM12878 rep=2
         type broadPeak
@@ -775,8 +779,8 @@ wgEncode 1
 
         track wgEncodeUwDnaseK562HotspotsRep2
         release alpha,beta
-        parent wgEncodeUwDnaseViewHot
-        shortLabel K562 2 
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel K562 Hspt 2 
         longLabel K562 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=1K562 rep=2
         type broadPeak
@@ -787,7 +791,7 @@ wgEncode 1
         track wgEncodeUwDnaseBjHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel BJ 2 
+        shortLabel BJ Hspt 2 
         longLabel BJ DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=BJ rep=2
         type broadPeak
@@ -797,7 +801,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfadHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-Ad 1
+        shortLabel NHDF-Ad Hspt 1
         longLabel NHDF-Ad DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=NHDF-Ad rep=1
         type broadPeak
@@ -807,7 +811,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfadHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-Ad 2
+        shortLabel NHDF-Ad Hspt 2
         longLabel NHDF-Ad DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=NHDF-Ad rep=2
         type broadPeak
@@ -817,7 +821,7 @@ wgEncode 1
         track wgEncodeUwDnaseHvmfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HVMF 1
+        shortLabel HVMF Hspt 1
         longLabel HVMF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HVMF rep=1
         type broadPeak
@@ -827,7 +831,7 @@ wgEncode 1
         track wgEncodeUwDnaseHvmfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HVMF 2
+        shortLabel HVMF Hspt 2
         longLabel HVMF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HVMF rep=2
         type broadPeak
@@ -837,7 +841,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpdlfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HPdLF 1
+        shortLabel HPdLF Hspt 1
         longLabel HPdLF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HPdLF rep=1
         type broadPeak
@@ -847,7 +851,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpdlfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HPdLF 2
+        shortLabel HPdLF Hspt 2
         longLabel HPdLF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HPdLF rep=2
         type broadPeak
@@ -857,7 +861,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HPF 1
+        shortLabel HPF Hspt 1
         longLabel HPF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HPF rep=1
         type broadPeak
@@ -867,7 +871,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HPF 2
+        shortLabel HPF Hspt 2
         longLabel HPF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HPF rep=2
         type broadPeak
@@ -877,7 +881,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpafHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HPAF 2
+        shortLabel HPAF Hspt 2
         longLabel HPAF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HPAF rep=2
         type broadPeak
@@ -887,7 +891,7 @@ wgEncode 1
         track wgEncodeUwDnaseHpafHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HPAF 1
+        shortLabel HPAF Hspt 1
         longLabel HPAF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HPAF rep=1
         type broadPeak
@@ -897,7 +901,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdneoHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dN 1
+        shortLabel HMVEC-dN Hspt 1
         longLabel HMVEC-dNeo DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdNeo rep=1
         type broadPeak
@@ -907,7 +911,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdneoHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dN 2
+        shortLabel HMVEC-dN Hspt 2
         longLabel HMVEC-dNeo DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdNeo rep=2
         type broadPeak
@@ -917,7 +921,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyneoHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dLN 1
+        shortLabel HMVEC-dLN Hspt 1
         longLabel HMVEC-dLy-Neo DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdLyNeo rep=1
         type broadPeak
@@ -927,7 +931,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyneoHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dLN 2
+        shortLabel HMVEC-dLN Hspt 2
         longLabel HMVEC-dLy-Neo DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdLyNeo rep=2
         type broadPeak
@@ -937,7 +941,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyadHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dLA 1
+        shortLabel HMVEC-dLA Hspt 1
         longLabel HMVEC-dLy-Ad DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdLyAd rep=1
         type broadPeak
@@ -947,7 +951,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdlyadHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dLA 2
+        shortLabel HMVEC-dLA Hspt 2
         longLabel HMVEC-dLy-Ad DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdLyAd rep=2
         type broadPeak
@@ -957,7 +961,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdblneoHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dBN 1
+        shortLabel HMVEC-dBN Hspt 1
         longLabel HMVEC-dBl-Neo DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdBlNeo rep=1
         type broadPeak
@@ -967,7 +971,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdblneoHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dBN 2
+        shortLabel HMVEC-dBN Hspt 2
         longLabel HMVEC-dBl-Neo DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdBlNeo rep=2
         type broadPeak
@@ -977,7 +981,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdbladHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dBA 1
+        shortLabel HMVEC-dBA Hspt 1
         longLabel HMVEC-dBl-Ad DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdBlAd rep=1
         type broadPeak
@@ -987,7 +991,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecdbladHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-dBA 2
+        shortLabel HMVEC-dBA Hspt 2
         longLabel HMVEC-dBl-Ad DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMVECdBlAd rep=2
         type broadPeak
@@ -997,7 +1001,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecllyHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-lL 2
+        shortLabel HMVEC-lL Hspt 2
         longLabel HMVEC-LLy DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMVECLLy rep=2
         type broadPeak
@@ -1007,7 +1011,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmvecllyHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-lL 1
+        shortLabel HMVEC-lL Hspt 1
         longLabel HMVEC-LLy DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMVECLLy rep=1
         type broadPeak
@@ -1017,7 +1021,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmveclblHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-lB 2
+        shortLabel HMVEC-lB Hspt 2
         longLabel HMVEC-LBl DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMVECLbl rep=2
         type broadPeak
@@ -1027,7 +1031,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMF 2
+        shortLabel HMF Hspt 2
         longLabel HMF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMF rep=2
         type broadPeak
@@ -1037,7 +1041,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMF 1
+        shortLabel HMF Hspt 1
         longLabel HMF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMF rep=1
         type broadPeak
@@ -1047,7 +1051,7 @@ wgEncode 1
         track wgEncodeUwDnaseHconfHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HConF 1
+        shortLabel HConF Hspt 1
         longLabel HConF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HCONF rep=1
         type broadPeak
@@ -1057,7 +1061,7 @@ wgEncode 1
         track wgEncodeUwDnaseHconfHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HConF 2
+        shortLabel HConF Hspt 2
         longLabel HConF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HCONF rep=2
         type broadPeak
@@ -1067,7 +1071,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfaaHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCFaa 2
+        shortLabel HCFaa Hspt 2
         longLabel HCFaa DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HCFaa rep=2
         type broadPeak
@@ -1077,7 +1081,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfaaHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCFaa 1
+        shortLabel HCFaa Hspt 1
         longLabel HCFaa DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HCFaa rep=1
         type broadPeak
@@ -1087,7 +1091,7 @@ wgEncode 1
         track wgEncodeUwDnaseAoafHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AoAF 1
+        shortLabel AoAF Hspt 1
         longLabel AoAF DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=AOAF rep=1
         type broadPeak
@@ -1097,7 +1101,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMEC 2
+        shortLabel HMEC Hspt 2
         longLabel HMEC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HMEC rep=2
         type broadPeak
@@ -1107,7 +1111,7 @@ wgEncode 1
         track wgEncodeUwDnaseHct116HotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCT-116 1
+        shortLabel HCT-116 Hspt 1
         longLabel HCT-116 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HCT116 rep=1
         type broadPeak
@@ -1117,7 +1121,7 @@ wgEncode 1
         track wgEncodeUwDnaseHct116HotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCT-116 2
+        shortLabel HCT-116 Hspt 2
         longLabel HCT-116 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HCT116 rep=2
         type broadPeak
@@ -1127,7 +1131,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmveclblHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMVEC-lB 1
+        shortLabel HMVEC-lB Hspt 1
         longLabel HMVEC-LBl DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HMVECLbl rep=1
         type broadPeak
@@ -1137,7 +1141,7 @@ wgEncode 1
         track wgEncodeUwDnaseAoafHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AoAF 2
+        shortLabel AoAF Hspt 2
         longLabel AoAF DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=AOAF rep=2
         type broadPeak
@@ -1147,7 +1151,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel H7-hESC 2
+        shortLabel H7-hESC Hspt 2
         longLabel H7-hESC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=H7es rep=2
         type broadPeak
@@ -1157,7 +1161,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhaHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NH-A 2
+        shortLabel NH-A Hspt 2
         longLabel NH-A DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=NHA rep=2
         type broadPeak
@@ -1167,7 +1171,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbmecHotspotsRep2
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HBMEC 2
+        shortLabel HBMEC Hspt 2
         longLabel HBMEC DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=HBMEC rep=2
         type broadPeak
@@ -1177,7 +1181,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhaHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NH-A 1
+        shortLabel NH-A Hspt 1
         longLabel NH-A DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=NHA rep=1
         type broadPeak
@@ -1187,7 +1191,7 @@ wgEncode 1
         track wgEncodeUwDnaseHbmecHotspotsRep1
         release alpha,beta
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HBMEC 1
+        shortLabel HBMEC Hspt 1
         longLabel HBMEC DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=HBMEC rep=1
         type broadPeak
@@ -1378,7 +1382,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseH1hescPkRep1
         release alpha,beta
-        parent wgEncodeUwDnaseViewaPeaks off
+        parent wgEncodeUwDnaseViewaPeaks
         shortLabel H1-hESC Pk 1
         longLabel H1-hESC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=1H1 rep=1
@@ -1460,7 +1464,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHepg2PkRep1
         release alpha,beta
-        parent wgEncodeUwDnaseViewaPeaks off
+        parent wgEncodeUwDnaseViewaPeaks
         shortLabel HepG2 Pk 1
         longLabel HepG2 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=2HEPG2 rep=1
@@ -1906,7 +1910,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseGm12878PkRep2
         release alpha,beta
-        parent wgEncodeUwDnaseViewaPeaks
+        parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM12878 Pk 2
         longLabel GM12878 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1GM12878 rep=2
@@ -1917,7 +1921,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseK562PkRep2
         release alpha,beta
-        parent wgEncodeUwDnaseViewaPeaks
+        parent wgEncodeUwDnaseViewaPeaks off
         shortLabel K562 Pk 2
         longLabel K562 DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=1K562 rep=2
@@ -2522,7 +2526,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseH1hescRawRep1
         release alpha,beta
-        parent wgEncodeUwDnaseViewzRaw off
+        parent wgEncodeUwDnaseViewzRaw 
         shortLabel H1-hESC Sig 1
         longLabel H1-hESC DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=1H1 rep=1
@@ -2604,7 +2608,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseHepg2RawRep1
         release alpha,beta
-        parent wgEncodeUwDnaseViewzRaw off
+        parent wgEncodeUwDnaseViewzRaw
         shortLabel HepG2 Sig 1
         longLabel HepG2 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=2HEPG2 rep=1
@@ -3050,7 +3054,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseGm12878RawRep2
         release alpha,beta
-        parent wgEncodeUwDnaseViewzRaw
+        parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM12878 Sig 2
         longLabel GM12878 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1GM12878 rep=2
@@ -3061,7 +3065,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseK562RawRep2
         release alpha,beta
-        parent wgEncodeUwDnaseViewzRaw
+        parent wgEncodeUwDnaseViewzRaw off
         shortLabel K562 Sig 2
         longLabel K562 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=1K562 rep=2
