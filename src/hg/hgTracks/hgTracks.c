@@ -2651,6 +2651,8 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->track))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
+    if (sameString(tdb->type, "downloadsOnly")) // These tracks should not even be seen by6 hgTracks. (FIXME: Until we want to see them in cfg list and searchTracks!)
+        continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
     if (slCount(tdb->subtracks) != 0)
@@ -4022,7 +4024,14 @@ if (restrictionEnzymesOk())
     slSafeAddHead(&trackList, cuttersTg());
     }
 if (wikiTrackEnabled(database, NULL))
+    {
     addWikiTrack(&trackList);
+    struct sqlConnection *conn = wikiConnect();
+    if (sqlTableExists(conn, "variome"))
+        addVariomeWikiTrack(&trackList);
+    wikiDisconnect(&conn);
+    }
+
 #ifdef SOON
 loadDataHubs(&trackList);
 #endif /* SOON */
@@ -4046,7 +4055,9 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (s != NULL && !track->limitedVisSet)
 	track->visibility = hTvFromString(s);
-    if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
+    if (tdbIsCompositeChild(track->tdb))
+        track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
+    else if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
 	{
 	struct trackDb *parent = track->tdb->parent;
 	char *parentShow = NULL;
@@ -4261,15 +4272,15 @@ for (;track != NULL; track = track->next)
     boolean shapedByubtrackOverride = FALSE;
     boolean cleanedByContainerSettings = FALSE;
 
+    // Top-down 'cleanup' MUST GO BEFORE bottom up reshaping.
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+
     if (tdbIsContainer(track->tdb))
         {
         shapedByubtrackOverride = cartTdbTreeReshapeIfNeeded(cart,track->tdb);
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-
-    // Top-down 'cleanup' can now follow reshaping because reshaping will flag itself for protection
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility

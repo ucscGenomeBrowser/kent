@@ -144,6 +144,10 @@ TABLE.hgcLsSnp TR, TABLE.hgcLsSnp TD {
 /* --------------- Newer UI 2.0 styles --------------- */
 .ghost { background-color: #EEEEEE; }
 .pale  { background-color: #F8F8F8; }
+.bgLevel1  { background-color: #FFFEE8; }
+.bgLevel2  { background-color: #FFF9D2; }
+.bgLevel3  { background-color: #FCECC0; }
+.bgLevel4  { background-color: #EED5B7; }
 
 /* Common boxes */
 .inputBox  { border: 2px inset #CCCCCC; }
@@ -197,6 +201,10 @@ div.sliceDiv { overflow:hidden; }
 /* These are for dragReorder: both in imageV2 and in hgTrackUi subtrack list */
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: s-resize; }
+
+tr.sortable { background-color: #FCECC0; }
+th.sortable { color: #0000FF; }
+th:hover.sortable { border: 2px outset #663333; cursor: pointer; }
 
 .noscript {
         background: none repeat scroll 0 0 #FFFF90;
