@@ -138,6 +138,60 @@ subId 1237
 tableName wgEncodeSunyAlbanyGeneSTGm12878T7tagRbpAssocRna
 view RbpAssocRna
 
+metaObject wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna
+objType table
+cell H1-hESC
+composite wgEncodeSunyAlbanyGeneST
+dataType RipChip
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+project wgEncode
+ripTgtProtien ELAVL1
+subId 3084
+tableName wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna
+objType table
+cell H1-hESC
+composite wgEncodeSunyAlbanyGeneST
+dataType RipChip
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Input
+project wgEncode
+ripTgtProtien ripInput
+subId 3084
+tableName wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna
+objType table
+cell H1-hESC
+composite wgEncodeSunyAlbanyGeneST
+dataType RipChip
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522,Mil_AB3790 antibodies
+project wgEncode
+ripTgtProtien T7Tag
+subId 3084
+tableName wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna
+view RbpAssocRna
+
 metaObject wgEncodeSunyAlbanyGeneSTHelas3Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
@@ -418,4 +472,4 @@ subId 1237
 tableName wgEncodeSunyAlbanyGeneSTK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 669900111
+# MAGIC: 975110308
