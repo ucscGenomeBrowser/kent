@@ -13273,3 +13273,50 @@ grep -i part hg19.unmapped | wc -l
 
 
 ##########################################################################
+# Neandertal tracks for hg19 (DONE - 2010-12-14 - Hiram)
+    # data supplied by Ed Green into /hive/data/outside/homNea/hg19
+    # add Neandertal group to hg19 grp
+    hgsql hg19 -e \
+      "insert into grp values ('neandertal', 'Neandertal Assembly and Analysis', 6.5, 1);"
+
+    mkdir -p /hive/data/genomes/hg19/bed/homNea/seqAlis
+    cd /hive/data/genomes/hg19/bed/homNea/seqAlis
+
+    ln -s /hive/data/outside/homNea/hg19/*.bam .
+    for F in *.bam
+do
+    samtools index $F
+done
+    
+
+    mkdir -p /gbdb/hg19/neandertal/seqAlis
+for T in Feld1 Mez1 Sid1253
+do
+    ln -s /hive/data/outside/homNea/hg19/${T}.hg18.bam \
+	/gbdb/hg19/neandertal/seqAlis/${T}.hg19.bam
+    ln -s `pwd`/${T}.hg18.bam.bai /gbdb/hg19/neandertal/seqAlis/${T}.hg19.bai
+done
+for T in 16 25 26
+do
+    ln -s /hive/data/outside/homNea/hg19/Vi33.${T}.hg18.bam \
+	/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bam
+    ln -s `pwd`/Vi33.${T}.hg18.bam.bai \
+	/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bai
+done
+
+for T in Feld1 Mez1 Sid1253
+do
+      hgsql hg19 -e "drop table if exists bam${T}; create table bam${T} (fileName varchar(255) not null);"
+      hgsql hg19 -e "insert into bam${T} values ('/gbdb/hg19/neandertal/seqAlis/${T}.hg19.bam');"
+done
+
+for T in 16 25 26
+do
+      hgsql hg19 -e "drop table if exists bamVi33dot${T}; create table bamVi33dot${T} (fileName varchar(255) not null);"
+      hgsql hg19 -e "insert into bamVi33dot${T} values ('/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bam');"
+done
+    hgsql hg19 -e "drop table if exists bamAll; create table bamAll (fileName varchar(255) not null);"
+    hgsql hg19 -e "insert into bamAll values ('/gbdb/hg19/neandertal/seqAlis/all-hg18.bam');"
+
+
+##########################################################################
