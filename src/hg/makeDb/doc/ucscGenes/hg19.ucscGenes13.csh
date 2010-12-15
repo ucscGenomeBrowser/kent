@@ -18,7 +18,7 @@ set xdb = mm9
 set Xdb = Mm9
 set ydb = canFam2
 set zdb = rn4
-set spDb = sp100331
+set spDb = sp101005
 set pbDb = proteins100331
 set ratDb = rn4
 set RatDb = Rn4
@@ -64,14 +64,14 @@ set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/flybase5.3/flyBasePep.fa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
-set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/090218/sgdPep.faa
+set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
-set rfam = /hive/data/outside/Rfam/110710/
+set rfam = /hive/data/outside/Rfam/110710
 
 
 # Tracks
@@ -97,7 +97,6 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
-
 
 
 # Get Genbank info
@@ -133,22 +132,25 @@ endif
 # Get tRNA for human (or else just an empty file)
 if ($db =~ hg* && \
   `hgsql -N $db -e "show tables;" | grep -E -c "tRNAs|chromInfo"` == 2) then
-    hgsql -N $db -e "select chrom,chromStart,chromEnd,name,score,strand from tRNAs" > tRNAs.bed 
+    hgsql -N $db -e "select chrom,chromStart,chromEnd,name,score,strand from tRNAs" > trna.bed 
 else
     echo -n "" > trna.bed
     echo -n "" > refToCcds.tab
 endif
 
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 # Get the Rfams that overlap with blocks that are syntenic to Mm9.
 # FIXME: this should be generalized for other species
 mkdir -p rfam
-pslToBed $db/Rfam.bestHits.psl rfam/rfam.all.bed
+pslToBed ${rfam}/${db}/Rfam.bestHits.psl rfam/rfam.all.bed
 bedToExons rfam/rfam.all.bed rfam/rfam.exons.bed
 hgLoadBed $db rfamExons rfam/rfam.exons.bed
-hgsql -E "SELECT DISTINCT r.name FROM rfamExons r, chainMm9 c WHERE r.bin = c.bin AND r.chrom = c.tName AND r.chromStart < c.tStart AND r.chromEnd < c.tEnd" \
+hgsql hg19 -e "SELECT DISTINCT r.name FROM rfamExons r, chainMm9 c WHERE r.bin = c.bin AND r.chrom = c.tName AND r.chromStart < c.tStart AND r.chromEnd < c.tEnd" \
  | awk '{ print "grep \"" $1 "\" rfam/rfam.all.bed"}' |bash \
  > rfam/rfam.syntenic.bed
-hgsql -E "DROP TABLE rfamExons"
+hgsql hg19 -e "DROP TABLE rfamExons"
  
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna trna
@@ -184,6 +186,10 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
           echo -n "" >rfam/$c.bed
     endif
 end
+
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
 
 
 # Get list of accessions that are associated with antibodies from database.
@@ -244,8 +250,6 @@ end
 
 
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 
 # Create an evidence weight file
@@ -287,9 +291,6 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
     txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
 end
 
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 # Clean up all but final other.txg
 rm -r est mrna refSeq
