@@ -737,3 +737,16 @@ priority 100
 visibility hide
 color 176,48,96
 type bed 12 .
+
+track targetScanS
+shortLabel TS miRNA sites
+longLabel TargetScan miRNA Regulatory Sites
+group regulation
+priority 0
+visibility hide
+color 0,96,0
+scoreFilterMax 100
+type bed 6 .
+urlLabel TargetScan link:
+url http://www.targetscan.org/cgi-bin/targetscan/mmu_50/view_gene.cgi?gs=$P&taxid=10090&members=$p&showcnc=1
+

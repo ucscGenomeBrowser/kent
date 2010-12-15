@@ -242,6 +242,9 @@ void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file);
 void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
 // prints (to stream) objs and var=val pairs as formatted metadata lines or ra style
 
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude);
+// returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
+
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle);
 // prints var=val pairs and objs that go with them single lines or ra style
 
@@ -273,6 +276,10 @@ void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
 
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
+
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var);
+// Removes var from set of mdbObjs but only if all that hav it have a commmon val
+// Returns the val if removed, else NULL
 
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis);
 // Replaces objs' vars with var=vap pairs provided, preparing for DB update.

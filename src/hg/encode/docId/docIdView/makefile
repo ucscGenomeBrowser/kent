@@ -7,11 +7,8 @@ MYLIBS =  $(MYLIBDIR)/docId.a $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = docIdView
 O = docIdView.o
 
-A = docIdView
-
 include ../../../../inc/cgi_build_rules.mk
 
 compile:: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
-

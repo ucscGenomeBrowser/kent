@@ -1555,7 +1555,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    if(window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
+                    if(window.open("../cgi-bin/hgc?g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
                         windowOpenFailedMsg();
                     }
                 } else {
@@ -1779,8 +1779,10 @@ function loadContextMenu(img)
                     var any = false;
                     if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
+                        if(rec && !(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0)) {
                         o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
                         o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
+                        }
                         o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
                     }
@@ -1876,15 +1878,17 @@ function parseMap(ele, reset)
                 // src is necessary under msie
                 var src = ele.next().attr('src');
                 ele.children().each(function() {
-                                      mapItems[i++] = {
-                                          r : new Rectangle(this.coords),
-                                          href : this.href,
-                                          title : this.title,
-                                          id : this.id,
-                                          src : src,
-                                          obj : this
-                                      };
-                                  });
+                    if (this.coords != undefined) {
+                        mapItems[i++] = {
+                            r : new Rectangle(this.coords),
+                            href : this.href,
+                            title : this.title,
+                            id : this.id,
+                            src : src,
+                            obj : this
+                        };
+                    }
+                });
     }
     return mapItems;
 }
@@ -2064,6 +2068,8 @@ function handleUpdateTrackMap(response, status)
                 limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
             if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
                 alert("There are too many items to display the track in " + this.newVisibility + " mode.");
+            var rec = trackDbJson[this.id];
+            rec.limitedVis = json[this.id].limitedVis;
             updateVisibility(this.id, visibility);
         } else {
             showWarning("Invalid trackDbJson received from the server");
@@ -2095,6 +2101,9 @@ function handleUpdateTrackMap(response, status)
                // loadContextMenu($('#tr_' + id));
                if(trackImgTbl.tableDnDUpdate)
                    trackImgTbl.tableDnDUpdate();
+               // NOTE: Want to examine the png? Uncomment:
+               //var img = $('#tr_' + id).find("img[id^='img_data_']").attr('src');
+               //warn("Just parsed image:<BR>"+img);
           } else {
                showWarning("Couldn't parse out new image for id: " + id);
                //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful

@@ -349,6 +349,28 @@ slReverse(&newList);
 return newList;
 }
 
+static void addReleaseTag(struct tdbRecord *record, struct lineFile *lf,
+    char *releaseTag)
+/* make sure there is no existing release tag, and add one if not */
+{
+struct tdbField *field, *last = NULL;
+for (field = record->fieldList; field != NULL; last = field, field = field->next)
+    {
+    if (sameString(field->name, "release"))
+        errAbort("Release tag in stanza with include release override line %d of %s", 
+		tdbRecordLineIx(record), lf->fileName);
+
+    }
+assert(last != NULL);
+
+struct tdbField *releaseField;
+
+AllocVar(releaseField);
+last->next = releaseField;
+releaseField->name = cloneString("release");
+releaseField->val = cloneString(releaseTag);
+}
+
 static void checkDupeFields(struct tdbRecord *record, struct lineFile *lf)
 /* Make sure that each field in record is unique. */
 {
@@ -448,7 +470,8 @@ hashFree(&uniqHash);
 }
 
 static void recurseThroughIncludes(char *fileName, struct lm *lm, 
-	struct hash *circularHash,  struct tdbRecord **pRecordList)
+	struct hash *circularHash,  struct tdbRecord **pRecordList, 
+        char *releaseTag)
 /* Recurse through include files. */
 {
 struct tdbRecord *record;
@@ -466,22 +489,45 @@ while ((record = tdbRecordReadOne(lf, glKeyField, lm)) != NULL)
 	       errAbort("Non-include tag %s in an include stanza starting line %d of %s", 
 		    field->name, tdbRecordLineIx(record), lf->fileName);
 	       }
-	    char *relPath = field->val;
 	    char dir[PATH_LEN];
 	    splitPath(lf->fileName, dir, NULL, NULL);
 	    char includeName[PATH_LEN];
+            char *words[5];
+            int count = chopLine(field->val, words);
+            if (count > 2)
+                errAbort("Too many words on include line at line %d of %s", 
+		     tdbRecordLineIx(record), lf->fileName);
+
+	    char *relPath = words[0];
+            char *subRelease = NULL;
+            if (count == 2)
+                {
+                subRelease = cloneString(words[1]);
+                if (!trackDbCheckValidRelease(subRelease))
+                    errAbort("Include with bad release tag %s at line %d of %s", 
+                        subRelease, tdbRecordLineIx(record), lf->fileName);
+                }
+
+            if (subRelease && releaseTag && !sameString(subRelease, releaseTag))
+                errAbort("Include with release %s included from include with release %s at line %d of %s", 
+		     subRelease, releaseTag, tdbRecordLineIx(record), 
+                     lf->fileName);
+
 	    safef(includeName, sizeof(includeName), "%s%s", dir, relPath);
 	    if (hashLookup(circularHash, includeName))
 		{
 		errAbort("Including file %s in an infinite loop line %d of %s", 
 			includeName, tdbRecordLineIx(record), lf->fileName);
 		}
-	    recurseThroughIncludes(includeName, lm, circularHash, pRecordList);
+	    recurseThroughIncludes(includeName, lm, circularHash, pRecordList, 
+                subRelease);
 	    }
 	}
     else
 	{
 	checkDupeFields(record, lf);
+        if (releaseTag)
+            addReleaseTag(record, lf, releaseTag);
 	if (record->key != NULL)
 	    {
 	    slAddHead(pRecordList, record);
@@ -496,7 +542,7 @@ struct tdbRecord *readStartingFromFile(char *fileName, struct lm *lm)
 {
 struct tdbRecord *recordList = NULL;
 struct hash *circularHash = hashNew(0);
-recurseThroughIncludes(fileName, lm, circularHash, &recordList);
+recurseThroughIncludes(fileName, lm, circularHash, &recordList, NULL);
 hashAdd(circularHash, fileName, NULL);
 hashFree(&circularHash);
 slReverse(&recordList);
@@ -630,6 +676,8 @@ for (fileLevel = fileLevelList; fileLevel != NULL; fileLevel = fileLevel->next)
     char *fileName = fileLevel->name;
     struct tdbRecord *fileRecords = readStartingFromFile(fileName, lm);
     verbose(2, "Read %d records starting from %s\n", slCount(fileRecords), fileName);
+    fileRecords = filterOnRelease(fileRecords, currentReleaseBit);
+    verbose(2, "After filterOnRelease %d records\n", slCount(fileRecords));
     linkUpParents(fileRecords, parentField, currentReleaseBit);
     checkDupeKeys(fileRecords, TRUE);
     struct tdbRecord *record, *nextRecord;
@@ -937,8 +985,6 @@ for (dbOrder = dbOrderList; dbOrder != NULL; dbOrder = dbOrder->next)
 
     verbose(2, "Composed %d records from %s\n", slCount(recordList), db);
     inheritFromParents(recordList, "parent", "noInherit", releaseBit, lm);
-    recordList = filterOnRelease(recordList, releaseBit);
-    verbose(2, "After filterOnRelease %d records\n", slCount(recordList));
     linkUpParents(recordList, "parent", releaseBit);
     checkDupeKeys(recordList, FALSE);
 

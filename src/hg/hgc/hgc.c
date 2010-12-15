@@ -21591,16 +21591,11 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName = NULL, *tableName, *userName = NULL;
+char *escName = NULL, *tableName;
 int hasAttr = 0;
 int i;
 int start = cartInt(cart, "o");
 
-if (wikiTrackEnabled(database, &userName) && sameWord("0", itemName))
-    {
-    if (userName != NULL)
-        itemName = cartUsualString(cart, "gvPos.create.annotation", "0");
-    }
 /* official name, position, band, genomic size */
 escName = sqlEscapeString(itemName);
 safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escName);
@@ -22542,19 +22537,16 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     r = bedDetailLoadWithGaps(row, bedPart+2);
     bedPrintPos((struct bed*)r, bedPart, tdb);
-    //print bedPart using bed routines?
-    //printf("<B>Name:</B> %s <BR>\n", r->name);
-    //print ID as link if have url
     if (r->id != NULL)
         {
         printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
         }
-    //printf("<B>Position:</B> %s:%u-%u<BR><BR>", r->chrom, *(r->chromStart)+1, *(r->chromEnd));
     if (r->description != NULL)
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
+printTrackHtml(tdb);
 
 bedDetailFree(&r);
 freeMem(escName);
@@ -22831,6 +22823,14 @@ else if (sameWord(table, G_CREATE_WIKI_ITEM))
     {
     doCreateWikiItem(item, seqName, winStart, winEnd);
     }
+else if (sameString(track, "variome"))
+    doVariome(item, seqName, winStart, winEnd);
+else if (sameString(track, "variome.create"))
+    doCreateVariomeItem(item, seqName, winStart, winEnd);
+else if (sameString(track, "variome.delete"))
+    doDeleteVariomeItem(item, seqName, winStart, winEnd);
+else if (sameString(track, "variome.addComments"))
+    doAddVariomeComments(item, seqName, winStart, winEnd);
 else if (startsWith("transMapAln", table) || startsWith("reconTransMapAln", table))
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", table))

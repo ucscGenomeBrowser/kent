@@ -9,7 +9,8 @@ A = hgc
 O = $A.o bamClick.o bigBedClick.o dbRIP.o ccdsClick.o cgapSageClick.o encodeClick.o expClick.o \
 	hgdpClick.o lowelab.o mafClick.o makeItemsClick.o mgcClick.o \
 	parClick.o peakClusters.o regMotif.o retroClick.o rnaFoldClick.o \
-	transMapClick.o txCdsInfo.o t2g.o virusClick.o wiggleClick.o wikiTrack.o 
+	transMapClick.o txCdsInfo.o t2g.o virusClick.o wiggleClick.o \
+	wikiTrack.o variomeClick.o
 
 include ../../inc/cgi_build_rules.mk
 

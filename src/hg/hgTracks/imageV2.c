@@ -289,7 +289,7 @@ dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(tra
 if (!configurable || track->hasUi == FALSE)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
 else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
-    matchRegex(track->track, "^snp[0-9]+$") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
+    matchRegex(track->track, "^snp[0-9]+") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"clickThrough\",");
 else
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"popup\",");
@@ -1808,10 +1808,10 @@ else if(slice->link != NULL)
             char *newLine = NEWLINE_TO_USE(browser);
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if(imgTrack->reorderable)
-                hPrintf(" TITLE='%s%sclick to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
+                hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
                     ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
             else
-                hPrintf(" TITLE='%s%sclick to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
+                hPrintf(" TITLE='%s%sclick or right click to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
             }
         else
             hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );

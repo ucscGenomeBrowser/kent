@@ -1158,6 +1158,9 @@ struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 	int start, int end);
 /* fetch wiki track items as simple bed 3 list in given range */
 
+void addVariomeWikiTrack(struct track **pGroupList);
+/* Add variome wiki track and append to group list. */
+
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */
 
