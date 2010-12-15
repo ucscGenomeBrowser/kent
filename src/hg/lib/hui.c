@@ -165,11 +165,11 @@ if (safeObj == NULL || safeObj->vars == NULL)
 return NULL;
 
 //struct dyString *dyTable = dyStringCreate("<table id='mdb_%s'>",tdb->table);
-struct dyString *dyTable = dyStringCreate("<table>");
+struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
 if(showLongLabel)
-    dyStringPrintf(dyTable,"<tr><td colspan=2>%s</td></tr>",tdb->longLabel);
+    dyStringPrintf(dyTable,"<tr><td colspan=2 valign='bottom'>%s</td></tr>",tdb->longLabel);
 if(showShortLabel)
-    dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
 struct hash *cvTermTypes = mdbCvTermTypeHash();
@@ -184,7 +184,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
-        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
+        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>",mdbVar->var);
 
         dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
         dyStringAppend(dyTable,"</td></tr>");
@@ -210,15 +210,15 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
                         {
                         char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
-                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
+                        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
                         freeMem(linkOfTerm);
                         }
                     else
-                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
+                        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
                         //{  // NOTE: Could just have a tool tip for these.
                         //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
                         //label = cgiEncode(label);
-                        //dyStringPrintf(dyTable,"<tr><td align=right><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
+                        //dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
                         //freeMem(descr);
                         //freeMem(label);
                         //}
@@ -227,7 +227,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     }
                 }
             }
-        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
+        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
 dyStringAppend(dyTable,"</table>");
@@ -3805,13 +3805,6 @@ sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
-// Table wraps around entire list so that "Top" link can float to the correct place.
-printf("<table><tr><td class='windowSize'>");
-printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
-makeTopLink(parentTdb);
-
-//printf("<style type='text/css'>td {padding: 0px 5px 0px;}</style>");
-
 // Now we can start in on the table of subtracks  It may be sortable and/or dragAndDroppable
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
 dyStringClear(dyHtml);
@@ -3838,11 +3831,13 @@ boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all")
 boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 int colspan = 3;
 if (sortOrder != NULL)
-    colspan = sortOrder->count+2;
+    colspan = sortOrder->count+4;
 if (doColorPatch)
     colspan += 1;
 printf("<TR%s>",useDragAndDrop?" id='noDrag' class='nodrop nodrag'":"");
-printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
+printf("<TD colspan='%d'>", colspan);
+printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
+printf("<B>List subtracks:&nbsp;");
 char javascript[JBUFSIZE];
 safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
 cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
@@ -3852,6 +3847,7 @@ cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
 printf("all</B>");
 if (slCount(subtrackRefList) > 5)
     printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
+makeTopLink(parentTdb);  // "Top" link  floats to right side of table
 puts("</TD>");
 
 // Add column headers which are sort button links
@@ -4065,7 +4061,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     // Do we have a restricted until date?
     char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
     if (dateDisplay)
-        printf("</TD>\n<TD align=\"CENTER\">&nbsp;%s&nbsp;", dateDisplay);
+        printf("</TD>\n<TD align=\"CENTER\" nowrap>&nbsp;%s&nbsp;", dateDisplay);
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
