@@ -1852,6 +1852,7 @@ url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&ex
 track evofold override
 mafTrack multiz46way
 origAssembly hg17
+pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
 
 track targetScanS
 shortLabel TS miRNA sites
