@@ -1,12 +1,34 @@
 # $Header:  Exp $
 
-# Note: Trial display for TFBS Data for Histone
+# UW TFBS (wrangler: Venkat)
+# Notes:
+#       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/University of Washington
+#       - Track Short Label: UW TFBS
+#       - View Long Labels: [cell] [factor] TFBS [view] Rep [rep #] [(FDR)] from ENCODE/UW 
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier
+#       - Short Labels: 
+#               Template: [cell] [factor] [view] [replicate #]
+#               - Views: For consistency sake view will be two letters
+#                       - Peaks = Pk
+#                       - Raw Signal = Sig
+#                       - Hotspots = Hspt 
+#               - Replicate: #
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
+#       - Default Tracks on: Peaks,Hotspots,Raw Signals for  tier 1 cells and Inputs.
+#       - Display matrix:
+#               - Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct from cell names.
+#               - Dimension X - Factor
+#                       - factor Order: Ordering is based on Histone Number then numerically and alphabetaclly. Numerically 09 before 12.
+#               - Dimension Y - Cell Type
+#                       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
+
+
 
 track wgEncodeUwTfbs
 compositeTrack on
 superTrack wgEncodeTfBindingSuper dense
 shortLabel UW TFBS
-longLabel ENCODE Transcription Factor Binding Sites by ChIP-Seq from Univ. of Washington
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)  HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF  BJ=BJ Caco2=Caco-2 H7es=H7-HESC HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
@@ -35,7 +57,7 @@ noInherit on
         track wgEncodeUwTfbsBjCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel BJ    CTCF    Hs1
+        shortLabel BJ CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in BJ cells)
         subGroups view=Hot factor=CTCF cellType=BJ rep=1
         type broadPeak
@@ -45,7 +67,7 @@ noInherit on
         track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot      
-        shortLabel GM878 CTCF    Hs1
+        shortLabel GM12878 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12878 cells)
         subGroups view=Hot factor=CTCF cellType=GM12878 rep=1
         type broadPeak
@@ -56,7 +78,7 @@ noInherit on
         track wgEncodeUwTfbsK562CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot      
-        shortLabel K562  CTCF    Hs1
+        shortLabel K562 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in K562 cells)
         subGroups view=Hot factor=CTCF cellType=K562 rep=1
         type broadPeak
@@ -67,7 +89,7 @@ noInherit on
         track wgEncodeUwTfbsGm06990CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel GM990 CTCF    Hs1
+        shortLabel GM06990 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM06990 cells)
         subGroups view=Hot factor=CTCF cellType=GM06990 rep=1
         type broadPeak
@@ -77,7 +99,7 @@ noInherit on
         track wgEncodeUwTfbsCaco2CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel Caco2 CTCF    Hs1
+        shortLabel Caco2 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in Caco-2 cells)
         subGroups view=Hot factor=CTCF cellType=Caco2 rep=1
         type broadPeak
@@ -87,7 +109,7 @@ noInherit on
         track wgEncodeUwTfbsGm12864CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel GM864 CTCF    Hs1
+        shortLabel GM12864 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12864 cells)
         subGroups view=Hot factor=CTCF cellType=GM12864 rep=1
         type broadPeak
@@ -97,7 +119,7 @@ noInherit on
         track wgEncodeUwTfbsGm12865CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel GM865 CTCF    Hs1
+        shortLabel GM12865 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12865 cells)
         subGroups view=Hot factor=CTCF cellType=GM12865 rep=1
         type broadPeak
@@ -107,7 +129,7 @@ noInherit on
         track wgEncodeUwTfbsGm12872CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel GM872 CTCF    Hs1
+        shortLabel GM12872 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12872 cells)
         subGroups view=Hot factor=CTCF cellType=GM12872 rep=1
         type broadPeak
@@ -117,7 +139,7 @@ noInherit on
         track wgEncodeUwTfbsGm12874CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel GM874 CTCF    Hs1
+        shortLabel GM12874 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12874 cells)
         subGroups view=Hot factor=CTCF cellType=GM12874 rep=1
         type broadPeak
@@ -127,7 +149,7 @@ noInherit on
         track wgEncodeUwTfbsHek293CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel HEK29 CTCF    Hs1
+        shortLabel HEK293 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in HEK293 cells)
         subGroups view=Hot factor=CTCF cellType=HEK293 rep=1
         type broadPeak
@@ -137,7 +159,7 @@ noInherit on
         track wgEncodeUwTfbsHelas3CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel HeLaS CTCF    Hs1
+        shortLabel HeLa-S3 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in HeLa-S3 cells)
         subGroups view=Hot factor=CTCF cellType=HELA rep=1
         type broadPeak
@@ -148,7 +170,7 @@ noInherit on
         track wgEncodeUwTfbsHepg2CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel HepG2 CTCF    Hs1
+        shortLabel HepG2 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in HepG2 cells)
         subGroups view=Hot factor=CTCF cellType=HEPG2 rep=1
         type broadPeak
@@ -159,7 +181,7 @@ noInherit on
         track wgEncodeUwTfbsHl60CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel HL-60 CTCF    Hs1
+        shortLabel HL-60 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in HL-60 cells)
         subGroups view=Hot factor=CTCF cellType=HL60 rep=1
         type broadPeak
@@ -169,7 +191,7 @@ noInherit on
         track wgEncodeUwTfbsHmecCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel HMEC  CTCF    Hs1
+        shortLabel HMEC CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in HMEC cells)
         subGroups view=Hot factor=CTCF cellType=HMEC rep=1
         type broadPeak
@@ -179,7 +201,7 @@ noInherit on
         track wgEncodeUwTfbsHreCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel HRE   CTCF    Hs1
+        shortLabel HRE CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in HRE cells)
         subGroups view=Hot factor=CTCF cellType=HRE rep=1
         type broadPeak
@@ -189,7 +211,7 @@ noInherit on
         track wgEncodeUwTfbsHuvecCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel HUVEC CTCF    Hs1
+        shortLabel HUVEC CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in HUVEC cells)
         subGroups view=Hot factor=CTCF cellType=HUVEC rep=1
         type broadPeak
@@ -200,7 +222,7 @@ noInherit on
         track wgEncodeUwTfbsNhekCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel NHEK  CTCF    Hs1
+        shortLabel NHEK CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in NHEK cells)
         subGroups view=Hot factor=CTCF cellType=NHEK rep=1
         type broadPeak
@@ -211,7 +233,7 @@ noInherit on
         track wgEncodeUwTfbsSaecCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel SAEC  CTCF    Hs1
+        shortLabel SAEC CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in SAEC cells)
         subGroups view=Hot factor=CTCF cellType=SAEC rep=1
         type broadPeak
@@ -221,7 +243,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel SKNSH CTCF    Hs1
+        shortLabel SK-N-SH_RA CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in SK-N-SH_RA cells)
         subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=1
         type broadPeak
@@ -231,7 +253,7 @@ noInherit on
         track wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel WERIR CTCF    Hs1
+        shortLabel WERI-Rb-1 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in WERI-Rb-1 cells)
         subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=1
         type broadPeak
@@ -241,7 +263,7 @@ noInherit on
         track wgEncodeUwTfbsBjCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel BJ    CTCF    Hs2
+        shortLabel BJ CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in BJ cells)
         subGroups view=Hot factor=CTCF cellType=BJ rep=2
         type broadPeak
@@ -251,7 +273,7 @@ noInherit on
         track wgEncodeUwTfbsK562CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot 
-        shortLabel K562  CTCF    Hs2
+        shortLabel K562 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in K562 cells)
         subGroups view=Hot factor=CTCF cellType=K562 rep=2
         type broadPeak
@@ -262,7 +284,7 @@ noInherit on
         track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot 
-        shortLabel GM878 CTCF    Hs2
+        shortLabel GM12878 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM12878 cells)
         subGroups view=Hot factor=CTCF cellType=GM12878 rep=2
         type broadPeak
@@ -273,7 +295,7 @@ noInherit on
         track wgEncodeUwTfbsCaco2CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel Caco2 CTCF    Hs2
+        shortLabel Caco2 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in Caco-2 cells)
         subGroups view=Hot factor=CTCF cellType=Caco2 rep=2
         type broadPeak
@@ -283,7 +305,7 @@ noInherit on
         track wgEncodeUwTfbsGm06990CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM990 CTCF    Hs2
+        shortLabel GM06990 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM06990 cells)
         subGroups view=Hot factor=CTCF cellType=GM06990 rep=2
         type broadPeak
@@ -293,7 +315,7 @@ noInherit on
         track wgEncodeUwTfbsGm12865CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM865 CTCF    Hs2
+        shortLabel GM12865 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM12865 cells)
         subGroups view=Hot factor=CTCF cellType=GM12865 rep=2
         type broadPeak
@@ -303,7 +325,7 @@ noInherit on
         track wgEncodeUwTfbsGm12872CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM872 CTCF    Hs2
+        shortLabel GM12872 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM12872 cells)
         subGroups view=Hot factor=CTCF cellType=GM12872 rep=2
         type broadPeak
@@ -313,7 +335,7 @@ noInherit on
         track wgEncodeUwTfbsGm12874CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM874 CTCF    Hs2
+        shortLabel GM12874 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM12874 cells)
         subGroups view=Hot factor=CTCF cellType=GM12874 rep=2
         type broadPeak
@@ -323,7 +345,7 @@ noInherit on
         track wgEncodeUwTfbsHelas3CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HeLaS CTCF    Hs2
+        shortLabel HeLa-S3 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in HeLa-S3 cells)
         subGroups view=Hot factor=CTCF cellType=HELA rep=2
         type broadPeak
@@ -334,7 +356,7 @@ noInherit on
         track wgEncodeUwTfbsHepg2CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HepG2 CTCF    Hs2
+        shortLabel HepG2 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in HepG2 cells)
         subGroups view=Hot factor=CTCF cellType=HEPG2 rep=2
         type broadPeak
@@ -345,7 +367,7 @@ noInherit on
         track wgEncodeUwTfbsHreCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HRE   CTCF    Hs2
+        shortLabel HRE CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in HRE cells)
         subGroups view=Hot factor=CTCF cellType=HRE rep=2
         type broadPeak
@@ -355,7 +377,7 @@ noInherit on
         track wgEncodeUwTfbsHuvecCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HUVEC CTCF    Hs2
+        shortLabel HUVEC CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in HUVEC cells)
         subGroups view=Hot factor=CTCF cellType=HUVEC rep=2
         type broadPeak
@@ -366,7 +388,7 @@ noInherit on
         track wgEncodeUwTfbsNhekCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel NHEK  CTCF    Hs2
+        shortLabel NHEK CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in NHEK cells)
         subGroups view=Hot factor=CTCF cellType=NHEK rep=2
         type broadPeak
@@ -377,7 +399,7 @@ noInherit on
         track wgEncodeUwTfbsSaecCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel SAEC  CTCF    Hs2
+        shortLabel SAEC CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in SAEC cells)
         subGroups view=Hot factor=CTCF cellType=SAEC rep=2
         type broadPeak
@@ -387,7 +409,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel SKNSH CTCF    Hs2
+        shortLabel SK-N-SH_RA CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in SK-N-SH_RA cells)
         subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=2
         type broadPeak
@@ -397,7 +419,7 @@ noInherit on
         track wgEncodeUwTfbsGm12864CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM864 CTCF    Hs2
+        shortLabel GM12864 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM12864 cells)
         subGroups view=Hot factor=CTCF cellType=GM12864 rep=2
         type broadPeak
@@ -407,7 +429,7 @@ noInherit on
         track wgEncodeUwTfbsGm12873CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM873 CTCF    Hs1
+        shortLabel GM12873 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12873 cells)
         subGroups view=Hot factor=CTCF cellType=GM12873 rep=1
         type broadPeak
@@ -417,7 +439,7 @@ noInherit on
         track wgEncodeUwTfbsGm12875CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM875 CTCF    Hs1
+        shortLabel GM12875 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12875 cells)
         subGroups view=Hot factor=CTCF cellType=GM12875 rep=1
         type broadPeak
@@ -427,7 +449,7 @@ noInherit on
       	track wgEncodeUwTfbsGm12801CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM801 CTCF    Hs1
+        shortLabel GM12801 CTCF Hspt 1
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 1 (CTCF in GM12801 cells)
         subGroups view=Hot factor=CTCF cellType=GM12801 rep=1
         type broadPeak
@@ -437,7 +459,7 @@ noInherit on
         track wgEncodeUwTfbsGm12873CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM873 CTCF    Hs2
+        shortLabel GM12873 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM12873 cells)
         subGroups view=Hot factor=CTCF cellType=GM12873 rep=2
         type broadPeak
@@ -447,7 +469,7 @@ noInherit on
         track wgEncodeUwTfbsHek293CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HEK29 CTCF    Hs2
+        shortLabel HEK293 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in HEK293 cells)
         subGroups view=Hot factor=CTCF cellType=HEK293 rep=2
         type broadPeak
@@ -457,7 +479,7 @@ noInherit on
         track wgEncodeUwTfbsGm12875CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel GM875 CTCF    Hs2
+        shortLabel GM12875 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in GM12875 cells)
         subGroups view=Hot factor=CTCF cellType=GM12875 rep=2
         type broadPeak
@@ -467,7 +489,7 @@ noInherit on
         track wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel WERIR CTCF    Hs2
+        shortLabel WERI-Rb-1 CTCF Hspt 2
         longLabel ENCODE UW TFBS by ChIP-Seq Hotspots Replicate 2 (CTCF in WERI-Rb-1 cells)
         subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=2
         type broadPeak
@@ -477,7 +499,7 @@ noInherit on
         track wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG04449 CTCF 2
+        shortLabel AG04449 CTCF Hpst 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in AG04449 cells)
         subGroups view=Hot factor=CTCF cellType=AG04449  rep=2
         type broadPeak
@@ -487,7 +509,7 @@ noInherit on
         track wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG04449 CTCF 1
+        shortLabel AG04449 CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in AG04449 cells)
         subGroups view=Hot factor=CTCF cellType=AG04449  rep=1
         type broadPeak
@@ -497,7 +519,7 @@ noInherit on
         track wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG04450 CTCF 1
+        shortLabel AG04450 CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in AG04450 cells)
         subGroups view=Hot factor=CTCF cellType=AG04450  rep=1
         type broadPeak
@@ -507,7 +529,7 @@ noInherit on
         track wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG09309 CTCF 2
+        shortLabel AG09309 CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in AG09309 cells)
         subGroups view=Hot factor=CTCF cellType=AG09309  rep=2
         type broadPeak
@@ -517,7 +539,7 @@ noInherit on
         track wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG09309 CTCF 1
+        shortLabel AG09309 CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in AG09309 cells)
         subGroups view=Hot factor=CTCF cellType=AG09309  rep=1
         type broadPeak
@@ -527,7 +549,7 @@ noInherit on
         track wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG09319 CTCF 2
+        shortLabel AG09319 CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in AG09319 cells)
         subGroups view=Hot factor=CTCF cellType=AG09319  rep=2
         type broadPeak
@@ -537,7 +559,7 @@ noInherit on
         track wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG10803 CTCF 1
+        shortLabel AG10803 CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in AG10803 cells)
         subGroups view=Hot factor=CTCF cellType=AG10803  rep=1
         type broadPeak
@@ -547,7 +569,7 @@ noInherit on
         track wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AG10803 CTCF 2
+        shortLabel AG10803 CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in AG10803 cells)
         subGroups view=Hot factor=CTCF cellType=AG10803  rep=2
         type broadPeak
@@ -557,7 +579,7 @@ noInherit on
         track wgEncodeUwTfbsAoafCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel AoAF CTCF 2
+        shortLabel AoAF CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in AoAF cells)
         subGroups view=Hot factor=CTCF cellType=AOAF  rep=2
         type broadPeak
@@ -567,7 +589,7 @@ noInherit on
         track wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HBMEC CTCF 1
+        shortLabel HBMEC CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HBMEC cells)
         subGroups view=Hot factor=CTCF cellType=HBMEC  rep=1
         type broadPeak
@@ -577,7 +599,7 @@ noInherit on
         track wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HBMEC CTCF 2
+        shortLabel HBMEC CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in HBMEC cells)
         subGroups view=Hot factor=CTCF cellType=HBMEC  rep=2
         type broadPeak
@@ -587,7 +609,7 @@ noInherit on
         track wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HCFaa CTCF 1
+        shortLabel HCFaa CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HCFaa cells)
         subGroups view=Hot factor=CTCF cellType=HCFaa  rep=1
         type broadPeak
@@ -597,7 +619,7 @@ noInherit on
         track wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HCPEpiC CTCF 1
+        shortLabel HCPEpiC CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HCPEpiC cells)
         subGroups view=Hot factor=CTCF cellType=HCPE  rep=1
         type broadPeak
@@ -607,7 +629,7 @@ noInherit on
         track wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HCPEpiC CTCF 2
+        shortLabel HCPEpiC CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in HCPEpiC cells)
         subGroups view=Hot factor=CTCF cellType=HCPE  rep=2
         type broadPeak
@@ -617,7 +639,7 @@ noInherit on
         track wgEncodeUwTfbsHeeCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HEEpiC CTCF 2
+        shortLabel HEEpiC CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in HEEpiC cells)
         subGroups view=Hot factor=CTCF cellType=HEE  rep=2
         type broadPeak
@@ -627,7 +649,7 @@ noInherit on
         track wgEncodeUwTfbsHeeCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HEEpiC CTCF 1
+        shortLabel HEEpiC CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HEEpiC cells)
         subGroups view=Hot factor=CTCF cellType=HEE  rep=1
         type broadPeak
@@ -637,7 +659,7 @@ noInherit on
         track wgEncodeUwTfbsHmfCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HMF CTCF 2
+        shortLabel HMF CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in HMF cells)
         subGroups view=Hot factor=CTCF cellType=HMF  rep=2
         type broadPeak
@@ -647,7 +669,7 @@ noInherit on
         track wgEncodeUwTfbsHmfCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HMF CTCF 1
+        shortLabel HMF CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HMF cells)
         subGroups view=Hot factor=CTCF cellType=HMF  rep=1
         type broadPeak
@@ -657,7 +679,7 @@ noInherit on
         track wgEncodeUwTfbsHpafCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HPAF CTCF 2
+        shortLabel HPAF CTCF Hspt 2
         longLabel ENCODE UW TFBS Hotspots Replicate 2 (CTCF in HPAF cells)
         subGroups view=Hot factor=CTCF cellType=HPAF  rep=2
         type broadPeak
@@ -667,7 +689,7 @@ noInherit on
         track wgEncodeUwTfbsHpafCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HPAF CTCF 1
+        shortLabel HPAF CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HPAF cells)
         subGroups view=Hot factor=CTCF cellType=HPAF  rep=1
         type broadPeak
@@ -677,7 +699,7 @@ noInherit on
         track wgEncodeUwTfbsHpfCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HPF CTCF 1
+        shortLabel HPF CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HPF cells)
         subGroups view=Hot factor=CTCF cellType=HPF  rep=1
         type broadPeak
@@ -687,7 +709,7 @@ noInherit on
         track wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HRPEpiC CTCF 1
+        shortLabel HRPEpiC CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HRPEpiC cells)
         subGroups view=Hot factor=CTCF cellType=HRPE  rep=1
         type broadPeak
@@ -697,7 +719,7 @@ noInherit on
         track wgEncodeUwTfbsHaspCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel HA-sp CTCF 1
+        shortLabel HA-sp CTCF Hspt 1
         longLabel ENCODE UW TFBS Hotspots Replicate 1 (CTCF in HA-sp cells)
         subGroups view=Hot factor=CTCF cellType=HA-sp  rep=1
         type broadPeak
@@ -715,7 +737,7 @@ noInherit on
         track wgEncodeUwTfbsBjCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel BJ    CTCF    Pk1
+        shortLabel BJ CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in BJ cells)
         subGroups view=Peaks factor=CTCF cellType=BJ rep=1
         type narrowPeak
@@ -725,7 +747,7 @@ noInherit on
         track wgEncodeUwTfbsGm12878CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks 
-        shortLabel GM878 CTCF    Pk1
+        shortLabel GM12878 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12878 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12878 rep=1
         type narrowPeak
@@ -736,7 +758,7 @@ noInherit on
         track wgEncodeUwTfbsK562CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks 
-        shortLabel K562  CTCF    Pk1
+        shortLabel K562 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in K562 cells)
         subGroups view=Peaks factor=CTCF cellType=K562 rep=1
         type narrowPeak
@@ -747,7 +769,7 @@ noInherit on
         track wgEncodeUwTfbsGm06990CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM990 CTCF    Pk1
+        shortLabel GM06990 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM06990 cells)
         subGroups view=Peaks factor=CTCF cellType=GM06990 rep=1
         type narrowPeak
@@ -757,7 +779,7 @@ noInherit on
         track wgEncodeUwTfbsCaco2CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel Caco2 CTCF    Pk1
+        shortLabel Caco2 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in Caco-2 cells)
         subGroups view=Peaks factor=CTCF cellType=Caco2 rep=1
         type narrowPeak
@@ -767,7 +789,7 @@ noInherit on
         track wgEncodeUwTfbsGm12864CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM864 CTCF    Pk1
+        shortLabel GM12864 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12864 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12864 rep=1
         type narrowPeak
@@ -777,7 +799,7 @@ noInherit on
         track wgEncodeUwTfbsGm12865CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM865 CTCF    Pk1
+        shortLabel GM12865 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12865 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12865 rep=1
         type narrowPeak
@@ -787,7 +809,7 @@ noInherit on
         track wgEncodeUwTfbsGm12872CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM872 CTCF    Pk1
+        shortLabel GM12872 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12872 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12872 rep=1
         type narrowPeak
@@ -797,7 +819,7 @@ noInherit on
         track wgEncodeUwTfbsGm12874CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM874 CTCF    Pk1
+        shortLabel GM12874 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12874 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12874 rep=1
         type narrowPeak
@@ -807,7 +829,7 @@ noInherit on
         track wgEncodeUwTfbsHek293CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HEK29 CTCF    Pk1
+        shortLabel HEK293 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in HEK293 cells)
         subGroups view=Peaks factor=CTCF cellType=HEK293 rep=1
         type narrowPeak
@@ -817,7 +839,7 @@ noInherit on
         track wgEncodeUwTfbsHelas3CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HeLaS CTCF    Pk1
+        shortLabel HeLa-S3 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in HeLa-S3 cells)
         subGroups view=Peaks factor=CTCF cellType=HELA rep=1
         type narrowPeak
@@ -828,7 +850,7 @@ noInherit on
         track wgEncodeUwTfbsHepg2CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HepG2 CTCF    Pk1
+        shortLabel HepG2 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in HepG2 cells)
         subGroups view=Peaks factor=CTCF cellType=HEPG2 rep=1
         type narrowPeak
@@ -839,7 +861,7 @@ noInherit on
         track wgEncodeUwTfbsHl60CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HL-60 CTCF    Pk1
+        shortLabel HL-60 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in HL-60 cells)
         subGroups view=Peaks factor=CTCF cellType=HL60 rep=1
         type narrowPeak
@@ -849,7 +871,7 @@ noInherit on
         track wgEncodeUwTfbsHmecCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HMEC  CTCF    Pk1
+        shortLabel HMEC CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in HMEC cells)
         subGroups view=Peaks factor=CTCF cellType=HMEC rep=1
         type narrowPeak
@@ -859,7 +881,7 @@ noInherit on
         track wgEncodeUwTfbsHreCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HRE   CTCF    Pk1
+        shortLabel HRE CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in HRE cells)
         subGroups view=Peaks factor=CTCF cellType=HRE rep=1
         type narrowPeak
@@ -869,7 +891,7 @@ noInherit on
         track wgEncodeUwTfbsHuvecCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HUVEC CTCF    Pk1
+        shortLabel HUVEC CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in HUVEC cells)
         subGroups view=Peaks factor=CTCF cellType=HUVEC rep=1
         type narrowPeak
@@ -880,7 +902,7 @@ noInherit on
         track wgEncodeUwTfbsNhekCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel NHEK  CTCF    Pk1
+        shortLabel NHEK CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in NHEK cells)
         subGroups view=Peaks factor=CTCF cellType=NHEK rep=1
         type narrowPeak
@@ -891,7 +913,7 @@ noInherit on
         track wgEncodeUwTfbsSaecCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SAEC  CTCF    Pk1
+        shortLabel SAEC CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in SAEC cells)
         subGroups view=Peaks factor=CTCF cellType=SAEC rep=1
         type narrowPeak
@@ -901,7 +923,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SKNSH CTCF    Pk1
+        shortLabel SK-N-SH_RA CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in SK-N-SH_RA cells)
         subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=1
         type narrowPeak
@@ -911,7 +933,7 @@ noInherit on
         track wgEncodeUwTfbsWerirb1CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel WERIR CTCF    Pk1
+        shortLabel WERI-Rb-1 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in WERI-Rb-1 cells)
         subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=1
         type narrowPeak
@@ -921,7 +943,7 @@ noInherit on
         track wgEncodeUwTfbsBjCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel BJ    CTCF    Pk2
+        shortLabel BJ CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in BJ cells)
         subGroups view=Peaks factor=CTCF cellType=BJ rep=2
         type narrowPeak
@@ -931,7 +953,7 @@ noInherit on
         track wgEncodeUwTfbsK562CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  
-        shortLabel K562  CTCF    Pk2
+        shortLabel K562 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in K562 cells)
         subGroups view=Peaks factor=CTCF cellType=K562 rep=2
         type narrowPeak
@@ -942,7 +964,7 @@ noInherit on
         track wgEncodeUwTfbsGm12878CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks 
-        shortLabel GM878 CTCF    Pk2
+        shortLabel GM12878 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM12878 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12878 rep=2
         type narrowPeak
@@ -953,7 +975,7 @@ noInherit on
         track wgEncodeUwTfbsCaco2CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel Caco2 CTCF    Pk2
+        shortLabel Caco2 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in Caco-2 cells)
         subGroups view=Peaks factor=CTCF cellType=Caco2 rep=2
         type narrowPeak
@@ -963,7 +985,7 @@ noInherit on
         track wgEncodeUwTfbsGm06990CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM990 CTCF    Pk2
+        shortLabel GM06990 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM06990 cells)
         subGroups view=Peaks factor=CTCF cellType=GM06990 rep=2
         type narrowPeak
@@ -973,7 +995,7 @@ noInherit on
         track wgEncodeUwTfbsGm12865CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM865 CTCF    Pk2
+        shortLabel GM12865 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM12865 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12865 rep=2
         type narrowPeak
@@ -983,7 +1005,7 @@ noInherit on
         track wgEncodeUwTfbsGm12872CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM872 CTCF    Pk2
+        shortLabel GM12872 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM12872 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12872 rep=2
         type narrowPeak
@@ -993,7 +1015,7 @@ noInherit on
         track wgEncodeUwTfbsGm12874CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM874 CTCF    Pk2
+        shortLabel GM12874 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM12874 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12874 rep=2
         type narrowPeak
@@ -1003,7 +1025,7 @@ noInherit on
      	track wgEncodeUwTfbsHelas3CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HeLaS CTCF    Pk2
+        shortLabel HeLa-S3 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in HeLa-S3 cells)
         subGroups view=Peaks factor=CTCF cellType=HELA rep=2
         type narrowPeak
@@ -1014,7 +1036,7 @@ noInherit on
         track wgEncodeUwTfbsHepg2CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HepG2 CTCF    Pk2
+        shortLabel HepG2 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in HepG2 cells)
         subGroups view=Peaks factor=CTCF cellType=HEPG2 rep=2
         type narrowPeak
@@ -1025,7 +1047,7 @@ noInherit on
         track wgEncodeUwTfbsHreCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HRE   CTCF    Pk2
+        shortLabel HRE CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in HRE cells)
         subGroups view=Peaks factor=CTCF cellType=HRE rep=2
         type narrowPeak
@@ -1035,7 +1057,7 @@ noInherit on
         track wgEncodeUwTfbsHuvecCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HUVEC CTCF    Pk2
+        shortLabel HUVEC CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in HUVEC cells)
         subGroups view=Peaks factor=CTCF cellType=HUVEC rep=2
         type narrowPeak
@@ -1046,7 +1068,7 @@ noInherit on
         track wgEncodeUwTfbsNhekCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel NHEK  CTCF    Pk2
+        shortLabel NHEK CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in NHEK cells)
         subGroups view=Peaks factor=CTCF cellType=NHEK rep=2
         type narrowPeak
@@ -1057,7 +1079,7 @@ noInherit on
         track wgEncodeUwTfbsSaecCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SAEC  CTCF    Pk2
+        shortLabel SAEC CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in SAEC cells)
         subGroups view=Peaks factor=CTCF cellType=SAEC rep=2
         type narrowPeak
@@ -1067,7 +1089,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SKNSH CTCF    Pk2
+        shortLabel SK-N-SH_RA CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in SK-N-SH_RA cells)
         subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=2
         type narrowPeak
@@ -1077,7 +1099,7 @@ noInherit on
         track wgEncodeUwTfbsGm12864CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM864 CTCF    Pk2
+        shortLabel GM12864 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM12864 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12864 rep=2
         type narrowPeak
@@ -1087,7 +1109,7 @@ noInherit on
        track wgEncodeUwTfbsGm12873CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM873 CTCF    Pk1
+        shortLabel GM12873 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12873 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12873 rep=1
         type narrowPeak
@@ -1097,7 +1119,7 @@ noInherit on
         track wgEncodeUwTfbsGm12875CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM875 CTCF    Pk1
+        shortLabel GM12875 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12875 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12875 rep=1
         type narrowPeak
@@ -1107,7 +1129,7 @@ noInherit on
         track wgEncodeUwTfbsGm12873CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM873 CTCF    Pk2
+        shortLabel GM12873 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM12873 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12873 rep=2
         type narrowPeak
@@ -1117,7 +1139,7 @@ noInherit on
         track wgEncodeUwTfbsHek293CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel HEK29 CTCF    Pk2
+        shortLabel HEK293 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in HEK293 cells)
         subGroups view=Peaks factor=CTCF cellType=HEK293 rep=2
         type narrowPeak
@@ -1127,7 +1149,7 @@ noInherit on
         track wgEncodeUwTfbsGm12875CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM875 CTCF    Pk2
+        shortLabel GM12875 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in GM12875 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12875 rep=2
         type narrowPeak
@@ -1137,7 +1159,7 @@ noInherit on
         track wgEncodeUwTfbsGm12801CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel GM801 CTCF    Pk1
+        shortLabel GM12801 CTCF Pk 1
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 1 (CTCF in GM12801 cells)
         subGroups view=Peaks factor=CTCF cellType=GM12801 rep=1
         type narrowPeak
@@ -1147,7 +1169,7 @@ noInherit on
         track wgEncodeUwTfbsWerirb1CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel WERIR CTCF    Pk2
+        shortLabel WERI-Rb-1 CTCF Pk 2
         longLabel ENCODE UW TFBS by ChIP-Seq Peaks (FDR 1%) Replicate 2 (CTCF in WERI-Rb-1 cells)
         subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=2
         type narrowPeak
@@ -1399,7 +1421,7 @@ noInherit on
         track wgEncodeUwTfbsBjCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel BJ    CTCF    Ra1
+        shortLabel BJ CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in BJ cells)
         subGroups view=zRSig factor=CTCF cellType=BJ rep=1
         type bigWig 1.000000 8153.000000
@@ -1409,7 +1431,7 @@ noInherit on
         track wgEncodeUwTfbsGm12878CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig
-        shortLabel GM878 CTCF    Ra1
+        shortLabel GM12878 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12878 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12878 rep=1
         type bigWig 1.000000 2723.000000
@@ -1420,7 +1442,7 @@ noInherit on
         track wgEncodeUwTfbsK562CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig
-        shortLabel K562  CTCF    Ra1
+        shortLabel K562 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in K562 cells)
         subGroups view=zRSig factor=CTCF cellType=K562 rep=1
         type bigWig 1.000000 8445.000000
@@ -1431,7 +1453,7 @@ noInherit on
         track wgEncodeUwTfbsGm06990CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM990 CTCF    Ra1
+        shortLabel GM12990 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM06990 cells)
         subGroups view=zRSig factor=CTCF cellType=GM06990 rep=1
         type bigWig 1.000000 6903.000000
@@ -1441,7 +1463,7 @@ noInherit on
         track wgEncodeUwTfbsCaco2CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel Caco2 CTCF    Ra1
+        shortLabel Caco2 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in Caco-2 cells)
         subGroups view=zRSig factor=CTCF cellType=Caco2 rep=1
         type bigWig 1.000000 8162.000000
@@ -1451,7 +1473,7 @@ noInherit on
         track wgEncodeUwTfbsGm12864CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM864 CTCF    Ra1
+        shortLabel GM12864 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12864 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12864 rep=1
         type bigWig 1.000000 4037.000000
@@ -1461,7 +1483,7 @@ noInherit on
         track wgEncodeUwTfbsGm12865CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM865 CTCF    Ra1
+        shortLabel GM12865 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12865 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12865 rep=1
         type bigWig 1.000000 4888.000000
@@ -1471,7 +1493,7 @@ noInherit on
         track wgEncodeUwTfbsGm12872CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM872 CTCF    Ra1
+        shortLabel GM12872 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12872 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12872 rep=1
         type bigWig 1.000000 4091.000000
@@ -1481,7 +1503,7 @@ noInherit on
         track wgEncodeUwTfbsGm12874CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM874 CTCF    Ra1
+        shortLabel GM12874 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12874 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12874 rep=1
         type bigWig 1.000000 3615.000000
@@ -1491,7 +1513,7 @@ noInherit on
         track wgEncodeUwTfbsHek293CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HEK29 CTCF    Ra1
+        shortLabel HEK293 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in HEK293 cells)
         subGroups view=zRSig factor=CTCF cellType=HEK293 rep=1
         type bigWig 1.000000 5462.000000
@@ -1501,7 +1523,7 @@ noInherit on
         track wgEncodeUwTfbsHelas3CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HeLaS CTCF    Ra1
+        shortLabel HeLa-S3 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in HeLa-S3 cells)
         subGroups view=zRSig factor=CTCF cellType=HELA rep=1
         type bigWig 1.000000 4129.000000
@@ -1512,7 +1534,7 @@ noInherit on
         track wgEncodeUwTfbsHepg2CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HepG2 CTCF    Ra1
+        shortLabel HepG2 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in HepG2 cells)
         subGroups view=zRSig factor=CTCF cellType=HEPG2 rep=1
         type bigWig 1.000000 2546.000000
@@ -1523,7 +1545,7 @@ noInherit on
         track wgEncodeUwTfbsHl60CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HL-60 CTCF    Ra1
+        shortLabel HL-60 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in HL-60 cells)
         subGroups view=zRSig factor=CTCF cellType=HL60 rep=1
         type bigWig 1.000000 2968.000000
@@ -1533,7 +1555,7 @@ noInherit on
         track wgEncodeUwTfbsHmecCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HMEC  CTCF    Ra1
+        shortLabel HMEC CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in HMEC cells)
         subGroups view=zRSig factor=CTCF cellType=HMEC rep=1
         type bigWig 1.000000 4919.000000
@@ -1543,7 +1565,7 @@ noInherit on
         track wgEncodeUwTfbsHreCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HRE   CTCF    Ra1
+        shortLabel HRE CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in HRE cells)
         subGroups view=zRSig factor=CTCF cellType=HRE rep=1
         type bigWig 1.000000 2395.000000
@@ -1553,7 +1575,7 @@ noInherit on
         track wgEncodeUwTfbsHuvecCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HUVEC CTCF    Ra1
+        shortLabel HUVEC CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in HUVEC cells)
         subGroups view=zRSig factor=CTCF cellType=HUVEC rep=1
         type bigWig 1.000000 2691.000000
@@ -1564,7 +1586,7 @@ noInherit on
         track wgEncodeUwTfbsNhekCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel NHEK  CTCF    Ra1
+        shortLabel NHEK  CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in NHEK cells)
         subGroups view=zRSig factor=CTCF cellType=NHEK rep=1
         type bigWig 1.000000 2291.000000
@@ -1575,7 +1597,7 @@ noInherit on
         track wgEncodeUwTfbsSaecCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SAEC  CTCF    Ra1
+        shortLabel SAEC CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in SAEC cells)
         subGroups view=zRSig factor=CTCF cellType=SAEC rep=1
         type bigWig 1.000000 1813.000000
@@ -1585,7 +1607,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSH CTCF    Ra1
+        shortLabel SK-N-SH-RA CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in SK-N-SH_RA cells)
         subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=1
         type bigWig 1.000000 3210.000000
@@ -1595,7 +1617,7 @@ noInherit on
         track wgEncodeUwTfbsWerirb1CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel WERIR CTCF    Ra1
+        shortLabel WERI-Rb-1 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in WERI-Rb-1 cells)
         subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=1
         type bigWig 1.000000 2991.000000
@@ -1605,7 +1627,7 @@ noInherit on
         track wgEncodeUwTfbsBjCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel BJ    CTCF    Ra2
+        shortLabel BJ CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in BJ cells)
         subGroups view=zRSig factor=CTCF cellType=BJ rep=2
         type bigWig 1.000000 5047.000000
@@ -1615,7 +1637,7 @@ noInherit on
         track wgEncodeUwTfbsK562CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig 
-        shortLabel K562  CTCF    Ra2
+        shortLabel K562 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in K562 cells)
         subGroups view=zRSig factor=CTCF cellType=K562 rep=2
         type bigWig 1.000000 8080.000000
@@ -1626,7 +1648,7 @@ noInherit on
         track wgEncodeUwTfbsGm12878CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig 
-        shortLabel GM878 CTCF    Ra2
+        shortLabel GM12878 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12878 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12878 rep=2
         type bigWig 1.000000 7099.000000
@@ -1637,7 +1659,7 @@ noInherit on
         track wgEncodeUwTfbsCaco2CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel Caco2 CTCF    Ra2
+        shortLabel Caco2 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in Caco-2 cells)
         subGroups view=zRSig factor=CTCF cellType=Caco2 rep=2
         type bigWig 1.000000 10289.000000
@@ -1647,7 +1669,7 @@ noInherit on
         track wgEncodeUwTfbsGm06990CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM990 CTCF    Ra2
+        shortLabel GM06990 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM06990 cells)
         subGroups view=zRSig factor=CTCF cellType=GM06990 rep=2
         type bigWig 1.000000 8819.000000
@@ -1657,7 +1679,7 @@ noInherit on
         track wgEncodeUwTfbsGm12865CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM865 CTCF    Ra2
+        shortLabel GM12865 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12865 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12865 rep=2
         type bigWig 1.000000 3768.000000
@@ -1667,7 +1689,7 @@ noInherit on
         track wgEncodeUwTfbsGm12872CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM872 CTCF    Ra2
+        shortLabel GM12872 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12872 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12872 rep=2
         type bigWig 1.000000 6815.000000
@@ -1677,7 +1699,7 @@ noInherit on
         track wgEncodeUwTfbsGm12874CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM874 CTCF    Ra2
+        shortLabel GM12874 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12874 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12874 rep=2
         type bigWig 1.000000 4160.000000
@@ -1687,7 +1709,7 @@ noInherit on
         track wgEncodeUwTfbsHelas3CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HeLaS CTCF    Ra2
+        shortLabel HeLa-S3 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in HeLa-S3 cells)
         subGroups view=zRSig factor=CTCF cellType=HELA rep=2
         type bigWig 1.000000 3763.000000
@@ -1698,7 +1720,7 @@ noInherit on
         track wgEncodeUwTfbsHepg2CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HepG2 CTCF    Ra2
+        shortLabel HepG2 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in HepG2 cells)
         subGroups view=zRSig factor=CTCF cellType=HEPG2 rep=2
         type bigWig 1.000000 5725.000000
@@ -1709,7 +1731,7 @@ noInherit on
         track wgEncodeUwTfbsHreCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HRE   CTCF    Ra2
+        shortLabel HRE CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in HRE cells)
         subGroups view=zRSig factor=CTCF cellType=HRE rep=2
         type bigWig 1.000000 4640.000000
@@ -1719,7 +1741,7 @@ noInherit on
         track wgEncodeUwTfbsHuvecCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HUVEC CTCF    Ra2
+        shortLabel HUVEC CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in HUVEC cells)
         subGroups view=zRSig factor=CTCF cellType=HUVEC rep=2
         type bigWig 1.000000 1952.000000
@@ -1730,7 +1752,7 @@ noInherit on
         track wgEncodeUwTfbsNhekCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel NHEK  CTCF    Ra2
+        shortLabel NHEK CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in NHEK cells)
         subGroups view=zRSig factor=CTCF cellType=NHEK rep=2
         type bigWig 1.000000 4245.000000
@@ -1741,7 +1763,7 @@ noInherit on
         track wgEncodeUwTfbsSaecCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SAEC  CTCF    Ra2
+        shortLabel SAEC CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in SAEC cells)
         subGroups view=zRSig factor=CTCF cellType=SAEC rep=2
         type bigWig 1.000000 2175.000000
@@ -1751,7 +1773,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSH CTCF    Ra2
+        shortLabel SK-N-SH_RA CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in SK-N-SH_RA cells)
         subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=2
         type bigWig 1.000000 3470.000000
@@ -1761,7 +1783,7 @@ noInherit on
         track wgEncodeUwTfbsGm12864CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM864 CTCF    Ra2
+        shortLabel GM12864 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12864 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12864 rep=2
         type bigWig 1.000000 6440.000000
@@ -1771,7 +1793,7 @@ noInherit on
         track wgEncodeUwTfbsGm12873CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM873 CTCF    Ra1
+        shortLabel GM12873 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12873 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12873 rep=1
         type bigWig 1.000000 3714.000000
@@ -1781,7 +1803,7 @@ noInherit on
         track wgEncodeUwTfbsGm12875CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM875 CTCF    Ra1
+        shortLabel GM12875 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12875 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12875 rep=1
         type bigWig 1.000000 4128.000000
@@ -1791,7 +1813,7 @@ noInherit on
         track wgEncodeUwTfbsGm12801CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM801 CTCF    Ra1
+        shortLabel GM12801 CTCF Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (CTCF in GM12801 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12801 rep=1
         type bigWig 1.000000 1190.000000
@@ -1801,7 +1823,7 @@ noInherit on
         track wgEncodeUwTfbsGm12873CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM873 CTCF    Ra2
+        shortLabel GM12873 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12873 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12873 rep=2
         type bigWig 1.000000 4813.000000
@@ -1811,7 +1833,7 @@ noInherit on
         track wgEncodeUwTfbsHek293CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HEK29 CTCF    Ra2
+        shortLabel HEK293 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in HEK293 cells)
         subGroups view=zRSig factor=CTCF cellType=HEK293 rep=2
         type bigWig 1.000000 1536.000000
@@ -1821,7 +1843,7 @@ noInherit on
         track wgEncodeUwTfbsGm12875CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM875 CTCF    Ra2
+        shortLabel GM12875 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in GM12875 cells)
         subGroups view=zRSig factor=CTCF cellType=GM12875 rep=2
         type bigWig 1.000000 3639.000000
@@ -1831,7 +1853,7 @@ noInherit on
         track wgEncodeUwTfbsWerirb1CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel WERIR CTCF    Ra2
+        shortLabel WERI-Rb-1 CTCF Sig 2
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 2 (CTCF in WERI-Rb-1 cells)
         subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=2
         type bigWig 1.000000 3015.000000
@@ -1841,7 +1863,7 @@ noInherit on
 	track wgEncodeUwTfbsBjInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel BJ    Input   Ra1
+        shortLabel BJ Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in BJ cells)
         subGroups view=zRSig factor=zInput cellType=BJ rep=1
         type bigWig 1.000000 15966.000000
@@ -1851,7 +1873,7 @@ noInherit on
 	track wgEncodeUwTfbsCaco2InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel Caco2 Input   Ra1
+        shortLabel Caco2 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in Caco-2 cells)
         subGroups view=zRSig factor=zInput cellType=Caco2 rep=1
         type bigWig 1.000000 9741.000000
@@ -1862,7 +1884,7 @@ noInherit on
         track wgEncodeUwTfbsGm06990InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM990 Input   Ra1
+        shortLabel GM06990 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM06990 cells)
         subGroups view=zRSig factor=zInput cellType=GM06990 rep=1
         type bigWig 1.000000 8015.000000
@@ -1873,7 +1895,7 @@ noInherit on
         track wgEncodeUwTfbsGm12801InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM801 Input   Ra1
+        shortLabel GM12801 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12801 cells)
         subGroups view=zRSig factor=zInput cellType=GM12801 rep=1
         type bigWig 1.000000 10337.000000
@@ -1884,7 +1906,7 @@ noInherit on
 	track wgEncodeUwTfbsGm12864InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM864 Input   Ra1
+        shortLabel GM12864 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12864 cells)
         subGroups view=zRSig factor=zInput cellType=GM12864 rep=1
         type bigWig 1.000000 8541.000000
@@ -1895,7 +1917,7 @@ noInherit on
         track wgEncodeUwTfbsGm12865InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM865 Input   Ra1
+        shortLabel GM12865 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12865 cells)
         subGroups view=zRSig factor=zInput cellType=GM12865 rep=1
         type bigWig 1.000000 9831.000000
@@ -1906,7 +1928,7 @@ noInherit on
         track wgEncodeUwTfbsGm12872InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM872 Input   Ra1
+        shortLabel GM12872 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12872 cells)
         subGroups view=zRSig factor=zInput cellType=GM12872 rep=1
         type bigWig 1.000000 7087.000000
@@ -1916,7 +1938,7 @@ noInherit on
 	track wgEncodeUwTfbsGm12878InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig
-        shortLabel GM878 Input   Ra1
+        shortLabel GM12878 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12878 cells)
         subGroups view=zRSig factor=zInput cellType=GM12878 rep=1
         type bigWig 1.000000 8963.000000
@@ -1928,7 +1950,7 @@ noInherit on
         track wgEncodeUwTfbsHek293InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HEK29 Input   Ra1
+        shortLabel HEK293 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in HEK293 cells)
         subGroups view=zRSig factor=zInput cellType=HEK293 rep=1
         type bigWig 1.000000 8215.000000
@@ -1938,7 +1960,7 @@ noInherit on
         track wgEncodeUwTfbsHmecInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HMEC  Input   Ra1
+        shortLabel HMEC Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in HMEC cells)
         subGroups view=zRSig factor=zInput cellType=HMEC rep=1
         type bigWig 1.000000 9968.000000
@@ -1948,7 +1970,7 @@ noInherit on
         track wgEncodeUwTfbsHreInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HRE   Input   Ra1
+        shortLabel HRE Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in HRE cells)
         subGroups view=zRSig factor=zInput cellType=HRE rep=1
         type bigWig 1.000000 7076.000000
@@ -1958,7 +1980,7 @@ noInherit on
         track wgEncodeUwTfbsK562InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig
-        shortLabel K562  Input   Ra1
+        shortLabel K562 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in K562 cells)
         subGroups view=zRSig factor=zInput cellType=K562 rep=1
         type bigWig 1.000000 13124.000000
@@ -1969,7 +1991,7 @@ noInherit on
         track wgEncodeUwTfbsHuvecInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HUVEC Input   Ra1
+        shortLabel HUVEC Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in HUVEC cells)
         subGroups view=zRSig factor=zInput cellType=HUVEC rep=1
         type bigWig 1.000000 8683.000000
@@ -1980,7 +2002,7 @@ noInherit on
         track wgEncodeUwTfbsNhekInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel NHEK  Input   Ra1
+        shortLabel NHEK Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in NHEK cells)
         subGroups view=zRSig factor=zInput cellType=NHEK rep=1
         type bigWig 1.000000 11841.000000
@@ -1991,7 +2013,7 @@ noInherit on
         track wgEncodeUwTfbsSaecInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SAEC  Input   Ra1
+        shortLabel SAEC Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in SAEC cells)
         subGroups view=zRSig factor=zInput cellType=SAEC rep=1
         type bigWig 1.000000 8873.000000
@@ -2001,7 +2023,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSH Input   Ra1
+        shortLabel SK-N-SH_RA Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in SK-N-SH_RA cells)
         subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=1
         type bigWig 1.000000 12154.000000
@@ -2012,7 +2034,7 @@ noInherit on
         track wgEncodeUwTfbsWerirb1InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel WERIR Input   Ra1
+        shortLabel WERI-Rb-1 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in WERI-Rb-1 cells)
         subGroups view=zRSig factor=zInput cellType=WERIRb1 rep=1
         type bigWig 1.000000 9496.000000
@@ -2023,7 +2045,7 @@ noInherit on
         track wgEncodeUwTfbsGm12874InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM874 Input   Ra1
+        shortLabel GM12874 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12874 cells)
         subGroups view=zRSig factor=zInput cellType=GM12874 rep=1
         type bigWig 1.000000 8370.000000
@@ -2033,7 +2055,7 @@ noInherit on
         track wgEncodeUwTfbsHelas3InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HeLaS Input   Ra1
+        shortLabel HeLa-S3 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in HeLa-S3 cells)
         subGroups view=zRSig factor=zInput cellType=HELA rep=1
         type bigWig 1.000000 10388.000000
@@ -2044,7 +2066,7 @@ noInherit on
         track wgEncodeUwTfbsHepg2InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HepG2 Input   Ra1
+        shortLabel HepG2 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in HepG2 cells)
         subGroups view=zRSig factor=zInput cellType=HEPG2 rep=1
         type bigWig 1.000000 7679.000000
@@ -2055,7 +2077,7 @@ noInherit on
         track wgEncodeUwTfbsHl60InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HL-60 Input   Ra1
+        shortLabel HL-60 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in HL-60 cells)
         subGroups view=zRSig factor=zInput cellType=HL60 rep=1
         type bigWig 1.000000 9223.000000
@@ -2066,7 +2088,7 @@ noInherit on
         track wgEncodeUwTfbsGm12873InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM873 Input   Ra1
+        shortLabel GM12873 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12873 cells)
         subGroups view=zRSig factor=zInput cellType=GM12873 rep=1
         type bigWig 1.000000 8562.000000
@@ -2077,7 +2099,7 @@ noInherit on
         track wgEncodeUwTfbsGm12875InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel GM875 Input   Ra1
+        shortLabel GM12875 Input Sig 1
         longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal Replicate 1 (Input in GM12875 cells)
         subGroups view=zRSig factor=zInput cellType=GM12875 rep=1
         type bigWig 1.000000 7544.000000
@@ -2087,7 +2109,7 @@ noInherit on
         track wgEncodeUwTfbsAg04449CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG04449 CTCF Raw 2
+        shortLabel AG04449 CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in AG04449 cells)
         subGroups view=zRSig factor=CTCF cellType=AG04449  rep=2
         type bigWig 1.000000 14258.000000
@@ -2098,7 +2120,7 @@ noInherit on
         track wgEncodeUwTfbsAg04449CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG04449 CTCF Raw 1
+        shortLabel AG04449 CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in AG04449 cells)
         subGroups view=zRSig factor=CTCF cellType=AG04449  rep=1
         type bigWig 1.000000 2542.000000
@@ -2108,7 +2130,7 @@ noInherit on
         track wgEncodeUwTfbsAg04449InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG04449 Input Raw 1
+        shortLabel AG04449 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in AG04449 cells)
         subGroups view=zRSig factor=zInput cellType=AG04449  rep=1
         type bigWig 1.000000 14656.000000
@@ -2119,7 +2141,7 @@ noInherit on
         track wgEncodeUwTfbsAg04450InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG04450 Input Raw 1
+        shortLabel AG04450 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in AG04450 cells)
         subGroups view=zRSig factor=zInput cellType=AG04450  rep=1
         type bigWig 1.000000 17581.000000
@@ -2129,7 +2151,7 @@ noInherit on
         track wgEncodeUwTfbsAg04450CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG04450 CTCF Raw 1
+        shortLabel AG04450 CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in AG04450 cells)
         subGroups view=zRSig factor=CTCF cellType=AG04450  rep=1
         type bigWig 1.000000 13221.000000
@@ -2139,7 +2161,7 @@ noInherit on
         track wgEncodeUwTfbsMcf7InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel MCF-7 Input Raw 1
+        shortLabel MCF-7 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in MCF-7 cells)
         subGroups view=zRSig factor=zInput cellType=MCF7  rep=1
         type bigWig 1.000000 25597.000000
@@ -2150,7 +2172,7 @@ noInherit on
         track wgEncodeUwTfbsAg09309InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG09309 Input Raw 1
+        shortLabel AG09309 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in AG09309 cells)
         subGroups view=zRSig factor=zInput cellType=AG09309  rep=1
         type bigWig 1.000000 7173.000000
@@ -2161,7 +2183,7 @@ noInherit on
         track wgEncodeUwTfbsAg09309CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG09309 CTCF Raw 2
+        shortLabel AG09309 CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in AG09309 cells)
         subGroups view=zRSig factor=CTCF cellType=AG09309  rep=2
         type bigWig 1.000000 7371.000000
@@ -2172,7 +2194,7 @@ noInherit on
         track wgEncodeUwTfbsAg09309CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG09309 CTCF Raw 1
+        shortLabel AG09309 CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in AG09309 cells)
         subGroups view=zRSig factor=CTCF cellType=AG09309  rep=1
         # subId=2666 dateSubmitted=2010-10-23
@@ -2181,7 +2203,7 @@ noInherit on
         track wgEncodeUwTfbsAg09319InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG09319 Input Raw 1
+        shortLabel AG09319 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in AG09319 cells)
         subGroups view=zRSig factor=zInput cellType=AG09319  rep=1
         type bigWig 1.000000 23698.000000
@@ -2192,7 +2214,7 @@ noInherit on
         track wgEncodeUwTfbsAg09319CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG09319 CTCF Raw 2
+        shortLabel AG09319 CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in AG09319 cells)
         subGroups view=zRSig factor=CTCF cellType=AG09319  rep=2
         type bigWig 1.000000 16542.000000
@@ -2203,7 +2225,7 @@ noInherit on
         track wgEncodeUwTfbsAg10803InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG10803 Input Raw 1
+        shortLabel AG10803 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in AG10803 cells)
         subGroups view=zRSig factor=zInput cellType=AG10803  rep=1
         type bigWig 1.000000 21401.000000
@@ -2214,7 +2236,7 @@ noInherit on
         track wgEncodeUwTfbsAg10803CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG10803 CTCF Raw 1
+        shortLabel AG10803 CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in AG10803 cells)
         subGroups view=zRSig factor=CTCF cellType=AG10803  rep=1
         type bigWig 1.000000 19625.000000
@@ -2225,7 +2247,7 @@ noInherit on
         track wgEncodeUwTfbsAg10803CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AG10803 CTCF Raw 2
+        shortLabel AG10803 CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in AG10803 cells)
         subGroups view=zRSig factor=CTCF cellType=AG10803  rep=2
         type bigWig 1.000000 21460.000000
@@ -2236,7 +2258,7 @@ noInherit on
         track wgEncodeUwTfbsAoafInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AoAF Input Raw 1
+        shortLabel AoAF Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in AoAF cells)
         subGroups view=zRSig factor=zInput cellType=AOAF  rep=1
         type bigWig 1.000000 17667.000000
@@ -2247,7 +2269,7 @@ noInherit on
         track wgEncodeUwTfbsAoafCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel AoAF CTCF Raw 2
+        shortLabel AoAF CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in AoAF cells)
         subGroups view=zRSig factor=CTCF cellType=AOAF  rep=2
         type bigWig 1.000000 18876.000000
@@ -2258,7 +2280,7 @@ noInherit on
         track wgEncodeUwTfbsHbmecCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HBMEC CTCF Raw 1
+        shortLabel HBMEC CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HBMEC cells)
         subGroups view=zRSig factor=CTCF cellType=HBMEC  rep=1
         type bigWig 1.000000 5796.000000
@@ -2269,7 +2291,7 @@ noInherit on
         track wgEncodeUwTfbsHbmecCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HBMEC CTCF Raw 2
+        shortLabel HBMEC CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in HBMEC cells)
         subGroups view=zRSig factor=CTCF cellType=HBMEC  rep=2
         type bigWig 1.000000 8110.000000
@@ -2280,7 +2302,7 @@ noInherit on
         track wgEncodeUwTfbsHcfaaCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HCFaa CTCF Raw 1
+        shortLabel HCFaa CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HCFaa cells)
         subGroups view=zRSig factor=CTCF cellType=HCFaa  rep=1
         type bigWig 1.000000 8603.000000
@@ -2291,7 +2313,7 @@ noInherit on
         track wgEncodeUwTfbsHcpeInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HCPEpiC Input Raw 1
+        shortLabel HCPEpiC Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HCPEpiC cells)
         subGroups view=zRSig factor=zInput cellType=HCPE  rep=1
         type bigWig 1.000000 15167.000000
@@ -2302,7 +2324,7 @@ noInherit on
         track wgEncodeUwTfbsHcpeCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HCPEpiC CTCF Raw 1
+        shortLabel HCPEpiC CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HCPEpiC cells)
         subGroups view=zRSig factor=CTCF cellType=HCPE  rep=1
         type bigWig 1.000000 2683.000000
@@ -2313,7 +2335,7 @@ noInherit on
         track wgEncodeUwTfbsHcpeCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HCPEpiC CTCF Raw 2
+        shortLabel HCPEpiC CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in HCPEpiC cells)
         subGroups view=zRSig factor=CTCF cellType=HCPE  rep=2
         type bigWig 1.000000 15624.000000
@@ -2324,7 +2346,7 @@ noInherit on
         track wgEncodeUwTfbsHeeInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HEEpiC Input Raw 1
+        shortLabel HEEpiC Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HEEpiC cells)
         subGroups view=zRSig factor=zInput cellType=HEE  rep=1
         type bigWig 1.000000 6633.000000
@@ -2334,7 +2356,7 @@ noInherit on
         track wgEncodeUwTfbsHeeCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HEEpiC CTCF Raw 2
+        shortLabel HEEpiC CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in HEEpiC cells)
         subGroups view=zRSig factor=CTCF cellType=HEE  rep=2
         type bigWig 1.000000 4700.000000
@@ -2345,7 +2367,7 @@ noInherit on
         track wgEncodeUwTfbsHeeCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HEEpiC CTCF Raw 1
+        shortLabel HEEpiC CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HEEpiC cells)
         subGroups view=zRSig factor=CTCF cellType=HEE  rep=1
         type bigWig 1.000000 8672.000000
@@ -2356,7 +2378,7 @@ noInherit on
         track wgEncodeUwTfbsHmfInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HMF Input Raw 1
+        shortLabel HMF Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HMF cells)
         subGroups view=zRSig factor=zInput cellType=HMF  rep=1
         type bigWig 1.000000 4624.000000
@@ -2367,7 +2389,7 @@ noInherit on
         track wgEncodeUwTfbsHmfCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HMF CTCF Raw 2
+        shortLabel HMF CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in HMF cells)
         subGroups view=zRSig factor=CTCF cellType=HMF  rep=2
         type bigWig 1.000000 8513.000000
@@ -2378,7 +2400,7 @@ noInherit on
         track wgEncodeUwTfbsHmfCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HMF CTCF Raw 1
+        shortLabel HMF CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HMF cells)
         subGroups view=zRSig factor=CTCF cellType=HMF  rep=1
         type bigWig 1.000000 3170.000000
@@ -2389,7 +2411,7 @@ noInherit on
         track wgEncodeUwTfbsHpafInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HPAF Input Raw 1
+        shortLabel HPAF Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HPAF cells)
         subGroups view=zRSig factor=zInput cellType=HPAF  rep=1
         type bigWig 1.000000 15992.000000
@@ -2400,7 +2422,7 @@ noInherit on
         track wgEncodeUwTfbsHpafCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HPAF CTCF Raw 2
+        shortLabel HPAF CTCF Sig 2
         longLabel ENCODE UW TFBS Raw Signal Replicate 2 (CTCF in HPAF cells)
         subGroups view=zRSig factor=CTCF cellType=HPAF  rep=2
         type bigWig 1.000000 15544.000000
@@ -2411,7 +2433,7 @@ noInherit on
         track wgEncodeUwTfbsHpafCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HPAF CTCF Raw 1
+        shortLabel HPAF CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HPAF cells)
         subGroups view=zRSig factor=CTCF cellType=HPAF  rep=1
         type bigWig 1.000000 12801.000000
@@ -2422,7 +2444,7 @@ noInherit on
         track wgEncodeUwTfbsHpfInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HPF Input Raw 1
+        shortLabel HPF Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HPF cells)
         subGroups view=zRSig factor=zInput cellType=HPF  rep=1
         type bigWig 1.000000 13754.000000
@@ -2433,7 +2455,7 @@ noInherit on
         track wgEncodeUwTfbsHpfCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HPF CTCF Raw 1
+        shortLabel HPF CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HPF cells)
         subGroups view=zRSig factor=CTCF cellType=HPF  rep=1
         type bigWig 1.000000 12089.000000
@@ -2444,7 +2466,7 @@ noInherit on
         track wgEncodeUwTfbsHrpeInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HRPEpiC Input Raw 1
+        shortLabel HRPEpiC Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HRPEpiC cells)
         subGroups view=zRSig factor=zInput cellType=HRPE  rep=1
         type bigWig 1.000000 11983.000000
@@ -2455,7 +2477,7 @@ noInherit on
         track wgEncodeUwTfbsHrpeCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HRPEpiC CTCF Raw 1
+        shortLabel HRPEpiC CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HRPEpiC cells)
         subGroups view=zRSig factor=CTCF cellType=HRPE  rep=1
         type bigWig 1.000000 14608.000000
@@ -2466,7 +2488,7 @@ noInherit on
         track wgEncodeUwTfbsHvmfInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HVMF Input Raw 1
+        shortLabel HVMF Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HVMF cells)
         subGroups view=zRSig factor=zInput cellType=HVMF  rep=1
         type bigWig 1.000000 21799.000000
@@ -2477,7 +2499,7 @@ noInherit on
         track wgEncodeUwTfbsJurkatInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel Jurkat Input Raw 1
+        shortLabel Jurkat Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in Jurkat cells)
         subGroups view=zRSig factor=zInput cellType=Jurkat  rep=1
         type bigWig 1.000000 18193.000000
@@ -2487,7 +2509,7 @@ noInherit on
         track wgEncodeUwTfbsNb4InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel NB4 Input Raw 1
+        shortLabel NB4 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in NB4 cells)
         subGroups view=zRSig factor=zInput cellType=NB4  rep=1
         type bigWig 1.000000 18098.000000
@@ -2498,7 +2520,7 @@ noInherit on
         track wgEncodeUwTfbsNhdfneoInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel NHDF-neo Input Raw 1
+        shortLabel NHDF-neo Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in NHDF-neo cells)
         subGroups view=zRSig factor=zInput cellType=NHDF-neo  rep=1
         type bigWig 1.000000 26277.000000
@@ -2509,7 +2531,7 @@ noInherit on
         track wgEncodeUwTfbsHcfInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HCF Input Raw 1
+        shortLabel HCF Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HCF cells)
         subGroups view=zRSig factor=zInput cellType=HCF  rep=1
         type bigWig 1.000000 19717.000000
@@ -2520,7 +2542,7 @@ noInherit on
         track wgEncodeUwTfbsHct116InputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HCT-116 Input Raw 1
+        shortLabel HCT-116 Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HCT-116 cells)
         subGroups view=zRSig factor=zInput cellType=HCT116  rep=1
         type bigWig 1.000000 14872.000000
@@ -2530,7 +2552,7 @@ noInherit on
         track wgEncodeUwTfbsHaspInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HA-sp Input Raw 1
+        shortLabel HA-sp Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HA-sp cells)
         subGroups view=zRSig factor=zInput cellType=HA-sp  rep=1
         type bigWig 1.000000 22062.000000
@@ -2540,7 +2562,7 @@ noInherit on
         track wgEncodeUwTfbsHaspCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HA-sp CTCF Raw 1
+        shortLabel HA-sp CTCF Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (CTCF in HA-sp cells)
         subGroups view=zRSig factor=CTCF cellType=HA-sp  rep=1
         type bigWig 1.000000 8186.000000
@@ -2550,7 +2572,7 @@ noInherit on
         track wgEncodeUwTfbsHbmecInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HBMEC Input Raw 1
+        shortLabel HBMEC Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HBMEC cells)
         subGroups view=zRSig factor=zInput cellType=HBMEC rep=1
         type bigWig 1.000000 15288.000000
@@ -2560,7 +2582,7 @@ noInherit on
         track wgEncodeUwTfbsHcfaaInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel HCFaa Input Raw 1
+        shortLabel HCFaa Input Sig 1
         longLabel ENCODE UW TFBS Raw Signal Replicate 1 (Input in HCFaa cells)
         subGroups view=zRSig factor=zInput cellType=HCFaa  rep=1
         type bigWig 1.000000 16198.000000
