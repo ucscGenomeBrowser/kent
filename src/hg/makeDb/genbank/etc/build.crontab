@@ -18,3 +18,8 @@ MAILTO=genbank@cse.ucsc.edu
 
 # rebuild downloads if more than 7 days old
 30 */2 * * *	/cluster/data/genbank/etc/mkdownload -getDownloadSeqs=7
+
+# copy new download files to download server
+# try 6 hours, just because more frequence emails are 
+# annoying
+30 0,6,12,18 * * * /cluster/data/genbank/etc/hgdownload-copy hgdownload-10
