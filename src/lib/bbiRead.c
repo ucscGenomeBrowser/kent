@@ -37,6 +37,43 @@ for (level = levelList; level != NULL; level = level->next)
 return closestLevel;
 }
 
+boolean bbiFileCheckSigs(char *fileName, bits32 sig, char *typeName)
+/* check file signatures at beginning and end of file */
+{
+int fd = mustOpenFd(fileName, O_RDONLY);
+bits32 magic;
+boolean isSwapped = FALSE;
+
+// look for signature at the beginning of the file
+mustReadFd(fd, &magic, sizeof(magic));
+
+if (magic != sig)
+    {
+    magic = byteSwap32(magic);
+    isSwapped = TRUE;
+    if (magic != sig)
+        return FALSE;
+    }
+
+// look for signature at the end of the file
+mustLseek(fd, -sizeof(magic), SEEK_END);
+mustReadFd(fd, &magic, sizeof(magic));
+
+if (isSwapped)
+    {
+    magic = byteSwap32(magic);
+    if (magic != sig)
+        return FALSE;
+    }
+else
+    {
+    if (magic != sig)
+        return FALSE;
+    }
+
+return TRUE;
+}
+
 struct bbiFile *bbiFileOpen(char *fileName, bits32 sig, char *typeName)
 /* Open up big wig or big bed file. */
 {

@@ -1871,3 +1871,7 @@ origAssembly hg18
 
 track ntSssTop5p override
 origAssembly hg18
+
+track ntSssZScorePMVar override
+origAssembly hg18
+type bigWig -8.8332 33.63719
