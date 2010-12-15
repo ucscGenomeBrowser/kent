@@ -7197,7 +7197,7 @@ type dataType
 label RIP-chip
 description Rna IP measured on microarray
 
-#This should be retired
+#This should be retired (12/15/10)
 term ShortRnaSeq
 tag shortRnaSeq
 type dataType
@@ -7208,7 +7208,7 @@ term Switchgear
 tag Switchgear 
 type dataType
 label SwitchGear
-description Provisional SwitchGear Genomics 3' UTR reporter assay 
+description SwitchGear Genomics 3' UTR reporter assay 
 
 
 #This is not in the metaDB currently
@@ -7223,7 +7223,7 @@ description TFBS-Valid
 term V2
 tag V2
 type version
-descriptoion version
+description version
 
 ### Strain
 # Used in conjunction with mouse submissions
