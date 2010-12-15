@@ -69,5 +69,7 @@ double bigWigSingleSummary(struct bbiFile *bwf, char *chrom, int start, int end,
 boolean isBigWig(char *fileName);
 /* Peak at a file to see if it's bigWig */
 
+boolean bigWigFileCheckSigs(char *fileName);
+/* check file signatures at beginning and end of file */
 #endif /* BIGWIG_H */
 
