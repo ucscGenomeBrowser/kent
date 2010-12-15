@@ -1147,6 +1147,10 @@ if (chrHash == NULL)
 
 int errs = 0;
 struct bbiFile *bbiFile;
+
+if (!bigWigFileCheckSigs(file))
+    reportErrAbort("bad signatures in file %s\n", file);
+
 bbiFile = bigWigFileOpen(file);
 
 if (bbiFile == NULL)
