@@ -13336,3 +13336,43 @@ done
     hgsql hg19 -e "insert into bamAll values ('/gbdb/hg19/neandertal/seqAlis/all-hg18.bam');"
 
 ##########################################################################
+# DECIPHER, RGD QTL, RGD RAT QTL (MAYBE DONE, Andy 2010-12-13)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir decipher rgdQtl rgdRatQtl
+for tab in decipher rgdQtl rgdRatQtl; do 
+  echo "select * from "$tab | hgsql hg18 | tail -n +2 | cut -f2- > ${tab}/hg18.bed
+  liftOver ${tab}/hg18.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz ${tab}/hg19.{bed,unmapped}
+  hgLoadBed hg19 $tab ${tab}/hg19.bed
+done
+rm bed.tab
+wc -l {decipher,rgdQtl,rgdRatQtl}/hg1{8,9}.bed
+#  4227 decipher/hg18.bed
+#  4048 decipher/hg19.bed
+#   254 rgdQtl/hg18.bed
+#   225 rgdQtl/hg19.bed
+#  6033 rgdRatQtl/hg18.bed
+#  5804 rgdRatQtl/hg19.bed
+## This isn't very good.  In each case, the unmapped % is over 2%.
+## DECIPHER: 95.8%, RGD QTL: 88.6%, RGD RAT QTL: 96.2%
+
+#############################################################################
+# FISH CLONES LIFT (DONE, Andy 2010-12-14)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir fishClones
+cd fishClones/
+echo "select * from fishClones" | hgsql hg18 | tail -n +2 > hg18.bed5p
+liftOver -bedPlus=5 hg18.bed5p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed5p hg19.unmapped 
+wc -l *.bed5p
+#   9788 hg18.bed5p
+#   9758 hg19.bed5p
+grep -i split hg19.unmapped  | wc -l
+# 17
+grep -i partially  hg19.unmapped  | wc -l
+# 13
+cp ~/kent/src/hg/lib/fishClones.sql .
+hgLoadBed -tab -sqlTable=fishClones.sql -notItemRgb hg19 fishClones hg19.bed5p
+
+#############################################################################
+
