@@ -1125,7 +1125,7 @@ int liftOverPositions(char *fileName, struct hash *chainHash,
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
-char *words[32];
+char *words[LIFTOVER_MAX_WORDS];
 int wordCount;
 int ct = 0;
 struct tempName bedTn, mappedBedTn, unmappedBedTn;
