@@ -2543,7 +2543,6 @@ if (!sameWord(tdb->type,"downloadsOnly"))
                 canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
                                 (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
             }
-    }
     if (!ajax)
         {
         printf("&nbsp;");
@@ -2560,14 +2559,15 @@ if (!sameWord(tdb->type,"downloadsOnly"))
         cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
         puts("&nbsp;");
         if (differentString(tdb->type, "chromGraph"))
-        {
-        char buf[256];
-        if(ajax)
-            // reference to a separate form doesn't work in modal dialog, so change window.location directly.
-            safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;", hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
-        else
-            safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
-        cgiMakeOnClickButton(buf, "Update custom track");
+            {
+            char buf[256];
+            if(ajax)
+                // reference to a separate form doesn't work in modal dialog, so change window.location directly.
+                safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;", hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
+            else
+                safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
+            cgiMakeOnClickButton(buf, "Update custom track");
+            }
         }
     }
 
