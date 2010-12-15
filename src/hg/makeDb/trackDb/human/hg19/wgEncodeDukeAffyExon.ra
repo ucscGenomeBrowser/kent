@@ -6,12 +6,12 @@ shortLabel Duke Affy Exon
 longLabel ENCODE Duke Affy All-Exon Arrays
 release alpha
 group expression
-subGroup1 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AOSMC Astrocy=Astrocy Chorion=Chorion CLL=CLL Fibrobl=Fibrobl FIBROP=FIBROP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9ES=H9ES Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo MELANO=Melano MYOMETR=Myometr NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib Stellate=Stellate Utothelia=Urothelia 8988T=8988T UROtsa=WHAT
+subGroup1 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AoSMC Astrocy=Astrocy Chorion=Chorion CLL=CLL Fibrobl=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9ES=H9ES Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo MELANO=Melano MYOMETR=Myometr NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib Stellate=Stellate UROtsa=Urothelia 8988T=8988T
 subGroup2 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
 subGroup3 treatment Treatment IFNa4h=IFNa4h IFNg4h=IFNg4h None=None TGFb=TGFb UT189=UT189 ANDRO=androgen ESTRO=estrogen SERUMFREE=serum_free_media VEH=vehicle 
 subGroup4 view View SimpleSignal=Signal
-dimensions dimensionX=rep dimensionY=cellType dimensionA=treatment
-dimensionAchecked None
+dimensions dimensionA=rep dimensionY=cellType dimensionX=treatment
+dimensionAchecked rep1 
 filterComposite dimensionA=one
 boxedCfg on
 sortOrder cellType=+ treatment=+ rep=+
@@ -22,7 +22,7 @@ canPack On
 priority 0
 type broadPeak
 wgEncode 1
-
+superTrack wgEncodeExonArraySuper dense
 
     track wgEncodeDukeAffyExonViewSimpleSignal
     release alpha
@@ -366,7 +366,7 @@ wgEncode 1
 
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep1
         release alpha
-        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel H1-hESC 1
         longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in H1-hESC cells)
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep1
@@ -376,7 +376,7 @@ wgEncode 1
 
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep2
         release alpha
-        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        parent wgEncodeDukeAffyExonViewSimpleSignal on 
         shortLabel H1-hESC 2
         longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in H1-hESC cells)
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep2
@@ -386,7 +386,7 @@ wgEncode 1
 
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep3
         release alpha
-        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel H1-hESC 3
         longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in H1-hESC cells)
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep3
@@ -396,7 +396,7 @@ wgEncode 1
 
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep4
         release alpha
-        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        parent wgEncodeDukeAffyExonViewSimpleSignal on
         shortLabel H1-hESC 4
         longLabel ENCODE Duke Affy All Exon Array Signal Replicate 4 (in H1-hESC cells)
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep4
