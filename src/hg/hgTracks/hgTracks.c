@@ -3322,7 +3322,7 @@ char hubDir[PATH_LEN];
 splitPath(hubUrl, hubDir, NULL, NULL);
 
 /* Load trackDb.ra file and make it into proper trackDb tree */
-struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl);
+struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl, NULL);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
      {
      trackDbFieldsFromSettings(tdb);
