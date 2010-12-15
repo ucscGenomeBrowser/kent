@@ -76,7 +76,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites
         shortLabel GM12878 2
-        longLabel GM12878Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel GM12878 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         color 153,38,0
@@ -85,7 +85,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites
         shortLabel GM12878 1
-        longLabel GM12878Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        longLabel GM12878 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         color 153,38,0
@@ -455,7 +455,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12891 2
-        longLabel GM12891Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel GM12891 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM12891 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         # subId=1152 dateSubmitted=2010-07-16
@@ -463,7 +463,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12891 1
-        longLabel GM12891Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        longLabel GM12891 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM12891 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         # subId=1152 dateSubmitted=2010-07-16
@@ -471,7 +471,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12892 1
-        longLabel GM12892Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        longLabel GM12892 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM12892 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         # subId=1152 dateSubmitted=2010-07-16
@@ -479,7 +479,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12892 2
-        longLabel GM12892Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel GM12892 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM12892 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         # subId=1152 dateSubmitted=2010-07-16
@@ -487,7 +487,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites
         shortLabel K562 2
-        longLabel K562Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel K562 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         color 46,0,184
@@ -496,7 +496,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites
         shortLabel K562 1
-        longLabel K562Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        longLabel K562 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         color 46,0,184
@@ -505,7 +505,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites off
         shortLabel H1-hESC 1
-        longLabel H1-hESCMethyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        longLabel H1-hESC Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1H1hESC obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         color 0,107,27
@@ -532,7 +532,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
         shortLabel H1-hESC 2
-        longLabel H1-hESCMethyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel H1-hESC Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1H1hESC obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         color 0,107,27
@@ -541,7 +541,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HeLa-S3 2
-        longLabel HeLa-S3Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel HeLa-S3 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HeLaS3 obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         color 0,119,158
@@ -550,7 +550,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HeLa-S3 1
-        longLabel HeLa-S3Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        longLabel HeLa-S3 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HeLaS3 obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         color 0,119,158
@@ -680,7 +680,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HepG2 2
-        longLabel HepG2 Optained Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel HepG2 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HepG2 obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         color 189,0,157
@@ -939,7 +939,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12878-XiM 1
-        longLabel GM12878-XiMatMethyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
+        longLabel GM12878-XiMat Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM12878XiMat obtainedBy=HAIB treatment=None rep=rep1
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
@@ -947,7 +947,7 @@ origAssembly hg19
         track wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12878-XiM 2
-        longLabel GM12878-XiMatMethyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
+        longLabel GM12878-XiMat Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=GM12878XiMat obtainedBy=HAIB treatment=None rep=rep2
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
