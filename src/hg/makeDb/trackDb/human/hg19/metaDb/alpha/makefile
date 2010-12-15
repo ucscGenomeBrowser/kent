@@ -10,6 +10,7 @@ wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeSunyGeneST.ra \
+wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUwAffyExonArray.ra \
@@ -26,7 +27,8 @@ wgEncodeUwTfbs.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
-wgEncodeUwDgf.ra 
+wgEncodeUwDgf.ra \
+wgEncodeDukeAffyExon.ra 
 
 include ../../../../makefile.metaDb
 

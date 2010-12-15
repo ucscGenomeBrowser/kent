@@ -204,7 +204,8 @@ div.sliceDiv { overflow:hidden; }
 
 tr.sortable { background-color: #FCECC0; }
 th.sortable { color: #0000FF; }
-th:hover.sortable { border: 2px outset #663333; cursor: pointer; }
+th:hover.sortable { background-color: #CCFFCC; cursor: pointer; }
+tbody.sorting { color: #DDDDDD; cursor: wait;  }
 
 .noscript {
         background: none repeat scroll 0 0 #FFFF90;
