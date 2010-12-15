@@ -1865,4 +1865,8 @@ type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
+track ntHumChimpCodingDiff override
+origAssembly hg18
 
+track ntSssTop5p override
+origAssembly hg18
