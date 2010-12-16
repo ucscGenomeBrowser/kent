@@ -12,7 +12,7 @@
 #		Peaks - Pk
 #		Signal - Sg 
 track wgEncodeSydhTfbs
-release alpha
+release beta
 compositeTrack on
 shortLabel Stan/Yale TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale
@@ -33,12 +33,11 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
 #visibilityViewDefaults  Signal=full
 noInherit on
-dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
 
 	#####Peak Tracks###########
 	track wgEncodeSydhTfbsViewPeaks
-	release alpha
+	release beta
 	shortLabel Peaks
 	view Peaks
 	visibility dense
@@ -52,68 +51,9 @@ wgEncode 1
 	qValueFilterLimits 0:300
 
 
-    		track wgEncodeSydhTfbsCh12JundIggrabPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewPeaks off
-    		shortLabel CH12 JunD Pk
-                longLabel CH12 JunD Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=JUND cellType=CH12 control=IGGrab treatment=None
-    		type narrowPeak
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=JunD setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1126 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12JundIggrabPk fileName=wgEncodeSydhTfbsCh12JundIggrabPk.narrowPeak.gz
-
-	        track wgEncodeSydhTfbsCh12P300IggrabPk
-	        release alpha
-	        parent wgEncodeSydhTfbsViewPeaks 
-	        shortLabel CH12 p300 Pk
-                longLabel CH12 p300 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=P300N15 cellType=CH12 control=IGGrab treatment=None
-	        type narrowPeak
-	        color 153,38,0
-	        # subId=1855 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12CtcfIggyalePk
-	        release alpha
-	        parent wgEncodeSydhTfbsViewPeaks 
-	        shortLabel CH12 CTCF Pk
-                longLabel CH12 CTCF Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=CTCFC20 cellType=CH12 control=IGGYale treatment=None
-	        type narrowPeak
-	        color 153,38,0
-	        # subId=1858 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12MaxIggrabPk
-	        release alpha
-	        parent wgEncodeSydhTfbsViewPeaks off
-	        shortLabel CH12 Max Pk
-                longLabel CH12 Max Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=MAX cellType=CH12 control=IGGrab treatment=None
-	        type narrowPeak
-	        color 153,38,0
-	        # subId=1859 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12Rad21IggrabPk
-	        release alpha
-	        parent wgEncodeSydhTfbsViewPeaks off
-	        shortLabel CH12 Rad21 Pk
-                longLabel CH12 Rad21 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=RAD21 cellType=CH12 control=IGGrab treatment=None
-	        type narrowPeak
-	        color 153,38,0
-	        # subId=1860 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12Usf2IggmusPk
-	        release alpha
-	        parent wgEncodeSydhTfbsViewPeaks off
-	        shortLabel CH12 USF2 Pk
-                longLabel CH12 USF2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-	        subGroups view=Peaks factor=USF2 cellType=CH12 control=IGGmus treatment=None
-	        type narrowPeak
-	        color 153,38,0
-	        # subId=1861 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelMaxIggrabPk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Max Pk
                 longLabel MEL Max Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -123,7 +63,7 @@ wgEncode 1
 	        # subId=1863 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelP300IggrabPk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL p300 Pk
                 longLabel MEL p300 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -133,7 +73,7 @@ wgEncode 1
 	        # subId=1864 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusPk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL USF2 Pk
                 longLabel MEL USF2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -143,7 +83,7 @@ wgEncode 1
 	        # subId=1865 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -153,7 +93,7 @@ wgEncode 1
 	        # subId=1857 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 D Pk
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -163,7 +103,7 @@ wgEncode 1
 	        # subId=2539 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelRad21IggrabPk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 Pk
                 longLabel MEL Rad21 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -173,7 +113,7 @@ wgEncode 1
 	        # subId=2541 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelNelfeIggrabPk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL NELFe Pk
                 longLabel MEL NELFe Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -183,7 +123,7 @@ wgEncode 1
 	        # subId=2543 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelCmybh141IggrabPk
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL c-Myb Pk
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -192,155 +132,10 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2542 dateSubmitted=2010-10-27
 
-        track wgEncodeSydhTfbsMelP300StdPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MEL p300 Pk
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (p300 in MEL cells)
-        subGroups view=Peaks factor=P300 cellType=MEL control=std treatment=None
-        type narrowPeak
-        color 46,0,184
-        # subId=3089 dateSubmitted=2010-12-10
-
-        track wgEncodeSydhTfbsMelCtcfStdPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel MEL CTCF Pk
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (CTCF in MEL cells)
-        subGroups view=Peaks factor=CTCF cellType=MEL control=std treatment=None
-        type narrowPeak
-        color 46,0,184
-        # subId=3087 dateSubmitted=2010-12-10
-
-
-		#### Submission 1153 ####
-		track wgEncodeSydhTfbsCh12E2f4IggrabPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel CH12 E2F4 Pk
-                longLabel CH12 E2F4 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=E2F4 cellType=CH12 control=IGGrab treatment=None
-    		type narrowPeak
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=E2F4 treatment=None control=IgG-rab setType=exp inputType=CH12/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1153 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12E2f4IggrabPk fileName=wgEncodeSydhTfbsCh12E2f4IggrabPk.narrowPeak.gz
-
-		#### Submission 1155 ####
-		track wgEncodeSydhTfbsCh12Pol2IggmusPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs
-    		shortLabel CH12 Pol2 Pk
-                longLabel CH12 Pol2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=POL2 cellType=CH12 control=IGGmus treatment=None
-    		type narrowPeak
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Pol2 setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1155 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12Pol2IggmusPk fileName=wgEncodeSydhTfbsCh12Pol2IggmusPk.narrowPeak.gz
-
-		#### Submission 1156 ####
-		track wgEncodeSydhTfbsCh12TbpIggmusPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel CH12 TBP Pk
-                longLabel CH12 TBP Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=TBP cellType=CH12 control=IGGmus treatment=None
-    		type narrowPeak
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=TBP setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1156 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12TbpIggmusPk fileName=wgEncodeSydhTfbsCh12TbpIggmusPk.narrowPeak.gz
-
-		#### Submission 1157 ####
-		track wgEncodeSydhTfbsCh12CjunIggrabPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel CH12 c-Jun Pk
-                longLabel CH12 c-Jun Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=cJUN cellType=CH12 control=IGGrab treatment=None
-    		type narrowPeak
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Jun setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1157 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CjunIggrabPk fileName=wgEncodeSydhTfbsCh12CjunIggrabPk.narrowPeak.gz
-
-		#### Submission 1159 ####
-		track wgEncodeSydhTfbsCh12CmycIggrabPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel CH12 c-Myc Pk
-                longLabel CH12 c-Myc Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=cMYC cellType=CH12 control=IGGrab treatment=None
-    		type narrowPeak
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabPk fileName=wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPeak.gz
-		
-		#### Submission 1160 ####
-    		track wgEncodeSydhTfbsMelTbpIggmusPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel MEL TBP Pk
-                longLabel MEL TBP Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=TBP cellType=MEL control=IGGmus treatment=None
-    		type narrowPeak
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=TBP setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1160 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelTbpIggmusPk fileName=wgEncodeSydhTfbsMelTbpIggmusPk.narrowPeak.gz
-	
-		#### Submission 1161 ####
-    		track wgEncodeSydhTfbsMelPol2IggmusPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs 
-    		shortLabel MEL Pol2 Pk
-                longLabel MEL Pol2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=POL2 cellType=MEL control=IGGmus treatment=None
-    		type narrowPeak
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Pol2 setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1161 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelPol2IggmusPk fileName=wgEncodeSydhTfbsMelPol2IggmusPk.narrowPeak.gz
-
-
-		#### Submission 1163 ####
-    		track wgEncodeSydhTfbsMelCmycIggrabPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel MEL c-Myc Pk
-                longLabel MEL c-Myc Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=cMYC cellType=MEL control=IGGrab treatment=None
-    		type narrowPeak
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=c-Myc setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1163 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelCmycIggrabPk fileName=wgEncodeSydhTfbsMelCmycIggrabPk.narrowPeak.gz
-
-
-		#### Submission 1165 ####
-    		track wgEncodeSydhTfbsMelGata1IggratPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel MEL GATA-1 Pk
-                longLabel MEL GATA-1 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=GATA1SC265 cellType=MEL control=IGGrat treatment=None
-    		type narrowPeak
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=GATA-1 setType=exp treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1165 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelGata1IggratPk fileName=wgEncodeSydhTfbsMelGata1IggratPk.narrowPeak.gz
-		
-
-
-		#### Submission 1192 ####
-    		track wgEncodeSydhTfbsMelJundIggrabPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-		shortLabel MEL JunD Pk
-                longLabel MEL JunD Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=JUND cellType=MEL control=IGGrab treatment=None
-    		type narrowPeak
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=JunD setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1192 dateSubmitted=2010-05-11 dateUnrestricted=2011-02-11 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelJundIggrabPk fileName=wgEncodeSydhTfbsMelJundIggrabPk.narrowPeak.gz
-
-		#### Submission 1193 ####
-    		track wgEncodeSydhTfbsMelE2f4IggrabPk
-    		release alpha
-    		subTrack wgEncodeSydhTfbs off
-    		shortLabel MEL E2F4 Pk
-                longLabel MEL E2F4 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
-    		subGroups view=Peaks factor=E2F4 cellType=MEL control=IGGrab treatment=None
-    		type narrowPeak
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabPk fileName=wgEncodeSydhTfbsMelE2f4IggrabPk.narrowPeak.gz
 
 	#####Signal Tracks###########
 	track wgEncodeSydhTfbsViewSig
-	release alpha
+	release beta
 	shortLabel Signal
 	view Signal
 	visibility full
@@ -351,247 +146,10 @@ wgEncode 1
     	maxHeightPixels 100:16:16
     	windowingFunction mean
 	
-		#### Submission 1125 ####
-		track wgEncodeSydhTfbsCh12InputIggrabSig
-		release alpha
-		subTrack wgEncodeSydhTfbsViewSig off
-		shortLabel CH12 IgGrab Sg
-                longLabel CH12 IgG-rab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-		subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGrab treatment=None
-		type bigWig 1 66328
-		color 153,38,0
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1125 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12InputIggrabSig fileName=wgEncodeSydhTfbsCh12InputIggrabSig.bigWig.gz
 
-		#### Submission 1126 ####
-		track wgEncodeSydhTfbsCh12JundIggrabSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off 
-    		shortLabel CH12 JunD Sg
-                longLabel CH12 JunD Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=JUND cellType=CH12 control=IGGrab treatment=None
-    		type bigWig 1 63771
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=JunD setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1126 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12JundIggrabSig fileName=wgEncodeSydhTfbsCh12JundIggrabSig.bigWig.gz
-		
-		#### Submission 1153 ####
-		track wgEncodeSydhTfbsCh12E2f4IggrabSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel CH12 E2F4 Sg
-                longLabel CH12 E2F4 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=E2F4 cellType=CH12 control=IGGrab treatment=None
-    		type bigWig 1 79444
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=E2F4 treatment=None control=IgG-rab setType=exp inputType=CH12/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1153 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12E2f4IggrabSig fileName=wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig.gz
-		
-		#### Sumission 1154 ####
-		track wgEncodeSydhTfbsCh12InputIggmusSig
-    		release alpha
-		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel CH12 IgGmus Sg
-                longLabel CH12 IgG-mus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGmus treatment=None
-    		type bigWig 1 71455
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1154 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12InputIggmusSig fileName=wgEncodeSydhTfbsCh12InputIggmusSig.bigWig.gz
-
-		#### Submission 1155 ####		
-		track wgEncodeSydhTfbsCh12Pol2IggmusSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig 
-    		shortLabel CH12 Pol2 Sg
-                longLabel CH12 Pol2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=POL2 cellType=CH12 control=IGGmus treatment=None
-    		type bigWig 1 14925
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Pol2 setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1155 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12Pol2IggmusSig fileName=wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig.gz
-
-		#### Submission 1156 ####
-		track wgEncodeSydhTfbsCh12TbpIggmusSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel CH12 TBP Sg
-                longLabel CH12 TBP Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=TBP cellType=CH12 control=IGGmus treatment=None
-    		type bigWig 1 52209
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=TBP setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1156 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12TbpIggmusSig fileName=wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig.gz
-
-		#### Submission 1157 ####
-   		track wgEncodeSydhTfbsCh12CjunIggrabSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel CH12 c-Jun Sg
-                longLabel CH12 c-Jun Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=cJUN cellType=CH12 control=IGGrab treatment=None
-    		type bigWig 1 57353
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Jun setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1157 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CjunIggrabSig fileName=wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig.gz
-		
-		#### Submission 1159 ####	
-		track wgEncodeSydhTfbsCh12CmycIggrabSig
-		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel CH12 c-Myc Sg
-                longLabel CH12 c-Myc Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=cMYC cellType=CH12 control=IGGrab treatment=None
-    		type bigWig 1 56356
-    		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabSig fileName=wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig.gz
-
-		#### Submission 1160 ####
-    		track wgEncodeSydhTfbsMelTbpIggmusSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel MEL TBP Sg
-                longLabel MEL TBP Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=TBP cellType=MEL control=IGGmus treatment=None
-    		type bigWig 1 60278
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=TBP setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1160 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelTbpIggmusSig fileName=wgEncodeSydhTfbsMelTbpIggmusSig.bigWig.gz
-
-		#### Submission 1161 ####
-    		track wgEncodeSydhTfbsMelPol2IggmusSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig 
-    		shortLabel MEL Pol2 Sg
-                longLabel MEL Pol2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=POL2 cellType=MEL control=IGGmus treatment=None
-    		type bigWig 1 13695
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Pol2 setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1161 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelPol2IggmusSig fileName=wgEncodeSydhTfbsMelPol2IggmusSig.bigWig.gz
-
-		#### Submission 1162 ####
-  		track wgEncodeSydhTfbsMelInputIggmusSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off 
-    		shortLabel MEL IgGmus Sg
-                longLabel MEL IgG-mus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGmus treatment=None
-    		type bigWig 1 78618
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1162 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggmusSig fileName=wgEncodeSydhTfbsMelInputIggmusSig.bigWig.gz
-
-		#### Submission 1163 ####
-  		track wgEncodeSydhTfbsMelCmycIggrabSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel MEL c-Myc Sg
-                longLabel MEL c-Myc Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=cMYC cellType=MEL control=IGGrab treatment=None
-    		type bigWig 1 61932
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=c-Myc setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1163 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelCmycIggrabSig fileName=wgEncodeSydhTfbsMelCmycIggrabSig.bigWig.gz
-
-
-		#### Submission 1164 ####
-    		track wgEncodeSydhTfbsMelInputIggrabSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel MEL IgGrab Sg
-                longLabel MEL IgG-rab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGrab treatment=None
-    		type bigWig 1 103648
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1164 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggrabSig fileName=wgEncodeSydhTfbsMelInputIggrabSig.bigWig.gz
-
-		#### Submission 1165 ####
-   		track wgEncodeSydhTfbsMelGata1IggratSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel MEL GATA-1 Sg
-                longLabel MEL GATA-1 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=GATA1SC265 cellType=MEL control=IGGrat treatment=None
-    		type bigWig 1 56526
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=GATA-1 setType=exp treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1165 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelGata1IggratSig fileName=wgEncodeSydhTfbsMelGata1IggratSig.bigWig.gz
-
-		#### Submission 1167 ####
-    		track wgEncodeSydhTfbsMelInputIggratSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel MEL IgGrat Sg
-                longLabel MEL IgG-rat Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGrat treatment=None
-    		type bigWig 1 90844
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1167 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggratSig fileName=wgEncodeSydhTfbsMelInputIggratSig.bigWig.gz
-
-
-		##### Submission 1192 #####
-    		track wgEncodeSydhTfbsMelJundIggrabSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel MEL JunD Sg
-                longLabel MEL JunD Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=JUND cellType=MEL control=IGGrab treatment=None
-    		type bigWig 1.000000 71501.000000
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=JunD setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1192 dateSubmitted=2010-05-11 dateUnrestricted=2011-02-11 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelJundIggrabSig fileName=wgEncodeSydhTfbsMelJundIggrabSig.bigWig.gz
-
-		#### Submission 1193 #####
-    		track wgEncodeSydhTfbsMelE2f4IggrabSig
-    		release alpha
-    		subTrack wgEncodeSydhTfbsViewSig off
-    		shortLabel MEL E2F4 Sg
-                longLabel MEL E2F4 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-    		subGroups view=Signal factor=E2F4 cellType=MEL control=IGGrab treatment=None
-    		type bigWig 1.000000 91713.000000
-    		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabSig fileName=wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig.gz
-
-	        track wgEncodeSydhTfbsCh12P300IggrabSig
-	        release alpha
-	        parent wgEncodeSydhTfbsViewSig 
-	        shortLabel CH12 p300 Sg
-                longLabel CH12 p300 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=P300N15 cellType=CH12 control=IGGrab treatment=None
-	        type bigWig 1.000000 106426.000000
-	        color 153,38,0
-	        # subId=1855 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12CtcfIggyaleSig
-	        release alpha
-	        parent wgEncodeSydhTfbsViewSig 
-	        shortLabel CH12 CTCF Sg
-                longLabel CH12 CTCF Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=CTCFC20 cellType=CH12 control=IGGYale treatment=None
-	        type bigWig 1.000000 94966.000000
-	        color 153,38,0
-	        # subId=1858 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12MaxIggrabSig
-	        release alpha
-	        parent wgEncodeSydhTfbsViewSig off
-	        shortLabel CH12 Max Sg
-                longLabel CH12 Max Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=MAX cellType=CH12 control=IGGrab treatment=None
-	        type bigWig 1.000000 122997.000000
-	        color 153,38,0
-	        # subId=1859 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12Rad21IggrabSig
-	        release alpha
-	        parent wgEncodeSydhTfbsViewSig off
-	        shortLabel CH12 Rad21 Sg
-                longLabel CH12 Rad21 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=RAD21 cellType=CH12 control=IGGrab treatment=None
-	        type bigWig 1.000000 78996.000000
-	        color 153,38,0
-	        # subId=1860 dateSubmitted=2010-07-08
-
-	        track wgEncodeSydhTfbsCh12Usf2IggmusSig
-	        release alpha
-	        parent wgEncodeSydhTfbsViewSig off
-	        shortLabel CH12 USF2 Sg
-                longLabel CH12 USF2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
-	        subGroups view=Signal factor=USF2 cellType=CH12 control=IGGmus treatment=None
-	        type bigWig 1.000000 126147.000000
-	        color 153,38,0
-	        # subId=1861 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelMaxIggrabSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Max Sg
                 longLabel MEL Max Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -601,7 +159,7 @@ wgEncode 1
 	        # subId=1863 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelP300IggrabSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel MEL p300 Sg
                 longLabel MEL p300 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -611,7 +169,7 @@ wgEncode 1
 	        # subId=1864 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL USF2 Sg
                 longLabel MEL USF2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -621,7 +179,7 @@ wgEncode 1
 	        # subId=1865 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -631,7 +189,7 @@ wgEncode 1
 	        # subId=1857 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelInputDmso20IggyaleSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL IgGYale D Sg
                 longLabel MEL IgG-Yale Input 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -641,7 +199,7 @@ wgEncode 1
 	        # subId=1862 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 D Sg
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -651,7 +209,7 @@ wgEncode 1
 	        # subId=2539 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelRad21IggrabSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 Sg
                 longLabel MEL Rad21 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -661,7 +219,7 @@ wgEncode 1
 	        # subId=2541 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelNelfeIggrabSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL NELFe Sg
                 longLabel MEL NELFe Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -671,7 +229,7 @@ wgEncode 1
 	        # subId=2543 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelCmybh141IggrabSig
-	        release alpha
+	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL c-Myb Sg
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -680,23 +238,4 @@ wgEncode 1
 	        color 46,0,184
 	        # subId=2542 dateSubmitted=2010-10-27
 
-        track wgEncodeSydhTfbsMelP300StdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSig off
-        shortLabel MEL p300 Sig
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (p300 in MEL cells)
-        subGroups view=Signal factor=P300 cellType=MEL control=std treatment=None
-        type bigWig 1.000000 92232.000000
-        color 46,0,184
-        # subId=3089 dateSubmitted=2010-12-10
-
-        track wgEncodeSydhTfbsMelCtcfStdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSig off
-        shortLabel MEL CTCF Sig
-        longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (CTCF in MEL cells)
-        subGroups view=Signal factor=CTCF cellType=MEL control=std treatment=None
-        type bigWig 1.000000 62645.000000
-        color 46,0,184
-        # subId=3087 dateSubmitted=2010-12-10
 
