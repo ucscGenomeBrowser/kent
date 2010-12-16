@@ -23,3 +23,4 @@ MAILTO=genbank@cse.ucsc.edu
 # try 6 hours, just because more frequence emails are 
 # annoying
 30 0,6,12,18 * * * /cluster/data/genbank/etc/hgdownload-copy hgdownload-10
+0  2,8,14,20 * * * /cluster/data/genbank/etc/hgdownload-copy hgdownload-sd
