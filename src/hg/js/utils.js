@@ -429,6 +429,10 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
         if($(divit).find('table').length == 0)
             lookupMetadata(trackName,showLonglabel,showShortLabel);
     }
+    var tr = $(divit).parents('tr');
+    if (tr.length > 0) {
+        $(divit).children('table').css('backgroundColor',$(tr[0]).css('backgroundColor'));
+    }
     $(divit).toggle();  // jQuery hide/show
     return false;
 }
