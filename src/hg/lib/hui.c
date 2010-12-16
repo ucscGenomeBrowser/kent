@@ -167,9 +167,9 @@ return NULL;
 //struct dyString *dyTable = dyStringCreate("<table id='mdb_%s'>",tdb->table);
 struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
 if(showLongLabel)
-    dyStringPrintf(dyTable,"<tr><td colspan=2 valign='bottom'>%s</td></tr>",tdb->longLabel);
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",tdb->longLabel);
 if(showShortLabel)
-    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 // Get the hash of mdb and cv term types
 struct hash *cvTermTypes = mdbCvTermTypeHash();
@@ -184,7 +184,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
-        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>",mdbVar->var);
+        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>",mdbVar->var);
 
         dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
         dyStringAppend(dyTable,"</td></tr>");
@@ -210,11 +210,11 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
                         {
                         char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
-                        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
+                        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
                         freeMem(linkOfTerm);
                         }
                     else
-                        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
+                        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
                         //{  // NOTE: Could just have a tool tip for these.
                         //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
                         //label = cgiEncode(label);
@@ -227,7 +227,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                     }
                 }
             }
-        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right'><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
+        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
 dyStringAppend(dyTable,"</table>");
