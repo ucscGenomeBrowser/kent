@@ -93,19 +93,11 @@ struct vGfx
     /* How wide is a string? */
     };
 
-#ifndef USE_PNG
-struct vGfx *vgOpenGif(int width, int height, char *fileName, boolean useTransparency);
-/* Open up something that will write out a GIF file upon vgClose.
- * If useTransparency, then the first color in memgfx's colormap/palette is
- * assumed to be the image background color, and pixels of that color
- * are made transparent. */
-#else
 struct vGfx *vgOpenPng(int width, int height, char *fileName, boolean useTransparency);
 /* Open up something that will write out a PNG file upon vgClose.  
  * If useTransparency, then the first color in memgfx's colormap/palette is
  * assumed to be the image background color, and pixels of that color
  * are made transparent. */
-#endif
 
 struct vGfx *vgOpenPostScript(int width, int height, char *fileName);
 /* Open up something that will someday be a PostScript file. */

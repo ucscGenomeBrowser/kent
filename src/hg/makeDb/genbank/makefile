@@ -38,7 +38,9 @@ install-bin: check-prefix all
 	rsync ${rsyncOpts} bin ${PREFIX}
 	rsync ${rsyncOpts} lib ${PREFIX}
 
+# ensures that gitFiles is in PATH, otherwise a very bogus rsync results
 install-etc: check-prefix
+	@which gitFiles >/dev/null
 	${MKDIR} ${PREFIX}/etc
 	umask 002; rsync ${rsyncOpts} $$(gitFiles etc) ${PREFIX}
 

@@ -1455,13 +1455,8 @@ fclose(mapFile);
 chmod(mapTn.forCgi, 0666);
 
 /* Save out picture and tell html file about it. */
-#ifdef USE_PNG
 makeTempName(&gifTn, "trk", ".png");
 mgSavePng(mg, gifTn.forCgi, FALSE);
-#else
-makeTempName(&gifTn, "trk", ".gif");
-mgSaveGif(mg, gifTn.forCgi, FALSE);
-#endif
 printf("<INPUT TYPE=HIDDEN NAME=map VALUE=\"%s\">\n", mapTn.forCgi);
 printf(
     "<P><INPUT TYPE=IMAGE SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME = \"mouse\" ALIGN=BOTTOM><BR>\n",

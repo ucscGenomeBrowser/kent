@@ -18,7 +18,6 @@ indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
 maxWindowToDraw 1000000
-html denisova
 
 track denisovaModernHumans
 compositeTrack on
@@ -47,7 +46,6 @@ sortOrder sample=+
 dragAndDrop subTracks
 allButtonPair on
 dimensions dimensionX=sample
-html denisova
 
     track bamMMS9MbutiPygmy
     parent denisovaModernHumans
