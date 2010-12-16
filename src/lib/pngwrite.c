@@ -3,7 +3,6 @@
  *  has a wide-open license intended to encourage usage of the PNG format, and the lib
  *  has been under development and testing for 14 years -- http://libpng.org/) */
 
-#ifdef USE_PNG
 
 #include "png.h"   // MUST come before common.h, due to setjmp checking  in pngconf.h 
 #include "common.h"
@@ -115,5 +114,3 @@ if (!mgSaveToPng(pngFile, mg, useTransparency))
 if (fclose(pngFile) != 0)
     errnoAbort("fclose failed");
 }
-
-#endif//def USE_PNG

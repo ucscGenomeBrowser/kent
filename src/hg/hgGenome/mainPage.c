@@ -303,13 +303,8 @@ else
     {
 
     /* Create gif file and make reference to it in html. */
-#ifdef USE_PNG
     trashDirFile(&gifTn, "hgg", "ideo", ".png");
     hvg = hvGfxOpenPng(gl->picWidth, gl->picHeight, gifTn.forCgi, FALSE);
-#else
-    trashDirFile(&gifTn, "hgg", "ideo", ".gif");
-    hvg = hvGfxOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi, FALSE);
-#endif /* USE_PNG */
 
     hPrintf("<INPUT TYPE=IMAGE SRC=\"%s\" BORDER=1 WIDTH=%d HEIGHT=%d NAME=\"%s\">",
 		gifTn.forHtml, gl->picWidth, gl->picHeight, hggClick);
