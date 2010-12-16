@@ -3805,6 +3805,11 @@ sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
+// Table wraps around entire list so that "Top" link can float to the correct place.
+printf("<table><tr><td class='windowSize'>");
+printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
+makeTopLink(parentTdb);
+
 // Now we can start in on the table of subtracks  It may be sortable and/or dragAndDroppable
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
 dyStringClear(dyHtml);
@@ -3831,13 +3836,11 @@ boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all")
 boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 int colspan = 3;
 if (sortOrder != NULL)
-    colspan = sortOrder->count+4;
+    colspan = sortOrder->count+2;
 if (doColorPatch)
     colspan += 1;
 printf("<TR%s>",useDragAndDrop?" id='noDrag' class='nodrop nodrag'":"");
-printf("<TD colspan='%d'>", colspan);
-printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
-printf("<B>List subtracks:&nbsp;");
+printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
 char javascript[JBUFSIZE];
 safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
 cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
@@ -3847,7 +3850,6 @@ cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
 printf("all</B>");
 if (slCount(subtrackRefList) > 5)
     printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
-makeTopLink(parentTdb);  // "Top" link  floats to right side of table
 puts("</TD>");
 
 // Add column headers which are sort button links
@@ -3891,7 +3893,7 @@ puts("</TR></THEAD>"); // The end of the header section.
 if (sortOrder != NULL || useDragAndDrop)
     {
     preSorted = tdbRefSortPrioritiesFromCart(cart, &subtrackRefList); // preserves user's prev sort/drags
-    puts("<TBODY class='sortable altColors'>");
+    printf("<TBODY class='%saltColors'>\n",(sortOrder != NULL ? "sortable " : "") );
     }
 else
     {
