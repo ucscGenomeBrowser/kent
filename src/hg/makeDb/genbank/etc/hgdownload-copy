@@ -1,22 +1,30 @@
 #!/bin/bash -e
+usage="hgdownload-copy download
 
-# Script to copy download files from the build server to the the download
-# server ( server)  This attempts an rsync
+Copy download files from the build server to the the download
+server.  This runs on the build server and pushes to the specified download
+server"
 
-set -e  # errors terminate
+set -beEu -o pipefail
 trap "echo Error: `hostname` download copy failed >&2; exit 1" ERR
 exec </dev/null
 
+if [ $# != 1 ] ; then
+    echo "wrong # args: $usage" >&2
+    exit 1
+fi
+downloadServer="$1"
+
 # initialize
-gbRoot=/genbank
+gbRoot=/cluster/data/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
 
 # location of the genbank root and files on the remote build server
-gbBuildServer=genbank-10
 rsyncPort="rsh"
-gbBuildRoot=/cluster/data/genbank
-gbDownloadBuildDir=${gbBuildRoot}/data/ftp
+gbDownloadBuildDir=${gbRoot}/data/ftp
+verbose=""
+#verbose="-verbose"
 
 goldenPathDir=/mirrordata/apache/htdocs/goldenPath
 
@@ -24,5 +32,5 @@ goldenPathDir=/mirrordata/apache/htdocs/goldenPath
 # and is less than one day old,  error if older.
 gbCheckLock $gbRoot/var/downloadcp/$(hostname)/run/downloadcp.lock
 
-gbCopyDownload -rsyncPort=$rsyncPort $gbBuildServer $gbDownloadBuildDir $goldenPathDir
+gbCopyDownload $verbose -rsyncPort=$rsyncPort $gbDownloadBuildDir $downloadServer $goldenPathDir
 

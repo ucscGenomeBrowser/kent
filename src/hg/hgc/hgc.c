@@ -3796,14 +3796,17 @@ void doGetDna1()
 {
 struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
-char rootName[256];
-char parsedChrom[32];
 if (dbIsFound)
     {
+    char rootName[256];
+    char parsedChrom[32];
     hParseTableName(database, tbl, rootName, parsedChrom);
     hti = hFindTableInfo(database, seqName, rootName);
     }
-cartWebStart(cart, database, "Get DNA in Window");
+char *otherOrg = hOrganism(database);
+char titleStr[256];
+safef(titleStr, sizeof(titleStr), "Get DNA in Window (%s/%s)", database, otherOrg);
+cartWebStart(cart, database, titleStr);
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
@@ -18278,13 +18281,8 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
-#ifdef USE_PNG
 trashDirFile(&gifTn, "hgc", "hgc", ".png");
 hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#else
-trashDirFile(&gifTn, "hgc", "hgc", ".gif");
-hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#endif /* USE_PNG */
 makeGrayShades(hvg);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,

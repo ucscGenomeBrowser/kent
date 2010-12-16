@@ -3805,6 +3805,11 @@ sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
+// Table wraps around entire list so that "Top" link can float to the correct place.
+printf("<table><tr><td class='windowSize'>");
+printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
+makeTopLink(parentTdb);
+
 // Now we can start in on the table of subtracks  It may be sortable and/or dragAndDroppable
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
 dyStringClear(dyHtml);
@@ -3831,13 +3836,11 @@ boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all")
 boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 int colspan = 3;
 if (sortOrder != NULL)
-    colspan = sortOrder->count+4;
+    colspan = sortOrder->count+2;
 if (doColorPatch)
     colspan += 1;
 printf("<TR%s>",useDragAndDrop?" id='noDrag' class='nodrop nodrag'":"");
-printf("<TD colspan='%d'>", colspan);
-printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
-printf("<B>List subtracks:&nbsp;");
+printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
 char javascript[JBUFSIZE];
 safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
 cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
@@ -3847,7 +3850,6 @@ cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
 printf("all</B>");
 if (slCount(subtrackRefList) > 5)
     printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
-makeTopLink(parentTdb);  // "Top" link  floats to right side of table
 puts("</TD>");
 
 // Add column headers which are sort button links
@@ -3860,7 +3862,7 @@ if (sortOrder != NULL)
     int sIx=0;
     for(sIx=0;sIx<sortOrder->count;sIx++)
         {
-        printf("<TH id='%s' class='sortable%s sort%d' abbr='use' nowrap title='Sort list on this column' onclick='tableSortAtButtonPress(this);'>%s",
+        printf("<TH id='%s' class='sortable%s sort%d' abbr='use' title='Sort list on this column' onclick='tableSortAtButtonPress(this);'>%s",
             sortOrder->column[sIx],(sortOrder->forward[sIx]?"":" sortRev"),sortOrder->order[sIx],sortOrder->title[sIx]);
         printf("<sup>%s",(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
         if (sortOrder->count > 1)
@@ -3879,7 +3881,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     (void)metadataForTable(db,subtrack,NULL);
     if (NULL != metadataFindValue(subtrack,"dateUnrestricted"))
         {
-        printf("<TH align=\"center\" nowrap>&nbsp;");
+        printf("<TH align='center'>&nbsp;");
         printf("<A HREF=\'%s\' TARGET=BLANK>Restricted Until</A>", ENCODE_DATA_RELEASE_POLICY);
         puts("&nbsp;</TH>");
         break; // Don't need more than one
@@ -3891,7 +3893,7 @@ puts("</TR></THEAD>"); // The end of the header section.
 if (sortOrder != NULL || useDragAndDrop)
     {
     preSorted = tdbRefSortPrioritiesFromCart(cart, &subtrackRefList); // preserves user's prev sort/drags
-    puts("<TBODY class='sortable altColors'>");
+    printf("<TBODY class='%saltColors'>\n",(sortOrder != NULL ? "sortable " : "") );
     }
 else
     {
@@ -3992,7 +3994,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 {
                 char *titleRoot=labelRoot(membership->titles[ix],NULL);
                 // Each sortable column requires hidden goop (in the "abbr" field currently) which is the actual sort on value
-                printf ("<TD id='%s_%s' nowrap abbr='%s' align='left'>&nbsp;",subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
+                printf ("<TD id='%s_%s' abbr='%s' align='left'>&nbsp;",subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
             #ifdef SUBTRACK_CFG_POPUP
                 dyStringPrintf(dyLabel,"%s ",titleRoot);
                 if (cType != cfgNone && sameString("view",sortOrder->column[sIx])) // configure link is on view currenntly  TODO: make a wrench next to check box/view
@@ -4013,7 +4015,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         }
     else  // Non-sortable tables do not have sort by columns but will display a short label (which may be a configurable link)
         {
-        printf ("<TD nowrap='true'>&nbsp;");
+        printf ("<TD>&nbsp;");
         indentIfNeeded(hierarchy,membership);
     #ifdef SUBTRACK_CFG_POPUP
         if (cType != cfgNone && cType != cfgWigMaf)  // FIXME: wigMaf restriction is temporary until configureByPopup off is set
@@ -4031,7 +4033,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #endif///def SUBTRACK_CFG_POPUP
 
     // The long label column (note that it may have a "..." that allows getting at all the metadata)
-    printf ("<TD nowrap title='select to copy'>&nbsp;%s", subtrack->longLabel);
+    printf ("<TD title='select to copy'>&nbsp;%s", subtrack->longLabel);
     if (trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
         printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
     compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
@@ -4054,14 +4056,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #endif///ndef SUBTRACK_CFG_POPUP
 
     // A schema link for each track
-    printf("</td>\n<TD nowrap>&nbsp;");
+    printf("</td>\n<TD>&nbsp;");
     makeSchemaLink(db,subtrack,"schema");
     printf("&nbsp;");
 
     // Do we have a restricted until date?
     char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
     if (dateDisplay)
-        printf("</TD>\n<TD align=\"CENTER\" nowrap>&nbsp;%s&nbsp;", dateDisplay);
+        printf("</TD>\n<TD align='center'>&nbsp;%s&nbsp;", dateDisplay);
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
