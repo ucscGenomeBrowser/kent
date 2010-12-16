@@ -24,6 +24,12 @@ struct bbiFile *bigBedFileOpen(char *fileName)
 return bbiFileOpen(fileName, bigBedSig, "big bed");
 }
 
+boolean bigBedFileCheckSigs(char *fileName)
+/* check file signatures at beginning and end of file */
+{
+return bbiFileCheckSigs(fileName, bigBedSig, "big bed");
+}
+
 struct bigBedInterval *bigBedIntervalQuery(struct bbiFile *bbi, char *chrom, 
 	bits32 start, bits32 end, int maxItems, struct lm *lm)
 /* Get data for interval.  Return list allocated out of lm.  Set maxItems to maximum
