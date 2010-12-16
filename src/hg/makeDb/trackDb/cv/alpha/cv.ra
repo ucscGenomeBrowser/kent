@@ -4323,6 +4323,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
 validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 
+term  GATA1_(SC-266) 
+tag  GATA1SC266 
+type Antibody
+target  GATA1 
+antibodyDescription  Rat monoclonal raised against bacterially expressed murine GATA-1
+targetDescription  GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes. 
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-266
+orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
+lab  Snyder 
+lots  
+targetId GeneCard:Gata1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
+validation GATA1(Immunoblot)mouse_GATA1_SC266_validation_Snyder.pdf
+
+
 term GATA-2
 tag GATA2
 type Antibody
