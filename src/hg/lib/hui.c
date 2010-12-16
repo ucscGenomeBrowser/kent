@@ -3862,7 +3862,7 @@ if (sortOrder != NULL)
     int sIx=0;
     for(sIx=0;sIx<sortOrder->count;sIx++)
         {
-        printf("<TH id='%s' class='sortable%s sort%d' abbr='use' nowrap title='Sort list on this column' onclick='tableSortAtButtonPress(this);'>%s",
+        printf("<TH id='%s' class='sortable%s sort%d' abbr='use' title='Sort list on this column' onclick='tableSortAtButtonPress(this);'>%s",
             sortOrder->column[sIx],(sortOrder->forward[sIx]?"":" sortRev"),sortOrder->order[sIx],sortOrder->title[sIx]);
         printf("<sup>%s",(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
         if (sortOrder->count > 1)
@@ -3881,7 +3881,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     (void)metadataForTable(db,subtrack,NULL);
     if (NULL != metadataFindValue(subtrack,"dateUnrestricted"))
         {
-        printf("<TH align=\"center\" nowrap>&nbsp;");
+        printf("<TH align='center'>&nbsp;");
         printf("<A HREF=\'%s\' TARGET=BLANK>Restricted Until</A>", ENCODE_DATA_RELEASE_POLICY);
         puts("&nbsp;</TH>");
         break; // Don't need more than one
@@ -3994,7 +3994,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 {
                 char *titleRoot=labelRoot(membership->titles[ix],NULL);
                 // Each sortable column requires hidden goop (in the "abbr" field currently) which is the actual sort on value
-                printf ("<TD id='%s_%s' nowrap abbr='%s' align='left'>&nbsp;",subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
+                printf ("<TD id='%s_%s' abbr='%s' align='left'>&nbsp;",subtrack->track,sortOrder->column[sIx],membership->membership[ix]);
             #ifdef SUBTRACK_CFG_POPUP
                 dyStringPrintf(dyLabel,"%s ",titleRoot);
                 if (cType != cfgNone && sameString("view",sortOrder->column[sIx])) // configure link is on view currenntly  TODO: make a wrench next to check box/view
@@ -4015,7 +4015,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
         }
     else  // Non-sortable tables do not have sort by columns but will display a short label (which may be a configurable link)
         {
-        printf ("<TD nowrap='true'>&nbsp;");
+        printf ("<TD>&nbsp;");
         indentIfNeeded(hierarchy,membership);
     #ifdef SUBTRACK_CFG_POPUP
         if (cType != cfgNone && cType != cfgWigMaf)  // FIXME: wigMaf restriction is temporary until configureByPopup off is set
@@ -4033,7 +4033,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #endif///def SUBTRACK_CFG_POPUP
 
     // The long label column (note that it may have a "..." that allows getting at all the metadata)
-    printf ("<TD nowrap title='select to copy'>&nbsp;%s", subtrack->longLabel);
+    printf ("<TD title='select to copy'>&nbsp;%s", subtrack->longLabel);
     if (trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
         printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
     compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
@@ -4056,14 +4056,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #endif///ndef SUBTRACK_CFG_POPUP
 
     // A schema link for each track
-    printf("</td>\n<TD nowrap>&nbsp;");
+    printf("</td>\n<TD>&nbsp;");
     makeSchemaLink(db,subtrack,"schema");
     printf("&nbsp;");
 
     // Do we have a restricted until date?
     char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
     if (dateDisplay)
-        printf("</TD>\n<TD align=\"CENTER\" nowrap>&nbsp;%s&nbsp;", dateDisplay);
+        printf("</TD>\n<TD align='center'>&nbsp;%s&nbsp;", dateDisplay);
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");
