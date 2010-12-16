@@ -1782,7 +1782,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
 	html altSeqComposite
 	priority 1
 	urlLabel Fetch alternate sequence:
-	url http://genome-test.cse.ucsc.edu/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
+	url http:/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
 	track altSeqPatches
         parent altSeqCompositeViewlocation
@@ -1793,7 +1793,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
 	html altSeqComposite
 	priority 2
 	urlLabel Fetch alternate sequence:
-	url http://genome-test.cse.ucsc.edu/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
+	url http:/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
     track altSeqCompositeViewpsl
     shortLabel Alignment
