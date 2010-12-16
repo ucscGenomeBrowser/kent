@@ -202,6 +202,8 @@ div.sliceDiv { overflow:hidden; }
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: s-resize; }
 
+/* The are for sortable tables */
+table.subtracks { overflow: visible; white-space: nowrap; }
 tr.sortable { background-color: #FCECC0; }
 th.sortable { color: #0000FF; }
 th:hover.sortable { background-color: #CCFFCC; cursor: pointer; }

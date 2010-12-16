@@ -73,7 +73,7 @@ if (s != NULL && fluff != NULL)
     }
 }
 
-boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, FILE *seqTab,
+boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, HGID seqId, FILE *seqTab,
                   struct sqlConnection* conn)
 /* Add next sequence in fasta file to tab file */
 {
@@ -83,7 +83,6 @@ char *s, *faLine;
 int faLineSize, faNameSize;
 int dnaSize = 0;
 char faAcc[256], faAccBuf[513];
-HGID seqId = 0;
 int prefixLen = 0;
 
 /* Get Next FA record. */
@@ -113,9 +112,6 @@ if (faSeekNextRecord(faLf))
 faEndOffset = faLf->bufOffsetInFile + faLf->lineStart;
 faSize = (int)(faEndOffset - faOffset); 
 
-/* add to tab file */
-seqId = hgNextId();
-    
 /* note: sqlDate column is empty */
 fprintf(seqTab, "%u\t%s\t%d\t0000-00-00\t%u\t%lld\t%d\n",
         seqId, sqlEscapeTabFileString2(faAccBuf, faAcc),
@@ -123,7 +119,7 @@ fprintf(seqTab, "%u\t%s\t%d\t0000-00-00\t%u\t%lld\t%d\n",
 return TRUE;
 }
 
-void loadFa(char *faFile, struct sqlConnection *conn, FILE *seqTab)
+void loadFa(char *faFile, struct sqlConnection *conn, FILE *seqTab, HGID *nextSeqId)
 /* Add sequences in a fasta file to a seq table tab file */
 {
 HGID extFileId = test ? 0 : hgAddToExtFileTbl(faFile, conn, extFileTbl);
@@ -138,8 +134,11 @@ if (!faSeekNextRecord(faLf))
 lineFileReuse(faLf);
 
 /* Loop around for each record of FA */
-while (loadFaSeq(faLf, extFileId, seqTab, conn))
+while (loadFaSeq(faLf, extFileId, *nextSeqId, seqTab, conn))
+    {
+    (*nextSeqId)++;
     count++;
+    }
 
 verbose(1, "%u sequences\n", count);
 lineFileClose(&faLf);
@@ -152,6 +151,7 @@ void hgLoadSeq(char *database, int fileCount, char *fileNames[])
 struct sqlConnection *conn;
 int i;
 FILE *seqTab;
+HGID firstSeqId = 0, nextSeqId = 0;
 
 if (!test)
     {
@@ -166,13 +166,14 @@ if (!test)
         }
     safef(query, sizeof(query), seqTableCreate, seqTbl);
     sqlMaybeMakeTable(conn, seqTbl, query);
+    firstSeqId = nextSeqId = hgGetMaxId(conn, seqTbl) + 1;
     }
 
 verbose(1, "Creating %s.tab file\n", seqTbl);
 seqTab = hgCreateTabFile(".", seqTbl);
 for (i=0; i<fileCount; ++i)
     {
-    loadFa(fileNames[i], conn, seqTab);
+    loadFa(fileNames[i], conn, seqTab, &nextSeqId);
     }
 if (!test)
     {
@@ -181,8 +182,8 @@ if (!test)
         opts |= SQL_TAB_REPLACE;
     verbose(1, "Updating %s table\n", seqTbl);
     hgLoadTabFileOpts(conn, ".", seqTbl, opts, &seqTab);
-    hgEndUpdate(&conn, "Add sequences from %d files starting with %s", 
-    	fileCount, fileNames[0]);
+    hgEndUpdate(&conn, firstSeqId, nextSeqId-1, "Add sequences to %s from %d files starting with %s", 
+                seqTbl, fileCount, fileNames[0]);
     verbose(1, "All done\n");
     }
 }

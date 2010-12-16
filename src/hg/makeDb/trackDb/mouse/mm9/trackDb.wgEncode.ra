@@ -6,3 +6,4 @@ include wgEncodeSydhTfbs.ra
 include wgEncodeUwDnase.ra
 include wgEncodePsuTfbs.ra
 include wgEncodePsuHistone.ra
+include wgEncodeSydhTfbs.newR2.ra
