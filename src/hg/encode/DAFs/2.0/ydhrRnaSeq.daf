@@ -18,6 +18,7 @@
  grant             Snyder
  lab               Yale
  dataType          RnaSeq
+ compositeSuffix   YaleRnaSeq
  variables         cell, treatment, rnaExtract
  assembly          hg19
  dafVersion        2.0
@@ -33,24 +34,17 @@
  hasReplicates    no
  required         no 
 
- view             Signal
- longLabelPrefix  TFBS, Yale/UCD/Harvard RNA-seq Signal
- type             bedGraph 4
- hasReplicates    no
- required         no
-
-
  view             RawSignal
  longLabelPrefix  TFBS, Yale/UCD/Harvard RNA-Seq Raw Signal
  type             bigWig
- hasReplicates    yes
+ hasReplicates    no 
  required         no
 
  view             Alignments
  longLabelPrefix  TFBS, Yale/UCD/Harvard RNA-seq Alignments
  type             bam
  hasReplicates    no
- required         yes
+ required         no 
 
  view             RawData
  type             fastq
