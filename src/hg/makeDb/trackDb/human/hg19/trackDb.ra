@@ -22,6 +22,22 @@ track gad override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+track decipher override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+release alpha
+
+track rgdQtl override
+shortLabel RGD Human QTL
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+release alpha
+
+track rgdRatQtl override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+release alpha
+
 track gwasCatalog override
 snpTable snp131
 snpVersion 131
@@ -1833,3 +1849,48 @@ dataVersion GRCh37 Patch 2 update, August 2010
 track vistaEnhancers override
 url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
 
+track evofold override
+mafTrack multiz46way
+origAssembly hg17
+pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
+
+track targetScanS
+shortLabel TS miRNA sites
+longLabel TargetScan miRNA Regulatory Sites
+group regulation
+priority 0
+visibility hide
+color 0,96,0
+scoreFilterMax 100
+type bed 6 .
+urlLabel TargetScan link:
+url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
+track ntSeqContigs override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntHumChimpCodingDiff override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssTop5p override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssZScorePMVar override
+origAssembly hg18
+type bigWig -8.8332 33.63719
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssSnps override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntOoaHaplo override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntMito override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"

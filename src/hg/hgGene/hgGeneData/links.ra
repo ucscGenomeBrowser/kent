@@ -28,9 +28,18 @@ hgsid on
 dbInUrl on
 priority 1
 
+name sgdPalTrack
+shortLabel Protein FASTA
+tables sgdGene 
+idSql select chrom,txStart+1,txEnd,name from sgdGene where name = '%s'
+url ../cgi-bin/hgPal?g=sgdGene&c=%s&l=%s&r=%s&i=%s
+hgsid on
+dbInUrl on
+priority 1
+
 name palTrack
 shortLabel Protein FASTA
-tables knownGene
+tables knownGene 
 idSql select chrom,txStart+1,txEnd,name from knownGene where name = '%s'
 url ../cgi-bin/hgPal?g=knownGene&c=%s&l=%s&r=%s&i=%s
 hgsid on

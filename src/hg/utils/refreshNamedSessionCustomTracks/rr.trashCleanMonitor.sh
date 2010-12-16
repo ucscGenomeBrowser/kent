@@ -21,7 +21,7 @@ export MM=`date "+%m"`
 export logDir="${userLog}/${YYYY}/${MM}"
 export cleanerLog="${logDir}/cleanerLog.${dateStamp}.txt"
 export trashCleaner="/home/qateam/trashCleaners/rr/trashCleaner.csh"
-export failMail="hiram@soe.ucsc.edu"
+export failMail="alertAddress@yourDomain.com"
 export failMessage="ALERT: from hgnfs1/rr trashCleanMonitor.sh - the trash cleaner is failing, check hgnfs1 ${cleanerLog}"
 
 export ECHO="/bin/echo -e"

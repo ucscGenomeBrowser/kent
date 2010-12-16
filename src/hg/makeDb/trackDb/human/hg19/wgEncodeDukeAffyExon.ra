@@ -1,0 +1,1011 @@
+# Duke Affy Exon (wrangler: Cricket)
+
+track wgEncodeDukeAffyExon
+compositeTrack on
+shortLabel Duke Affy Exon
+longLabel ENCODE Duke Affy All-Exon Arrays
+release alpha
+group expression
+subGroup1 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AOSMC Astrocy=Astrocy Chorion=Chorion CLL=CLL Fibrobl=Fibrobl FIBROP=FIBROP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9ES=H9ES Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo MELANO=Melano MYOMETR=Myometr NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib Stellate=Stellate Utothelia=Urothelia 8988T=8988T UROtsa=WHAT
+subGroup2 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
+subGroup3 treatment Treatment IFNa4h=IFNa4h IFNg4h=IFNg4h None=None TGFb=TGFb UT189=UT189 ANDRO=androgen ESTRO=estrogen SERUMFREE=serum_free_media VEH=vehicle 
+subGroup4 view View SimpleSignal=Signal
+dimensions dimensionX=rep dimensionY=cellType dimensionA=treatment
+dimensionAchecked None
+filterComposite dimensionA=one
+boxedCfg on
+sortOrder cellType=+ treatment=+ rep=+
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+dragAndDrop subTracks
+visibility hide
+canPack On
+priority 0
+type broadPeak
+wgEncode 1
+
+
+    track wgEncodeDukeAffyExonViewSimpleSignal
+    release alpha
+    shortLabel Simple Signal
+    view SimpleSignal
+    visibility full
+    parent wgEncodeDukeAffyExon
+    maxHeightPixels 100:24:16
+    minLimit .005
+    maxLimit 25183
+    viewLimits 0:30
+    autoScale off
+    windowingFunction mean
+
+        track wgEncodeDukeAffyExonAosmcSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel AoSMC 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in AoSMC cells)
+        subGroups view=SimpleSignal cellType=AOSMC treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonAosmcSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel AoSMC 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in AoSMC cells)
+        subGroups view=SimpleSignal cellType=AOSMC treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel AoSMC 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in AoSMC cells)
+        subGroups view=SimpleSignal cellType=AOSMC treatment=SERUMFREE rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel AoSMC 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in AoSMC cells)
+        subGroups view=SimpleSignal cellType=AOSMC treatment=SERUMFREE rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel AoSMC 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in AoSMC cells)
+        subGroups view=SimpleSignal cellType=AOSMC treatment=TGFb rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel AoSMC 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in AoSMC cells)
+        subGroups view=SimpleSignal cellType=AOSMC treatment=TGFb rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonAstrocySimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Astrocy 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Astrocy cells)
+        subGroups view=SimpleSignal cellType=Astrocy treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonAstrocySimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Astrocy 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Astrocy cells)
+        subGroups view=SimpleSignal cellType=Astrocy treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonChorionSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Chorion 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Chorion cells)
+        subGroups view=SimpleSignal cellType=Chorion treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonCllSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel CLL 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in CLL cells)
+        subGroups view=SimpleSignal cellType=CLL treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonCllSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel CLL 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in CLL cells)
+        subGroups view=SimpleSignal cellType=CLL treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonFibroblSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Fibrobl 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Fibrobl cells)
+        subGroups view=SimpleSignal cellType=Fibrobl treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonFibroblSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Fibrobl 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Fibrobl cells)
+        subGroups view=SimpleSignal cellType=Fibrobl treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonFibropSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel FibroP 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in FibroP cells)
+        subGroups view=SimpleSignal cellType=FIBROP treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonFibropSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel FibroP 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in FibroP cells)
+        subGroups view=SimpleSignal cellType=FIBROP treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonFibropSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel FibroP 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in FibroP cells)
+        subGroups view=SimpleSignal cellType=FIBROP treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGlioblaSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Gliobla 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Gliobla cells)
+        subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGlioblaSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Gliobla 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Gliobla cells)
+        subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGlioblaSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Gliobla 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in Gliobla cells)
+        subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGlioblaSimpleSignalRep4
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Gliobla 4
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 4 (in Gliobla cells)
+        subGroups view=SimpleSignal cellType=Gliobla treatment=None rep=rep4
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm12878SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal
+        shortLabel GM12878 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12878 cells)
+        subGroups view=SimpleSignal cellType=GM12878 treatment=None rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm12878SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal
+        shortLabel GM12878 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12878 cells)
+        subGroups view=SimpleSignal cellType=GM12878 treatment=None rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm12878SimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal
+        shortLabel GM12878 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in GM12878 cells)
+        subGroups view=SimpleSignal cellType=GM12878 treatment=None rep=rep3
+        type broadPeak
+        color 153,38,0
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm12891SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM12891 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12891 cells)
+        subGroups view=SimpleSignal cellType=GM12891 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm12891SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM12891 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12891 cells)
+        subGroups view=SimpleSignal cellType=GM12891 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm12892SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM12892 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12892 cells)
+        subGroups view=SimpleSignal cellType=GM12892 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm12892SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM12892 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12892 cells)
+        subGroups view=SimpleSignal cellType=GM12892 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm18507SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM18507 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM18507 cells)
+        subGroups view=SimpleSignal cellType=GM18507 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm18507SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM18507 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM18507 cells)
+        subGroups view=SimpleSignal cellType=GM18507 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm18507SimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM18507 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in GM18507 cells)
+        subGroups view=SimpleSignal cellType=GM18507 treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm19238SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM19238 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19238 cells)
+        subGroups view=SimpleSignal cellType=GM19238 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm19238SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM19238 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19238 cells)
+        subGroups view=SimpleSignal cellType=GM19238 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm19239SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM19239 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19239 cells)
+        subGroups view=SimpleSignal cellType=GM19239 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm19239SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM19239 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19239 cells)
+        subGroups view=SimpleSignal cellType=GM19239 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm19240SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM19240 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19240 cells)
+        subGroups view=SimpleSignal cellType=GM19240 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonGm19240SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel GM19240 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19240 cells)
+        subGroups view=SimpleSignal cellType=GM19240 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonH1hescSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel H1-hESC 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in H1-hESC cells)
+        subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep1
+        type broadPeak
+        color 0,107,27
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonH1hescSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel H1-hESC 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in H1-hESC cells)
+        subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep2
+        type broadPeak
+        color 0,107,27
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonH1hescSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel H1-hESC 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in H1-hESC cells)
+        subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep3
+        type broadPeak
+        color 0,107,27
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonH1hescSimpleSignalRep4
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel H1-hESC 4
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 4 (in H1-hESC cells)
+        subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep4
+        type broadPeak
+        color 0,107,27
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonH9esSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel H9ES 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in H9ES cells)
+        subGroups view=SimpleSignal cellType=H9ES treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHelas3SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
+        subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep1
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHelas3SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
+        subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep2
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHelas3SimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HeLa-S3 cells)
+        subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep3
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
+        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep1
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
+        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep2
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
+        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep1
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HeLa-S3 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
+        subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep2
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHepatocytesSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Hepatocytes 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Hepatocytes cells)
+        subGroups view=SimpleSignal cellType=Hepatocytes treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHepatocytesSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Hepatocytes 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Hepatocytes cells)
+        subGroups view=SimpleSignal cellType=Hepatocytes treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHepg2SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HepG2 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HepG2 cells)
+        subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep1
+        type broadPeak
+        color 189,0,157
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHepg2SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HepG2 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HepG2 cells)
+        subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep2
+        type broadPeak
+        color 189,0,157
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHepg2SimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HepG2 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HepG2 cells)
+        subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep3
+        type broadPeak
+        color 189,0,157
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHmecSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HMEC 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HMEC cells)
+        subGroups view=SimpleSignal cellType=HMEC treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHmecSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HMEC 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HMEC cells)
+        subGroups view=SimpleSignal cellType=HMEC treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HPDE6-E6E7 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HPDE6-E6E7 cells)
+        subGroups view=SimpleSignal cellType=HPDE6E6E7 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HPDE6-E6E7 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HPDE6-E6E7 cells)
+        subGroups view=SimpleSignal cellType=HPDE6E6E7 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHsmmSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMM 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HSMM cells)
+        subGroups view=SimpleSignal cellType=HSMM treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHsmmSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMM 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HSMM cells)
+        subGroups view=SimpleSignal cellType=HSMM treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHsmmSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMM 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HSMM cells)
+        subGroups view=SimpleSignal cellType=HSMM treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHsmmtSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMMtube 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HSMMtube cells)
+        subGroups view=SimpleSignal cellType=HSMMt treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHsmmtSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMMtube 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HSMMtube cells)
+        subGroups view=SimpleSignal cellType=HSMMt treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHsmmtSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HSMMtube 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HSMMtube cells)
+        subGroups view=SimpleSignal cellType=HSMMt treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHtr8SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HTR8svn 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HTR8svn cells)
+        subGroups view=SimpleSignal cellType=HTR8 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHtr8SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HTR8svn 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HTR8svn cells)
+        subGroups view=SimpleSignal cellType=HTR8 treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHuh75SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Huh-7.5 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Huh-7.5 cells)
+        subGroups view=SimpleSignal cellType=Huh7.5 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHuh7SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Huh-7 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Huh-7 cells)
+        subGroups view=SimpleSignal cellType=Huh7 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHuvecSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HUVEC 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HUVEC cells)
+        subGroups view=SimpleSignal cellType=HUVEC treatment=None rep=rep1
+        type broadPeak
+        color 224,75,0
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonHuvecSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel HUVEC 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HUVEC cells)
+        subGroups view=SimpleSignal cellType=HUVEC treatment=None rep=rep2
+        type broadPeak
+        color 224,75,0
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonIpsSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel iPS 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in iPS cells)
+        subGroups view=SimpleSignal cellType=iPS treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonIpsSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel iPS 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in iPS cells)
+        subGroups view=SimpleSignal cellType=iPS treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonIpsSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel iPS 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in iPS cells)
+        subGroups view=SimpleSignal cellType=iPS treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonK562SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal
+        shortLabel K562 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in K562 cells)
+        subGroups view=SimpleSignal cellType=K562 treatment=None rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonK562SimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal
+        shortLabel K562 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in K562 cells)
+        subGroups view=SimpleSignal cellType=K562 treatment=None rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonK562SimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal
+        shortLabel K562 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in K562 cells)
+        subGroups view=SimpleSignal cellType=K562 treatment=None rep=rep3
+        type broadPeak
+        color 46,0,184
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel LNCaP 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LNCaP cells)
+        subGroups view=SimpleSignal cellType=LNCaP treatment=ANDRO rep=rep1
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel LNCaP 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LNCaP cells)
+        subGroups view=SimpleSignal cellType=LNCaP treatment=ANDRO rep=rep2
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonLncapSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel LNCaP 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LNCaP cells)
+        subGroups view=SimpleSignal cellType=LNCaP treatment=None rep=rep1
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonLncapSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel LNCaP 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LNCaP cells)
+        subGroups view=SimpleSignal cellType=LNCaP treatment=None rep=rep2
+        type broadPeak
+        color 0,119,158
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMcf7SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel MCF-7 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
+        subGroups view=SimpleSignal cellType=MCF7 treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel MCF-7 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
+        subGroups view=SimpleSignal cellType=MCF7 treatment=ESTRO rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel MCF-7 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
+        subGroups view=SimpleSignal cellType=MCF7 treatment=ESTRO rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel MCF-7 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
+        subGroups view=SimpleSignal cellType=MCF7 treatment=VEH rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel MCF-7 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
+        subGroups view=SimpleSignal cellType=MCF7 treatment=VEH rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMedulloSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Medullo 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Medullo cells)
+        subGroups view=SimpleSignal cellType=Medullo treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMedulloSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Medullo 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Medullo cells)
+        subGroups view=SimpleSignal cellType=Medullo treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMedulloSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Medullo 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in Medullo cells)
+        subGroups view=SimpleSignal cellType=Medullo treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMelanoSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Melano 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Melano cells)
+        subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMelanoSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Melano 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Melano cells)
+        subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMelanoSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Melano 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in Melano cells)
+        subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMelanoSimpleSignalRep4
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Melano 4
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 4 (in Melano cells)
+        subGroups view=SimpleSignal cellType=MELANO treatment=None rep=rep4
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMyometrSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Myometr 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Myometr cells)
+        subGroups view=SimpleSignal cellType=MYOMETR treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonMyometrSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Myometr 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Myometr cells)
+        subGroups view=SimpleSignal cellType=MYOMETR treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonNhekSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel NHEK 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in NHEK cells)
+        subGroups view=SimpleSignal cellType=NHEK treatment=None rep=rep1
+        type broadPeak
+        color 179,0,134
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonNhekSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel NHEK 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in NHEK cells)
+        subGroups view=SimpleSignal cellType=NHEK treatment=None rep=rep2
+        type broadPeak
+        color 179,0,134
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonOsteoblSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Osteobl 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Osteobl cells)
+        subGroups view=SimpleSignal cellType=Osteobl treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonOsteoblSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Osteobl 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Osteobl cells)
+        subGroups view=SimpleSignal cellType=Osteobl treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonOsteoblSimpleSignalRep3
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Osteobl 3
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in Osteobl cells)
+        subGroups view=SimpleSignal cellType=Osteobl treatment=None rep=rep3
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExon8988tSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel 8988T 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in 8988T cells)
+        subGroups view=SimpleSignal cellType=8988T treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExon8988tSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel 8988T 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in 8988T cells)
+        subGroups view=SimpleSignal cellType=8988T treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonProgfibSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel ProgFib 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in ProgFib cells)
+        subGroups view=SimpleSignal cellType=ProgFib treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonProgfibSimpleSignalRep2
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel ProgFib 2
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in ProgFib cells)
+        subGroups view=SimpleSignal cellType=ProgFib treatment=None rep=rep2
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonStellateSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Stellate 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Stellate cells)
+        subGroups view=SimpleSignal cellType=Stellate treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonUrotsaSimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Urothelia 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Urothelia cells)
+        subGroups view=SimpleSignal cellType=UROtsa treatment=None rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09
+
+        track wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
+        release alpha
+        parent wgEncodeDukeAffyExonViewSimpleSignal off
+        shortLabel Urothelia 1
+        longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Urothelia cells)
+        subGroups view=SimpleSignal cellType=UROtsa treatment=UT189 rep=rep1
+        type broadPeak
+        # subId=3081 dateSubmitted=2010-12-09

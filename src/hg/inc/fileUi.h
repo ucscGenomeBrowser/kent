@@ -9,13 +9,13 @@
 struct fileDb
 // File in a list of downloadable files
     {
-    struct fileDb *next;  // single link list
-    char *fileName;       // File Name
-    off_t fileSize;       // File size
-    char *fileDate;       // File Modified? date and time
-    struct mdbObj *mdb;   // The files are not trackDb entries but are found in the metaDb only
-    char **sortFields;    // Array of strings to sort on in sort Order
-    boolean *reverse;     // Direction of sort for array
+    struct fileDb *next;     // single link list
+    char *fileName;          // File Name
+    unsigned long  fileSize; // File size
+    char *fileDate;          // File Modified? date and time
+    struct mdbObj *mdb;      // The files are not trackDb entries but are found in the metaDb only
+    char **sortFields;       // Array of strings to sort on in sort Order
+    boolean *reverse;        // Direction of sort for array
     };
 
 

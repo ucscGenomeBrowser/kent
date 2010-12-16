@@ -586,6 +586,12 @@ boolean checkPeak(char *file, int line, char *row, char *peak, char *start, char
 {
 verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, line, peak, start, end, row);
 unsigned p, s, e;
+int i;
+if (!checkSigned(file, line, row, peak, &i, "peak"))
+    return FALSE;
+if (i == -1)
+    return TRUE;
+
 if (   !checkUnsigned(file, line, row, peak, &p, "peak")
     || !checkUnsigned(file, line, row, start, &s, "chromStart")
     || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
@@ -1147,6 +1153,10 @@ if (chrHash == NULL)
 
 int errs = 0;
 struct bbiFile *bbiFile;
+
+if (!bigWigFileCheckSigs(file))
+    reportErrAbort("bad signatures in file %s\n", file);
+
 bbiFile = bigWigFileOpen(file);
 
 if (bbiFile == NULL)
