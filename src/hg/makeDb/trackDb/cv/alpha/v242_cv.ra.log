@@ -1,0 +1,2290 @@
+commit 7f1b060dac55a1fb1a2d6415e796588b159902f8
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Mon Oct 11 14:46:34 2010 -0700
+
+    actually added SH-SY5Y this time...
+
+commit 1925b9ff7cf33a04666a8710f5cc54a9b6156890
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Oct 8 16:49:22 2010 -0700
+
+    Added Cell line SK-SY5Y and protocol
+
+commit 320e2ba26c9a40ae153b3221e878dce949ad9721
+Author: Tim Dreszer <tdreszer@soe.ucsc.edu>
+Date:   Thu Oct 7 12:43:05 2010 -0700
+
+    Added labels to labs for cleaner findTracks display.  Labs still need cleanup in mdb and cv.ra
+
+commit ac293ab737a12c2af5d30b3bcf9c7cf6bd71f601
+Author: Kate Rosenbloom <kate@soe.ucsc.edu>
+Date:   Tue Oct 5 16:07:54 2010 -0700
+
+    Adding tags to grant entries
+
+commit fc7258ff43d9f44a3bce3eeaf4cc35f0121d847f
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Oct 1 15:27:41 2010 -0700
+
+    Updated RnaExtract to be short total from short. Providing more information about meta-data. Also deleted reference to parentTables that have no function
+
+commit 52894c5188eec45348476d15a614e67305049e10
+Merge: a2caf65 08cb881
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Sep 30 13:57:14 2010 -0700
+
+    Merge branch 'master' of cricket@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit a2caf652606c290932e9c2508d55cd11bb185a71
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Sep 30 13:57:09 2010 -0700
+
+    added AMA50ug
+
+commit f43bdcb2527752eab6732cb86d77c79faac8feff
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Sep 29 16:59:14 2010 -0700
+
+    Added comment to descirbe the B10.H-2aH-4bp/Wts is associated with the CH12 cell line
+
+commit 416af9251a0996e7c9426d3bb3ae721b04f1b376
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Sep 29 10:55:45 2010 -0700
+
+    Updated Mouse Strain and Age metadata for CH12 and MEL cell lines
+
+commit 16c3f9fcba189df5a6cc783b44c18303bc4ab4dd
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Sep 27 10:02:54 2010 -0700
+
+    Registerd antibody for Hardison Lab PAX5-N15
+
+commit a1011c54ba86a1a344b3953a6db3e6681a005ba1
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Sep 27 09:42:56 2010 -0700
+
+    Antibody registration of 2 antibodies, CTCF_(C-20), p300(N-15).
+
+commit 4ef394296ec63c6eae38b9bc6063161ed0347ba5
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Sep 27 09:22:05 2010 -0700
+
+    Added how PBDE cells were obtained.
+
+commit 6eb63cfcbe2f118f717eda690d632d6bd6e32f28
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Fri Sep 24 11:56:17 2010 -0700
+
+    Fixed broken links in antibody validation for Melissa
+
+commit da42d10adafb6c3a7edadbef33409b07361e5752
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Thu Sep 23 10:17:23 2010 -0700
+
+     Finished registration of PBDE cell
+
+commit 8e18989ef7a65e766e9ce543be331ab8eae6651f
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Wed Sep 22 15:16:03 2010 -0700
+
+    Fixed one more broken link to a cell protocol
+
+commit abd0ac2dc15e107da2538c80299b007622e396f6
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Wed Sep 22 15:13:52 2010 -0700
+
+    Fixed a broken link to a mouse cell protocol
+
+commit ba920729ef2be44ae41e2af52048ef24c8b04f87
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Wed Sep 22 15:11:09 2010 -0700
+
+    Added links for selected mouse protocols
+
+commit 7bfdff7140857c4342fcd2ec5abf975ef1c0bce2
+Merge: 2497284 f388faf
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Wed Sep 22 14:35:21 2010 -0700
+
+    Merge branch 'master' of cline@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 413f71bef4f53ba289bdcb4fe4a1c33c41bdbff2
+Merge: 9fe1347 fa1f124
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Sep 22 10:12:07 2010 -0700
+
+    Merge branch 'master' of vsmalladi@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 9fe134751696f6a4671c633f1323bdb50c1e74e3
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Sep 22 10:11:58 2010 -0700
+
+    Added validation link information for E2F1 and HA-E2F1 targets
+
+commit 23fa7405495b4be66422b784b41092fadacc52cf
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Sep 21 14:47:55 2010 -0700
+
+    changed treatment for AMA
+
+commit 9714c272f2a85ccf0dd5654dadaac1fadd01e733
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Sep 21 11:58:01 2010 -0700
+
+    Cluster was a tag not term
+
+commit f8fd2a1ce4eec49d61b756007d2aca57a583809f
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Sep 21 11:53:30 2010 -0700
+
+    added treatment AMA50ug9h
+
+commit a6ba375b1a6e2ab7ffa444b0fb2e67a39772f168
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Sep 21 10:52:24 2010 -0700
+
+    added clusters to dataType
+
+commit ee51117be7b7548c280598c67721d236280698c9
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Mon Sep 20 16:50:32 2010 -0700
+
+    changed DGF to DNaseDgf
+
+commit 7e5c744e5fd10dd50050e8373c73c14ed69ac812
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Mon Sep 20 15:30:32 2010 -0700
+
+    Redid type dataType: draft 2
+
+commit 24972849ffa13ec1596025a8e5f9573a6b0acf70
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Thu Sep 16 18:34:28 2010 -0700
+
+    Replaced a bunch of 'validation RipChip' lines with blank validation lines, to not lead to broken links
+
+commit b52a30c51f11e8a46ba05c075202bdc0d9c36ead
+Merge: 613538d 6273af1
+Author: Kate Rosenbloom <kate@soe.ucsc.edu>
+Date:   Wed Sep 15 14:30:09 2010 -0700
+
+    Merge branch 'master' of kate@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 6f5c33969e145120591f3a46b24eb40748e508c8
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Tue Sep 14 16:38:54 2010 -0700
+
+    Added new Hardison lab antibodies and validation documents
+
+commit 1ba20cdef8b2d7d415d6193efc4fab05346a95d3
+Merge: 78d4baa b9d4766
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Tue Sep 14 16:07:12 2010 -0700
+
+    Merge branch 'master' of cline@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 11c35c5d942f1cc9bcf0893a740121f1ac1b96f9
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Sep 14 13:45:15 2010 -0700
+
+    remove the rnaExtract terms that were not used at Carrie Davis request
+
+commit 31eab8dbd644e84529b4b14f0d101105734b1a32
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Mon Sep 13 18:39:13 2010 -0700
+
+    Renamed the term G1E_ER4+E2 to G1E-ER4+E2
+
+commit d1d13230750904a52954dca577dec126a5915b2e
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Sep 13 11:17:56 2010 -0700
+
+    Shortened tag for BoneMarrow to BMarrow to fit table name of 64 characters.
+
+commit 9e698c02a37eb7a785d8e6f31ea6b18f9be82c94
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Sep 13 10:31:27 2010 -0700
+
+    Updated registration term names for GATA2_(CG2-96) and LEF1_(C-19) to be consistent with ncbi naming of the genes. Also updated antibody document link to specify Myers lab for ATF3 antibody
+
+commit 9de5ff509788645e793b966d43cbae0068604e80
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Thu Sep 9 16:19:22 2010 -0700
+
+    Added 4 new antibody validation document refrences and 3 new antibodies (BCLAF1(M33-P5B11), ATF3, GATA-2(CG2-96) and LEF-1(C-19)) for the Myers lab.
+
+commit f5e48f4dd251c01bff35be884a7abcdd1fa822da
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Sep 8 15:51:26 2010 -0700
+
+    Updated validation document nameing, so that links to documents would work. Also sperated two antibodies for target YY1
+
+commit 59c077c7f0b48825975919c4b617f2a8a3e19455
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Tue Sep 7 13:34:53 2010 -0700
+
+    Updated Tier information for H1-hESC and NHEK cell lines. Upgraded H1-hESC to tier 1 and downgraded NHEK to tier 3
+
+commit c1206fe33c1a69197e0425df82143beea703d152
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Tue Sep 7 10:14:15 2010 -0700
+
+    Added Genome Analyzer II, which is the precursor to IIe and IIx.
+
+commit 1f1815551817df4ab4a49b39c5d0b28234049738
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Sep 3 11:40:30 2010 -0700
+
+    Added Antibody for NF-E2, using different term and tag name. Utilizing targert as well.
+
+commit 3512adaa73e14c6ba637fe892fe30c20beb85737
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Thu Sep 2 17:19:42 2010 -0700
+
+    Fixed typo's in ra structure and variable names
+
+commit 45dda3705d46d3d0b85fef94467956e8a44b7d05
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Wed Sep 1 16:58:22 2010 -0700
+
+    fixed a # typo
+
+commit bbc95eb577b5cc18541095ed99c38f58bc2f5567
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Wed Sep 1 16:42:26 2010 -0700
+
+    added urls for ripAntibodies
+
+commit e6cc95673625edb75d355e0a014d32c62e9728a5
+Merge: 5e8fd8b bec8f2b
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Wed Sep 1 10:43:59 2010 -0700
+
+    Merge branch 'master' of cricket@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit cea6eada4c40c66fba39871187f3ebe48a0b3172
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Sep 1 10:41:32 2010 -0700
+
+    Fixed cv.ra with tag's with no term and a ? in front of term
+
+commit 5e8fd8b8ec7b2e95294a2dc100f3462523664fcd
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Aug 31 17:21:04 2010 -0700
+
+     added grants to the cv.ra
+
+commit a9dd7f5ce376914b750435c69abb3884d960a610
+Merge: bdaefd6 136b503
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Aug 31 16:32:23 2010 -0700
+
+    trying to fix conflict
+
+commit bdaefd6a7cc1470aa0fa42fdd120b37cda90c782
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Aug 31 16:11:44 2010 -0700
+
+    added targets for all antibodies, commented on any that were not in metaDb
+
+commit e4a2ab7a45fe26c650a3f53b5812c73ca99b1c07
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Tue Aug 31 12:27:47 2010 -0700
+
+    Added a provisional cell type entry for PBDE
+
+commit 5df86e71757c0bc7f9f382c4640881cc3218d9b1
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Tue Aug 31 10:55:31 2010 -0700
+
+    Updated Antibody validation document naming and links.
+
+commit ee6a580f344c46096cd46573142af0f53ab6ea0e
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Mon Aug 30 14:09:44 2010 -0700
+
+    The ripAntibody table is no more
+
+commit 0fad2657965b08a7323d7ca0a6af53ddbe4d14ee
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Aug 27 14:54:59 2010 -0700
+
+    Added valdiation document and antibody order url for YY1
+
+commit acae74779bfea5704e515e967faba3d1a05a7f12
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Aug 26 08:26:36 2010 -0700
+
+    Added RNA extract terms for Yale
+
+commit ad55725f8deeafb2dc6aeecdf1d3beed0783a8f5
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Aug 24 20:48:27 2010 -0700
+
+    This cv.ra has lab with projectName, note I think that matching tags is going to break this, and I did not spearate into grant and lab because Broad would break it as Broad is both a grant and a lab and in the cv, it can not be both
+
+commit 613538dcaf2364f96f3d26053fbd7974024ac1d9
+Merge: 456615d 914f65b
+Author: Kate Rosenbloom <kate@soe.ucsc.edu>
+Date:   Mon Aug 23 15:45:02 2010 -0700
+
+    Merge branch 'master' of kate@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit f74d7d37d4aec889550ff38d8f2a625f8af54559
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Aug 19 15:53:46 2010 -0700
+
+    this has the ripChip Antibodies as Antibodies but commented out until we are ready to make the change
+
+commit cba344a00772ea57f1cda3d0b8c372f136764b88
+Merge: 38ea9b6 3eeb362
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Aug 19 11:48:26 2010 -0700
+
+    The first draft of merging pi.ra with cv.ra
+    
+    Merge branch 'UCV'
+
+commit 3eeb3621896644d37660aa63afad2e3277d09138
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Aug 19 11:45:52 2010 -0700
+
+    First draft of adding pi.ra to the cv.ra
+
+commit 94c22fcf2e0957c7af3f506dd797cf637265e559
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Aug 13 13:36:13 2010 -0700
+
+    Updated Treatment Androgen and Estrogen with appropriate description. Changed display matrix labels of treatments for tracks.
+
+commit 456615d8f608dad6ddb9d0d3c5522bb0015441e5
+Author: Kate Rosenbloom <kate@soe.ucsc.edu>
+Date:   Wed Aug 11 16:18:51 2010 -0700
+
+    Minor tweaks to labels for NHGRI reporting
+
+commit 3521370914197fa7fe08ffbbd07d698697e5cc33
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Aug 9 14:50:25 2010 -0700
+
+    Updated SeqPlatform descriptions
+
+commit 10e281c1c03f9574e0c3551250af66467faffe33
+Merge: 89ef435 b72936b
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Aug 6 14:50:00 2010 -0700
+
+    Merge branch 'master' of vsmalladi@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 89ef435e631db9659d9ece4dfdfa720580094d71
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Aug 6 14:49:41 2010 -0700
+
+    Commented out documents, so that mouse cv can be released while documents can be released  when a standard can be determined or mouse tracks are released.
+
+commit 92a2b1ef7e04a1c74d23eded604d75d3fa123899
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Fri Aug 6 13:33:05 2010 -0700
+
+    Added first draft of pi.ra and cleaned up DataType
+
+commit dd9e56b2be53173be89d12e9bf943f705e415447
+Merge: b6d91a9 2c32b1e
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Aug 5 08:47:03 2010 -0700
+
+    Merge branch 'master' of cricket@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 2173d33549b2e8f76bc7d4d1227b28562f8bbb6e
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Aug 4 18:04:33 2010 -0700
+
+    Updated Description typo in Fibroblast and termId and termUrl for WholeBrain
+
+commit e3a0c9e08c29a83a03d3fa10b9acee2534a829be
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Wed Aug 4 16:57:48 2010 -0700
+
+    first draft of adding pi.ra to cv.ra
+
+commit 3b9a3565f27e423a97c3f160a9f610dc57da24f3
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Wed Aug 4 15:44:02 2010 -0700
+
+    These are changed to accomodate ripTgtProtiens while we still have them and to make sure that there is a vendorId for every vendoerName in the cv.ra
+
+commit 9eba28f1cf01590350ca690b258b4734916b0c40
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Aug 4 12:56:55 2010 -0700
+
+    Added rought descriptions for seqPlatforms, need to verify exact descriptions.
+
+commit e6a7edca9e36f50b749db48dcf663c422c4ae46c
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Aug 2 15:40:33 2010 -0700
+
+    Fixed two typos in terms for mouse cell lines (3143 should be 3134 and Cerebrumm should be Cerebrum).
+
+commit fa89b4d1b722602ae850962e8699ceb4b258673f
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Jul 28 16:29:53 2010 -0700
+
+    Added age E0 to the age for embryonic stem cell age
+
+commit 3905606cbb38a0960c2e59fd07c6b3a501c51a6e
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Wed Jul 28 15:25:01 2010 -0700
+
+    Updated mouse registered Cell lines registered by UW lab
+
+commit dfc6c9e30aac71d0b166d4f3300f8eeea8fe4baf
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Jul 26 15:01:39 2010 -0700
+
+    Updated type of termP to term
+
+commit 68fac088bffa52f7e3217f2790df4feff9bbebac
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Jul 26 14:41:05 2010 -0700
+
+    Added 22 cell lines from UW.
+
+commit c67f3745398271e83f76f5454f4d9009186e30fb
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Jul 26 09:45:41 2010 -0700
+
+    Fixed description for TAM treamtent for quantity of 2uM to 1 uM.
+
+commit 7d82d8442e76b62887b6fce76a6d6e2f0bc1024b
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Jul 26 09:17:43 2010 -0700
+
+     Added 1 new treatment tamoxifen for Myers lab
+
+commit c7b0e51932e047193782162e35fbc5e9798a9c3f
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Jul 26 09:10:30 2010 -0700
+
+    Remvoed orderUrl for GM12878 registered cell lines, not applicable
+
+commit 23af99a04dc22f839894dd47bddcd255b5038244
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Mon Jul 26 09:04:54 2010 -0700
+
+    Added 4 new cell lines for X-inactivation in GM12878 cell lines registered by the Myers lab
+
+commit aa751f5d30d4fb72690cd26c6e4fa3e3ed5e69c1
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Tue Jul 20 15:05:14 2010 -0700
+
+    Updated the Mouse cell type controlled vocabulary to be consistent with what was registered as well as update the CGIs to display the correct headers for mouse Cell Type
+
+commit e414939fa196e675d407a6ad0577462a7f269372
+Merge: 7597da3 cfac70b
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Fri Jul 16 09:57:11 2010 -0700
+
+    Merge branch 'master' of cricket@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 7597da39b16483a73d8800cc0ac394f16bf81091
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Fri Jul 16 09:55:59 2010 -0700
+
+    Adding the new caltech-RNA seq tracks and fixing cv.ra to comment out ripTgtProtiens until we are ready
+
+commit 70294a048f471b3ee53f63789b02322596197ea0
+Author: Tim Dreszer <tdreszer@soe.ucsc.edu>
+Date:   Wed Jul 14 11:41:35 2010 -0700
+
+    NH-A is no longer provisional
+
+commit 0655b69609088a6fd7cb5cc39f78813bc2c525ec
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Jul 13 16:52:17 2010 -0700
+
+    Changed all references to Yale_TFSB to Yale_TFBS
+
+commit b1813d80821643305b62b0604c479a22fb1f85ee
+Merge: df462dc 072e436
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Jul 13 16:47:21 2010 -0700
+
+    Merge branch 'master' of cricket@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 489f78ad80117570c6ebf6fa3ce7388f3b717925
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Tue Jul 13 16:33:02 2010 -0700
+
+     Added 1 submission 1623 to SYDH TFBS Track
+
+commit 43e8ca8865f0316e629c3c8f1d7cf74e3cdf329b
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Tue Jul 13 15:11:30 2010 -0700
+
+    Added growth protocol to protocols
+
+commit cc675c7d55041d7ddc40665e8d6231328c68876c
+Author: Tim Dreszer <tdreszer@soe.ucsc.edu>
+Date:   Tue Jul 13 14:13:40 2010 -0700
+
+    Provisionally added NH-A to finish Broad's pre-AWG meeting submissions
+
+commit 7b514b86ee40f5d2ad82e4e1cc38409f5de61cdb
+Merge: f4efca5 0acbbdc
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Mon Jul 12 15:49:53 2010 -0700
+
+    Merge branch 'master' of cricket@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 0acbbdce85b900731876343409c968957eac3ba6
+Author: Kate Rosenbloom <kate@soe.ucsc.edu>
+Date:   Mon Jul 12 15:37:03 2010 -0700
+
+    Adding geo terms for seqPlatform entries and making the term tag more concise
+
+commit d7f23ba2d5782485e5449bb8f69b78f5ddf7a1b4
+Merge: 7522df2 76e41fc
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Fri Jul 9 11:44:25 2010 -0700
+
+    Merge branch 'master' of cricket@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 8fdd534818443a0c4c83ed4666a94af5266c93db
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Jul 9 11:26:42 2010 -0700
+
+     Add category =L cell Line for mouse cell MEL
+
+commit 49d98b88d0226e4512d30496bcb7bb095c573925
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Jul 9 11:23:50 2010 -0700
+
+     Accidently used number 0 instead of O when registering DMSO_2.0pct
+
+commit d5600e701fe1594c869232db7e46c4966cd94f26
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Jul 9 09:51:44 2010 -0700
+
+    Updated 5 cell lines that were missing tier designations
+
+commit 7522df2c65cb1d8c52ba7f6ed29f164e8f6ff1fb
+Author: Cricket Sloan <cricket@soe.ucsc.edu>
+Date:   Thu Jul 8 17:44:45 2010 -0700
+
+    This is the attempt at replacing ripTgtProtien with Antibody.  I have most of the work done, but it doesn't work with encodeVocab
+
+commit cf9161c74c63e3864cd2bc0f30bbf5bb3d985e94
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Thu Jul 8 16:19:27 2010 -0700
+
+     Added new treatment DMSO_2.0pct
+
+commit 09ed8bfa0f203ecb818143c81c1f1bf997a4ddb1
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Thu Jul 8 14:29:03 2010 -0700
+
+    Added new seqPlatform variable to cv.ra and fields.ra to check seqencing platform information for GEO submissions
+
+commit 3f95eaa01c0fc04abbd7f85f9cf01f2f88888630
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Thu Jul 8 14:27:36 2010 -0700
+
+    Updated hgEncodeVocab to find path for the valdiation documents for the antibodies now mentioned in cv.ra
+
+commit 2f22010006239682ab132797f024ba8fe800bdaf
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Tue Jul 6 15:06:55 2010 -0700
+
+     Commented out the validation lines that include file names for 2 antibodies
+
+commit a273d80e7d9747a56dc8106243bdc9eef5b5c06b
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Jul 2 15:12:14 2010 -0700
+
+    Changed nm to nM for 2 treatments Estradiol_10nm and Genistein_100nm to register them correctly.
+
+commit 1f96bdb38f1aa982a2356b4a8f4036d47edc9ee8
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Jul 2 15:08:23 2010 -0700
+
+     Added 7 treatments registered by the Hudson Alpha (Myers) lab
+
+commit 9c8b6f4047511f8a093952702231e17e4d43b239
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Jul 2 12:42:20 2010 -0700
+
+    Added document names for the validation documents provided for Antibodies
+
+commit b801caac44e463c8edbaf9200f8f858b9987d286
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Fri Jul 2 12:15:14 2010 -0700
+
+    Added 3 new antibodies, 2 with validation documents. Antibodies added: Pol2(phosphoS2),ETS1,MEF2A
+
+commit 4b112d95a8ed3f10d24a63750933c64f83a6597d
+Merge: 69dbdc0 e58a31f
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Thu Jul 1 14:53:37 2010 -0700
+
+    Merge branch 'master' of hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 3ba06b788f1010f80ae6e51b5326d5f794f93656
+Author: Kate Rosenbloom <kate@soe.ucsc.edu>
+Date:   Wed Jun 30 16:49:29 2010 -0700
+
+    Remove special chars from tags.  Minor tweaks for consistency (e.g. caps)
+
+commit fe5c9a0b0980a1893d6bbf70ebdc0f53edc79e55
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Tue Jun 29 14:05:52 2010 -0700
+
+    Updated the sex of MEL (mouse) to U, unidentified as we do not know this sex at the moment.
+
+commit 1dd3274609a365617b24ebe59439addab618663b
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Fri Jun 25 17:56:54 2010 -0700
+
+    A few more minor fixes from Katrina
+
+commit 264574d592b9f116fb965beea81e8285baaf772a
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Wed Jun 23 16:50:10 2010 -0700
+
+    incorporating feedback from Katrina and from review
+
+commit 06be10dc9a809e92d82e2be00e58df79b6407670
+Merge: 85546fa 7fd9ee9
+Author: Brian Raney <braney@soe.ucsc.edu>
+Date:   Tue Jun 22 15:48:45 2010 -0700
+
+    Merge branch 'master' of braney@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit c65ee6c705a6bfa03c5acf5a529ef2a04abea24b
+Author: Brian Raney <braney@soe.ucsc.edu>
+Date:   Tue Jun 22 15:34:41 2010 -0700
+
+    fix typo
+
+commit bb5fe7eb32b2230f201902f950cf524e216aaf53
+Author: Tim Dreszer <tdreszer@soe.ucsc.edu>
+Date:   Tue Jun 22 11:56:30 2010 -0700
+
+    Filled out details for 2 antibodies for Broad
+
+commit c522511d920a2633d4a254a411acf9411d760d2e
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Mon Jun 21 17:12:20 2010 -0700
+
+    Added new mouse cell types
+
+commit b69b3099c094db621f13bc1457d7f6e0ae4b14f7
+Author: Tim Dreszer <tdreszer@soe.ucsc.edu>
+Date:   Mon Jun 21 13:03:17 2010 -0700
+
+    Did I say 76.  No it is H3K479me2
+
+commit 360b7d4071aff38581b547414fa88d288f5f523e
+Author: Tim Dreszer <tdreszer@soe.ucsc.edu>
+Date:   Mon Jun 21 13:00:19 2010 -0700
+
+    Added 2 antibodies provisionally
+
+commit f3cffc7917dd3e275cb4aed10a121929bdc9072e
+Author: Tim Dreszer <tdreszer@soe.ucsc.edu>
+Date:   Fri Jun 18 16:07:24 2010 -0700
+
+    CKM is male, not female
+
+commit 2bb11e279db8b3f64fd929319944219f6a8695c0
+Author: Brian Raney <braney@soe.ucsc.edu>
+Date:   Fri Jun 18 11:52:35 2010 -0700
+
+    try this again, add ilNA field
+
+commit 377b5bcb24a157093ac26c0b643eb65143be30c0
+Author: Brian Raney <braney@soe.ucsc.edu>
+Date:   Fri Jun 18 11:35:22 2010 -0700
+
+    take out NA for insert length since it was interfering with NA for mapAlgorithm
+
+commit 5a0ac2018b73e594f5140f5b3463333fff073209
+Author: Venkat Malladi <vsmalladi@soe.ucsc.edu>
+Date:   Thu Jun 17 10:11:48 2010 -0700
+
+    Changed Sex of LHSR cell line from F to M to be accurate according to OpenChrom Labs
+
+commit ff5bd7b8ddcaa73d2ef565f97a11e84f93491cef
+Author: Brian Raney <braney@soe.ucsc.edu>
+Date:   Wed Jun 16 16:18:26 2010 -0700
+
+    added some words for Wold. New insert lengths and a code for TopHat as aligner
+
+commit 24babbb660402caa1322291bf0b48c46845fa9cf
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Mon Jun 14 17:48:49 2010 -0700
+
+    Documented most stanza types
+
+commit 22bd1a900202a28eb5983bf4df81f6e6d004fc77
+Merge: 2b44648 9f3b2f0
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Mon Jun 14 12:33:08 2010 -0700
+
+    Merge branch 'master' of cline@hgwdev.cse.ucsc.edu:/data/git/kent
+
+commit 2b446481045ab61911b109b9ad038d9c103d887e
+Author: Melissa Cline <cline@soe.ucsc.edu>
+Date:   Mon Jun 14 12:24:56 2010 -0700
+
+    Added a header comment block describing the tissue type section
+
+commit 9f3b2f053f8f2b5fb8f752cc79ccca29885e9e5d
+Author: Venkat Malladi <color.branch>
+Date:   Mon Jun 14 12:19:33 2010 -0700
+
+    Added line validatio missing to cv.ra
+
+commit 6b10e99653778d257c704c09a567c6c211ffab60
+Author: Venkat Malladi <color.branch>
+Date:   Mon Jun 14 12:09:23 2010 -0700
+
+    Added Antibody STAT3 from Snyder lab to cv.ra
+
+commit f88ea54b20d0561a5d89fe8cea1c7dd25ae80921
+Author: cline <cline>
+Date:   Mon Jun 7 21:02:41 2010 +0000
+
+    Fixed the protocol names for ECC1 and T47D
+
+commit d17a4c8010caf04e0b70c87c7a55be0a5bd61e8b
+Author: cline <cline>
+Date:   Mon Jun 7 21:00:21 2010 +0000
+
+    Added a few more fiends for ECC1 and T47D
+
+commit e017aabd30b494864fe0ef75f6f3abbfbb06a2c9
+Author: tdreszer <tdreszer>
+Date:   Fri Jun 4 18:09:37 2010 +0000
+
+    Put them in order.
+
+commit caede43316d216cf8fa58ccf5571486c6d898b7e
+Author: tdreszer <tdreszer>
+Date:   Fri Jun 4 18:08:05 2010 +0000
+
+    Added 2 approved cell lines for HAIB
+
+commit 32521f546814b9ff3de360364a73a5b7beae2b96
+Author: cricket <cricket>
+Date:   Thu Jun 3 22:59:34 2010 +0000
+
+    dded ripInput to the ripTgtProtien table
+
+commit 96030cdfc6325d9873bbf760a0ed8c048b7ba889
+Author: tdreszer <tdreszer>
+Date:   Thu Jun 3 19:39:11 2010 +0000
+
+    Removed the duplicate 'None' term from ripTgtProtein
+
+commit dbad8a68fb9ece03d313ba9874adef0cfd2acd8c
+Author: vsmalladi <vsmalladi>
+Date:   Thu Jun 3 17:50:46 2010 +0000
+
+    For term AP-2gamma: changed santibodyDescription -> antibodyDescription to be consistent with all other entries
+
+commit 523c463c06813b61a747b1d7e7749c39dcd8af35
+Author: cline <cline>
+Date:   Thu Jun 3 03:18:01 2010 +0000
+
+    Added mouse vocabularies including sex and age
+
+commit 39f3ed8bc9e320c0c4da55bd81b5f8d0e7294609
+Author: cline <cline>
+Date:   Tue Jun 1 02:50:47 2010 +0000
+
+    Added U2OS to the Tier 3 human cell types
+
+commit 89ede50f480b6a0d702fbbf2052eaaeec1464934
+Author: cricket <cricket>
+Date:   Sat May 29 02:25:14 2010 +0000
+
+    Try that one more time.  Removed Input from ripAntibodies and put None in ripProteins.
+
+commit 0040a174366a8fc9c317387be004094290295d9f
+Author: cricket <cricket>
+Date:   Sat May 29 02:20:57 2010 +0000
+
+    Removed the Input in ripAntibodies and was able to do this better
+
+commit ecd12c6b1c94cd8e70ff5da68642c623a9010952
+Author: cricket <cricket>
+Date:   Sat May 29 01:49:57 2010 +0000
+
+    I entered an Input type for the ripAntibodies, so that we could validate over the weekend.  This should be removed and done the same way that Antibodies is.
+
+commit 07dfea88f4246a1a6aed1ced6a15f22e5d5af94c
+Author: cricket <cricket>
+Date:   Fri May 28 23:37:28 2010 +0000
+
+    added more ripAntibodies
+
+commit 0058dfb2d3a99393f8bc0e7bb0dcd40a7fc1bfbc
+Author: cricket <cricket>
+Date:   Fri May 28 20:51:00 2010 +0000
+
+    Moved CELF1 from ripAntibodies table to ripTargetProtien
+
+commit fae217d5e4530d00f9f5aa18091370a1821b53c0
+Author: vsmalladi <vsmalladi>
+Date:   Thu May 27 17:15:58 2010 +0000
+
+    Registered New Cell Line: Raji with provided protocol from SYDH (Farnham).
+
+commit 8636846fdda3f2569e28ff26fd89d64eb4b6e9db
+Author: tdreszer <tdreszer>
+Date:   Wed May 26 20:10:56 2010 +0000
+
+    A lot of 'organism Human' lines were missing from cells
+
+commit 2a658ded03b77332beefbef7c293427f79ae6d57
+Author: cline <cline>
+Date:   Mon May 24 18:57:44 2010 +0000
+
+    Added tissue types for cell types
+
+commit 013b30b7f611be6195a816f1bb30d222fc38e244
+Author: kate <kate>
+Date:   Thu May 13 17:43:31 2010 +0000
+
+    Flip mouse cell color to match human analog (k562)
+
+commit 5013ea5b343ebff861404154f4c4fd43cbae376a
+Author: krish <krish>
+Date:   Mon May 10 20:24:28 2010 +0000
+
+    added missing organisms
+
+commit 858b78f45b6bc41ddc5e9fb36dd6dd048c732a63
+Author: tdreszer <tdreszer>
+Date:   Tue May 4 17:08:52 2010 +0000
+
+    Added 2 new protocols for HAIB TFBS
+
+commit 40be69015adb9109aa3e56d426855329021c4434
+Author: tdreszer <tdreszer>
+Date:   Fri Apr 30 15:25:54 2010 +0000
+
+    Forgot to check this one in for Farnham
+
+commit 66cc62f44a3b0e55de06de8354f3071a4151f1a3
+Author: vsmalladi <vsmalladi>
+Date:   Wed Apr 28 20:59:18 2010 +0000
+
+    IRF-1 to IRF1
+
+commit fb9b37ba6aad3861ea2a3e25af430d9e63a6bb41
+Author: cline <cline>
+Date:   Wed Apr 28 18:11:11 2010 +0000
+
+    Moved the Ccnt2 antibody entry to uppercase (CCNT2)
+
+commit a99e3221acbfb3202647d31389fb1dabf757f70f
+Author: cline <cline>
+Date:   Wed Apr 28 01:18:47 2010 +0000
+
+    Addd the missing targetId and targetUrl for TFIIB.
+
+commit e18eab8d2b1bec6af1deef15bda658ef8b8bf8f2
+Author: cline <cline>
+Date:   Wed Apr 28 01:14:09 2010 +0000
+
+    Added antibodies ERalpha(a) and ERalpha(b).  Removed some extraneous
+    whitespace on the targetId line for TFIIB.
+
+commit 66a9030ee203696c2d746238b239e40c40d3aae6
+Author: cline <cline>
+Date:   Mon Apr 26 20:20:17 2010 +0000
+
+    Added some new antibodies
+
+commit 0b5f2da7d3b4496719969863a2c6cea2e158bf45
+Author: tdreszer <tdreszer>
+Date:   Thu Apr 22 20:58:16 2010 +0000
+
+    Demoted 'input' to 'control'
+
+commit 9ecd67277cbc4e76d0135779c4ea193fa071bb78
+Author: braney <braney>
+Date:   Thu Apr 15 15:50:40 2010 +0000
+
+    make H1-hESC into male.  Poof!
+
+commit 69731afa5e66003fbcf9577ed56692bdc7da4cb0
+Author: cline <cline>
+Date:   Wed Apr 14 23:36:11 2010 +0000
+
+    Added a displayName entry for the cases where there are two or more entities of the same class, and the term field (which has to be unique) cannot represent both entities accurately.
+
+commit 39e8e697d75fb572a0d9cf6f7687eabe75536c04
+Author: cline <cline>
+Date:   Wed Apr 14 23:10:33 2010 +0000
+
+    Added antibody H3K9acB
+
+commit 82dd79aff88645a6b53fbfb4c5225e551784b400
+Author: cline <cline>
+Date:   Mon Apr 12 19:15:17 2010 +0000
+
+    Added antibodies H3K4me3B, H3K27me3B, H3K36me3B, IRF3, TBP, and USF2
+
+commit 09a2b0dc627c023676a7f97671ee82716c7d9233
+Author: cline <cline>
+Date:   Thu Apr 8 18:43:21 2010 +0000
+
+    Changed the vendor ID and link for the PABP1 rip antibody, due to the vendor
+    discontinuing the old product
+
+commit cfd4f18b1d834edbabc24c12bf31cd3ba500d5ec
+Author: cline <cline>
+Date:   Wed Apr 7 23:22:08 2010 +0000
+
+    Added a whole slew of RIP antibodies
+
+commit 0c2b55ba4fd979341ae18a0a0574060de12bced1
+Author: cline <cline>
+Date:   Mon Apr 5 21:33:41 2010 +0000
+
+    Revised the description of the UC Davis input, according to a request from
+    the UC Davis folks
+
+commit e03e47c7a5a892d92892cbb3d0f2b1eb53fd4bde
+Author: braney <braney>
+Date:   Mon Apr 5 20:17:38 2010 +0000
+
+    add 20k fragment size
+
+commit 7b228ea6053c69f612d442a386673b3274c4b5bb
+Author: cline <cline>
+Date:   Mon Apr 5 19:24:41 2010 +0000
+
+    Added two antibodies: ELK4 and IRF-1.
+
+commit 1e36a8ec71f1daa29ec0dda6991732c33030679b
+Author: cline <cline>
+Date:   Fri Mar 26 01:39:35 2010 +0000
+
+    Changed the sex of CH12 to U.
+
+commit 45ddc8223222071f8d4e86b63b37afe84a87834a
+Author: cline <cline>
+Date:   Thu Mar 25 00:02:35 2010 +0000
+
+    Re-added CH12
+
+commit 1a4860868ce74f129361e2c1cfe8263cab94a4b6
+Author: cline <cline>
+Date:   Wed Mar 24 23:57:47 2010 +0000
+
+    Adding CH12, provisionally
+
+commit 0ebbe2fe5cb68bd5226f04e48e51b3c1dd09d87c
+Author: tdreszer <tdreszer>
+Date:   Wed Mar 24 20:37:05 2010 +0000
+
+    Added missing JunD description and antibody validation document variable
+
+commit 09fde0a38b8cca9ff4f59034120017b41a169ee6
+Author: cline <cline>
+Date:   Tue Mar 23 20:59:09 2010 +0000
+
+    Corrected the BTO URL for MDA-MB-231
+
+commit b181e5dadfd8cc606c82f3a6a1cdbb2de2dfc36e
+Author: cline <cline>
+Date:   Tue Mar 23 00:11:01 2010 +0000
+
+    Added 5 new cell lines to cv.ra.
+
+commit dcd9e0740f1377a213d22b34997b489aee8dbc95
+Author: tdreszer <tdreszer>
+Date:   Fri Mar 5 22:06:39 2010 +0000
+
+    Moved certain terms from 'Control' to explicitly 'input'
+
+commit c9a21e6ad37328954a3eed161c5ee8c5a416854c
+Author: cline <cline>
+Date:   Fri Feb 12 23:08:31 2010 +0000
+
+    Temporarily commented out MCF-10A.
+
+commit 28bf13940e6618b0d337c6b21eeeeee23235a7dd
+Author: cline <cline>
+Date:   Fri Feb 12 18:58:19 2010 +0000
+
+    Added the MCF-10A cll type
+
+commit f10c301583f6312727493cfc3637fdc14085d416
+Author: tdreszer <tdreszer>
+Date:   Wed Feb 10 20:52:05 2010 +0000
+
+    And one more time
+
+commit 4115d49463ca9053964ac70575bdd695c1d9af64
+Author: tdreszer <tdreszer>
+Date:   Wed Feb 10 20:49:47 2010 +0000
+
+    More protocol naming adjustments
+
+commit b7a189c1198c35216403ad522b3ce88596aeeabf
+Author: tdreszer <tdreszer>
+Date:   Wed Feb 10 20:43:55 2010 +0000
+
+    Made protocols more specific to groups.  This is the only identification of a cell line to a praticular group
+
+commit 5d0865790ea3ef0fd026d77ee137095c0b2a2d19
+Author: tdreszer <tdreszer>
+Date:   Wed Feb 10 20:18:09 2010 +0000
+
+    Marking prostate cell line as provisional since we have no approved protocol
+
+commit 2af3784511609ddd7e1ba5b073e0121b054222a5
+Author: tdreszer <tdreszer>
+Date:   Wed Feb 10 20:11:13 2010 +0000
+
+    Three cell lines for Crawford's group are no longer provisional.
+
+commit d09b2d90319d1dadac9ea95b18cdbdf356657a63
+Author: cline <cline>
+Date:   Thu Feb 4 01:48:57 2010 +0000
+
+    Changed the sex of the human cell lines from Male to Unknown when there was no obvious gender data available.
+
+commit ca4673e878186d2a82ca5a311498b870f2996bd6
+Author: kate <kate>
+Date:   Tue Feb 2 18:45:11 2010 +0000
+
+    Add label for reporting cosmetics
+
+commit a750685949b17a405fe81c30932cc6d34f8b4f03
+Author: cline <cline>
+Date:   Tue Feb 2 01:56:47 2010 +0000
+
+    Added sex information for the human cell lines.
+
+commit a55ac3ff5672b7984cdeb4647171379352df82f2
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 29 17:51:41 2010 +0000
+
+    Minor adjustments to cell descriptions and officially added UCDavis as control type.  This had been implied for some time.
+
+commit 3c0ace1898848b73bfb4343fc1b3193591e20c41
+Author: kate <kate>
+Date:   Thu Jan 28 01:00:17 2010 +0000
+
+    Unify RNA-seq here for reporting -- will do for trackDb when convenient
+
+commit a4e5db9851dd3d4f86a38913e6ba5a062238129c
+Author: tdreszer <tdreszer>
+Date:   Wed Jan 27 19:20:11 2010 +0000
+
+    Changed Mouse_IgG to IgG-mus and Rabbit_IgG to IgG-rab
+
+commit 5ef5b4f0e4936a3464470831b37261a2ea79915d
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 26 22:04:14 2010 +0000
+
+    pravastatin treatment illucidated by Yale
+
+commit 2fbdd1fa2bdbf21d4a82d1ad3dec8a6cd824f6e6
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 26 20:25:28 2010 +0000
+
+    Adde pravastatin treatment and renamed SREBP1A to SREBP1 for Yale
+
+commit f16e7b0ed8a0a3aadc71372117c682a1bd47b9fa
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 26 20:00:17 2010 +0000
+
+    Some metadata corrections for Yale
+
+commit 8855eae464d6eaf080334888e07e0dfcdbcf1e67
+Author: tdreszer <tdreszer>
+Date:   Sat Jan 16 00:41:40 2010 +0000
+
+    BRF2 is no longer provisional
+
+commit 8cdfcd984c48332592fde28a361d37043ced498f
+Author: tdreszer <tdreszer>
+Date:   Sat Jan 16 00:17:12 2010 +0000
+
+    provisionally added BRF2 for Yale
+
+commit 3483b7f19be34179aea5cbbb59c623c40a52c869
+Author: braney <braney>
+Date:   Fri Jan 15 22:47:26 2010 +0000
+
+    add 1x25 readType and bow10 mapping method
+
+commit a788797754e8560615296e26f1d7032f1526a682
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 15 21:17:17 2010 +0000
+
+    Added TFIIIC antibody for Struhl
+
+commit 19766d6d80369c22a377d7e2301f0736d41152ae
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 15 20:09:36 2010 +0000
+
+    Added antibody, fixed antibody tags and spelled insulin correctly
+
+commit 0263e181a1bbb5dc872df495e66fe4bbe8cbd0f5
+Author: braney <braney>
+Date:   Fri Jan 15 18:21:54 2010 +0000
+
+    add insertLength of 400
+
+commit f6f408f0cfe4866d359b097845bd223982134d03
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 14 23:44:30 2010 +0000
+
+    Finally got the proper description for Nrf1 antibody
+
+commit fca4516679bf4c26a3346112c25388405dd85bfc
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 14 22:23:17 2010 +0000
+
+    Added insolin and forskolin treatments for Snyder
+
+commit 7b83756473c58c0c182678187255c6ac0436286d
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 14 20:36:20 2010 +0000
+
+    Fixed a number of problems with cut and pasted special chars (alpha,gamma,etc.)
+
+commit 69e3f9e4e4915315cf42e4c3ad058cc24c3e8a42
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 14 20:25:40 2010 +0000
+
+    Added 2 new cell lines for HudsonAlpha
+
+commit 51646baa39648929882c6eddafda9a02e7ad9eba
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 14 20:01:05 2010 +0000
+
+    Six cell lines from provisional to approved for Stam lab
+
+commit 1af215b45e17badf88d15002fcd26e7ea790134f
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 14 19:36:06 2010 +0000
+
+    Added 6 new antibodies for Snyder
+
+commit b3725adc745226d8459683d9f90cc03149918497
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 14 18:06:23 2010 +0000
+
+    How many changes is this going to take until it is correct?
+
+commit 0a1caf841dbd13c4ba144184374d7b54df1aeea3
+Author: braney <braney>
+Date:   Thu Jan 14 04:03:50 2010 +0000
+
+    add 1x75D
+
+commit 64b7e883670fd8566653eaf6c93782dd5ba7c580
+Author: tdreszer <tdreszer>
+Date:   Wed Jan 13 21:34:59 2010 +0000
+
+    Nrf1 didn't have a type
+
+commit 0c0a1bd120c6dbdd7db5cbe4f619eb881f71a898
+Author: tdreszer <tdreszer>
+Date:   Wed Jan 13 20:50:29 2010 +0000
+
+    Added Nrf1 as a provisional antibody so that Mike Wilson can get his data in before the freeze
+
+commit f8abd6b22a6e2e1623d7ba0d58d6f2a6760c4938
+Author: tdreszer <tdreszer>
+Date:   Wed Jan 13 00:25:07 2010 +0000
+
+    Added G1 phase for Stam lab
+
+commit a0b2cfd5852fde61aa2c83ccaa6d6c1694f0f194
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 12 20:58:45 2010 +0000
+
+    Change 10 cell lines from provisional to approved
+
+commit 2c17bdb8ccce2576eb5c831188fe862c302f8291
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 12 18:19:47 2010 +0000
+
+    Missed GM12872 in earlier ci fo cells for Stam
+
+commit 9dbf117e4c72243c3d84bd2d9d95274b9991c977
+Author: tdreszer <tdreszer>
+Date:   Mon Jan 11 17:30:58 2010 +0000
+
+    Added 5 new (provisional) cell lines for Stam and 4 new antibodies for Snyder
+
+commit 3ae07a021e86e94db4fa91f87d5f31a795c25575
+Author: tdreszer <tdreszer>
+Date:   Sat Jan 9 00:32:56 2010 +0000
+
+    Added Rabbit_IgG for Snyder
+
+commit 9f99b9d39d6829b87bba84d3a6a71880fc4bdf9e
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 8 18:44:59 2010 +0000
+
+    Changed name of treatment
+
+commit d8aa09d37c18e74390ce0b0b97def99a1ad9aaae
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 8 18:41:05 2010 +0000
+
+    Added 5 new cells (3 provisional), 1 new antibody and 1 new treatment
+
+commit b8254eaff0506bb9708893d4515aa99e9e9abf5a
+Author: tdreszer <tdreszer>
+Date:   Thu Jan 7 23:29:13 2010 +0000
+
+    Removed restrictionEnzyme 'None'.  This should be done by controlled vocab
+
+commit e3cddd8897ac5928700a44b8f3635644b5877b7a
+Author: braney <braney>
+Date:   Wed Jan 6 21:21:30 2010 +0000
+
+    None for restrictionEnzyme.  Some new readTypes
+
+commit ff18e1369b46916fb753bcc900fb36f3b35cda94
+Author: tdreszer <tdreszer>
+Date:   Wed Jan 6 01:02:52 2010 +0000
+
+    Added 4 antibodies for Snyder lab
+
+commit b6738caf65083655c4ded6008cf0ab15c109c593
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 5 00:10:21 2010 +0000
+
+    Added antibody ZNF274 for Snyder lab and reordered a couple of antibodies
+
+commit e9655d875a3cf96f4bce939e5f2488bb0d7d651d
+Author: tdreszer <tdreszer>
+Date:   Mon Jan 4 23:43:18 2010 +0000
+
+    Altered 'pending' cell lines to put '(provisional)' in description.
+
+commit 5d1c8201bf42194f54619e997435966f70d0c1e4
+Author: tdreszer <tdreszer>
+Date:   Mon Jan 4 23:38:22 2010 +0000
+
+    Added 10 provisional cell lines for Stam lab
+
+commit e836565c31b6a9602b850bdb36cdc9be9ae63f35
+Author: braney <braney>
+Date:   Mon Jan 4 20:27:41 2010 +0000
+
+    fix some strings
+
+commit c2a8a8d44770e38c45af9530d5849431fb488c68
+Author: braney <braney>
+Date:   Mon Jan 4 20:12:55 2010 +0000
+
+    change tag for longPolyA
+
+commit 1c3118785cdad6ec89a01b00f0a26b5d32e0f2ec
+Author: tdreszer <tdreszer>
+Date:   Mon Jan 4 19:54:11 2010 +0000
+
+    Added 14 new tier 3 cell lines for Snyder and Stam labs
+
+commit b2c4e9d849cc1f2c2dad662e2f75951bfc7265c1
+Author: braney <braney>
+Date:   Mon Jan 4 19:52:12 2010 +0000
+
+    add 1x75
+
+commit d6a87784d54df6d85aaa55437acc59b0b2898a51
+Author: braney <braney>
+Date:   Mon Jan 4 19:48:26 2010 +0000
+
+    add new maapping protocol
+
+commit 54ff0ffb7101bf2dd814df24342a3f765bb14d5b
+Author: braney <braney>
+Date:   Mon Jan 4 19:42:51 2010 +0000
+
+    add new mapping algorithm BB2
+
+commit fa51c9a011130b26e3ae14dea067a7f4c96667d5
+Author: kate <kate>
+Date:   Sat Dec 26 20:16:10 2009 +0000
+
+    Add datatype for SUNY
+
+commit 0de23d2acf4225783cfec7e84f2a4f15717bed6b
+Author: kate <kate>
+Date:   Sat Dec 26 01:11:08 2009 +0000
+
+    Add CV term for submissions versions (used by reporting)
+
+commit 0eb21e310b22f2c10ff2e6e740a60b56199b7dcc
+Author: kate <kate>
+Date:   Tue Dec 22 06:06:30 2009 +0000
+
+    Add labels and CV of data types, for use in automated reporting
+
+commit 7f0d3a25ae24248a2908b170db63a90ca416a15b
+Author: tdreszer <tdreszer>
+Date:   Tue Dec 15 22:24:27 2009 +0000
+
+    Fix BTO term for myotubes
+
+commit f745ada0bc061e830393cda79560458316b52035
+Author: tdreszer <tdreszer>
+Date:   Tue Dec 15 22:19:53 2009 +0000
+
+    Added 2 cell types for Broad
+
+commit 1526f8802f4d911efea81b49168fb0e2e49ab57a
+Author: tdreszer <tdreszer>
+Date:   Tue Dec 15 00:10:16 2009 +0000
+
+    Shortened more tags because tableNames and sorting
+
+commit 27ad91d2cd64ff0a27552be96c4f8273400f5e9a
+Author: tdreszer <tdreszer>
+Date:   Mon Dec 14 23:41:44 2009 +0000
+
+    Shortened some tags because tableNames are over-flowing
+
+commit 9fd7083a12cf1ca9a9ff6950bb61215d03b5b441
+Author: tdreszer <tdreszer>
+Date:   Fri Dec 11 21:29:43 2009 +0000
+
+    Greg Crawford finds his typo
+
+commit 02f5f433c74ebc6c7d0f415c2c0ee57905047c25
+Author: tdreszer <tdreszer>
+Date:   Fri Dec 11 20:38:46 2009 +0000
+
+    Added one more cell line and updated others for Crawford.  Fixed INFa4h concentration to what Greg specifically requested.
+
+commit f2d77de0d120b1984eeb5e15c82dcbe3bee3e0e1
+Author: tdreszer <tdreszer>
+Date:   Fri Dec 11 18:33:48 2009 +0000
+
+    Added cell lines and treatments for Crawford.  Will need to extend cell line definitions.
+
+commit 92955fd76ed23ceb7ec8b384cc847e170f1e6fc0
+Author: tdreszer <tdreszer>
+Date:   Wed Dec 9 18:03:19 2009 +0000
+
+    Added some treatments and protocols for HAIB
+
+commit a26dcadaba965fb1fe6efb26ca553816555a3665
+Author: tdreszer <tdreszer>
+Date:   Mon Dec 7 17:08:29 2009 +0000
+
+    Switched Gliobla and Medullo
+
+commit 1530a40a5461b3771bbcfb34b099c226cc55d8d4
+Author: kate <kate>
+Date:   Sat Dec 5 00:20:47 2009 +0000
+
+    Add new grants from ARRA (stimulus) and other Mouse ENCODE (LICR)
+
+commit 50055e8a87bc3b305a1d0a2be6231bb0d1f01972
+Author: tdreszer <tdreszer>
+Date:   Thu Dec 3 23:37:26 2009 +0000
+
+    Renamed 6 cell lines by request from Greg Crawford
+
+commit fa26025b1a12a5456490929e2a3d540b588e918d
+Author: kate <kate>
+Date:   Thu Dec 3 22:19:50 2009 +0000
+
+    Add organism setting to Cell Line entries (all existing ones are for Human)
+
+commit e0e41be4a8ef91da9f3ab3677c17dc4ecbf09158
+Author: kate <kate>
+Date:   Thu Dec 3 22:13:22 2009 +0000
+
+    Make targetLink handling symmetric with other links (remove special syntax).  Splits targetLink setting into two -- targetId and targetUrl
+
+commit f34f15466a85146636564fe55515696f8fc6263b
+Author: braney <braney>
+Date:   Thu Dec 3 17:54:13 2009 +0000
+
+    add some words to the definition of total
+
+commit c58288177907395e4609c146b5031f45a7b418c1
+Author: tdreszer <tdreszer>
+Date:   Thu Nov 26 02:10:12 2009 +0000
+
+    Added 5 more antibodies for Myers
+
+commit 2c9b3e758c0455eb0dfea8c6679b939d89f61d69
+Author: tdreszer <tdreszer>
+Date:   Thu Nov 26 01:33:32 2009 +0000
+
+    Added BCL11A, BCL3 and BHLHE40 for Myers
+
+commit 8e0f727c20cd71fbc86664d5c8480c0392bc9fc0
+Author: kate <kate>
+Date:   Wed Nov 25 21:17:41 2009 +0000
+
+    Add color (green) to H1 es cells
+
+commit 45fc151ab58ff26079e0f9b807b23bfd84b51159
+Author: kate <kate>
+Date:   Wed Nov 25 01:17:12 2009 +0000
+
+    Add tags field (unique, no special chars, alpha start) to each entry
+
+commit 896c1e8e1ee3d01004a85934b2b8d48a44fdb3b2
+Author: tdreszer <tdreszer>
+Date:   Thu Nov 5 18:08:18 2009 +0000
+
+    Added MCF-7 protocol for Farnham and removed the obsolete HA antibody listing
+
+commit 80028a7dc9f900a79e0c5303b741a6d3c9fe84ba
+Author: tdreszer <tdreszer>
+Date:   Fri Oct 23 16:56:37 2009 +0000
+
+    Vendor for H3K4me3 has changed.
+
+commit d1e47db1cfd05f42606682c6bb9843119eee957c
+Author: tdreszer <tdreszer>
+Date:   Thu Oct 22 17:21:49 2009 +0000
+
+    Change BAFT to BATF
+
+commit f91c3c5d8d7a19491f97be9bcd37c1a11810d510
+Author: tdreszer <tdreszer>
+Date:   Thu Oct 22 17:02:23 2009 +0000
+
+    Added 10 new antibodies for Myers and one for Farnham and Myers
+
+commit adcfb5d34c566776227e9444c29c912442bf743e
+Author: tdreszer <tdreszer>
+Date:   Thu Oct 15 21:55:28 2009 +0000
+
+    Don't you know I am just trying to up my total modified lines in cvs-reports.
+
+commit 2b7eff469dfe7cf07db6eb41eaafdf2ffd09ac8a
+Author: tdreszer <tdreszer>
+Date:   Thu Oct 15 21:49:48 2009 +0000
+
+    Type HA-E2F1 not H1-E2F1
+
+commit c2b57bc4b6feb4fe910db5b5eeb1c87570b6261a
+Author: tdreszer <tdreszer>
+Date:   Thu Oct 15 21:47:58 2009 +0000
+
+    Altered E2F1 to HA-E2F1 at Farnham's request
+
+commit 9c7de315c831e9118e1feda57a2b9361ce097b27
+Author: tdreszer <tdreszer>
+Date:   Tue Oct 6 18:12:24 2009 +0000
+
+    Changed BJ-tert to BJ by Stam lab request.
+
+commit 2f60478b6c79a97990e3d9ff297df620ae5700ed
+Author: tdreszer <tdreszer>
+Date:   Fri Oct 2 22:48:36 2009 +0000
+
+    Sorry changing NFkB back to NFKB as this seems to be a valid term in the literature
+
+commit 86d33dfae1b996f012782275cecc5ea83b25a743
+Author: tdreszer <tdreszer>
+Date:   Fri Oct 2 22:35:42 2009 +0000
+
+    For Yale added NF-YA and NF-YB and renamed NFKB to NFkB
+
+commit 2cf74a749e6d2dcca19e925a1cce86d72af2194d
+Author: tdreszer <tdreszer>
+Date:   Tue Sep 29 23:15:29 2009 +0000
+
+    Added antibody NFKB and treatment TNFa for Yale.
+
+commit 4717e76b4aa27db84eb1fbfc40066d4ef08ab677
+Author: tdreszer <tdreszer>
+Date:   Mon Sep 28 19:36:29 2009 +0000
+
+    Added Antibody HA and cell HGF
+
+commit 7cecaa36e927df794001ae45fb4d84a98dcb51bb
+Author: tdreszer <tdreszer>
+Date:   Thu Sep 24 20:03:40 2009 +0000
+
+    Changing H1 ES or H1_ES to H1-hESC for clarity
+
+commit 2b3f29ddcec4879a5a22d302a5b46bd58e0349b2
+Author: tdreszer <tdreszer>
+Date:   Thu Sep 17 21:33:54 2009 +0000
+
+    Changed antibody TCF4 to TC7L2
+
+commit 2b0244474c1ddbb92a6658aef6a352b8f76b19d8
+Author: tdreszer <tdreszer>
+Date:   Mon Aug 31 23:21:00 2009 +0000
+
+    Added a few antibodies and added targetLink to antibodies
+
+commit fd23f37707ab8743b333e075bb6eedb28bd8b319
+Author: tdreszer <tdreszer>
+Date:   Tue Aug 18 17:51:15 2009 +0000
+
+    Added two for Duke/UTA
+
+commit 98d6e5c837566507d1e64d784ae2b87e327cf301
+Author: tdreszer <tdreszer>
+Date:   Tue Aug 18 00:08:45 2009 +0000
+
+    Included the protocols
+
+commit 291bd3deea2d1d9ca4048be4de50ab1b85bd3ece
+Author: tdreszer <tdreszer>
+Date:   Mon Aug 17 23:56:56 2009 +0000
+
+    Four for Myers, two for Stam
+
+commit 0667b2fdbbaa330d71436181c92c7418fe510c75
+Author: tdreszer <tdreszer>
+Date:   Mon Aug 17 21:07:50 2009 +0000
+
+    Two protocols approved for Bernstein
+
+commit 786464efbabe2683ada31adb0b4e51df2c4bac7a
+Author: kate <kate>
+Date:   Thu Aug 13 17:20:48 2009 +0000
+
+    Correct antibody name, by request of Rick Myers
+
+commit b187d5f78c48092f56e7f9a328a2996d4c810cd6
+Author: braney <braney>
+Date:   Tue Jul 21 21:22:01 2009 +0000
+
+    temporarily add U87 and BE2_C to get some HudonAlpha data loaded
+
+commit a9b4bfc810a6a19d494497c78fe0cccf6ce71d4c
+Author: braney <braney>
+Date:   Fri Jul 17 22:55:20 2009 +0000
+
+    add some new antibodies from wiki: Oct-2 PU.1 Pbx p300
+
+commit b54ad4e0e1cd923bc1f44aaa471cd73fca3d588f
+Author: braney <braney>
+Date:   Mon Jul 6 21:45:29 2009 +0000
+
+    added new field restrictionEnzyme
+
+commit bb374fdcc6851e8ccc9f344a7f24610916709901
+Author: tdreszer <tdreszer>
+Date:   Tue Jun 23 19:36:11 2009 +0000
+
+    Four more antibodies for Yale
+
+commit 4388b1bd75957d415c25d71cbc9826cf7264c940
+Author: kate <kate>
+Date:   Thu Jun 18 00:21:38 2009 +0000
+
+    Rename cell type for more specificity
+
+commit 5d5bb506e2948aef81ba0b6a5d610092b29f9a39
+Author: tdreszer <tdreszer>
+Date:   Tue Jun 16 18:34:16 2009 +0000
+
+    Added 3 new tier 3s for Stam lab
+
+commit 35627dd7a4581afc9fb4ae606251d1173a8bfc94
+Author: kate <kate>
+Date:   Mon Jun 15 18:06:56 2009 +0000
+
+    expand description for NHEK
+
+commit ca513876a15f89f6c584bad85d385890d2888ce5
+Author: kate <kate>
+Date:   Mon Jun 15 17:56:02 2009 +0000
+
+    Lonza web site has changed
+
+commit a9b58fc92fd588ac6cf2cb46bd941ec2566d040a
+Author: tdreszer <tdreszer>
+Date:   Thu Jun 11 23:52:50 2009 +0000
+
+    Added E2F6 antibody for Yale
+
+commit 50413692d30fc781599c334a43700af3be5a884a
+Author: tdreszer <tdreszer>
+Date:   Thu Jun 11 21:20:59 2009 +0000
+
+    Added K562b and HepG2b alternate cell lines because Yale and UCDavis can't agree
+
+commit f236d1462fce78f2ba11a0875a7218575ea33659
+Author: tdreszer <tdreszer>
+Date:   Mon Jun 8 18:55:21 2009 +0000
+
+    Fixed STAT1 url
+
+commit 854c1c0f7da8d09b1dbe131f43e337bba730ebee
+Author: tdreszer <tdreszer>
+Date:   Mon Jun 8 18:53:15 2009 +0000
+
+    Added STAT2 for Yale
+
+commit 5b7b5597a9e93655d8b7509732fc2e4674db4e3b
+Author: tdreszer <tdreszer>
+Date:   Mon Jun 8 18:21:13 2009 +0000
+
+    Added type treatment with 4 treatments for Yale
+
+commit f1101a93af71977512b979e58cb6eadfb093dd47
+Author: tdreszer <tdreszer>
+Date:   Fri Jun 5 18:25:30 2009 +0000
+
+    Did I happen to mention how much I hate updating cv.ra?
+
+commit e17b75f88dca9a266d3ade54d64969f214719202
+Author: tdreszer <tdreszer>
+Date:   Fri Jun 5 18:19:08 2009 +0000
+
+    Missing orderUrl's
+
+commit 71596a93c8796ebb373143d73b21188540e7f112
+Author: tdreszer <tdreszer>
+Date:   Fri Jun 5 18:14:43 2009 +0000
+
+    Missing type
+
+commit aad9ba64a24a2e359eb5e47bd4047f40d29000d8
+Author: tdreszer <tdreszer>
+Date:   Fri Jun 5 18:07:29 2009 +0000
+
+    Added a batch of cell lines
+
+commit 6d42e3e633cf9172640e0920935f5bcacc8e5e64
+Author: tdreszer <tdreszer>
+Date:   Fri Jun 5 17:16:32 2009 +0000
+
+    Added a bunch of new antibodies
+
+commit ca7d9cf347affe22c473f39d3f119b6aa628a9db
+Author: mikep <mikep>
+Date:   Thu Jun 4 00:13:04 2009 +0000
+
+    url must be a url, move descriptoin to vendor name
+
+commit f1a9a8f0411ab7588dfa28d9d43512eb5144faa8
+Author: tdreszer <tdreszer>
+Date:   Fri May 29 19:18:12 2009 +0000
+
+    One protocol had a broken link
+
+commit ef35d500b0e38f29a33917996175dd86ddf5f24c
+Author: tdreszer <tdreszer>
+Date:   Fri May 29 18:52:33 2009 +0000
+
+    Added some cell line protocols which had not been checked in before
+
+commit 2157df2155aa5395f8e22cf79b76589f553704d7
+Author: tdreszer <tdreszer>
+Date:   Fri May 29 01:02:18 2009 +0000
+
+    Approved cell lines for Myers: BG02ES,H9ES, HAL, HFL11W and HFL24W
+
+commit 2b699ba3984f7766801fc5dc839247e6815ba242
+Author: tdreszer <tdreszer>
+Date:   Sat May 23 16:42:32 2009 +0000
+
+    Fix misspelling - Thanks Angie
+
+commit 3564b589681f561195e425a0980ac26e2612fba8
+Author: tdreszer <tdreszer>
+Date:   Thu May 21 01:02:04 2009 +0000
+
+    Misnamed a protocol
+
+commit b0eb2d6367b1bbf6e3940932c83fb50b941f7fd5
+Author: tdreszer <tdreszer>
+Date:   Wed May 20 21:01:45 2009 +0000
+
+    Added approved protocols
+
+commit 8e9bd7ddc093dba5eaf93e77e40ad64bfbddefe5
+Author: tdreszer <tdreszer>
+Date:   Fri May 15 18:23:25 2009 +0000
+
+    Sloppy typo
+
+commit c318871c266ea993eef4d5d1297c558999dd923d
+Author: tdreszer <tdreszer>
+Date:   Fri May 15 18:21:55 2009 +0000
+
+    Added E2F4 fro Yaale/UCD Farnham
+
+commit 5868a16371c1456b8ceecf8caa0b80e67578d297
+Author: tdreszer <tdreszer>
+Date:   Sat May 2 19:30:55 2009 +0000
+
+    Added Rad21 and XRCC4 antibodies fro Yale
+
+commit 5afd4d867248b5864a808a8cecd46a7e4511daf9
+Author: tdreszer <tdreszer>
+Date:   Sat May 2 19:07:00 2009 +0000
+
+    Added Pol3 for Yale
+
+commit 61e44ff60555215f91ab38015e2a6d3cc819c343
+Author: tdreszer <tdreszer>
+Date:   Thu Apr 30 04:53:15 2009 +0000
+
+    Removed some cut and paste errors
+
+commit 7bfe1a6126549d2e11d33cdf9f6775f6f8c9cf19
+Author: tdreszer <tdreszer>
+Date:   Wed Apr 29 22:03:10 2009 +0000
+
+    Added 8 cell lines for Stam lab
+
+commit 171432d3f4634baf0de6613417971ed2e1cf94fd
+Author: larrym <larrym>
+Date:   Mon Apr 27 20:25:52 2009 +0000
+
+    add colors
+
+commit ee1124e5f463067235ca0c518dba6eba3624d570
+Author: tdreszer <tdreszer>
+Date:   Fri Apr 17 19:24:43 2009 +0000
+
+    HTC-116 was removed as this should be the already existing HCT-116
+
+commit 1ab61d9f80a1136a6bccff0769efb480f7437d37
+Author: kate <kate>
+Date:   Thu Apr 16 17:24:06 2009 +0000
+
+    Fix syntax err
+
+commit 1593d9f9bf0d006dd4f2b5e348727063f2781a9b
+Author: kate <kate>
+Date:   Thu Apr 16 15:21:51 2009 +0000
+
+    Add cell colors, loosely based on GNF conventions
+
+commit 611a422bd6c5f7a85aece109e97cebf7bc719945
+Author: kate <kate>
+Date:   Fri Mar 20 18:18:40 2009 +0000
+
+    Add longer ID string
+
+commit b3d2dcb44f7600a1a859b4243fe8e4710dbc02ec
+Author: kate <kate>
+Date:   Fri Mar 20 18:18:19 2009 +0000
+
+    Add source control identifier string
+
+commit 12751690beb6b64a92cfee32b5a0c282eca241c5
+Author: mikep <mikep>
+Date:   Fri Mar 6 00:14:06 2009 +0000
+
+    shorter codes
+
+commit 80114d9144156f46c3ba4163174b7c53062c2ad2
+Author: tdreszer <tdreszer>
+Date:   Thu Mar 5 22:23:02 2009 +0000
+
+    Added rediculous variable freezeDate, rather than rewrite pipeline
+
+commit 9b9a177bc4811ff8d7c0f783ff9ad61bd1882349
+Author: mikep <mikep>
+Date:   Thu Mar 5 20:33:25 2009 +0000
+
+    fixed typo
+
+commit a640fc0f876fef2eed696d51a86fec619e1a9cf4
+Author: mikep <mikep>
+Date:   Thu Mar 5 20:18:21 2009 +0000
+
+    new variable readType for Caltech
+
+commit 7ebb2aa9256caad1be1fdf4b76cbcd3f4621f100
+Author: mikep <mikep>
+Date:   Thu Mar 5 20:14:04 2009 +0000
+
+    removed some gnarly chars for javascript
+
+commit 97c9b8ea8b85f6dd95cff4f4b5c4d99189e15e11
+Author: tdreszer <tdreszer>
+Date:   Tue Mar 3 18:41:15 2009 +0000
+
+    Clarified Large_Fragment description
+
+commit a3545a4cae13d057982e00289c0a0813d07cbbbf
+Author: tdreszer <tdreszer>
+Date:   Fri Feb 27 22:42:46 2009 +0000
+
+    Changed SREBP1 to SREBP1A as per Mike Willson's request
+
+commit f13fa4f51daac08b0da8e85a6cb4d6e28894ca98
+Author: tdreszer <tdreszer>
+Date:   Fri Feb 27 19:36:54 2009 +0000
+
+    Added GATA-1, JunD, SREBP1 and SREBP2 antibodies
+
+commit dca71693236db56a677e115ea1d8a063f4e71642
+Author: kate <kate>
+Date:   Wed Feb 25 20:04:38 2009 +0000
+
+    Sanitize out slash from cell type name (w/ agreement of Peggy Farnham)
+
+commit dd41afb20504839cc0db38fd7416313cd1d28302
+Author: tdreszer <tdreszer>
+Date:   Tue Feb 24 17:19:42 2009 +0000
+
+    Added TCF4 for Snyder's lab
+
+commit f8d8ddf944eef04e4b96563a7163fa131fce6332
+Author: larrym <larrym>
+Date:   Wed Feb 18 07:51:33 2009 +0000
+
+    fix description for HAL
+
+commit d027b33c4a27d2f62bd79f0e663c39f56cc10a0f
+Author: larrym <larrym>
+Date:   Tue Feb 17 23:15:19 2009 +0000
+
+    add descriptions for terms recently added by HA
+
+commit 5ddeab667356d0cdf77ced3d14b34636c21fb01a
+Author: mikep <mikep>
+Date:   Sat Feb 14 00:35:21 2009 +0000
+
+    shortening names for sake of 64 char table name limit in mysql
+
+commit 55b44201a051140bdce65535d1b970cbd9bb246e
+Author: mikep <mikep>
+Date:   Fri Feb 13 23:35:05 2009 +0000
+
+    shortening for table name limit of 64 chars for Wold
+
+commit 27257cc3d5c7fcb43fa5f027b6daed7c4b1e8f06
+Author: mikep <mikep>
+Date:   Fri Feb 13 17:28:58 2009 +0000
+
+    no algorithm applicable for some data like download only sequences
+
+commit bfdd55918e035d7d8f4578172af6dc720abeda3e
+Author: mikep <mikep>
+Date:   Thu Feb 12 22:22:21 2009 +0000
+
+    new tag map algorithms for Wold
+
+commit e746ad9d9b21fc13116578f8c23bbaa0538f7c1b
+Author: tdreszer <tdreszer>
+Date:   Wed Feb 11 16:38:51 2009 +0000
+
+    Added ZNF263 antibody for Yale.
+
+commit 18d5175758f16f743d80ec0f5209b5bf33c023f0
+Author: larrym <larrym>
+Date:   Tue Feb 10 23:01:58 2009 +0000
+
+    new cell lines from Rami (they are not yet approved and we still need more details)
+
+commit db68c08a31b46e6ce88555549ea30389580d2f4b
+Author: mikep <mikep>
+Date:   Thu Feb 5 18:18:01 2009 +0000
+
+    new frag size for gPET (see GisDnaPet.daf)
+
+commit 2e9ada3b17cfe67b2e3d76784f6c53bbd7992a6e
+Author: kate <kate>
+Date:   Fri Jan 30 20:05:12 2009 +0000
+
+    Correct spelling
+
+commit 505ffd7a3eb53372112aaa0de96376d956d11c18
+Author: tdreszer <tdreszer>
+Date:   Wed Jan 28 19:00:24 2009 +0000
+
+    Added H1_ES human embryonic stem cells
+
+commit 802078e463764c8b23bb83d0b677e86d1a659786
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 27 21:16:47 2009 +0000
+
+    Added species dog
+
+commit 4f3c5a8959f5f49e328cf0d2ecc329dcbbbbdad1
+Author: mikep <mikep>
+Date:   Tue Jan 27 15:47:37 2009 +0000
+
+    more accurate  description
+
+commit cfbe2d00f2ec4904ee1f837c87cd4372880281f2
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 23 22:55:13 2009 +0000
+
+    Added species for Elnitski's Bi-direction promoter submissions
+
+commit 32f679d04f40898accf15f47e2519f9d2235580c
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 20 20:21:26 2009 +0000
+
+    Fixed osteoblast order info and comment on no order info for Th1
+
+commit 79fab5c7e116a8d1f7bd62a96516f622578bcff4
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 20 19:59:56 2009 +0000
+
+    Fixed HeLa-S3_IFNg termUrl
+
+commit 40ea778112828729dbf6b894d1c57ecead79609b
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 20 19:53:19 2009 +0000
+
+    Fix K562 orderUrl
+
+commit 730ae8d2d47f016368962147df227bdf19d96598
+Author: mikep <mikep>
+Date:   Tue Jan 20 18:46:14 2009 +0000
+
+    added new categories of short RNA
+
+commit 9f6d1378c6140e66a83baebdcf7921844fb48c43
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 16 20:21:06 2009 +0000
+
+    Added HEK293(b) for Yale (different protocol from Stam's HEK293
+
+commit f7911a94baae05e98504ab71f591b115ade87785
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 9 23:53:24 2009 +0000
+
+    Fixed typo
+
+commit 054fab6c601b690c7a3671c5e7afbdeb676549aa
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 9 23:31:47 2009 +0000
+
+    Added Reference_Genome for support tracks built on hg18
+
+commit d519f392756747e76e8c2b3256d1bb4fbb34ddc9
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 9 21:11:16 2009 +0000
+
+    Added NF-E2 for Yale
+
+commit d51e3c02a4d68c87b91c160367b4c0d4e25d3474
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 9 18:54:01 2009 +0000
+
+    Added type control to handle growing number of control terms
+
+commit 2101381710da865811b25a3dcaac161535c2f1dc
+Author: tdreszer <tdreszer>
+Date:   Fri Jan 9 17:09:19 2009 +0000
+
+    Added Max antibody for Snyder
+
+commit 820bec52edc4b9042ccdcd01a4beb520cb88331f
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 6 18:56:55 2009 +0000
+
+    Kate called me out on this quick little work around.  Removing the temporary NHEK
+
+commit a93a045094028b6ff4dd829f9653e7521617393f
+Author: tdreszer <tdreszer>
+Date:   Tue Jan 6 01:14:56 2009 +0000
+
+    Temporarily add NHEK to allow Tarjei's submission of Keratinocytes to work
+
+commit 4e765c2619836bb0c0a50adf7abd7a4af4960174
+Author: mikep <mikep>
+Date:   Wed Dec 17 15:49:03 2008 +0000
+
+    new localizations for Encode
+
+commit 0685aec0fd39bb6b761cc875174dd9937e6bda16
+Author: mikep <mikep>
+Date:   Tue Dec 9 16:23:33 2008 +0000
+
+    additional vocab for Wold lab
+
+commit 8e737f584ed94d664e21c37bc990eaf8e48e2890
+Author: mikep <mikep>
+Date:   Mon Dec 8 21:05:11 2008 +0000
+
+    fragSize for GIS DNA PET
+
+commit 55dce3a655f7c6dd487330df33de3bbcd156308e
+Author: tdreszer <tdreszer>
+Date:   Fri Dec 5 19:38:19 2008 +0000
+
+    Extended some antibody target descriptions
+
+commit 87e798e5bd1f08a3080f96ff9184b7af55c8a67e
+Author: mikep <mikep>
+Date:   Tue Dec 2 20:52:27 2008 +0000
+
+    renaming for better clarity
+
+commit 576e86df7a0590961e082820d9d198059c3ae4c8
+Author: tdreszer <tdreszer>
+Date:   Mon Dec 1 22:48:35 2008 +0000
+
+    Lineage text should cite source
+
+commit a37585efbec6f96db7aab5f5c258d4f6bb794646
+Author: mikep <mikep>
+Date:   Tue Nov 25 19:32:12 2008 +0000
+
+    standardized ripAntibody names
+
+commit c07db277d991f2696bf3c9d1a7e32d06dba6fa9b
+Author: mikep <mikep>
+Date:   Tue Nov 25 19:11:30 2008 +0000
+
+    standardized ripTgtProtein names
+
+commit 756399d3abf8f3b0661e617e159abae63ab3efca
+Author: mikep <mikep>
+Date:   Tue Nov 25 03:52:31 2008 +0000
+
+    Unfortunately does not look like you can have 2 terms of the same name even if their types are different
+
+commit 1f5897adea47151abc9e8d9306b8e8748e447739
+Author: mikep <mikep>
+Date:   Tue Nov 25 03:32:49 2008 +0000
+
+    Tpyo in PA Binding Protein
+
+commit 5beddeda5181777aefb6fba4f2e86f5242fe4352
+Author: mikep <mikep>
+Date:   Tue Nov 25 01:21:59 2008 +0000
+
+    target proteins for RIP-chip Tenenbaum project
+
+commit a5468b6d9aaa4b8c740f251be0fbb86a29c167bf
+Author: tdreszer <tdreszer>
+Date:   Tue Nov 25 00:42:36 2008 +0000
+
+    Additional information for several new cell lines
+
+commit ece5a8f23c9869f36b8d581118368547e6bcc365
+Author: tdreszer <tdreszer>
+Date:   Mon Nov 24 20:00:57 2008 +0000
+
+    Added a bunch of tier 3 cell lines, but the protocols have yet to be approved.
+
+commit 9154f7d08fc0aae99e65b6d6cdb0e5cc484fd729
+Author: tdreszer <tdreszer>
+Date:   Fri Nov 21 19:19:17 2008 +0000
+
+    Registered some antibodies
+
+commit 0c90179ee1a8bfd9a5cd40b9be284272c27599cc
+Author: mikep <mikep>
+Date:   Tue Nov 18 23:31:28 2008 +0000
+
+    added new RBP's
+
+commit 9c04b3874a200e90e8584abf778cd8b471f97a24
+Author: mikep <mikep>
+Date:   Tue Nov 18 22:04:08 2008 +0000
+
+    new class of antibodies for RIP project
+
+commit f10f50857b3a0bc055361d5cd9e4644b26bb6daf
+Author: mikep <mikep>
+Date:   Mon Nov 17 18:40:42 2008 +0000
+
+    Whole cell short+long+polyA+/- for Affy RNA tiling array experiment
+
+commit 5fea57de5006fd94273e7c2fac0459ff1c87aaef
+Author: mikep <mikep>
+Date:   Fri Nov 14 23:52:38 2008 +0000
+
+    new cell lines from Stam lab, pending approval
+
+commit 0b50a2b9393e6af5cc72b106200111ab6d595d39
+Author: mikep <mikep>
+Date:   Wed Nov 12 21:58:09 2008 +0000
+
+    typo on attatched
+
+commit 6b98b39e97e2bde1086382550d2d1b991d3de57a
+Author: mikep <mikep>
+Date:   Fri Nov 7 18:26:20 2008 +0000
+
+    singular form
+
+commit 46d0e3a939d6bd725d27c815bb2cadbe766e6053
+Author: mikep <mikep>
+Date:   Tue Oct 21 18:23:40 2008 +0000
+
+    sanger variable is freeze date
+
+commit 3a20384b5e4f18b1db54bf180a51490ef214f60c
+Author: mikep <mikep>
+Date:   Tue Oct 7 14:41:35 2008 +0000
+
+    adding prostate cell line temporarily while we figure out what it should be for gingeras
+
+commit 8e7acae5fc8d5a732ada2498e53a08bbbfa4aeaa
+Author: kate <kate>
+Date:   Wed Oct 1 19:54:47 2008 +0000
+
+    Add termUrl fields
+
+commit ed9e7947b03c68c60d5597d6df0ce57b51837fa4
+Author: tdreszer <tdreszer>
+Date:   Sat Sep 27 00:00:13 2008 +0000
+
+    Restoring c-Myc, which I somehow shot myself in the foot with KDevelop and lost.
+
+commit e797ce9847a96fc3d56d0cc2444bac11fbb5ae0a
+Author: mikep <mikep>
+Date:   Thu Sep 25 00:38:10 2008 +0000
+
+    added term for whole-cell
+
+commit d0bf34d75fd2741e3e0b86033254a9022646db90
+Author: tdreszer <tdreszer>
+Date:   Wed Sep 24 18:52:04 2008 +0000
+
+    Fixed HeLa-S2 name and added IFNg treatment for HeLa-S3
+
+commit 86024721c1a69ed8623d443963bf295c81a3ecfb
+Author: tdreszer <tdreszer>
+Date:   Wed Sep 24 16:51:33 2008 +0000
+
+    Registered c-Myc from Vishy Iyer
+
+commit 1d7727d92fe59f52104013fcdbef68d429755197
+Author: tdreszer <tdreszer>
+Date:   Tue Sep 23 21:18:18 2008 +0000
+
+    Added HCT-116 tier 3 cell line
+
+commit ad036cd40f0e9d1fe6540e24d883086ee5197776
+Author: tdreszer <tdreszer>
+Date:   Thu Sep 18 22:29:46 2008 +0000
+
+    Added two promoters
+
+commit f7933ebbd686532f8bea68a8f299c8aa0eb303d8
+Author: tdreszer <tdreszer>
+Date:   Mon Sep 15 17:20:18 2008 +0000
+
+    Added LNCaP newly approved teir 3 cell line
+
+commit c55655baadd35100d49e2231aa6ca2774ad181db
+Author: tdreszer <tdreszer>
+Date:   Mon Sep 8 17:36:55 2008 +0000
+
+    ra lib trips on commented-out cell line.  Remove for now.
+
+commit fc7794ec08864cba82ea917b4314641227044d7b
+Author: tdreszer <tdreszer>
+Date:   Mon Sep 8 17:26:09 2008 +0000
+
+    Four more cell lines approved by Resources working group
+
+commit 5500ff308f6a01203666a38d7c9d42b0e5c22b28
+Author: larrym <larrym>
+Date:   Thu Sep 4 18:54:55 2008 +0000
+
+    remove extra newline after comment (which screws up our ra parser)
+
+commit 926afb178844928321ef0a2f1a93a4552fe9af12
+Author: larrym <larrym>
+Date:   Tue Sep 2 18:25:38 2008 +0000
+
+    add PSFK-1 and SK-N-MC (which are submitted and pending approval)
+
+commit 0f85861171a0a1f974f7571805f1c189a941b4b4
+Author: tdreszer <tdreszer>
+Date:   Tue Aug 26 17:52:36 2008 +0000
+
+    Added newly approved teir 3 cell line GM18507
+
+commit a2827f05d0b94259ac016c83cb32f0798e075b68
+Author: tdreszer <tdreszer>
+Date:   Fri Aug 15 21:49:10 2008 +0000
+
+    Added NT2/D12 (Ntera2) cell line since Farnham's protocol was approved
+
+commit 4e14be831ef8041414f77536c2a58df8193567c9
+Author: kate <kate>
+Date:   Thu Aug 14 00:59:51 2008 +0000
+
+    Remove unregistered Tier 3 cell line
+
+commit 8a102c2e034242c4f17882f8566fd8a619c5d5e1
+Author: mikep <mikep>
+Date:   Thu Jul 24 23:25:26 2008 +0000
+
+    added new controlled vocabulary types plus the cgi ra file viewer
+
+commit 4e06a9f30865080eb09944841dd38c2b0509bfed
+Author: larrym <larrym>
+Date:   Thu Jul 24 21:50:54 2008 +0000
+
+    remove some redundant lines
+
+commit 800c5eebbcd46c69947b76facaeb27f5fe054aee
+Author: kate <kate>
+Date:   Wed Jul 23 18:10:30 2008 +0000
+
+    Another typo in field name
+
+commit b5a0434ee930a27f2f9714fb3a42ad1193b1680e
+Author: kate <kate>
+Date:   Wed Jul 23 18:10:08 2008 +0000
+
+    Another typo in field name
+
+commit b887ac48153ff7899e84cde78f086aa256b778fa
+Author: kate <kate>
+Date:   Wed Jul 23 18:07:03 2008 +0000
+
+    Correct bad field type
+
+commit 4d04b2c36cffe6ffc75835c9a1e576c5de96d6c5
+Author: kate <kate>
+Date:   Fri Jul 18 23:08:06 2008 +0000
+
+    Add new antibodies from Wiki
+
+commit f9f09427eb4a5c9179b42e40a344c29da3c0d3d6
+Author: kate <kate>
+Date:   Wed Jul 16 06:08:28 2008 +0000
+
+    Need to remove empty lines for ra lib
+
+commit 15a94534efc0db2baebb39d815a4979a6ce628d1
+Author: kate <kate>
+Date:   Wed Jul 16 00:05:04 2008 +0000
+
+    Add antibody section from wiki, expanded to include 'Target Description'
+
+commit cb74cf41222f596155155381be9dcbbf3468a240
+Author: larrym <larrym>
+Date:   Thu Jun 26 21:09:24 2008 +0000
+
+    add FOXP2 and SK-N-MC
+
+commit 04539a8156bd124e55350245cfd799f2ccf8e8df
+Author: kate <kate>
+Date:   Sat Jan 26 00:47:42 2008 +0000
+
+    Add gene types
+
+commit 07565449c10c88105c9e4fb4dce6deb3287a642f
+Author: kate <kate>
+Date:   Tue Jan 15 19:11:26 2008 +0000
+
+    Metadata definition files
