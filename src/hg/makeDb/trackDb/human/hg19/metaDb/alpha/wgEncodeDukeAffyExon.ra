@@ -4,12 +4,13 @@ cell 8988T
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExon8988tSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -23,12 +24,13 @@ cell 8988T
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExon8988tSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -42,12 +44,13 @@ cell AoSMC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -61,12 +64,13 @@ cell AoSMC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -80,12 +84,13 @@ cell AoSMC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -99,12 +104,13 @@ cell AoSMC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAosmcSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -118,12 +124,13 @@ cell AoSMC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -137,12 +144,13 @@ cell AoSMC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAosmcTgfbSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -156,12 +164,13 @@ cell Astrocy
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAstrocySimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -175,12 +184,13 @@ cell Astrocy
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonAstrocySimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -194,12 +204,13 @@ cell Chorion
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonChorionSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -213,12 +224,13 @@ cell CLL
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonCllSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -232,12 +244,13 @@ cell CLL
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonCllSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -251,12 +264,13 @@ cell Fibrobl
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -270,12 +284,13 @@ cell Fibrobl
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -289,12 +304,13 @@ cell FibroP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonFibropSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -308,12 +324,13 @@ cell FibroP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonFibropSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -327,12 +344,13 @@ cell FibroP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonFibropSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -346,12 +364,13 @@ cell Gliobla
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -365,12 +384,13 @@ cell Gliobla
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -384,12 +404,13 @@ cell Gliobla
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -403,12 +424,13 @@ cell Gliobla
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep4.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 4
 subId 3081
@@ -422,12 +444,13 @@ cell GM12878
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -441,12 +464,13 @@ cell GM12878
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -460,12 +484,13 @@ cell GM12878
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 3
 subId 3081
@@ -479,12 +504,13 @@ cell GM12891
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -498,12 +524,13 @@ cell GM12891
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -517,12 +544,13 @@ cell GM12892
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -536,12 +564,13 @@ cell GM12892
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -555,12 +584,13 @@ cell GM18507
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -574,12 +604,13 @@ cell GM18507
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -593,12 +624,13 @@ cell GM18507
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 3
 subId 3081
@@ -612,12 +644,13 @@ cell GM19238
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -631,12 +664,13 @@ cell GM19238
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -650,12 +684,13 @@ cell GM19239
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -669,12 +704,13 @@ cell GM19239
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -688,12 +724,13 @@ cell GM19240
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -707,12 +744,13 @@ cell GM19240
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -726,12 +764,13 @@ cell H1-hESC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -745,12 +784,13 @@ cell H1-hESC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -764,12 +804,13 @@ cell H1-hESC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -783,12 +824,13 @@ cell H1-hESC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonH1hescSimpleSignalRep4.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 4
 subId 3081
@@ -802,12 +844,13 @@ cell H9ES
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonH9esSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -821,12 +864,13 @@ cell HeLa-S3
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -840,12 +884,13 @@ cell HeLa-S3
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -859,12 +904,13 @@ cell HeLa-S3
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -878,12 +924,13 @@ cell HeLa-S3
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -897,12 +944,13 @@ cell HeLa-S3
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -916,12 +964,13 @@ cell HeLa-S3
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -935,12 +984,13 @@ cell HeLa-S3
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 3
 subId 3081
@@ -954,12 +1004,13 @@ cell Hepatocytes
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHepatocytesSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -973,12 +1024,13 @@ cell Hepatocytes
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHepatocytesSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -992,12 +1044,13 @@ cell HepG2
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1011,12 +1064,13 @@ cell HepG2
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1030,12 +1084,13 @@ cell HepG2
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 3
 subId 3081
@@ -1049,12 +1104,13 @@ cell HMEC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHmecSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1068,12 +1124,13 @@ cell HMEC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHmecSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1087,12 +1144,13 @@ cell HPDE6-E6E7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1106,12 +1164,13 @@ cell HPDE6-E6E7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHpde6e6e7SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1125,12 +1184,13 @@ cell HSMM
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1144,12 +1204,13 @@ cell HSMM
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1163,12 +1224,13 @@ cell HSMM
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHsmmSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -1182,12 +1244,13 @@ cell HSMMtube
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1201,12 +1264,13 @@ cell HSMMtube
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1220,12 +1284,13 @@ cell HSMMtube
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHsmmtSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -1239,12 +1304,13 @@ cell HTR8svn
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHtr8SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1258,12 +1324,13 @@ cell HTR8svn
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHtr8SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1277,12 +1344,13 @@ cell Huh-7.5
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHuh75SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1296,12 +1364,13 @@ cell Huh-7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHuh7SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1315,12 +1384,13 @@ cell HUVEC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1334,12 +1404,13 @@ cell HUVEC
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1353,12 +1424,13 @@ cell iPS
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonIpsSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1372,12 +1444,13 @@ cell iPS
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonIpsSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1391,12 +1464,13 @@ cell iPS
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonIpsSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -1410,12 +1484,13 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1429,12 +1504,13 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1448,12 +1524,13 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 3
 subId 3081
@@ -1467,12 +1544,13 @@ cell LNCaP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1486,12 +1564,13 @@ cell LNCaP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1505,12 +1584,13 @@ cell LNCaP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonLncapSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1524,12 +1604,13 @@ cell LNCaP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonLncapSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1543,12 +1624,13 @@ cell MCF-7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1562,12 +1644,13 @@ cell MCF-7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1581,12 +1664,13 @@ cell MCF-7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMcf7SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1600,12 +1684,13 @@ cell MCF-7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1619,12 +1704,13 @@ cell MCF-7
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1638,12 +1724,13 @@ cell Medullo
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1657,12 +1744,13 @@ cell Medullo
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1676,12 +1764,13 @@ cell Medullo
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -1695,12 +1784,13 @@ cell Melano
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1714,12 +1804,13 @@ cell Melano
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1733,12 +1824,13 @@ cell Melano
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -1752,12 +1844,13 @@ cell Melano
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMelanoSimpleSignalRep4.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 4
 subId 3081
@@ -1771,12 +1864,13 @@ cell Myometr
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMyometrSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1790,12 +1884,13 @@ cell Myometr
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonMyometrSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3081
@@ -1809,12 +1904,13 @@ cell NHEK
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonNhekSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1828,12 +1924,13 @@ cell NHEK
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonNhekSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1847,12 +1944,13 @@ cell Osteobl
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonOsteoblSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1866,12 +1964,13 @@ cell Osteobl
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonOsteoblSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1885,12 +1984,13 @@ cell Osteobl
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonOsteoblSimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 3081
@@ -1904,12 +2004,13 @@ cell ProgFib
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 1
 subId 3081
@@ -1923,12 +2024,13 @@ cell ProgFib
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateResubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg18
 project wgEncode
 replicate 2
 subId 3081
@@ -1942,12 +2044,13 @@ cell Stellate
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonStellateSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1961,12 +2064,13 @@ cell Urothelia
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonUrotsaSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1980,12 +2084,13 @@ cell Urothelia
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-09
-dateUnrestricted 2011-09-09
+dateSubmitted 2010-12-14
+dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
 labVersion 1.0
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3081
@@ -1993,4 +2098,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: -1383226705
+# MAGIC: 76719693

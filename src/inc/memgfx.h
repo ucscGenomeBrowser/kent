@@ -30,11 +30,6 @@ typedef unsigned int Color;
 
 #define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
 
-#ifndef USE_PNG
-#error ------ ERROR ----- you must define USE_PNG if you define COLOR32
-#endif
-
-
 #else /* 8-bit color */
 typedef unsigned char Color;
 
@@ -50,8 +45,6 @@ typedef unsigned char Color;
 #define MG_FREE_COLORS_START 9
 
 #endif /* COLOR32 */
-
-
 
 #define MG_WRITE_MODE_NORMAL    0
 #define MG_WRITE_MODE_MULTIPLY  (1 << 0)
@@ -187,26 +180,6 @@ void mgDrawHorizontalLine(struct memGfx *mg, int y1, Color color);
 
 void mgLineH(struct memGfx *mg, int y, int x1, int x2, Color color);
 /* Draw horizizontal line width pixels long starting at x/y in color */
-
-void mgSaveGif(struct memGfx *mg, char *name, boolean useTransparency);
-/* Save memory bitmap as a gif.
- * If useTransparency, then the first color in memgfx's colormap/palette is
- * assumed to be the image background color, and pixels of that color
- * are made transparent. */
-
-boolean mgSaveToGif(FILE *gif_file, struct memGfx *screen, boolean useTransparency);
-/* Save GIF to an already open file.
- * If useTransparency, then the first color in memgfx's colormap/palette is
- * assumed to be the image background color, and pixels of that color
- * are made transparent. */
-
-struct memGfx *mgLoadGif(char *name);
-/* Create memory image based on gif file. 
- * Note this is based on a very old gif reader
- * that only handles the GIF87a version. 
- * This is the same that mgSaveGif creates at
- * least.  This version of gif was always
- * color mapped. */
 
 void mgSavePng(struct memGfx *mg, char *filename, boolean useTransparency);
 /* Save memory bitmap to filename as a PNG.
