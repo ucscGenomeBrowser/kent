@@ -1,0 +1,116 @@
+track wgEncodeGisDnaPet
+compositeTrack on
+shortLabel GIS DNA PET
+longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags
+group varRep
+subGroup1 view Views Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup3 fragSize Frag_Size 0-1k=1k 1-5k=5k 2-10k=10k 3-f20k=20k
+dimensions dimensionX=cellType dimensionY=fragSize
+sortOrder cellType=+ fragSize=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
+dragAndDrop subTracks
+type bed 3
+noInherit on
+wgEncode 1
+
+    track wgEncodeGisDnaPetViewAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility dense
+    subTrack wgEncodeGisDnaPet
+
+        track wgEncodeGisDnaPetAlignmentsK5621k
+        subTrack wgEncodeGisDnaPetViewAlignments off
+        shortLabel K562 1k
+        color 46,0,184
+        longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=0-1k
+        #type pairedTagAlign
+        type bigBed 6
+        baseColorDefault diffBases
+        baseColorUseSequence seq1Seq2
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+    #    configurable on
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=1k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=256 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK5621k fileName=wgEncodeGisDnaPetAlignmentsK5621k.pairedTagAlign.gz
+
+        track wgEncodeGisDnaPetAlignmentsK56210k
+        subTrack wgEncodeGisDnaPetViewAlignments on
+        shortLabel K562 10k
+        color 46,0,184
+        longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=2-10k
+        #type pairedTagAlign
+        type bigBed 6
+        baseColorDefault diffBases
+        baseColorUseSequence seq1Seq2
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+    #    configurable on
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=K562 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=257 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56210k fileName=wgEncodeGisDnaPetAlignmentsK56210k.pairedTagAlign.gz
+
+	track wgEncodeGisDnaPetAlignmentsK56220k
+        subTrack wgEncodeGisDnaPetViewAlignments off
+	shortLabel K562 20k
+        color 46,0,184
+	longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
+	subGroups view=Alignments cellType=K562 fragSize=3-f20k
+	type bigBed 6
+        baseColorDefault diffBases
+        baseColorUseSequence seq1Seq2
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+	showDiffBasesMaxZoom 10000.0
+	metadata project=wgEncode grant=Gingeras lab=Gis(Ruan) dataType=DnaPet cell=K562 fragSize=20k view=Alignments dataVersion="ENCODE June 2010 Freeze" subId=1075 dateSubmitted=2010-04-05 dateUnrestricted=2011-01-05 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsK56220k fileName=wgEncodeGisDnaPetAlignmentsK56220k.pairedTagAlign.gz
+
+        track wgEncodeGisDnaPetAlignmentsGm128781k
+        subTrack wgEncodeGisDnaPetViewAlignments off
+        shortLabel GM12878 1k
+        color 153,38,0
+        longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=0-1k
+        #type pairedTagAlign
+        type bigBed 6
+        baseColorDefault diffBases
+        baseColorUseSequence seq1Seq2
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+    #    configurable on
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=1k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=253 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128781k fileName=wgEncodeGisDnaPetAlignmentsGm128781k.pairedTagAlign.gz
+
+        track wgEncodeGisDnaPetAlignmentsGm128785k
+        subTrack wgEncodeGisDnaPetViewAlignments off
+        shortLabel GM12878 5k
+        color 153,38,0
+        longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=1-5k
+        #type pairedTagAlign
+        type bigBed 6
+        baseColorDefault diffBases
+        baseColorUseSequence seq1Seq2
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+    #    configurable on
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=5k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=254 dateSubmitted=2009-04-03 dateUnrestricted=2010-01-03 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm128785k fileName=wgEncodeGisDnaPetAlignmentsGm128785k.pairedTagAlign.gz
+
+        track wgEncodeGisDnaPetAlignmentsGm1287810k
+        subTrack wgEncodeGisDnaPetViewAlignments on
+        color 153,38,0
+        shortLabel GM12878 10k
+        longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=2-10k
+        type bigBed 6
+        baseColorDefault diffBases
+        baseColorUseSequence seq1Seq2
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        metadata project=wgEncode grant=Gingeras lab=Gis dataType=DnaPet cell=GM12878 fragSize=10k view=Alignments dataVersion="ENCODE Feb 2009 Freeze" subId=255 dateSubmitted=2009-03-11 dateUnrestricted=2009-12-11 composite=wgEncodeGisDnaPet tableName=wgEncodeGisDnaPetAlignmentsGm1287810k fileName=wgEncodeGisDnaPetAlignmentsGm1287810k.pairedTagAlign.gz
+
+
+
