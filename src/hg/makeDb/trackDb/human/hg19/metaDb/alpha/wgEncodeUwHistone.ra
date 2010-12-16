@@ -2562,7 +2562,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1283
@@ -2587,7 +2586,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1283
@@ -3339,7 +3337,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1287
@@ -3364,7 +3361,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1287
@@ -4117,7 +4113,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1288
@@ -4142,7 +4137,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1288
@@ -4896,7 +4890,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1293
@@ -4921,7 +4914,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1293
@@ -5655,7 +5647,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 2033
@@ -5678,7 +5669,6 @@ grant Stam
 lab UW
 origAssembly hg19
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 2033
@@ -5702,7 +5692,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg19
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 2033
@@ -8270,7 +8259,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1295
@@ -8295,7 +8283,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1295
@@ -9048,7 +9035,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1423
@@ -9073,7 +9059,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1423
@@ -9825,7 +9810,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1435
@@ -9850,7 +9834,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1435
@@ -10119,7 +10102,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1438
@@ -10144,7 +10126,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1438
@@ -10527,7 +10508,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1302
@@ -10552,7 +10532,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1302
@@ -12214,7 +12193,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1303
@@ -12239,7 +12217,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1303
@@ -13296,7 +13273,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1316
@@ -13321,7 +13297,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1316
@@ -14660,7 +14635,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1308
@@ -14685,7 +14659,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1308
@@ -16114,7 +16087,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1317
@@ -16139,7 +16111,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1317
@@ -16892,7 +16863,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1318
@@ -16917,7 +16887,6 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1318
@@ -17670,7 +17639,6 @@ lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1319
@@ -17695,11 +17663,10 @@ lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg18
 project wgEncode
-rank 1
 replicate 1
 setType input
 subId 1319
 tableName wgEncodeUwHistoneSknshraInputStdRawRep1
 view RawSignal
 
-# MAGIC: -464742339
+# MAGIC: -465069732
