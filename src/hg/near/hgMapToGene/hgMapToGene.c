@@ -6,6 +6,7 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "bed.h"
+#include "basicBed.h"
 #include "binRange.h"
 #include "hdb.h"
 #include "hgConfig.h"
@@ -137,6 +138,8 @@ else
 return overlap;
 }
 
+<<<<<<< HEAD:src/hg/near/hgMapToGene/hgMapToGene.c
+=======
 int bedLength(struct bed *bed)
 /* Return the number of bases aligned in this bed alignment */
 {
@@ -149,6 +152,7 @@ for(ii = 0; ii < bed->blockCount; ii++)
     }
 return(length);
 }
+>>>>>>> 0e03ae6074481a36b8a22c3d17e88546bf800a00:src/hg/near/hgMapToGene/hgMapToGene.c
 
 
 struct bed *mostOverlappingBed(struct binKeeper *bk, struct genePred *gp)
@@ -172,7 +176,11 @@ for (el = elList; el != NULL; el = el->next)
         // If two beds have the same number of overlapping bases to
         // the gene prediction, then take the bed with the greatest proportion of
         // overlapping bases, i.e. the shorter one.
+<<<<<<< HEAD:src/hg/near/hgMapToGene/hgMapToGene.c
+        if (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed))
+=======
         if (bedLength(bed) < bedLength(bestBed))
+>>>>>>> 0e03ae6074481a36b8a22c3d17e88546bf800a00:src/hg/near/hgMapToGene/hgMapToGene.c
             {
             bestOverlap = overlap;
             bestBed = bed;
