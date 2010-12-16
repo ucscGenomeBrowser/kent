@@ -18278,13 +18278,8 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
-#ifdef USE_PNG
 trashDirFile(&gifTn, "hgc", "hgc", ".png");
 hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#else
-trashDirFile(&gifTn, "hgc", "hgc", ".gif");
-hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#endif /* USE_PNG */
 makeGrayShades(hvg);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,

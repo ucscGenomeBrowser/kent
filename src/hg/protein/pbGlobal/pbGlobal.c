@@ -242,13 +242,8 @@ if (psOutput2)
     }
 else
     {
-#ifdef USE_PNG
     trashDirFile(&gifTn2, "pbt", "pbt", ".png");
     vg2 = vgOpenPng(pixWidth, pixHeight, gifTn2.forCgi, FALSE);
-#else
-    trashDirFile(&gifTn2, "pbt", "pbt", ".gif");
-    vg2 = vgOpenGif(pixWidth, pixHeight, gifTn2.forCgi, FALSE);
-#endif /* USE_PNG */
     }
 
 g_vg = vg2;
