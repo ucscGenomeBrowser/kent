@@ -2989,6 +2989,8 @@ void subgroupFree(char **value)
 if(value && *value)
     freez(value);
 }
+#define SORT_ON_TRACK_NAME "trackName"
+#define SORT_ON_RESTRICTED "dateUnrestricted"
 
 sortOrder_t *sortOrderGet(struct cart *cart,struct trackDb *parentTdb)
 /* Parses any list sort order instructions for parent of subtracks (from cart or trackDb)
@@ -3006,16 +3008,66 @@ safef(sortOrder->htmlId, (strlen(parentTdb->track)+15), "%s.sortOrder", parentTd
 char *cartSetting = NULL;
 if(cart != NULL)
     cartSetting = cartCgiUsualString(cart, sortOrder->htmlId, setting);
-if(cart != NULL && strlen(cartSetting) == strlen(setting))
+if(cart != NULL && strlen(cartSetting) > strlen(setting)) // If setting is bigger, then it may be due to a trackDb change
     sortOrder->sortOrder = cloneString(cartSetting);  // cart order
 else
     sortOrder->sortOrder = cloneString(setting);      // old cart value is abandoned!
-sortOrder->column  = needMem(12*sizeof(char*)); // There aren't going to be more than 3 or 4!
+
 sortOrder->setting = cloneString(setting);
-sortOrder->count   = chopByWhite(sortOrder->setting, sortOrder->column,12);
+sortOrder->count   = chopByWhite(sortOrder->setting,NULL,0);  // Get size
+#ifdef SORT_ON_TRACK_NAME
+if (cart && !stringIn(SORT_ON_TRACK_NAME,setting))
+    sortOrder->count += 1;
+#endif///def SORT_ON_TRACK_NAME
+#ifdef SORT_ON_RESTRICTED
+if (cart && !stringIn(SORT_ON_RESTRICTED,setting))
+    sortOrder->count += 1;
+#endif///def SORT_ON_RESTRICTED
+sortOrder->column  = needMem(sortOrder->count*sizeof(char*));
+int foundColumns = chopByWhite(sortOrder->setting, sortOrder->column,sortOrder->count);
 sortOrder->title   = needMem(sortOrder->count*sizeof(char*));
 sortOrder->forward = needMem(sortOrder->count*sizeof(boolean));
 sortOrder->order   = needMem(sortOrder->count*sizeof(int));
+#if defined(SORT_ON_TRACK_NAME) || defined(SORT_ON_RESTRICTED)
+if (cart && foundColumns < sortOrder->count)
+    {
+    int columnCount = foundColumns;
+    int size = 0;
+    char *moreOrder = NULL;
+    #ifdef SORT_ON_TRACK_NAME
+    if (cart && columnCount < sortOrder->count && !stringIn(SORT_ON_TRACK_NAME,setting))
+        {
+        assert(sortOrder->column[columnCount] == NULL);
+        sortOrder->column[columnCount] = cloneString(SORT_ON_TRACK_NAME "=+");
+        if (!stringIn(SORT_ON_TRACK_NAME,sortOrder->sortOrder))
+            {
+            size = strlen(sortOrder->sortOrder) + strlen(sortOrder->column[columnCount]) + 5; // little bit more
+            moreOrder = needMem(size);
+            safef(moreOrder,size,"%s %s",sortOrder->sortOrder, sortOrder->column[columnCount]);
+            freeMem(sortOrder->sortOrder);
+            sortOrder->sortOrder = moreOrder;
+            }
+        columnCount++;
+        }
+    #endif///def SORT_ON_TRACK_NAME
+    #ifdef SORT_ON_RESTRICTED
+    if (cart && columnCount < sortOrder->count && !stringIn(SORT_ON_RESTRICTED,setting))
+        {
+        assert(sortOrder->column[columnCount] == NULL);
+        sortOrder->column[columnCount] = cloneString(SORT_ON_RESTRICTED "=+");
+        if (!stringIn(SORT_ON_RESTRICTED,sortOrder->sortOrder))
+            {
+            size = strlen(sortOrder->sortOrder) + strlen(sortOrder->column[columnCount]) + 5; // little bit more
+            moreOrder = needMem(size);
+            safef(moreOrder,size,"%s %s",sortOrder->sortOrder, sortOrder->column[columnCount]);
+            freeMem(sortOrder->sortOrder);
+            sortOrder->sortOrder = moreOrder;
+            }
+        columnCount++;
+        }
+    #endif///def SORT_ON_RESTRICTED
+    }
+#endif///def SORT_ON_TRACK_NAME
 for (ix = 0; ix<sortOrder->count; ix++)
     {
     strSwapChar(sortOrder->column[ix],'=',0);  // Don't want 'CEL=+' but 'CEL' and '+'
@@ -3038,7 +3090,10 @@ for (ix = 0; ix<sortOrder->count; ix++)
         sortOrder->forward[ix] = TRUE;
         sortOrder->order[ix] = ix+1;
         }
-    subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
+#ifdef SORT_ON_TRACK_NAME
+    if (ix < foundColumns)
+#endif///def SORT_ON_TRACK_NAME
+        subgroupFindTitle(parentTdb,sortOrder->column[ix],&(sortOrder->title[ix]));
     }
 return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0] and will be freed when sortOrder is freed
 }
@@ -3805,6 +3860,19 @@ sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
+// Determine whether there is a restricted until date column
+boolean restrictions = FALSE;
+for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
+    {
+    subtrack = subtrackRef->val;
+    (void)metadataForTable(db,subtrack,NULL);
+    if (NULL != metadataFindValue(subtrack,"dateUnrestricted"))
+        {
+        restrictions = TRUE;
+        break;
+        }
+    }
+
 // Table wraps around entire list so that "Top" link can float to the correct place.
 printf("<table><tr><td class='windowSize'>");
 printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
@@ -3839,6 +3907,7 @@ if (sortOrder != NULL)
     colspan = sortOrder->count+2;
 if (doColorPatch)
     colspan += 1;
+int columnCount = 0;
 printf("<TR%s>",useDragAndDrop?" id='noDrag' class='nodrop nodrag'":"");
 printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
 char javascript[JBUFSIZE];
@@ -3851,41 +3920,73 @@ printf("all</B>");
 if (slCount(subtrackRefList) > 5)
     printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
 puts("</TD>");
+columnCount++;
 
 // Add column headers which are sort button links
 if (sortOrder != NULL)
     {
     puts("<TD colspan=5>&nbsp;</TD></TR>");
     printf("<TR id=\"subtracksHeader\" class='nodrop nodrag sortable'>\n");
-    printf("<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE=\"%s\"></TH>\n", sortOrder->htmlId, sortOrder->sortOrder); // keeing track of sortOrder
+    printf("<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE='%s'></TH>\n", sortOrder->htmlId, sortOrder->sortOrder); // keeing track of sortOrder
     // Columns in tdb order (unchanging), sort in cart order (changed by user action)
     int sIx=0;
     for(sIx=0;sIx<sortOrder->count;sIx++)
         {
-        printf("<TH id='%s' class='sortable%s sort%d' abbr='use' title='Sort list on this column' onclick='tableSortAtButtonPress(this);'>%s",
+#ifdef SORT_ON_TRACK_NAME
+        if (sameString(SORT_ON_TRACK_NAME,sortOrder->column[sIx]))
+            break; // All wrangler requested sort orders have been done.
+#endif///def SORT_ON_TRACK_NAME
+#ifdef SORT_ON_RESTRICTED
+        if (sameString(SORT_ON_RESTRICTED,sortOrder->column[sIx]))
+            break; // All wrangler requested sort orders have been done.
+#endif///def SORT_ON_RESTRICTED
+        printf("<TH id='%s' class='sortable%s sort%d' abbr='use' onclick='tableSortAtButtonPress(this);'>%s",
             sortOrder->column[sIx],(sortOrder->forward[sIx]?"":" sortRev"),sortOrder->order[sIx],sortOrder->title[sIx]);
         printf("<sup>%s",(sortOrder->forward[sIx]?"&darr;":"&uarr;"));
         if (sortOrder->count > 1)
             printf ("%d",sortOrder->order[sIx]);
         printf("</sup>");
         puts ("</TH>");
+        columnCount++;
         }
-    puts("<TD>&nbsp;</TD>");
-    }
-puts("<TH>&nbsp;</TH>");
 
-// Determine whether there is a restricted until date column
-for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackRef->next)
+    // longLabel column
+#ifdef SORT_ON_TRACK_NAME
+    assert(sameString(SORT_ON_TRACK_NAME,sortOrder->column[sIx]));
+    printf("<TH id='%s' class='sortable%s sort%d' onclick='tableSortAtButtonPress(this);' align='left'>&nbsp;&nbsp;Track Name",
+           sortOrder->column[sIx],(sortOrder->forward[sIx]?"":" sortRev"),sortOrder->order[sIx]);
+    printf("<sup>%s%d</sup>",(sortOrder->forward[sIx]?"&darr;":"&uarr;"),sortOrder->order[sIx]);
+    puts ("</TH>");
+#else///ifndef SORT_ON_TRACK_NAME
+    puts("<TD>&nbsp;</TD>");
+#endif///ndef SORT_ON_TRACK_NAME
+    columnCount++;
+    }
+puts("<TH>&nbsp;</TH>"); // schema column
+columnCount++;
+
+// Finally there may be a restricted until column
+if (restrictions)
     {
-    subtrack = subtrackRef->val;
-    (void)metadataForTable(db,subtrack,NULL);
-    if (NULL != metadataFindValue(subtrack,"dateUnrestricted"))
+#ifdef SORT_ON_RESTRICTED
+    if (sortOrder != NULL)
+        {
+        int sIx=sortOrder->count-1;
+        assert(sameString(SORT_ON_RESTRICTED,sortOrder->column[sIx]));
+        printf("<TH id='%s' class='sortable%s sort%d' onclick='tableSortAtButtonPress(this);' align='left'>&nbsp;Restricted Until",
+            sortOrder->column[sIx],(sortOrder->forward[sIx]?"":" sortRev"),sortOrder->order[sIx]);
+        printf("<sup>%s%d</sup>",(sortOrder->forward[sIx]?"&darr;":"&uarr;"),sortOrder->order[sIx]);
+        //printf("<span class='bgLevel1' style='height:100%%;'><A HREF=\'%s\' TARGET=BLANK>&nbsp;?&nbsp;</A></span>", ENCODE_DATA_RELEASE_POLICY);
+        puts ("</TH>");
+        }
+    else
+#endif///def SORT_ON_RESTRICTED
         {
         printf("<TH align='center'>&nbsp;");
         printf("<A HREF=\'%s\' TARGET=BLANK>Restricted Until</A>", ENCODE_DATA_RELEASE_POLICY);
         puts("&nbsp;</TH>");
-        break; // Don't need more than one
         }
+    columnCount++;
     }
 puts("</TR></THEAD>"); // The end of the header section.
 
@@ -4072,13 +4173,24 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     }
 
 // End of the table
-puts("</TBODY><TFOOT></TFOOT>");
-puts("</TABLE>");
-printf("</td></tr></table>");
+puts("</TBODY><TFOOT>");
+printf("<TR valign='top'><TD colspan=%d>",columnCount-1);
 
 // Count of subtracks is filled in by javascript.
+printf("&nbsp;&nbsp;&nbsp;&nbsp;");
 if (slCount(subtrackRefList) > 5)
-    puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='subCBcount'></font>");
+    printf("<span class='subCBcount'></span>\n");
+
+// Restruction policy needs a link
+#ifdef SORT_ON_RESTRICTED
+if (restrictions && sortOrder != NULL)
+    printf("<TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A></TH>", ENCODE_DATA_RELEASE_POLICY);
+#endif///def SORT_ON_RESTRICTED
+
+printf("</TD></TR>\n");
+puts("</TFOOT></TABLE>");
+printf("</td></tr></table>");
+
 puts("<P>");
 
 // Tying subtracks with matrix and subtrack cfgs with views requires javascript help
