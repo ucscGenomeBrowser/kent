@@ -16,10 +16,10 @@ priority 260.3
 chainMinScore 3000
 
 	track chainCalJac1 override
-	shortLabel $o_Organism Net
+	shortLabel $o_Organism Chain
 
 	track netCalJac1 override
-	shortLabel $o_Organism Chain
+	shortLabel $o_Organism Net
 
 track chainNetFr1 override
 shortLabel $o_db Chain/Net

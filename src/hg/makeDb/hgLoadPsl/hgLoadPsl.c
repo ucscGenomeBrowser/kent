@@ -25,6 +25,7 @@ static struct optionSpec optionSpecs[] = {
     {"keep", OPTION_BOOLEAN},
     {"table", OPTION_STRING},
     {"noSort", OPTION_BOOLEAN},
+    {"noHistory", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -34,6 +35,7 @@ boolean append = FALSE;
 boolean keep = FALSE;
 char *clTableName = NULL;
 boolean noSort = FALSE;
+boolean noHistory = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -59,6 +61,7 @@ errAbort(
   "   -nobin Repress binning\n"
   "   -keep  Don't remove intermediate tab file/s after load\n"
   "   -noSort  don't sort (you better be sorting before this)\n"
+  "   -noHistory don;t update history table (useful for sorting)\n"
 );
 }
 
@@ -233,9 +236,11 @@ else
 
 sqlLoadTabFile(conn, tabFile, table, pslLoadOpts);
 
-/* add a comment and ids to the history table */
-safef(comment, sizeof(comment), "Add psl alignments to %s table", table);
-hgHistoryComment(conn, comment);
+if (!noHistory)
+    {
+    safef(comment, sizeof(comment), "Add psl alignments to %s table", table);
+    hgHistoryComment(conn, comment);
+    }
 
 if (indirectLoad && !keep)
     unlink(tabFile);
@@ -274,6 +279,7 @@ clTableName = optionVal("table", NULL);
 append = optionExists("append");
 keep = optionExists("keep");
 noSort = optionExists("noSort");
+noHistory = optionExists("noHistory");
 if (argc < 3)
     usage();
 if ((clTableName != NULL) && (argc > 3))

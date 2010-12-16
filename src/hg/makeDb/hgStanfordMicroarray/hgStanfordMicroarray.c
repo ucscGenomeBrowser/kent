@@ -369,7 +369,7 @@ makeGeneTable(database, table,  geneList, expCount);
 
 /* Update history. */
 conn = hgStartUpdate(database);
-hgEndUpdate(&conn, "Loading %s from %s dir. %d experiments %d genes",
+hgEndUpdate(&conn, 0, 0, "Loading %s from %s dir. %d experiments %d genes",
 	table, dir, slCount(expList), slCount(geneList));
 }
 

@@ -202,9 +202,12 @@ div.sliceDiv { overflow:hidden; }
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: s-resize; }
 
+/* The are for sortable tables */
+table.subtracks { overflow: visible; white-space: nowrap; }
 tr.sortable { background-color: #FCECC0; }
 th.sortable { color: #0000FF; }
-th:hover.sortable { border: 2px outset #663333; cursor: pointer; }
+th:hover.sortable { background-color: #CCFFCC; cursor: pointer; }
+tbody.sorting { color: #DDDDDD; cursor: wait;  }
 
 .noscript {
         background: none repeat scroll 0 0 #FFFF90;

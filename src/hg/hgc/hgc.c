@@ -3796,14 +3796,17 @@ void doGetDna1()
 {
 struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
-char rootName[256];
-char parsedChrom[32];
 if (dbIsFound)
     {
+    char rootName[256];
+    char parsedChrom[32];
     hParseTableName(database, tbl, rootName, parsedChrom);
     hti = hFindTableInfo(database, seqName, rootName);
     }
-cartWebStart(cart, database, "Get DNA in Window");
+char *otherOrg = hOrganism(database);
+char titleStr[256];
+safef(titleStr, sizeof(titleStr), "Get DNA in Window (%s/%s)", database, otherOrg);
+cartWebStart(cart, database, titleStr);
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);

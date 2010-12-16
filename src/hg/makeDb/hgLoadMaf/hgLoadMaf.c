@@ -299,7 +299,7 @@ verbose(1, "Loaded %ld mafs in %d files from %s\n", mafCount, slCount(fileList),
 if (isCustom)
     sqlDisconnect(&conn);
 else
-    hgEndUpdate(&conn, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
+    hgEndUpdate(&conn, 0, 0, "Add %ld mafs in %d files from %s\n", mafCount, slCount(fileList), pathPrefix);
 
 /*	if temp dir specified, unlink file to make it disappear */
 if ((char *)NULL != tmpDir)

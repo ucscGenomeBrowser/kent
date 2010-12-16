@@ -76,7 +76,7 @@ if (foundFiles == NULL
                 {
                 //-rw-rw-r-- 5  502826550 2010-10-22 16:51 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdRawDataRep1.fastq.gz
                 AllocVar(oneFile);
-                oneFile->fileSize = atoi(words[2]);
+                oneFile->fileSize = sqlUnsignedLong(words[2]);
                 oneFile->fileDate = cloneString(words[3]);
                 char *atSlash = strrchr(words[5], '/');
                 if (atSlash != NULL)
@@ -89,7 +89,7 @@ if (foundFiles == NULL
                 {
                 //-rw-rw-r--    26420982 2009/09/29 14:53:30 wgEncodeBroadChipSeq/wgEncodeBroadChipSeqSignalNhlfH4k20me1.wig.gz
                 AllocVar(oneFile);
-                oneFile->fileSize = atoi(words[1]);
+                oneFile->fileSize = sqlUnsignedLong(words[1]);
                 oneFile->fileDate = cloneString(words[2]);
                 strSwapChar(oneFile->fileDate,'/','-');// Standardize YYYY-MM-DD, no time
                 oneFile->fileName = cloneString(words[4]);
@@ -141,6 +141,66 @@ if (newList)
 return oneFile;
 }
 
+sortOrder_t *fileSortOrderGet(struct cart *cart,struct trackDb *parentTdb)
+/* Parses 'fileSortOrder' trackDb/cart instructions and returns a sort order struct or NULL.
+   Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order,
+   But columns are in original tdb order (unchanging)!  However, if cart is null, all is from trackDb.ra */
+{
+int ix;
+char *setting = trackDbSetting(parentTdb, "fileSortOrder");
+if(setting == NULL) // Must be in trackDb or not a sortable list of files
+    return NULL;
+
+sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
+sortOrder->setting = cloneString(setting);
+sortOrder->htmlId = needMem(strlen(parentTdb->track)+20);
+safef(sortOrder->htmlId, (strlen(parentTdb->track)+20), "%s.fileSortOrder", parentTdb->track);
+if(cart != NULL)
+    sortOrder->sortOrder = cloneString(cartOptionalString(cart, sortOrder->htmlId));
+
+sortOrder->count = chopByWhite(sortOrder->setting,NULL,0);  // Get size
+sortOrder->column  = needMem(sortOrder->count*sizeof(char*));
+sortOrder->count = chopByWhite(sortOrder->setting,sortOrder->column,sortOrder->count);
+sortOrder->title   = needMem(sortOrder->count*sizeof(char*));
+sortOrder->forward = needMem(sortOrder->count*sizeof(boolean));
+sortOrder->order   = needMem(sortOrder->count*sizeof(int));
+for (ix = 0; ix<sortOrder->count; ix++)
+    {
+    // separate out mtaDb var in sortColumn from title
+    sortOrder->title[ix] = strchr(sortOrder->column[ix],'='); // Could be 'cell=Cell_Line'
+    if (sortOrder->title[ix] != NULL)
+        {
+        sortOrder->title[ix][0] = '\0';
+        sortOrder->title[ix]   = strSwapChar(sortOrder->title[ix]+1,'_',' '); // +1 jumps to next char after '='
+        }
+    else
+        sortOrder->title[ix] = sortOrder->column[ix];         // or could be just 'cell'
+
+    // Sort order defaults to forward but may be found in a cart var
+    sortOrder->order[ix] = ix+1;
+    sortOrder->forward[ix] = TRUE;
+    if (sortOrder->sortOrder != NULL)
+        {
+        char *pos = stringIn(sortOrder->column[ix], sortOrder->sortOrder);// find tdb substr in cart current order string
+        if(pos != NULL && pos[strlen(sortOrder->column[ix])] == '=')
+            {
+            int ord=1;
+            char* pos2 = sortOrder->sortOrder;
+            for(;*pos2 && pos2 < pos;pos2++)
+                {
+                if(*pos2 == '=') // Discovering sort order in cart
+                    ord++;
+                }
+            sortOrder->forward[ix] = (pos[strlen(sortOrder->column[ix]) + 1] == '+');
+            sortOrder->order[ix] = ord;
+            }
+        }
+    }
+if (sortOrder->sortOrder == NULL)
+    sortOrder->sortOrder = cloneString(setting);      // no order in cart, all power to trackDb
+return sortOrder;  // NOTE cloneString:words[0]==*sortOrder->column[0] and will be freed when sortOrder is freed
+}
+
 static int fileDbSortCmp(const void *va, const void *vb)
 // Compare two sortable tdb items based upon sort columns.
 {
@@ -170,11 +230,27 @@ if (sortOrder && fileList)
         int ix;
         for(ix=0;ix<sortOrder->count;ix++)
             {
-            char *field = mdbObjFindValue(oneFile->mdb,sortOrder->column[ix]);
+            char *field = NULL;
+            if (sameString("fileSize",sortOrder->column[ix]))
+                {
+                char niceNumber[32];
+                sprintf(niceNumber, "%.15lu", oneFile->fileSize);
+                field = cloneString(niceNumber);
+                }
+            else if (sameString("fileType",sortOrder->column[ix]))
+                {
+                field = cloneString(oneFile->fileName + strlen(oneFile->mdb->obj) + 1);
+                if (endsWith(field,".gz"))
+                    chopSuffix(field);
+                }
+            else
+                {
+                field = mdbObjFindValue(oneFile->mdb,sortOrder->column[ix]);
+                }
             if (field)
                 {
-                oneFile->sortFields[sortOrder->order[ix] - 1] = mdbObjFindValue(oneFile->mdb,sortOrder->column[ix]);
-                oneFile->reverse[   sortOrder->order[ix] - 1] = (!sortOrder->forward[ix]);
+                oneFile->sortFields[sortOrder->order[ix] - 1] = field;
+                oneFile->reverse[   sortOrder->order[ix] - 1] = (sortOrder->forward[ix] == FALSE);
                 }
             else
                 {
@@ -310,84 +386,26 @@ if (debug)
     //membersForAll_t* membersForAll = membersForAllSubGroupsGet(tdb,cart);
 
 // Now update all files with their sortable fields and sort the list
-sortOrder_t *sortOrder = sortOrderGet(cart,tdb);
+sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb);
 if (sortOrder != NULL)
     {
-    // FIXME: This should be done elsewhere
-    // FIXME: We should probably have a fielSortOrder trackDb setting for this!
-    // sortOrder->column needs "tag" to be replaced with mdb Var  Should be abole to use:
-    // controlledVocabulary encode/cv.ra cellType=cell factor=antibody
-    char *vocab = trackDbSetting(tdb, "controlledVocabulary");
-    char *words[15];
-    int count,cix;
-    if((count = chopByWhite(cloneString(vocab), words,15)) > 2)
-        {
-        for(cix=1;cix<count;cix++)
-            {
-            if(countChars(words[cix],'=') == 1)  // cellType=cell
-                {
-                strSwapChar(words[cix],'=',0);
-                for(ix=0;ix<sortOrder->count;ix++)
-                    {
-                    if(sameString(sortOrder->column[ix],words[cix]))  // tags match, but need mdb var
-                        sortOrder->column[ix] = cloneString(words[cix]+strlen(words[cix])+1); // skip past tag=
-                    }
-                }
-            }
-        }
-    // FIXME: More mess until there is a fileSortOrder
-    boolean hasRep=FALSE;
-    for(ix=0;ix<sortOrder->count;ix++)
-        {
-        if(sameString(sortOrder->column[ix],"rep"))  // tags match, but need mdb var
-            hasRep=TRUE;
-        }
-    if (!hasRep)
-        {
-        char **  column  = needMem(sizeof(char *)  * (sortOrder->count + 1));
-        char **  title   = needMem(sizeof(char *)  * (sortOrder->count + 1));
-        boolean *forward = needMem(sizeof(boolean) * (sortOrder->count + 1));
-        int *    order   = needMem(sizeof(int)     * (sortOrder->count + 1));
-        memcpy(column, sortOrder->column, (sizeof(char *)  * sortOrder->count));
-        memcpy(title,  sortOrder->title,  (sizeof(char *)  * sortOrder->count));
-        memcpy(forward,sortOrder->forward,(sizeof(boolean) * sortOrder->count));
-        memcpy(order,  sortOrder->order,  (sizeof(int)     * sortOrder->count));
-        freeMem(sortOrder->column);
-        freeMem(sortOrder->title);
-        freeMem(sortOrder->forward);
-        freeMem(sortOrder->order);
-        sortOrder->column  = column ;
-        sortOrder->title   = title  ;
-        sortOrder->forward = forward;
-        sortOrder->order   = order  ;
-        sortOrder->column[ sortOrder->count] = cloneString("replicate");
-        sortOrder->title[  sortOrder->count] = cloneString("Rep");
-        sortOrder->forward[sortOrder->count] = TRUE;
-        sortOrder->order[  sortOrder->count] = ++sortOrder->count;
-        }
-
-
     // Fill in and sort fileList
     fileDbSortList(&fileList,sortOrder);
     }
 
-// Total (if long enough or if filetBoxes: 12 of 147 files)
-
-// Table class=sortable
-    // Columns: Restricted Until | Name? | size | date | dimension columns | ...
 jsIncludeFile("hui.js",NULL);
 jsIncludeFile("ajax.js",NULL);
 
+// Table class=sortable
 printf("<TABLE class='sortable' style='border: 2px outset #006600;'>\n");
 printf("<THEAD class='sortable'>\n");
-// Column: Restricted Until | sortColumns... | name{...} | size | date
-printf("<TR class='sortable'>\n");
-printf("<TD valign='center' align='center'>&nbsp;");
+printf("<TR class='sortable' valign='bottom'>\n");
+printf("<TD align='center' valign='center'>&nbsp;");
 int filesCount = slCount(fileList);
 if (filesCount > 5)
     printf("<i>%d files</i>",filesCount);    //puts("<FONT class='subCBcount'></font>"); // Use this style when filterboxes are up and running
-//if (sortOrder)
-//  printf("<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE=\"%s\">",sortOrder->htmlId, sortOrder->sortOrder);
+//if (sortOrder) // NOTE: This could be done to preserve sort order
+//    printf("<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE=\"%s\">",sortOrder->htmlId, sortOrder->sortOrder);
 printf("</TD>\n");
 
 // Now the columns
@@ -397,20 +415,18 @@ if (sortOrder)
     curOrder = sortOrder->count;
     for(ix=0;ix<sortOrder->count;ix++)
         {
-        printf("<TH class='sortable sort%d%s' valign='bottom' nowrap>%s</TH>\n",
-            sortOrder->order[ix],(sortOrder->forward[ix]?"":" sortRev"), sortOrder->title[ix]); // keeing track of sortOrder
+        printf("<TH class='sortable sort%d%s' %snowrap>%s</TH>\n",
+            sortOrder->order[ix],(sortOrder->forward[ix]?"":" sortRev"),
+            (sameString("fileSize",sortOrder->column[ix])?"abbr='use' ":""),
+            sortOrder->title[ix]); // keeing track of sortOrder
         }
     }
 //#define INCLUDE_FILENAMES
 #ifndef INCLUDE_FILENAMES
 else
 #endif///defn INCLUDE_FILENAMES
-    printf("<TH class='sortable sort%d' valign='bottom' nowrap>File Name</TH>\n",                  ++curOrder);
-printf("<TH class='sortable sort%d' abbr=use valign='bottom' align='right' nowrap>Size</TH>\n",    ++curOrder);
-printf("<TH class='sortable sort%d' valign='bottom' nowrap>Type</TH>\n",                           ++curOrder);
-printf("<TH class='sortable sort%d' valign='bottom' nowrap>Submitted</TH>\n",                      ++curOrder);
-printf("<TH class='sortable sort%d' valign='bottom' nowrap>RESTRICTED<BR>until</TH>\n",            ++curOrder);
-printf("<TH class='sortable sort%d' valign='bottom' align='left' nowrap>Additional Details</TH>\n",++curOrder);
+    printf("<TH class='sortable sort%d' nowrap>File Name</TH>\n",++curOrder);
+printf("<TH class='sortable sort%d' align='left' nowrap>Additional Details</TH>\n",++curOrder);
 printf("</TR></THEAD>\n");
 
 // Now the files...
@@ -433,9 +449,20 @@ for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
         {
         for(ix=0;ix<sortOrder->count;ix++)
             {
-            field = oneFile->sortFields[sortOrder->order[ix] - 1];
-            printf("<TD class='' align='center' nowrap>%s</td>",field?field:" &nbsp;");
-            mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
+            if (sameString("fileSize",sortOrder->column[ix]))
+                {
+                char niceNumber[128];
+                sprintWithGreekByte(niceNumber, sizeof(niceNumber), oneFile->fileSize);
+                field = oneFile->sortFields[sortOrder->order[ix] - 1];
+                printf("<TD abbr='%s' align='right' nowrap>%s</td>",field,niceNumber);
+                }
+            else
+                {
+                field = oneFile->sortFields[sortOrder->order[ix] - 1];
+                printf("<TD align='center' nowrap>%s</td>",field?field:" &nbsp;");
+                if (!sameString("fileType",sortOrder->column[ix]))
+                    mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
+                }
             }
         }
 #ifndef INCLUDE_FILENAMES
@@ -449,28 +476,8 @@ for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
         //printf("<DIV id='div_%s_meta' style='display:none;'></div></td>",oneFile->mdb->obj);
         }
 
-
-    // Size
-    char niceNumber[128];
-    sprintWithGreekByte(niceNumber, sizeof(niceNumber), oneFile->fileSize);
-    printf("<TD abbr='%ld' align='right' nowrap>%s</td>",oneFile->fileSize,niceNumber);
-
-    // Type
-    field = cloneString(oneFile->fileName + strlen(oneFile->mdb->obj) + 1);
-    if (endsWith(field,".gz"))
-        chopSuffix(field);
-    printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
-
-    // dateSubmitted
-    field = mdbObjFindValue(oneFile->mdb,"dateSubmitted");
-    printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
-
-    // Restricted Until
-    field = mdbObjFindValue(oneFile->mdb,"dateUnrestricted");
-    printf("<TD nowrap align='center'>%s</td>",field?field:" &nbsp;");
-
     // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
-    mdbObjRemoveVars(oneFile->mdb,"dateUnrestricted dateSubmitted fileName fileIndex composite project"); // Remove this from mdb now so that it isn't displayed in "extras'
+    mdbObjRemoveVars(oneFile->mdb,"fileName fileIndex composite project"); // Remove this from mdb now so that it isn't displayed in "extras'
     mdbObjReorderVars(oneFile->mdb,"grant lab dataType cell treatment antibody protocol replicate view",FALSE); // Bring to front
     mdbObjReorderVars(oneFile->mdb,"subId submittedDataVersion dateResubmitted dataVersion setType inputType controlId tableName",TRUE); // Send to back
     field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);

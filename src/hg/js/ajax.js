@@ -286,7 +286,18 @@ function loadMetadataTable(response, status)
 // Handle ajax response (repopulate a metadata val select)
 {
     var div = $("div#div_"+this.cmd+"_meta");
+    var td = $(div).parent('td');
+    if(td.length > 0 && $(td[0]).width() > 200) {
+        $(td[0]).css('maxWidth',$(td[0]).width() + "px");
+        $(div).css('overflow','visible');
+    }
     $(div).html(response);
+    if(td.length > 0 && $(td[0]).width() > 200) {
+        tr = $(td[0]).parent('tr');
+        if (tr.length > 0 && $(tr[0]).hasClass('bgLevel2')) {
+            $(div).children('table').css('backgroundColor',$(tr[0]).css('backgroundColor'));
+        }
+    }
     $(div).show();
 }
 
