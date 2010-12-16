@@ -1175,6 +1175,7 @@ organism Human
 description (aka H54) Glioblastoma
 tissue Brain
 vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu) 
+orderUrl http://pathology.mc.duke.edu/neuropath/np_faculty_dbigner.htm
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000527
 sex U
@@ -2294,9 +2295,9 @@ lineage  Hepatocyte derived carcinoma taken from a liver tumor
 karyotype  Unknown 
 sex  M 
 tissue  Liver 
-vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University 
+vendorName  Ravi Jhaveri, Duke University 
 vendorId
-orderUrl
+orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001950
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Huh-7_Crawford_protocol.pdf
@@ -2312,9 +2313,9 @@ lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for 
 karyotype  Unknown 
 sex  M 
 tissue  Liver 
-vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University 
+vendorName  Ravi Jhaveri, Duke University 
 vendorId
-orderUrl
+orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001950
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Huh-7.5_Crawford_protocol.pdf
@@ -2356,9 +2357,9 @@ lineage  induced pluripotent stem cell derived from skin fibroblast
 karyotype  Unknown 
 sex  U 
 tissue  iPS stem cell derived from skin fibroblast 
-vendorName  Josh Chenoweth (chenowej @ ninds.nih.gov), Laboratory of Molecular Biology, National Institutes of Health, NINDS
-vendorId
-orderUrl
+vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
+vendorId 
+orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
 termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000001
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:iPS_Crawford_protocol.pdf
@@ -2489,7 +2490,8 @@ type Cell Line
 organism Human
 description Medulloblastoma
 tissue Brain
-vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu).
+vendorName Duke University Medical Center, surgical resection from a patient with medulloblastoma as described by S Bigner (1997). Requests for D721 cells should be directed to Darrell Bigner.
+orderUrl http://pathology.mc.duke.edu/neuropath/np_faculty_dbigner.htm
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001359
 sex U
@@ -2964,9 +2966,9 @@ lineage  Liver that was perfused with collagenase and sellected for hepatic stel
 karyotype  normal 
 sex  F 
 tissue  Liver 
-vendorName  Steve Choi (steve.choi @ duke.edu) at Duke University 
+vendorName  Steve Choi, Duke University 
 vendorId
-orderUrl
+orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002316
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Stellate_Crawford_protocol.pdf
@@ -3312,9 +3314,7 @@ tissue Blood
 category Cell Line
 description Gata1- erythroid progenitor
 vendorName Mitch Weiss lab
-orderUrl
-# This is an email address how do we want these links displayed
-#orderUrl weissmi@email.chop.edu
+orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
@@ -3329,9 +3329,7 @@ tissue Blood
 category Cell Line
 description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
 vendorName Mitch Weiss lab
-orderUrl
-# This is an email address how do we want these links displayed
-#orderUrl weissmi@email.chop.edu
+orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
@@ -3433,9 +3431,7 @@ tissue Blood
 category Primary Cells
 description Megakaryocyte
 vendorName Mitch Weiss lab
-orderUrl
-# This is an email address how do we want these links displayed
-#orderUrl weissmi@email.chop.edu
+orderUrl http://www.med.upenn.edu/apps/faculty/index.php/g20000320/p14904
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
@@ -4985,7 +4981,7 @@ antibodyDescription Mouse monoclonal
 targetDescription Neuron-restrictive silencer transcription factor
 vendorName David Anderson, Caltech
 vendorId  (Made by Protein Expression Center: pec@caltech.edu)
-orderUrl
+orderUrl http://www.cns.caltech.edu/people/faculty/anderson.html
 lab Myers / Wold
 lots 20070905JV
 targetId
