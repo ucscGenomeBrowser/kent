@@ -80,8 +80,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     FILE *f = mustOpen(tempFile, "w");
     fwrite(docIdSub->metaData, strlen(docIdSub->metaData), 1, f);
     fclose(f);
-    boolean validated;
-    struct mdbObj *mdbObj = mdbObjsLoadFromFormattedFile(tempFile, &validated);
+    //boolean validated = FALSE;
+    struct mdbObj *mdbObj = mdbObjsLoadFromFormattedFile(tempFile, NULL);
     unlink(tempFile);
 
     // <Data type> <Cell Type> <Key Metadata> <View>
