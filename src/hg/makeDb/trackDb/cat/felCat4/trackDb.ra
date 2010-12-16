@@ -52,7 +52,7 @@ irows on
 summary multiz6waySummary
 speciesCodonDefault felCat4
 speciesGroups Vertebrate
-sGroup_Vertebrate mm9 canFam2 monDom5 equCab2 ailMel1
+sGroup_Vertebrate canFam2 ailMel1 hg19 mm9 monDom5 
 itemFirstCharCase noChange
 treeImage phylo/felCat4_6way.gif
 
