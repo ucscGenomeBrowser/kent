@@ -4340,7 +4340,7 @@ lab  Snyder
 lots  
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
-validation GATA1(Immunoblot):mouse_GATA1_SC266_validation_Snyder.pdf
+validation GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf
 
 
 term GATA-2
