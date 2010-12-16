@@ -33,7 +33,6 @@ dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
 #visibilityViewDefaults  Signal=full
 noInherit on
-dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
 
 	#####Peak Tracks###########
@@ -60,7 +59,6 @@ wgEncode 1
     		subGroups view=Peaks factor=JUND cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=JunD setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1126 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12JundIggrabPk fileName=wgEncodeSydhTfbsCh12JundIggrabPk.narrowPeak.gz
 
 	        track wgEncodeSydhTfbsCh12P300IggrabPk
 	        release alpha
@@ -222,7 +220,6 @@ wgEncode 1
     		subGroups view=Peaks factor=E2F4 cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=E2F4 treatment=None control=IgG-rab setType=exp inputType=CH12/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1153 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12E2f4IggrabPk fileName=wgEncodeSydhTfbsCh12E2f4IggrabPk.narrowPeak.gz
 
 		#### Submission 1155 ####
 		track wgEncodeSydhTfbsCh12Pol2IggmusPk
@@ -233,7 +230,6 @@ wgEncode 1
     		subGroups view=Peaks factor=POL2 cellType=CH12 control=IGGmus treatment=None
     		type narrowPeak
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Pol2 setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1155 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12Pol2IggmusPk fileName=wgEncodeSydhTfbsCh12Pol2IggmusPk.narrowPeak.gz
 
 		#### Submission 1156 ####
 		track wgEncodeSydhTfbsCh12TbpIggmusPk
@@ -244,7 +240,6 @@ wgEncode 1
     		subGroups view=Peaks factor=TBP cellType=CH12 control=IGGmus treatment=None
     		type narrowPeak
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=TBP setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1156 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12TbpIggmusPk fileName=wgEncodeSydhTfbsCh12TbpIggmusPk.narrowPeak.gz
 
 		#### Submission 1157 ####
 		track wgEncodeSydhTfbsCh12CjunIggrabPk
@@ -255,7 +250,6 @@ wgEncode 1
     		subGroups view=Peaks factor=cJUN cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Jun setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1157 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CjunIggrabPk fileName=wgEncodeSydhTfbsCh12CjunIggrabPk.narrowPeak.gz
 
 		#### Submission 1159 ####
 		track wgEncodeSydhTfbsCh12CmycIggrabPk
@@ -266,7 +260,6 @@ wgEncode 1
     		subGroups view=Peaks factor=cMYC cellType=CH12 control=IGGrab treatment=None
     		type narrowPeak
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabPk fileName=wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPeak.gz
 		
 		#### Submission 1160 ####
     		track wgEncodeSydhTfbsMelTbpIggmusPk
@@ -277,7 +270,6 @@ wgEncode 1
     		subGroups view=Peaks factor=TBP cellType=MEL control=IGGmus treatment=None
     		type narrowPeak
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=TBP setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1160 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelTbpIggmusPk fileName=wgEncodeSydhTfbsMelTbpIggmusPk.narrowPeak.gz
 	
 		#### Submission 1161 ####
     		track wgEncodeSydhTfbsMelPol2IggmusPk
@@ -288,7 +280,6 @@ wgEncode 1
     		subGroups view=Peaks factor=POL2 cellType=MEL control=IGGmus treatment=None
     		type narrowPeak
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Pol2 setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1161 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelPol2IggmusPk fileName=wgEncodeSydhTfbsMelPol2IggmusPk.narrowPeak.gz
 
 
 		#### Submission 1163 ####
@@ -300,7 +291,6 @@ wgEncode 1
     		subGroups view=Peaks factor=cMYC cellType=MEL control=IGGrab treatment=None
     		type narrowPeak
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=c-Myc setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1163 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelCmycIggrabPk fileName=wgEncodeSydhTfbsMelCmycIggrabPk.narrowPeak.gz
 
 
 		#### Submission 1165 ####
@@ -312,7 +302,6 @@ wgEncode 1
     		subGroups view=Peaks factor=GATA1SC265 cellType=MEL control=IGGrat treatment=None
     		type narrowPeak
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=GATA-1 setType=exp treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1165 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelGata1IggratPk fileName=wgEncodeSydhTfbsMelGata1IggratPk.narrowPeak.gz
 		
 
 
@@ -325,7 +314,6 @@ wgEncode 1
     		subGroups view=Peaks factor=JUND cellType=MEL control=IGGrab treatment=None
     		type narrowPeak
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=JunD setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1192 dateSubmitted=2010-05-11 dateUnrestricted=2011-02-11 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelJundIggrabPk fileName=wgEncodeSydhTfbsMelJundIggrabPk.narrowPeak.gz
 
 		#### Submission 1193 ####
     		track wgEncodeSydhTfbsMelE2f4IggrabPk
@@ -336,7 +324,6 @@ wgEncode 1
     		subGroups view=Peaks factor=E2F4 cellType=MEL control=IGGrab treatment=None
     		type narrowPeak
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabPk fileName=wgEncodeSydhTfbsMelE2f4IggrabPk.narrowPeak.gz
 
 	#####Signal Tracks###########
 	track wgEncodeSydhTfbsViewSig
@@ -360,7 +347,6 @@ wgEncode 1
 		subGroups view=Signal factor=zInputIGGRAB cellType=CH12 control=IGGrab treatment=None
 		type bigWig 1 66328
 		color 153,38,0
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1125 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12InputIggrabSig fileName=wgEncodeSydhTfbsCh12InputIggrabSig.bigWig.gz
 
 		#### Submission 1126 ####
 		track wgEncodeSydhTfbsCh12JundIggrabSig
@@ -371,7 +357,6 @@ wgEncode 1
     		subGroups view=Signal factor=JUND cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 63771
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=JunD setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1126 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12JundIggrabSig fileName=wgEncodeSydhTfbsCh12JundIggrabSig.bigWig.gz
 		
 		#### Submission 1153 ####
 		track wgEncodeSydhTfbsCh12E2f4IggrabSig
@@ -382,7 +367,6 @@ wgEncode 1
     		subGroups view=Signal factor=E2F4 cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 79444
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=E2F4 treatment=None control=IgG-rab setType=exp inputType=CH12/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1153 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12E2f4IggrabSig fileName=wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig.gz
 		
 		#### Sumission 1154 ####
 		track wgEncodeSydhTfbsCh12InputIggmusSig
@@ -393,7 +377,6 @@ wgEncode 1
     		subGroups view=Signal factor=zInputIGGMUS cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 71455
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1154 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12InputIggmusSig fileName=wgEncodeSydhTfbsCh12InputIggmusSig.bigWig.gz
 
 		#### Submission 1155 ####		
 		track wgEncodeSydhTfbsCh12Pol2IggmusSig
@@ -404,7 +387,6 @@ wgEncode 1
     		subGroups view=Signal factor=POL2 cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 14925
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Pol2 setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1155 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12Pol2IggmusSig fileName=wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig.gz
 
 		#### Submission 1156 ####
 		track wgEncodeSydhTfbsCh12TbpIggmusSig
@@ -415,7 +397,6 @@ wgEncode 1
     		subGroups view=Signal factor=TBP cellType=CH12 control=IGGmus treatment=None
     		type bigWig 1 52209
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=TBP setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1156 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12TbpIggmusSig fileName=wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig.gz
 
 		#### Submission 1157 ####
    		track wgEncodeSydhTfbsCh12CjunIggrabSig
@@ -426,7 +407,6 @@ wgEncode 1
     		subGroups view=Signal factor=cJUN cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 57353
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Jun setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1157 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CjunIggrabSig fileName=wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig.gz
 		
 		#### Submission 1159 ####	
 		track wgEncodeSydhTfbsCh12CmycIggrabSig
@@ -437,7 +417,6 @@ wgEncode 1
     		subGroups view=Signal factor=cMYC cellType=CH12 control=IGGrab treatment=None
     		type bigWig 1 56356
     		color 153,38,0
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabSig fileName=wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig.gz
 
 		#### Submission 1160 ####
     		track wgEncodeSydhTfbsMelTbpIggmusSig
@@ -448,7 +427,6 @@ wgEncode 1
     		subGroups view=Signal factor=TBP cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 60278
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=TBP setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1160 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelTbpIggmusSig fileName=wgEncodeSydhTfbsMelTbpIggmusSig.bigWig.gz
 
 		#### Submission 1161 ####
     		track wgEncodeSydhTfbsMelPol2IggmusSig
@@ -459,7 +437,6 @@ wgEncode 1
     		subGroups view=Signal factor=POL2 cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 13695
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Pol2 setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1161 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelPol2IggmusSig fileName=wgEncodeSydhTfbsMelPol2IggmusSig.bigWig.gz
 
 		#### Submission 1162 ####
   		track wgEncodeSydhTfbsMelInputIggmusSig
@@ -470,7 +447,6 @@ wgEncode 1
     		subGroups view=Signal factor=zInputIGGMUS cellType=MEL control=IGGmus treatment=None
     		type bigWig 1 78618
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1162 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggmusSig fileName=wgEncodeSydhTfbsMelInputIggmusSig.bigWig.gz
 
 		#### Submission 1163 ####
   		track wgEncodeSydhTfbsMelCmycIggrabSig
@@ -481,7 +457,6 @@ wgEncode 1
     		subGroups view=Signal factor=cMYC cellType=MEL control=IGGrab treatment=None
     		type bigWig 1 61932
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=c-Myc setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1163 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelCmycIggrabSig fileName=wgEncodeSydhTfbsMelCmycIggrabSig.bigWig.gz
 
 
 		#### Submission 1164 ####
@@ -493,7 +468,6 @@ wgEncode 1
     		subGroups view=Signal factor=zInputIGGRAB cellType=MEL control=IGGrab treatment=None
     		type bigWig 1 103648
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1164 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggrabSig fileName=wgEncodeSydhTfbsMelInputIggrabSig.bigWig.gz
 
 		#### Submission 1165 ####
    		track wgEncodeSydhTfbsMelGata1IggratSig
@@ -504,7 +478,6 @@ wgEncode 1
     		subGroups view=Signal factor=GATA1SC265 cellType=MEL control=IGGrat treatment=None
     		type bigWig 1 56526
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=GATA-1 setType=exp treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1165 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelGata1IggratSig fileName=wgEncodeSydhTfbsMelGata1IggratSig.bigWig.gz
 
 		#### Submission 1167 ####
     		track wgEncodeSydhTfbsMelInputIggratSig
@@ -515,7 +488,6 @@ wgEncode 1
     		subGroups view=Signal factor=zInputIGGRAT cellType=MEL control=IGGrat treatment=None
     		type bigWig 1 90844
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1167 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggratSig fileName=wgEncodeSydhTfbsMelInputIggratSig.bigWig.gz
 
 
 		##### Submission 1192 #####
@@ -527,7 +499,6 @@ wgEncode 1
     		subGroups view=Signal factor=JUND cellType=MEL control=IGGrab treatment=None
     		type bigWig 1.000000 71501.000000
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=JunD setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1192 dateSubmitted=2010-05-11 dateUnrestricted=2011-02-11 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelJundIggrabSig fileName=wgEncodeSydhTfbsMelJundIggrabSig.bigWig.gz
 
 		#### Submission 1193 #####
     		track wgEncodeSydhTfbsMelE2f4IggrabSig
@@ -538,7 +509,6 @@ wgEncode 1
     		subGroups view=Signal factor=E2F4 cellType=MEL control=IGGrab treatment=None
     		type bigWig 1.000000 91713.000000
     		color 46,0,184
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabSig fileName=wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig.gz
 
 	        track wgEncodeSydhTfbsCh12P300IggrabSig
 	        release alpha
