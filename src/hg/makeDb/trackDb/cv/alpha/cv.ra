@@ -1,6 +1,10 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
+
+# NOTE: the revision history of this file was lost when it was moved in the repository.
+#     For history prior to Oct. 11, 2010  see the files v242_cv* in this directory.
+#
 # Human cell types, template below
 # --------------------------
 # term (human-readable cell type name)
