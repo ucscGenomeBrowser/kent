@@ -5320,6 +5320,24 @@ targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation missing
 
+term  SETDB1_(SC-66884)
+tag  SETDB1SC66884
+type Antibody
+target  SETDB1
+antibodyDescription  SETDB1 (H-300) is an affinity purified rabbit polyclonal antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog.
+targetDescription  SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
+vendorName Santa Cruz Biotech
+vendorId Cat#sc-66884
+orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
+lab  Farnham
+lots
+targetId Genecards:SETDB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
+validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP)_Farnham:human_SETDB1-SC66884_validation_Farnham.pdf
+
+
+
+
 term Sin3Ak-20
 tag SIN3AK20
 type Antibody
