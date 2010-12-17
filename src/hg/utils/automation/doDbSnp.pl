@@ -348,6 +348,11 @@ _EOF_
 
 sub translateSql {
   return if ($opt_debug);
+
+#*** Note: we really need to compare these SQL definitions vs. our
+#*** expectation of columns and column indices since we use numeric
+#*** column offsets...
+
   # Translate dbSNP's flavor of SQL create statements into mySQL.
   # This is computationally trivial so it doesn't matter where it runs.
   my $schemaDir = "$buildDir/$commonName/schema";
@@ -620,11 +625,15 @@ sub loadDbSnp {
     hgsql -e 'create database $tmpDb'
     hgsql $tmpDb < $runDir/schema/table.sql
 
-    foreach t ($ContigInfo $MapInfo $ContigLocusId)
+    foreach t ($ContigInfo $ContigLocusId $MapInfo)
       zcat $dataDir/\$t.bcp.gz $grepOutLabels $grepOutContigs\\
       | perl -wpe '$cleanDbSnpSql' \\
       | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
     end
+    hgsql $tmpDb -e \\
+      'alter table $ContigInfo add index (ctg_id); \\
+       alter table $ContigLocusId add index (ctg_id); \\
+       alter table $MapInfo add index (snp_id);'
 
     # Make sure there are no orient != 0 contigs among those selected.
     set badCount = `hgsql $tmpDb -NBe \\
@@ -634,39 +643,47 @@ sub loadDbSnp {
       exit 1
     endif
 
-    # $ContigLoc is huge, and we want just the reference contig mappings.
+    # $ContigLoc is huge, and we want only the reference contig mappings.
     # Keep lines only if they have a word match to some reference contig ID.
-    # That probably will allow some false positives from coord matches,
-    # but we can clean those up afterward.
+    # That allows some false positives from coord matches; clean those up afterward.
     zcat $dataDir/$ContigInfo.bcp.gz $grepOutLabels\\
     | cut -f $ctgIdCol | sort -n > $ContigInfo.ctg_id.txt
     zcat $dataDir/$ContigLoc.bcp.gz \\
     | grep -Fwf $ContigInfo.ctg_id.txt \\
     | perl -wpe '$cleanDbSnpSql' \\
     | hgLoadSqlTab -oldTable $tmpDb $ContigLoc placeholder stdin
-    # There are usually some empty-value warnings to ignore.
     # Get rid of those false positives:
     hgsql $tmpDb -e 'alter table $ContigLoc add index (ctg_id);'
     hgsql $tmpDb -e 'create table ContigLocFix select cl.* from $ContigLoc as cl, $ContigInfo as ci where cl.ctg_id = ci.ctg_id;'
     hgsql $tmpDb -e 'alter table ContigLocFix add index (ctg_id);'
     hgsql $tmpDb -e 'drop table $ContigLoc; \\
                          rename table ContigLocFix to $ContigLoc;'
+    hgsql $tmpDb -e 'alter table $ContigLoc add index (snp_id);'
 
     zcat $dataDir/SNP.bcp.gz \\
     | perl -wpe '$cleanDbSnpSql' \\
     | hgLoadSqlTab -oldTable $tmpDb SNP placeholder stdin
+    # Add indices to tables for a big join:
+    hgsql $tmpDb -e 'alter table SNP add index (snp_id);'
 
     # New additions to our pipeline as of 132:
 
     zcat $buildDir/shared/Allele.bcp.gz \\
     | perl -wpe '$cleanDbSnpSql' \\
     | hgLoadSqlTab -oldTable $tmpDb Allele placeholder stdin
+    hgsql $tmpDb -e 'alter table Allele add index (allele_id);'
 
     foreach t (Batch SNPAlleleFreq SNPSubSNPLink SNP_bitfield SubSNP)
       zcat $dataDir/\$t.bcp.gz \\
       | perl -wpe '$cleanDbSnpSql' \\
       | hgLoadSqlTab -oldTable $tmpDb \$t placeholder stdin
     end
+
+    hgsql $tmpDb -e 'alter table Batch add index (batch_id); \\
+                     alter table SNPAlleleFreq add index (snp_id); \\
+                     alter table SNPSubSNPLink add index (subsnp_id); \\
+                     alter table SNP_bitfield add index (snp_id); \\
+                     alter table SubSNP add index (subsnp_id);'
 
     foreach t ($ContigInfo $ContigLoc $ContigLocusId $MapInfo SNP \\
                Allele Batch SNPAlleleFreq SNPSubSNPLink SNP_bitfield SubSNP)
@@ -687,7 +704,9 @@ sub addToDbSnp {
   my $snpBase = "snp$build";
   my $tmpDb = $db . $snpBase;
   my $whatItDoes =
-"It pre-processes functional annotations into a new table $tmpDb.ucscFunc
+"It pre-processes functional annotations into a new table $tmpDb.ucscFunc,
+pre-processes submitted snp submitter handles into a new table
+$tmpDb.ucscHandles,
 and extracts info from fasta headers into a new table $tmpDb.ucscGnl.";
 
   my $bossScript = new HgRemoteScript("$runDir/addToDbSnp.csh",
@@ -696,6 +715,7 @@ and extracts info from fasta headers into a new table $tmpDb.ucscGnl.";
     set tmpDir = `cat $runDir/workingDir`
     cd \$tmpDir
 
+    #######################################################################
     # Glom each SNP's function codes together and load up a new $tmpDb table.
     # Also extract NCBI's annotations of coding SNPs' effects on translation.
     # We extract $ContigLocusId info only for reference assembly mapping.
@@ -703,9 +723,6 @@ and extracts info from fasta headers into a new table $tmpDb.ucscGnl.";
     # have no NCBI functional annotations to display for those (but our own are
     # available).
     # Add indices to tables for a big join:
-    hgsql $tmpDb -e \\
-      'alter table $ContigInfo add index (ctg_id); \\
-       alter table $ContigLocusId add index (ctg_id);'
     hgsql $tmpDb -NBe 'select snp_id, ci.contig_acc, asn_from, asn_to, mrna_acc, \\
                            fxn_class, reading_frame, allele, residue, codon, cli.ctg_id \\
                            from $ContigLocusId as cli, $ContigInfo as ci \\
@@ -750,7 +767,6 @@ EOF
     # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
     # the list to determine what type of coord fix to apply to each annotation
     # when making snp130CodingDbSnp below.
-    hgsql $tmpDb -e 'alter table $ContigLoc add index (snp_id);'
     hgsql $tmpDb -NBe \\
       'select ci.contig_acc, cl.asn_from, cl.asn_to, uf.snp_id \\
        from ucscFunc as uf, $ContigLoc as cl, $ContigInfo as ci \\
@@ -761,7 +777,70 @@ EOF
       > ncbiFuncInsertions.ctg.bed
     wc -l ncbiFuncInsertions.ctg.bed
 
-    # Extract observed allele, molType and snp class from FASTA headers gnl
+
+    #######################################################################
+    # Glom together the submitter handles (names) associated with each snp_id:
+    hgsql $tmpDb -NBe 'select SNPSubSNPLink.snp_id, handle from SubSNP, SNPSubSNPLink, Batch \\
+                       where SubSNP.subsnp_id = SNPSubSNPLink.subsnp_id and \\
+                             SubSNP.batch_id = Batch.batch_id' \\
+    | sort -k1n,1n -k2,2 -u \\
+    | perl -we \\
+       'while (<>) { \\
+          chomp; my (\$id, \$handle) = split("\\t"); \\
+          if (defined \$prevId && \$prevId != \$id) { \\
+            print "\$prevId\\t\$handleCount\\t\$handleBlob\\n"; \\
+            \$handleCount = 0;  \$handleBlob = ""; \\
+          } \\
+          \$handleCount++; \\
+          \$handleBlob .= "\$handle,"; \\
+          \$prevId = \$id; \\
+        } \\
+        print "\$prevId\\t\$handleCount\\t\$handleBlob\\n";' \\
+      > ucscHandles.txt
+
+    cat > ucscHandles.sql <<EOF
+CREATE TABLE ucscHandles (
+	snp_id int NOT NULL,
+	handleCount int unsigned NOT NULL,
+	handles longblob NOT NULL,
+	INDEX snp_id (snp_id)
+);
+EOF
+    hgLoadSqlTab $tmpDb ucscHandles{,.sql,.txt}
+
+    #######################################################################
+    # Glom together the allele frequencies for each snp_id:
+    hgsql $tmpDb -NBe 'select snp_id, allele, chr_cnt, freq from SNPAlleleFreq, Allele \\
+                       where SNPAlleleFreq.allele_id = Allele.allele_id' \\
+    | perl -we \\
+       'while (<>) { \\
+          chomp; my (\$id, \$al, \$cnt, \$freq) = split("\\t"); \\
+          if (defined \$prevId && \$prevId != \$id) { \\
+            print "\$prevId\\t\$alleleCount\\t\$alBlob\\t\$cntBlob\\t\$freqBlob\\n"; \\
+            \$alleleCount = 0;  \$alBlob = "";  \$cntBlob = "";  \$freqBlob = ""; \\
+          } \\
+          \$alleleCount++; \\
+          \$alBlob .= "\$al,";  \$cntBlob .= "\$cnt,";  \$freqBlob .= "\$freq,"; \\
+          \$prevId = \$id; \\
+        } \\
+        print "\$prevId\\t\$alleleCount\\t\$alBlob\\t\$cntBlob\\t\$freqBlob\\n";' \\
+      > ucscAlleleFreq.txt
+
+    cat > ucscAlleleFreq.sql <<EOF
+CREATE TABLE ucscAlleleFreq (
+        snp_id int NOT NULL,
+        alleleCount int unsigned NOT NULL,
+        alleles longblob NOT NULL,
+        chr_cnts longblob NOT NULL,
+        freqs longblob NOT NULL,
+        INDEX snp_id (snp_id)
+);
+EOF
+    hgLoadSqlTab $tmpDb ucscAlleleFreq{,.sql,.txt}
+
+
+    #######################################################################
+    # Extract observed alleles, molType and snp class from FASTA headers gnl
     foreach rej (AltOnly NotOn)
       if (-e $runDir/rs_fasta/rs_ch\$rej.fas.gz) then
         mkdir -p $runDir/rs_fasta/rejects
@@ -792,11 +871,6 @@ CREATE TABLE ucscGnl (
 );
 EOF
     hgLoadSqlTab $tmpDb ucscGnl{,.sql,.txt}
-
-    # Add indices to tables for a big join:
-    hgsql $tmpDb -e \\
-      'alter table SNP        add index (snp_id); \\
-       alter table $MapInfo    add index (snp_id);'
 _EOF_
 		  );
 
@@ -822,26 +896,28 @@ in $snpBase.";
     set tmpDir = `cat $runDir/workingDir`
     cd \$tmpDir
 
-#***TODO: add SNPAlleleFreq to this query and snpNcbiToUcsc (bitfield/"clinical" too)
-
     # Big leftie join to bring together all of the columns that we want in $snpBase,
     # using all of the available joining info:
     hgsql $tmpDb -NBe \\
      'SELECT ci.contig_acc, cl.asn_from, cl.asn_to, cl.snp_id, cl.orientation, cl.allele, \\
              ug.observed, ug.molType, ug.class, \\
              s.validation_status, s.avg_heterozygosity, s.het_se, \\
-             uf.fxn_class, cl.loc_type, mi.weight, cl.phys_pos_from \\
+             uf.fxn_class, cl.loc_type, mi.weight, cl.phys_pos_from, \\
+             uh.handleCount, uh.handles, \\
+             ua.alleleCount, ua.alleles, ua.chr_cnts, ua.freqs, \\
+             sb.link_prop_b2, sb.freq_prop, sb.pheno_prop, sb.quality_check \\
       FROM \\
-      (((($ContigLoc as cl JOIN $ContigInfo as ci \\
-               ON cl.ctg_id = ci.ctg_id) \\
-          LEFT JOIN $MapInfo as mi ON mi.snp_id = cl.snp_id and mi.assembly = ci.group_label) \\
-         LEFT JOIN SNP as s ON s.snp_id = cl.snp_id) \\
-        LEFT JOIN ucscGnl as ug ON ug.snp_id = cl.snp_id) \\
-       LEFT JOIN ucscFunc as uf ON uf.snp_id = cl.snp_id and uf.ctg_id = cl.ctg_id \\
-                                and uf.asn_from = cl.asn_from;' \\
+      ((((((($ContigLoc as cl JOIN $ContigInfo as ci ON cl.ctg_id = ci.ctg_id) \\
+             LEFT JOIN $MapInfo as mi ON mi.snp_id = cl.snp_id) \\
+            LEFT JOIN SNP as s ON s.snp_id = cl.snp_id) \\
+           LEFT JOIN ucscGnl as ug ON ug.snp_id = cl.snp_id) \\
+          LEFT JOIN ucscFunc as uf ON uf.snp_id = cl.snp_id and uf.ctg_id = cl.ctg_id \\
+                                      and uf.asn_from = cl.asn_from) \\
+         LEFT JOIN ucscHandles as uh ON uh.snp_id = cl.snp_id) \\
+        LEFT JOIN ucscAlleleFreq as ua ON ua.snp_id = cl.snp_id) \\
+       LEFT JOIN SNP_bitfield as sb ON sb.snp_id = cl.snp_id;' \\
       > ucscNcbiSnp.ctg.bed
     wc -l ucscNcbiSnp.ctg.bed
-#34610479 ucscNcbiSnp.ctg.bed
 
     # There are some weird cases of length=1 but locType=range... in all the cases
     # that I checked, the length really seems to be 1 so I'm not sure where they got
@@ -887,7 +963,7 @@ _EOF_
     # many coords will differ, oh well.
     grep -w NC_012920 ucscNcbiSnp.ctg.bed \\
     | awk -F"\\t" 'BEGIN{OFS="\\t";} {\$3 += 1; \$16 = -1; print;}' \\
-    | liftOver -bedPlus=3 stdin \\
+    | liftOver -tab -bedPlus=3 stdin \\
         $hg19MitoLiftOver stdout chrM.unmapped \\
     | awk -F"\\t" 'BEGIN{OFS="\\t";} {\$3 -= 1; print;}' \\
     | sort -k2n,2n \\
@@ -929,7 +1005,7 @@ working directory to $runDir.";
 
     # Translate NCBI's encoding into UCSC's, and perform a bunch of checks.
 #*** add output to endNotes:
-    snpNcbiToUcsc ucscNcbiSnp.bed $HgAutomate::clusterData/$db/$db.2bit $snpBase
+    snpNcbiToUcsc -snp132Ext ucscNcbiSnp.bed $HgAutomate::clusterData/$db/$db.2bit $snpBase
 #*** add output to endNotes:
     head ${snpBase}Errors.bed
 #*** add output to endNotes:

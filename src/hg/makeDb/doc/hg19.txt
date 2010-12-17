@@ -13090,7 +13090,7 @@ hgLoadBed hg19 darned allChroms.bed
     # once this has been QAed, will auto-update from genbank scripts
 
 #############################################################################
-# NEW SNP132 (IN PROGRESS 12/8/10 angie)
+# NEW SNP132 (DONE 12/17/10 angie)
 
     mkdir -p /hive/data/outside/dbSNP/132test/human
     cd /hive/data/outside/dbSNP/132test/human
@@ -13136,6 +13136,12 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
       -buildDir /hive/data/outside/dbSNP/132test \
       -continue bigJoin -stop translate >>& do.log &
+    tail -f do.log
+
+    # Load it up with new columns!
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin >>& do.log &
     tail -f do.log
 
 
