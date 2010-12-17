@@ -3804,9 +3804,7 @@ if (dbIsFound)
     hti = hFindTableInfo(database, seqName, rootName);
     }
 char *otherOrg = hOrganism(database);
-char titleStr[256];
-safef(titleStr, sizeof(titleStr), "Get DNA in Window (%s/%s)", database, otherOrg);
-cartWebStart(cart, database, titleStr);
+cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, otherOrg);
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
