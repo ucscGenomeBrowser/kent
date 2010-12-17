@@ -1851,7 +1851,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
 	priority 5
 
 track vistaEnhancers override
-url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
 
 track evofold override
 mafTrack multiz46way
