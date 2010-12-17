@@ -8,7 +8,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
-	encode/hgEncodeVocab phyloGif hgCustom hgPal \
+	encode/hgEncodeVocab phyloGif hgCustom hgPal hgFileUi \
 	makeDb/hgCgiData js htdocs/style
 
 ifdef LOWELAB
