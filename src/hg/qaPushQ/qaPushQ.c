@@ -34,7 +34,7 @@ static char const rcsid[] = "$Id: qaPushQ.c,v 1.124 2010/04/16 19:05:01 galt Exp
 char msg[2048] = "";
 char ** saveEnv;
 
-#define BUFMAX 128000
+#define BUFMAX 256000
 char html[BUFMAX];
 
 char *action = NULL;   /* have to put declarations first */

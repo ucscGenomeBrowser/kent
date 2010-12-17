@@ -26,7 +26,7 @@ wgEncode 1
     view 1-PlusRawSignal
     visibility dense
     release alpha
-        subTrack wgEncodeGisRnaSeq
+    subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
     transformFunc NONE
