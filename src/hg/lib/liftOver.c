@@ -35,6 +35,9 @@ else
     return c;
 }
 
+// The maximum number of words per line that can be lifted:
+#define LIFTOVER_MAX_WORDS 64
+
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
 {
@@ -378,7 +381,7 @@ static int bedOverSmall(struct lineFile *lf, int fieldCount,
  * ENCODE region mapping */  
 {
 int i, wordCount, s, e;
-char *words[20], *chrom;
+char *words[LIFTOVER_MAX_WORDS], *chrom;
 char strand = '.', strandString[2];
 char *error;
 int ct = 0;
@@ -1003,7 +1006,7 @@ static int bedOverBig(struct lineFile *lf, int refCount,
 /* Do a bed with block-list. */
 {
 int wordCount, bedCount;
-char *line, *words[64];
+char *line, *words[LIFTOVER_MAX_WORDS];
 char *whyNot = NULL;
 int ct = 0;
 int errs = 0;
@@ -1062,7 +1065,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
 int bedFieldCount = bedPlus;
 char *line;
-char *words[64];
+char *words[LIFTOVER_MAX_WORDS];
 int ct = 0;
 
 if (lineFileNextReal(lf, &line))
@@ -1122,7 +1125,7 @@ int liftOverPositions(char *fileName, struct hash *chainHash,
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
-char *words[32];
+char *words[LIFTOVER_MAX_WORDS];
 int wordCount;
 int ct = 0;
 struct tempName bedTn, mappedBedTn, unmappedBedTn;

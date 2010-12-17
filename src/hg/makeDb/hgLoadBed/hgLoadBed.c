@@ -477,14 +477,8 @@ if ( ! noLoad )
 	sqlLoadTabFile(conn, tab, track, loadOptions);
 
     if (! noHistory)
-	{
-	char comment[256];
-	/* add a comment to the history table and finish up connection */
-	safef(comment, sizeof(comment),
-	    "Add %d element(s) from bed list to %s table",
-		slCount(bedList), track);
-	hgHistoryComment(conn, comment);
-	}
+	hgHistoryComment(conn, "Add %d element(s) from bed list to %s table",
+			 slCount(bedList), track);
     if(fillInScoreColumn != NULL)
         {
         char query[500];

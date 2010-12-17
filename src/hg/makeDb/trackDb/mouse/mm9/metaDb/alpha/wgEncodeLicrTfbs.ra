@@ -161,8 +161,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
+lab LICR-m
 labVersion 12/09/09 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
@@ -186,8 +186,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
+lab LICR-m
 labVersion 04/12/10 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
@@ -211,8 +211,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 12/09/09 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -236,8 +236,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 04/12/10 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -261,8 +261,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
+lab LICR-m
 labVersion 08/17/09 Lane 6
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
@@ -286,8 +286,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
+lab LICR-m
 labVersion 02/11/10 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
@@ -311,8 +311,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 08/17/09 Lane 6
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -336,8 +336,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 02/11/10 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -361,8 +361,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
+lab LICR-m
 labVersion 05/27/09 Lane 1
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
@@ -386,8 +386,8 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 05/27/09 Lane 1
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -411,8 +411,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
+lab LICR-m
 labVersion 05/26/09 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
@@ -436,8 +436,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
+lab LICR-m
 labVersion 08/17/09 Lane 5
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
@@ -461,8 +461,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 05/26/09 Lane 3
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -486,8 +486,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 08/17/09 Lane 5
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -511,8 +511,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
+lab LICR-m
 labVersion 05/26/09 Lane 5
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
@@ -536,8 +536,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
+lab LICR-m
 labVersion 12/14/09 Lane 4
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
@@ -561,8 +561,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 05/26/09 Lane 5
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -586,8 +586,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 12/14/09 Lane 4
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -611,8 +611,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
+lab LICR-m
 labVersion 05/26/09 Lane 2
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
@@ -636,8 +636,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
+lab LICR-m
 labVersion 08/14/09 Lane 5
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
@@ -661,8 +661,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 05/26/09 Lane 2
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
@@ -686,8 +686,8 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
+lab LICR-m
 labVersion 08/14/09 Lane 5
-LICR-m LICR
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
@@ -958,4 +958,4 @@ strain C57BL/6
 subId 3005
 view RawData
 
-# MAGIC: -1312667243
+# MAGIC: -1312758829

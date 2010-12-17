@@ -44,6 +44,7 @@ my %dataTypeCleaner = (
     "DNaseSeq"  => "DNase-seq",
     "FAIREseq"  => "FAIRE-seq",
     "RnaSeq"    => "RNA-seq",
+    "DnaseDgf"  => "DNase-seq",
 );
 
 # given a normalized datatype (see above), give the molecle involved
@@ -58,18 +59,21 @@ my %dataTypeMolecule = (
 my %dataTypeLibraryStrategy = (
     "ChIP-seq"  => "ChIP-Seq",
     "RNA-seq"   => "RNA-Seq",
+    "DNase-seq" => "DNase-Hypersensitivity",
 );
 
 # given a normalized datatype, give the library source
 my %dataTypeLibrarySource = (
     "ChIP-seq"  => "genomic",
     "RNA-seq"   => "genomic",
+    "DNase-seq" => "genomic",
 );
 
 # given a normalized datatype, give the library selection method
 my %dataTypeLibrarySelection = (
     "ChIP-seq"  => "ChIP",
     "RNA-seq"  => "cDNA",
+    "DNase-seq" => "DNase",
 );
 
 use vars qw/
@@ -329,7 +333,16 @@ while(scalar(keys %objsSet) > 0) {
     my $lowerOrganism = $organism;
     $lowerOrganism=~ tr/[A-Z]/[a-z]/;
     my $provider = $cellLineInfo{"vendorName"};
-    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/$lowerOrganism/" . $cellLineInfo{"protocol"};
+    if (not $provider) {
+        print STDERR "WARNING: No biomaterial provider given for $cell\n"
+    }
+    
+    #$cellLineInfo{"protocol"} or die "No growth protocol (in \"protocol\") defined for cell $cell\n";
+    if (not defined $cellLineInfo{"protocol"}) {
+        print $cell, "\n";
+        $cellLineInfo{"protocol"} = "NONE";
+    }
+    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cells/$lowerOrganism/" . $cellLineInfo{"protocol"};
     my $growthProtocol = "Cells were grown according to ENCODE cell culture protocols: $growthProtocolUrl";
 
     my $extractProtocolUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
@@ -378,7 +391,10 @@ while(scalar(keys %objsSet) > 0) {
             }
         }
     }
-    print MANIFEST "!Sample_biomaterial_provider = $provider" . "\n";
+    
+    if ($provider) {
+        print MANIFEST "!Sample_biomaterial_provider = $provider" . "\n";
+    }
     print MANIFEST "!Sample_growth_protocol = $growthProtocol" . "\n";
     print MANIFEST "!Sample_molecule = $molecule" . "\n";
     print MANIFEST "!Sample_extract_protocol = $extractProtocol" . "\n";

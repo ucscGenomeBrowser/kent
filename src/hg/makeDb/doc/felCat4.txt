@@ -1368,7 +1368,7 @@ chainOne $(path1)
 
 ############################################################################
 ## Annotate 6-way multiple alignment with gene annotations
-##              (working 2010-12-15  - Chin)
+##              (DONE 2010-12-15  - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ## Rules to decide which genes to use in order:
@@ -1548,8 +1548,7 @@ done | sort -k1,1 -k2,2n > multiz6wayFrames.bed
 # frames multiz6wayFrames
 # irows on
     #   appears to work OK
-XXXX 12-16
-#############################################################################
+
 ## create upstream refGene maf files
     cd /hive/data/genomes/felCat4/bed/multiz6way/downloads/maf
     # bash script
@@ -1580,7 +1579,7 @@ done
 
 
 #########################################################################
-# Phylogenetic tree from 6-way (working 2010-07-21 - Chin)
+# Phylogenetic tree from 6-way (working 2010-12-16 - Chin)
 #       We need one tree for all chroms
 
     # use the

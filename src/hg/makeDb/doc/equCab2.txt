@@ -2425,11 +2425,16 @@ TMPDIR=/scratch/tmp
 # DBSNP BUILD 130 -> SNP130 (DONE 12/6/10 angie)
     mkdir -p /hive/data/outside/dbSNP/130/horse
     cd /hive/data/outside/dbSNP/130/horse
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (horse_9796 in this case).
+    # Then click into that directory and look for file names like 
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly:
     cat > config.ra <<EOF
 db equCab2
+orgDir horse_9796
 build 130
 buildAssembly 2_1
-orgDir horse_9796
 EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log &
     tail -f do.log
@@ -2448,13 +2453,15 @@ EOF
 #*** Then run again with -continue=translate .
 
     # suggested.lft looks reasonable.  We don't already have an equivalent
-    # in equCab2/jkStuff
+    # in equCab2/jkStuff so rename suggested.lft, and add that to config.ra:
     mv suggested.lft /hive/data/genomes/equCab2/jkStuff/liftNcbiContigs.lft
     echo "liftUp /hive/data/genomes/equCab2/jkStuff/liftNcbiContigs.lft" \
       >> config.ra
     # cantLiftUpSeqNames.txt seems to be all-Un, and Un seems like a specific
     # enough string to safely use with egrep -vw (see doDbSnp.pl -help).
+    # Add it to config.ra:
     echo "ignoreDbSnpContigs Un" >> config.ra
+
     # Try again with updated config:
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=translate >>& do.log &
     tail -f do.log

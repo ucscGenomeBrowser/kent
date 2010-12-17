@@ -25,6 +25,7 @@
 #include "mdb.h"
 #include "web.h"
 #include "hPrint.h"
+#include "fileUi.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -67,15 +68,22 @@ static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char
         struct hash *trackHash)
 // Returns an HTML string for a downloads link
 {
-// Downloads directory if this is ENCODE
-if(trackDbSetting(tdb, "wgEncode") != NULL)
+// If has fileSortOrder, then link to new hgFileUi
+if (trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
+    {
+    char * link = needMem(PATH_LEN); // 512 should be enough
+    safef(link,PATH_LEN,"<A HREF='%s?g=%s' title='Downloadable Files...'>%s</A>", //  NOTE: TARGET=ucscDownloads   ??
+        hgFileUiName(), /*cartSessionVarName(), cartSessionId(cart),*/ tdb->track, name); // Note the hgsid would be needed if downloads page ever saved fileSortOrder to cart.
+    return link;
+    }
+else if(trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this is ENCODE
     {
     struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
     char *actualName = (sameWord(dirKeeper->type,"downloadsOnly")?dirKeeper->track:tdb->table);
-    struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
+    struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download %s' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
             trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS, actualName, (nameIsFile?name:""), name);
+            ENCODE_DCC_DOWNLOADS, actualName, (nameIsFile?name:""), nameIsFile?"file":"files",name);
     return dyStringCannibalize(&dyLink);
     }
 return NULL;
@@ -4174,17 +4182,16 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 
 // End of the table
 puts("</TBODY><TFOOT>");
-printf("<TR valign='top'><TD colspan=%d>",columnCount-1);
+printf("<TR valign='top'><TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",columnCount-1);
 
 // Count of subtracks is filled in by javascript.
-printf("&nbsp;&nbsp;&nbsp;&nbsp;");
 if (slCount(subtrackRefList) > 5)
     printf("<span class='subCBcount'></span>\n");
 
 // Restruction policy needs a link
 #ifdef SORT_ON_RESTRICTED
 if (restrictions && sortOrder != NULL)
-    printf("<TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A></TH>", ENCODE_DATA_RELEASE_POLICY);
+    printf("</TD><TH><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", ENCODE_DATA_RELEASE_POLICY);
 #endif///def SORT_ON_RESTRICTED
 
 printf("</TD></TR>\n");
