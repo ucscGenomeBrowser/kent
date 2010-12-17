@@ -141,7 +141,10 @@ alpha: clean
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb ${CGI_BIN}/encode/cv.ra ${HIVE_TRIX} ${DBS}
 	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
 
-beta: clean
+onbeta:
+	@test ${HOST} == "hgwbeta" || ( echo "must be on hgwbeta to build this target" && exit 1 )
+
+beta: onbeta clean 
 	${GIT} pull
 	./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
@@ -150,7 +153,7 @@ beta: clean
 	rm -f ${DBS:%=${DATA_TRIX}/%_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb ${CGI_BIN}/encode/cv.ra ${DATA_TRIX} ${DBS}
 
-public: clean
+public: onbeta clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb_public ${DBS}

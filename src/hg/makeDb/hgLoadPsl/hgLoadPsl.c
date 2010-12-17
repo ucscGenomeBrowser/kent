@@ -194,7 +194,7 @@ else
 void loadPslTable(char *database, struct sqlConnection *conn, char *pslFile)
 /* load one psl table */
 {
-char table[128], comment[256];
+char table[128];
 char *tabFile;
 boolean indirectLoad = FALSE;
 
@@ -237,10 +237,7 @@ else
 sqlLoadTabFile(conn, tabFile, table, pslLoadOpts);
 
 if (!noHistory)
-    {
-    safef(comment, sizeof(comment), "Add psl alignments to %s table", table);
-    hgHistoryComment(conn, comment);
-    }
+    hgHistoryComment(conn, "Add psl alignments to %s table", table);
 
 if (indirectLoad && !keep)
     unlink(tabFile);
