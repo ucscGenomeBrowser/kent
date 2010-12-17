@@ -55,7 +55,6 @@ void loadDatabase(char *database, char *tab, char *track)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
-char comment[256];
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -115,9 +114,7 @@ dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 verbose(1, "Loading %s into %s\n", track, database);
 sqlUpdate(conn, dy->string);
 /* add a comment to the history table and finish up connection */
-safef(comment, sizeof(comment),
-      "Loaded net table %s", track);
-hgHistoryComment(conn, comment);
+hgHistoryComment(conn, "Loaded net table %s", track);
 sqlDisconnect(&conn);
 }
 
