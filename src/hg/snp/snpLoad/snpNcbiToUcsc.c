@@ -26,6 +26,13 @@ errAbort(
 "   -1000GenomesRsIds=file      Text file with one number per line, numerically\n"
 "                               sorted, specifying RS IDs for submissions by the\n"
 "                               1000 Genomes Project.\n"
+"   -snp132Ext                  Add columns extracted from human 132 & later:\n"
+"                               exceptions,\n"
+"                               submitterCount, submitters,\n"
+"                               alleleFreqCount, alleles, alleleNs, alleleFreqs\n"
+"                               bitfields\n"
+"                               Since exceptions are now in a column in snpNNN,\n"
+"                               there is no separate snpNNNExceptions table.\n"
 "\n"
 "Converts NCBI's representation of SNP data into UCSC's, and checks for\n"
 "consistency.  Typically NNN is the dbSNP release number; snpNNN is the\n"
@@ -47,7 +54,7 @@ errAbort(
 "  snpNNN.sql                SQL for above, with enums and sets generated\n"
 "                            from the latest encodings.\n"
 "  snpNNNExceptions.bed      Notable (often dubious) conditions detected for\n"
-"                            this SNP.\n"
+"                            this SNP.  Not generated if -snp132Ext.\n"
 "  snpNNNExceptionDesc.tab   Descriptions and counts of each type of notable\n"
 "                            condition.\n"
 "  snpNNNErrors.bed          Data errors -- this should be empty.\n"
@@ -57,10 +64,12 @@ errAbort(
 
 static struct optionSpec options[] = {
     {"1000GenomesRsIds", OPTION_STRING},
+    {"snp132Ext", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
 char *oneKGenomesRsIds = NULL;
+boolean snp132Ext = FALSE;
 
 #define UPDATE_CODE "update this program and possibly hgTracks/hgc/hgTrackUi."
 
@@ -221,6 +230,64 @@ char *molTypeStrings[] = {
 };
 boolean molTypeStringsUsed[MAX_MOLTYPE+1];
 
+
+// dbSNP's SNP_bitfield table contains various annotations encoded as bitmasks
+// -- see ftp://ftp.ncbi.nlm.nih.gov/snp/specs/dbSNP_BitField_v5.pdf
+// -- but note that not all of the spec'd bitmasks are actually populated,
+// and some are incomplete encodings (e.g. 2 bits for weight, but it can be
+// 0, 1, 2, 3 or 10), so we can't make use of all fields that appear useful.
+#define MAX_BITFIELDS 9
+char *bitfieldsStrings[] = {
+    "unknown",
+    // "Clinical" bit from link_prop_b2 (link properties, byte 2):
+    "clinically-assoc",
+    // >5% MAF in some or all populations from freq_prop:
+    "maf-5-some-pop",
+    "maf-5-all-pops",
+    // Known phenotype sources from pheno_prop:
+    "has-omim-omia",
+    "microattr-tpa",
+    "submitted-by-lsdb",
+    // dbSNP's quality_check:
+    "genotype-conflict",
+    "rs-cluster-nonoverlapping-alleles",
+    "observed-mismatch",
+};
+boolean bitfieldsStringsUsed[MAX_BITFIELDS+1];
+
+// Byte offset is index of column pulled in from SNP_bitfields table;
+// bit offset is for masking the byte to get the bitfield named above.
+struct byteBitOffsets
+    {
+    unsigned short byte;
+    unsigned short bit;
+    };
+struct byteBitOffsets bitfieldsOffsets[] = {
+    // placeholder for unknown:
+    {0, 15},
+    // link_prop_b2:
+    {0, 6}, // clinical
+    // freq_prop:
+    {1, 0}, // >5% in at least one pop
+    {1, 1}, // >5% in all pops
+    // pheno_prop:
+    {2, 0}, // has OMIM or OMIA
+    {2, 1}, // has microattribution or third-party annotation
+    {2, 4}, // submitted by LSDB
+    // quality_check:
+    {3, 0}, // genotype conflict (same individual, different genotypes)
+    {3, 2}, // rs cluster has non-overlapping allele sets (should be similar to tri & quad allelic)
+    {3, 4}, // contig allele of at least one mapping is not present in snp allele list
+            // (mostly matches ObservedMismatch)
+};
+
+// Most of those we just pass through, but we add exceptions for the bits in quality_check:
+#define BITFIELDS_QUAL_CHECK_BYTE 3
+#define BITFIELDS_GENOTYPE_CONFLICT 0
+#define BITFIELDS_NON_OV_ALLELES 2
+#define BITFIELDS_REF_MISMATCH 4
+
+
 void initStringsUsed()
 /* Set the arrays of flags that indicate whether an encoding has been used. */
 {
@@ -235,9 +302,6 @@ for (i = 0;  i < VALID_BITS;  i++)
     validBitStringsUsed[i] = FALSE;
 for (i = 0;  i < MAX_FUNC+1;  i++)
     functionStringsUsed[i] = FALSE;
-/* We might never have a class=unknown, but set the bit anyway because it is the 
- * default value: */
-classStringsUsed[0] = 1;
 }
 
 #define isMissing(val) (sameString("MISSING", val) || sameString("NULL", val))
@@ -260,6 +324,7 @@ else
     lineFileAbort(lf, "Unrecognized molType %s", molType);
 }
 
+
 void writeCodes(FILE *f, char *strings[], boolean stringsUsed[], int count)
 /* Print out a comma-sep list of single-quoted values from one of the
  * above arrays. */
@@ -281,6 +346,13 @@ for (i = 0;  i < count;  i++)
     }
 }
 
+// using prototype here because the code depends on exception types and
+// variables defined further on.
+void writeExceptionCodes(FILE *f);
+/* snp132Ext: Write out a comma-sep list of single-quoted exceptions for
+ * mysql column definition (type=set).
+ * Set can be empty so don't add 'unknown' at beginning as writeCodes does. */
+
 void writeSnpSql(char *outRoot)
 /* Write outRoot.sql, translating the above codes into enums and sets. */
 {
@@ -290,39 +362,59 @@ FILE *f = mustOpen(fileName, "w");
 
 fprintf(f,
 "CREATE TABLE %s (\n"
-"  bin smallint(5) unsigned NOT NULL default '0',\n"
-"  chrom varchar(31) NOT NULL default '',\n"
-"  chromStart int(10) unsigned NOT NULL default '0',\n"
-"  chromEnd int(10) unsigned NOT NULL default '0',\n"
-"  name varchar(15) NOT NULL default '',\n"
-"  score smallint(5) unsigned NOT NULL default '0',\n"
-"  strand enum('+','-') default NULL,\n"
+"  bin smallint(5) unsigned NOT NULL,\n"
+"  chrom varchar(31) NOT NULL,\n"
+"  chromStart int(10) unsigned NOT NULL,\n"
+"  chromEnd int(10) unsigned NOT NULL,\n"
+"  name varchar(15) NOT NULL,\n"
+"  score smallint(5) unsigned NOT NULL,\n"
+"  strand enum('+','-') NOT NULL,\n"
 "  refNCBI blob NOT NULL,\n"
 "  refUCSC blob NOT NULL,\n"
-"  observed varchar(255) NOT NULL default '',\n"
+"  observed varchar(255) NOT NULL,\n"
 "  molType enum(", outRoot);
 writeCodes(f, molTypeStrings, molTypeStringsUsed, MAX_MOLTYPE+1);
 fprintf(f,
-") default NULL,\n"
+") NOT NULL,\n"
 "  class enum(");
 writeCodes(f, classStrings, classStringsUsed, MAX_CLASS+2+1);
 fprintf(f,
-") NOT NULL default 'unknown',\n"
+") NOT NULL,\n"
 "  valid set(");
 writeCodes(f, validBitStrings, validBitStringsUsed, VALID_BITS+1);
 fprintf(f,
-") NOT NULL default 'unknown',\n"
-"  avHet float NOT NULL default '0',\n"
-"  avHetSE float NOT NULL default '0',\n"
+") NOT NULL,\n"
+"  avHet float NOT NULL,\n"
+"  avHetSE float NOT NULL,\n"
 "  func set(");
 writeCodes(f, functionStrings, functionStringsUsed, MAX_FUNC+1);
 fprintf(f,
-") NOT NULL default 'unknown',\n"
+") NOT NULL,\n"
 "  locType enum(");
 writeCodes(f, locTypeStrings, locTypeStringsUsed, MAX_LOCTYPE+1);
 fprintf(f,
-") default NULL,\n"
-"  weight int(10) unsigned NOT NULL default '0',\n"
+") NOT NULL,\n"
+"  weight int(10) unsigned NOT NULL,\n");
+if (snp132Ext)
+    {
+    fprintf(f,
+  "  exceptions set(");
+    writeExceptionCodes(f);
+    fprintf(f,
+") NOT NULL,\n"
+"  submitterCount smallint unsigned NOT NULL,\n"
+"  submitters longblob NOT NULL,\n"
+"  alleleFreqCount smallint unsigned NOT NULL,\n"
+"  alleles longblob NOT NULL,\n"
+"  alleleNs longblob NOT NULL,\n"
+"  alleleFreqs longblob NOT NULL,\n"
+"  bitfields set (");
+    writeCodes(f, bitfieldsStrings, bitfieldsStringsUsed, MAX_BITFIELDS+1);
+    fprintf(f,
+") NOT NULL,\n"
+	    );
+    }
+fprintf(f,
 "  INDEX name (name),\n"
 "  INDEX chrom (chrom,bin)\n"
 ");\n");
@@ -334,6 +426,10 @@ char *chr = NULL;
 int chrStart = 0;
 int chrEnd = 0;
 int rsId = 0;
+unsigned int exceptionBits = 0;
+
+// Fudge factor for checking allele frequency properties:
+#define ALLELE_FREQ_ROUNDING_ERROR 0.001
 
 
 /******************* Reporting of errors and exceptions *********************/
@@ -365,6 +461,19 @@ int rsId = 0;
  *   4, 5, 6 / range{Insertion,Substitution,Deletion} respectively,
  *   alert the user (probably a problem with alignment and/or flanking
  *   sequences).
+ * New exceptions as of snp132Ext:
+ * - NonIntegerChromCount: dbSNP's SNPAlleleFreq table has a chr_cnt
+ *   column which is not a true count but rather an extrapolation:
+ *   reported allele frequency * reported total sample size.  Sometimes
+ *   these end up as fractional numbers, in which case the reported 
+ *   sample size could not have been the denominator used to compute the
+ *   reported allele frequency.  Would be nice if dbSNP could catch this
+ *   discrepancy in incoming submissions.
+ * - AlleleFreqSumNot1: only 1 case of this in human 132: SNPAlleleFreq
+ *   has a row with an allele_id not found in Allele, which causes us to
+ *   lose that row of SNPAlleleFreq (perhaps should do a left join to
+ *   make ucscAlleleFreq in doDbSnp.pl, but then we'd have to deal with
+ *   missing values in the middle of float arrays).
  */
 
 /* Use an enum that indexes arrays of char * to avoid spelling errors. */
@@ -395,14 +504,26 @@ enum exceptionType
     ObservedMismatch,
     /* reportMultipleMappings() */
     MultipleAlignments,
+    /* processAlleleFreqs() */
+    NonIntegerChromCount,
+    AlleleFreqSumNot1,
+    /* processBitfields() */
+    GenotypeConflict,
+    ClusterNonOverlappingAlleles,
     /* Keep this one last as a count of enum values: */
     exceptionTypeCount
     };
 
 FILE *fErr = NULL;
+// Without -snp132Ext, we write exceptions to file fExc:
 FILE *fExc = NULL;
+// with -snp132Ext, we set exception flag bits on the first pass
+// through input and then add to main SNP table in the second pass.
+
+// Global flag that is set if we find an inconsistency bad enough to reject this SNP:
 boolean skipIt = FALSE;
 int skipCount = 0;
+
 char **exceptionNames = NULL;
 char **exceptionDescs = NULL;
 int   *exceptionCounts = NULL;
@@ -414,8 +535,11 @@ void initErrException(char *outRoot)
 char fileName[2048];
 safef(fileName, sizeof(fileName), "%sErrors.bed", outRoot);
 fErr = mustOpen(fileName, "w");
-safef(fileName, sizeof(fileName), "%sExceptions.bed", outRoot);
-fExc = mustOpen(fileName, "w");
+if (! snp132Ext)
+    {
+    safef(fileName, sizeof(fileName), "%sExceptions.bed", outRoot);
+    fExc = mustOpen(fileName, "w");
+    }
 
 AllocArray(exceptionNames, exceptionTypeCount);
 /* processUcscAllele() */
@@ -443,6 +567,12 @@ exceptionNames[ObservedContainsIupac] = "ObservedContainsIupac";
 exceptionNames[ObservedMismatch] = "ObservedMismatch";
 /* reportMultipleMappings() */
 exceptionNames[MultipleAlignments] = "MultipleAlignments";
+/* processAlleleFreqs() */
+exceptionNames[NonIntegerChromCount] = "NonIntegerChromCount";
+exceptionNames[AlleleFreqSumNot1] = "AlleleFreqSumNot1";
+/* processBitfields() */
+exceptionNames[GenotypeConflict] = "GenotypeConflict";
+exceptionNames[ClusterNonOverlappingAlleles] = "ClusterNonOverlappingAlleles";
 
 
 /* Many of these conditions imply a problem with NCBI's alignment and/or the
@@ -511,6 +641,24 @@ exceptionDescs[ObservedMismatch] =
 /* reportMultipleMappings() */
 exceptionDescs[MultipleAlignments] =
     "This variant aligns in more than one location.";
+/* processAlleleFreqs() */
+char buf[256];
+safef(buf, sizeof(buf),
+    "At least one allele frequency corresponds to a non-integer (+-%f) "
+    "count of chromosomes on which the allele was observed."
+    "  The reported total sample count for this SNP is probably incorrect.",
+      ALLELE_FREQ_ROUNDING_ERROR);
+exceptionDescs[NonIntegerChromCount] = cloneString(buf);
+safef(buf, sizeof(buf),
+    "Allele frequencies do not sum to 1.0 (+-%f)."
+    "  This SNP's allele frequency data are probably incomplete.",
+      ALLELE_FREQ_ROUNDING_ERROR);
+exceptionDescs[AlleleFreqSumNot1] = cloneString(buf);
+/* processBitfields() */
+exceptionDescs[GenotypeConflict] =
+    "Different genotypes have been submitted for the same individual.";
+exceptionDescs[ClusterNonOverlappingAlleles] =
+    "The reference SNP cluster contains submitted SNPs with non-overlapping alleles.";
 
 AllocArray(exceptionCounts, exceptionTypeCount);
 
@@ -549,19 +697,40 @@ vaWriteError(format, args);
 va_end(args);
 }
 
-void writeExceptionDetailed(char *dChr, int dStart, int dEnd, int dRsId,
-			    enum exceptionType exc)
+void writeExceptionToFile(char *dChr, int dStart, int dEnd, int dRsId,
+			  enum exceptionType exc)
 /* Write SNP bed4 and the unusual condition to the exception output file. */
 {
 fprintf(fExc, "%s\t%d\t%d\trs%d\t%s\n", dChr, dStart, dEnd, dRsId,
 	exceptionNames[exc]);
-exceptionCounts[exc]++;
 }
 
 void writeException(enum exceptionType exc)
-/* Write SNP bed4 and the unusual condition to the exception output file. */
+/* Write _current_ SNP bed4 and the unusual condition to the exception output file,
+ * or if snp132Ext, accumulate into the global exceptionBits. */
 {
-writeExceptionDetailed(chr, chrStart, chrEnd, rsId, exc);
+if (snp132Ext)
+    exceptionBits |= (1 << exc);
+else
+    writeExceptionToFile(chr, chrStart, chrEnd, rsId, exc);
+exceptionCounts[exc]++;
+}
+
+// Using prototype here because the code depends on struct coord defs below:
+void setExceptionBit(char *eChr, int eStart, int eEnd, int eRsId, enum exceptionType exc);
+/* Look up mapping record by id and position, and set bit exc in map->exceptions.
+ * Naturally this must be called only after the mapping has been stored. */
+
+void writeExceptionRetro(char *rChr, int rStart, int rEnd, int rRsId, enum exceptionType exc)
+/* Retroactively (because it is no longer the current SNP) write a specific SNP 
+ * mapping as bed4 plus the unusual condition to the exception output file,
+ * or if snp132Ext, set the bit for exc in the SNP's stored mapping record. */
+{
+if (snp132Ext)
+    setExceptionBit(rChr, rStart, rEnd, rRsId, exc);
+else
+    writeExceptionToFile(rChr, rStart, rEnd, rRsId, exc);
+exceptionCounts[exc]++;
 }
 
 void finishErrException(char *outRoot)
@@ -569,7 +738,8 @@ void finishErrException(char *outRoot)
  * Write out outRootExceptionDesc.tab with exception counts. */
 {
 fclose(fErr);
-fclose(fExc);
+if (! snp132Ext)
+    fclose(fExc);
 fErr = fExc = NULL;
 
 char fileName[2048];
@@ -584,6 +754,20 @@ for (i = 0;  i < exceptionTypeCount;  i++)
 fclose(fExcDesc);
 }
 
+void writeExceptionCodes(FILE *f)
+/* snp132Ext: Write out a comma-sep list of single-quoted exceptions for
+ * mysql column definition (type=set).
+ * Set can be empty so don't add 'unknown' at beginning as writeCodes does. */
+{
+int i;
+boolean needComma = FALSE;
+for (i = 0;  i < exceptionTypeCount;  i++)
+    if (exceptionCounts[i] > 0)
+	{
+	fprintf(f, "%s'%s'", (needComma ? "," : ""), exceptionNames[i]);
+	needComma = TRUE;
+	}
+}
 
 /******************* Field processing and simple checks *********************/
 
@@ -907,7 +1091,7 @@ return expanded->string;
 void checkNcbiChrStart(int ncbiChrStart)
 /* Compare NCBI's lifted chrom start to ours: */
 {
-if (ncbiChrStart != 0 && !strstr(chr, "_hap") &&
+if (ncbiChrStart != -1 && !strstr(chr, "_hap") &&
     ncbiChrStart != chrStart)
     writeError("chromStart (%d) does not match phys_pos_from (%d).",
 	       chrStart, ncbiChrStart);
@@ -1077,7 +1261,7 @@ enum exceptionType exc = listAllEqual(observedList) ? DuplicateObserved :
 						      MixedObserved;
 struct slInt *el;
 for (el = idList;  el != NULL;  el = el->next)
-    writeExceptionDetailed(clusterChr, clusterPos, clusterPos, el->val, exc);
+    writeExceptionRetro(clusterChr, clusterPos, clusterPos, el->val, exc);
 }
 
 void checkLocType(struct lineFile *lf, char *locType)
@@ -1283,10 +1467,10 @@ else if (sameString(class, "deletion") || sameString(class, "insertion") ||
 	    {
 	    stripChar(observed, ' ');
 	    /* Since we fix this, an exception would be confusing.
-	     * SNP128 has only one instance of this, so just report it
-	     * on stderr and tell NCBI. */
-	    warn("spaces stripped from observed:\n%s\t%d\t%d\trs%d",
-		 chr, chrStart, chrEnd, rsId);
+	     * SNP128 & onward has only one instance of this, so just report it
+	     * on stderr and tell NCBI after more serious bugs have been fixed. */
+	    verbose(2, "spaces stripped from observed:\n%s\t%d\t%d\trs%d",
+		    chr, chrStart, chrEnd, rsId);
 	    }
 	flagIupac(observed);
 	}
@@ -1502,20 +1686,113 @@ prevPos = chrStart;
 }
 
 
+void checkSubmitters(struct lineFile *lf, int submitterCount, char *submitters)
+/* Make sure submitterCount matches count of comma-sep'd strings in submitters. */
+{
+// subtract one because of comma at end:
+int checkCount = chopCommas(submitters, NULL) - 1;
+if (checkCount != submitterCount)
+    lineFileAbort(lf, "submitterCount %d does not match number of comma-separated "
+		  "strings %d in submitters (%s).  Check doDbSnp.pl's code that "
+		  "processes submitter data into ucscHandles.",
+		  submitterCount, checkCount, submitters);
+}
+
+void processAlleleFreqs(struct lineFile *lf, int *pAlleleFreqCount, char *alleles,
+			float *alleleNs, float *alleleFreqs)
+/* Make sure alleleFreqCount matches count of comma-sep'd strings in alleles.
+ * If any alleleNs are non-integer, flag exception.  If alleleFreqs don't sum to
+ * 1.0, flag an error. */
+{
+if (*pAlleleFreqCount < 0)
+    {
+    *pAlleleFreqCount = 0;
+    alleles[0] = '\0';
+    return;
+    }
+int checkCount = chopCommas(alleles, NULL) - 1;
+if (checkCount != *pAlleleFreqCount)
+    lineFileAbort(lf, "alleleFreqCount %d does not match number of comma-separated "
+		  "strings %d in alleles (%s)", *pAlleleFreqCount, checkCount, alleles);
+// Length of alleleNs and alleleFreqs was already checked during parsing.
+int i;
+double total = 0.0;
+for (i=0;  i < *pAlleleFreqCount;  i++)
+    {
+    double leftover = alleleNs[i] - trunc(alleleNs[i]);
+    if (leftover > ALLELE_FREQ_ROUNDING_ERROR && leftover < 1.0-ALLELE_FREQ_ROUNDING_ERROR)
+	writeException(NonIntegerChromCount);
+    total += alleleFreqs[i];
+    }
+if (total < 1.0-ALLELE_FREQ_ROUNDING_ERROR || total > 1.0+ALLELE_FREQ_ROUNDING_ERROR)
+    writeException(AlleleFreqSumNot1);
+}
+
+void processBitfields(struct lineFile *lf, int bytes[], char *bitfieldsStr, size_t size)
+/* Convert link properties byte 2 bits of interest into comma-sep'd list (mysql set). */
+{
+if (bytes[0] < 0)
+    {
+    // missing data -> "unknown"
+    safecpy(bitfieldsStr, size, bitfieldsStrings[0]);
+    bitfieldsStringsUsed[0] = TRUE;
+    }
+else
+    {
+    safecpy(bitfieldsStr, size, "");
+    int i;
+    for (i = 1;  i < MAX_BITFIELDS+1;  i++)
+	{
+	struct byteBitOffsets off = bitfieldsOffsets[i];
+	if (bytes[off.byte] & (1 << off.bit))
+	    {
+	    safecpy(bitfieldsStr, size, bitfieldsStrings[i]);
+	    bitfieldsStringsUsed[i] = TRUE;
+	    }
+	}
+    int qualCheck = bytes[BITFIELDS_QUAL_CHECK_BYTE];
+    if (qualCheck & (1 << BITFIELDS_GENOTYPE_CONFLICT))
+	writeException(GenotypeConflict);
+    if (qualCheck & (1 << BITFIELDS_NON_OV_ALLELES))
+	writeException(ClusterNonOverlappingAlleles);
+    // This should be redundant w/ObservedMismatch:
+    if ((qualCheck & (1 << BITFIELDS_REF_MISMATCH)) &&
+	!(exceptionBits & (1 << ObservedMismatch)))
+	{
+	static int complainCount = 0;
+	if (complainCount < 10)
+	    warn("bitfields says observed mismatch but we don't: rs%d %s %d",
+		 rsId, chr, chrStart);
+	complainCount++;
+	}
+    if (!(qualCheck & (1 << BITFIELDS_REF_MISMATCH)) &&
+	(exceptionBits & (1 << ObservedMismatch)))
+	{
+	static int complainCount = 0;
+	if (complainCount < 10)
+	    warn("we say ref observed mismatch but bitfields doesn't: rs%d %s %d",
+		 rsId, chr, chrStart);
+	complainCount++;
+	}
+    }
+}
+
+
+/* Use an array[MAX_SNPID] of coord lists to detect multiply-mapped SNPs and to store 
+ * exceptions. */
+/* Hashing might be slightly more memory efficient, but this is easier and it still works. */
+/* SNP130: now 18M items, max ID 74315166. */
+/* SNP132: 30M items, max ID 121909398 */
+#define MAX_SNPID 120 * 1024 * 1024
 struct coords
     {
     struct coords *next;
     int chrId;
     int start;
     int end;
+    unsigned int exceptions;
     };
 
-/* If SNP ids exceed this, and there are <= 16M total SNP items, then 
- * hashing would be more memory efficient.  Until then, just use an array 
- * as big as the hash would need to alloc. */
-/* SNP130: now 18M items, max ID 74315166. */
-/* SNP132: 30M items, max ID 121909398 */
-#define MAX_SNPID 120 * 1024 * 1024
 int lastRsId = 0;
 struct coords **mappings = NULL;
 
@@ -1524,15 +1801,15 @@ char **idChrs = NULL;
 int nextChrId = 0;
 int maxChrId = 2048;
 
-int idForChr()
+int idForChr(char *chrom)
 /* To save memory, map chromosome name to integer index and vice versa. */
 {
-struct hashEl *hel = hashLookup(chrIds, chr);
+struct hashEl *hel = hashLookup(chrIds, chrom);
 int id = 0;
 if (hel == NULL)
     {
     id = nextChrId++;
-    hel = hashAddInt(chrIds, chr, id);
+    hel = hashAddInt(chrIds, chrom, id);
     if (id >= maxChrId)
 	{
 	maxChrId *= 4;
@@ -1546,8 +1823,12 @@ return id;
 }
 
 void storeMapping()
-/* Keep track of coordinates to which each SNP is mapped, so we can report
- * on multiple mappings at the end. */
+/* Keep track of coordinates to which each SNP is mapped, so we can 
+ * detect multiple mappings after processing all rows of input.
+ * Also, for snp132Ext, store exceptions so we can add the exceptions 
+ * column in the second pass.
+ * Note: this must be called for each SNP after all input columns 
+ * have been processed, so all exceptions are stored here. */
 {
 struct coords *mapping;
 AllocVar(mapping);
@@ -1561,9 +1842,10 @@ if (rsId >= MAX_SNPID)
     errAbort("Need to increase MAX_SNPID. (%d)", rsId);
 if (rsId > lastRsId)
     lastRsId = rsId;
-mapping->chrId = idForChr();
+mapping->chrId = idForChr(chr);
 mapping->start = chrStart;
 mapping->end   = chrEnd;
+mapping->exceptions = exceptionBits;
 slAddHead(&mappings[rsId], mapping);
 }
 
@@ -1605,18 +1887,75 @@ for (id = 0;  id <= lastRsId;  id++)
 	if (gotMult)
 	    {
 	    for (map = mappings[id];  map != NULL;  map = map->next)
-		writeExceptionDetailed(idChrs[map->chrId], map->start, map->end,
-				       id, MultipleAlignments);
+		writeExceptionRetro(idChrs[map->chrId], map->start, map->end,
+				    id, MultipleAlignments);
 	    }
 	}
 }
 
+
+struct coords *mustGetMapping(char *mChr, int mStart, int mEnd, int mRsId)
+/* Look up mapping record by id and position or error out. */
+{
+int chromId = idForChr(mChr);
+struct coords *map = mappings[mRsId];
+while (map != NULL &&
+       (chromId != map->chrId || mStart != map->start || mEnd != map->end))
+    map = map->next;
+if (map == NULL)
+    errAbort("Can't find mapping for rs=%d at %s\t%d\t%d", mRsId, mChr, mStart, mEnd);
+return map;
+}
+
+void setExceptionBit(char *eChr, int eStart, int eEnd, int eRsId, enum exceptionType exc)
+/* Look up mapping record by id and position, and set bit exc in map->exceptions.
+ * Naturally this must be called only after the mapping has been stored. */
+{
+struct coords *map = mustGetMapping(eChr, eStart, eEnd, eRsId);
+map->exceptions |= (1 << exc);
+}
+
+char *makeExceptionColVal()
+/* Translate exception codes for the current SNP into comma-sep'd string 
+ * for snp132Ext's exceptions col.
+ * Do not free result! */
+{
+static struct dyString *dy = NULL;
+if (dy == NULL)
+    dy = dyStringNew(512);
+dyStringClear(dy);
+struct coords *map = mustGetMapping(chr, chrStart, chrEnd, rsId);
+boolean needComma = FALSE;
+enum exceptionType exc;
+for (exc = 0;  exc < exceptionTypeCount;  exc++)
+    if (map->exceptions & (1 << exc))
+	{
+	if (needComma)
+	    dyStringAppendC(dy, ',');
+	dyStringAppend(dy, exceptionNames[exc]);
+	needComma = TRUE;
+	}
+return dy->string;
+}
+
+static float *parseFloatArray(struct lineFile *lf, char **row, int i, int count)
+/* Return an array[count] of floats parsed from row[i]. */
+{
+float *retArray;
+int size;
+sqlFloatDynamicArray(row[i], &retArray, &size);
+if (size != count)
+    lineFileAbort(lf, "Expected %d floats in column %d but got %d.", count, i, size);
+return retArray;
+}
 
 /* Several fields are numeric unless they have a placeholder value: */
 #define missingOrInt(lf, row, i) (isMissing(row[i]) ? -1 : lineFileNeedFullNum(lf, row, i))
 
 #define missingOrDouble(lf, row, i) (isMissing(row[i]) ? 0.0 : lineFileNeedDouble(lf, row, i))
 
+#define missingOrFloatArray(lf, row, i, count) (isMissing(row[i]) ? NULL : \
+						parseFloatArray(lf, row, i, count))
 
 void snpNcbiToUcsc(char *rawFileName, char *twoBitFileName, char *outRoot)
 /* snpNcbiToUcsc - Reformat NCBI SNP field values into UCSC, and flag exceptions.. */
@@ -1630,15 +1969,24 @@ char outFileName[2048];
 
 safef(outFileName, sizeof(outFileName), "%s.bed", outRoot);
 FILE *f = mustOpen(outFileName, "w");
+char tmpFileName[512];
+if (snp132Ext)
+    {
+    // Write to tmp file on first pass, then add exceptions column on second pass:
+    carefulClose(&f);
+    safef(tmpFileName, sizeof(tmpFileName), "firstPass.%ld.tab", (unsigned long)getpid());
+    f = mustOpen(tmpFileName, "w");
+    }
 
 initErrException(outRoot);
 initStringsUsed();
 memset(weightHisto, 0, sizeof(weightHisto));
 
+int expectedCols = snp132Ext ? 26 : 16;
 while ((wordCount = lineFileChopTab(lf, row)) > 0)
     {
     /* Read in raw data: same columns as SNP table, but in NCBI's encoding: */
-    lineFileExpectWords(lf, 16, wordCount);
+    lineFileExpectWords(lf, expectedCols, wordCount);
     chr            = row[0];
     chrStart       = missingOrInt(lf, row, 1);
     chrEnd         = missingOrInt(lf, row, 2);
@@ -1657,9 +2005,29 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     int locTypeNum = missingOrInt(lf, row, 13);
     int weight     = missingOrInt(lf, row, 14);
     /* Extra input column for comparing NCBI's chrom coords vs. ours: */
-    int ncbiChrStart = lineFileNeedFullNum(lf, row, 15);
-
+    int ncbiChrStart = missingOrInt(lf, row, 15);
+    // Additional input columns for snp132Ext:
+    int submitterCount = 0;
+    char *submitters = NULL;
+    int alleleFreqCount = 0;
+    char *alleles = NULL;
+    float *alleleNs = NULL, *alleleFreqs = NULL;
+    int linkPropB2 = 0, freqProp = 0, phenoProp = 0, qualCheck = 0;
+    if (snp132Ext)
+	{
+	submitterCount = missingOrInt(lf, row, 16);
+	submitters = row[17];
+	alleleFreqCount = missingOrInt(lf, row, 18);
+	alleles = row[19];
+	alleleNs = missingOrFloatArray(lf, row, 20, alleleFreqCount);
+	alleleFreqs = missingOrFloatArray(lf, row, 21, alleleFreqCount);
+	linkPropB2 = missingOrInt(lf, row, 22);
+	freqProp = missingOrInt(lf, row, 23);
+	phenoProp = missingOrInt(lf, row, 24);
+	qualCheck = missingOrInt(lf, row, 25);
+	}
     skipIt = FALSE;
+    exceptionBits = 0;
 
 #ifdef DEBUG
     carefulCheckHeap();
@@ -1703,6 +2071,15 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
     if (sameString("between", locType) && sameString("insertion", class) &&
 	!skipIt)
 	checkCluster(lf, strand, observed);
+    char bitfieldsStr[256];
+    if (snp132Ext)
+	{
+	checkSubmitters(lf, submitterCount, submitters);
+	processAlleleFreqs(lf, &alleleFreqCount, alleles, alleleNs, alleleFreqs);
+	// Note: the order of bytes here must match bitfieldsOffsets above:
+	int bytes[] = { linkPropB2, freqProp, phenoProp, qualCheck };
+	processBitfields(lf, bytes, bitfieldsStr, sizeof(bitfieldsStr));
+	}
     if (! skipIt)
 	{
 	storeMapping();
@@ -1723,7 +2100,23 @@ while ((wordCount = lineFileChopTab(lf, row)) > 0)
 	    fprintf(f, "0.0\t");
 	else
 	    fprintf(f, "%lf\t", avHetSE);
-	fprintf(f, "%s\t%s\t%d\n", func, locType, weight);
+	fprintf(f, "%s\t%s\t%d", func, locType, weight);
+	if (snp132Ext)
+	    {
+	    // On first pass, write out empty exceptions column that will
+	    // be replaced on second pass:
+	    fputc('\t', f);
+	    fprintf(f , "\t%d\t%s", submitterCount, submitters);
+	    fprintf(f, "\t%d\t%s\t", alleleFreqCount, alleles);
+	    int i;
+	    for (i=0;  i < alleleFreqCount;  i++)
+		fprintf(f, "%f,", alleleNs[i]);
+	    fputc('\t', f);
+	    for (i=0;  i < alleleFreqCount;  i++)
+		fprintf(f, "%f,", alleleFreqs[i]);
+	    fprintf(f, "\t%s", bitfieldsStr);
+	    }
+	fputc('\n', f);
 	}
     }
 /* Flush checkers' internal state at end of input: */
@@ -1750,6 +2143,31 @@ fclose(f);
 lineFileClose(&lf);
 twoBitClose(&twoBit);
 finishErrException(outRoot);
+
+if (snp132Ext)
+    {
+    // Second pass to fill in the empty exceptions column:
+    int outputColumnCount = 25;
+    lf = lineFileOpen(tmpFileName, TRUE);
+    f = mustOpen(outFileName, "w");
+    while ((wordCount = lineFileChopTab(lf, row)) > 0)
+	{
+	lineFileExpectWords(lf, outputColumnCount, wordCount);
+	chr = row[0];
+	chrStart = atoi(row[1]);
+	chrEnd = atoi(row[2]);
+	rsId = atoi(row[3]+2);
+	row[17] = makeExceptionColVal();
+	fputs(row[0], f);
+	for (i = 1;  i < outputColumnCount;  i++)
+	    fprintf(f, "\t%s", row[i]);
+	fputc('\n', f);
+	}
+    fclose(f);
+    lineFileClose(&lf);
+    unlink(tmpFileName);
+    }
+
 writeSnpSql(outRoot);
 }
 
@@ -1758,6 +2176,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 oneKGenomesRsIds = optionVal("1000GenomesRsIds", oneKGenomesRsIds);
+snp132Ext = optionExists("snp132Ext");
 if (argc != 4)
     usage();
 #ifdef DEBUG
