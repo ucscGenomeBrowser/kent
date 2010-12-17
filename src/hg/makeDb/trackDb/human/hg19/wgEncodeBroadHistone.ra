@@ -40,18 +40,26 @@
 # H3K79me2                          ## Missing
 # WCE       #colorScheme2 0,0,0
 
-#track wgEncodeHistoneDownloads
-#release alpha
-##compositeTrack on
-#superTrack wgEncodeHistoneSuper dense
-#shortLabel Nothing but files
-#longLabel ENCODE Fictitious Histone Modifications by ChIP-Seq (Downloadable Files Only)
-#group regulation
-#priority 0
-##type bed 3
-#type downloadsOnly
-#wgEncode 1
-#dataVersion through the ENCODE Jan 2013 Freeze
+# track wgEncodeHistoneDownloads
+# table wgEncodeBroadHistone
+# release alpha
+# #compositeTrack on
+# #type bed 3
+# type downloadsOnly
+# superTrack wgEncodeHistoneSuper dense
+# shortLabel Nothing but files
+# longLabel ENCODE Fictitious Histone Modifications by ChIP-Seq (Downloadable Files Only)
+# subGroup1 view Views Peaks=Peaks Signal=Signal
+# subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHDFa=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTBL=Osteobl
+# subGroup3 factor Antibody CTCF=CTCF H2AZ=H2A.Z H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K09me3=H3K9me3 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K79me2=H3K79me2 H4K20me1=H4K20me1 POL2B=Pol2(b) zCTRL=Input_Control
+# dimensions dimensionY=cellType dimensionX=factor
+# sortOrder cellType=+ factor=+ view=+
+# fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+# controlledVocabulary encode/cv.ra cellType=cell factor=antibody
+# group regulation
+# priority 0
+# wgEncode 1
+# dataVersion through the ENCODE Jan 2013 Freeze
 
 track wgEncodeBroadHistone
 compositeTrack on
@@ -64,6 +72,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier
 subGroup3 factor Antibody CTCF=CTCF H2AZ=H2A.Z H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K09me3=H3K9me3 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K79me2=H3K79me2 H4K20me1=H4K20me1 POL2B=Pol2(b) zCTRL=Input_Control
 dimensions dimensionY=cellType dimensionX=factor
 sortOrder cellType=+ factor=+ view=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
