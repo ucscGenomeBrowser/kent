@@ -13365,4 +13365,28 @@ cp ~/kent/src/hg/lib/fishClones.sql .
 hgLoadBed -tab -sqlTable=fishClones.sql -notItemRgb hg19 fishClones hg19.bed5p
 
 #############################################################################
+# CGAP SAGE LIFT (DONE, Galt 2010-12-16)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir cgapSage
+cd cgapSage
+echo "select * from cgapSage" | hgsql hg18 -N > hg18.bed8p
+liftOver -tab -bedPlus=8 -hasBin hg18.bed8p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed8p hg19.unmapped 
+wc -l *.bed8p
+#  276905 hg18.bed8p
+#  276865 hg19.bed8p
+grep -i split hg19.unmapped  | wc -l
+# 0
+grep -i partially  hg19.unmapped  | wc -l
+# 3
+cp ~/kent/src/hg/lib/cgapSage/cgapSage.sql .
+hgLoadBed -tab -hasBin -sqlTable=cgapSage.sql -notItemRgb hg19 cgapSage hg19.bed8p
+
+# no lift needed for the lib table
+echo "select * from cgapSageLib" | hgsql hg18 -N > cgapSageLib.tab
+cp ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql .
+hgLoadSqlTab hg19 cgapSageLib cgapSageLib.sql cgapSageLib.tab
+
+
+#############################################################################
 
