@@ -264,7 +264,7 @@ if (drop)
 	safef(comment, sizeof(comment),
 	    "Dropped %d tables with total size %llu", droppedCount, totalSize);
 	verbose(2,"# %s\n", comment);
-	hgHistoryComment(conn, comment);
+	hgHistoryComment(conn, "%s", comment);
 	}
     }
 sqlDisconnect(&conn);

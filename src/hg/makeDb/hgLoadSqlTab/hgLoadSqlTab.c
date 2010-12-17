@@ -74,7 +74,6 @@ void hgLoadSqlTab(char *database, char *table, char *createFile,
 {
 struct sqlConnection *conn = sqlConnect(database);
 
-char comment[256];
 int loadOptions = 0;
 int i=0;
 boolean oldTable = optionExists("oldTable") || optionExists("append");
@@ -101,14 +100,11 @@ for (i=0;  i < inCount;  i++)
 	sqlLoadTabFile(conn, inNames[i], table, loadOptions);
     }
 if (oldTable)
-    safef(comment, sizeof(comment),
-	  "Add contents of %d text file(s) to table %s.",
-	  inCount, table);
+    hgHistoryComment(conn, "Add contents of %d text file(s) to table %s.",
+		     inCount, table);
 else
-    safef(comment, sizeof(comment),
-	  "Load table %s directly from .sql and %d text file(s).",
-	  table, inCount);
-hgHistoryComment(conn, comment);
+    hgHistoryComment(conn, "Load table %s directly from .sql and %d text file(s).",
+		     table, inCount);
 sqlDisconnect(&conn);
 }
 
