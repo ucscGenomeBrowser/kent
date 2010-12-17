@@ -13140,7 +13140,7 @@ hgLoadBed hg19 vistaEnhancers vistaEnhancers.bed
 
 # add to hg19/trackDb.ra
 track vistaEnhancers override
-url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
 
 
 #####################################################
