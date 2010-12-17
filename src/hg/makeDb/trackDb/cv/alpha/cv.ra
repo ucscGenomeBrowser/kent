@@ -1178,12 +1178,8 @@ type Cell Line
 organism Human
 description (aka H54) Glioblastoma
 tissue Brain
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
-vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu) 
+vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner. 
 orderUrl http://pathology.mc.duke.edu/neuropath/np_faculty_dbigner.htm
-=======
-vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu)
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000527
 sex U
@@ -2297,7 +2293,6 @@ tag  Huh7
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  Huh-7 
 description  Hepatocellular carcinoma 
 lineage  Hepatocyte derived carcinoma taken from a liver tumor 
@@ -2305,15 +2300,6 @@ karyotype  Unknown
 sex  M 
 tissue  Liver 
 vendorName  Ravi Jhaveri, Duke University 
-=======
-target  Huh-7
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor
-karyotype  Unknown
-sex  M
-tissue  Liver
-vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 vendorId
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
@@ -2325,7 +2311,6 @@ tag  Huh7.5
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  Huh-7.5 
 description  Hepatocellular carcinoma 
 lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication 
@@ -2333,15 +2318,6 @@ karyotype  Unknown
 sex  M 
 tissue  Liver 
 vendorName  Ravi Jhaveri, Duke University 
-=======
-target  Huh-7.5
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication
-karyotype  Unknown
-sex  M
-tissue  Liver
-vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 vendorId
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
@@ -2379,7 +2355,6 @@ tag  iPS
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  iPS 
 description  induced pluripotent stem cell 
 lineage  induced pluripotent stem cell derived from skin fibroblast 
@@ -2389,17 +2364,6 @@ tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId 
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
-=======
-target  iPS
-description  induced pluripotent stem cell
-lineage  induced pluripotent stem cell derived from skin fibroblast
-karyotype  Unknown
-sex  U
-tissue  iPS stem cell derived from skin fibroblast
-vendorName  Josh Chenoweth (chenowej @ ninds.nih.gov), Laboratory of Molecular Biology, National Institutes of Health, NINDS
-vendorId
-orderUrl
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000001
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:iPS_Crawford_protocol.pdf
@@ -3000,7 +2964,6 @@ tag  Stellate
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  Stellate 
 description  Human Hepatic Stellate Cells 
 lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient 
@@ -3008,15 +2971,6 @@ karyotype  normal
 sex  F 
 tissue  Liver 
 vendorName  Steve Choi, Duke University 
-=======
-target  Stellate
-description  Human Hepatic Stellate Cells
-lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient
-karyotype  normal
-sex  F
-tissue  Liver
-vendorName  Steve Choi (steve.choi @ duke.edu) at Duke University
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 vendorId
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
@@ -7270,11 +7224,7 @@ term Switchgear
 tag Switchgear
 type dataType
 label SwitchGear
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 description SwitchGear Genomics 3' UTR reporter assay 
-=======
-description Provisional SwitchGear Genomics 3' UTR reporter assay
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 
 
 #This is not in the metaDB currently

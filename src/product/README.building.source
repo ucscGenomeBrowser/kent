@@ -32,12 +32,9 @@ Following the instructions in scripts/README
 	CentOS Linux on Intel or AMD Opteron environment.
 	Other users do report successful operation on other systems.
 
-	Other variables to be set: USE_BAM  USE_PNG  USE_SSL
+	Other variables to be set: USE_BAM  USE_SSL
 	See also:
 	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
-
-	USE_PNG=1 isn't really an option.  It needs to be set.
-	Future releases of the kent source tree will eliminate this option.
 
 2.  Create a directory where binaries will be moved to during
 	the build of the source tree:

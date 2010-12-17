@@ -13299,41 +13299,31 @@ grep -i part hg19.unmapped | wc -l
     mkdir -p /hive/data/genomes/hg19/bed/homNea/seqAlis
     cd /hive/data/genomes/hg19/bed/homNea/seqAlis
 
+for T in Feld1 Mez1 Sid1253 Vi33.16 Vi33.25 Vi33.26
+do
+    ln -s /hive/data/outside/homNea/hg19/${T}.hg18.bam \
+	./SL${T}.hg19.bam
+done
+
     ln -s /hive/data/outside/homNea/hg19/*.bam .
     for F in *.bam
 do
     samtools index $F
 done
-    
 
     mkdir -p /gbdb/hg19/neandertal/seqAlis
-for T in Feld1 Mez1 Sid1253
-do
-    ln -s /hive/data/outside/homNea/hg19/${T}.hg18.bam \
-	/gbdb/hg19/neandertal/seqAlis/${T}.hg19.bam
-    ln -s `pwd`/${T}.hg18.bam.bai /gbdb/hg19/neandertal/seqAlis/${T}.hg19.bai
-done
-for T in 16 25 26
-do
-    ln -s /hive/data/outside/homNea/hg19/Vi33.${T}.hg18.bam \
-	/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bam
-    ln -s `pwd`/Vi33.${T}.hg18.bam.bai \
-	/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bai
-done
+    ln -s `pwd`/SL*.b* /gbdb/hg19/neandertal/seqAlis/
 
 for T in Feld1 Mez1 Sid1253
 do
-      hgsql hg19 -e "drop table if exists bam${T}; create table bam${T} (fileName varchar(255) not null);"
-      hgsql hg19 -e "insert into bam${T} values ('/gbdb/hg19/neandertal/seqAlis/${T}.hg19.bam');"
+    hgBbiDbLink hg19 bamSL${T} \
+	/gbdb/hg19/neandertal/seqAlis/SL${T}.hg19.bam
 done
-
 for T in 16 25 26
 do
-      hgsql hg19 -e "drop table if exists bamVi33dot${T}; create table bamVi33dot${T} (fileName varchar(255) not null);"
-      hgsql hg19 -e "insert into bamVi33dot${T} values ('/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bam');"
+    hgBbiDbLink hg19 bamSLVi33dot${T} \
+	/gbdb/hg19/neandertal/seqAlis/SLVi33.${T}.hg19.bam
 done
-    hgsql hg19 -e "drop table if exists bamAll; create table bamAll (fileName varchar(255) not null);"
-    hgsql hg19 -e "insert into bamAll values ('/gbdb/hg19/neandertal/seqAlis/all-hg18.bam');"
 
 ##########################################################################
 # DECIPHER, RGD QTL, RGD RAT QTL (MAYBE DONE, Andy 2010-12-13)

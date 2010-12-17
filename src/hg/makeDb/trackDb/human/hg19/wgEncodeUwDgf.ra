@@ -2,7 +2,7 @@
 
 # UW DGF (wrangler: Venkat, assisted by Tim)
 # Notes:
-#       - Track Long Label:  DNaseI Digital Genomic Fingerprinting from ENCODE/University of Washington
+#       - Track Long Label:  DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 #	- Track Short Label: UW DNaseI DGF
 #       - View Long Labels: [cell] DNaseI DGF [view] from ENCODE/UW 
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
@@ -25,7 +25,7 @@ track wgEncodeUwDgf
 compositeTrack on
 superTrack wgEncodeDNAseSuper dense
 shortLabel UW DNaseI DGF
-longLabel DNaseI Digital Genomic Fingerprinting from ENCODE/University of Washington
+longLabel DNaseI Digital Genomic Footprinting from ENCODE/University of Washington
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal

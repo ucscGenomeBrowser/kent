@@ -48,9 +48,6 @@ export GOLD="${DOCUMENTROOT}/goldenPath"
 export TRASHDIR="${BROWSERHOME}/trash"
 # cgi-bin/ must be in the same directory as htdocs/ and trash/
 export CGI_BIN="${BROWSERHOME}/cgi-bin"
-# USE_PNG is not really an option, it is mandatory as of mid-year 2010
-#	The libpng development and run-time packages must be installed
-export USE_PNG=1
 # Adding these to your path will enable finding all the kent commands
 export PATH="$KENTBIN/$MACHTYPE:$KENTBIN/:$PATH"
 # where to find the hgsql command for database operations
