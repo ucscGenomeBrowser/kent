@@ -11,7 +11,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-14
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/09/09 Lane 1
 parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -36,7 +36,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-14
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 02/10/10 Lane 6
 parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -61,7 +61,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-14
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/09/09 Lane 1
 parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -86,7 +86,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-14
 fileName wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 02/10/10 Lane 6
 parentTable wgEncodeLicrHistoneBmarrowH3k4me1MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -207,7 +207,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 5/26/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -231,7 +231,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 8/20/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -255,7 +255,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 5/26/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -279,7 +279,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 8/20/09 Lane 6
 parentTable wgEncodeLicrHistoneCbellumH3k4me3MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -303,7 +303,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 4
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -328,7 +328,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 10/23/09 Lane 7
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -353,7 +353,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep3.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/14/09 Lane 2
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdAlnRep3
 project wgEncode
@@ -378,7 +378,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 4
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -403,7 +403,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 10/23/09 Lane 7
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -428,7 +428,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawDataRep3.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/14/09 Lane 2
 parentTable wgEncodeLicrHistoneCortexH3k4me1MAdult8wksC57bl6StdRawSignalRep3
 project wgEncode
@@ -453,7 +453,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 1
 parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -478,7 +478,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/21/09 Lane 1
 parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -503,7 +503,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 1
 parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -528,7 +528,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/21/09 Lane 1
 parentTable wgEncodeLicrHistoneCortexH3k4me3MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -553,7 +553,7 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 07/29/09 Lane 5
 parentTable wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -578,7 +578,7 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 02/24/10 Lane 1
 parentTable wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -603,7 +603,7 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 07/29/09 Lane 5
 parentTable wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -628,7 +628,7 @@ dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 02/24/10 Lane 1
 parentTable wgEncodeLicrHistoneHeartH3k4me1MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -640,4 +640,108 @@ strain C57BL/6
 subId 2789
 view RawData
 
-# MAGIC: -2104855536
+metaObject wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Kidney
+composite wgEncodeLicrHistone
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3002
+view Alignments
+
+metaObject wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Kidney
+composite wgEncodeLicrHistone
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 01/04/10 Lane 5
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3002
+view Alignments
+
+metaObject wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Kidney
+composite wgEncodeLicrHistone
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 3
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3002
+view RawData
+
+metaObject wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K4me1
+cell Kidney
+composite wgEncodeLicrHistone
+control std
+controlId Kidney/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-19
+dateUnrestricted 2011-08-18
+fileName wgEncodeLicrHistoneKidneyH3k4me1MAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 01/04/10 Lane 5
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3002
+view RawData
+
+# MAGIC: -733265284

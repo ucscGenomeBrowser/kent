@@ -21,21 +21,11 @@ hvg->clipMaxY = vg->height;
 return hvg;
 }
 
-#ifndef USE_PNG
-struct hvGfx *hvGfxOpenGif(int width, int height, char *fileName, boolean useTransparency)
-/* Open up something that we'll write out as a gif someday. */
-{
-return hvGfxAlloc(vgOpenGif(width, height, fileName, useTransparency));
-}
-
-#else
-
 struct hvGfx *hvGfxOpenPng(int width, int height, char *fileName, boolean useTransparency)
 /* Open up something that we'll write out as a PNG someday. */
 {
 return hvGfxAlloc(vgOpenPng(width, height, fileName, useTransparency));
 }
-#endif//def USE_PNG
 
 struct hvGfx *hvGfxOpenPostScript(int width, int height, char *fileName)
 /* Open up something that will someday be a PostScript file. */

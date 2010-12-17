@@ -1,6 +1,17 @@
 # Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
+
+#
+# BEFORE YOU EDIT THIS FILE!!!
+# - remember standard cv.ra editing protocol: after you add or modify any stanza,
+#   add the keyword "Provisional" to the description line
+#
+
+
+# NOTE: the revision history of this file was lost when it was moved in the repository.
+#     For history prior to Oct. 11, 2010  see the files v242_cv* in this directory.
+#
 # Human cell types, template below
 # --------------------------
 # term (human-readable cell type name)
@@ -21,6 +32,7 @@
 # tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html.  Not used in mouse)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+
 
 
 term GM12878
@@ -1174,12 +1186,8 @@ type Cell Line
 organism Human
 description (aka H54) Glioblastoma
 tissue Brain
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
-vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu) 
+vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner. 
 orderUrl http://pathology.mc.duke.edu/neuropath/np_faculty_dbigner.htm
-=======
-vendorName Duke University Medical Center, surgical resection from a patient with glioblastoma multiforme (WHO Grade IV). D54 is a commonly studied glioblastoma cell line (Bao et al., 2006) that has been thoroughly described by S Bigner (1981). Requests for D54 cells should be directed to Darrell Bigner (bigne001@mc.duke.edu)
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000527
 sex U
@@ -2293,7 +2301,6 @@ tag  Huh7
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  Huh-7 
 description  Hepatocellular carcinoma 
 lineage  Hepatocyte derived carcinoma taken from a liver tumor 
@@ -2301,15 +2308,6 @@ karyotype  Unknown
 sex  M 
 tissue  Liver 
 vendorName  Ravi Jhaveri, Duke University 
-=======
-target  Huh-7
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor
-karyotype  Unknown
-sex  M
-tissue  Liver
-vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 vendorId
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
@@ -2321,7 +2319,6 @@ tag  Huh7.5
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  Huh-7.5 
 description  Hepatocellular carcinoma 
 lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication 
@@ -2329,15 +2326,6 @@ karyotype  Unknown
 sex  M 
 tissue  Liver 
 vendorName  Ravi Jhaveri, Duke University 
-=======
-target  Huh-7.5
-description  Hepatocellular carcinoma
-lineage  Hepatocyte derived carcinoma taken from a liver tumor and selected for high levels of hepatitis C replication
-karyotype  Unknown
-sex  M
-tissue  Liver
-vendorName  Ravi Jhaveri (ravi.jhaveri @ duke.edu) at Duke University
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 vendorId
 orderUrl http://www.dukehealth.org/physicians/ravi_r_jhaveri
 termId BTO:0001950
@@ -2375,7 +2363,6 @@ tag  iPS
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  iPS 
 description  induced pluripotent stem cell 
 lineage  induced pluripotent stem cell derived from skin fibroblast 
@@ -2385,17 +2372,6 @@ tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId 
 orderUrl http://intra.ninds.nih.gov/lab.asp?org_id=25
-=======
-target  iPS
-description  induced pluripotent stem cell
-lineage  induced pluripotent stem cell derived from skin fibroblast
-karyotype  Unknown
-sex  U
-tissue  iPS stem cell derived from skin fibroblast
-vendorName  Josh Chenoweth (chenowej @ ninds.nih.gov), Laboratory of Molecular Biology, National Institutes of Health, NINDS
-vendorId
-orderUrl
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 termId BTO:0000001 (nonspecific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000001
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:iPS_Crawford_protocol.pdf
@@ -2996,7 +2972,6 @@ tag  Stellate
 type Cell Line
 tier 3
 organism Human
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 target  Stellate 
 description  Human Hepatic Stellate Cells 
 lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient 
@@ -3004,15 +2979,6 @@ karyotype  normal
 sex  F 
 tissue  Liver 
 vendorName  Steve Choi, Duke University 
-=======
-target  Stellate
-description  Human Hepatic Stellate Cells
-lineage  Liver that was perfused with collagenase and sellected for hepatic stellate cells by density gradient
-karyotype  normal
-sex  F
-tissue  Liver
-vendorName  Steve Choi (steve.choi @ duke.edu) at Duke University
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 vendorId
 orderUrl http://www.dukehealth.org/physicians/steve_s_choi
 termId BTO:0002316
@@ -4323,6 +4289,22 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
 validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 
+term  GATA1_(SC-266) 
+tag  GATA1SC266 
+type Antibody
+target  GATA1 
+antibodyDescription  Rat monoclonal raised against bacterially expressed murine GATA-1
+targetDescription  GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes. 
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-266
+orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
+lab  Snyder 
+lots  
+targetId GeneCard:Gata1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1
+validation GATA1(Immunoblot):mouse_GATA1-SC266_validation_Snyder.pdf
+
+
 term GATA-2
 tag GATA2
 type Antibody
@@ -5345,6 +5327,24 @@ lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation missing
+
+term  SETDB1_(SC-66884)
+tag  SETDB1SC66884
+type Antibody
+target  SETDB1
+antibodyDescription  SETDB1 (H-300) is an affinity purified rabbit polyclonal antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog.
+targetDescription  SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
+vendorName Santa Cruz Biotech
+vendorId Cat#sc-66884
+orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
+lab  Farnham
+lots
+targetId Genecards:SETDB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
+validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP)_Farnham:human_SETDB1-SC66884_validation_Farnham.pdf
+
+
+
 
 term Sin3Ak-20
 tag SIN3AK20
@@ -7250,11 +7250,7 @@ term Switchgear
 tag Switchgear
 type dataType
 label SwitchGear
-<<<<<<< HEAD:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 description SwitchGear Genomics 3' UTR reporter assay 
-=======
-description Provisional SwitchGear Genomics 3' UTR reporter assay
->>>>>>> 24d7d22e99c57a4f8f5082c07a476b9b3f13d670:src/hg/makeDb/trackDb/cv/alpha/cv.ra
 
 
 #This is not in the metaDB currently

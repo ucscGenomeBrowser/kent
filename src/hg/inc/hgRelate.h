@@ -21,23 +21,29 @@
 
 typedef unsigned int HGID;	/* A database ID. */
 
-HGID hgIdQuery(struct sqlConnection *conn, char *query);
-/* Return first field of first table as HGID. 0 return ok. */
+void hgHistoryComment(struct sqlConnection *conn, char *comment, ...)
+/* Add comment to history table. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
 
-HGID hgRealIdQuery(struct sqlConnection *conn, char *query);
-/* Return first field of first table as HGID- abort if 0. */
-
-void hgHistoryComment(struct sqlConnection *conn, char *comment, ...);
-/* Add comment to history table.  Does not lock the process. */
+void hgHistoryCommentWithIds(struct sqlConnection *conn, int startId, int endId, char *comment, ...)
+/* Add comment to history table, with id range. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 4, 5)))
+#endif
+;
 
 struct sqlConnection *hgStartUpdate(char *db);
-/* Open and connection and get next global id from the history table */
+/* Open and connection and lock the history table */
 
-void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...);
-/* Finish up connection with a printf format comment. */
-
-HGID hgNextId(void);
-/* Get next unique id.  (Should only be called after hgStartUpdate). */
+void hgEndUpdate(struct sqlConnection **pConn, int startId, int endId, char *comment, ...)
+/* Finish up connection with a printf format comment and optional id range */
+#if defined(__GNUC__)
+__attribute__((format(printf, 4, 5)))
+#endif
+;
 
 FILE *hgCreateTabFile(char *tmpDir, char *tableName);
 /* Open a tab file with name corresponding to tableName in tmpDir.  If tmpDir is NULL,

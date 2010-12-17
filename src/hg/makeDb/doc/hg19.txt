@@ -13140,7 +13140,7 @@ hgLoadBed hg19 vistaEnhancers vistaEnhancers.bed
 
 # add to hg19/trackDb.ra
 track vistaEnhancers override
-url http://enhancer-test.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$
+url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
 
 
 #####################################################
@@ -13299,41 +13299,31 @@ grep -i part hg19.unmapped | wc -l
     mkdir -p /hive/data/genomes/hg19/bed/homNea/seqAlis
     cd /hive/data/genomes/hg19/bed/homNea/seqAlis
 
+for T in Feld1 Mez1 Sid1253 Vi33.16 Vi33.25 Vi33.26
+do
+    ln -s /hive/data/outside/homNea/hg19/${T}.hg18.bam \
+	./SL${T}.hg19.bam
+done
+
     ln -s /hive/data/outside/homNea/hg19/*.bam .
     for F in *.bam
 do
     samtools index $F
 done
-    
 
     mkdir -p /gbdb/hg19/neandertal/seqAlis
-for T in Feld1 Mez1 Sid1253
-do
-    ln -s /hive/data/outside/homNea/hg19/${T}.hg18.bam \
-	/gbdb/hg19/neandertal/seqAlis/${T}.hg19.bam
-    ln -s `pwd`/${T}.hg18.bam.bai /gbdb/hg19/neandertal/seqAlis/${T}.hg19.bai
-done
-for T in 16 25 26
-do
-    ln -s /hive/data/outside/homNea/hg19/Vi33.${T}.hg18.bam \
-	/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bam
-    ln -s `pwd`/Vi33.${T}.hg18.bam.bai \
-	/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bai
-done
+    ln -s `pwd`/SL*.b* /gbdb/hg19/neandertal/seqAlis/
 
 for T in Feld1 Mez1 Sid1253
 do
-      hgsql hg19 -e "drop table if exists bam${T}; create table bam${T} (fileName varchar(255) not null);"
-      hgsql hg19 -e "insert into bam${T} values ('/gbdb/hg19/neandertal/seqAlis/${T}.hg19.bam');"
+    hgBbiDbLink hg19 bamSL${T} \
+	/gbdb/hg19/neandertal/seqAlis/SL${T}.hg19.bam
 done
-
 for T in 16 25 26
 do
-      hgsql hg19 -e "drop table if exists bamVi33dot${T}; create table bamVi33dot${T} (fileName varchar(255) not null);"
-      hgsql hg19 -e "insert into bamVi33dot${T} values ('/gbdb/hg19/neandertal/seqAlis/Vi33.${T}.hg19.bam');"
+    hgBbiDbLink hg19 bamSLVi33dot${T} \
+	/gbdb/hg19/neandertal/seqAlis/SLVi33.${T}.hg19.bam
 done
-    hgsql hg19 -e "drop table if exists bamAll; create table bamAll (fileName varchar(255) not null);"
-    hgsql hg19 -e "insert into bamAll values ('/gbdb/hg19/neandertal/seqAlis/all-hg18.bam');"
 
 ##########################################################################
 # DECIPHER, RGD QTL, RGD RAT QTL (MAYBE DONE, Andy 2010-12-13)
@@ -13373,6 +13363,30 @@ grep -i partially  hg19.unmapped  | wc -l
 # 13
 cp ~/kent/src/hg/lib/fishClones.sql .
 hgLoadBed -tab -sqlTable=fishClones.sql -notItemRgb hg19 fishClones hg19.bed5p
+
+#############################################################################
+# CGAP SAGE LIFT (DONE, Galt 2010-12-16)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir cgapSage
+cd cgapSage
+echo "select * from cgapSage" | hgsql hg18 -N > hg18.bed8p
+liftOver -tab -bedPlus=8 -hasBin hg18.bed8p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed8p hg19.unmapped 
+wc -l *.bed8p
+#  276905 hg18.bed8p
+#  276865 hg19.bed8p
+grep -i split hg19.unmapped  | wc -l
+# 0
+grep -i partially  hg19.unmapped  | wc -l
+# 3
+cp ~/kent/src/hg/lib/cgapSage/cgapSage.sql .
+hgLoadBed -tab -hasBin -sqlTable=cgapSage.sql -notItemRgb hg19 cgapSage hg19.bed8p
+
+# no lift needed for the lib table
+echo "select * from cgapSageLib" | hgsql hg18 -N > cgapSageLib.tab
+cp ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql .
+hgLoadSqlTab hg19 cgapSageLib cgapSageLib.sql cgapSageLib.tab
+
 
 #############################################################################
 

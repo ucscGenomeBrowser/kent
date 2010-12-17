@@ -24,8 +24,8 @@ load: clean
 	  hgLoadBed -noStrict test $${TEST}Bad  input/$${TEST}Bad.bed -verbose=0 ; \
 	done
 	for TEST in ${PSLS} ; do \
-	 hgLoadPsl test -table=$${TEST}Good input/$${TEST}Good.psl -verbose=0 ; \
-	 hgLoadPsl test -table=$${TEST}Bad  input/$${TEST}Bad.psl -verbose=0 ; \
+	 hgLoadPsl -noHistory test -table=$${TEST}Good input/$${TEST}Good.psl -verbose=0 ; \
+	 hgLoadPsl -noHistory test -table=$${TEST}Bad  input/$${TEST}Bad.psl -verbose=0 ; \
 	done
 
 mkdirs:

@@ -129,7 +129,7 @@ set split splitPrefix=chr%\_
 set tRNAsDbs hg18,hg19,mm9,rn4
 
 # Databases with the CGAP SAGE track
-set cgapSageDbs hg18,mm8
+set cgapSageDbs hg18,hg19,mm8
 
 # Define the shared identifiers and the fields they appear in.
 

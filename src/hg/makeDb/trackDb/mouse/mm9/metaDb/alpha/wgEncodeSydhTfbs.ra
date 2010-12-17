@@ -1794,7 +1794,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep1
 project wgEncode
 replicate 1
@@ -1819,7 +1819,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelCmybh141IggrabAlnRep2
 project wgEncode
 replicate 2
@@ -1844,7 +1844,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1869,7 +1869,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -1894,7 +1894,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelCmybh141IggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -1919,7 +1919,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMelCmybh141IggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2222,6 +2222,134 @@ strain Unknown
 subId 1857
 tableName wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
 treatment DMSO_2.0pct
+view Signal
+
+metaObject wgEncodeSydhTfbsMelCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelCtcfStdAlnRep1.bam
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType exp
+subId 3087
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelCtcfStdAlnRep2.bam
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 2
+setType exp
+subId 3087
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelCtcfStdPk
+objType table
+antibody CTCF
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelCtcfStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3087
+tableName wgEncodeSydhTfbsMelCtcfStdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelCtcfStdRawDataRep1
+objType file
+antibody CTCF
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelCtcfStdRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType exp
+subId 3087
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelCtcfStdRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 2
+setType exp
+subId 3087
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelCtcfStdSig
+objType table
+antibody CTCF
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelCtcfStdSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3087
+tableName wgEncodeSydhTfbsMelCtcfStdSig
+treatment None
 view Signal
 
 metaObject wgEncodeSydhTfbsMelE2f4IggrabAlnRep1
@@ -3159,7 +3287,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelNelfeIggrabRep1.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep1
 project wgEncode
 replicate 1
@@ -3184,7 +3312,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelNelfeIggrabAlnRep2.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelNelfeIggrabAlnRep2
 project wgEncode
 replicate 2
@@ -3209,7 +3337,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelNelfeIggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3234,7 +3362,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -3259,7 +3387,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelNelfeIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelNelfeIggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -3284,7 +3412,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelNelfeIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3440,6 +3568,134 @@ sex M
 strain Unknown
 subId 1864
 tableName wgEncodeSydhTfbsMelP300IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsMelP300StdAlnRep1
+objType file
+antibody p300
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelP300StdAlnRep1.bam
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType exp
+subId 3089
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelP300StdAlnRep2
+objType file
+antibody p300
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelP300StdAlnRep2.bam
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 2
+setType exp
+subId 3089
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMelP300StdPk
+objType table
+antibody p300
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelP300StdPk.narrowPeak.gz
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3089
+tableName wgEncodeSydhTfbsMelP300StdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsMelP300StdRawDataRep1
+objType file
+antibody p300
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelP300StdRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 1
+setType exp
+subId 3089
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelP300StdRawDataRep2
+objType file
+antibody p300
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelP300StdRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford-m
+project wgEncode
+replicate 2
+setType exp
+subId 3089
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMelP300StdSig
+objType table
+antibody p300
+cell MEL
+composite wgEncodeSydhTfbs
+control std
+controlId MEL/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-10
+dateUnrestricted 2011-09-10
+fileName wgEncodeSydhTfbsMelP300StdSig.bigWig
+grant Snyder
+lab Stanford-m
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3089
+tableName wgEncodeSydhTfbsMelP300StdSig
 treatment None
 view Signal
 
@@ -3603,7 +3859,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep1
 project wgEncode
 replicate 1
@@ -3628,7 +3884,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabAlnRep2
 project wgEncode
 replicate 2
@@ -3653,7 +3909,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3678,7 +3934,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -3703,7 +3959,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21Dmso20IggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -3728,7 +3984,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3753,7 +4009,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep1.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep1
 project wgEncode
 replicate 1
@@ -3778,7 +4034,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21IggrabAlnRep2.bam
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21IggrabAlnRep2
 project wgEncode
 replicate 2
@@ -3803,7 +4059,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21IggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3828,7 +4084,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep1
 project wgEncode
 replicate 1
@@ -3853,7 +4109,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 parentTable wgEncodeSydhTfbsMelRad21IggrabRawSignalRep2
 project wgEncode
 replicate 2
@@ -3878,7 +4134,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21IggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4183,4 +4439,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 893619172
+# MAGIC: 953884916

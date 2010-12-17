@@ -272,7 +272,7 @@ if (test)
 verbose(1, "Loading into %s table %s...\n", database, table);
 hgLoadTabFile(conn, ".", table, &f);
 verbose(1, "Loading complete");
-hgEndUpdate(&conn, "Add %ld maf summary blocks from %s\n", 
+hgEndUpdate(&conn, 0, 0, "Add %ld maf summary blocks from %s\n", 
                         summaryCount, fileName);
 }
 

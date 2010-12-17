@@ -4,7 +4,7 @@
 #       - Track Long Label:  DNA Methylation by Reduced Representation Bisulfite Seq from ENCODE/HudsonAlpha
 #	- Track Short Label: HAIB Methyl RRBS
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
-#       - Default Tracks on: Sites for K562 and GM12878 Cell Lines.
+#       - Default Tracks on: Sites for Tier 1 and Tier 2 for Replicate 1
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
 #       - Deafult View selections
 #               - Sites = dense
@@ -74,7 +74,7 @@ origAssembly hg19
     scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
-        parent wgEncodeHaibRrbsViewSites
+        parent wgEncodeHaibRrbsViewSites off
         shortLabel GM12878 2
         longLabel GM12878 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep2
@@ -485,7 +485,7 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2
-        parent wgEncodeHaibRrbsViewSites
+        parent wgEncodeHaibRrbsViewSites off
         shortLabel K562 2
         longLabel K562 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep2
@@ -503,7 +503,7 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1
-        parent wgEncodeHaibRrbsViewSites off
+        parent wgEncodeHaibRrbsViewSites
         shortLabel H1-hESC 1
         longLabel H1-hESC Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=1H1hESC obtainedBy=HAIB treatment=None rep=rep1
@@ -548,7 +548,7 @@ origAssembly hg19
         # subId=1152 dateSubmitted=2010-07-16
 
         track wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1
-        parent wgEncodeHaibRrbsViewSites off
+        parent wgEncodeHaibRrbsViewSites
         shortLabel HeLa-S3 1
         longLabel HeLa-S3 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HeLaS3 obtainedBy=HAIB treatment=None rep=rep1
@@ -669,7 +669,7 @@ origAssembly hg19
 #        # subId=1220 dateSubmitted=2010-07-13
 
         track wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
-        parent wgEncodeHaibRrbsViewSites off
+        parent wgEncodeHaibRrbsViewSites
         shortLabel HepG2 1
         longLabel HepG2 Methyl-RRBS Sites Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Sites cellType=2HepG2 obtainedBy=Duke treatment=None rep=rep1

@@ -1058,29 +1058,16 @@ function tableSortAtButtonPress(anchor,tagId)
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
-    //jQuery.each(jQuery.browser, function(i, val) {
-    //    if(val) {
-    //        browser = i;
-    //    }
-    //});
+    // Initialize sortable tables
+    $('table.sortable').each(function (ix) {
+        sortTableInitialize(this,true,true);
+    });
 
-    // Allows rows to have their positions updated after a drag event
-    var tblDnd = $(".tableWithDragAndDrop");
-    if($(tblDnd).length > 0) {
-        $(tblDnd).tableDnD({
-            onDragClass: "trDrag",
-            dragHandle: "dragHandle",
-            onDrop: function(table, row, dragStartIndex) {
-                    if(tableSetPositions) {
-                        tableSetPositions(table);
-                    }
-                }
-            });
-        $("td.dragHandle").hover(
-            function(){ $(this).closest('tr').addClass('trDrag'); },
-            function(){ $(this).closest('tr').removeClass('trDrag'); }
-        );
-    }
+    // Register tables with drag and drop
+    $("table.tableWithDragAndDrop").each(function (ix) {
+        tableDragAndDropRegister(this);
+    });
+
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 
     $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually

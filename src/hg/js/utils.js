@@ -429,6 +429,10 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
         if($(divit).find('table').length == 0)
             lookupMetadata(trackName,showLonglabel,showShortLabel);
     }
+    var tr = $(divit).parents('tr');
+    if (tr.length > 0) {
+        $(divit).children('table').css('backgroundColor',$(tr[0]).css('backgroundColor'));
+    }
     $(divit).toggle();  // jQuery hide/show
     return false;
 }
@@ -955,6 +959,27 @@ function codonColoringChanged(name)
 }
 
 
+//////////// Drag and Drop ////////////
+function tableDragAndDropRegister(thisTable)
+{// Initialize a table with tableWithDragAndDrop
+    if ($(thisTable).hasClass("tableWithDragAndDrop") == false)
+        return;
+
+    $(thisTable).tableDnD({
+        onDragClass: "trDrag",
+        dragHandle: "dragHandle",
+        onDrop: function(table, row, dragStartIndex) {
+                if(tableSetPositions) {
+                    tableSetPositions(table);
+                }
+            }
+    });
+    $(thisTable).find("td.dragHandle").hover(
+        function(){ $(this).closest('tr').addClass('trDrag'); },
+        function(){ $(this).closest('tr').removeClass('trDrag'); }
+    );
+}
+
 //////////// Sorting ////////////
 // Sorting a table by columns relies upon the sortColumns structure
 
@@ -1055,6 +1080,9 @@ function tableSortFinish(tbody,sortColumns)
     tableSetPositions(tbody);
     if ($(tbody).hasClass('altColors'))
         sortedTableAlternateColors(tbody,sortColumns);
+    $(tbody).parents("table.tableWithDragAndDrop").each(function (ix) {
+        tableDragAndDropRegister(this);
+    });
     //$(tbody).show();
     $(tbody).removeClass('sorting');
 }
@@ -1066,7 +1094,7 @@ function tableSortByColumns(tbody,sortColumns)
     $(tbody).addClass('sorting');
     gTbody=tbody;
     gSortColumns=sortColumns;
-    setTimeout('tableSort(gTbody,gSortColumns)',5); // This allows hiding the rows while sorting!
+    setTimeout('tableSort(gTbody,gSortColumns)',50); // This allows hiding the rows while sorting!
 }
 
 function trAlternateColors(tbody,rowGroup,cellIx)
@@ -1531,7 +1559,13 @@ function sortTableInitialize(table,addSuperscript,altColors)
             $(this).click( function () { tableSortOnButtonPress(this);} );
         }
         if ( $(this).attr('title').length == 0) {
-            $(this).attr('title',"Sort list on '" + $(this).text() + "'." );
+            var title = $(this).text().replace(/[^a-z0-9 ]/ig,'');
+            if (title.length > 0 && $(this).find('sup'))
+                title = title.replace(/[0-9]$/g,'');
+            if (title.length > 0)
+                $(this).attr('title',"Sort list on '" + title + "'." );
+            else
+                $(this).attr('title',"Sort list on column." );
         }
     })
     // Now update all of those cells
