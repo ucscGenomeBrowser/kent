@@ -3823,10 +3823,11 @@ if (!hIsGsidServer())
     if (tbl[0] == 0)
     	{
     	puts("<P>"
-	     "Note: if you would prefer to get DNA for features of a particular "
-	     "track or table, try the ");
+             "Note: This page retrieves genomic DNA for a single region. "
+             "If you would prefer to get DNA for many items in a particular track, "
+             "or get DNA with formatting options based on gene structure (introns, exons, UTRs, etc.), try using the ");
     	printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
-    	puts("Table Browser</A> using the output format sequence.");
+    	puts("Table Browser</A> with the \"sequence\" output format.");
     	}
     else
     	{
