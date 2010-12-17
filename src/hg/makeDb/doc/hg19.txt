@@ -13387,6 +13387,67 @@ echo "select * from cgapSageLib" | hgsql hg18 -N > cgapSageLib.tab
 cp ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql .
 hgLoadSqlTab hg19 cgapSageLib cgapSageLib.sql cgapSageLib.tab
 
-
 #############################################################################
+# LASTZ Zebrafish DanRer7 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+    cd /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
 
+    cat << '_EOF_' > DEF
+# human vs X. zebrafish
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Fri Dec 17 09:11:34 PST 2010
+    #	real    1678m17.827s
+    #	failed during the chain step due to encodek cluster problems
+    #	finish that manually, then:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=chainMerge > chainMerge.log 2>&1 &
+    #	real    167m6.930s
+    cat fb.hg19.chainDanRer7Link.txt 
+    #	88391631 bases of 2897316137 (3.051%) in intersection
+
+    #	running the swap - DONE - 2010-12-17
+    mkdir /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    183m21.102s
+    cat fb.danRer7.chainHg19Link.txt 
+    #	96424507 bases of 1506896106 (6.399%) in intersection
+
+##############################################################################
