@@ -496,7 +496,7 @@ include wgEncodeRikenCage.ra
 
 # Duke Affy Exon (wrangler: braney)
 include wgEncodeDukeAffyExon.ra
-#include wgEncodeDukeAffyExon.new.ra
+include wgEncodeDukeAffyExon.new.ra
 
 # U. Washington Affy Exon (wrangler: Andy, Brian)
 
@@ -1644,7 +1644,7 @@ type encodeFiveC
 
 # Affymetrix RNA-chip (wrangler: braney)
 include wgEncodeAffyRnaChip.ra
-#include wgEncodeAffyRnaChip.new.ra
+include wgEncodeAffyRnaChip.new.ra
 
 # SUNY Albany genechp (wrangler: braney)
 
@@ -1978,7 +1978,7 @@ wgEncode 1
 
 # HudsonAlpha CNV (wrangler: braney)
 include wgEncodeHudsonalphaCnv.ra
-#include wgEncodeHudsonalphaCnv.new.ra
+include wgEncodeHudsonalphaCnv.new.ra
 
 # HudsonAlpha Methyl-seq (wrangler: braney)
 
@@ -2723,299 +2723,22 @@ include wgEncodeCaltechRnaSeq.ra
 
 # GIS RNA-seq (wrangler: braney)
 include wgEncodeGisRnaSeq.ra
+include wgEncodeGisRnaSeq.new.ra
 
 # GIS DNA Pet (wrangler: braney)
 include wgEncodeGisDnaPet.ra
-#include wgEncodeGisDnaPet.new.ra
+include wgEncodeGisDnaPet.new.ra
 
 # Helicos RNA-seq (wrangler: braney)
 include wgEncodeHelicosRnaSeq.ra
+include wgEncodeHelicosRnaSeq.new.ra
 
 # CSHL short rna-seq (wrangler: braney)
 include wgEncodeCshlShortRnaSeq.ra
-#include wgEncodeCshlShortRnaSeq.new.ra
+include wgEncodeCshlShortRnaSeq.new.ra
 
 # CSHL long rna-seq (wrangler: braney)
-track wgEncodeCshlLongRnaSeq
-compositeTrack on
-shortLabel CSHL Long RNA-seq
-longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
-group expression
-subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3 localization Localization cell=Cell cytosol=Cytosol
-subGroup4 rnaExtract Rna_Extract total=Total_RNA longPolyA=Long_PolyA+
-dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
-dragAndDrop subTracks
-dimensionZchecked longNonPolyA,longPolyA,total
-priority 0
-type bed 3
-wgEncode 1
-noInherit on
-
-    track wgEncodeCshlLongRnaSeqView1-PlusRawSignal
-    shortLabel Plus Raw Signal
-    view 1-PlusRawSignal
-    visibility full
-    subTrack wgEncodeCshlLongRnaSeq
-    maxHeightPixels 100:24:16
-    windowingFunction maximum
-    transformFunc NONE
-    autoScale on
-    minLimit 0
-    maxLimit 898990
-
-        track wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
-        shortLabel GM12 cell to +S1
-        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (GM12878 whole cell)
-        subGroups view=1-PlusRawSignal cellType=GM12878 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 580871
-        minLimit 0
-        maxLimit 580871
-        transformFunc NONE
-        color 153,38,0
-
-        track wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
-        shortLabel GM12 cell to +S2
-        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 2 (GM12878 whole cell)
-        subGroups view=1-PlusRawSignal cellType=GM12878 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 898990
-        minLimit 0
-        maxLimit 898990
-        transformFunc NONE
-        color 153,38,0
-
-        track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
-        shortLabel K562 cell to +S1
-        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (K562 whole cell)
-        subGroups view=1-PlusRawSignal cellType=K562 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 384266
-        minLimit 0
-        maxLimit 384266
-        transformFunc NONE
-        color 46,0,184
-
-        track wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
-        shortLabel K562 cell to +S2
-        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 2 (K562 whole cell)
-        subGroups view=1-PlusRawSignal cellType=K562 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 421850
-        minLimit 0
-        maxLimit 421850
-        transformFunc NONE
-        color 46,0,184
-
-        track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2
-        subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
-        shortLabel K562 cyto A+ +S1
-        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
-        subGroups view=1-PlusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
-        type bedGraph 4
-        #type bigWig 0 118018
-        minLimit 0
-        maxLimit 118018
-        transformFunc NONE
-        color 46,0,184
-
-    track wgEncodeCshlLongRnaSeqView2-MinusRawSignal
-    shortLabel Minus Raw Signal
-    view 2-MinusRawSignal
-    visibility full
-    subTrack wgEncodeCshlLongRnaSeq
-    maxHeightPixels 100:24:16
-    windowingFunction maximum
-    transformFunc NONE
-    autoScale on
-    minLimit 0
-    maxLimit 3756424
-
-        track wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
-        shortLabel GM12 cell to -S1
-        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (GM12878 whole cell)
-        subGroups view=2-MinusRawSignal cellType=GM12878 localization=cell rnaExtract=total
-        type bedGraph 4
-        # type bigWig 0 2199965
-        minLimit 0
-        maxLimit 2199965
-        transformFunc NONE
-        color 153,38,0
-
-        track wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
-        shortLabel GM12 cell to -S2
-        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 2 (GM12878 whole cell)
-        subGroups view=2-MinusRawSignal cellType=GM12878 localization=cell rnaExtract=total
-        type bedGraph 4
-        # type bigWig  0 3756424
-        minLimit 0
-        maxLimit 3756424
-        transformFunc NONE
-        color 153,38,0
-
-        track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
-        shortLabel K562 cell to -S1
-        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (K562 whole cell)
-        subGroups view=2-MinusRawSignal cellType=K562 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 2180073
-        minLimit 0
-        maxLimit 2180073
-        transformFunc NONE
-        color 46,0,184
-
-        track wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
-        shortLabel K562 cell to -S2
-        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 2 (K562 whole cell)
-        subGroups view=2-MinusRawSignal cellType=K562 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 1769868
-        minLimit 0
-        maxLimit 1769868
-        transformFunc NONE
-        color 46,0,184
-
-        track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2
-        subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
-        shortLabel K562 cyto A+ -S1
-        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 1 (PolyA+ in K562 cytosol)
-        subGroups view=2-MinusRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
-        type bedGraph 4
-        #type bigWig 0 318978
-        minLimit 0
-        maxLimit 318978
-        transformFunc NONE
-        color 46,0,184
-
-    track wgEncodeCshlLongRnaSeqView3-AllRawSignal
-    shortLabel All Raw Signal
-    view 3-AllRawSignal
-    visibility hide
-    subTrack wgEncodeCshlLongRnaSeq
-    maxHeightPixels 100:24:16
-    windowingFunction maximum
-    transformFunc NONE
-    autoScale on
-    minLimit 0
-    maxLimit 4860029
-
-        track wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
-        shortLabel GM12 cell to AS1
-        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (GM12878 whole cell)
-        subGroups view=3-AllRawSignal cellType=GM12878 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 2689207
-        minLimit 0
-        maxLimit 2689207
-        transformFunc NONE
-        color 153,38,0
-
-        track wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
-        shortLabel GM12 cell to AS2
-        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 2 (GM12878 whole cell)
-        subGroups view=3-AllRawSignal cellType=GM12878 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 4860029
-        minLimit 0
-        maxLimit 4860029
-        transformFunc NONE
-        color 153,38,0
-
-        track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
-        shortLabel K562 cell to AS1
-        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (K562 whole cell)
-        subGroups view=3-AllRawSignal cellType=K562 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 3032883
-        minLimit 0
-        maxLimit 3032883
-        transformFunc NONE
-        color 46,0,184
-
-        track wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
-        shortLabel K562 cell to AS2
-        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 2 (K562 whole cell)
-        subGroups view=3-AllRawSignal cellType=K562 localization=cell rnaExtract=total
-        type bedGraph 4
-        #type bigWig 0 2411797
-        minLimit 0
-        maxLimit 2411797
-        transformFunc NONE
-        color 46,0,184
-
-        track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
-        subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
-        shortLabel K562 cyto A+ AS1
-        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Rep 1 (PolyA+ in K562 cytosol)
-        subGroups view=3-AllRawSignal cellType=K562 localization=cytosol rnaExtract=longPolyA
-        type bedGraph 4
-        #type bigWig 0 318978
-        minLimit 0
-        maxLimit 318978
-        transformFunc NONE
-        color 46,0,184
-
-    track wgEncodeCshlLongRnaSeqView4-Alignments
-    shortLabel Alignments
-    view 4-Alignments
-    visibility pack
-    subTrack wgEncodeCshlLongRnaSeq
-
-        track wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
-        shortLabel GM12 cell to Al1
-        longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (GM12878 whole cell)
-        subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
-        type bigBed 12
-        colorByStrand 46,0,184 238,85,34
-
-        track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
-        shortLabel GM12 cell to Al2
-        longLabel ENCODE CSHL Long RNA-seq Tags Replicate 2 (GM12878 whole cell)
-        subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
-        type bigBed 12
-        colorByStrand 46,0,184 238,85,34
-
-        track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
-        shortLabel K562 cell to Al1
-        longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (K562 whole cell)
-        subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
-        type bigBed 12
-        colorByStrand 46,0,184 238,85,34
-
-        track wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal
-        subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
-        shortLabel K562 cell to Al2
-        longLabel ENCODE CSHL Long RNA-seq Tags Replicate 2 (K562 whole cell)
-        subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
-        type bigBed 12
-        colorByStrand 46,0,184 238,85,34
-
-        track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2
-        subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
-        shortLabel K562 cyto A+ Al1
-        longLabel ENCODE CSHL Long RNA-seq Tags Replicate 1 (PolyA+ in K562 cytosol)
-        subGroups view=4-Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
-        type bigBed 12
-        colorByStrand 46,0,184 238,85,34
+include wgEncodeCshlLongRnaSeq.ra
 
 # UMass Weng Lab TFBS Validation (wrangler: kate)
 
