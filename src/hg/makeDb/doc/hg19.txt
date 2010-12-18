@@ -13507,3 +13507,108 @@ XXX - running Fri Dec 17 09:11:34 PST 2010
     #	96424507 bases of 1506896106 (6.399%) in intersection
 
 ##############################################################################
+# UMass Med School brain histone ChIP-seq 
+# (DONE - 2010-12-17 - Kate)
+#
+# From Troy Whitfield, submitting for Zhiping Weng, collab with Akbarian
+# Published in PNAS, April 2010
+# Variables: cell, sample, sex, age
+# Tissue:  Prefrontal cortex (PFC)
+#
+# 11 individuals, age .5 to 69 years
+# 13 bigWigs of H3K4me3 enrichment: 11 neuronal, 2 non-neuronal 
+# 3 peaks files (bed5FloatScore)
+# Neuronal cells selected by FACS sorting, based on NeuN marker (NeuN+)
+# Non-neuronal (NeuN-) cells are largely glia, microglia, and endothelium
+# 3 peak files
+
+# Note: used publicly available blood cell (lymphocyte)
+# ChIP-seq as controls:
+# K562, GM12878 (from Bernstein ENCODE group), CD4+ (from Barski, HLB)
+
+    cd /hive/data/genomes/hg19/bed
+
+    mkdir uMassBrainHistone
+    cd uMassBrainHistone
+
+    wget http://zlab.umassmed.edu/~whitfiet/hg19/uMassBrainHist.tar.gz
+    tar xvfz uMassBrainHist.tar.gz
+    cd data
+
+    set t = "uMassBrainHistone"
+
+# Load peak tracks
+# peaks in neuron not in  blood
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksNeuron 11Neuronal_vs_3Blood_hg19.bed
+# Loaded 7947 elements of size 6
+
+# peaks in infants (<1 year), not in seniors (>60)
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksInfant 3Young_vs3Old_hg19.bed
+# Loaded 1292 elements of size 6
+
+# peaks specific to individuals
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksSample SampleSpecific_hg19.bed
+# Loaded 3214 elements of size 6
+
+# Load signal tracks
+# Get metadata from .ddf file
+
+    cd ..
+    cat uMassMedBrainHist.ddf
+
+#files   view    sample  cell    sex     age
+#data/s6.bw      Signal  6       neuron  male    4.7
+#data/s6n.bw     Signal  6       non-neuron      male    4.7
+#data/s2.bw      Signal  2       neuron  male    0.58
+#data/s3.bw      Signal  3       neuron  female  0.75
+#data/s1.bw      Signal  1       neuron  male    0.5
+#data/s9.bw      Signal  9       neuron  female  68
+#data/s5.bw      Signal  5       neuron  female  2.8
+#data/s11.bw     Signal  11      neuron  female  69
+#data/s11n.bw    Signal  11      non-neuron      female  69
+#data/s7.bw      Signal  7       neuron  male    8.8
+#data/s8.bw      Signal  8       neuron  male    14
+#data/s10.bw     Signal  10      neuron  female  69
+#data/s4.bw      Signal  4       neuron  male    1.3
+#data/11Neuronal_vs_3Blood_hg19.bed      Peaks   N/A     N/A     N/A     N/A
+#data/3Young_vs3Old_hg19.bed     Peaks   N/A     N/A     N/A     N/
+#data/SampleSpecific_hg19.bed    Peaks   N/A     N/A     N/A     N/A
+
+
+# Generate table names from DDF
+# Format:  uMassBrainHistoneSignalS<sample>Neu<P|M><age>yrs<M|F>
+# e.g. uMassBrainHistoneSignalS1185Neu4pt7yrsM
+
+    grep Signal uMassMedBrainHist.ddf | \
+
+    cat << 'EOF' > list.pl
+while (<>) {
+    ($file, $view, $sample, $cell, $sex, $age) = split;
+    next unless $view eq 'Signal';
+    $cell = ($cell eq 'neuron' ? 'P' : 'M');
+    $age =~ s/\./pt/;
+    $sex = ($sex eq 'male' ? 'M' : 'F');
+    $table = "uMassBrainHistoneSignalS" . $sample . "Neu" . $cell . $age . "yrs" . $sex;
+    print $file . "." . $table . "\n";
+}
+'EOF'
+
+    cat << 'EOF' > load.csh
+set gbdb = "/gbdb/hg19/bbi/uMassBrainHistone"
+foreach x (`perl list.pl < uMassMedBrainHist.ddf`)
+    set f = $x:r
+    set t = $x:e
+    echo "Loading $f into $t"
+    bigWigInfo $f
+    ln -s `pwd`/$f $gbdb/$t.bw
+    hgBbiDbLink hg19 $t $gbdb/$t.bw
+end
+'EOF'
+
+    csh load.csh >&! load.out &
