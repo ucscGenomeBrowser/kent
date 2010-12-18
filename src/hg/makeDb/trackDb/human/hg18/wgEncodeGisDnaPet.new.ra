@@ -18,9 +18,11 @@ wgEncode 1
     shortLabel Alignments
     view Alignments
     visibility dense
-    subTrack wgEncodeGisDnaPet
+    release alpha
+        subTrack wgEncodeGisDnaPet
 
         track wgEncodeGisDnaPetAlignmentsK5621k
+        release alpha
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 1k
         color 46,0,184
@@ -36,6 +38,7 @@ wgEncode 1
     #    configurable on
 
         track wgEncodeGisDnaPetAlignmentsK56210k
+        release alpha
         subTrack wgEncodeGisDnaPetViewAlignments on
         shortLabel K562 10k
         color 46,0,184
@@ -51,6 +54,7 @@ wgEncode 1
     #    configurable on
 
 	track wgEncodeGisDnaPetAlignmentsK56220k
+        release alpha
         subTrack wgEncodeGisDnaPetViewAlignments off
 	shortLabel K562 20k
         color 46,0,184
@@ -64,6 +68,7 @@ wgEncode 1
 	showDiffBasesMaxZoom 10000.0
 
         track wgEncodeGisDnaPetAlignmentsGm128781k
+        release alpha
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 1k
         color 153,38,0
@@ -79,6 +84,7 @@ wgEncode 1
     #    configurable on
 
         track wgEncodeGisDnaPetAlignmentsGm128785k
+        release alpha
         subTrack wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 5k
         color 153,38,0
@@ -94,6 +100,7 @@ wgEncode 1
     #    configurable on
 
         track wgEncodeGisDnaPetAlignmentsGm1287810k
+        release alpha
         subTrack wgEncodeGisDnaPetViewAlignments on
         color 153,38,0
         shortLabel GM12878 10k
