@@ -16,7 +16,12 @@ void usage()
 errAbort(
   "fastaToPsl - Convert FASTA pair alignments to PSL format\n"
   "usage:\n"
-  "   fastaToPsl [options] in.fasta out.psl\n"
+  "   fastaToPsl  in.fasta out.psl\n"
+  "\n"
+  "If there are more than two sequences in the FASTA alignment.\n"
+  "the first sequence is use as the query and the rest of the\n"
+  "sequences are iterated over as the target to create a series\n"
+  "of pair-wise alignments.\n"
   );
 }
 
@@ -30,9 +35,7 @@ void fastaToPsl(char *inName, char *outName)
 /* fastaToPsl - Convert axt to psl format. */
 {
 struct lineFile *inLF;
-DNA *tmpSeq;
-char *tmpHeader;
-int tmpSize;
+FILE *outFh;
 boolean read;
 struct psl* pslAlign;
 
@@ -46,39 +49,41 @@ int tSize;
 int tSeqLen;
 char *tHeader;
 
-inLF  = lineFileOpen(inName, TRUE);
+int queryCounter;
 
-/* read the query sequence */
-read = faMixedSpeedReadNext(inLF, &tmpSeq, &qSize, &tmpHeader);
+inLF  = lineFileOpen(inName, TRUE);
+outFh = mustOpen(outName, "w");
+
+/* read the target sequence */
+read = faMixedSpeedReadNext(inLF, &qSeq, &qSize, &qHeader);
 if (!read)
-    errAbort("Could not read query FASTA entry.");
-qSeq    = cloneString(tmpSeq);
+    errAbort("Could not read target FASTA entry.");
+qSeq    = cloneString(qSeq);
 qSeqLen = countNonDash(qSeq, qSize);
-qHeader = cloneString(tmpHeader);
+qHeader = cloneString(qHeader);
 verbose(2, "Query sequence header: %s\n", qHeader);
 verbose(3, "Query sequence alignment length: %d\n", qSize);
 verbose(3, "Query sequence length: %d\n", qSeqLen);
+verbose(4, "Query sequence: %s\n", qSeq);
 
-/* read the target sequence */
-read = faMixedSpeedReadNext(inLF, &tmpSeq, &tSize, &tmpHeader);
-if (!read)
-    errAbort("Could not read target FASTA entry.");
-tSeq    = cloneString(tmpSeq);
-tSeqLen = countNonDash(tSeq, tSize);
-tHeader = cloneString(tmpHeader);
-verbose(2, "Target sequence header: %s\n", tHeader);
-verbose(3, "Target sequence alignment length: %d\n", tSize);
-verbose(3, "Target sequence length: %d\n", tSeqLen);
+/* read the rest of the sequences */
+queryCounter = 1;
+pslWriteHead(outFh);
+while (faMixedSpeedReadNext(inLF, &tSeq, &tSize, &tHeader))
+    {
+    tSeqLen = countNonDash(tSeq, tSize);
 
-/* try to read next sequence to see if there is one */
-read = faMixedSpeedReadNext(inLF, &tmpSeq, &tmpSize, &tmpHeader);
-if (read)
-    verbose(0, "Found more than two FASTA entries, only processing the first two.\n");
+    verbose(2, "Target sequence (%d) header: %s\n", queryCounter, tHeader);
+    verbose(3, "Target sequence (%d) length: %d\n", queryCounter, tSeqLen);
+    verbose(4, "Target sequence (%d): %s\n", queryCounter, tSeq);
 
-pslAlign = pslFromAlign(qHeader, qSeqLen, 0, qSeqLen, qSeq,
-                        tHeader, tSeqLen, 0, tSeqLen, tSeq,
-                        "+", 0);
-pslWriteAll(pslAlign, outName, TRUE);
+    pslAlign = pslFromAlign(qHeader, qSeqLen, 0, qSeqLen, qSeq,
+                            tHeader, tSeqLen, 0, tSeqLen, tSeq,
+                            "+", 0);
+    pslTabOut(pslAlign, outFh);
+
+    ++queryCounter;
+    }
 
 lineFileClose(&inLF);
 }
@@ -89,7 +94,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpec);
 if (argc != 3)
     usage();
-//gUntranslated = optionExists("untranslated");
 fastaToPsl(argv[1], argv[2]);
 return 0;
 }
