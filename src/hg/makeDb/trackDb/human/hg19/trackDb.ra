@@ -5,7 +5,7 @@ include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
 
 #large composites
-# include uMassBrainHistone.ra
+include uMassBrainHistone.ra
 
 track stsMap override
 visibility hide
