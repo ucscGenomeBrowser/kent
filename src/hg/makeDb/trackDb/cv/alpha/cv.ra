@@ -2,6 +2,13 @@
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
 
+#
+# BEFORE YOU EDIT THIS FILE!!!
+# - remember standard cv.ra editing protocol: after you add or modify any stanza,
+#   add the keyword "Provisional" to the description line
+#
+
+
 # NOTE: the revision history of this file was lost when it was moved in the repository.
 #     For history prior to Oct. 11, 2010  see the files v242_cv* in this directory.
 #
@@ -25,6 +32,7 @@
 # tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html.  Not used in mouse)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+
 
 
 term GM12878
@@ -5319,6 +5327,25 @@ lab Farnham
 targetId GeneCard:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SETDB1
 validation missing
+
+term  SETDB1_(SC-66884)
+tag  SETDB1SC66884
+type Antibody
+target  SETDB1
+antibodyDescription  SETDB1 (H-300) is an affinity purified rabbit polyclonal antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog.
+targetDescription  SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
+vendorName Santa Cruz Biotech
+vendorId Cat#sc-66884
+orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
+lab  Farnham
+lots
+targetId Genecards:SETDB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
+validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):
+human_SETDB1-SC66884_validation_Farnham.pdf
+
+
+
 
 term Sin3Ak-20
 tag SIN3AK20

@@ -1575,7 +1575,16 @@ function sortTableInitialize(table,addSuperscript,altColors)
     if(altColors != undefined)
         sortedTableAlternateColors(tbody);
 
+    // Highlight rows?  But on subtrack list, this will mess up the "..." coloring.  So just exclude tables with drag and drop
+    if ($(table).hasClass('tableWithDragAndDrop') == false) {
+        $('tbody.sortable').find('tr').hover(
+            function(){ $(this).addClass('bgLevel3'); },      // Will highlight the rows
+            function(){ $(this).removeClass('bgLevel3');}
+        );
+    }
+
     // Finally, make visible
+    $(tbody).removeClass('sorting');
     $(tbody).show();
 }
 
