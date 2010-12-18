@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 A = fastaToPsl
 O = fastaToPsl.o
 
-fastaToPsl: $O $(MYLIBS)
+${DESTDIR}${BINDIR}/${A}${EXE}:: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
