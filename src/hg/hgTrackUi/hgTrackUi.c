@@ -2626,7 +2626,10 @@ else
     specificUi(tdb, ct, ajax);
 puts("</FORM>");
 
-if (ct && !ajax)
+if (ajax)
+    return;
+
+if (ct)
     {
     /* hidden form for custom tracks CGI */
     printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
@@ -2634,9 +2637,6 @@ if (ct && !ajax)
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
     }
-
-if (ajax)
-    return;
 
 if (!ct)
     {
