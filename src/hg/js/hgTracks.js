@@ -1653,7 +1653,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             // Hide local display of this track and update server side cart.
             // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
             if(rec.parentTrack != undefined)
-                setCartVars( [ id, id+"_sel" ], [ "[]", 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
+                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
