@@ -147,14 +147,14 @@ sortOrder_t *fileSortOrderGet(struct cart *cart,struct trackDb *parentTdb)
    But columns are in original tdb order (unchanging)!  However, if cart is null, all is from trackDb.ra */
 {
 int ix;
-char *setting = trackDbSetting(parentTdb, "fileSortOrder");
+char *setting = trackDbSetting(parentTdb, FILE_SORT_ORDER);
 if(setting == NULL) // Must be in trackDb or not a sortable list of files
     return NULL;
 
 sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
 sortOrder->setting = cloneString(setting);
 sortOrder->htmlId = needMem(strlen(parentTdb->track)+20);
-safef(sortOrder->htmlId, (strlen(parentTdb->track)+20), "%s.fileSortOrder", parentTdb->track);
+safef(sortOrder->htmlId, (strlen(parentTdb->track)+20), "%s.%s", parentTdb->track,FILE_SORT_ORDER);
 if(cart != NULL)
     sortOrder->sortOrder = cloneString(cartOptionalString(cart, sortOrder->htmlId));
 
@@ -310,7 +310,7 @@ sqlDisconnect(&conn);
 
 if (slCount(mdbList) == 0)
     {
-    warn("No files specified in memtadata for: %s\n%s",tdb->track,tdb->longLabel);
+    warn("No files specified in metadata for: %s\n%s",tdb->track,tdb->longLabel);
     return;
     }
 
@@ -397,6 +397,8 @@ jsIncludeFile("hui.js",NULL);
 jsIncludeFile("ajax.js",NULL);
 
 // Table class=sortable
+int columnCount = 0;
+int restrictedColumn = 0;
 printf("<TABLE class='sortable' style='border: 2px outset #006600;'>\n");
 printf("<THEAD class='sortable'>\n");
 printf("<TR class='sortable' valign='bottom'>\n");
@@ -404,9 +406,10 @@ printf("<TD align='center' valign='center'>&nbsp;");
 int filesCount = slCount(fileList);
 if (filesCount > 5)
     printf("<i>%d files</i>",filesCount);    //puts("<FONT class='subCBcount'></font>"); // Use this style when filterboxes are up and running
-//if (sortOrder) // NOTE: This could be done to preserve sort order
+//if (sortOrder) // NOTE: This could be done to preserve sort order   FIXME: However hgFileUi would need form OR changes would need to be ajaxed over AND hgsid would be needed.
 //    printf("<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE=\"%s\">",sortOrder->htmlId, sortOrder->sortOrder);
 printf("</TD>\n");
+columnCount++;
 
 // Now the columns
 int curOrder = 0;
@@ -419,18 +422,25 @@ if (sortOrder)
             sortOrder->order[ix],(sortOrder->forward[ix]?"":" sortRev"),
             (sameString("fileSize",sortOrder->column[ix])?"abbr='use' ":""),
             sortOrder->title[ix]); // keeing track of sortOrder
+        columnCount++;
+        if (sameWord(sortOrder->column[ix],"dateUnrestricted"))
+            restrictedColumn = columnCount;
         }
     }
 //#define INCLUDE_FILENAMES
 #ifndef INCLUDE_FILENAMES
 else
 #endif///defn INCLUDE_FILENAMES
+    {
     printf("<TH class='sortable sort%d' nowrap>File Name</TH>\n",++curOrder);
+    columnCount++;
+    }
 printf("<TH class='sortable sort%d' align='left' nowrap>Additional Details</TH>\n",++curOrder);
+columnCount++;
 printf("</TR></THEAD>\n");
 
 // Now the files...
-printf("<TBODY class='sortable'>\n");
+printf("<TBODY class='sortable sorting'>\n"); // 'sorting' is a fib but it conveniently greys the list till the table is initialized.
 for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
     {
     char *field = NULL;
@@ -486,12 +496,25 @@ for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
     printf("</TR>\n");
     }
 
-printf("</TBODY></TABLE><BR>\n");
-printf("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>\n");
+printf("</TBODY><TFOOT class='bgLevel3'>\n");
+printf("<TR valign='top'>");
+
+// Restriction policy link in first column?
+if (restrictedColumn == 1)
+    printf("<TH colspan=%d><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A></TH>", (columnCount - restrictedColumn),ENCODE_DATA_RELEASE_POLICY);
+
+printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",(restrictedColumn > 1 ? (restrictedColumn - 1) : columnCount));
 
 // Total
 if (filesCount > 5)
-    printf("&nbsp;&nbsp;&nbsp;&nbsp;<i>%d files</i>\n",filesCount);    //puts("<FONT class='subCBcount'></font>"); // Use this style when filterboxes are up and running
+    printf("<i>%d files</i>\n",filesCount);
+
+// Restriction policy link in later column?
+if (restrictedColumn > 1)
+    printf("</TD><TH colspan=%d align='left'><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", columnCount,ENCODE_DATA_RELEASE_POLICY);
+
+printf("</TD></TR>\n");
+printf("</TFOOT></TABLE><BR>\n");
 
 // Free mem?
 }

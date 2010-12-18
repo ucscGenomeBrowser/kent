@@ -13003,6 +13003,7 @@ hgLoadBed hg19 darned allChroms.bed
 # at human, level
 # added darned.html
 # added trackDb.ra entry
+
 #############################################################################
 # lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
     # down load from JHU
@@ -13015,7 +13016,62 @@ hgLoadBed hg19 darned allChroms.bed
     cd /cluster/data/genbank
     ./bin/lsSnpPdbDbLoadStep hg19
     # once this has been QAed, will auto-update from genbank scripts
+
 #############################################################################
+# NEW SNP132 (DONE 12/17/10 angie)
+
+    mkdir -p /hive/data/outside/dbSNP/132test/human
+    cd /hive/data/outside/dbSNP/132test/human
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (human_9606 in this case).
+    # Then click into that directory and look for file names like 
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly.
+    # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606
+build 132
+buildAssembly 37_1
+liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test >& do.log & tail -f do.log
+# *** This release contains more than one assembly label.
+# *** Please examine this list in case we need to exclude any of these:
+#
+#CRA_TCAGchr7v2
+#Celera
+#GRCh37
+#HuRef
+# *** Add refAssemblyLabel to config.ra.  If keeping all labels, it will
+# *** look like this:
+#
+#refAssemblyLabel CRA_TCAGchr7v2,Celera,GRCh37,HuRef
+#
+# *** Edit out any of those that are not included in hg19 (e.g. Celera).
+# *** Then restart this script with -continue=loadDnSnp .
+    # GRCh37 is the only one that corresponds to hg19, so add it to config.ra:
+    echo "refAssemblyLabel GRCh37" >> config.ra
+
+    # Try again with updated config:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # Needed to tweak hg19-specific liftOver awk; run again from bigJoin but don't load:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin -stop translate >>& do.log &
+    tail -f do.log
+
+    # Load it up with new columns!
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin >>& do.log &
+    tail -f do.log
+
 
 #############################################################################
 # Agilent arrays (2010-12-01 Andy)
@@ -13387,6 +13443,67 @@ echo "select * from cgapSageLib" | hgsql hg18 -N > cgapSageLib.tab
 cp ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql .
 hgLoadSqlTab hg19 cgapSageLib cgapSageLib.sql cgapSageLib.tab
 
-
 #############################################################################
+# LASTZ Zebrafish DanRer7 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+    cd /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
 
+    cat << '_EOF_' > DEF
+# human vs X. zebrafish
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Fri Dec 17 09:11:34 PST 2010
+    #	real    1678m17.827s
+    #	failed during the chain step due to encodek cluster problems
+    #	finish that manually, then:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=chainMerge > chainMerge.log 2>&1 &
+    #	real    167m6.930s
+    cat fb.hg19.chainDanRer7Link.txt 
+    #	88391631 bases of 2897316137 (3.051%) in intersection
+
+    #	running the swap - DONE - 2010-12-17
+    mkdir /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    183m21.102s
+    cat fb.danRer7.chainHg19Link.txt 
+    #	96424507 bases of 1506896106 (6.399%) in intersection
+
+##############################################################################

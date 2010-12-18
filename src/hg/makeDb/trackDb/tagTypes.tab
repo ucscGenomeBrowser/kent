@@ -95,7 +95,7 @@ expTable bed expRatio
 extTable *
 fieldCount customTracks
 filePos *
-fileSortOrder bed downloadsOnly
+fileSortOrder *
 filterBy genePred bed
 filterComposite *
 filterTopScorers bed5FloatScoreWithFdr bed5FloatScore

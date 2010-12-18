@@ -1592,19 +1592,14 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 
     } else if (cmd == 'hgTrackUi_follow') {
 
-        var link = $( 'td#td_btn_'+ selectedMenuItem.id ).children('a'); // The button already has the ref
-        if( $(link) != undefined) {
-            location.assign($(link).attr('href'));
-        } else {
-            var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
-            var id = selectedMenuItem.id;
-            var rec = trackDbJson[id];
-            if (tdbHasParent(rec) && tdbIsLeaf(rec))
-                url += rec.parentTrack
-            else
-                url = selectedMenuItem.id;
-            location.assign(url);
-        }
+        var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
+        var id = selectedMenuItem.id;
+        var rec = trackDbJson[id];
+        if (tdbHasParent(rec) && tdbIsLeaf(rec))
+            url += rec.parentTrack
+        else
+            url = selectedMenuItem.id;
+        location.assign(url);
 
     } else if (cmd == 'dragZoomMode') {
         autoHideSetting = true;
