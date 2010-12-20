@@ -3867,6 +3867,7 @@ for(di=0;di<membersForAll->dimMax;di++) { if (membersForAll->members[di]) dimCou
 sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
+boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 
 // Determine whether there is a restricted until date column
 boolean restrictions = FALSE;
@@ -3884,7 +3885,26 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 // Table wraps around entire list so that "Top" link can float to the correct place.
 printf("<table><tr><td class='windowSize'>");
 printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
-makeTopLink(parentTdb);
+if (sortOrder != NULL)
+    {
+    // First table row contains the display "selected/visible" or "all" radio buttons
+    // NOTE: list subtrack radio buttons are inside tracklist table header if there are no sort columns
+    //       The reason is to ensure spacing of lines column headers when the only column header is "Restricted Until"
+    printf("<B>List subtracks:&nbsp;");
+    char javascript[JBUFSIZE];
+    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
+    cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
+    puts("only selected/visible &nbsp;&nbsp;");
+    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
+    cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
+    printf("all</B>");
+    if (slCount(subtrackRefList) > 5)
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
+    makeTopLink(parentTdb);
+    printf("</td></tr></table>");
+    }
+else
+    makeTopLink(parentTdb);
 
 // Now we can start in on the table of subtracks  It may be sortable and/or dragAndDroppable
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
@@ -3899,7 +3919,7 @@ if (useDragAndDrop)
     }
 if (dyStringLen(dyHtml) > 0)
     {
-    printf(" class='subtracks %s'",dyStringContents(dyHtml));
+    printf(" class='subtracks bglevel1 %s'",dyStringContents(dyHtml));
     colorIx = COLOR_BG_ALTDEFAULT_IX;
     }
 if (sortOrder != NULL)
@@ -3907,8 +3927,6 @@ if (sortOrder != NULL)
 else
     puts("><THEAD>");
 
-// First table row contains the display "selected/visible" or "all" radio buttons
-boolean displayAll = sameString(cartUsualString(cart, "displaySubtracks", "all"), "all");
 boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 int colspan = 3;
 if (sortOrder != NULL)
@@ -3916,26 +3934,33 @@ if (sortOrder != NULL)
 if (doColorPatch)
     colspan += 1;
 int columnCount = 0;
-printf("<TR%s>",useDragAndDrop?" id='noDrag' class='nodrop nodrag'":"");
-printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
-char javascript[JBUFSIZE];
-safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
-cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
-puts("only selected/visible &nbsp;&nbsp;");
-safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
-cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
-printf("all</B>");
-if (slCount(subtrackRefList) > 5)
-    printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
-puts("</TD>");
-columnCount++;
+if (sortOrder != NULL)
+    printf("<TR id=\"subtracksHeader\" class='sortable%s'>\n",useDragAndDrop?" nodrop nodrag":"");
+else
+    {
+    printf("<TR%s>",useDragAndDrop?" id='noDrag' class='nodrop nodrag'":"");
+    // First table row contains the display "selected/visible" or "all" radio buttons
+    // NOTE: list subtrack radio buttons are inside tracklist table header if there are no sort columns
+    //       The reason is to ensure spacing of lines column headers when the only column header is "Restricted Until"
+    printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
+    char javascript[JBUFSIZE];
+    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
+    cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
+    puts("only selected/visible &nbsp;&nbsp;");
+    safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(false);\"");
+    cgiMakeOnClickRadioButton("displaySubtracks", "all", displayAll,javascript);
+    printf("all</B>");
+    if (slCount(subtrackRefList) > 5)
+        printf("&nbsp;&nbsp;&nbsp;&nbsp;(<FONT class='subCBcount'></font>)");
+    puts("</TD>");
+    columnCount = colspan;
+    }
 
 // Add column headers which are sort button links
 if (sortOrder != NULL)
     {
-    puts("<TD colspan=5>&nbsp;</TD></TR>");
-    printf("<TR id=\"subtracksHeader\" class='nodrop nodrag sortable'>\n");
     printf("<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE='%s'></TH>\n", sortOrder->htmlId, sortOrder->sortOrder); // keeing track of sortOrder
+    columnCount++;
     // Columns in tdb order (unchanging), sort in cart order (changed by user action)
     int sIx=0;
     for(sIx=0;sIx<sortOrder->count;sIx++)
@@ -4196,7 +4221,8 @@ if (restrictions && sortOrder != NULL)
 
 printf("</TD></TR>\n");
 puts("</TFOOT></TABLE>");
-printf("</td></tr></table>");
+if (sortOrder == NULL)
+    printf("</td></tr></table>");
 
 puts("<P>");
 
