@@ -496,7 +496,7 @@ for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
     printf("</TR>\n");
     }
 
-printf("</TBODY><TFOOT class='bgLevel3'>\n");
+printf("</TBODY><TFOOT class='bgLevel1'>\n");
 printf("<TR valign='top'>");
 
 // Restriction policy link in first column?
