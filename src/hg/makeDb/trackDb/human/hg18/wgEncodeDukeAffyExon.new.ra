@@ -18,6 +18,7 @@ maxItems 20
 wgEncode 1
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Astrocy
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Astrocy 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Astrocy cells)
@@ -25,6 +26,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Astrocy
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Astrocy 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Astrocy cells)
@@ -32,6 +34,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Chorion
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Chorion 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Chorion cells)
@@ -39,6 +42,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Fibrobl
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Fibrobl 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Fibrobl cells)
@@ -46,6 +50,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Fibrobl
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Fibrobl 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Fibrobl cells)
@@ -53,6 +58,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gliobla
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Gliobla 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Gliobla cells)
@@ -60,6 +66,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gliobla
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Gliobla 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Gliobla cells)
@@ -67,6 +74,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12878
+    release alpha
     subTrack wgEncodeDukeAffyExonArray
     shortLabel GM12878 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12878 cells)
@@ -75,6 +83,7 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12878
+    release alpha
     subTrack wgEncodeDukeAffyExonArray
     shortLabel GM12878 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12878 cells)
@@ -83,6 +92,7 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Gm12878
+    release alpha
     subTrack wgEncodeDukeAffyExonArray
     shortLabel GM12878 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in GM12878 cells)
@@ -91,6 +101,7 @@ wgEncode 1
     color 153,38,0
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12891
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12891 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12891 cells)
@@ -98,6 +109,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12891
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12891 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12891 cells)
@@ -105,6 +117,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm12892
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12892 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM12892 cells)
@@ -112,6 +125,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm12892
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM12892 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM12892 cells)
@@ -119,6 +133,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm18507
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM18507 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM18507 cells)
@@ -126,6 +141,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm18507
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM18507 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM18507 cells)
@@ -133,6 +149,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Gm18507
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM18507 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in GM18507 cells)
@@ -140,6 +157,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19238
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19238 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19238 cells)
@@ -147,6 +165,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19238
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19238 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19238 cells)
@@ -154,6 +173,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19239
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19239 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19239 cells)
@@ -161,6 +181,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19239
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19239 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19239 cells)
@@ -168,6 +189,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Gm19240
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19240 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in GM19240 cells)
@@ -175,6 +197,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Gm19240
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel GM19240 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in GM19240 cells)
@@ -182,6 +205,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
@@ -190,6 +214,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
@@ -198,6 +223,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Helas3
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HeLa-S3 cells)
@@ -206,6 +232,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifna4h
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
@@ -214,6 +241,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifna4h
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
@@ -222,6 +250,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Helas3Ifng4h
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HeLa-S3 cells)
@@ -230,6 +259,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Helas3Ifng4h
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HeLaS3 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HeLa-S3 cells)
@@ -238,6 +268,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Hepg2
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HepG2 cells)
@@ -246,6 +277,7 @@ wgEncode 1
     color 189,0,157
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Hepg2
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HepG2 cells)
@@ -254,6 +286,7 @@ wgEncode 1
     color 189,0,157
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep3Hepg2
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HepG2 3
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 3 (in HepG2 cells)
@@ -262,6 +295,7 @@ wgEncode 1
     color 189,0,157
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Hmec
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HMEC 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HMEC cells)
@@ -269,6 +303,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Hmec
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HMEC 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HMEC cells)
@@ -276,6 +311,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Huvec
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HUVEC 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in HUVEC cells)
@@ -284,6 +320,7 @@ wgEncode 1
     color 224,75,0
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Huvec
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel HUVEC 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in HUVEC cells)
@@ -292,6 +329,7 @@ wgEncode 1
     color 224,75,0
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1LhsrAndro
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LHSR cells)
@@ -299,6 +337,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2LhsrAndro
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LHSR cells)
@@ -306,6 +345,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Lhsr
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LHSR cells)
@@ -313,6 +353,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Lhsr
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LHSR 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LHSR cells)
@@ -320,6 +361,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1LncapAndro
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LNCaP cells)
@@ -328,6 +370,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2LncapAndro
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LNCaP cells)
@@ -336,6 +379,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Lncap
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in LNCaP cells)
@@ -344,6 +388,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Lncap
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel LNCaP 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in LNCaP cells)
@@ -352,6 +397,7 @@ wgEncode 1
     color 0,119,158
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
@@ -359,6 +405,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Estro
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
@@ -366,6 +413,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Estro
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
@@ -373,6 +421,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Mcf7Vehicle
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in MCF-7 cells)
@@ -380,6 +429,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Mcf7Vehicle
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel MCF7 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in MCF-7 cells)
@@ -387,6 +437,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Medullo
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Medullo 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Medullo cells)
@@ -394,6 +445,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Medullo
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Medullo 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Medullo cells)
@@ -401,6 +453,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Nhek
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel NHEK 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in NHEK cells)
@@ -409,6 +462,7 @@ wgEncode 1
     color 179,0,134
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Nhek
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel NHEK 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in NHEK cells)
@@ -417,6 +471,7 @@ wgEncode 1
     color 179,0,134
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Osteobl
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Osteobl 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in Osteobl cells)
@@ -424,6 +479,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Osteobl
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel Osteobl 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in Osteobl cells)
@@ -431,6 +487,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep1Progfib
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel ProgFib 1
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 1 (in ProgFib cells)
@@ -438,6 +495,7 @@ wgEncode 1
     type broadPeak
 
     track wgEncodeDukeAffyExonArraySimpleSignalRep2Progfib
+    release alpha
     subTrack wgEncodeDukeAffyExonArray off
     shortLabel ProgFib 2
     longLabel ENCODE Duke Affy All Exon Array Signal Replicate 2 (in ProgFib cells)

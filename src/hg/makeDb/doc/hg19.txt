@@ -13003,6 +13003,7 @@ hgLoadBed hg19 darned allChroms.bed
 # at human, level
 # added darned.html
 # added trackDb.ra entry
+
 #############################################################################
 # lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
     # down load from JHU
@@ -13015,7 +13016,62 @@ hgLoadBed hg19 darned allChroms.bed
     cd /cluster/data/genbank
     ./bin/lsSnpPdbDbLoadStep hg19
     # once this has been QAed, will auto-update from genbank scripts
+
 #############################################################################
+# NEW SNP132 (DONE 12/17/10 angie)
+
+    mkdir -p /hive/data/outside/dbSNP/132test/human
+    cd /hive/data/outside/dbSNP/132test/human
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (human_9606 in this case).
+    # Then click into that directory and look for file names like 
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly.
+    # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606
+build 132
+buildAssembly 37_1
+liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test >& do.log & tail -f do.log
+# *** This release contains more than one assembly label.
+# *** Please examine this list in case we need to exclude any of these:
+#
+#CRA_TCAGchr7v2
+#Celera
+#GRCh37
+#HuRef
+# *** Add refAssemblyLabel to config.ra.  If keeping all labels, it will
+# *** look like this:
+#
+#refAssemblyLabel CRA_TCAGchr7v2,Celera,GRCh37,HuRef
+#
+# *** Edit out any of those that are not included in hg19 (e.g. Celera).
+# *** Then restart this script with -continue=loadDnSnp .
+    # GRCh37 is the only one that corresponds to hg19, so add it to config.ra:
+    echo "refAssemblyLabel GRCh37" >> config.ra
+
+    # Try again with updated config:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # Needed to tweak hg19-specific liftOver awk; run again from bigJoin but don't load:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin -stop translate >>& do.log &
+    tail -f do.log
+
+    # Load it up with new columns!
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin >>& do.log &
+    tail -f do.log
+
 
 #############################################################################
 # Agilent arrays (2010-12-01 Andy)
@@ -13387,6 +13443,172 @@ echo "select * from cgapSageLib" | hgsql hg18 -N > cgapSageLib.tab
 cp ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql .
 hgLoadSqlTab hg19 cgapSageLib cgapSageLib.sql cgapSageLib.tab
 
-
 #############################################################################
+# LASTZ Zebrafish DanRer7 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+    cd /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
 
+    cat << '_EOF_' > DEF
+# human vs X. zebrafish
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running Fri Dec 17 09:11:34 PST 2010
+    #	real    1678m17.827s
+    #	failed during the chain step due to encodek cluster problems
+    #	finish that manually, then:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=chainMerge > chainMerge.log 2>&1 &
+    #	real    167m6.930s
+    cat fb.hg19.chainDanRer7Link.txt 
+    #	88391631 bases of 2897316137 (3.051%) in intersection
+
+    #	running the swap - DONE - 2010-12-17
+    mkdir /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    183m21.102s
+    cat fb.danRer7.chainHg19Link.txt 
+    #	96424507 bases of 1506896106 (6.399%) in intersection
+
+##############################################################################
+# UMass Med School brain histone ChIP-seq 
+# (DONE - 2010-12-17 - Kate)
+#
+# From Troy Whitfield, submitting for Zhiping Weng, collab with Akbarian
+# Published in PNAS, April 2010
+# Variables: cell, sample, sex, age
+# Tissue:  Prefrontal cortex (PFC)
+#
+# 11 individuals, age .5 to 69 years
+# 13 bigWigs of H3K4me3 enrichment: 11 neuronal, 2 non-neuronal 
+# 3 peaks files (bed5FloatScore)
+# Neuronal cells selected by FACS sorting, based on NeuN marker (NeuN+)
+# Non-neuronal (NeuN-) cells are largely glia, microglia, and endothelium
+# 3 peak files
+
+# Note: used publicly available blood cell (lymphocyte)
+# ChIP-seq as controls:
+# K562, GM12878 (from Bernstein ENCODE group), CD4+ (from Barski, HLB)
+
+    cd /hive/data/genomes/hg19/bed
+
+    mkdir uMassBrainHistone
+    cd uMassBrainHistone
+
+    wget http://zlab.umassmed.edu/~whitfiet/hg19/uMassBrainHist.tar.gz
+    tar xvfz uMassBrainHist.tar.gz
+    cd data
+
+    set t = "uMassBrainHistone"
+
+# Load peak tracks
+# peaks in neuron not in  blood
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksNeuron 11Neuronal_vs_3Blood_hg19.bed
+# Loaded 7947 elements of size 6
+
+# peaks in infants (<1 year), not in seniors (>60)
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksInfant 3Young_vs3Old_hg19.bed
+# Loaded 1292 elements of size 6
+
+# peaks specific to individuals
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksSample SampleSpecific_hg19.bed
+# Loaded 3214 elements of size 6
+
+# Load signal tracks
+# Get metadata from .ddf file
+
+    cd ..
+    cat uMassMedBrainHist.ddf
+
+#files   view    sample  cell    sex     age
+#data/s6.bw      Signal  6       neuron  male    4.7
+#data/s6n.bw     Signal  6       non-neuron      male    4.7
+#data/s2.bw      Signal  2       neuron  male    0.58
+#data/s3.bw      Signal  3       neuron  female  0.75
+#data/s1.bw      Signal  1       neuron  male    0.5
+#data/s9.bw      Signal  9       neuron  female  68
+#data/s5.bw      Signal  5       neuron  female  2.8
+#data/s11.bw     Signal  11      neuron  female  69
+#data/s11n.bw    Signal  11      non-neuron      female  69
+#data/s7.bw      Signal  7       neuron  male    8.8
+#data/s8.bw      Signal  8       neuron  male    14
+#data/s10.bw     Signal  10      neuron  female  69
+#data/s4.bw      Signal  4       neuron  male    1.3
+#data/11Neuronal_vs_3Blood_hg19.bed      Peaks   N/A     N/A     N/A     N/A
+#data/3Young_vs3Old_hg19.bed     Peaks   N/A     N/A     N/A     N/
+#data/SampleSpecific_hg19.bed    Peaks   N/A     N/A     N/A     N/A
+
+
+# Generate table names from DDF
+# Format:  uMassBrainHistoneSignalS<sample>Neu<P|M><age>yrs<M|F>
+# e.g. uMassBrainHistoneSignalS1185Neu4pt7yrsM
+
+    grep Signal uMassMedBrainHist.ddf | \
+
+    cat << 'EOF' > list.pl
+while (<>) {
+    ($file, $view, $sample, $cell, $sex, $age) = split;
+    next unless $view eq 'Signal';
+    $cell = ($cell eq 'neuron' ? 'P' : 'M');
+    $age =~ s/\./pt/;
+    $sex = ($sex eq 'male' ? 'M' : 'F');
+    $table = "uMassBrainHistoneSignalS" . $sample . "Neu" . $cell . $age . "yrs" . $sex;
+    print $file . "." . $table . "\n";
+}
+'EOF'
+
+    cat << 'EOF' > load.csh
+set gbdb = "/gbdb/hg19/bbi/uMassBrainHistone"
+foreach x (`perl list.pl < uMassMedBrainHist.ddf`)
+    set f = $x:r
+    set t = $x:e
+    echo "Loading $f into $t"
+    bigWigInfo $f
+    ln -s `pwd`/$f $gbdb/$t.bw
+    hgBbiDbLink hg19 $t $gbdb/$t.bw
+end
+'EOF'
+
+    csh load.csh >&! load.out &

@@ -2296,7 +2296,6 @@ dataVersion ENCODE June 2005 Freeze
 
 #October freeze (strict) data
 track encodeAffyChIpHl60PvalStrict
-release alpha
 superTrack encodeAffyChipSuper dense
 shortLabel Affy Strict pVal
 longLabel Affymetrix ChIP-chip (HL-60 and ME-180 cells) Strict P-Value
@@ -2315,7 +2314,6 @@ origAssembly hg17
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr00
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=0h
     shortLabel Affy H3K9ac2 0h
@@ -2324,7 +2322,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 1
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr02
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=2h
     shortLabel Affy H3K9ac2 2h
@@ -2333,7 +2330,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 2
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr08
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=8h
     shortLabel Affy H3K9ac2 8h
@@ -2342,7 +2338,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 3
 
     track encodeAffyChIpHl60PvalStrictH3K9K14DHr32
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H3K9K14ac2 time=32h
     shortLabel Affy H3K9ac2 32h
@@ -2351,7 +2346,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 4
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr00
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=0h
     shortLabel Affy H4Kac4 0h
@@ -2360,7 +2354,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr02
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=2h
     shortLabel Affy H4Kac4 2h
@@ -2369,7 +2362,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 6
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr08
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=8h
     shortLabel Affy H4Kac4 8h
@@ -2378,7 +2370,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 7
 
     track encodeAffyChIpHl60PvalStrictHisH4Hr32
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=H4Kac4 time=32h
     shortLabel Affy H4Kac4 32h
@@ -2387,7 +2378,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 8
 
     track encodeAffyChIpHl60PvalStrictPol2Hr00
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=0h
     shortLabel Affy Pol2 0h
@@ -2396,7 +2386,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 9
 
     track encodeAffyChIpHl60PvalStrictPol2Hr02
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=2h
     shortLabel Affy Pol2 2h
@@ -2405,7 +2394,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 10
 
     track encodeAffyChIpHl60PvalStrictPol2Hr08
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=8h
     shortLabel Affy Pol2 8h
@@ -2414,7 +2402,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 11
 
     track encodeAffyChIpHl60PvalStrictPol2Hr32
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=Pol2 time=32h
     shortLabel Affy Pol2 32h
@@ -2423,7 +2410,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 12
 
     track encodeAffyChIpHl60PvalStrictp63_ActD
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=actd time=0h
     shortLabel Affy p63 ME-180+
@@ -2432,7 +2418,6 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 13
 
     track encodeAffyChIpHl60PvalStrictp63_mActD
-    release alpha
     parent encodeAffyChIpHl60PvalStrict
     subGroups factor=mactd time=0h
     shortLabel Affy p63 ME-180
