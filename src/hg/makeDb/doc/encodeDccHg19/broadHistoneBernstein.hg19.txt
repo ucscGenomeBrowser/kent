@@ -3421,3 +3421,47 @@ At this point, waiting for Broad on:
 The 2 missing replicates are not likely to be provided.
 
 Missing Controls for NHDF-Ad and Osteobl
+
+2010-12-06 Two missing controls were submitted
+==============================================
+rm mdbBroad.ra
+cat 3073/out/mdb.txt >> mdbBroad.ra
+cat 3074/out/mdb.txt >> mdbBroad.ra
+mv mdbBroad.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+e mdbBroad.ra # Actually, nothing really needs to be changed.
+mdbUpdate hg19 mdbBroad.ra
+Using table named 'hg19.metaDb_tdreszer'.
+Read 10 metadata objects from hg19
+Affected 194 row(s) in hg19.metaDb_tdreszer
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra 
+gold wgEncodeBroadHistone.ra
+git update, add, ci, push
+
+rm tdbBroad.ra
+cat 3073/out/trackDb.ra >> tdbBroad.ra
+cat 3074/out/trackDb.ra >> tdbBroad.ra
+mv tdbBroad.ra ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+e tdbBroad.ra # edit subGroups, longLabels and shortLabels
+encodePatchTdb metaDb/alpha/testing/tdbBroad.ra wgEncodeBroadHistone.ra
+
+make DBS=hg19
+Check in sandbox.  Fine.
+
+git up, add,ci,push
+make alpha DBS=hg19
+
+encodeDownloadsPage.pl -db=hg19 index.html
+1251 files
+encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3073 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3074 displayed
+
+hgsql encpipeline_prod
+select id,name,status, user_id from projects where name like "BI_%" and status = "displayed";
+| 3073 | BI_NH-Osteoblast_WCE | displayed |      34 | 
+| 3074 | BI_NHDF_WCE          | displayed |      34 | 
+update projects set name = "Broad 2010-12-06 NH-Osteoblast_WCE" where id = 3073;
+update projects set name = "Broad 2010-12-06 NHDF_WCE" where id = 3074;
+
+

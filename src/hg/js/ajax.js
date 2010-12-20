@@ -294,7 +294,7 @@ function loadMetadataTable(response, status)
     $(div).html(response);
     if(td.length > 0 && $(td[0]).width() > 200) {
         tr = $(td[0]).parent('tr');
-        if (tr.length > 0 && $(tr[0]).hasClass('bgLevel2')) {
+        if (tr.length > 0) {
             $(div).children('table').css('backgroundColor',$(tr[0]).css('backgroundColor'));
         }
     }
