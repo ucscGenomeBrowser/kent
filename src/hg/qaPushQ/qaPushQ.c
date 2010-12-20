@@ -34,6 +34,7 @@ static char const rcsid[] = "$Id: qaPushQ.c,v 1.124 2010/04/16 19:05:01 galt Exp
 char msg[2048] = "";
 char ** saveEnv;
 
+#define BLSIZE 256000  /* size of strings for processing big lists of tables and files */
 #define BUFMAX 256000
 char html[BUFMAX];
 
@@ -2607,7 +2608,6 @@ for(i=0;i<=l;i++)
 safef(s, l+1, "%s", ss);
 }
 
-#define BLSIZE 100000  /* size of strings for processing big lists of tables and files */
 
 void doShowSizes()
 /* show the sizes of all the track tables, cgis, and general files in separate window target= _blank  */

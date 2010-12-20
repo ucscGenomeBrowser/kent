@@ -5341,7 +5341,8 @@ lab  Farnham
 lots
 targetId Genecards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
-validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP)_Farnham:human_SETDB1-SC66884_validation_Farnham.pdf
+validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):
+human_SETDB1-SC66884_validation_Farnham.pdf
 
 
 

@@ -1166,13 +1166,13 @@ view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArraySimpleSignalRep2Skmc
 objType table
-accession GSM472911
 cell SKMC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
+dccNotes GEO accession provided by lab: GSM472911
 fileName wgEncodeUwAffyExonArraySimpleSignalRep2Skmc.broadPeak.gz
 grant Stam
 lab UW
@@ -1198,4 +1198,4 @@ replicate 2
 subId 403
 tableName wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra
 
-# MAGIC: -774951309
+# MAGIC: 1057896847

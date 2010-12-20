@@ -1510,7 +1510,7 @@ include wgEncodeUwDGF.ra
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
 include wgEncodeUwDnaseSeq.ra
-
+include wgEncodeUwDnaseSeq.new.ra
 
 
 # UW DNAase-seq southerns

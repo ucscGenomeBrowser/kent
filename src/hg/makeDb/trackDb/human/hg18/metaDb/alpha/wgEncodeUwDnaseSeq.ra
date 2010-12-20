@@ -1863,25 +1863,6 @@ subId 735
 tableName wgEncodeUwDnaseSeqHotspotsRep1Hgf
 view Hotspots
 
-metaObject wgEncodeUwDnaseSeqHotspotsRep1Hipe
-objType table
-cell HIPEpiC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-08
-dateUnrestricted 2010-10-07
-fileName wgEncodeUwDnaseSeqHotspotsRep1Hipe.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-project wgEncode
-rank 1st
-replicate 1
-subId 925
-tableName wgEncodeUwDnaseSeqHotspotsRep1Hipe
-view Hotspots
-
 metaObject wgEncodeUwDnaseSeqHotspotsRep1Hl60
 objType table
 cell HL-60
@@ -2054,26 +2035,6 @@ rank 1st
 replicate 1
 subId 965
 tableName wgEncodeUwDnaseSeqHotspotsRep1Jurkat
-view Hotspots
-
-metaObject wgEncodeUwDnaseSeqHotspotsRep1JurkatG1
-objType table
-cell Jurkat
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeUwDnaseSeqHotspotsRep1JurkatG1.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-phase G1
-project wgEncode
-rank 1st
-replicate 1
-subId 931
-tableName wgEncodeUwDnaseSeqHotspotsRep1JurkatG1
 view Hotspots
 
 metaObject wgEncodeUwDnaseSeqHotspotsRep1K562
@@ -2667,25 +2628,6 @@ rank 2nd
 replicate 2
 subId 736
 tableName wgEncodeUwDnaseSeqHotspotsRep2Hgf
-view Hotspots
-
-metaObject wgEncodeUwDnaseSeqHotspotsRep2Hipe
-objType table
-cell HIPEpiC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-10
-dateUnrestricted 2010-10-09
-fileName wgEncodeUwDnaseSeqHotspotsRep2Hipe.broadPeak.gz
-grant Stam
-lab UW
-labVersion Hotspot-v5.1
-project wgEncode
-rank 2nd
-replicate 2
-subId 964
-tableName wgEncodeUwDnaseSeqHotspotsRep2Hipe
 view Hotspots
 
 metaObject wgEncodeUwDnaseSeqHotspotsRep2Hl60
@@ -3394,25 +3336,6 @@ subId 735
 tableName wgEncodeUwDnaseSeqPeaksRep1Hgf
 view Peaks
 
-metaObject wgEncodeUwDnaseSeqPeaksRep1Hipe
-objType table
-cell HIPEpiC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-08
-dateUnrestricted 2010-10-07
-fileName wgEncodeUwDnaseSeqPeaksRep1Hipe.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0, FDR 0.5%
-project wgEncode
-rank 1st
-replicate 1
-subId 925
-tableName wgEncodeUwDnaseSeqPeaksRep1Hipe
-view Peaks
-
 metaObject wgEncodeUwDnaseSeqPeaksRep1Hl60
 objType table
 cell HL-60
@@ -3585,26 +3508,6 @@ rank 1st
 replicate 1
 subId 965
 tableName wgEncodeUwDnaseSeqPeaksRep1Jurkat
-view Peaks
-
-metaObject wgEncodeUwDnaseSeqPeaksRep1JurkatG1
-objType table
-cell Jurkat
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeUwDnaseSeqPeaksRep1JurkatG1.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0, FDR 0.5%
-phase G1
-project wgEncode
-rank 1st
-replicate 1
-subId 931
-tableName wgEncodeUwDnaseSeqPeaksRep1JurkatG1
 view Peaks
 
 metaObject wgEncodeUwDnaseSeqPeaksRep1K562
@@ -4198,25 +4101,6 @@ rank 2nd
 replicate 2
 subId 736
 tableName wgEncodeUwDnaseSeqPeaksRep2Hgf
-view Peaks
-
-metaObject wgEncodeUwDnaseSeqPeaksRep2Hipe
-objType table
-cell HIPEpiC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-10
-dateUnrestricted 2010-10-09
-fileName wgEncodeUwDnaseSeqPeaksRep2Hipe.narrowPeak.gz
-grant Stam
-lab UW
-labVersion lmax-v1.0, FDR 0.5%
-project wgEncode
-rank 2nd
-replicate 2
-subId 964
-tableName wgEncodeUwDnaseSeqPeaksRep2Hipe
 view Peaks
 
 metaObject wgEncodeUwDnaseSeqPeaksRep2Hl60
@@ -6310,25 +6194,6 @@ subId 735
 tableName wgEncodeUwDnaseSeqRawSignalRep1Hgf
 view RawSignal
 
-metaObject wgEncodeUwDnaseSeqRawSignalRep1Hipe
-objType table
-cell HIPEpiC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-08
-dateUnrestricted 2010-10-07
-fileName wgEncodeUwDnaseSeqRawSignalRep1Hipe.wig.gz
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-project wgEncode
-rank 1st
-replicate 1
-subId 925
-tableName wgEncodeUwDnaseSeqRawSignalRep1Hipe
-view RawSignal
-
 metaObject wgEncodeUwDnaseSeqRawSignalRep1Hl60
 objType table
 cell HL-60
@@ -6501,26 +6366,6 @@ rank 1st
 replicate 1
 subId 965
 tableName wgEncodeUwDnaseSeqRawSignalRep1Jurkat
-view RawSignal
-
-metaObject wgEncodeUwDnaseSeqRawSignalRep1JurkatG1
-objType table
-cell Jurkat
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-13
-dateUnrestricted 2010-10-12
-fileName wgEncodeUwDnaseSeqRawSignalRep1JurkatG1.wig.gz
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-phase G1
-project wgEncode
-rank 1st
-replicate 1
-subId 931
-tableName wgEncodeUwDnaseSeqRawSignalRep1JurkatG1
 view RawSignal
 
 metaObject wgEncodeUwDnaseSeqRawSignalRep1K562
@@ -7116,25 +6961,6 @@ subId 736
 tableName wgEncodeUwDnaseSeqRawSignalRep2Hgf
 view RawSignal
 
-metaObject wgEncodeUwDnaseSeqRawSignalRep2Hipe
-objType table
-cell HIPEpiC
-composite wgEncodeUwDnaseSeq
-dataType DnaseSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-10
-dateUnrestricted 2010-10-09
-fileName wgEncodeUwDnaseSeqRawSignalRep2Hipe.wig.gz
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-project wgEncode
-rank 2nd
-replicate 2
-subId 964
-tableName wgEncodeUwDnaseSeqRawSignalRep2Hipe
-view RawSignal
-
 metaObject wgEncodeUwDnaseSeqRawSignalRep2Hl60
 objType table
 cell HL-60
@@ -7442,4 +7268,4 @@ submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 view RawSignal
 
-# MAGIC: -1802223902
+# MAGIC: -88265301
