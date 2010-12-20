@@ -416,10 +416,20 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running - Fri Dec 17 10:15:41 PST 2010
 
     cat fb.danRer7.chainXenTro2Link.txt 
-    #   100078259 bases of 1506896106 (6.641%) in intersection
+    #	90625809 bases of 1409770109 (6.428%) in intersection
+
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzXenTro2.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    32m57.901s
+    cat fb.xenTro2.chainDanRer7Link.txt 
+    #	89862892 bases of 1359412157 (6.610%) in intersection
 
 #########################################################################
 # LASTZ Tetraodon TetNig2 (DONE - 2010-12-17 - Hiram)
@@ -616,5 +626,24 @@ TMPDIR=/scratch/tmp
 
     cat fb.danRer7.chainMm9Link.txt 
     #	71960602 bases of 1409770109 (5.104%) in intersection
+
+#########################################################################
+# lastz swap from hg19 (DONE - 2010-12-20 - Hiram)
+    #	original alignment
+    cd /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+    cat fb.hg19.chainDanRer7Link.txt 
+    #	80849592 bases of 2897316137 (2.790%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    42m52.920s
+    cat fb.danRer7.chainHg19Link.txt 
+    #	86716552 bases of 1409770109 (6.151%) in intersection
 
 #########################################################################

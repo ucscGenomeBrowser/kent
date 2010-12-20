@@ -13481,20 +13481,11 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	> do.log 2>&1 &
-XXX - running Fri Dec 17 09:11:34 PST 2010
-    #	real    1678m17.827s
-    #	failed during the chain step due to encodek cluster problems
-    #	finish that manually, then:
-    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
-	`pwd`/DEF \
-	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
-	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	-continue=chainMerge > chainMerge.log 2>&1 &
-    #	real    167m6.930s
+    #	Elapsed time: 1698m29s
     cat fb.hg19.chainDanRer7Link.txt 
-    #	88391631 bases of 2897316137 (3.051%) in intersection
+    #	80849592 bases of 2897316137 (2.790%) in intersection
 
-    #	running the swap - DONE - 2010-12-17
+    #	running the swap
     mkdir /hive/data/genomes/danRer7/bed/blastz.hg19.swap
     cd /hive/data/genomes/danRer7/bed/blastz.hg19.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -13502,9 +13493,9 @@ XXX - running Fri Dec 17 09:11:34 PST 2010
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-swap > swap.log 2>&1 &
-    #	real    183m21.102s
+    #	real    42m52.920s
     cat fb.danRer7.chainHg19Link.txt 
-    #	96424507 bases of 1506896106 (6.399%) in intersection
+    #	86716552 bases of 1409770109 (6.151%) in intersection
 
 ##############################################################################
 # UMass Med School brain histone ChIP-seq 
