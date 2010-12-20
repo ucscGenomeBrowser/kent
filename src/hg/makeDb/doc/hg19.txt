@@ -13612,3 +13612,55 @@ end
 'EOF'
 
     csh load.csh >&! load.out &
+
+#############################################################################
+# SwitchDB TSS Track (DONE 2010-12-17 galt)
+#
+# This liftover is tricky because of the gmStart and gmEnd, which
+# are not lifted automatically.  
+# The gm coordinates have to be lifted separately.
+
+ssh hgwdev
+mkdir /cluster/data/hg19/bed/switchDbTss
+cd /cluster/data/hg19/bed/switchDbTss
+ln -s /cluster/data/hg17/bed/switchDbTss/hg17.bed hg17.bed
+liftOver -tab -bedPlus=6 hg17.bed /gbdb/hg17/liftOver/hg17ToHg19.over.chain.gz hg19.bed unMapped
+cat unMapped | grep '^#' | sort | uniq -c
+#     61 #Deleted in new
+
+ln -s ~/kent/src/hg/lib/switchDbTss.sql
+hgLoadBed -renameSqlTable -sqlTable=switchDbTss.sql hg19 switchDbTssTemp hg19.bed
+
+mysql> select count(*) from switchDbTssTemp;
++----------+
+| count(*) |
++----------+
+|   132332 | 
++----------+
+
+hgsql -N hg19 -e "select distinct chrom, gmChromStart, gmChromEnd, gmName from switchDbTssTemp" > gmLoc.hg17.bed4
+liftOver -tab -bedPlus=4 gmLoc.hg17.bed4 /gbdb/hg17/liftOver/hg17ToHg19.over.chain.gz gmLoc.hg19.bed4 gmUnMapped
+
+cat gmUnMapped | grep '^#' | sort | uniq -c
+#      1 #Deleted in new
+#     58 #Partially deleted in new
+#     57 #Split in new
+
+hgLoadBed hg19 switchDbTssGmLocTemp gmLoc.hg19.bed4
+
+
+hgsql hg19 < switchDbTss.sql
+
+hgsql hg19 -e "insert into switchDbTss select a.bin, a.chrom, a.chromStart, a.chromEnd, a.name, a.score, a.strand, a.confScore, a.gmName, b.chromStart as gmChromStart, b.chromEnd as gmChromEnd, a.isPseudo from switchDbTssTemp a, switchDbTssGmLocTemp b where a.gmName = b.name"
+
+mysql> select count(*) from switchDbTss;
++----------+
+| count(*) |
++----------+
+|   131780 | 
++----------+
+
+hgsql hg19 -e "drop table switchDbTssTemp"
+hgsql hg19 -e "drop table switchDbTssGmLocTemp"
+
+#############################################################################
