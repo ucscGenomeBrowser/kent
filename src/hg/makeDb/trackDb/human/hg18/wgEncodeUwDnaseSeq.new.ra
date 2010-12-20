@@ -379,13 +379,13 @@ wgEncode 1
         subGroups view=aPeaks cellType=GM12865 rank=2nd
         type narrowPeak
 
-        track wgEncodeUwDnaseSeqPeaksRep1JurkatG1
-        subTrack wgEncodeUwDnaseSeqViewaPeaks off
-        shortLabel Jurkat Pk 1
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in Jurkat cells)
-        subGroups view=aPeaks cellType=JurkatG1 rank=1st
-        type narrowPeak
+#        track wgEncodeUwDnaseSeqPeaksRep1JurkatG1
+#        subTrack wgEncodeUwDnaseSeqViewaPeaks off
+#        shortLabel Jurkat Pk 1
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in Jurkat cells)
+#        subGroups view=aPeaks cellType=JurkatG1 rank=1st
+#        type narrowPeak
 
         track wgEncodeUwDnaseSeqPeaksRep2Mcf7
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
@@ -531,21 +531,21 @@ wgEncode 1
         subGroups view=aPeaks cellType=HEE rank=2nd
         type narrowPeak
 
-        track wgEncodeUwDnaseSeqPeaksRep1Hipe
-        subTrack wgEncodeUwDnaseSeqViewaPeaks off
-        shortLabel HIPEpiC Pk 1
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HIPEpiC cells)
-        subGroups view=aPeaks cellType=HIPE rank=1st
-        type narrowPeak
+#        track wgEncodeUwDnaseSeqPeaksRep1Hipe
+#        subTrack wgEncodeUwDnaseSeqViewaPeaks off
+#        shortLabel HIPEpiC Pk 1
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 1st (in HIPEpiC cells)
+#        subGroups view=aPeaks cellType=HIPE rank=1st
+#        type narrowPeak
 
-        track wgEncodeUwDnaseSeqPeaksRep2Hipe
-        subTrack wgEncodeUwDnaseSeqViewaPeaks off
-        shortLabel HIPEpiC Pk 2
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HIPEpiC cells)
-        subGroups view=aPeaks cellType=HIPE rank=2nd
-        type narrowPeak
+#        track wgEncodeUwDnaseSeqPeaksRep2Hipe
+#        subTrack wgEncodeUwDnaseSeqViewaPeaks off
+#        shortLabel HIPEpiC Pk 2
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Peaks (FDR 0.5%) - 2nd (in HIPEpiC cells)
+#        subGroups view=aPeaks cellType=HIPE rank=2nd
+#        type narrowPeak
 
         track wgEncodeUwDnaseSeqPeaksRep1Hnpce
         subTrack wgEncodeUwDnaseSeqViewaPeaks off
@@ -1017,13 +1017,13 @@ wgEncode 1
         subGroups view=cHot cellType=GM12865 rank=2nd
         type broadPeak
 
-        track wgEncodeUwDnaseSeqHotspotsRep1JurkatG1
-        subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel Jurkat Hspot 1
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in Jurkat cells)
-        subGroups view=cHot cellType=JurkatG1 rank=1st
-        type broadPeak
+#        track wgEncodeUwDnaseSeqHotspotsRep1JurkatG1
+#        subTrack wgEncodeUwDnaseSeqViewcHot off
+#        shortLabel Jurkat Hspot 1
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in Jurkat cells)
+#        subGroups view=cHot cellType=JurkatG1 rank=1st
+#        type broadPeak
 
         track wgEncodeUwDnaseSeqHotspotsRep2Mcf7
         subTrack wgEncodeUwDnaseSeqViewcHot off
@@ -1169,21 +1169,21 @@ wgEncode 1
         subGroups view=cHot cellType=HEE rank=2nd
         type broadPeak
 
-        track wgEncodeUwDnaseSeqHotspotsRep1Hipe
-        subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel HIPEpiC Hspot 1
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HIPEpiC cells)
-        subGroups view=cHot cellType=HIPE rank=1st
-        type broadPeak
+#        track wgEncodeUwDnaseSeqHotspotsRep1Hipe
+#        subTrack wgEncodeUwDnaseSeqViewcHot off
+#        shortLabel HIPEpiC Hspot 1
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Hotspots - 1st (in HIPEpiC cells)
+#        subGroups view=cHot cellType=HIPE rank=1st
+#        type broadPeak
 
-        track wgEncodeUwDnaseSeqHotspotsRep2Hipe
-        subTrack wgEncodeUwDnaseSeqViewcHot off
-        shortLabel HIPEpiC Hspot 2
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HIPEpiC cells)
-        subGroups view=cHot cellType=HIPE rank=2nd
-        type broadPeak
+#        track wgEncodeUwDnaseSeqHotspotsRep2Hipe
+#        subTrack wgEncodeUwDnaseSeqViewcHot off
+#        shortLabel HIPEpiC Hspot 2
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Hotspots - 2nd (in HIPEpiC cells)
+#        subGroups view=cHot cellType=HIPE rank=2nd
+#        type broadPeak
 
         track wgEncodeUwDnaseSeqHotspotsRep1Hnpce
         subTrack wgEncodeUwDnaseSeqViewcHot off
@@ -1657,13 +1657,13 @@ wgEncode 1
         subGroups view=zRawSig cellType=GM12865 rank=2nd
         type wig 1.00 77440.00
 
-        track wgEncodeUwDnaseSeqRawSignalRep1JurkatG1
-        subTrack wgEncodeUwDnaseSeqViewzRawSig off
-        shortLabel Jurkat Raw 1
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in Jurkat cells)
-        subGroups view=zRawSig cellType=JurkatG1 rank=1st
-        type wig 1.00 179155.00
+#        track wgEncodeUwDnaseSeqRawSignalRep1JurkatG1
+#        subTrack wgEncodeUwDnaseSeqViewzRawSig off
+#        shortLabel Jurkat Raw 1
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in Jurkat cells)
+#        subGroups view=zRawSig cellType=JurkatG1 rank=1st
+#        type wig 1.00 179155.00
 
         track wgEncodeUwDnaseSeqRawSignalRep2Mcf7
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
@@ -1809,21 +1809,21 @@ wgEncode 1
         subGroups view=zRawSig cellType=HEE rank=2nd
         type wig 1.00 174596.00
 
-        track wgEncodeUwDnaseSeqRawSignalRep1Hipe
-        subTrack wgEncodeUwDnaseSeqViewzRawSig off
-        shortLabel HIPEpiC Raw 1
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HIPEpiC cells)
-        subGroups view=zRawSig cellType=HIPE rank=1st
-        type wig 1.00 124227.00
+#        track wgEncodeUwDnaseSeqRawSignalRep1Hipe
+#        subTrack wgEncodeUwDnaseSeqViewzRawSig off
+#        shortLabel HIPEpiC Raw 1
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Raw Signal - 1st (in HIPEpiC cells)
+#        subGroups view=zRawSig cellType=HIPE rank=1st
+#        type wig 1.00 124227.00
 
-        track wgEncodeUwDnaseSeqRawSignalRep2Hipe
-        subTrack wgEncodeUwDnaseSeqViewzRawSig off
-        shortLabel HIPEpiC Raw 2
-        release alpha
-        longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HIPEpiC cells)
-        subGroups view=zRawSig cellType=HIPE rank=2nd
-        type wig 1.00 77756.00
+#        track wgEncodeUwDnaseSeqRawSignalRep2Hipe
+#        subTrack wgEncodeUwDnaseSeqViewzRawSig off
+#        shortLabel HIPEpiC Raw 2
+#        release alpha
+#        longLabel ENCODE UW Digital DNaseI Raw Signal - 2nd (in HIPEpiC cells)
+#        subGroups view=zRawSig cellType=HIPE rank=2nd
+#        type wig 1.00 77756.00
 
         track wgEncodeUwDnaseSeqRawSignalRep1Hnpce
         subTrack wgEncodeUwDnaseSeqViewzRawSig off
