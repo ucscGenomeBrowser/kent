@@ -6784,16 +6784,19 @@ bool hasSubgroups = (trackDbSetting(tdb, "subGroup1") != NULL);
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
 
-if (!cartVarExists(cart, "ajax"))
+if (primarySubtrack == NULL)
     {
-    if(trackDbSetting(tdb, "dragAndDrop") != NULL)
-        jsIncludeFile("jquery.tablednd.js", NULL);
-    jsIncludeFile("ajax.js",NULL);
-    #ifdef TABLE_SCROLL
-    jsIncludeFile("jquery.fixedtable.js",NULL);
-    #endif//def TABLE_SCROLL
+    if (!cartVarExists(cart, "ajax"))
+        {
+        if(trackDbSetting(tdb, "dragAndDrop") != NULL)
+            jsIncludeFile("jquery.tablednd.js", NULL);
+        jsIncludeFile("ajax.js",NULL);
+        #ifdef TABLE_SCROLL
+        jsIncludeFile("jquery.fixedtable.js",NULL);
+        #endif//def TABLE_SCROLL
+        }
+    jsIncludeFile("hui.js",NULL);
     }
-jsIncludeFile("hui.js",NULL);
 
 #ifdef SUBTRACK_CFG_POPUP
 printf("<div id='popit' style='display: none'></div>");
@@ -7066,6 +7069,38 @@ sqlFreeResult(&sr);
 webPrintLinkTableEnd();
 }
 
+
+boolean printPennantIconNote(struct trackDb *tdb)
+// Returns TRUE and prints out the "pennantIcon" and note when found.
+//This is used by hgTrackUi and hgc before printing out trackDb "html"
+{
+char * setting = trackDbSetting(tdb, "pennantIcon");
+if (setting != NULL)
+    {
+    setting = cloneString(setting);
+    char *icon = htmlEncodeText(nextWord(&setting),FALSE);
+    char *url = nextWord(&setting);
+    char *hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
+
+    if (strlen(url) > 0)
+        {
+        printf("<P><a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' src='../images/%s'></a>",hint,url,icon);
+
+        // Special case for liftOver from hg17 or hg18, but this should probably be generalized.
+        if (sameString(icon,"18.jpg") && startsWithWord("lifted",hint))
+            printf("&nbsp;Note: these data have been converted via liftOver from the Mar. 2006 (NCBI36/hg18) version of the track.");
+        else if (sameString(icon,"17.jpg") && startsWithWord("lifted",hint))
+            printf("&nbsp;Note: these data have been converted via liftOver from the May 2004 (NCBI35/hg17) version of the track.");
+        else if (strlen(hint) > 0)
+            printf("&nbsp;Note: %s.",hint);
+        printf("</P>\n");
+        }
+    else
+        printf("<img height='16' width='16' src='%s'>\n",icon);
+    return TRUE;
+    }
+return FALSE;
+}
 
 boolean hPrintPennantIcon(struct trackDb *tdb)
 // Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
