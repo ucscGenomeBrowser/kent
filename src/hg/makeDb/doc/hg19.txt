@@ -13291,6 +13291,9 @@ grep -i split hg19.unmapped | wc -l
 #18
 grep -i part hg19.unmapped | wc -l
 #5
+for table in gadAll gadList; do 
+    echo "create table "$table" select * from hg18."$table | hgsql hg19
+done
 
 #############################################################################
 # EVOFOLD (Done, 2010-12-13) - Galt using Jakob's procedure from hg18.txt.
