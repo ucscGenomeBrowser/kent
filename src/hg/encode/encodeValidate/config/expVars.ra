@@ -26,3 +26,10 @@ expVar2 localization
 composite wgEncodeHudsonalphaMethylSeq
 expVar1 cell
 expVar2 replicate
+
+composite wgEncodeUwDgf
+expVar1 cell
+
+composite wgEncodeUwDnase
+expVar1 cell
+expVar2 replicate
