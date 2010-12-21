@@ -39,7 +39,7 @@
 #                       - Hotspots = Ht 
 #               - Replicate: #
 #	- cellType Order: Ordering is based on tier and alphabetical within a tier. 
-#	- Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks.
+#	- Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd replicates for Tier 1 cells.
 #	- Display matrix:
 #		- Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct from cell names.
 #               - Dimension X - Factor
