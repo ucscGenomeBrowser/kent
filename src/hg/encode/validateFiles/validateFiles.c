@@ -12,8 +12,10 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 #include "errCatch.h"
+#include "obscure.h"
+#include "hmmstats.h"
 
-char *version = "4.2";
+char *version = "4.3";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -193,6 +195,22 @@ va_start(args, format);
 if (reportF != NULL)
     vfprintf(reportF, format, args);
 va_end(args);
+}
+
+void reportLongWithCommas(long long l)
+/* Print out a long number with commas at thousands, millions, etc. */
+{
+char ascii[32];
+sprintLongWithCommas(ascii, l);
+report("%s", ascii);
+}
+
+void reportLabelAndLongNumber(char *label, long long l)
+/* Print label: 1,234,567 format number */
+{
+report("%s: ", label);
+reportLongWithCommas( l);
+report("\n");
 }
 
 boolean checkMismatch(int ch1, int ch2)
@@ -1046,6 +1064,7 @@ while ( lineFileNext(lf, &seqName, NULL))
 	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
+reportLabelAndLongNumber("number of sequences", line / 4);
 return errs;
 }
 
@@ -1195,6 +1214,32 @@ for(; chroms; chroms = chroms->next)
 
 if (errs)
     reportErrAbort("Aborting... %d errors found in bigWig file\n", errs);
+
+report("version: %d\n", bbiFile->version);
+report("isCompressed: %s\n", (bbiFile->uncompressBufSize > 0 ? "yes" : "no"));
+report("isSwapped: %d\n", bbiFile->isSwapped);
+reportLabelAndLongNumber("primaryDataSize", bbiFile->unzoomedIndexOffset - bbiFile->unzoomedDataOffset);
+if (bbiFile->levelList != NULL)
+    {
+    long long indexEnd = bbiFile->levelList->dataOffset;
+    reportLabelAndLongNumber("primaryIndexSize", indexEnd - bbiFile->unzoomedIndexOffset);
+    }
+report("zoomLevels: %d\n", bbiFile->zoomLevels);
+
+struct bbiZoomLevel *zoom;
+for (zoom = bbiFile->levelList; zoom != NULL; zoom = zoom->next)
+    report("\t%d\t%d\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
+
+struct bbiChromInfo *chrom, *chromList = bbiChroms;
+report("chromCount: %d\n", slCount(chromList));
+for (chrom=chromList; chrom != NULL; chrom = chrom->next)
+    report("\t%s %d %d\n", chrom->name, chrom->id, chrom->size);
+struct bbiSummaryElement sum = bbiTotalSummary(bbiFile);
+reportLabelAndLongNumber("basesCovered", sum.validCount);
+report("mean: %f\n", sum.sumData/sum.validCount);
+report("min: %f\n", sum.minVal);
+report("max: %f\n", sum.maxVal);
+report("std: %f\n", calcStdFromSums(sum.sumData, sum.sumSquares, sum.validCount));
 
 return errs;
 }
