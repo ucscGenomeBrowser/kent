@@ -13404,6 +13404,8 @@ wc -l {decipher,rgdQtl,rgdRatQtl}/hg1{8,9}.bed
 #  5804 rgdRatQtl/hg19.bed
 ## This isn't very good.  In each case, the unmapped % is over 2%.
 ## DECIPHER: 95.8%, RGD QTL: 88.6%, RGD RAT QTL: 96.2%
+## update for rgdQtl:
+hgsql hg19 -e "create table rgdQtlLink select * from hg18.rgdQtlLink"
 
 #############################################################################
 # FISH CLONES LIFT (DONE, Andy 2010-12-14)

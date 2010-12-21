@@ -18,7 +18,7 @@
 #               - Raw Signal = full
 #	- Short Labels: 
 #		Template: [cell] [view] [replicate #]
-#		- Views: For consistency sake view will be two letters
+#		- Views: For consistency sake view will be
 #			- Peaks = Pk
 #			- Raw Signal = Sig
 #			- Hotspots = Hspt 

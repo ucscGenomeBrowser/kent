@@ -15,7 +15,7 @@
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
 #       - Short Labels: 
 #               Template: [cell] [view] 
-#               - Views: For consistency sake view will be two letters
+#               - Views: For consistency sake view will be:
 #			- Hot Spots = Hspt
 #                       - Peaks = Pk
 #                       - Signal = Sig
