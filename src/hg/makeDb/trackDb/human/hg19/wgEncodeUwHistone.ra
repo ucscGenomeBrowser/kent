@@ -8,10 +8,35 @@
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
 #	- Short Labels: 
 #               Template: [cell] [factor] [view] [replicate #]
+#		- Cell: Abbreviations for cells
+#			- AG04449 = AG49
+#			- AG04450 = AG50
+#			- AG09309 = AG09
+#			- AG09319 = AG19
+#			- AG10803 = AG03
+#			- Caco-2 = Caco
+#			- GM06990 = GM06
+#			- GM12878 = GM12
+#			- H7-hESC = H7ES
+#			- HA-sp = HAsp
+#			- HCPEpiC = HCPE
+#			- HCT-116 = HCT16
+#			- HEEpiC = HEE
+#			- HEK293 = HEK
+#			- HeLa-S3 = HeLa
+#			- HepG2 = HepG
+#			- HL-60 = HL60
+#			- HRPEpiC = HRPE
+#			- HUVEC = HUVE	
+#			- Jurkat = Jurk
+#			- NHDF-neo = NHDFn
+#			- SK-N-SH_RA = SKRA
+#		- Factor: Abbreviations for factors
+#			- me3 (Methylation) = m3
 #               - Views: For consistency sake view will be two letters
 #                       - Peaks = Pk
-#                       - Raw Signal = Sig
-#                       - Hotspots = Hspt 
+#                       - Raw Signal = Sg
+#                       - Hotspots = Ht 
 #               - Replicate: #
 #	- cellType Order: Ordering is based on tier and alphabetical within a tier. 
 #	- Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks.
@@ -30,7 +55,7 @@ shortLabel UW Histone
 longLabel Histone Modifications by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ Caco2=Caco-2 HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCM=HCM HCF=HCF HCPE=HCPEpiC HCT116=HCT-116 H7es=H7-HESC HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ Caco2=Caco-2 HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCM=HCM HCF=HCF HCPE=HCPEpiC HCT116=HCT-116 H7es=H7-hESC HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
 subGroup3 factor Factor H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
 subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
@@ -55,7 +80,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ H3K27me3 Hspt 1
+        shortLabel BJ H3K27m3 Ht 1
         longLabel BJ H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=BJ rep=1
         type broadPeak
@@ -65,7 +90,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ H3K4me3 Hspt 1
+        shortLabel BJ H3K4m3 Ht 1
         longLabel BJ H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=BJ rep=1
         type broadPeak
@@ -75,7 +100,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ H3K36me3 Hspt 1
+        shortLabel BJ H3K36m3 Ht 1
         longLabel BJ H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=BJ rep=1
         type broadPeak
@@ -85,7 +110,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 H3K4me3 Hspt 1
+        shortLabel Caco H3K4m3 Ht 1
         longLabel Caco-2 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=Caco2 rep=1
         type broadPeak
@@ -95,7 +120,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 H3K27me3 Hspt 1
+        shortLabel Caco H3K27m3 Ht 1
         longLabel Caco-2 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=Caco2 rep=1
         type broadPeak
@@ -105,7 +130,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 H3K36m3 Hspt 1
+        shortLabel Caco H3K36m3 Ht 1
         longLabel Caco-2 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=Caco2 rep=1
         type broadPeak
@@ -115,7 +140,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06990 H3K4me3 Hspt 1
+        shortLabel GM06 H3K4m3 Ht 1
         longLabel GM06990 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=GM06990 rep=1
         type broadPeak
@@ -125,7 +150,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ H3K27me3 Hspt 2
+        shortLabel BJ H3K27m3 Ht 2
         longLabel BJ H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=BJ rep=2
         type broadPeak
@@ -135,7 +160,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 H3K27me3 Hspt 2
+        shortLabel Caco H3K27m3 Ht 2
         longLabel Caco-2 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=Caco2 rep=2
         type broadPeak
@@ -145,7 +170,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ H3K4me3 Hspt 2
+        shortLabel BJ H3K4m3 Ht 2
         longLabel BJ H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=BJ rep=2
         type broadPeak
@@ -155,7 +180,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ H3K36me3 Hspt 2
+        shortLabel BJ H3K36m3 Ht 2
         longLabel BJ H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=BJ rep=2
         type broadPeak
@@ -165,7 +190,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 H3K36me3 Hspt 2
+        shortLabel Caco H3K36m3 Ht 2
         longLabel Caco-2 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=Caco2 rep=2
         type broadPeak
@@ -175,7 +200,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06990 H3K4me3 Hspt 2
+        shortLabel GM06 H3K4m3 Ht 2
         longLabel GM06990 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=GM06990 rep=2
         type broadPeak
@@ -185,7 +210,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06990 H3K27m3 Hspt 2
+        shortLabel GM06 H3K27m3 Ht 2
         longLabel GM06990 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=GM06990 rep=2
         type broadPeak
@@ -195,7 +220,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06990 H3K27m3 Hspt 1
+        shortLabel GM06 H3K27m3 Ht 1
         longLabel GM06990 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=GM06990 rep=1
         type broadPeak
@@ -205,7 +230,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06990 H3K36m3 Hspt 1
+        shortLabel GM06 H3K36m3 Ht 1
         longLabel GM06990 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=GM06990 rep=1
         type broadPeak
@@ -215,7 +240,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot
-        shortLabel GM12878 H3K4me3 Hspt 1
+        shortLabel GM12 H3K4m3 Ht 1
         longLabel GM12878 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=GM12878 rep=1
         type broadPeak
@@ -226,7 +251,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot
-        shortLabel GM12878 H3K27me3 Hspt 1
+        shortLabel GM12 H3K27m3 Ht 1
         longLabel GM12878 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=GM12878 rep=1
         type broadPeak
@@ -237,7 +262,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot
-        shortLabel GM12878 H3K36me3 Hspt 1
+        shortLabel GM12 H3K36m3 Ht 1
         longLabel GM12878 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=GM12878 rep=1
         type broadPeak
@@ -248,7 +273,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLa-S3 H3K4me3 Hspt 1
+        shortLabel HeLa H3K4m3 Ht 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HELA rep=1
         type broadPeak
@@ -259,7 +284,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLa-S3 H3K36m3 Hspt 1
+        shortLabel HeLa H3K36m3 Ht 1
         longLabel HeLa-S3 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HELA rep=1
         type broadPeak
@@ -270,7 +295,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLa-S3 H3K27me3 Hspt 1
+        shortLabel HeLa H3K27m3 Ht 1
         longLabel HeLa-S3 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HELA rep=1
         type broadPeak
@@ -281,7 +306,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 H3K4me3 Hspt 1
+        shortLabel HepG H3K4m3 Ht 1
         longLabel HepG2 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HEPG2 rep=1
         type broadPeak
@@ -292,7 +317,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 H3K27me3 Hspt 1
+        shortLabel HepG H3K27m3 Ht 1
         longLabel HepG2 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HEPG2 rep=1
         type broadPeak
@@ -303,7 +328,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 H3K36me3 Hspt 1
+        shortLabel HepG H3K36m3 Ht 1
         longLabel HepG2 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HEPG2 rep=1
         type broadPeak
@@ -314,7 +339,7 @@ noInherit on
         track wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HL-60 H3K4me3 Hspt 1
+        shortLabel HL60 H3K4m3 Ht 1
         longLabel HL-60 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HL60 rep=1
         type broadPeak
@@ -324,7 +349,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HMEC H3K27me3 Hspt 1
+        shortLabel HMEC H3K27m3 Ht 1
         longLabel HMEC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HMEC rep=1
         type broadPeak
@@ -334,7 +359,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE H3K36me3 Hspt 1
+        shortLabel HRE H3K36m3 Ht 1
         longLabel HRE H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HRE rep=1
         type broadPeak
@@ -344,7 +369,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE H3K27me3 Hspt 1
+        shortLabel HRE H3K27m3 Ht 1
         longLabel HRE H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HRE rep=1
         type broadPeak
@@ -354,7 +379,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC H3K4me3 Hspt 1
+        shortLabel HUVE H3K4m3 Ht 1
         longLabel HUVEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HUVEC rep=1
         type broadPeak
@@ -365,7 +390,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC H3K27me3 Hspt 1
+        shortLabel HUVE H3K27m3 Ht 1
         longLabel HUVEC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HUVEC rep=1
         type broadPeak
@@ -376,7 +401,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC H3K36me3 Hspt 1
+        shortLabel HUVE H3K36m3 Ht 1
         longLabel HUVEC H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HUVEC rep=1
         type broadPeak
@@ -387,7 +412,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot
-        shortLabel K562 H3K4me3 Hspt 1
+        shortLabel K562 H3K4m3 Ht 1
         longLabel K562 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=K562 rep=1
         type broadPeak
@@ -398,7 +423,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot
-        shortLabel K562 H3K27me3 Hspt 1
+        shortLabel K562 H3K27m3 Ht 1
         longLabel K562 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=K562 rep=1
         type broadPeak
@@ -409,7 +434,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot
-        shortLabel K562 H3K36me3 Hspt 1
+        shortLabel K562 H3K36m3 Ht 1
         longLabel K562 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=K562 rep=1
         type broadPeak
@@ -420,7 +445,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK H3K4me3 Hspt 1
+        shortLabel NHEK H3K4m3 Ht 1
         longLabel NHEK H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=NHEK rep=1
         type broadPeak
@@ -431,7 +456,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK H3K27me3 Hspt 1
+        shortLabel NHEK H3K27m3 Ht 1
         longLabel NHEK H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=NHEK rep=1
         type broadPeak
@@ -442,7 +467,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK H3K36me3 Hspt 1
+        shortLabel NHEK H3K36m3 Ht 1
         longLabel NHEK H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=NHEK rep=1
         type broadPeak
@@ -453,7 +478,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC H3K4me3 Hspt 1
+        shortLabel SAEC H3K4m3 Ht 1
         longLabel SAEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=SAEC rep=1
         type broadPeak
@@ -463,7 +488,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC H3K27me3 Hspt 1
+        shortLabel SAEC H3K27m3 Ht 1
         longLabel SAEC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SAEC rep=1
         type broadPeak
@@ -473,7 +498,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC H3K36me3 Hspt 1
+        shortLabel SAEC H3K36m3 Ht 1
         longLabel SAEC H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SAEC rep=1
         type broadPeak
@@ -483,7 +508,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-SH_RA H3K4me3 Hspt 1
+        shortLabel SKRA H3K4m3 Ht 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=SKNSHRA rep=1
         type broadPeak
@@ -493,7 +518,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-SH_RA H3K27me3 Hspt 1
+        shortLabel SKRA H3K27m3 Ht 1
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SKNSHRA rep=1
         type broadPeak
@@ -503,7 +528,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-SH_RA H3K36me3 Hspt 1
+        shortLabel SKRA H3K36m3 Ht 1
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SKNSHRA rep=1
         type broadPeak
@@ -513,7 +538,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 H3K4me3 Hspt 2
+        shortLabel Caco H3K4m3 Ht 2
         longLabel Caco-2 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=Caco2 rep=2
         type broadPeak
@@ -523,7 +548,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel GM06990 H3K36me3 Hspt 2
+        shortLabel GM06 H3K36m3 Ht 2
         longLabel GM06990 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=GM06990 rep=2
         type broadPeak
@@ -533,7 +558,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot 
-        shortLabel GM12878 H3K4me3 Hspt 2
+        shortLabel GM12 H3K4m3 Ht 2
         longLabel GM12878 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=GM12878 rep=2
         type broadPeak
@@ -544,7 +569,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot 
-        shortLabel GM12878 H3K36me3 Hspt 2
+        shortLabel GM12 H3K36m3 Ht 2
         longLabel GM12878 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=GM12878 rep=2
         type broadPeak
@@ -555,7 +580,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot 
-        shortLabel GM12878 H3K27me3 Hspt 2
+        shortLabel GM12 H3K27m3 Ht 2
         longLabel GM12878 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=GM12878 rep=2
         type broadPeak
@@ -566,7 +591,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLa-S3 H3K4me3 Hspt 2
+        shortLabel HeLa H3K4m3 Ht 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HELA rep=2
         type broadPeak
@@ -577,7 +602,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLa-S3 H3K27me3 Hspt 2
+        shortLabel HeLa H3K27m3 Ht 2
         longLabel HeLa-S3 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HELA rep=2
         type broadPeak
@@ -588,7 +613,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLa-S3 H3K36me3 Hspt 2
+        shortLabel HeLa H3K36m3 Ht 2
         longLabel HeLa-S3 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HELA rep=2
         type broadPeak
@@ -599,7 +624,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 H3K4me3 Hspt 2
+        shortLabel HepG H3K4m3 Ht 2
         longLabel HepG2 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HEPG2 rep=2
         type broadPeak
@@ -610,7 +635,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 H3K27m3 Hspt 2
+        shortLabel HepG H3K27m3 Ht 2
         longLabel HepG2 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HEPG2 rep=2
         type broadPeak
@@ -621,7 +646,7 @@ noInherit on
         track wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HL-60 H3K4me3 Hspt 2
+        shortLabel HL60 H3K4m3 Ht 2
         longLabel HL-60 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HL60 rep=2
         type broadPeak
@@ -631,7 +656,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE H3K4me3 Hspt 2
+        shortLabel HRE H3K4m3 Ht 2
         longLabel HRE H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HRE rep=2
         type broadPeak
@@ -641,7 +666,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE H3K27me3 Hspt 2
+        shortLabel HRE H3K27m3 Ht 2
         longLabel HRE H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HRE rep=2
         type broadPeak
@@ -651,7 +676,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE H3K36me3 Hspt 2
+        shortLabel HRE H3K36m3 Ht 2
         longLabel HRE H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HRE rep=2
         type broadPeak
@@ -661,7 +686,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC H3K4me3 Hspt 2
+        shortLabel HUVE H3K4m3 Ht 2
         longLabel HUVEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HUVEC rep=2
         type broadPeak
@@ -672,7 +697,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC H3K27me3 Hspt 2
+        shortLabel HUVE H3K27m3 Ht 2
         longLabel HUVEC H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=HUVEC rep=2
         type broadPeak
@@ -683,7 +708,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC H3K36me3 Hspt 2
+        shortLabel HUVE H3K36m3 Ht 2
         longLabel HUVEC H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HUVEC rep=2
         type broadPeak
@@ -694,7 +719,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot 
-        shortLabel K562 H3K4me3 Hspt 2
+        shortLabel K562 H3K4m3 Ht 2
         longLabel K562 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=K562 rep=2
         type broadPeak
@@ -705,7 +730,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot 
-        shortLabel K562 H3K27me3 Hspt 2
+        shortLabel K562 H3K27m3 Ht 2
         longLabel K562 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=K562 rep=2
         type broadPeak
@@ -716,7 +741,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot 
-        shortLabel K562 H3K36me3 Hspt 2
+        shortLabel K562 H3K36m3 Ht 2
         longLabel K562 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=K562 rep=2
         type broadPeak
@@ -727,7 +752,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK H3K4me3 Hspt 2
+        shortLabel NHEK H3K4m3 Ht 2
         longLabel NHEK H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=NHEK rep=2
         type broadPeak
@@ -738,7 +763,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK H3K36m3 Hspt 2
+        shortLabel NHEK H3K36m3 Ht 2
         longLabel NHEK H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=NHEK rep=2
         type broadPeak
@@ -749,7 +774,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC H3K4me3 Hspt 2
+        shortLabel SAEC H3K4m3 Ht 2
         longLabel SAEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=SAEC rep=2
         type broadPeak
@@ -759,7 +784,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC H3K27me3 Hspt 2
+        shortLabel SAEC H3K27m3 Ht 2
         longLabel SAEC H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SAEC rep=2
         type broadPeak
@@ -769,7 +794,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC H3K36me3 Hspt 2
+        shortLabel SAEC H3K36m3 Ht 2
         longLabel SAEC H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SAEC rep=2
         type broadPeak
@@ -779,7 +804,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-SH_RA H3K4me3 Hspt 2
+        shortLabel SKRA H3K4m3 Ht 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=SKNSHRA rep=2
         type broadPeak
@@ -789,7 +814,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-SH_RA H3K27me3 Hspt 2
+        shortLabel SKRA H3K27m3 Ht 2
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=SKNSHRA rep=2
         type broadPeak
@@ -799,7 +824,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel SK-N-SH-RA H3K36me3 Hspt 2
+        shortLabel SKRA H3K36m3 Ht 2
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=SKNSHRA rep=2
         type broadPeak
@@ -809,7 +834,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE H3K4me3 Hspt 1
+        shortLabel HRE H3K4m3 Ht 1
         longLabel HRE H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HRE rep=1
         type broadPeak
@@ -819,7 +844,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK H3K27me3 Hspt 2
+        shortLabel NHEK H3K27m3 Ht 2
         longLabel NHEK H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=NHEK rep=2
         type broadPeak
@@ -830,7 +855,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 Hspt 1
+        shortLabel H7ES H3K4m3 Ht 1
         longLabel H7-hESC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=H7es rep=1
         type broadPeak
@@ -840,7 +865,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 Hspt 1
+        shortLabel H7ES H3K27m3 Ht 1
         longLabel H7-hESC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=H7es rep=1
         type broadPeak
@@ -850,7 +875,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K27me3 Hspt 2
+        shortLabel H7ES H3K27m3 Ht 2
         longLabel H7-hESC H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K27me3 cellType=H7es rep=2
         type broadPeak
@@ -860,7 +885,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 Hspt 2
+        shortLabel H7ES H3K36m3 Ht 2
         longLabel H7-hESC H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=H7es rep=2
         type broadPeak
@@ -870,7 +895,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K4me3 Hspt 2
+        shortLabel H7ES H3K4m3 Ht 2
         longLabel H7-hESC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=H7es rep=2
         type broadPeak
@@ -880,7 +905,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel H7-hESC H3K36me3 Hspt 1
+        shortLabel H7ES H3K36m3 Ht 1
         longLabel H7-hESC H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=H7es rep=1
         type broadPeak
@@ -890,7 +915,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 H3K36m3 Hspt 2
+        shortLabel HepG H3K36m3 Ht 2
         longLabel HepG2 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K36me3 cellType=HEPG2 rep=2
         type broadPeak
@@ -901,7 +926,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG04449 H3K4me3 Hspt 1
+        shortLabel AG49 H3K4m3 Ht 1
         longLabel AG04449 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG04449 rep=1
         type broadPeak
@@ -911,7 +936,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG04449 H3K4me3 Hspt 2
+        shortLabel AG49 H3K4m3 Ht 2
         longLabel AG04449 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG04449 rep=2
         type broadPeak
@@ -921,7 +946,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG04450 H3K4me3 Hspt 1
+        shortLabel AG50 H3K4m3 Ht 1
         longLabel AG04450 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG04450 rep=1
         type broadPeak
@@ -931,7 +956,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG04450 H3K4me3 Hspt 2
+        shortLabel AG50 H3K4m3 Ht 2
         longLabel AG04450 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG04450 rep=2
         type broadPeak
@@ -941,7 +966,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG09309 H3K4me3 Hspt 2
+        shortLabel AG09 H3K4m3 Ht 2
         longLabel AG09309 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG09309 rep=2
         type broadPeak
@@ -951,7 +976,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG09309 H3K4me3 Hspt 1
+        shortLabel AG09 H3K4m3 Ht 1
         longLabel AG09309 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG09309 rep=1
         type broadPeak
@@ -961,7 +986,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG09319 H3K4me3 Hspt 1
+        shortLabel AG19 H3K4m3 Ht 1
         longLabel AG09319 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG09319 rep=1
         type broadPeak
@@ -971,7 +996,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG09319 H3K4me3 Hspt 2
+        shortLabel AG19 H3K4m3 Ht 2
         longLabel AG09319 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG09319 rep=2
         type broadPeak
@@ -981,7 +1006,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG10803 H3K4me3 Hspt 1
+        shortLabel AG03 H3K4m3 Ht 1
         longLabel AG10803 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG10803 rep=1
         type broadPeak
@@ -991,7 +1016,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AG10803 H3K4me3 Hspt 2
+        shortLabel AG03 H3K4m3 Ht 2
         longLabel AG10803 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AG10803 rep=2
         type broadPeak
@@ -1001,7 +1026,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AoAF H3K4me3 Hspt 2
+        shortLabel AoAF H3K4m3 Ht 2
         longLabel AoAF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AOAF rep=2
         type broadPeak
@@ -1011,7 +1036,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel AoAF H3K4me3 Hspt 1
+        shortLabel AoAF H3K4m3 Ht 1
         longLabel AoAF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=AOAF rep=1
         type broadPeak
@@ -1021,7 +1046,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCM H3K4me3 Hspt 1
+        shortLabel HCM H3K4m3 Ht 1
         longLabel HCM H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCM rep=1
         type broadPeak
@@ -1031,7 +1056,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HBMEC H3K4me3 Hspt 2
+        shortLabel HBMEC H3K4m3 Ht 2
         longLabel HBMEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HBMEC rep=2
         type broadPeak
@@ -1041,7 +1066,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HBMEC H3K4me3 Hspt 1
+        shortLabel HBMEC H3K4m3 Ht 1
         longLabel HBMEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HBMEC rep=1
         type broadPeak
@@ -1051,7 +1076,7 @@ noInherit on
         track wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCFaa H3K4me3 Hspt 1
+        shortLabel HCFaa H3K4m3 Ht 1
         longLabel HCFaa H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCFaa rep=1
         type broadPeak
@@ -1061,7 +1086,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCF H3K4me3 Hspt 1
+        shortLabel HCF H3K4m3 Ht 1
         longLabel HCF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCF rep=1
         type broadPeak
@@ -1071,7 +1096,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCF H3K4me3 Hspt 2
+        shortLabel HCF H3K4m3 Ht 2
         longLabel HCF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCF rep=2
         type broadPeak
@@ -1081,7 +1106,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCM H3K4me3 Hspt 2
+        shortLabel HCM H3K4m3 Ht 2
         longLabel HCM H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCM rep=2
         type broadPeak
@@ -1091,7 +1116,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCPEpiC H3K4me3 Hspt 2
+        shortLabel HCPE H3K4m3 Ht 2
         longLabel HCPEpiC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCPE rep=2
         type broadPeak
@@ -1101,7 +1126,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCPEpiC H3K4me3 Hspt 1
+        shortLabel HCPE H3K4m3 Ht 1
         longLabel HCPEpiC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCPE rep=1
         type broadPeak
@@ -1111,7 +1136,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCT-116 H3K4me3 Hspt 2
+        shortLabel HCT16 H3K4m3 Ht 2
         longLabel HCT-116 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCT116 rep=2
         type broadPeak
@@ -1121,7 +1146,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HCT-116 H3K4me3 Hspt 1
+        shortLabel HCT16 H3K4m3 Ht 1
         longLabel HCT-116 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HCT116 rep=1
         type broadPeak
@@ -1131,7 +1156,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HEEpiC H3K4me3 Hspt 1
+        shortLabel HEE H3K4m3 Ht 1
         longLabel HEEpiC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HEE rep=1
         type broadPeak
@@ -1141,7 +1166,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HEEpiC H3K4me3 Hspt 2
+        shortLabel HEE H3K4m3 Ht 2
         longLabel HEEpiC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HEE rep=2
         type broadPeak
@@ -1151,7 +1176,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HEK293 H3K4me3 Hspt 2
+        shortLabel HEK H3K4m3 Ht 2
         longLabel HEK293 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HEK293 rep=2
         type broadPeak
@@ -1161,7 +1186,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HEK293 H3K4me3 Hspt 1
+        shortLabel HEK H3K4m3 Ht 1
         longLabel HEK293 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HEK293 rep=1
         type broadPeak
@@ -1171,7 +1196,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HMEC H3K4me3 Hspt 2
+        shortLabel HMEC H3K4m3 Ht 2
         longLabel HMEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HMEC rep=2
         type broadPeak
@@ -1181,7 +1206,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HMEC H3K4me3 Hspt 1
+        shortLabel HMEC H3K4m3 Ht 1
         longLabel HMEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HMEC rep=1
         type broadPeak
@@ -1191,7 +1216,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HMF H3K4me3 Hspt 1
+        shortLabel HMF H3K4m3 Ht 1
         longLabel HMF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HMF rep=1
         type broadPeak
@@ -1201,7 +1226,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HMF H3K4me3 Hspt 2
+        shortLabel HMF H3K4m3 Ht 2
         longLabel HMF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HMF rep=2
         type broadPeak
@@ -1211,7 +1236,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HPAF H3K4me3 Hspt 1
+        shortLabel HPAF H3K4m3 Ht 1
         longLabel HPAF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HPAF rep=1
         type broadPeak
@@ -1221,7 +1246,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HPAF H3K4me3 Hspt 2
+        shortLabel HPAF H3K4m3 Ht 2
         longLabel HPAF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HPAF rep=2
         type broadPeak
@@ -1231,7 +1256,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HPF H3K4me3 Hspt 2
+        shortLabel HPF H3K4m3 Ht 2
         longLabel HPF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HPF rep=2
         type broadPeak
@@ -1241,7 +1266,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HPF H3K4me3 Hspt 1
+        shortLabel HPF H3K4m3 Ht 1
         longLabel HPF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HPF rep=1
         type broadPeak
@@ -1251,7 +1276,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRPEpiC H3K4me3 Hspt 2
+        shortLabel HRPE H3K4m3 Ht 2
         longLabel HRPEpiC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HRPE rep=2
         type broadPeak
@@ -1261,7 +1286,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HRPEpiC H3K4me3 Hspt 1
+        shortLabel HRPE H3K4m3 Ht 1
         longLabel HRPEpiC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HRPE rep=1
         type broadPeak
@@ -1271,7 +1296,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HVMF H3K4me3 Hspt 2
+        shortLabel HVMF H3K4m3 Ht 2
         longLabel HVMF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HVMF rep=2
         type broadPeak
@@ -1281,7 +1306,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HVMF H3K4me3 Hspt 1
+        shortLabel HVMF H3K4m3 Ht 1
         longLabel HVMF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HVMF rep=1
         type broadPeak
@@ -1291,7 +1316,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Jurkat H3K4me3 Hspt 2
+        shortLabel Jurk H3K4m3 Ht 2
         longLabel Jurkat H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=Jurkat rep=2
         type broadPeak
@@ -1301,7 +1326,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel Jurkat H3K4me3 Hspt 1
+        shortLabel Jurk H3K4m3 Ht 1
         longLabel Jurkat H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=Jurkat rep=1
         type broadPeak
@@ -1311,7 +1336,7 @@ noInherit on
         track wgEncodeUwHistoneMcf7H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel MCF-7 H3K4me3 Hspt 1
+        shortLabel MCF-7 H3K4m3 Ht 1
         longLabel MCF-7 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=MCF7 rep=1
         type broadPeak
@@ -1321,7 +1346,7 @@ noInherit on
         track wgEncodeUwHistoneNb4H3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NB4 H3K4me3 Hspt 1
+        shortLabel NB4 H3K4m3 Ht 1
         longLabel NB4 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=NB4 rep=1
         type broadPeak
@@ -1331,7 +1356,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHDF-neo H3K4me3 Hspt 1
+        shortLabel NHDFn H3K4m3 Ht 1
         longLabel NHDF-neo H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=NHDF-neo rep=1
         type broadPeak
@@ -1341,7 +1366,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel NHDF-neo H3K4me3 Hspt 2
+        shortLabel NHDFn H3K4m3 Ht 2
         longLabel NHDF-neo H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=NHDF-neo rep=2
         type broadPeak
@@ -1351,7 +1376,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HA-sp H3K4me3 Hspt 1
+        shortLabel HAsp H3K4m3 Ht 1
         longLabel HA-sp H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HA-sp rep=1
         type broadPeak
@@ -1361,7 +1386,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
-        shortLabel HA-sp H3K4me3 Hspt 2
+        shortLabel HAsp H3K4m3 Ht 2
         longLabel HA-sp H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=H3K04me3 cellType=HA-sp  rep=2
         type broadPeak
@@ -1380,7 +1405,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ H3K27me3 Pk 1
+        shortLabel BJ H3K27m3 Pk 1
         longLabel BJ H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=BJ rep=1
         type narrowPeak
@@ -1390,7 +1415,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ H3K4me3 Pk 1
+        shortLabel BJ H3K4m3 Pk 1
         longLabel BJ H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=BJ rep=1
         type narrowPeak
@@ -1400,7 +1425,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ H3K36me3 Pk 1
+        shortLabel BJ H3K36m3 Pk 1
         longLabel BJ H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=BJ rep=1
         type narrowPeak
@@ -1410,7 +1435,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 H3K4me3 Pk 1
+        shortLabel Caco H3K4m3 Pk 1
         longLabel Caco-2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=Caco2 rep=1
         type narrowPeak
@@ -1420,7 +1445,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 H3K27me3 Pk 1
+        shortLabel Caco H3K27m3 Pk 1
         longLabel Caco-2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=Caco2 rep=1
         type narrowPeak
@@ -1430,7 +1455,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 H3K36me3 Pk 1
+        shortLabel Caco H3K36m3 Pk 1
         longLabel Caco-2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=Caco2 rep=1
         type narrowPeak
@@ -1440,7 +1465,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06990 H3K4me3 Pk 1
+        shortLabel GM06 H3K4m3 Pk 1
         longLabel GM06990 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=GM06990 rep=1
         type narrowPeak
@@ -1450,7 +1475,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ H3K27me3 Pk 2
+        shortLabel BJ H3K27m3 Pk 2
         longLabel BJ H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=BJ rep=2
         type narrowPeak
@@ -1460,7 +1485,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 H3K27me3 Pk 2
+        shortLabel Caco H3K27m3 Pk 2
         longLabel Caco-2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=Caco2 rep=2
         type narrowPeak
@@ -1470,7 +1495,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ H3K4me3 Pk 2
+        shortLabel BJ H3K4m3 Pk 2
         longLabel BJ H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=BJ rep=2
         type narrowPeak
@@ -1480,7 +1505,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ H3K36me3 Pk 2
+        shortLabel BJ H3K36m3 Pk 2
         longLabel BJ H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=BJ rep=2
         type narrowPeak
@@ -1490,7 +1515,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 H3K36me3 Pk 2
+        shortLabel Caco H3K36m3 Pk 2
         longLabel Caco-2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=Caco2 rep=2
         type narrowPeak
@@ -1500,7 +1525,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06990 H3K4me3 Pk 2
+        shortLabel GM06 H3K4m3 Pk 2
         longLabel GM06990 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=GM06990 rep=2
         type narrowPeak
@@ -1510,7 +1535,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06990 H3K27me3 Pk 2
+        shortLabel GM06 H3K27m3 Pk 2
         longLabel GM06990 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=GM06990 rep=2
         type narrowPeak
@@ -1520,7 +1545,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06990 H3K27me3 Pk 1
+        shortLabel GM06 H3K27m3 Pk 1
         longLabel GM06990 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=GM06990 rep=1
         type narrowPeak
@@ -1530,7 +1555,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06990 H3K36me3 Pk 1
+        shortLabel GM06 H3K36m3 Pk 1
         longLabel GM06990 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=GM06990 rep=1
         type narrowPeak
@@ -1540,7 +1565,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM12878 H3K4me3 Pk 1
+        shortLabel GM12 H3K4m3 Pk 1
         longLabel GM12878 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=GM12878 rep=1
         type narrowPeak
@@ -1551,7 +1576,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM12878 H3K27me3 Pk 1
+        shortLabel GM12 H3K27m3 Pk 1
         longLabel GM12878 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=GM12878 rep=1
         type narrowPeak
@@ -1562,7 +1587,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM12878 H3K36me3 Pk 1
+        shortLabel GM12 H3K36m3 Pk 1
         longLabel GM12878 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=GM12878 rep=1
         type narrowPeak
@@ -1573,7 +1598,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLa-S3 H3K4me3 Pk 1
+        shortLabel HeLa H3K4m3 Pk 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HELA rep=1
         type narrowPeak
@@ -1584,7 +1609,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLa-S3 H3K36m3 Pk 1
+        shortLabel HeLa H3K36m3 Pk 1
         longLabel HeLa-S3 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HELA rep=1
         type narrowPeak
@@ -1595,7 +1620,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLa-S3 H3K27me3 Pk 1
+        shortLabel HeLa H3K27m3 Pk 1
         longLabel HeLa-S3 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HELA rep=1
         type narrowPeak
@@ -1606,7 +1631,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 H3K4me3 Pk 1
+        shortLabel HepG H3K4m3 Pk 1
         longLabel HepG2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HEPG2 rep=1
         type narrowPeak
@@ -1617,7 +1642,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 H3K27me3 Pk 1
+        shortLabel HepG H3K27m3 Pk 1
         longLabel HepG2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HEPG2 rep=1
         type narrowPeak
@@ -1628,7 +1653,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 H3K36me3 Pk 1
+        shortLabel HepG H3K36m3 Pk 1
         longLabel HepG2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HEPG2 rep=1
         type narrowPeak
@@ -1639,7 +1664,7 @@ noInherit on
         track wgEncodeUwHistoneHl60H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HL-60 H3K4me3 Pk 1
+        shortLabel HL60 H3K4m3 Pk 1
         longLabel HL-60 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HL60 rep=1
         type narrowPeak
@@ -1649,7 +1674,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HMEC H3K27me3 Pk 1
+        shortLabel HMEC H3K27m3 Pk 1
         longLabel HMEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HMEC rep=1
         type narrowPeak
@@ -1659,7 +1684,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE H3K36me3 Pk 1
+        shortLabel HRE H3K36m3 Pk 1
         longLabel HRE H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HRE rep=1
         type narrowPeak
@@ -1669,7 +1694,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE H3K27me3 Pk 1
+        shortLabel HRE H3K27m3 Pk 1
         longLabel HRE H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HRE rep=1
         type narrowPeak
@@ -1679,7 +1704,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC H3K4me3 Pk 1
+        shortLabel HUVE H3K4m3 Pk 1
         longLabel HUVEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HUVEC rep=1
         type narrowPeak
@@ -1690,7 +1715,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC H3K27me3 Pk 1
+        shortLabel HUVE H3K27m3 Pk 1
         longLabel HUVEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HUVEC rep=1
         type narrowPeak
@@ -1701,7 +1726,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC H3K36me3 Pk 1
+        shortLabel HUVE H3K36m3 Pk 1
         longLabel HUVEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HUVEC rep=1
         type narrowPeak
@@ -1712,7 +1737,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel K562 H3K4me3 Pk 1
+        shortLabel K562 H3K4m3 Pk 1
         longLabel K562 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=K562 rep=1
         type narrowPeak
@@ -1723,7 +1748,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel K562 H3K27me3 Pk 1
+        shortLabel K562 H3K27m3 Pk 1
         longLabel K562 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=K562 rep=1
         type narrowPeak
@@ -1734,7 +1759,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks
-        shortLabel K562 H3K36me3 Pk 1
+        shortLabel K562 H3K36m3 Pk 1
         longLabel K562 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=K562 rep=1
         type narrowPeak
@@ -1745,7 +1770,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK H3K4me3 Pk 1
+        shortLabel NHEK H3K4m3 Pk 1
         longLabel NHEK H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=NHEK rep=1
         type narrowPeak
@@ -1756,7 +1781,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK H3K27me3 Pk 1
+        shortLabel NHEK H3K27m3 Pk 1
         longLabel NHEK H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=NHEK rep=1
         type narrowPeak
@@ -1767,7 +1792,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK H3K36me3 Pk 1
+        shortLabel NHEK H3K36m3 Pk 1
         longLabel NHEK H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=NHEK rep=1
         type narrowPeak
@@ -1778,7 +1803,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC H3K4me3 Pk 1
+        shortLabel SAEC H3K4m3 Pk 1
         longLabel SAEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=SAEC rep=1
         type narrowPeak
@@ -1788,7 +1813,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC H3K27me3 Pk 1
+        shortLabel SAEC H3K27m3 Pk 1
         longLabel SAEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=SAEC rep=1
         type narrowPeak
@@ -1798,7 +1823,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC H3K36me3 Pk 1
+        shortLabel SAEC H3K36m3 Pk 1
         longLabel SAEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=SAEC rep=1
         type narrowPeak
@@ -1808,7 +1833,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-SH_RA H3K4me3 Pk 1
+        shortLabel SKRA H3K4m3 Pk 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=SKNSHRA rep=1
         type narrowPeak
@@ -1818,7 +1843,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-SH_RA H3K27me3 Pk 1
+        shortLabel SKRA H3K27m3 Pk 1
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=SKNSHRA rep=1
         type narrowPeak
@@ -1828,7 +1853,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-SH_RA H3K36me3 Pk 1
+        shortLabel SKRA H3K36m3 Pk 1
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=SKNSHRA rep=1
         type narrowPeak
@@ -1838,7 +1863,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 H3K4me3 Pk 2
+        shortLabel Caco H3K4m3 Pk 2
         longLabel Caco-2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=Caco2 rep=2
         type narrowPeak
@@ -1848,7 +1873,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM06990 H3K36me3 Pk 2
+        shortLabel GM06 H3K36m3 Pk 2
         longLabel GM06990 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=GM06990 rep=2
         type narrowPeak
@@ -1858,7 +1883,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel GM12878 H3K4me3 Pk 2
+        shortLabel GM12 H3K4m3 Pk 2
         longLabel GM12878 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=GM12878 rep=2
         type narrowPeak
@@ -1869,7 +1894,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel GM12878 H3K36me3 Pk 2
+        shortLabel GM12 H3K36m3 Pk 2
         longLabel GM12878 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=GM12878 rep=2
         type narrowPeak
@@ -1880,7 +1905,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel GM12878 H3K27me3 Pk 2
+        shortLabel GM12 H3K27m3 Pk 2
         longLabel GM12878 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=GM12878 rep=2
         type narrowPeak
@@ -1891,7 +1916,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLa-S3 H3K4me3 Pk 2
+        shortLabel HeLa H3K4m3 Pk 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HELA rep=2
         type narrowPeak
@@ -1902,7 +1927,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLa-S3 H3K27me3 Pk 2
+        shortLabel HeLa H3K27m3 Pk 2
         longLabel HeLa-S3 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HELA rep=2
         type narrowPeak
@@ -1913,7 +1938,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLa-S3 H3K36me3 Pk 2
+        shortLabel HeLa H3K36m3 Pk 2
         longLabel HeLa-S3 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HELA rep=2
         type narrowPeak
@@ -1924,7 +1949,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 H3K4me3 Pk 2
+        shortLabel HepG H3K4m3 Pk 2
         longLabel HepG2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HEPG2 rep=2
         type narrowPeak
@@ -1935,7 +1960,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 H3K27me3 Pk 2
+        shortLabel HepG H3K27m3 Pk 2
         longLabel HepG2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HEPG2 rep=2
         type narrowPeak
@@ -1946,7 +1971,7 @@ noInherit on
         track wgEncodeUwHistoneHl60H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HL-60 H3K4me3 Pk 2
+        shortLabel HL60 H3K4m3 Pk 2
         longLabel HL-60 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HL60 rep=2
         type narrowPeak
@@ -1956,7 +1981,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE H3K4me3 Pk 2
+        shortLabel HRE H3K4m3 Pk 2
         longLabel HRE H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HRE rep=2
         type narrowPeak
@@ -1966,7 +1991,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE H3K27me3 Pk 2
+        shortLabel HRE H3K27m3 Pk 2
         longLabel HRE H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HRE rep=2
         type narrowPeak
@@ -1976,7 +2001,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE H3K36me3 Pk 2
+        shortLabel HRE H3K36m3 Pk 2
         longLabel HRE H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HRE rep=2
         type narrowPeak
@@ -1986,7 +2011,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC H3K4me3 Pk 2
+        shortLabel HUVE H3K4m3 Pk 2
         longLabel HUVEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HUVEC rep=2
         type narrowPeak
@@ -1997,7 +2022,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC H3K27me3 Pk 2
+        shortLabel HUVE H3K27m3 Pk 2
         longLabel HUVEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=HUVEC rep=2
         type narrowPeak
@@ -2008,7 +2033,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC H3K36me3 Pk 2
+        shortLabel HUVE H3K36m3 Pk 2
         longLabel HUVEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HUVEC rep=2
         type narrowPeak
@@ -2019,7 +2044,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel K562 H3K4me3 Pk 2
+        shortLabel K562 H3K4m3 Pk 2
         longLabel K562 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=K562 rep=2
         type narrowPeak
@@ -2030,7 +2055,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel K562 H3K27me3 Pk 2
+        shortLabel K562 H3K27m3 Pk 2
         longLabel K562 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=K562 rep=2
         type narrowPeak
@@ -2041,7 +2066,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks 
-        shortLabel K562 H3K36me3 Pk 2
+        shortLabel K562 H3K36m3 Pk 2
         longLabel K562 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=K562 rep=2
         type narrowPeak
@@ -2052,7 +2077,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK H3K4me3 Pk 2
+        shortLabel NHEK H3K4m3 Pk 2
         longLabel NHEK H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=NHEK rep=2
         type narrowPeak
@@ -2063,7 +2088,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK H3K36me3 Pk 2
+        shortLabel NHEK H3K36m3 Pk 2
         longLabel NHEK H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=NHEK rep=2
         type narrowPeak
@@ -2074,7 +2099,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC H3K4me3 Pk 2
+        shortLabel SAEC H3K4m3 Pk 2
         longLabel SAEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=SAEC rep=2
         type narrowPeak
@@ -2084,7 +2109,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC H3K27me3 Pk 2
+        shortLabel SAEC H3K27m3 Pk 2
         longLabel SAEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=SAEC rep=2
         type narrowPeak
@@ -2094,7 +2119,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC H3K36me3 Pk 2
+        shortLabel SAEC H3K36m3 Pk 2
         longLabel SAEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=SAEC rep=2
         type narrowPeak
@@ -2104,7 +2129,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-SH_RA H3K4me3 Pk 2
+        shortLabel SKRA H3K4m3 Pk 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=SKNSHRA rep=2
         type narrowPeak
@@ -2114,7 +2139,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-SH_RA H3K27me3 Pk 2
+        shortLabel SKRA H3K27m3 Pk 2
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=SKNSHRA rep=2
         type narrowPeak
@@ -2124,7 +2149,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SK-N-SH_RA H3K36me3 Pk 2
+        shortLabel SKRA H3K36m3 Pk 2
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=SKNSHRA rep=2
         type narrowPeak
@@ -2134,7 +2159,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE H3K4me3 Pk 1
+        shortLabel HRE H3K4m3 Pk 1
         longLabel HRE H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HRE rep=1
         type narrowPeak
@@ -2144,7 +2169,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK H3K27me3 Pk 2
+        shortLabel NHEK H3K27m3 Pk 2
         longLabel NHEK H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=NHEK rep=2
         type narrowPeak
@@ -2155,7 +2180,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 1
+        shortLabel H7ES H3K4m3 Pk 1
         longLabel H7-hESC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=H7es rep=1
         type narrowPeak
@@ -2165,7 +2190,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 1
+        shortLabel H7ES H3K27m3 Pk 1
         longLabel H7-hESC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=H7es rep=1
         type narrowPeak
@@ -2175,7 +2200,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K27me3 Pk 2
+        shortLabel H7ES H3K27m3 Pk 2
         longLabel H7-hESC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K27me3 cellType=H7es rep=2
         type narrowPeak
@@ -2185,7 +2210,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 2
+        shortLabel H7ES H3K36m3 Pk 2
         longLabel H7-hESC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=H7es rep=2
         type narrowPeak
@@ -2195,7 +2220,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K4me3 Pk 2
+        shortLabel H7ES H3K4m3 Pk 2
         longLabel H7-hESC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=H7es rep=2
         type narrowPeak
@@ -2205,7 +2230,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel H7-hESC H3K36me3 Pk 1
+        shortLabel H7ES H3K36m3 Pk 1
         longLabel H7-hESC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=H7es rep=1
         type narrowPeak
@@ -2215,7 +2240,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 H3K36me3 Pk 2
+        shortLabel HepG H3K36m3 Pk 2
         longLabel HepG2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K36me3 cellType=HEPG2 rep=2
         type narrowPeak
@@ -2226,7 +2251,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG04449 H3K4me3 Pk 1
+        shortLabel AG49 H3K4m3 Pk 1
         longLabel AG04449 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG04449 rep=1
         type narrowPeak
@@ -2236,7 +2261,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG04449 H3K4me3 Pk 2
+        shortLabel AG49 H3K4m3 Pk 2
         longLabel AG04449 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG04449 rep=2
         type narrowPeak
@@ -2246,7 +2271,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG04450 H3K4me3 Pk 1
+        shortLabel AG50 H3K4m3 Pk 1
         longLabel AG04450 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG04450 rep=1
         type narrowPeak
@@ -2256,7 +2281,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG04450 H3K4me3 Pk 2
+        shortLabel AG50 H3K4m3 Pk 2
         longLabel AG04450 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG04450 rep=2
         type narrowPeak
@@ -2266,7 +2291,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG09309 H3K4me3 Pk 2
+        shortLabel AG09 H3K4m3 Pk 2
         longLabel AG09309 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG09309 rep=2
         type narrowPeak
@@ -2276,7 +2301,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG09309 H3K4me3 Pk 1
+        shortLabel AG09 H3K4m3 Pk 1
         longLabel AG09309 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG09309 rep=1
         type narrowPeak
@@ -2286,7 +2311,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG09319 H3K4me3 Pk 1
+        shortLabel AG19 H3K4m3 Pk 1
         longLabel AG09319 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG09319 rep=1
         type narrowPeak
@@ -2296,7 +2321,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG09319 H3K4me3 Pk 2
+        shortLabel AG19 H3K4m3 Pk 2
         longLabel AG09319 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG09319 rep=2
         type narrowPeak
@@ -2306,7 +2331,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG10803 H3K4me3 Pk 1
+        shortLabel AG03 H3K4m3 Pk 1
         longLabel AG10803 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG10803 rep=1
         type narrowPeak
@@ -2316,7 +2341,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AG10803 H3K4me3 Pk 2
+        shortLabel AG03 H3K4m3 Pk 2
         longLabel AG10803 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AG10803 rep=2
         type narrowPeak
@@ -2326,7 +2351,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AoAF H3K4me3 Pk 2
+        shortLabel AoAF H3K4m3 Pk 2
         longLabel AoAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AOAF rep=2
         type narrowPeak
@@ -2336,7 +2361,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel AoAF H3K4me3 Pk 1
+        shortLabel AoAF H3K4m3 Pk 1
         longLabel AoAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=AOAF rep=1
         type narrowPeak
@@ -2346,7 +2371,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCM H3K4me3 Pk 1
+        shortLabel HCM H3K4m3 Pk 1
         longLabel HCM H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCM rep=1
         type narrowPeak
@@ -2356,7 +2381,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HBMEC H3K4me3 Pk 2
+        shortLabel HBMEC H3K4m3 Pk 2
         longLabel HBMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HBMEC rep=2
         type narrowPeak
@@ -2366,7 +2391,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HBMEC H3K4me3 Pk 1
+        shortLabel HBMEC H3K4m3 Pk 1
         longLabel HBMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HBMEC rep=1
         type narrowPeak
@@ -2376,7 +2401,7 @@ noInherit on
         track wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCFaa H3K4me3 Pk 1
+        shortLabel HCFaa H3K4m3 Pk 1
         longLabel HCFaa H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCFaa rep=1
         type narrowPeak
@@ -2386,7 +2411,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCF H3K4me3 Pk 1
+        shortLabel HCF H3K4m3 Pk 1
         longLabel HCF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCF rep=1
         type narrowPeak
@@ -2396,7 +2421,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCF H3K4me3 Pk 2
+        shortLabel HCF H3K4m3 Pk 2
         longLabel HCF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCF rep=2
         type narrowPeak
@@ -2406,7 +2431,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCM H3K4me3 Pk 2
+        shortLabel HCM H3K4m3 Pk 2
         longLabel HCM H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCM rep=2
         type narrowPeak
@@ -2416,7 +2441,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCPEpiC H3K4me3 Pk 2
+        shortLabel HCPE H3K4m3 Pk 2
         longLabel HCPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCPE rep=2
         type narrowPeak
@@ -2426,7 +2451,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCPEpiC H3K4me3 Pk 1
+        shortLabel HCPE H3K4m3 Pk 1
         longLabel HCPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCPE rep=1
         type narrowPeak
@@ -2436,7 +2461,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCT-116 H3K4me3 Pk 2
+        shortLabel HCT16 H3K4m3 Pk 2
         longLabel HCT-116 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCT116 rep=2
         type narrowPeak
@@ -2446,7 +2471,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HCT-116 H3K4me3 Pk 1
+        shortLabel HCT16 H3K4m3 Pk 1
         longLabel HCT-116 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HCT116 rep=1
         type narrowPeak
@@ -2456,7 +2481,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HEEpiC H3K4me3 Pk 1
+        shortLabel HEE H3K4m3 Pk 1
         longLabel HEEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HEE rep=1
         type narrowPeak
@@ -2466,7 +2491,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HEEpiC H3K4me3 Pk 2
+        shortLabel HEE H3K4m3 Pk 2
         longLabel HEEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HEE rep=2
         type narrowPeak
@@ -2476,7 +2501,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HEK293 H3K4me3 Pk 2
+        shortLabel HEK H3K4m3 Pk 2
         longLabel HEK293 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HEK293 rep=2
         type narrowPeak
@@ -2486,7 +2511,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HEK293 H3K4me3 Pk 1
+        shortLabel HEK H3K4m3 Pk 1
         longLabel HEK293 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HEK293 rep=1
         type narrowPeak
@@ -2496,7 +2521,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HMEC H3K4me3 Pk 2
+        shortLabel HMEC H3K4m3 Pk 2
         longLabel HMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HMEC rep=2
         type narrowPeak
@@ -2506,7 +2531,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HMEC H3K4me3 Pk 1
+        shortLabel HMEC H3K4m3 Pk 1
         longLabel HMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HMEC rep=1
         type narrowPeak
@@ -2516,7 +2541,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HMF H3K4me3 Pk 1
+        shortLabel HMF H3K4m3 Pk 1
         longLabel HMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HMF rep=1
         type narrowPeak
@@ -2526,7 +2551,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HMF H3K4me3 Pk 2
+        shortLabel HMF H3K4m3 Pk 2
         longLabel HMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HMF rep=2
         type narrowPeak
@@ -2536,7 +2561,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HPAF H3K4me3 Pk 1
+        shortLabel HPAF H3K4m3 Pk 1
         longLabel HPAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HPAF rep=1
         type narrowPeak
@@ -2546,7 +2571,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HPAF H3K4me3 Pk 2
+        shortLabel HPAF H3K4m3 Pk 2
         longLabel HPAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HPAF rep=2
         type narrowPeak
@@ -2556,7 +2581,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HPF H3K4me3 Pk 2
+        shortLabel HPF H3K4m3 Pk 2
         longLabel HPF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HPF rep=2
         type narrowPeak
@@ -2566,7 +2591,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HPF H3K4me3 Pk 1
+        shortLabel HPF H3K4m3 Pk 1
         longLabel HPF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HPF rep=1
         type narrowPeak
@@ -2576,7 +2601,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRPEpiC H3K4me3 Pk 2
+        shortLabel HRPE H3K4m3 Pk 2
         longLabel HRPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HRPE rep=2
         type narrowPeak
@@ -2586,7 +2611,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRPEpiC H3K4me3 Pk 1
+        shortLabel HRPE H3K4m3 Pk 1
         longLabel HRPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HRPE rep=1
         type narrowPeak
@@ -2596,7 +2621,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HVMF H3K4me3 Pk 2
+        shortLabel HVMF H3K4m3 Pk 2
         longLabel HVMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HVMF rep=2
         type narrowPeak
@@ -2606,7 +2631,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HVMF H3K4me3 Pk 1
+        shortLabel HVMF H3K4m3 Pk 1
         longLabel HVMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HVMF rep=1
         type narrowPeak
@@ -2616,7 +2641,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Jurkat H3K4me3 Pk 2
+        shortLabel Jurk H3K4m3 Pk 2
         longLabel Jurkat H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=Jurkat rep=2
         type narrowPeak
@@ -2626,7 +2651,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Jurkat H3K4me3 Pk 1
+        shortLabel Jurk H3K4m3 Pk 1
         longLabel Jurkat H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=Jurkat rep=1
         type narrowPeak
@@ -2636,7 +2661,7 @@ noInherit on
         track wgEncodeUwHistoneMcf7H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel MCF-7 H3K4me3 Pk 1
+        shortLabel MCF-7 H3K4m3 Pk 1
         longLabel MCF-7 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=MCF7 rep=1
         type narrowPeak
@@ -2646,7 +2671,7 @@ noInherit on
         track wgEncodeUwHistoneNb4H3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NB4 H3K4me3 Pk 1
+        shortLabel NB4 H3K4m3 Pk 1
         longLabel NB4 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=NB4 rep=1
         type narrowPeak
@@ -2656,7 +2681,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHDF-neo H3K4me3 Pk 1
+        shortLabel NHDFn H3K4m3 Pk 1
         longLabel NHDF-neo H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=NHDF-neo rep=1
         type narrowPeak
@@ -2666,7 +2691,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHDF-neo H3K4me3 Pk 2
+        shortLabel NHDFn H3K4m3 Pk 2
         longLabel NHDF-neo H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=NHDF-neo rep=2
         type narrowPeak
@@ -2676,7 +2701,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HA-sp H3K4me3 Pk 1
+        shortLabel HAsp H3K4m3 Pk 1
         longLabel HA-sp H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HA-sp rep=1
         type narrowPeak
@@ -2686,7 +2711,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HA-sp H3K4me3 Pk 2
+        shortLabel HAsp H3K4m3 Pk 2
         longLabel HA-sp H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=H3K04me3 cellType=HA-sp rep=2
         type narrowPeak
@@ -2709,7 +2734,7 @@ noInherit on
         track wgEncodeUwHistoneBjInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ Input Sig 1
+        shortLabel BJ Input Sg 1
         longLabel BJ Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=BJ rep=1
         type bigWig 1.000000 15966.000000
@@ -2719,7 +2744,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ H3K27me3 Sig 1
+        shortLabel BJ H3K27m3 Sg 1
         longLabel BJ H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=BJ rep=1
         type bigWig 1.000000 5970.000000
@@ -2729,7 +2754,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 Input Sig 1
+        shortLabel Caco Input Sg 1
         longLabel Caco-2 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=Caco2 rep=1
         type bigWig 1.000000 9741.000000
@@ -2739,7 +2764,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06990 Input Sig 1
+        shortLabel GM06 Input Sg 1
         longLabel GM06990 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=GM06990 rep=1
         type bigWig 1.000000 8015.000000
@@ -2750,7 +2775,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12878 Input Sig 1
+        shortLabel GM12 Input Sg 1
         longLabel GM12878 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=GM12878 rep=1
         type bigWig 1.000000 8963.000000
@@ -2761,7 +2786,7 @@ noInherit on
         track wgEncodeUwHistoneHek293InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEK293 Input Sig 1
+        shortLabel HEK Input Sg 1
         longLabel HEK293 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HEK293 rep=1
         type bigWig 1.000000 8215.000000
@@ -2771,7 +2796,7 @@ noInherit on
         track wgEncodeUwHistoneHmecInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMEC Input Sig 1
+        shortLabel HMEC Input Sg 1
         longLabel HMEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HMEC rep=1
         type bigWig 1.000000 9968.000000
@@ -2781,7 +2806,7 @@ noInherit on
         track wgEncodeUwHistoneHreInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE Input Sig 1
+        shortLabel HRE Input Sg 1
         longLabel HRE Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HRE rep=1
         type bigWig 1.000000 7076.000000
@@ -2791,7 +2816,7 @@ noInherit on
         track wgEncodeUwHistoneK562InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel K562 Input Sig 1
+        shortLabel K562 Input Sg 1
         longLabel K562 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=K562 rep=1
         type bigWig 1.000000 13124.000000
@@ -2802,7 +2827,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC Input Sig 1
+        shortLabel HUVE Input Sg 1
         longLabel HUVEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HUVEC rep=1
         type bigWig 1.000000 8683.000000
@@ -2813,7 +2838,7 @@ noInherit on
         track wgEncodeUwHistoneNhekInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK Input Sig 1
+        shortLabel NHEK Input Sg 1
         longLabel NHEK Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=NHEK rep=1
         type bigWig 1.000000 11841.000000
@@ -2824,7 +2849,7 @@ noInherit on
         track wgEncodeUwHistoneSaecInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC Input Sig 1
+        shortLabel SAEC Input Sg 1
         longLabel SAEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SAEC rep=1
         type bigWig 1.000000 8873.000000
@@ -2834,7 +2859,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-SH_RA Input Sig 1
+        shortLabel SKRA Input Sg 1
         longLabel SK-N-SH_RA Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=1
         type bigWig 1.000000 12154.000000
@@ -2845,7 +2870,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ H3K4me3 Sig 1
+        shortLabel BJ H3K4m3 Sg 1
         longLabel BJ H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=BJ rep=1
         type bigWig 1.000000 2259.000000
@@ -2855,7 +2880,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ H3K36me3 Sig 1
+        shortLabel BJ H3K36m3 Sg 1
         longLabel BJ H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=BJ rep=1
         type bigWig 1.000000 8665.000000
@@ -2865,7 +2890,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 H3K4me3 Sig 1
+        shortLabel Caco H3K4m3 Sg 1
         longLabel Caco-2 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=Caco2 rep=1
         type bigWig 1.000000 1551.000000
@@ -2875,7 +2900,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 H3K27me3 Sig 1
+        shortLabel Caco H3K27m3 Sg 1
         longLabel Caco-2 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=Caco2 rep=1
         type bigWig 1.000000 8131.000000
@@ -2885,7 +2910,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 H3K36me3 Sig 1
+        shortLabel Caco H3K36m3 Sg 1
         longLabel Caco-2 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=Caco2 rep=1
         type bigWig 1.000000 7188.000000
@@ -2895,7 +2920,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06990 H3K4me3 Sig 1
+        shortLabel GM06 H3K4m3 Sg 1
         longLabel GM06990 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=GM06990 rep=1
         type bigWig 1.000000 1362.000000
@@ -2905,7 +2930,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ H3K27me3 Sig 2
+        shortLabel BJ H3K27m3 Sg 2
         longLabel BJ H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=BJ rep=2
         type bigWig 1.000000 6945.000000
@@ -2915,7 +2940,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 H3K27me3 Sig 2
+        shortLabel Caco H3K27m3 Sg 2
         longLabel Caco-2 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=Caco2 rep=2
         type bigWig 1.000000 6994.000000
@@ -2925,7 +2950,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ H3K4me3 Sig 2
+        shortLabel BJ H3K4m3 Sg 2
         longLabel BJ H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=BJ rep=2
         type bigWig 1.000000 2701.000000
@@ -2935,7 +2960,7 @@ noInherit on
         track wgEncodeUwHistoneBjH3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ H3K36me3 Sig 2
+        shortLabel BJ H3K36m3 Sg 2
         longLabel BJ H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=BJ rep=2
         type bigWig 1.000000 9722.000000
@@ -2945,7 +2970,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 H3K36me3 Sig 2
+        shortLabel Caco H3K36m3 Sg 2
         longLabel Caco-2 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=Caco2 rep=2
         type bigWig 1.000000 6954.000000
@@ -2955,7 +2980,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06990 H3K4me3 Sig 2
+        shortLabel GM06 H3K4m3 Sg 2
         longLabel GM06990 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=GM06990 rep=2
         type bigWig 1.000000 2227.000000
@@ -2965,7 +2990,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06990 H3K27me3 Sig 2
+        shortLabel GM06 H3K27m3 Sg 2
         longLabel GM06990 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=GM06990 rep=2
         type bigWig 1.000000 3746.000000
@@ -2975,7 +3000,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06990 H3K27me3 Sig 1
+        shortLabel GM06 H3K27m3 Sg 1
         longLabel GM06990 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=GM06990 rep=1
         type bigWig 1.000000 3769.000000
@@ -2985,7 +3010,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06990 H3K36me3 Sig 1
+        shortLabel GM06 H3K36m3 Sg 1
         longLabel GM06990 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=GM06990 rep=1
         type bigWig 1.000000 4071.000000
@@ -2996,7 +3021,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12878 H3K4me3 Sig 1
+        shortLabel GM12 H3K4m3 Sg 1
         longLabel GM12878 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=GM12878 rep=1
         type bigWig 1.000000 2525.000000
@@ -3007,7 +3032,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12878 H3K27me3 Sig 1
+        shortLabel GM12 H3K27m3 Sg 1
         longLabel GM12878 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=GM12878 rep=1
         type bigWig 1.000000 3327.000000
@@ -3018,7 +3043,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM12878 H3K36me3 Sig 1
+        shortLabel GM12 H3K36m3 Sg 1
         longLabel GM12878 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=GM12878 rep=1
         type bigWig 1.000000 4249.000000
@@ -3029,7 +3054,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa-S3 Input Sig 1
+        shortLabel HeLa Input Sg 1
         longLabel HeLa-S3 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HELA rep=1
         type bigWig 1.000000 10388.000000
@@ -3040,7 +3065,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa-S3 H3K4me3 Sig 1
+        shortLabel HeLa H3K4m3 Sg 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HELA rep=1
         type bigWig 1.000000 3307.000000
@@ -3051,7 +3076,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa-S3 H3K36me3 Sig 1
+        shortLabel HeLa H3K36m3 Sg 1
         longLabel HeLa-S3 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HELA rep=1
         type bigWig 1.000000 8609.000000
@@ -3062,7 +3087,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa-S3 H3K27me3 Sig 1
+        shortLabel HeLa H3K27m3 Sg 1
         longLabel HeLa-S3 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HELA rep=1
         type bigWig 1.000000 6433.000000
@@ -3073,7 +3098,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 H3K4me3 Sig 1
+        shortLabel HepG H3K4m3 Sg 1
         longLabel HepG2 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HEPG2 rep=1
         type bigWig 1.000000 1372.000000
@@ -3084,7 +3109,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 H3K27me3 Sig 1
+        shortLabel HepG H3K27m3 Sg 1
         longLabel HepG2 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HEPG2 rep=1
         type bigWig 1.000000 2797.000000
@@ -3095,7 +3120,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 H3K36me3 Sig 1
+        shortLabel HepG H3K36m3 Sg 1
         longLabel HepG2 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HEPG2 rep=1
         type bigWig 1.000000 3834.000000
@@ -3106,7 +3131,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 Input Sig 1
+        shortLabel HepG Input Sg 1
         longLabel HepG2 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HEPG2 rep=1
         type bigWig 1.000000 7679.000000
@@ -3117,7 +3142,7 @@ noInherit on
         track wgEncodeUwHistoneHl60H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HL-60 H3K4me3 Sig 1
+        shortLabel HL60 H3K4m3 Sg 1
         longLabel HL-60 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HL60 rep=1
         type bigWig 1.000000 1515.000000
@@ -3127,7 +3152,7 @@ noInherit on
         track wgEncodeUwHistoneHl60InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HL-60 Input Sig 1
+        shortLabel HL60 Input Sg 1
         longLabel HL-60 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HL60 rep=1
         type bigWig 1.000000 9223.000000
@@ -3137,7 +3162,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMEC H3K27me3 Sig 1
+        shortLabel HMEC H3K27m3 Sg 1
         longLabel HMEC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HMEC rep=1
         type bigWig 1.000000 8444.000000
@@ -3147,7 +3172,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE H3K36me3 Sig 1
+        shortLabel HRE H3K36m3 Sg 1
         longLabel HRE H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HRE rep=1
         type bigWig 1.000000 4359.000000
@@ -3157,7 +3182,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE H3K27me3 Sig 1
+        shortLabel HRE H3K27m3 Sg 1
         longLabel HRE H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HRE rep=1
         type bigWig 1.000000 4006.000000
@@ -3167,7 +3192,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC H3K4me3 Sig 1
+        shortLabel HUVE H3K4m3 Sg 1
         longLabel HUVEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HUVEC rep=1
         type bigWig 1.000000 3357.000000
@@ -3178,7 +3203,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC H3K27me3 Sig 1
+        shortLabel HUVE H3K27m3 Sg 1
         longLabel HUVEC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HUVEC rep=1
         type bigWig 1.000000 3857.000000
@@ -3189,7 +3214,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC H3K36me3 Sig 1
+        shortLabel HUVE H3K36m3 Sg 1
         longLabel HUVEC H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HUVEC rep=1
         type bigWig 1.000000 4984.000000
@@ -3200,7 +3225,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel K562 H3K4me3 Sig 1
+        shortLabel K562 H3K4m3 Sg 1
         longLabel K562 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=K562 rep=1
         type bigWig 1.000000 4646.000000
@@ -3211,7 +3236,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel K562 H3K27me3 Sig 1
+        shortLabel K562 H3K27m3 Sg 1
         longLabel K562 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=K562 rep=1
         type bigWig 1.000000 6663.000000
@@ -3222,7 +3247,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
-        shortLabel K562 H3K36me3 Sig 1
+        shortLabel K562 H3K36m3 Sg 1
         longLabel K562 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=K562 rep=1
         type bigWig 1.000000 8569.000000
@@ -3233,7 +3258,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK H3K4me3 Sig 1
+        shortLabel NHEK H3K4m3 Sg 1
         longLabel NHEK H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=NHEK rep=1
         type bigWig 1.000000 1796.000000
@@ -3244,7 +3269,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK H3K27me3 Sig 1
+        shortLabel NHEK H3K27m3 Sg 1
         longLabel NHEK H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=NHEK rep=1
         type bigWig 1.000000 9934.000000
@@ -3255,7 +3280,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK H3K36me3 Sig 1
+        shortLabel NHEK H3K36m3 Sg 1
         longLabel NHEK H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=NHEK rep=1
         type bigWig 1.000000 4056.000000
@@ -3266,7 +3291,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC H3K4me3 Sig 1
+        shortLabel SAEC H3K4m3 Sg 1
         longLabel SAEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=SAEC rep=1
         type bigWig 1.000000 1353.000000
@@ -3276,7 +3301,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC H3K27me3 Sig 1
+        shortLabel SAEC H3K27m3 Sg 1
         longLabel SAEC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SAEC rep=1
         type bigWig 1.000000 3822.000000
@@ -3286,7 +3311,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC H3K36me3 Sig 1
+        shortLabel SAEC H3K36m3 Sg 1
         longLabel SAEC H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SAEC rep=1
         type bigWig 1.000000 3875.000000
@@ -3296,7 +3321,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-SH_RA H3K4me3 Sig 1
+        shortLabel SKRA H3K4m3 Sg 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=SKNSHRA rep=1
         type bigWig 1.000000 1354.000000
@@ -3306,7 +3331,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-SH_RA H3K27me3 Sig 1
+        shortLabel SKRA H3K27m3 Sg 1
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SKNSHRA rep=1
         type bigWig 1.000000 3475.000000
@@ -3316,7 +3341,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-SH_RA H3K36me3 Sig 1
+        shortLabel SKRA H3K36m3 Sg 1
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SKNSHRA rep=1
         type bigWig 1.000000 6275.000000
@@ -3326,7 +3351,7 @@ noInherit on
         track wgEncodeUwHistoneCaco2H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 H3K4me3 Sig 2
+        shortLabel Caco H3K4m3 Sg 2
         longLabel Caco-2 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=Caco2 rep=2
         type bigWig 1.000000 2008.000000
@@ -3336,7 +3361,7 @@ noInherit on
         track wgEncodeUwHistoneGm06990H3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM06990 H3K36me3 Sig 2
+        shortLabel GM06 H3K36m3 Sg 2
         longLabel GM06990 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=GM06990 rep=2
         type bigWig 1.000000 5082.000000
@@ -3346,7 +3371,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig f
-        shortLabel GM12878 H3K4me3 Sig 2
+        shortLabel GM12 H3K4m3 Sg 2
         longLabel GM12878 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=GM12878 rep=2
         type bigWig 1.000000 2040.000000
@@ -3357,7 +3382,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig 
-        shortLabel GM12878 H3K36me3 Sig 2
+        shortLabel GM12 H3K36m3 Sg 2
         longLabel GM12878 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=GM12878 rep=2
         type bigWig 1.000000 4313.000000
@@ -3368,7 +3393,7 @@ noInherit on
         track wgEncodeUwHistoneGm12878H3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig 
-        shortLabel GM12878 H3K27me3 Sig 2
+        shortLabel GM12 H3K27m3 Sg 2
         longLabel GM12878 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=GM12878 rep=2
         type bigWig 1.000000 4386.000000
@@ -3379,7 +3404,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa-S3 H3K4me3 Sig 2
+        shortLabel HeLa H3K4m3 Sg 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HELA rep=2
         type bigWig 1.000000 4978.000000
@@ -3390,7 +3415,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa-S3 H3K27me3 Sig 2
+        shortLabel HeLa H3K27m3 Sg 2
         longLabel HeLa-S3 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HELA rep=2
         type bigWig 1.000000 7668.000000
@@ -3401,7 +3426,7 @@ noInherit on
         track wgEncodeUwHistoneHelas3H3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLa-S3 H3K36me3 Sig 2
+        shortLabel HeLa H3K36m3 Sg 2
         longLabel HeLa-S3 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HELA rep=2
         type bigWig 1.000000 8774.000000
@@ -3412,7 +3437,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 H3K4me3 Sig 2
+        shortLabel HepG H3K4m3 Sg 2
         longLabel HepG2 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HEPG2 rep=2
         type bigWig 1.000000 1522.000000
@@ -3423,7 +3448,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 H3K27me3 Sig 2
+        shortLabel HepG H3K27m3 Sg 2
         longLabel HepG2 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HEPG2 rep=2
         type bigWig 1.000000 3019.000000
@@ -3434,7 +3459,7 @@ noInherit on
         track wgEncodeUwHistoneHl60H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HL-60 H3K4me3 Sig 2
+        shortLabel HL60 H3K4m3 Sg 2
         longLabel HL-60 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HL60 rep=2
         type bigWig 1.000000 1752.000000
@@ -3444,7 +3469,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE H3K4me3 Sig 2
+        shortLabel HRE H3K4m3 Sg 2
         longLabel HRE H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HRE rep=2
         type bigWig 1.000000 1485.000000
@@ -3454,7 +3479,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE H3K27me3 Sig 2
+        shortLabel HRE H3K27m3 Sg 2
         longLabel HRE H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HRE rep=2
         type bigWig 1.000000 2575.000000
@@ -3464,7 +3489,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE H3K36me3 Sig 2
+        shortLabel HRE H3K36m3 Sg 2
         longLabel HRE H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HRE rep=2
         type bigWig 1.000000 4485.000000
@@ -3474,7 +3499,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC H3K4me3 Sig 2
+        shortLabel HUVE H3K4m3 Sg 2
         longLabel HUVEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HUVEC rep=2
         type bigWig 1.000000 2673.000000
@@ -3485,7 +3510,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC H3K27me3 Sig 2
+        shortLabel HUVE H3K27m3 Sg 2
         longLabel HUVEC H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=HUVEC rep=2
         type bigWig 1.000000 4013.000000
@@ -3496,7 +3521,7 @@ noInherit on
         track wgEncodeUwHistoneHuvecH3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC H3K36me3 Sig 2
+        shortLabel HUVE H3K36m3 Sg 2
         longLabel HUVEC H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HUVEC rep=2
         type bigWig 1.000000 4959.000000
@@ -3507,7 +3532,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig 
-        shortLabel K562 H3K4me3 Sig 2
+        shortLabel K562 H3K4m3 Sg 2
         longLabel K562 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=K562 rep=2
         type bigWig 1.000000 4241.000000
@@ -3518,7 +3543,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig 
-        shortLabel K562 H3K27me3 Sig 2
+        shortLabel K562 H3K27m3 Sg 2
         longLabel K562 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=K562 rep=2
         type bigWig 1.000000 5758.000000
@@ -3529,7 +3554,7 @@ noInherit on
         track wgEncodeUwHistoneK562H3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig 
-        shortLabel K562 H3K36me3 Sig 2
+        shortLabel K562 H3K36m3 Sg 2
         longLabel K562 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=K562 rep=2
         type bigWig 1.000000 9619.000000
@@ -3540,7 +3565,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK H3K4me3 Sig 2
+        shortLabel NHEK H3K4m3 Sg 2
         longLabel NHEK H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=NHEK rep=2
         type bigWig 1.000000 1956.000000
@@ -3551,7 +3576,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK H3K36me3 Sig 2
+        shortLabel NHEK H3K36m3 Sg 2
         longLabel NHEK H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=NHEK rep=2
         type bigWig 1.000000 4145.000000
@@ -3562,7 +3587,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC H3K4me3 Sig 2
+        shortLabel SAEC H3K4m3 Sg 2
         longLabel SAEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=SAEC rep=2
         type bigWig 1.000000 1651.000000
@@ -3572,7 +3597,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC H3K27me3 Sig 2
+        shortLabel SAEC H3K27m3 Sg 2
         longLabel SAEC H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SAEC rep=2
         type bigWig 1.000000 4807.000000
@@ -3582,7 +3607,7 @@ noInherit on
         track wgEncodeUwHistoneSaecH3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC H3K36me3 Sig 2
+        shortLabel SAEC H3K36m3 Sg 2
         longLabel SAEC H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SAEC rep=2
         type bigWig 1.000000 3634.000000
@@ -3592,7 +3617,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-SH_RA H3K4me3 Sig 2
+        shortLabel SKRA H3K4m3 Sg 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=SKNSHRA rep=2
         type bigWig 1.000000 1287.000000
@@ -3602,7 +3627,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-SH_RA H3K27me3 Sig 2
+        shortLabel SKRA H3K27m3 Sg 2
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=SKNSHRA rep=2
         type bigWig 1.000000 5070.000000
@@ -3612,7 +3637,7 @@ noInherit on
         track wgEncodeUwHistoneSknshraH3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SK-N-SH_RA H3K36m3 Sig 2
+        shortLabel SKRA H3K36m3 Sg 2
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=SKNSHRA rep=2
         type bigWig 1.000000 6465.000000
@@ -3623,7 +3648,7 @@ noInherit on
         track wgEncodeUwHistoneHreH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE H3K4me3 Sig 1
+        shortLabel HRE H3K4m3 Sg 1
         longLabel HRE H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HRE rep=1
         type bigWig 1.000000 997.000000
@@ -3633,7 +3658,7 @@ noInherit on
         track wgEncodeUwHistoneNhekH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK H3K27me3 Sig 2
+        shortLabel NHEK H3K27m3 Sg 2
         longLabel NHEK H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=NHEK rep=2
         type bigWig 1.000000 3767.000000
@@ -3644,7 +3669,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Sig 1
+        shortLabel H7ES H3K4m3 Sg 1
         longLabel H7-hESC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=H7es rep=1
         type bigWig 1.000000 1089.000000
@@ -3654,7 +3679,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Sig 1
+        shortLabel H7ES H3K27m3 Sg 1
         longLabel H7-hESC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=H7es rep=1
         type bigWig 1.000000 3427.000000
@@ -3664,7 +3689,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K27me3 Sig 2
+        shortLabel H7ES H3K27m3 Sg 2
         longLabel H7-hESC H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K27me3 cellType=H7es rep=2
         type bigWig 1.000000 6743.000000
@@ -3674,7 +3699,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Sig 2
+        shortLabel H7ES H3K36m3 Sg 2
         longLabel H7-hESC H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=H7es rep=2
         type bigWig 1.000000 5883.000000
@@ -3684,7 +3709,7 @@ noInherit on
         track wgEncodeUwHistoneH7esInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC Input Sig 1
+        shortLabel H7ES Input Sg 1
         longLabel H7-hESC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=H7es rep=1
         type bigWig 1.000000 9907.000000
@@ -3694,7 +3719,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K4me3 Sig 2
+        shortLabel H7ES H3K4m3 Sg 2
         longLabel H7-hESC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=H7es rep=2
         type bigWig 1.000000 2759.000000
@@ -3704,7 +3729,7 @@ noInherit on
         track wgEncodeUwHistoneH7esH3k36me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel H7-hESC H3K36me3 Sig 1
+        shortLabel H7ES H3K36m3 Sg 1
         longLabel H7-hESC H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=H7es rep=1
         type bigWig 1.000000 5084.000000
@@ -3714,7 +3739,7 @@ noInherit on
         track wgEncodeUwHistoneHepg2H3k36me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2  H3K36me3 Sig 2
+        shortLabel HepG  H3K36m3 Sg 2
         longLabel HepG2 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K36me3 cellType=HEPG2 rep=2
         type bigWig 1.000000 4879.000000
@@ -3725,7 +3750,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG04449 H3K4me3 Sig 1
+        shortLabel AG49 H3K4m3 Sg 1
         longLabel AG04449 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG04449 rep=1
         type bigWig 1.000000 4247.000000
@@ -3735,7 +3760,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG04449 H3K4me3 Sig 2
+        shortLabel AG49 H3K4m3 Sg 2
         longLabel AG04449 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG04449 rep=2
         type bigWig 1.000000 5567.000000
@@ -3745,7 +3770,7 @@ noInherit on
         track wgEncodeUwHistoneAg04449InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG04449 Input Sig 1
+        shortLabel AG49 Input Sg 1
         longLabel AG04449 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG04449 rep=1
         type bigWig 1.000000 14656.000000
@@ -3755,7 +3780,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG04450 H3K4me3 Sig 1
+        shortLabel AG50 H3K4m3 Sg 1
         longLabel AG04450 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG04450 rep=1
         type bigWig 1.000000 4594.000000
@@ -3765,7 +3790,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG04450 H3K4me3 Sig 2
+        shortLabel AG50 H3K4m3 Sg 2
         longLabel AG04450 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG04450 rep=2
         type bigWig 1.000000 4459.000000
@@ -3775,7 +3800,7 @@ noInherit on
         track wgEncodeUwHistoneAg04450InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG04450 Input Sig 1
+        shortLabel AG50 Input Sg 1
         longLabel AG04450 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG04450 rep=1
         type bigWig 1.000000 17581.000000
@@ -3785,7 +3810,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG09309 Input Sig 1
+        shortLabel AG09 Input Sg 1
         longLabel AG09309 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG09309 rep=1
         type bigWig 1.000000 7173.000000
@@ -3795,7 +3820,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG09309 H3K4me3 Sig 2
+        shortLabel AG09 H3K4m3 Sg 2
         longLabel AG09309 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG09309 rep=2
         type bigWig 1.000000 2062.000000
@@ -3805,7 +3830,7 @@ noInherit on
         track wgEncodeUwHistoneAg09309H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG09309 H3K4me3 Sig 1
+        shortLabel AG09 H3K4m3 Sg 1
         longLabel AG09309 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG09309 rep=1
         type bigWig 1.000000 2329.000000
@@ -3815,7 +3840,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG09319 H3K4me3 Sig 1
+        shortLabel AG19 H3K4m3 Sg 1
         longLabel AG09319 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG09319 rep=1
         type bigWig 1.000000 3182.000000
@@ -3825,7 +3850,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG09319 H3K4me3 Sig 2
+        shortLabel AG19 H3K4m3 Sg 2
         longLabel AG09319 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG09319 rep=2
         type bigWig 1.000000 2278.000000
@@ -3835,7 +3860,7 @@ noInherit on
         track wgEncodeUwHistoneAg09319InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG09319 Input Sig 1
+        shortLabel AG19 Input Sg 1
         longLabel AG09319 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG09319 rep=1
         type bigWig 1.000000 23698.000000
@@ -3845,7 +3870,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG10803 H3K4me3 Sig 1
+        shortLabel AG03 H3K4m3 Sg 1
         longLabel AG10803 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG10803 rep=1
         type bigWig 1.000000 6328.000000
@@ -3855,7 +3880,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG10803 H3K4me3 Sig 2
+        shortLabel AG03 H3K4m3 Sg 2
         longLabel AG10803 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AG10803 rep=2
         type bigWig 1.000000 6842.000000
@@ -3865,7 +3890,7 @@ noInherit on
         track wgEncodeUwHistoneAg10803InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AG10803 Input Sig 1
+        shortLabel AG03 Input Sg 1
         longLabel AG10803 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AG10803 rep=1
         type bigWig 1.000000 21401.000000
@@ -3875,7 +3900,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AoAF H3K4me3 Sig 2
+        shortLabel AoAF H3K4m3 Sg 2
         longLabel AoAF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AOAF rep=2
         type bigWig 1.000000 4590.000000
@@ -3885,7 +3910,7 @@ noInherit on
         track wgEncodeUwHistoneAoafH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AoAF H3K4me3 Sig 1
+        shortLabel AoAF H3K4m3 Sg 1
         longLabel AoAF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=AOAF rep=1
         type bigWig 1.000000 3446.000000
@@ -3895,7 +3920,7 @@ noInherit on
         track wgEncodeUwHistoneAoafInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel AoAF Input Sig 1
+        shortLabel AoAF Input Sg 1
         longLabel AoAF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=AOAF rep=1
         type bigWig 1.000000 17667.000000
@@ -3905,7 +3930,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCM H3K4me3 Sig 1
+        shortLabel HCM H3K4m3 Sg 1
         longLabel HCM H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCM rep=1
         type bigWig 1.000000 1509.000000
@@ -3915,7 +3940,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HBMEC H3K4me3 Sig 2
+        shortLabel HBMEC H3K4m3 Sg 2
         longLabel HBMEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HBMEC rep=2
         type bigWig 1.000000 2812.000000
@@ -3925,7 +3950,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HBMEC H3K4me3 Sig 1
+        shortLabel HBMEC H3K4m3 Sg 1
         longLabel HBMEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HBMEC rep=1
         type bigWig 1.000000 2636.000000
@@ -3935,7 +3960,7 @@ noInherit on
         track wgEncodeUwHistoneHbmecInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HBMEC Input Sig 1
+        shortLabel HBMEC Input Sg 1
         longLabel HBMEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HBMEC rep=1
         type bigWig 1.000000 15288.000000
@@ -3945,7 +3970,7 @@ noInherit on
         track wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCFaa H3K4me3 Sig 1
+        shortLabel HCFaa H3K4m3 Sg 1
         longLabel HCFaa H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCFaa rep=1
         type bigWig 1.000000 1905.000000
@@ -3955,7 +3980,7 @@ noInherit on
         track wgEncodeUwHistoneHcfaaInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCFaa Input Sig 1
+        shortLabel HCFaa Input Sg 1
         longLabel HCFaa Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCFaa rep=1
         type bigWig 1.000000 16198.000000
@@ -3965,7 +3990,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCF H3K4me3 Sig 1
+        shortLabel HCF H3K4m3 Sg 1
         longLabel HCF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCF rep=1
         type bigWig 1.000000 5505.000000
@@ -3975,7 +4000,7 @@ noInherit on
         track wgEncodeUwHistoneHcfH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCF H3K4me3 Sig 2
+        shortLabel HCF H3K4m3 Sg 2
         longLabel HCF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCF rep=2
         type bigWig 1.000000 8744.000000
@@ -3985,7 +4010,7 @@ noInherit on
         track wgEncodeUwHistoneHcfInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCF Input Sig 1
+        shortLabel HCF Input Sg 1
         longLabel HCF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCF rep=1
         type bigWig 1.000000 19717.000000
@@ -3995,7 +4020,7 @@ noInherit on
         track wgEncodeUwHistoneHcmH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCM H3K4me3 Sig 2
+        shortLabel HCM H3K4m3 Sg 2
         longLabel HCM H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCM rep=2
         type bigWig 1.000000 2482.000000
@@ -4005,7 +4030,7 @@ noInherit on
         track wgEncodeUwHistoneHcmInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCM Input Sig 1
+        shortLabel HCM Input Sg 1
         longLabel HCM Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCM rep=1
         type bigWig 1.000000 18082.000000
@@ -4015,7 +4040,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCPEpiC H3K4me3 Sig 2
+        shortLabel HCPE H3K4m3 Sg 2
         longLabel HCPEpiC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCPE rep=2
         type bigWig 1.000000 3567.000000
@@ -4025,7 +4050,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCPEpiC H3K4me3 Sig 1
+        shortLabel HCPE H3K4m3 Sg 1
         longLabel HCPEpiC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCPE rep=1
         type bigWig 1.000000 2335.000000
@@ -4035,7 +4060,7 @@ noInherit on
         track wgEncodeUwHistoneHcpeInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCPEpiC Input Sig 1
+        shortLabel HCPE Input Sg 1
         longLabel HCPEpiC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCPE rep=1
         type bigWig 1.000000 15167.000000
@@ -4045,7 +4070,7 @@ noInherit on
         track wgEncodeUwHistoneHct116InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCT-116 Input Sig 1
+        shortLabel HCT16 Input Sg 1
         longLabel HCT-116 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HCT116 rep=1
         type bigWig 1.000000 14872.000000
@@ -4055,7 +4080,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCT-116 H3K4me3 Sig 2
+        shortLabel HCT16 H3K4m3 Sg 2
         longLabel HCT-116 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCT116 rep=2
         type bigWig 1.000000 7182.000000
@@ -4065,7 +4090,7 @@ noInherit on
         track wgEncodeUwHistoneHct116H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HCT-116 H3K4me3 Sig 1
+        shortLabel HCT16 H3K4m3 Sg 1
         longLabel HCT-116 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HCT116 rep=1
         type bigWig 1.000000 4897.000000
@@ -4075,7 +4100,7 @@ noInherit on
         track wgEncodeUwHistoneHeeInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEEpiC Input Sig 1
+        shortLabel HEE Input Sg 1
         longLabel HEEpiC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HEE rep=1
         type bigWig 1.000000 6633.000000
@@ -4085,7 +4110,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEEpiC H3K4me3 Sig 1
+        shortLabel HEE H3K4m3 Sg 1
         longLabel HEEpiC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HEE rep=1
         type bigWig 1.000000 5315.000000
@@ -4095,7 +4120,7 @@ noInherit on
         track wgEncodeUwHistoneHeeH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEEpiC H3K4me3 Sig 2
+        shortLabel HEE H3K4m3 Sg 2
         longLabel HEEpiC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HEE rep=2
         type bigWig 1.000000 6106.000000
@@ -4105,7 +4130,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEK293 H3K4me3 Sig 2
+        shortLabel HEK H3K4m3 Sg 2
         longLabel HEK293 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HEK293 rep=2
         type bigWig 1.000000 3272.000000
@@ -4115,7 +4140,7 @@ noInherit on
         track wgEncodeUwHistoneHek293H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEK293 H3K4me3 Sig 1
+        shortLabel HEK H3K4m3 Sg 1
         longLabel HEK293 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HEK293 rep=1
         type bigWig 1.000000 5296.000000
@@ -4125,7 +4150,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMEC H3K4me3 Sig 2
+        shortLabel HMEC H3K4m3 Sg 2
         longLabel HMEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HMEC rep=2
         type bigWig 1.000000 3376.000000
@@ -4135,7 +4160,7 @@ noInherit on
         track wgEncodeUwHistoneHmecH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMEC H3K4me3 Sig 1
+        shortLabel HMEC H3K4m3 Sg 1
         longLabel HMEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HMEC rep=1
         type bigWig 1.000000 2345.000000
@@ -4145,7 +4170,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMF H3K4me3 Sig 1
+        shortLabel HMF H3K4m3 Sg 1
         longLabel HMF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HMF rep=1
         type bigWig 1.000000 4301.000000
@@ -4155,7 +4180,7 @@ noInherit on
         track wgEncodeUwHistoneHmfH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMF H3K4me3 Sig 2
+        shortLabel HMF H3K4m3 Sg 2
         longLabel HMF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HMF rep=2
         type bigWig 1.000000 3836.000000
@@ -4165,7 +4190,7 @@ noInherit on
         track wgEncodeUwHistoneHmfInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMF Input Sig 1
+        shortLabel HMF Input Sg 1
         longLabel HMF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HMF rep=1
         type bigWig 1.000000 4624.000000
@@ -4175,7 +4200,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Jurkat Input Sig 1
+        shortLabel Jurk Input Sg 1
         longLabel Jurkat Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=Jurkat rep=1
         type bigWig 1.000000 18193.000000
@@ -4185,7 +4210,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPAF H3K4me3 Sig 1
+        shortLabel HPAF H3K4m3 Sg 1
         longLabel HPAF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HPAF rep=1
         type bigWig 1.000000 2892.000000
@@ -4195,7 +4220,7 @@ noInherit on
         track wgEncodeUwHistoneHpafH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPAF H3K4me3 Sig 2
+        shortLabel HPAF H3K4m3 Sg 2
         longLabel HPAF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HPAF rep=2
         type bigWig 1.000000 3521.000000
@@ -4205,7 +4230,7 @@ noInherit on
         track wgEncodeUwHistoneHpafInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPAF Input Sig 1
+        shortLabel HPAF Input Sg 1
         longLabel HPAF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HPAF rep=1
         type bigWig 1.000000 15992.000000
@@ -4215,7 +4240,7 @@ noInherit on
         track wgEncodeUwHistoneHpfInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPF Input Sig 1
+        shortLabel HPF Input Sg 1
         longLabel HPF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HPF rep=1
         type bigWig 1.000000 13754.000000
@@ -4225,7 +4250,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPF H3K4me3 Sig 2
+        shortLabel HPF H3K4m3 Sg 2
         longLabel HPF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HPF rep=2
         type bigWig 1.000000 4481.000000
@@ -4235,7 +4260,7 @@ noInherit on
         track wgEncodeUwHistoneHpfH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HPF H3K4me3 Sig 1
+        shortLabel HPF H3K4m3 Sg 1
         longLabel HPF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HPF rep=1
         type bigWig 1.000000 5458.000000
@@ -4245,7 +4270,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRPEpiC Input Sig 1
+        shortLabel HRPE Input Sg 1
         longLabel HRPEpiC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HRPE rep=1
         type bigWig 1.000000 11983.000000
@@ -4255,7 +4280,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRPEpiC H3K4me3 Sig 2
+        shortLabel HRPE H3K4m3 Sg 2
         longLabel HRPEpiC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HRPE rep=2
         type bigWig 1.000000 5740.000000
@@ -4265,7 +4290,7 @@ noInherit on
         track wgEncodeUwHistoneHrpeH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRPEpiC H3K4me3 Sig 1
+        shortLabel HRPE H3K4m3 Sg 1
         longLabel HRPEpiC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HRPE rep=1
         type bigWig 1.000000 4170.000000
@@ -4275,7 +4300,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HVMF H3K4me3 Sig 2
+        shortLabel HVMF H3K4m3 Sg 2
         longLabel HVMF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HVMF rep=2
         type bigWig 1.000000 6381.000000
@@ -4285,7 +4310,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HVMF H3K4me3 Sig 1
+        shortLabel HVMF H3K4m3 Sg 1
         longLabel HVMF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HVMF rep=1
         type bigWig 1.000000 4571.000000
@@ -4295,7 +4320,7 @@ noInherit on
         track wgEncodeUwHistoneHvmfInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HVMF Input Sig 1
+        shortLabel HVMF Input Sg 1
         longLabel HVMF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HVMF rep=1
         type bigWig 1.000000 21799.000000
@@ -4305,7 +4330,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Jurkat H3K4me3 Sig 2
+        shortLabel Jurk H3K4m3 Sg 2
         longLabel Jurkat H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=Jurkat rep=2
         type bigWig 1.000000 6095.000000
@@ -4315,7 +4340,7 @@ noInherit on
         track wgEncodeUwHistoneJurkatH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Jurkat H3K4me3 Sig 1
+        shortLabel Jurk H3K4m3 Sg 1
         longLabel Jurkat H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=Jurkat rep=1
         type bigWig 1.000000 7505.000000
@@ -4325,7 +4350,7 @@ noInherit on
         track wgEncodeUwHistoneMcf7InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel MCF-7 Input Sig 1
+        shortLabel MCF-7 Input Sg 1
         longLabel MCF-7 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=MCF7 rep=1
         type bigWig 1.000000 25597.000000
@@ -4335,7 +4360,7 @@ noInherit on
         track wgEncodeUwHistoneMcf7H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel MCF-7 H3K4me3 Sig 1
+        shortLabel MCF-7 H3K4m3 Sg 1
         longLabel MCF-7 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=MCF7 rep=1
         type bigWig 1.000000 12643.000000
@@ -4345,7 +4370,7 @@ noInherit on
         track wgEncodeUwHistoneNb4InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NB4 Input Sig 1
+        shortLabel NB4 Input Sg 1
         longLabel NB4 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=NB4 rep=1
         type bigWig 1.000000 18098.000000
@@ -4355,7 +4380,7 @@ noInherit on
         track wgEncodeUwHistoneNb4H3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NB4 H3K4me3 Sig 1
+        shortLabel NB4 H3K4m3 Sg 1
         longLabel NB4 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=NB4 rep=1
         type bigWig 1.000000 3916.000000
@@ -4365,7 +4390,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHDF-neo Input Sig 1
+        shortLabel NHDFn Input Sg 1
         longLabel NHDF-neo Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=NHDF-neo rep=1
         type bigWig 1.000000 26277.000000
@@ -4375,7 +4400,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHDF-neo H3K4me3 Sig 1
+        shortLabel NHDFn H3K4m3 Sg 1
         longLabel NHDF-neo H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=NHDF-neo rep=1
         type bigWig 1.000000 8338.000000
@@ -4385,7 +4410,7 @@ noInherit on
         track wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHDF-neo H3K4me3 Sig 2
+        shortLabel NHDFn H3K4m3 Sg 2
         longLabel NHDF-neo H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=NHDF-neo rep=2
         type bigWig 1.000000 9369.000000
@@ -4395,7 +4420,7 @@ noInherit on
         track wgEncodeUwHistoneHaspInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HA-sp Input Sig 1
+        shortLabel HAsp Input Sg 1
         longLabel HA-sp Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=HA-sp rep=1
         type bigWig 1.000000 22062.000000
@@ -4405,7 +4430,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HA-sp H3K4me3 Sig 1
+        shortLabel HAsp H3K4m3 Sg 1
         longLabel HA-sp H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HA-sp rep=1
         type bigWig 1.000000 5096.000000
@@ -4415,7 +4440,7 @@ noInherit on
         track wgEncodeUwHistoneHaspH3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HA-sp H3K4me3 Sig 2
+        shortLabel HAsp H3K4m3 Sg 2
         longLabel HA-sp H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=H3K04me3 cellType=HA-sp rep=2
         type bigWig 1.000000 7657.000000
