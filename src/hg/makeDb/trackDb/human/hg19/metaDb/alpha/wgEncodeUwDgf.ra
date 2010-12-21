@@ -74,6 +74,22 @@ subId 1682
 tableName wgEncodeUwDgfGm06990Raw
 view RawSignal
 
+metaObject wgEncodeUwDgfGm06990RawData
+objType file
+cell GM06990
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwDgfGm06990RawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 3114
+view RawData
+
 metaObject wgEncodeUwDgfGm06990Sig
 objType table
 cell GM06990
@@ -798,6 +814,22 @@ subId 1815
 tableName wgEncodeUwDgfK562Raw
 view RawSignal
 
+metaObject wgEncodeUwDgfK562RawData
+objType file
+cell K562
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwDgfK562RawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 3115
+view RawData
+
 metaObject wgEncodeUwDgfK562Sig
 objType table
 cell K562
@@ -1244,4 +1276,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -873844582
+# MAGIC: 209599754
