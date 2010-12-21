@@ -13,7 +13,6 @@ subGroup4 view View SimpleSignal=Signal
 dimensions dimensionA=rep dimensionY=cellType dimensionX=treatment
 dimensionAchecked rep1,rep2
 filterComposite dimensionA=multi
-#boxedCfg on
 sortOrder cellType=+ treatment=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
@@ -21,6 +20,7 @@ visibility hide
 canPack On
 priority 0
 type bed 3    
+noInherit on
 wgEncode 1
 superTrack wgEncodeExonArraySuper dense
 
@@ -31,7 +31,7 @@ superTrack wgEncodeExonArraySuper dense
     visibility full
     parent wgEncodeDukeAffyExon
     scoreFilterLimits 0:1000
-    scoreFilter 10
+    scoreFilter 1
 
         track wgEncodeDukeAffyExonAosmcSimpleSignalRep1
         release alpha
@@ -54,7 +54,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off
-        shortLabel AoSMC Ser 1
+        shortLabel AoSMC Free 1
         longLabel AoSMC with serum free media Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=AOSMC treatment=SERUMFREE rep=rep1
         type broadPeak
@@ -63,7 +63,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonAosmcSerumfreeSimpleSignalRep2
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off
-        shortLabel AoSMC Ser 2
+        shortLabel AoSMC Free 2
         longLabel AoSMC with serum free media Affy All Exon Array Signal rep 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=AOSMC treatment=SERUMFREE rep=rep2
         type broadPeak
@@ -363,7 +363,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on
-        shortLabel H1ES 1
+        shortLabel H1-hESC 1
         longLabel H1-hESC Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep1
         type broadPeak
@@ -373,7 +373,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep2
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
-        shortLabel H1ES 2
+        shortLabel H1-hESC 2
         longLabel H1-hESC Affy All Exon Array Signal rep 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep2
         type broadPeak
@@ -383,7 +383,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep3
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off
-        shortLabel H1ES 3
+        shortLabel H1-hESC 3
         longLabel H1-hESC Affy All Exon Array Signal rep 3 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep3
         type broadPeak
@@ -393,7 +393,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonH1hescSimpleSignalRep4
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off 
-        shortLabel H1ES 4
+        shortLabel H1-hESC 4
         longLabel H1-hESC Affy All Exon Array Signal rep 4 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=H1hESC treatment=None rep=rep4
         type broadPeak
@@ -412,7 +412,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3SimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on
-        shortLabel HeLa 1
+        shortLabel HeLa-S3 1
         longLabel HeLa-S3 Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep1
         type broadPeak
@@ -422,7 +422,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3SimpleSignalRep2
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on
-        shortLabel HeLa 2
+        shortLabel HeLa-S3 2
         longLabel HeLa-S3 Affy All Exon Array Signal rep 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep2
         type broadPeak
@@ -432,7 +432,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3SimpleSignalRep3
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off
-        shortLabel HeLa 3
+        shortLabel HeLa-S3 3
         longLabel HeLa-S3 Affy All Exon Array Signal rep 3 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=None rep=rep3
         type broadPeak
@@ -442,7 +442,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
-        shortLabel HeLa IFN4h 1
+        shortLabel HeLa-S3 IFNa4h 1
         longLabel HeLa-S3 IFNa4h Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep1
         type broadPeak
@@ -452,7 +452,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on
-        shortLabel HeLa IFNa4h 2
+        shortLabel HeLa-S3 IFNa4h 2
         longLabel HeLa-S3 IFNa4h Affy All Exon Array Signal rep 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNa4h rep=rep2
         type broadPeak
@@ -462,7 +462,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on
-        shortLabel HeLa IFNg4h 1
+        shortLabel HeLa-S3 IFNg4h 1
         longLabel HeLa-S3 IFNg4h Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep1
         type broadPeak
@@ -472,7 +472,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on
-        shortLabel HeLa IFNg4h 2
+        shortLabel HeLa-S3 IFNg4h 2
         longLabel HeLa-S3 IFNg4h Affy All Exon Array Signal rep 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HeLaS3 treatment=IFNg4h rep=rep2
         type broadPeak
@@ -500,7 +500,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHepg2SimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
-        shortLabel HepG 1
+        shortLabel HepG2 1
         longLabel HepG2 Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep1
         type broadPeak
@@ -510,7 +510,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHepg2SimpleSignalRep2
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal on 
-        shortLabel HepG 2
+        shortLabel HepG2 2
         longLabel HepG2 Affy All Exon Array Signal rep 2 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep2
         type broadPeak
@@ -520,7 +520,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonHepg2SimpleSignalRep3
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off
-        shortLabel HepG 3
+        shortLabel HepG2 3
         longLabel HepG2 Affy All Exon Array Signal rep 3 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=HepG2 treatment=None rep=rep3
         type broadPeak
@@ -991,7 +991,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonUrotsaSimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off
-        shortLabel Uroth 1
+        shortLabel Urothelia 1
         longLabel Urothelia Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=UROtsa treatment=None rep=rep1
         type broadPeak
@@ -1000,7 +1000,7 @@ superTrack wgEncodeExonArraySuper dense
         track wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
         release alpha
         parent wgEncodeDukeAffyExonViewSimpleSignal off
-        shortLabel Uroth UT189 1
+        shortLabel Urothelia UT189 1
         longLabel Urothelia UT189 Affy All Exon Array Signal rep 1 from ENCODE/Duke
         subGroups view=SimpleSignal cellType=UROtsa treatment=UT189 rep=rep1
         type broadPeak
