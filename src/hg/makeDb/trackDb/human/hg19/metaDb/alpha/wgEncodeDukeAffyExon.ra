@@ -165,7 +165,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonAstrocySimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -185,7 +186,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonAstrocySimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -205,7 +207,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonChorionSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -265,7 +268,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -285,7 +289,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonFibroblSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -365,7 +370,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -385,7 +391,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGlioblaSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -445,7 +452,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -465,7 +473,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -485,7 +494,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm12878SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
@@ -505,7 +515,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -525,7 +536,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm12891SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -545,7 +557,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -565,7 +578,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm12892SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -585,7 +599,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -605,7 +620,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -625,7 +641,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm18507SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
@@ -645,7 +662,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -665,7 +683,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm19238SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -685,7 +704,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -705,7 +725,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm19239SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -725,7 +746,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -745,7 +767,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonGm19240SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -865,7 +888,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -885,7 +909,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHelas3Ifna4hSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -905,7 +930,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -925,7 +951,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHelas3Ifng4hSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -945,7 +972,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -965,7 +993,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -985,7 +1014,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHelas3SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1045,7 +1075,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1065,7 +1096,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1085,7 +1117,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHepg2SimpleSignalRep3.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1105,7 +1138,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHmecSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1125,7 +1159,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHmecSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1385,7 +1420,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1405,7 +1441,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonHuvecSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1545,7 +1582,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1564,8 +1602,8 @@ cell LNCaP
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonLncapAndroSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1585,7 +1623,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonLncapSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1605,7 +1644,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonLncapSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1625,7 +1665,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1645,7 +1686,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonMcf7EstroSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1665,7 +1707,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonMcf7SimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1685,7 +1728,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1705,7 +1749,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonMcf7VehSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1725,7 +1770,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1745,7 +1791,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonMedulloSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1905,7 +1952,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonNhekSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1925,7 +1973,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonNhekSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1945,7 +1994,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonOsteoblSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -1965,7 +2015,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonOsteoblSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -2005,7 +2056,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep1.broadPeak.gz
 grant Crawford
 lab Duke
@@ -2025,7 +2077,8 @@ composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-14
-dateUnrestricted 2011-09-14
+dateSubmitted 2009-12-16
+dateUnrestricted 2010-09-16
 fileName wgEncodeDukeAffyExonProgfibSimpleSignalRep2.broadPeak.gz
 grant Crawford
 lab Duke
@@ -2098,4 +2151,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: 76719693
+# MAGIC: -512591429
