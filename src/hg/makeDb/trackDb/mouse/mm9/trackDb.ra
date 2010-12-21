@@ -266,7 +266,7 @@ priority 103.2
     viewUi on
     subTrack cons30way
 
-	track fultiz30way
+	track multiz30way
 	subTrack cons30wayViewalign on
 	shortLabel Multiz Align
 	longLabel Multiz Alignments of 30 Vertebrates

@@ -2452,21 +2452,12 @@ blackText();
 fprintf(htmlOut, "<H3>Graphical Summary of Profile Hits</H3>\n");
 fprintf(htmlOut, "Colors represent different profiles. Darker colors represent\n"
        "stronger matches to profile.\n");
-#ifdef USE_PNG
 if (gifName == NULL)
     {
     makeTempName(&gifTn, "imp", ".png");
     gifName = gifTn.forCgi;
     }
 mgSavePng(mg, gifName, FALSE);
-#else
-if (gifName == NULL)
-    {
-    makeTempName(&gifTn, "imp", ".gif");
-    gifName = gifTn.forCgi;
-    }
-mgSaveGif(mg, gifName, FALSE);
-#endif
 chmod(gifName, 0666);
 mgFree(&mg);
 fprintf(htmlOut, "<IMG SRC=\"%s\" WIDTH=%d HEIGHT=%d BORDER=0>\n",

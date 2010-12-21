@@ -94,33 +94,18 @@ function showSubTrackCheckBoxes(onlySelected)
 // This can show/hide tablerows that contain the checkboxes
 // Containing <tr>'s must be id'd with 'tr_' + the checkbox id,
 // while checkbox id must have 'cb_' prefix (ie: 'tr_cb_checkThis' & 'cb_checkThis')
-   if (document.getElementsByTagName)
-   {
-        var list = document.getElementsByTagName('tr');
-        for (var ix=0;ix<list.length;ix++) {
-            var tblRow = list[ix];
-            if(tblRow.id.indexOf("tr_cb_") >= 0) {  // marked as tr containing a cb
-                if(!onlySelected) {
-                    tblRow.style.display = ''; //'table-row' doesn't work in some browsers (ie: IE)
-                } else {
-                    var associated_cb = tblRow.id.substring(3,tblRow.id.length);
-                    chkBox = document.getElementById(associated_cb);
-                    if(chkBox!=undefined && chkBox.checked && chkBox.disabled == false)
-                        tblRow.style.display = '';
-                    else
-                        tblRow.style.display = 'none';  // hides
-                }
-            }
-        }
-   }
-   else if (document.all) {
-        if(debug)
-            alert("showSubTrackCheckBoxes is unimplemented for this browser");
-   } else {
-        // NS 4.x - I gave up trying to get this to work.
-        if(debug)
-           alert("showSubTrackCheckBoxes is unimplemented for this browser");
-   }
+    var trs = $('table.subtracks').children('tbody').children('tr');
+    if(!onlySelected)
+        $(trs).show();
+    else {
+        $(trs).each(function (ix) {
+            var subCB = $(this).find('input.subCB');
+            if (subCB.length > 0 && subCB[0].checked && subCB[0].disabled == false)
+                $(this).show();
+            else
+                $(this).hide();
+        });
+    }
 }
 
 function hideOrShowSubtrack(obj)
@@ -441,9 +426,12 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
     if($(divit).css('display') == 'none') {
         $("#div_"+trackName+"_cfg").hide();  // Hide any configuration when opening metadata
 
-        if($(divit).find('table').length == 0) {
+        if($(divit).find('table').length == 0)
             lookupMetadata(trackName,showLonglabel,showShortLabel);
-        }
+    }
+    var tr = $(divit).parents('tr');
+    if (tr.length > 0) {
+        $(divit).children('table').css('backgroundColor',$(tr[0]).css('backgroundColor'));
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
@@ -971,6 +959,27 @@ function codonColoringChanged(name)
 }
 
 
+//////////// Drag and Drop ////////////
+function tableDragAndDropRegister(thisTable)
+{// Initialize a table with tableWithDragAndDrop
+    if ($(thisTable).hasClass("tableWithDragAndDrop") == false)
+        return;
+
+    $(thisTable).tableDnD({
+        onDragClass: "trDrag",
+        dragHandle: "dragHandle",
+        onDrop: function(table, row, dragStartIndex) {
+                if(tableSetPositions) {
+                    tableSetPositions(table);
+                }
+            }
+    });
+    $(thisTable).find("td.dragHandle").hover(
+        function(){ $(this).closest('tr').addClass('trDrag'); },
+        function(){ $(this).closest('tr').removeClass('trDrag'); }
+    );
+}
+
 //////////// Sorting ////////////
 // Sorting a table by columns relies upon the sortColumns structure
 
@@ -985,7 +994,52 @@ function codonColoringChanged(name)
 var gSortColumns;
 var gTbody
 
-function tableSort(tbody,fnCompare,sortColumns)
+function sortField(value,index)
+{
+this.value=value;
+this.index=index;
+}
+
+function sortRow(tr,sortColumns,row)  // UNUSED: sortField works fine
+{
+    this.fields  = new Array();
+    this.reverse = new Array();
+    this.row     = row;
+    for(var ix=0;ix<sortColumns.cellIxs.length;ix++)
+        {
+        var th = tr.cells[sortColumns.cellIxs[ix]];
+        this.fields[ix]  = (sortColumns.useAbbr[ix] ? th.abbr : $(th).text()).toLowerCase(); // case insensitive sorts
+        this.reverse[ix] = sortColumns.reverse[ix];
+        }
+}
+
+function sortRowCmp(a,b)  // UNUSED: sortField works fine
+{
+    for(var ix=0;ix<a.fields.length;ix++) {
+        if (a.fields[ix] > b.fields[ix])
+            return (a.reverse[ix] ? -1:1);
+        else if (a.fields[ix] < b.fields[ix])
+            return (a.reverse[ix] ? 1:-1);
+    }
+    return 0;
+}
+
+function sortField(value,reverse,row)
+{
+    this.value   = value.toLowerCase(); // case insensitive sorts NOTE: Do not need to define every field
+    this.reverse = reverse;
+    this.row     = row;
+}
+function sortFieldCmp(a,b)
+{
+    if (a.value > b.value)
+        return (a.reverse ? -1:1);
+    else if (a.value < b.value)
+        return (a.reverse ? 1:-1);
+    return 0;
+}
+
+function tableSort(tbody,sortColumns)
 {// Sorts table based upon rules passed in by function reference
  // Expects tbody to not sort thead, but could take table
 
@@ -997,57 +1051,24 @@ function tableSort(tbody,fnCompare,sortColumns)
     // Create array of the primary sort column's text
     var cols = new Array();
     var trs = tbody.rows;
-    var cellIx = sortColumns.cellIxs[0];
-    var useAbbr = sortColumns.useAbbr[0];
-    $(trs).each(function(i) {
-        var th = this.cells[cellIx];
-        if(useAbbr)
-            cols.push(th.abbr);
+    $(trs).each(function(ix) {
+        //cols.push(new sortRow(this,sortColumns,$(this).clone()));
+        var th = this.cells[sortColumns.cellIxs[0]];
+        if(sortColumns.useAbbr[0])
+            cols.push(new sortField(th.abbr,sortColumns.reverse[0],$(this).clone())); // When jQuery >= v1.4, use detach() insterad of clone()
         else
-            cols.push($(th).text());
+            cols.push(new sortField($(th).text(),sortColumns.reverse[0],$(this).clone()));
     });
 
     // Sort the array
-    cols.sort();
-    if(sortColumns.reverse[0])
-        cols.reverse();
+    //cols.sort(sortRowCmp);
+    cols.sort(sortFieldCmp);
 
     // Now reorder the table
     for(var cIx=0;cIx<cols.length;cIx++) {
-        trs = tbody.rows;
-        var match = false;
-        for(var rIx=0;rIx<trs.length;rIx++) {
-            var th = trs[rIx].cells[cellIx];
-            if(useAbbr)
-                match = (th.abbr == cols[cIx]);
-            else
-                match = ($(th).text() == cols[cIx]);
-            if(match) {
-                tbody.appendChild(tbody.removeChild(trs[rIx])); // Always append to end in order
-                break;
-            }
-        }
+        $(tbody.rows[cIx]).replaceWith(cols[cIx].row);
     }
 
-   /* This is obslete and inefficient code.
-    var trs=0,moves=0;
-    var colOrder = new Array();
-    var cIx=0;
-    var trTopIx,trCurIx,trBottomIx=tbody.rows.length - 1;
-    for(trTopIx=0;trTopIx < trBottomIx;trTopIx++) {
-        trs++;
-        var topRow = tbody.rows[trTopIx];
-        for(trCurIx = trTopIx + 1; trCurIx <= trBottomIx; trCurIx++) {
-            var curRow = tbody.rows[trCurIx];
-            var compared = fnCompare(topRow,curRow);
-            if (compared < 0) {
-                tbody.insertBefore(tbody.removeChild(curRow), topRow);
-                topRow = curRow; // New top!
-                moves++;
-            }
-        }
-    }
-    */
     gTbody=tbody;
     gSortColumns=sortColumns;
     setTimeout('tableSortFinish(gTbody,gSortColumns)',5); // Avoid javascript timeouts!
@@ -1059,43 +1080,21 @@ function tableSortFinish(tbody,sortColumns)
     tableSetPositions(tbody);
     if ($(tbody).hasClass('altColors'))
         sortedTableAlternateColors(tbody,sortColumns);
-     $(tbody).show();
-}
-
-///// Following compare functions are not currentl;y used since sorting rows must be done indirectly
-function trCompareColumnInnerHtml(tr1,tr2) // NOT USED and will not be until sorting directly by row is avaiable
-{// Compares a set of columns based upon the contents of their first sortField's innerHTML
-    if (tr1.cells[gSortColumns.cellIxs[0]].innerHTML < tr2.cells[gSortColumns.cellIxs[0]].innerHTML)
-        return (gSortColumns.reverse[0] ? -1: 1);
-    else if (tr1.cells[gSortColumns.cellIxs[0]].innerHTML > tr2.cells[gSortColumns.cellIxs[0]].innerHTML)
-        return (gSortColumns.reverse[0] ? 1: -1);
-    return 0;
-}
-
-function trCompareColumnAbbr(tr1,tr2) // NOT USED and will not be until sorting directly by row is avaiable
-{// Compares a set of columns based upon the contents of their first sortField's abbr
-    if (tr1.cells[gSortColumns.cellIxs[0]].abbr < tr2.cells[gSortColumns.cellIxs[0]].abbr)
-        return (gSortColumns.reverse[0] ? -1: 1);
-    else if (tr1.cells[gSortColumns.cellIxs[0]].abbr > tr2.cells[gSortColumns.cellIxs[0]].abbr)
-        return (gSortColumns.reverse[0] ? 1: -1);
-    return 0;
-}
-
-function trCompareByColumn(tr1,tr2) // NOT USED and will not be until sorting directly by row is avaiable
-{// Compares a set of columns based upon the contents of their first sortField's abbr
-    if (sortColumns.useAbbr[0])
-        return trCompareColumnAbbr(tr1,tr2);
-    else
-        return trCompareColumnInnerHtml(tr1,tr2);
+    $(tbody).parents("table.tableWithDragAndDrop").each(function (ix) {
+        tableDragAndDropRegister(this);
+    });
+    //$(tbody).show();
+    $(tbody).removeClass('sorting');
 }
 
 function tableSortByColumns(tbody,sortColumns)
 {// Will sort the table based on the abbr values on a set of <TH> colIds
  // Expects tbody to not sort thead, but could take table
-    $(tbody).hide();
+    //$(tbody).hide();
+    $(tbody).addClass('sorting');
     gTbody=tbody;
     gSortColumns=sortColumns;
-    setTimeout('tableSort(gTbody,trCompareByColumn,gSortColumns)',5); // This allows hiding the rows while sorting!
+    setTimeout('tableSort(gTbody,gSortColumns)',50); // This allows hiding the rows while sorting!
 }
 
 function trAlternateColors(tbody,rowGroup,cellIx)
@@ -1110,12 +1109,11 @@ function trAlternateColors(tbody,rowGroup,cellIx)
         if (rowGroup == undefined || rowGroup == 0)
             rowGroup = 1;
         var curCount = 0; // Always start with a change
-        $(tbody).find('tr:visible').each( function(i) {
+        $(tbody).children('tr:visible').each( function(i) {
             if (curCount == 0 ) {
                 curCount  = rowGroup;
                 darker = (!darker);
             }
-            //$(this).css('backgroundColor', curColor );
             if (darker) {
                 $(this).removeClass("bgLevel1");
                 $(this).addClass(   "bgLevel2");
@@ -1133,20 +1131,19 @@ function trAlternateColors(tbody,rowGroup,cellIx)
         for(var aIx=2;aIx<arguments.length;aIx++) {   // multiple columns
             cIxs[aIx-2] = arguments[aIx];
         }
-        $(tbody).find('tr:visible').each( function(i) {
+        $(tbody).children('tr:visible').each( function(i) {
             curContent = "";
             for(var ix=0;ix<cIxs.length;ix++) {
                 if (this.cells[cIxs[ix]]) {
                     curContent += (this.cells[cIxs[ix]].abbr != "" ?
-                                this.cells[cIxs[ix]].abbr       :
-                                this.cells[cIxs[ix]].innerHTML );
+                                   this.cells[cIxs[ix]].abbr       :
+                                   this.cells[cIxs[ix]].innerHTML );
                 }
             }
             if (lastContent != curContent ) {
                 lastContent  = curContent;
                 darker = (!darker);
             }
-            //$(this).css('backgroundColor', curColor );
             if (darker) {
                 $(this).removeClass("bgLevel1");
                 $(this).addClass(   "bgLevel2");
@@ -1215,9 +1212,9 @@ function sortOrderUpdate(table,sortColumns,addSuperscript)
                     return;
                 classList = aryRemove(classList,"sortable");
                 while( classList.length > 0 ) {
-                    var class = classList.pop();
-                    if (class.indexOf("sort") == 0)
-                        $(this).removeClass(class);
+                    var aClass = classList.pop();
+                    if (aClass.indexOf("sort") == 0)
+                        $(this).removeClass(aClass);
                 }
 
                 // Now add current sort classes
@@ -1268,13 +1265,13 @@ function sortOrderFromTr(tr)
             var reverse = false;
             var sortIx = -1;
             while( classList.length > 0 ) {
-                var class = classList.pop();
-                if (class.indexOf("sort") == 0) {
-                    if (class == "sortRev")
+                var aClass = classList.pop();
+                if (aClass.indexOf("sort") == 0) {
+                    if (aClass == "sortRev")
                         reverse = true;
                     else {
-                        class = class.substring(4);  // clip off the "sort" portion
-                        var ix = parseInt(class);
+                        aClass = aClass.substring(4);  // clip off the "sort" portion
+                        var ix = parseInt(aClass);
                         if (ix != NaN) {
                             sortIx = ix;
                         }
@@ -1319,17 +1316,18 @@ function sortColumnsGetFromTr(tr,silent)
     }
 
     this.inheritFrom(sortOrder);
-    // Add an additional array
+    // Add two additional arrays
     this.cellIxs = new Array();
     this.useAbbr = new Array();
     var ths = $(tr).find('th.sortable');
     for(var tIx=0;tIx<this.tags.length;tIx++) {
         for(ix=0; ix<ths.length; ix++) {
-            if (ths[ix].id != undefined && ths[ix].id == this.tags[tIx])
+            if ((ths[ix].id != undefined && ths[ix].id == this.tags[tIx])
+            ||  (ths[ix].cellIndex == this.tags[tIx]))
+            {
                 this.cellIxs[tIx] = ths[ix].cellIndex;
-            else if (ths[ix].cellIndex == this.tags[tIx])
-                this.cellIxs[tIx] = ths[ix].cellIndex;
-            this.useAbbr = (ths[ix].abbr.length > 0);
+                this.useAbbr[tIx] = (ths[ix].abbr.length > 0);
+            }
         }
     }
     if (this.cellIxs.length == 0 && silent == undefined) {
@@ -1370,12 +1368,14 @@ function _tableSortOnButtonPressEncapsulated(anchor)
         newOrder.tags[nIx] = theOrder.tags[oIx];
         newOrder.reverse[nIx] = false;  // When moving to the first position sort forward
         newOrder.cellIxs[nIx] = theOrder.cellIxs[oIx];
+        newOrder.useAbbr[nIx] = theOrder.useAbbr[oIx];
         for(var ix=0;ix<theOrder.cellIxs.length;ix++) {
             if (ix != oIx) {
                 nIx++;
                 newOrder.tags[nIx]    = theOrder.tags[ix];
                 newOrder.reverse[nIx] = theOrder.reverse[ix];
                 newOrder.cellIxs[nIx] = theOrder.cellIxs[ix];
+                newOrder.useAbbr[nIx] = theOrder.useAbbr[ix];
             }
         }
         theOrder = newOrder;
@@ -1559,7 +1559,13 @@ function sortTableInitialize(table,addSuperscript,altColors)
             $(this).click( function () { tableSortOnButtonPress(this);} );
         }
         if ( $(this).attr('title').length == 0) {
-            $(this).attr('title',"Sort list on '" + $(this).text() + "'." );
+            var title = $(this).text().replace(/[^a-z0-9 ]/ig,'');
+            if (title.length > 0 && $(this).find('sup'))
+                title = title.replace(/[0-9]$/g,'');
+            if (title.length > 0)
+                $(this).attr('title',"Sort list on '" + title + "'." );
+            else
+                $(this).attr('title',"Sort list on column." );
         }
     })
     // Now update all of those cells
@@ -1569,7 +1575,16 @@ function sortTableInitialize(table,addSuperscript,altColors)
     if(altColors != undefined)
         sortedTableAlternateColors(tbody);
 
+    // Highlight rows?  But on subtrack list, this will mess up the "..." coloring.  So just exclude tables with drag and drop
+    if ($(table).hasClass('tableWithDragAndDrop') == false) {
+        $('tbody.sortable').find('tr').hover(
+            function(){ $(this).addClass('bgLevel3'); },      // Will highlight the rows
+            function(){ $(this).removeClass('bgLevel3');}
+        );
+    }
+
     // Finally, make visible
+    $(tbody).removeClass('sorting');
     $(tbody).show();
 }
 

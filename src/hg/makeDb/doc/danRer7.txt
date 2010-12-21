@@ -378,3 +378,272 @@ supporting and genbank tables) which tracks to assign these tables to:
     hgsql qapushq < /tmp/danRer7.pushQ.sql
 
 #########################################################################
+# LASTZ Xenopus xenTro2 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/lastzXenTro2.2010-12-17
+    cd /hive/data/genomes/danRer7/bed/lastzXenTro2.2010-12-17
+
+    cat << '_EOF_' > DEF
+# zebrafish vs. X. tropicalis
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer7
+SEQ1_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ1_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: X. tropicalis xenTro2
+SEQ2_DIR=/scratch/data/xenTro2/xenTro2.2bit
+SEQ2_LEN=/scratch/data/xenTro2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/danRer7/bed/lastzXenTro2.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+
+    cat fb.danRer7.chainXenTro2Link.txt 
+    #	90625809 bases of 1409770109 (6.428%) in intersection
+
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzXenTro2.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    32m57.901s
+    cat fb.xenTro2.chainDanRer7Link.txt 
+    #	89862892 bases of 1359412157 (6.610%) in intersection
+
+#########################################################################
+# LASTZ Tetraodon TetNig2 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/lastzTetNig2.2010-12-17
+    cd /hive/data/genomes/danRer7/bed/lastzTetNig2.2010-12-17
+
+    cat << '_EOF_' > DEF
+# zebrafish vs tetraodon
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer7
+SEQ1_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ1_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Tetraodon TetNig2 - single chunk big enough to single largest item
+SEQ2_DIR=/scratch/data/tetNig2/tetNig2.2bit
+SEQ2_LEN=/scratch/data/tetNig2/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/tetNig2/tetNig2.contigs.2bit
+SEQ2_CTGLEN=/scratch/data/tetNig2/tetNig2.contigs.sizes
+SEQ2_LIFT=/scratch/data/tetNig2/tetNig2.contigs.lift
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/danRer7/bed/lastzTetNig2.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	 Elapsed time: 144m12s
+
+    cat fb.danRer7.chainTetNig2Link.txt 
+    #	88435047 bases of 1409770109 (6.273%) in intersection
+
+    mkdir /hive/data/genomes/tetNig2/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/tetNig2/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzTetNig2.2010-12-17/DEF \
+	-qRepeats=windowmaskerSdust \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    8m43.275s
+
+    cat fb.tetNig2.chainDanRer7Link.txt 
+    #	71259923 bases of 302314788 (23.571%) in intersection
+
+##############################################################################
+# LASTZ Stickleback gasAcu1 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/lastzGasAcu1.2010-12-17
+    cd /hive/data/genomes/danRer7/bed/lastzGasAcu1.2010-12-17
+
+    cat << '_EOF_' > DEF
+# zebrafish vs. stickleback
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer7
+SEQ1_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ1_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# TARGET: Stickleback gasAcu1, chunk large enough to run largest piece
+SEQ2_DIR=/scratch/data/gasAcu1/gasAcu1.2bit
+SEQ2_LEN=/scratch/data/gasAcu1/chrom.sizes
+SEQ2_CTGDIR=/scratch/data/gasAcu1/gasAcu1.contigs.2bit
+SEQ2_CTGLEN=/scratch/data/gasAcu1/gasAcu1.contigs.sizes
+SEQ2_LIFT=/scratch/data/gasAcu1/gasAcu1.contigs.lift
+SEQ2_CHUNK=22000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/danRer7/bed/lastzGasAcu1.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	real    247m45.584s
+    cat fb.danRer7.chainGasAcu1Link.txt 
+    #	144782335 bases of 1409770109 (10.270%) in intersection
+
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzGasAcu1.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    25m35.024s
+    cat fb.gasAcu1.chainDanRer7Link.txt 
+    #	122918766 bases of 446627861 (27.522%) in intersection
+
+#########################################################################
+# lastz Medaka oryLat2 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/lastzOryLat2.2010-12-17
+    cd /hive/data/genomes/danRer7/bed/lastzOryLat2.2010-12-17
+
+    cat << '_EOF_' > DEF
+# Zebrafish vs. Medaka
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer7
+SEQ1_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ1_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# Query: Medaka oryLat2
+SEQ2_DIR=/scratch/data/oryLat2/oryLat2.2bit
+SEQ2_LEN=/scratch/data/oryLat2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/danRer7/bed/lastzOryLat2.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    258m58.096s
+    cat fb.oryLat2.chainDanRer7Link.txt
+    #	141428502 bases of 1409770109 (10.032%) in intersection
+
+    mkdir /hive/data/genomes/oryLat2/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/oryLat2/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzOryLat2.2010-12-17/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    20m56.926s
+    cat fb.oryLat2.chainDanRer7Link.txt 
+    #	124527579 bases of 700386597 (17.780%) in intersection
+
+############################################################################
+# lastz swap mm9 (DONE - 2010-12-17 - Hiram
+    #	original alignment
+    cd /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+    cat fb.danRer7.chainMm9Link.txt 
+    #	68190354 bases of 2620346127 (2.602%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    16m8.672s
+
+    cat fb.danRer7.chainMm9Link.txt 
+    #	71960602 bases of 1409770109 (5.104%) in intersection
+
+#########################################################################
+# lastz swap from hg19 (DONE - 2010-12-20 - Hiram)
+    #	original alignment
+    cd /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+    cat fb.hg19.chainDanRer7Link.txt 
+    #	80849592 bases of 2897316137 (2.790%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    42m52.920s
+    cat fb.danRer7.chainHg19Link.txt 
+    #	86716552 bases of 1409770109 (6.151%) in intersection
+
+#########################################################################

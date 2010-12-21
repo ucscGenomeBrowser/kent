@@ -68,5 +68,7 @@ char *bigBedAutoSqlText(struct bbiFile *bbi);
 struct asObject *bigBedAs(struct bbiFile *bbi);
 /* Get autoSql object definition if any associated with file. */
 
+boolean bigBedFileCheckSigs(char *fileName);
+/* check file signatures at beginning and end of file */
 #endif /* BIGBED_H */
 

@@ -2162,7 +2162,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
     if (!hTableOrSplitExists(database, tdb->table)
     && tdb->subtracks != NULL && trackDbLocalSetting(tdb, "compositeTrack") == NULL
-    && !sameWord(tdb->type,"downloadsOnly"))
+    && !tdbIsDownloadsOnly(tdb))
 	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
@@ -2170,7 +2170,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdb->track), tdb->shortLabel);
     printf("<TD>");
-    if (sameWord(tdb->type,"downloadsOnly"))
+    if (tdbIsDownloadsOnly(tdb))
         printf("&nbsp;");
     else
     {
@@ -2513,7 +2513,7 @@ if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
 // Don't bother with vis controls for downloadsOnly
-if (!sameWord(tdb->type,"downloadsOnly"))
+if (!tdbIsDownloadsOnly(tdb))
     {
     /* Display visibility menu */
         if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
@@ -2543,7 +2543,6 @@ if (!sameWord(tdb->type,"downloadsOnly"))
                 canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
                                 (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
             }
-    }
     if (!ajax)
         {
         printf("&nbsp;");
@@ -2560,18 +2559,19 @@ if (!sameWord(tdb->type,"downloadsOnly"))
         cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
         puts("&nbsp;");
         if (differentString(tdb->type, "chromGraph"))
-        {
-        char buf[256];
-        if(ajax)
-            // reference to a separate form doesn't work in modal dialog, so change window.location directly.
-            safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;", hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
-        else
-            safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
-        cgiMakeOnClickButton(buf, "Update custom track");
+            {
+            char buf[256];
+            if(ajax)
+                // reference to a separate form doesn't work in modal dialog, so change window.location directly.
+                safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;", hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
+            else
+                safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
+            cgiMakeOnClickButton(buf, "Update custom track");
+            }
         }
     }
 
-if (!tdbIsSuper(tdb))
+if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
     if (trackDbSetting(tdb, "dimensions"))
@@ -2593,40 +2593,16 @@ if (!tdbIsSuper(tdb))
     }
 printf("<BR>\n");
 
-// FIXME: Do something here for downloadOnly tracks.
-if (sameWord(tdb->type,"downloadsOnly"))
-    {
-    filesDownloadUi(database,cart,tdb);
-        // FIXME: To be written: hgTracUi cgi which is downloads page.
-        // Should be lib code and 2 cgis:
-        // hgTrackUi when we have downloads ONLY, except for this on trackDb entry to point us there
-        // hgFilesUi when we have composite tracks AND download filess, so that hgTrackUi handles composite and offers link to hgFilesUi for downloads
-        /*
-        struct fileDb, contains mdbObj struct
-        get composite name (in trackDb) from cart: g=wgEncodeBroadHistone
-        // Use composite name to aquire list of mdbObjs where composite= and fileName exists
-        // Use trackDb settings to get at html description, long and short labels
-        // Acquire composite level setting for:
-        //   experiment defining variables?
-        //   major sort order?
-        //   filterComposite stuff?  Or is this defined in trackDb for pseudo-composite?
-        // Sort list of mdbObjs?
-        // Weed list of mdbObjects via fileExists.
-        // Get preamble from dir
-        // Make any selection controls (filterBoxes) Do we want a matrix?
-        // Make table class=sortable
-        // Get html from trackDb
-        // Recommend different color background to get the point across that these are files, not tracks
-
-        */
-    //makeDownloadsLink(database, tdb, trackHash);
-    //extraUiLinks(database,tdb, trackHash);
-    }
+if (tdbIsDownloadsOnly(tdb))
+    filesDownloadUi(database,cart,tdb);  // Composites without tracks but with files to download are tdb->type: downloadsOnly
 else
     specificUi(tdb, ct, ajax);
 puts("</FORM>");
 
-if (ct && !ajax)
+if (ajax)
+    return;
+
+if (ct)
     {
     /* hidden form for custom tracks CGI */
     printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
@@ -2634,9 +2610,6 @@ if (ct && !ajax)
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
     }
-
-if (ajax)
-    return;
 
 if (!ct)
     {
@@ -2779,7 +2752,8 @@ if (super)
         trackDbSuperMemberSettings(tdb);
         }
     }
-char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
+char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
+                tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html

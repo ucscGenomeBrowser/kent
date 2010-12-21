@@ -647,28 +647,64 @@ sub validatePairedTagAlign
     return ();
 }
 
+sub getInfoFiles
+{
+    my ($cell,$sex) = @_;
+
+    if (not defined $terms{'Cell Line'}->{$cell}) {
+        print STDERR "ERROR: controlled Vocabulary \'Cell Line\' value \'$cell\' is not known\n";
+        return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
+    }
+    my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
+
+    # For category= Tissues change sex to one defined by the DFF
+    # The reason that I did not just pass sex is because I will be using the
+    # same DAF with required fields for mouse tissue and cell samples
+
+    # Category is defined in cv.ra for
+    # T= Tissue
+    # L= Cell Line
+    # P= Primary Cells
+    my $category = $terms{'Cell Line'}->{$cell}->{'category'};
+
+    # Can be a better design, but need to flesh out design more.
+    if (defined $category && $category eq "Tissue") {
+        $cellLineSex=$sex;
+    }
+
+    my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
+    my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
+    my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
+
+    if ($cellLineSex ne "F")  {
+        $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
+        $twoBitFile =  "$downloadDir/male.$assembly.2bit";
+    }
+    return ($infoFile, $twoBitFile);
+}
+
 sub validateNarrowPeak
 {
-    my ($path, $file, $type) = @_;
-    my @list = ({TYPE => "chrom", NAME => "chrom"},
-                {TYPE => "uint", NAME => "chromStart"},
-                {TYPE => "uint", NAME => "chromEnd"},
-                {TYPE => "string", NAME => "name"},
-                {TYPE => "uint", NAME => "score"},
-                {REGEX => "[+-\\.]", NAME => "strand"},
-                {TYPE => "float", NAME => "signalValue"},
-                {TYPE => "float", NAME => "pValue"},
-                {TYPE => "float", NAME => "qValue"},
-                {TYPE => "int", NAME => "peak"});
-    return validateWithList($path, $file, $type, $maxBedRows, "validateNarrowPeak", \@list);
+    my ($path, $file, $type, $cell,$sex) = @_;
+    # validate chroms, chromSize, etc.
+    my $paramList = validationSettings("validateFiles","narrowPeak",$assembly);
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $quickOpt $paramList -type=narrowPeak $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateNarrowPeak : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateNarrowPeak for '$file'");
+    }
+    return ();
 }
 
 sub validateBroadPeak
 {
-    my ($path, $file, $type) = @_;
+    my ($path, $file, $type, $cell,$sex) = @_;
     # validate chroms, chromSize, etc.
     my $paramList = validationSettings("validateFiles","broadPeak",$assembly);
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=broadPeak $file"]);
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $quickOpt $paramList -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -770,44 +806,13 @@ sub validateSAM
     return ();
 }
 
+
 sub validateBam
 {
-	# Venkat: Added $sex to validate tissue samples for mouse
     my ($path, $file, $type, $cell,$sex) = @_;
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
-    if (not defined $terms{'Cell Line'}->{$cell}) {
-	print STDERR "ERROR: controlled Vocabulary \'Cell Line\' value \'$cell\' is not known\n";
-	# don't show end-user pipe error(s)
-	return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
-    }
-	#Venkat: Changed $sex to $cellLineSex to accomadate the sex being passed from the DDF
-    my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
-
-	# Venkat: For category= Tissues change sex to one defined by the DFF
-	# The reason that I did not just pass sex is because I will be using the
-	# same DAF with required fields for mouse tissue and cell samples
-
-	#Venkat: Category is defined in cv.ra for
-	# T= Tissue
-	# L= Cell Line
-	# P= Primary Cells
-    my $category = $terms{'Cell Line'}->{$cell}->{'category'};
-
-	#Venkat: Can be a better design, but need to flesh out design more.
-	if (defined $category && $category eq "Tissue") {
-	$cellLineSex=$sex;
-    }
-
-    my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
-    my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
-    my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
-	# Venkat: Changed $sex to $cellLineSex to accomade the above changes to pass sex from ddf
-    if ($cellLineSex ne "F")  {
-        $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
-        $twoBitFile =  "$downloadDir/male.$assembly.2bit";
-    }
 
     # index the BAM file
     my $safe = SafePipe->new(CMDS => ["samtools index $file"]);
@@ -816,6 +821,8 @@ sub validateBam
 	# don't show end-user pipe error(s)
 	return("failed validateBam for '$file'");
     }
+
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
     $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";
@@ -2193,6 +2200,7 @@ if($submitPath =~ /(\d+)$/) {
 }
 
 my @cmds;
+# push @cmds, "docIdSubmitDir encpipeline_beta $submitPath  /hive/groups/encode/dcc/pipeline/downloads/betaDocId";
 push @cmds, "docIdSubmitDir encpipeline_prod $submitPath  /hive/groups/encode/dcc/pipeline/downloads/docId";
 my $safe = SafePipe->new(CMDS => \@cmds,  DEBUG => $opt_verbose - 1);
 if(my $err = $safe->exec()) {

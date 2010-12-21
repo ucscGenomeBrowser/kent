@@ -1195,7 +1195,7 @@ function postToSaveSettings(obj)
     if(blockUseMap==true) {
         return false;
     }
-    if(obj.href == undefined) // called directly with obj and from callback without obj
+    if(obj == undefined || obj.href == undefined) // called directly with obj and from callback without obj
         obj = this;
     if( obj.href.match('#') || obj.target.length > 0) {
         //alert("Matched # ["+obj.href+"] or has target:"+obj.target);
@@ -1592,19 +1592,19 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 
     } else if (cmd == 'hgTrackUi_follow') {
 
-        var link = $( 'td#td_btn_'+ selectedMenuItem.id ).children('a'); // The button already has the ref
-        if( $(link) != undefined) {
-            location.assign($(link).attr('href'));
-        } else {
-            var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
-            var id = selectedMenuItem.id;
-            var rec = trackDbJson[id];
-            if (tdbHasParent(rec) && tdbIsLeaf(rec))
-                url += rec.parentTrack
+        var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
+        var id = selectedMenuItem.id;
+        var rec = trackDbJson[id];
+        if (tdbHasParent(rec) && tdbIsLeaf(rec))
+            url += rec.parentTrack
+        else {
+            var link = $( 'td#td_btn_'+ selectedMenuItem.id ).children('a'); // The button already has the ref
+            if( $(link) != undefined)
+                url = $(link).attr('href');
             else
-                url = selectedMenuItem.id;
-            location.assign(url);
+                url += selectedMenuItem.id;
         }
+        location.assign(url);
 
     } else if (cmd == 'dragZoomMode') {
         autoHideSetting = true;
@@ -1658,7 +1658,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             // Hide local display of this track and update server side cart.
             // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
             if(rec.parentTrack != undefined)
-                setCartVars( [ id, id+"_sel" ], [ "[]", 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
+                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
@@ -2487,6 +2487,15 @@ function findTracksSortNow(obj)
         $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
     else
         $('#sortIt').val($(obj).val());
+
+    // How to hold onto selected tracks?
+    // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
+    var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
+    if($(inp).length > 0) {
+        $(inp).appendTo('form#trackSearch');
+        $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+    }
+
     $('#searchSubmit').click();
     return true;
 }
@@ -2497,7 +2506,6 @@ function findTracksPage(pageVar,startAt)
     if( $(pager).length == 1)
         $(pager).val(startAt);
 
-    // FIXME: Remove this code if sving settings on paging is not wanted
     // How to hold onto selected tracks?
     // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
     var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
@@ -2505,10 +2513,16 @@ function findTracksPage(pageVar,startAt)
         $(inp).appendTo('form#trackSearch');
         $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
     }
-    // FIXME: Remove this code if sving settings on paging is not wanted
 
     $('#searchSubmit').click();
     return false;
+}
+
+function findTracksConfigureSet(name)
+{// Called when configuring a composite or superTrack
+    var thisForm =  $('form#searchResults');
+    $(thisForm).attr('action',"../cgi-bin/hgTrackUi?hgt_tSearch=Search&g="+name);
+    $(thisForm).find('input.viewBtn').click();
 }
 
 /////////////////////////////////////////////////////

@@ -18,6 +18,11 @@ priority 230.3
 chainMinScore 5000
 chainLinearGap loose
 
+track chainNetDanRer7 override
+priority 240.3
+chainMinScore 2000
+chainLinearGap medium
+
 track chainNetDanRer6 override
 priority 240.3
 chainMinScore 2000

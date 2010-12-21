@@ -114,13 +114,8 @@ for (i=0; i<representativeCount; i += groupSize+1)
     {
     printf("<TD VALIGN='BOTTOM' WIDTH=%d>", expSubcellWidth);
     groupSize = countNonNull(experiments+i, representativeCount-i);
-#ifdef USE_PNG
     safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d.png", 
     	colName, subName, ++gifStart);
-#else
-    safef(gifName, sizeof(gifName), "../trash/nea_%s_%s%d.gif", 
-    	colName, subName, ++gifStart);
-#endif
     gifLabelVerticalText(gifName, experiments+i, groupSize, height);
     if (url != NULL)
        printf("<A HREF=\"%s\">", url); 

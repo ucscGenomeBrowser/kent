@@ -12,6 +12,7 @@ static char const rcsid[] = "$Id: hCommon.c,v 1.39 2009/07/10 01:40:37 markd Exp
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
 static char *_hgTrackUiName = "../cgi-bin/hgTrackUi"; /* Path to extended ui program. */
+static char *_hgFileUiName = "../cgi-bin/hgFileUi";   /* Path to downloladable files CGI. */
 static char *_hgTextName = "../cgi-bin/hgText"; /* Path back to the text browser. */
 static char *_hgTablesName = "../cgi-bin/hgTables"; /* Path back to the table browser. */
 static char *_hgCustomName = "../cgi-bin/hgCustom"; /* Path back to the custom tracks manager. */
@@ -40,6 +41,12 @@ char *hgTrackUiName()
 /* Relative URL to extended track UI. */
 {
 return _hgTrackUiName;
+}
+
+char *hgFileUiName()
+/* Relative URL to downloladable files UI. */
+{
+return _hgFileUiName;
 }
 
 char *hgTextName()
@@ -141,7 +148,7 @@ recNameToFileName(dir, recName, fileName, ".fa");
 }
 
 void gsToUcsc(char *gsName, char *ucscName)
-/* Convert from 
+/* Convert from
  *    AC020585.5~1.2 Fragment 2 of 29 (AC020585.5:1..1195)
  * to
  *    AC020585.5_1_2
@@ -187,7 +194,7 @@ return s;
 }
 
 int chromToInt(char *s)
-/* converts a chrom name chrXX into an integer from 1 to 54. 
+/* converts a chrom name chrXX into an integer from 1 to 54.
     X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
 {
 char *u;
@@ -209,16 +216,16 @@ if (u != NULL)
 switch (str[0])
     {
     case 'X':
-        ret += 23; 
+        ret += 23;
         break;
     case 'Y':
-        ret += 24; 
+        ret += 24;
         break;
     case 'U':
-        ret += 25; 
+        ret += 25;
         break;
     case 'M':
-        ret += 26; 
+        ret += 26;
         break;
     default:
         ret += atoi(s);

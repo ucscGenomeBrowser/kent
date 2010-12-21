@@ -469,4 +469,136 @@ echo         hgsql $db -e "insert into bamSLVi33dot$i values ('/gbdb/$db/neander
 
 
 #########################################################################
+# Lifting to hg19 (WORKING - 2010-12-15 - Hiram)
+    #### H-C Coding Diffs
+    mkdir -p /hive/data/genomes/hg19/bed/homNea/codingDiff
+    cd /hive/data/genomes/hg19/bed/homNea/codingDiff
+    hgsql -N -e "select * from ntHumChimpCodingDiff;" hg18 \
+        | cut -f2- > ntHumChimpCodingDiff.hg18.tab
+    liftOver -bedPlus=8 -tab ntHumChimpCodingDiff.hg18.tab \
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/liftOver/hg18ToHg19.over.chain.gz \
+    ntHumChimpCodingDiff.hg19.tab unMapped.tab
+# -rw-rw-r-- 1   0 Dec 15 10:49 unMapped.tab
+    hgLoadBed -tab hg19 ntHumChimpCodingDiff ntHumChimpCodingDiff.hg19.tab
 
+    #### 5% Lowest S - Selective Sweep Scan (S): 5% Smallest S scores
+    mkdir /hive/data/genomes/hg19/bed/homNea/SssTop5p
+    cd /hive/data/genomes/hg19/bed/homNea/SssTop5p
+    hgsql -N -e "select * from ntSssTop5p;" hg18 \
+        | cut -f2- > ntSssTop5p.hg18.tab
+    liftOver ntSssTop5p.hg18.tab \
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/liftOver/hg18ToHg19.over.chain.gz \
+    ntSssTop5p.hg19.tab unMapped.tab
+# -rw-rw-r-- 1   0 Dec 15 10:49 unMapped.tab
+    hgLoadBed -tab hg19 ntSssTop5p ntSssTop5p.hg19.tab
+
+    #### Sel Swp Scan (S) - Selective Sweep Scan (S) on Neandertal vs. Human Polymorphisms (Z-Score +- Variance)
+    mkdir /hive/data/genomes/hg19/bed/homNea/SssZScorePMVar
+    cd /hive/data/genomes/hg19/bed/homNea/SssZScorePMVar
+    bigWigToBedGraph /gbdb/hg18/neandertal/bbi/ntSssZScorePMVar.bw \
+	ntSssZScorePMVa.hg18.bedGraph
+    liftOver -bedPlus=3 -tab ntSssZScorePMVa.hg18.bedGraph \
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/liftOver/hg18ToHg19.over.chain.gz \
+    ntSssZScorePMVa.hg19.bedGraph unMapped.tab
+    grep "^chr" unMapped.tab | wc
+    #	1981    7924   62659
+    grep -v "^chr" unMapped.tab | sort | uniq -c
+    #	1981 #Deleted in new
+    grep "^chr" unMapped.tab | cut -f1 | sort | uniq -c
+#      2 chr10
+#     38 chr12
+#      5 chr13
+#     15 chr14
+#     22 chr15
+#    532 chr17
+#     16 chr19
+#     25 chr2
+#      2 chr22
+#     48 chr3
+#     85 chr4
+#     23 chr5
+#     24 chr6
+#    814 chr7
+#    198 chr8
+#    132 chrX
+    sort -k1,1 -k2,2n ntSssZScorePMVa.hg19.bedGraph > sorted.bedGraph
+    bedGraphToBigWig sorted.bedGraph \
+	/hive/data/genomes/hg19/chrom.sizes ntSssZScorePMVar.bw
+    rm -f sorted.bedGraph
+    bigWigInfo ntSssZScorePMVar.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 71,065,376
+# primaryIndexSize: 357,392
+# zoomLevels: 10
+# chromCount: 23
+# basesCovered: 11,101,027
+# mean: -0.023223
+# min: -8.833200
+# max: 33.637199
+# std: 4.037342
+    bigWigInfo /gbdb/hg18/neandertal/bbi/ntSssZScorePMVar.bw
+# version: 3
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 53,391,942
+# primaryIndexSize: 357,400
+# zoomLevels: 7
+# chromCount: 23
+# basesCovered: 11,103,008
+# mean: -0.023066
+# min: -8.833200
+# max: 33.637199
+# std: 4.037344
+   ls -ogL /gbdb/hg18/neandertal/bbi/ntSssZScorePMVar.bw *.bw
+# -rw-rw-r-- 1  56244661 Mar 24  2010 /gbdb/hg18/neandertal/bbi/ntSssZScorePMVar.bw
+# -rw-rw-r-- 1 107739421 Dec 15 10:11 ntSssZScorePMVar.bw
+    mkdir /gbdb/hg19/neandertal/bbi
+    ln -s `pwd`/ntSssZScorePMVar.bw /gbdb/hg19/neandertal/bbi
+
+    hgBbiDbLink database trackName fileName
+    hgBbiDbLink hg19 ntSssZScorePMVar \
+	/gbdb/hg19/neandertal/bbi/ntSssZScorePMVar.bw
+
+    #### S SNPs - SNPS Used for Selective Sweep Scan (S)
+    mkdir /hive/data/genomes/hg19/bed/homNea/SssSnps
+    cd /hive/data/genomes/hg19/bed/homNea/SssSnps
+    hgsql -N -e "select * from ntSssSnps;" hg18 | cut -f2- > ntSssSnps.hg18.bed
+    liftOver -bedPlus=8 -tab ntSssSnps.hg18.bed \
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/liftOver/hg18ToHg19.over.chain.gz \
+    ntSssSnps.hg19.bed unMapped.tab
+     grep "^chr" unMapped.tab | wc
+    #	1197   10773   74797
+    grep -v "^chr" unMapped.tab | sort | uniq -c
+    #	1197 #Deleted in new
+    hgLoadBed hg19 ntSssSnps ntSssSnps.hg19.bed
+    #	Loaded 5614241 elements of size 9
+
+    #### Cand. Gene Flow - Candidate Regions for Gene Flow from Neandertal to
+    #### Non-African Modern Humans
+    
+    mkdir /hive/data/genomes/hg19/bed/homNea/OoaHaplo
+    cd /hive/data/genomes/hg19/bed/homNea/OoaHaplo
+    hgsql -N -e "select * from ntOoaHaplo;" hg18 | cut -f2- \
+	> ntOoaHaplo.hg18.bed
+    liftOver -bedPlus=8 -tab ntOoaHaplo.hg18.bed \
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg18/liftOver/hg18ToHg19.over.chain.gz \
+    ntOoaHaplo.hg19.bed unMapped.tab
+# -rw-rw-r-- 1   0 Dec 15 10:49 unMapped.tab
+
+    hgLoadBed hg19 ntOoaHaplo ntOoaHaplo.hg19.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/ntOoaHaplo.sql -tab
+
+    #### Neandertal Mito - Neandertal Mitochondrial Sequence (Vi33.16, 2008)
+    mkdir /hive/data/genomes/hg19/bed/homNea/Mito
+    cd /hive/data/genomes/hg19/bed/homNea/Mito
+    hgsql -N -e "select * from ntMito;" hg18 | cut -f2- \
+	> ntMito.hg18.psl
+    # it is the same chrM in hg19, no need to lift
+
+    hgLoadPsl hg19 -table=ntMito ntMito.hg18.psl
+    mkdir /gbdb/hg19/neandertal/ntMito
+    ln -s /hive/data/genomes/hg18/bed/ntMito/ntM.fa \
+	/gbdb/hg19/neandertal/ntMito/
+    hgLoadSeq hg19 /gbdb/hg19/neandertal/ntMito/ntM.fa

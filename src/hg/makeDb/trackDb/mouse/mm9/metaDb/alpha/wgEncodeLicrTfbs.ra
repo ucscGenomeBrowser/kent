@@ -1,3 +1,153 @@
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-14
+dateUnrestricted 2011-07-14
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 11/19/09 Lane 1
+parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2489
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-14
+dateUnrestricted 2011-07-14
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 12/14/09 Lane 1
+parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2489
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep3
+objType file
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-14
+dateUnrestricted 2011-07-14
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep3.bam
+grant Ren
+lab LICR-m
+labVersion 12/09/09 Lane 4
+parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep3
+project wgEncode
+replicate 3
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2489
+view Alignments
+
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-14
+dateUnrestricted 2011-07-14
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 11/19/09 Lane 1
+parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawSignalRep1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2489
+view RawData
+
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-14
+dateUnrestricted 2011-07-14
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/14/09 Lane 1
+parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawSignalRep2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2489
+view RawData
+
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep3
+objType file
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-14
+dateUnrestricted 2011-07-14
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep3.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 12/09/09 Lane 4
+parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawSignalRep3
+project wgEncode
+replicate 3
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2489
+view RawData
+
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -11,7 +161,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/09/09 Lane 3
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -36,7 +186,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 04/12/10 Lane 3
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -61,7 +211,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/09/09 Lane 3
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -86,7 +236,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 04/12/10 Lane 3
 parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -111,7 +261,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/17/09 Lane 6
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -136,7 +286,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 02/11/10 Lane 3
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -161,7 +311,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/17/09 Lane 6
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -186,7 +336,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 02/11/10 Lane 3
 parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -211,7 +361,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/27/09 Lane 1
 parentTable wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -236,7 +386,7 @@ dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/27/09 Lane 1
 parentTable wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -261,7 +411,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 3
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -286,7 +436,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/17/09 Lane 5
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -311,7 +461,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 3
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -336,7 +486,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/17/09 Lane 5
 parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -361,7 +511,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 5
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -386,7 +536,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/14/09 Lane 4
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -411,7 +561,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 5
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -436,7 +586,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 12/14/09 Lane 4
 parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -461,7 +611,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 2
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1
 project wgEncode
@@ -486,7 +636,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/14/09 Lane 5
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2
 project wgEncode
@@ -511,7 +661,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 05/26/09 Lane 2
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
@@ -536,7 +686,7 @@ dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
-lab LICR
+lab LICR-m
 labVersion 08/14/09 Lane 5
 parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
@@ -546,6 +696,110 @@ sex M
 softwareVersion ELAND
 strain C57BL/6
 subId 2512
+view RawData
+
+metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell Heart
+composite wgEncodeLicrTfbs
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-01
+dateUnrestricted 2011-08-01
+fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 05/04/09 Lane 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2788
+view Alignments
+
+metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell Heart
+composite wgEncodeLicrTfbs
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-01
+dateUnrestricted 2011-08-01
+fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep2.bam
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 7
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2788
+view Alignments
+
+metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody CTCF
+cell Heart
+composite wgEncodeLicrTfbs
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-01
+dateUnrestricted 2011-08-01
+fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 05/04/09 Lane 7
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2788
+view RawData
+
+metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody CTCF
+cell Heart
+composite wgEncodeLicrTfbs
+control std
+controlId Heart/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-01
+dateUnrestricted 2011-08-01
+fileName wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 7
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2788
 view RawData
 
 metaObject wgEncodeLicrTfbsKidneyCtcfMAdult8wksC57bl6StdAlnRep1
@@ -808,4 +1062,4 @@ strain C57BL/6
 subId 3005
 view RawData
 
-# MAGIC: 216730507
+# MAGIC: 1499593313

@@ -629,13 +629,8 @@ if(doIdeo)
         }
     else
         {
-#ifdef USE_PNG
         trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".png");
         hvg = hvGfxOpenPng(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
-#else
-        trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".gif");
-        hvg = hvGfxOpenGif(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
-#endif
         }
     hvg->rc = revCmplDisp;
     initColors(hvg);
@@ -2056,13 +2051,8 @@ else
     if (theImgBox!=NULL)
         transparentImage = TRUE;   // transparent because BG (blue ruler lines) is separate image
 
-#ifdef USE_PNG
     trashDirFile(&gifTn, "hgt", "hgt", ".png");
     hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
-#else //ifndef
-    trashDirFile(&gifTn, "hgt", "hgt", ".gif");
-    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
-#endif //ndef USE_PNG
 
     if(theImgBox)
         {
@@ -2076,13 +2066,8 @@ else
         {
         // TODO: It would be great to make the images smaller, but keeping both the same full size for now
         struct tempName gifTnSide;
-        #ifdef USE_PNG
-            trashDirFile(&gifTnSide, "hgt", "side", ".png");
-            hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
-        #else //ifndef
-            trashDirFile(&gifTnSide, "hgt", "side", ".gif");
-            hvgSide = hvGfxOpenGif(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
-        #endif //ndef USE_PNG
+        trashDirFile(&gifTnSide, "hgt", "side", ".png");
+        hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
 
         // Also add the side image
         theSideImg = imgBoxImageAdd(theImgBox,gifTnSide.forHtml,NULL,pixWidth, pixHeight,FALSE);
@@ -2304,21 +2289,13 @@ if (withGuidelines)
         struct tempName gifBg;
         char base[64];
         safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
-        #ifdef USE_PNG
-            exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
-        #else///ifndef
-            exists = trashDirReusableFile(&gifBg, "hgt", base, ".gif");
-        #endif///ndef USE_PNG
+        exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
         if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image.
             exists = TRUE;                       // However, for the time being, rebuild when user presses "default tracks"
 
         if (!exists)
             {
-            #ifdef USE_PNG
-                bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-            #else///ifndef
-                bgImg = hvGfxOpenGif(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-            #endif///ndef USE_PNG
+            bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
             bgImg->rc = revCmplDisp;
             }
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image

@@ -688,9 +688,9 @@ if (featDna && end > start)
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	   "View DNA for this feature</A>(%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
-	   chrom, start, end, strand, tbl);
+	   chrom, start, end, strand, tbl, database, hGenome(database));
     }
 }
 
@@ -3796,14 +3796,15 @@ void doGetDna1()
 {
 struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
-char rootName[256];
-char parsedChrom[32];
 if (dbIsFound)
     {
+    char rootName[256];
+    char parsedChrom[32];
     hParseTableName(database, tbl, rootName, parsedChrom);
     hti = hFindTableInfo(database, seqName, rootName);
     }
-cartWebStart(cart, database, "Get DNA in Window");
+char *otherOrg = hOrganism(database);
+cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, otherOrg);
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
@@ -3823,10 +3824,11 @@ if (!hIsGsidServer())
     if (tbl[0] == 0)
     	{
     	puts("<P>"
-	     "Note: if you would prefer to get DNA for features of a particular "
-	     "track or table, try the ");
+             "Note: This page retrieves genomic DNA for a single region. "
+             "If you would prefer to get DNA for many items in a particular track, "
+             "or get DNA with formatting options based on gene structure (introns, exons, UTRs, etc.), try using the ");
     	printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
-    	puts("Table Browser</A> using the output format sequence.");
+    	puts("Table Browser</A> with the \"sequence\" output format.");
     	}
     else
     	{
@@ -18278,13 +18280,8 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
-#ifdef USE_PNG
 trashDirFile(&gifTn, "hgc", "hgc", ".png");
 hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#else
-trashDirFile(&gifTn, "hgc", "hgc", ".gif");
-hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#endif /* USE_PNG */
 makeGrayShades(hvg);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,

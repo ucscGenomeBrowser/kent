@@ -38,13 +38,11 @@ install-bin: check-prefix all
 	rsync ${rsyncOpts} bin ${PREFIX}
 	rsync ${rsyncOpts} lib ${PREFIX}
 
+# ensures that gitFiles is in PATH, otherwise a very bogus rsync results
 install-etc: check-prefix
-	@echo checking if etc/ is committed
-	@if [[ $$(git diff --name-only -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has files that need committed"; exit 1; fi
-	@if [[ $$(git diff --cached --name-only -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has staged, uncommited files that need committed"; exit 1; fi
-	@if [[ $$(git diff --name-only origin -- etc |wc -l) != 0 ]] ; then echo "Error: etc/ has changes that need to be pushed"; exit 1; fi
+	@which gitFiles >/dev/null
 	${MKDIR} ${PREFIX}/etc
-	umask 002; rsync ${rsyncOpts} `gitFiles etc` ${PREFIX}
+	umask 002; rsync ${rsyncOpts} $$(gitFiles etc) ${PREFIX}
 
 check-prefix:
 	@test -n "${PREFIX}" || (echo "must specify PREFIX= to install"; exit 1)
@@ -62,4 +60,4 @@ ${GB_BINARCH}/hgLsSnpPdbLoad: ${hgLsSnpPdbLoadSrcDir}/hgLsSnpPdbLoad.c
 # build emacs tags for all files
 .PHONY: etags-all
 etags-all:
-	find . -name '*.[ch]' | etags -
+	find . -name '*.[ch]' | etags 

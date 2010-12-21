@@ -8,8 +8,7 @@
 	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 	<META HTTP-EQUIV="Expires" CONTENT="-1">
 	<TITLE>Track and Table Releases	</TITLE>
-	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css" TYPE="text/css">
-
+    <LINK rel='STYLESHEET' href='../style/HGStyle-1292536211.css' TYPE='text/css' />
 </HEAD>
 <BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"><script type='text/javascript'>
 document.write("<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'><CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
@@ -17,16 +16,6 @@ function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nb
 function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.style.display='none';warnBox.innerHTML='';var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }}
 </script>
 
-<style type='text/css'>
-.trDrag {background-color:#EEEEEE;} .pale {background-color:#F8F8F8;}
-.inputBox {border: 2px inset #CCCCCC;}
-.greenRoof {border-top: 3px groove #008800;}
-.greenBox {border: 5px outset #008800;}
-.blueBox {border: 4px inset #000088;}
-.hintCol {font-size:70%; line-height:80%; border-style: hidden; background-color:#FFF9D2;}
-.hintRow {font-size:70%; line-height:80%; border-style: hidden; background-color:#FFF9D2;}
-.inOutButton {height:24px; width:24px; border-style: outset;}
-.waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #fff; opacity: 0;}</style>
 <A NAME="TOP"></A>
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
@@ -70,11 +59,11 @@ function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.s
 <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->
 <TR><TD COLSPAN=3>	
   	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="#FFFEE8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
+      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>    
+    <TABLE BGCOLOR="#FFFEE8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>     
+      <TABLE BGCOLOR="#D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD class='windowSize'>
 		<FONT SIZE="4" id='sectTtl'><b>&nbsp;
-Track and Table Releases</b></FONT></TD></TR></TABLE>
+Track and Table Releases</b></FONT></TD><TD></TD></TR></TABLE>
 	<TABLE BGCOLOR="#FFFEE8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 	
@@ -174,7 +163,7 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 14 Dec 2010. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 20 Dec 2010. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -200,6 +189,36 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT></TD>
 </TR>
 <TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=targetScanS" target=_blank>TS miRNA sites</a></td>
+<td>hg19</td>
+<td>17 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase" target=_blank>ENCODE UW DNaseI HS</a></td>
+<td>hg19</td>
+<td>16 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+Add links to LS-SNP for hg19</td>
+<td>hg19</td>
+<td>15 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=darned" target=_blank>Human RNA Editing (from the DAtabase of RNa EDiting)</a></td>
+<td>hg19</td>
+<td>15 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDgf" target=_blank>ENCODE UW DNaseI DGF</a></td>
+<td>hg19</td>
+<td>14 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=evofold" target=_blank>EvoFold Predictions of RNA Secondary Structure</a></td>
+<td>hg19</td>
+<td>14 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=vistaEnhancers" target=_blank>Vista Enhancers</a></td>
 <td>hg19</td>
 <td>13 Dec 2010</td>
@@ -218,36 +237,6 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=affyU133Plus2" target=_blank>Affymetrix Consensus/Exemplars from HG-U133 Plus 2.0</a></td>
 <td>hg19</td>
 <td>08 Dec 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hgs19&g=wgEncodeAffyRnaChip" target=_blank>ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array</a></td>
-<td>hg19</td>
-<td>03 Dec 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=rheMac2&g=refSeqAnno" target=_blank>RefSeq 1.2 genomic annotations from NCBI</a></td>
-<td>rheMac2</td>
-<td>03 Dec 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg18&g=rdmr" target=_blank>Reprogrammed Differentially Methylated Regions (R-DMR)</a></td>
-<td>hg18</td>
-<td>01 Dec 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=microsat" target=_blank>Microsatellites</a></td>
-<td>hg19</td>
-<td>22 Nov 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=hg19ContigDiff" target=_blank>Contigs new to GRCh37/(hg19), not carried forward from NCBI build 36(hg18) plus the GRC Map Contigs track</a></td>
-<td>hg19</td>
-<td>22 Nov 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=hg18ContigDiff" target=_blank>Contigs dropped or changed from NCBI build 36(hg18) to GRCh37(hg19)</a></td>
-<td>hg18</td>
-<td>19 Nov 2010</td>
 </tr>
 </table>
 
@@ -272,6 +261,30 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
     <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=targetScanS" target=_blank>TS miRNA sites</a></td>
+<td>17 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase" target=_blank>ENCODE UW DNaseI HS</a></td>
+<td>16 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+Add links to LS-SNP for hg19</td>
+<td>15 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=darned" target=_blank>Human RNA Editing (from the DAtabase of RNa EDiting)</a></td>
+<td>15 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDgf" target=_blank>ENCODE UW DNaseI DGF</a></td>
+<td>14 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=evofold" target=_blank>EvoFold Predictions of RNA Secondary Structure</a></td>
+<td>14 Dec 2010</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href=" ../../cgi-bin/hgTrackUi?db=hg19&g=vistaEnhancers" target=_blank>Vista Enhancers</a></td>
 <td>13 Dec 2010</td>

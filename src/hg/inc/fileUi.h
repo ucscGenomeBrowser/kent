@@ -6,16 +6,26 @@
 #include "cart.h"
 #include "trackDb.h"
 
+#define DOWNLOADS_ONLY_TYPE  "downloadsOnly"
+#define DOWNLOADS_ONLY_TITLE "Downloadable Files"
+#define FILE_SORT_ORDER      "fileSortOrder"
+
+INLINE boolean tdbIsDownloadsOnly(struct trackDb *tdb)
+// Is this a downloadsOnly tdb
+{
+return (tdb && sameWord(tdb->type,DOWNLOADS_ONLY_TYPE));
+}
+
 struct fileDb
 // File in a list of downloadable files
     {
-    struct fileDb *next;  // single link list
-    char *fileName;       // File Name
-    off_t fileSize;       // File size
-    char *fileDate;       // File Modified? date and time
-    struct mdbObj *mdb;   // The files are not trackDb entries but are found in the metaDb only
-    char **sortFields;    // Array of strings to sort on in sort Order
-    boolean *reverse;     // Direction of sort for array
+    struct fileDb *next;     // single link list
+    char *fileName;          // File Name
+    unsigned long  fileSize; // File size
+    char *fileDate;          // File Modified? date and time
+    struct mdbObj *mdb;      // The files are not trackDb entries but are found in the metaDb only
+    char **sortFields;       // Array of strings to sort on in sort Order
+    boolean *reverse;        // Direction of sort for array
     };
 
 

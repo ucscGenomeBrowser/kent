@@ -114,10 +114,19 @@ if ((hel = hashLookup(hash, name)) != NULL)
     return ptToInt(hel->val);
 else
     {
+    // It appears like this program is dead code that is no longer used.
+    // I don't want to make a potential bogus change to track the removal
+    // of hgNextId(), so a landmine is added.  Code can be change to determine
+    // max id from table if ever needed.  markd 2010-12-15
+#if 1
+    errAbort("code hasn't been updated to work, please see markd");
+    return 0;
+#else
     int id = hgNextId();
     fprintf(f, "%u\t%s\n", id, name);
     hashAdd(hash, name, intToPt(id));
     return id;
+#endif
     }
 }
 

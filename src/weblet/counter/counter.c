@@ -86,12 +86,7 @@ if (mute)
     mg = mgNew(1, 1);
 else
     mg = makeCountPic(count, mgMediumFont());
-#ifdef USE_PNG
 fprintf(stdout, "Content-type: image/png\n\n");
 mgSaveToPng(stdout, mg, FALSE);
-#else
-fprintf(stdout, "Content-type: image/gif\n\n");
-mgSaveToGif(stdout, mg, FALSE);
-#endif
 return 0;
 }
