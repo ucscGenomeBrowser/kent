@@ -23,6 +23,11 @@ composite wgEncodeCshlShortRnaSeq
 expVar1 cell
 expVar2 localization
 
+composite wgEncodeCshlLongRnaSeq
+expVar1 cell
+expVar2 localization
+expVar2 rnaExtract
+
 composite wgEncodeHudsonalphaMethylSeq
 expVar1 cell
 expVar2 replicate
