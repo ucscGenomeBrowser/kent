@@ -770,7 +770,7 @@ else
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
             {
             containerTrackCount++;
-            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&%s=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track,TRACK_SEARCH);
+            hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' onclick='findTracksConfigureSet(\"%s\");'>&nbsp;", track->track);
             }
         hPrintf("</td>\n");
 

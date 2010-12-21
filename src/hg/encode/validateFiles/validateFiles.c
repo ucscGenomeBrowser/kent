@@ -11,8 +11,9 @@
 #endif
 #include "bbiFile.h"
 #include "bigWig.h"
+#include "errCatch.h"
 
-char *version = "4.1";
+char *version = "4.2";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -1573,7 +1574,21 @@ for (i = 0; i < numFiles ; ++i)
 
     report("validateFiles %s %s\n", version, files[i]);
     errs += validate(lf, files[i]);
-    lineFileClose(&lf);
+
+    if (quick)
+	{
+	/* set up error catch to allow SIGPIPE errors from gzip */
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    lineFileClose(&lf);
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	   warn("Ignoring: %s", errCatch->message->string);
+	errCatchFree(&errCatch);
+	}
+    else
+	lineFileClose(&lf);
+
     report("endReport\n");
     if (reportF != NULL)
         {

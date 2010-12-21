@@ -189,6 +189,9 @@ priority 590.3
 track chainNetXenTro1 override
 priority 590.3
 
+track chainNetDanRer7 override
+priority 600.3
+
 track chainNetDanRer6 override
 priority 600.3
 

@@ -688,9 +688,9 @@ if (featDna && end > start)
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	   "View DNA for this feature</A> (%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
-	   chrom, start, end, strand, tbl);
+	   chrom, start, end, strand, tbl, database, hGenome(database));
     }
 }
 

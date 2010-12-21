@@ -2013,4 +2013,24 @@ by a single Makefile. This is available from:
    svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/projs/transMap/tags/vertebrate.2009-09-13
 
 see doc/builds.txt for specific details.
+
+############################################################################
+# lastz swap danRer7 (DONE - 2010-12-17 - Hiram)
+    #	original alignment to danRer7
+    cd /hive/data/genomes/danRer7/bed/lastzOryLat2.2010-12-17/DEF
+    cat fb.oryLat2.chainDanRer7Link.txt
+    #	141428502 bases of 1409770109 (10.032%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/oryLat2/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/oryLat2/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzOryLat2.2010-12-17/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    20m56.926s
+    cat fb.oryLat2.chainDanRer7Link.txt 
+    #	124527579 bases of 700386597 (17.780%) in intersection
+
 ############################################################################
