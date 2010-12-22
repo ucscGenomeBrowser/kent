@@ -4242,3 +4242,22 @@ priority 53.5
 visibility hide
 type bed 12
 
+track microattrLoci
+shortLabel Microattribution
+longLabel Loci involved in microattribution reviews
+group varRep
+priority 500.3
+visibility hide
+type bedDetail 14
+itemRgb on
+url http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&sendto=t&extrafeatpresent=1&list_uids=$$
+
+track microCuratedVars
+shortLabel Curated variants
+longLabel Curated variants from loci involved in microattribution
+group varRep
+priority 500.4
+visibility hide
+type bedDetail 6
+color 128,0,128
+

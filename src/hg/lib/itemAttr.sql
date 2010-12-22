@@ -13,5 +13,5 @@ CREATE TABLE itemAttr (
     colorG tinyint unsigned not null,	# Color green component 0-255
     colorB tinyint unsigned not null,	# Color blue component 0-255
               #Indices
-    PRIMARY KEY(name)
+    INDEX(name)
 );

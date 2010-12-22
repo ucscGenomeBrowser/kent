@@ -22,6 +22,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeUwDnaseViewHotspots
+    release alpha
     shortLabel Hot Spots
     view Hotspots
     visibility pack
@@ -352,6 +353,7 @@ wgEncode 1
         # subId=2016 dateSubmitted=2010-07-24
 
     track wgEncodeUwDnaseViewPeaks
+    release alpha
     shortLabel Peaks
     view Peaks
     visibility pack
@@ -683,6 +685,7 @@ wgEncode 1
 
 
     track wgEncodeUwDnaseViewRawSignal
+    release alpha
     shortLabel Raw Signal
     view RawSignal
     visibility full

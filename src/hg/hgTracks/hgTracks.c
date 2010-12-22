@@ -629,13 +629,8 @@ if(doIdeo)
         }
     else
         {
-#ifdef USE_PNG
         trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".png");
         hvg = hvGfxOpenPng(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
-#else
-        trashDirFile(ideoTn, "hgtIdeo", "hgtIdeo", ".gif");
-        hvg = hvGfxOpenGif(ideoWidth, ideoHeight, ideoTn->forCgi, FALSE);
-#endif
         }
     hvg->rc = revCmplDisp;
     initColors(hvg);
@@ -2056,13 +2051,8 @@ else
     if (theImgBox!=NULL)
         transparentImage = TRUE;   // transparent because BG (blue ruler lines) is separate image
 
-#ifdef USE_PNG
     trashDirFile(&gifTn, "hgt", "hgt", ".png");
     hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
-#else //ifndef
-    trashDirFile(&gifTn, "hgt", "hgt", ".gif");
-    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
-#endif //ndef USE_PNG
 
     if(theImgBox)
         {
@@ -2076,13 +2066,8 @@ else
         {
         // TODO: It would be great to make the images smaller, but keeping both the same full size for now
         struct tempName gifTnSide;
-        #ifdef USE_PNG
-            trashDirFile(&gifTnSide, "hgt", "side", ".png");
-            hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
-        #else //ifndef
-            trashDirFile(&gifTnSide, "hgt", "side", ".gif");
-            hvgSide = hvGfxOpenGif(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
-        #endif //ndef USE_PNG
+        trashDirFile(&gifTnSide, "hgt", "side", ".png");
+        hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
 
         // Also add the side image
         theSideImg = imgBoxImageAdd(theImgBox,gifTnSide.forHtml,NULL,pixWidth, pixHeight,FALSE);
@@ -2304,21 +2289,13 @@ if (withGuidelines)
         struct tempName gifBg;
         char base[64];
         safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
-        #ifdef USE_PNG
-            exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
-        #else///ifndef
-            exists = trashDirReusableFile(&gifBg, "hgt", base, ".gif");
-        #endif///ndef USE_PNG
+        exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
         if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image.
             exists = TRUE;                       // However, for the time being, rebuild when user presses "default tracks"
 
         if (!exists)
             {
-            #ifdef USE_PNG
-                bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-            #else///ifndef
-                bgImg = hvGfxOpenGif(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-            #endif///ndef USE_PNG
+            bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
             bgImg->rc = revCmplDisp;
             }
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image
@@ -2650,6 +2627,8 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     next = tdb->next;
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->track))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
+        continue;
+    if (sameString(tdb->type, "downloadsOnly")) // These tracks should not even be seen by6 hgTracks. (FIXME: Until we want to see them in cfg list and searchTracks!)
         continue;
     track = trackFromTrackDb(tdb);
     track->hasUi = TRUE;
@@ -3320,7 +3299,7 @@ char hubDir[PATH_LEN];
 splitPath(hubUrl, hubDir, NULL, NULL);
 
 /* Load trackDb.ra file and make it into proper trackDb tree */
-struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl);
+struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl, NULL);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
      {
      trackDbFieldsFromSettings(tdb);
@@ -4022,7 +4001,14 @@ if (restrictionEnzymesOk())
     slSafeAddHead(&trackList, cuttersTg());
     }
 if (wikiTrackEnabled(database, NULL))
+    {
     addWikiTrack(&trackList);
+    struct sqlConnection *conn = wikiConnect();
+    if (sqlTableExists(conn, "variome"))
+        addVariomeWikiTrack(&trackList);
+    wikiDisconnect(&conn);
+    }
+
 #ifdef SOON
 loadDataHubs(&trackList);
 #endif /* SOON */
@@ -4046,7 +4032,9 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     if (s != NULL && !track->limitedVisSet)
 	track->visibility = hTvFromString(s);
-    if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
+    if (tdbIsCompositeChild(track->tdb))
+        track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
+    else if (tdbIsComposite(track->tdb) && track->visibility != tvHide)
 	{
 	struct trackDb *parent = track->tdb->parent;
 	char *parentShow = NULL;
@@ -4261,15 +4249,15 @@ for (;track != NULL; track = track->next)
     boolean shapedByubtrackOverride = FALSE;
     boolean cleanedByContainerSettings = FALSE;
 
+    // Top-down 'cleanup' MUST GO BEFORE bottom up reshaping.
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+
     if (tdbIsContainer(track->tdb))
         {
         shapedByubtrackOverride = cartTdbTreeReshapeIfNeeded(cart,track->tdb);
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-
-    // Top-down 'cleanup' can now follow reshaping because reshaping will flag itself for protection
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility

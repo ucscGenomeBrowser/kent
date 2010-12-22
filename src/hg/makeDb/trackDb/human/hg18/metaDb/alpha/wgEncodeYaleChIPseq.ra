@@ -1,6 +1,5 @@
 metaObject wgEncodeYaleChIPseqAlignmentsHelas3ifngInput
 objType file
-accession GSE12782
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -10,6 +9,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz
 fragLength 200
 grant Snyder
@@ -23,7 +23,6 @@ view Alignments
 
 metaObject wgEncodeYaleChIPseqAlignmentsHelas3Input
 objType file
-accession GSE12781
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -33,6 +32,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
+dccNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqAlignmentsHelas3Input.tagAlign.gz
 fragLength 200
 grant Snyder
@@ -9883,7 +9883,6 @@ view Peaks
 
 metaObject wgEncodeYaleChIPseqPeaksHelas3ifngStat1
 objType table
-accession GSE12782
 antibody STAT1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -9893,6 +9892,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -11768,7 +11768,6 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataHelas3ifngInput
 objType file
-accession GSE12782
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -11778,6 +11777,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRawDataHelas3ifngInput.fastq.gz
 grant Snyder
 lab Yale
@@ -11789,7 +11789,6 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataHelas3Input
 objType file
-accession GSE12781
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -11799,6 +11798,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataHelas3Input.fastq.gz
 grant Snyder
 lab Yale
@@ -13482,7 +13482,6 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1
 objType file
-accession GSE12782
 antibody STAT1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -13492,6 +13491,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1.fastq.gz
 grant Snyder
 lab Yale
@@ -13675,7 +13675,6 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep1Helas3Pol2
 objType file
-accession GSE12781
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -13685,6 +13684,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3Pol2.fastq.gz
 grant Snyder
 lab Yale
@@ -16908,7 +16908,6 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1
 objType file
-accession GSE12782
 antibody STAT1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -16918,6 +16917,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1.fastq.gz
 grant Snyder
 lab Yale
@@ -17101,7 +17101,6 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep2Helas3Pol2
 objType file
-accession GSE12781
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -17111,6 +17110,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3Pol2.fastq.gz
 grant Snyder
 lab Yale
@@ -19452,7 +19452,6 @@ view RawData
 
 metaObject wgEncodeYaleChIPseqRawDataRep3Helas3Pol2
 objType file
-accession GSE12781
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -19462,6 +19461,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataRep3Helas3Pol2.fastq.gz
 grant Snyder
 lab Yale
@@ -20364,7 +20364,6 @@ view Signal
 
 metaObject wgEncodeYaleChIPseqRel2SignalHelas3ifngInput
 objType table
-accession GSE12782
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -20375,6 +20374,7 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-03-20
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz
 grant Snyder
 lab Yale
@@ -20389,7 +20389,6 @@ view Signal
 
 metaObject wgEncodeYaleChIPseqRel2SignalHelas3Input
 objType table
-accession GSE12781
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -20400,6 +20399,7 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-03-20
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz
 grant Snyder
 lab Yale
@@ -22120,7 +22120,6 @@ view Signal
 
 metaObject wgEncodeYaleChIPseqSignalHelas3ifngStat1V2
 objType table
-accession GSE12782
 antibody STAT1
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -22131,6 +22130,7 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-21
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
+dccNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqSignalHelas3ifngStat1V2.bedGraph4.gz
 grant Snyder
 lab Yale
@@ -24035,4 +24035,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 2071444698
+# MAGIC: 1544874314

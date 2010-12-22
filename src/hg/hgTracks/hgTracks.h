@@ -1007,6 +1007,11 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
 
+void bamLinkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
+			      struct hvGfx *hvg, int xOff, int yOff, int width,
+			      MgFont *font, Color color, enum trackVisibility vis);
+/* Draw BAM linked features series items. */
+
 void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis);
@@ -1157,6 +1162,9 @@ void wikiTrackMethods(struct track *tg);
 struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 	int start, int end);
 /* fetch wiki track items as simple bed 3 list in given range */
+
+void addVariomeWikiTrack(struct track **pGroupList);
+/* Add variome wiki track and append to group list. */
 
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */

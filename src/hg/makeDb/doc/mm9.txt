@@ -11333,3 +11333,80 @@ for bed in agilent*.bed; do
     tail -n +2 $bed | hgLoadBed mm9 ${bed%.ct.bed} stdin
 done
 rm bed.tab
+
+
+##########################################################################
+# Build targetScanS track - (DONE - 2010-12-14 galt)
+#       requested by: George Bell gbell at wi.mit.edu
+    ssh hgwdev
+    mkdir -p /cluster/data/mm9/bed/targetScanS
+    cd /cluster/data/mm9/bed/targetScanS
+
+    wget --timestamping http://www.targetscan.org/mmu_50/ucsc/mm9/mm9Cons_ALL_CHRS.BED
+
+    hgLoadBed mm9 targetScanS mm9Cons_ALL_CHRS.BED
+    #	Loaded 38961 elements of size 6
+    featureBits mm9 targetScanS
+    #   253088 bases of 2620346127 (0.010%) in intersection
+
+    # Create/edit/check in targetScans.html and trackDb.ra under
+    # kent/src/hg/makeDb/trackDb/mouse/mm9
+
+#########################################################################
+# LASTZ Mouse mm9 (DONE - 2010-12-17 - hiram)
+    mkdir /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+    cd /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+
+    cat << '_EOF_' > DEF
+# mouse vs zebrafish
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	Elapsed time: 254m42s
+
+    cat fb.danRer7.chainMm9Link.txt 
+    #	68190354 bases of 2620346127 (2.602%) in intersection
+
+    #	and the swap to danRer7
+    mkdir /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    16m8.672s
+
+    cat fb.danRer7.chainMm9Link.txt 
+    #	71960602 bases of 1409770109 (5.104%) in intersection
+
+#########################################################################

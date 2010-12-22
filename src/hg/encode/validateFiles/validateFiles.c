@@ -11,8 +11,11 @@
 #endif
 #include "bbiFile.h"
 #include "bigWig.h"
+#include "errCatch.h"
+#include "obscure.h"
+#include "hmmstats.h"
 
-char *version = "4.1";
+char *version = "4.3";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -192,6 +195,22 @@ va_start(args, format);
 if (reportF != NULL)
     vfprintf(reportF, format, args);
 va_end(args);
+}
+
+void reportLongWithCommas(long long l)
+/* Print out a long number with commas at thousands, millions, etc. */
+{
+char ascii[32];
+sprintLongWithCommas(ascii, l);
+report("%s", ascii);
+}
+
+void reportLabelAndLongNumber(char *label, long long l)
+/* Print label: 1,234,567 format number */
+{
+report("%s: ", label);
+reportLongWithCommas( l);
+report("\n");
 }
 
 boolean checkMismatch(int ch1, int ch2)
@@ -586,6 +605,12 @@ boolean checkPeak(char *file, int line, char *row, char *peak, char *start, char
 {
 verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, line, peak, start, end, row);
 unsigned p, s, e;
+int i;
+if (!checkSigned(file, line, row, peak, &i, "peak"))
+    return FALSE;
+if (i == -1)
+    return TRUE;
+
 if (   !checkUnsigned(file, line, row, peak, &p, "peak")
     || !checkUnsigned(file, line, row, start, &s, "chromStart")
     || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
@@ -1039,6 +1064,7 @@ while ( lineFileNext(lf, &seqName, NULL))
 	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
+reportLabelAndLongNumber("number of sequences", line / 4);
 return errs;
 }
 
@@ -1147,6 +1173,10 @@ if (chrHash == NULL)
 
 int errs = 0;
 struct bbiFile *bbiFile;
+
+if (!bigWigFileCheckSigs(file))
+    reportErrAbort("bad signatures in file %s\n", file);
+
 bbiFile = bigWigFileOpen(file);
 
 if (bbiFile == NULL)
@@ -1184,6 +1214,32 @@ for(; chroms; chroms = chroms->next)
 
 if (errs)
     reportErrAbort("Aborting... %d errors found in bigWig file\n", errs);
+
+report("version: %d\n", bbiFile->version);
+report("isCompressed: %s\n", (bbiFile->uncompressBufSize > 0 ? "yes" : "no"));
+report("isSwapped: %d\n", bbiFile->isSwapped);
+reportLabelAndLongNumber("primaryDataSize", bbiFile->unzoomedIndexOffset - bbiFile->unzoomedDataOffset);
+if (bbiFile->levelList != NULL)
+    {
+    long long indexEnd = bbiFile->levelList->dataOffset;
+    reportLabelAndLongNumber("primaryIndexSize", indexEnd - bbiFile->unzoomedIndexOffset);
+    }
+report("zoomLevels: %d\n", bbiFile->zoomLevels);
+
+struct bbiZoomLevel *zoom;
+for (zoom = bbiFile->levelList; zoom != NULL; zoom = zoom->next)
+    report("\t%d\t%d\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
+
+struct bbiChromInfo *chrom, *chromList = bbiChroms;
+report("chromCount: %d\n", slCount(chromList));
+for (chrom=chromList; chrom != NULL; chrom = chrom->next)
+    report("\t%s %d %d\n", chrom->name, chrom->id, chrom->size);
+struct bbiSummaryElement sum = bbiTotalSummary(bbiFile);
+reportLabelAndLongNumber("basesCovered", sum.validCount);
+report("mean: %f\n", sum.sumData/sum.validCount);
+report("min: %f\n", sum.minVal);
+report("max: %f\n", sum.maxVal);
+report("std: %f\n", calcStdFromSums(sum.sumData, sum.sumSquares, sum.validCount));
 
 return errs;
 }
@@ -1563,7 +1619,21 @@ for (i = 0; i < numFiles ; ++i)
 
     report("validateFiles %s %s\n", version, files[i]);
     errs += validate(lf, files[i]);
-    lineFileClose(&lf);
+
+    if (quick)
+	{
+	/* set up error catch to allow SIGPIPE errors from gzip */
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    lineFileClose(&lf);
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	   warn("Ignoring: %s", errCatch->message->string);
+	errCatchFree(&errCatch);
+	}
+    else
+	lineFileClose(&lf);
+
     report("endReport\n");
     if (reportF != NULL)
         {

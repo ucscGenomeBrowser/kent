@@ -3,7 +3,8 @@
 include ../../../inc/common.mk
 
 SCRIPT_FILES = \
-	encodeMkGeoPkg
+	encodeMkGeoPkg \
+	encodeAddGeoAccessions
 
 all:
 	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts scripts

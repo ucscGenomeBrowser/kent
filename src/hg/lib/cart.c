@@ -1748,7 +1748,10 @@ if (compositeLevel)
 for ( ; tdb != NULL; tdb = tdb->parent)
     {
     char buf[512];
-    safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
+    if (suffix[0] == '.' || suffix[0] == '_')
+        safef(buf, sizeof buf, "%s%s", tdb->track,suffix);
+    else
+        safef(buf, sizeof buf, "%s.%s", tdb->track,suffix);
     char *cartSetting = hashFindVal(cart->hash, buf);
     if (cartSetting != NULL)
 	{
@@ -1991,6 +1994,30 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
 return removed;
 }
 
+static int cartRemoveOldFromTdbTree(struct cart *newCart,struct hash *oldVars,struct trackDb *tdb,char *suffix,char *parentVal,boolean skipParent)
+/* Removes a 'trackName.suffix' from all tdb descendents (but not parent), BUT ONLY IF OLD or same as parentVal.
+   If suffix NULL then removes 'trackName' which holds visibility */
+{
+int removed = 0;
+boolean vis = (suffix == NULL || *suffix == '\0');
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?tdb->subtracks:tdb);
+for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+    {
+    struct trackDb *descendentTdb = tdbRef->val;
+    char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+    if (vis)
+        safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
+    else
+        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
+    char *newVal = cartOptionalString(newCart,settingName);
+    if (    newVal    != NULL
+    && (   (parentVal != NULL && sameString(newVal,parentVal))
+        || (FALSE == cartValueHasChanged(newCart,oldVars,settingName,TRUE,FALSE))))
+        removed += cartRemoveAndCount(newCart,settingName);
+    }
+return removed;
+}
+
 static boolean cartTdbOverrideSuperTracks(struct cart *cart,struct trackDb *tdb,boolean ifJustSelected)
 /* When when the child of a hidden supertrack is foudn and selected, then shape the supertrack accordingly
    Returns TRUE if any cart changes are made */
@@ -2115,7 +2142,10 @@ if (visMax != visOrig || reshapeFully)
             cartRemove(cart,subtrack->track);  // Remove subtrack level vis if it isn't even checked just in case
         else  // subtrack is checked (should include subtrack level vis)
             {
-            if (!hashFindVal(subVisHash, subtrack->track))   // if the subtrack doesn't have individual vis AND...
+            char *visFromHash = hashFindVal(subVisHash, subtrack->track);
+            if (tdbIsMultiTrack(parent))
+                cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited vis and non-selected should not have vis
+            if (visFromHash == NULL)   // if the subtrack doesn't have individual vis AND...
                 {
                 if (reshapeFully || visOrig == tvHide)
                     {
@@ -2125,15 +2155,19 @@ if (visMax != visOrig || reshapeFully)
                     }
                 else if (visOrig != tvHide)
                     {
-                    if (tdbIsMultiTrack(parent))
-                        cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited
-                    else
-                        cartSetString(cart,subtrack->track,hStringFromTv(visOrig));
+                    cartSetString(cart,subtrack->track,hStringFromTv(visOrig));
                     countVisChanged++;
                     }
                 }
-            else if (tdbIsMultiTrack(parent))
-                cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited vis and non-selected should not have vis
+            else // This subtrack has explicit vis
+                {
+                enum trackVisibility vis = hTvFromString(visFromHash);
+                if (vis == visMax)
+                    {
+                    cartRemove(cart,subtrack->track);  // Remove vis which should now be inherited
+                    countVisChanged++;
+                    }
+                }
             }
         }
     }
@@ -2315,7 +2349,7 @@ if (hasViews)
                 {
                 viewVisChanged = TRUE;
                 }
-            else if (cartRemoveFromTdbTree(newCart,tdbView,suffix,TRUE) > 0)
+            else if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,suffix,oneName->val,TRUE) > 0)
                     clensed++;
 
             freeMem(oneName);
@@ -2333,7 +2367,8 @@ if (hasViews)
         if  (containerVisChanged || viewVisChanged)
             { // vis is a special additive case!
             WARN("Removing subtrack vis for %s.%s",tdb->track,view);
-            if (cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE) > 0)
+            char *viewVis = hStringFromTv(tdbVisLimitedByAncestry(newCart, tdbView, FALSE));
+            if (cartRemoveOldFromTdbTree(newCart,oldVars,tdbView,NULL,viewVis,TRUE) > 0)
                 clensed++;
             }
         changedSettings = leftOvers;
@@ -2344,13 +2379,14 @@ if (hasViews)
 while ((oneName = slPopHead(&changedSettings)) != NULL)
     {
     suffix = oneName->name + strlen(tdb->track) + 1;
-    if(cartRemoveFromTdbTree(newCart,tdb,suffix,TRUE) > 0)
+    if (cartRemoveOldFromTdbTree(newCart,oldVars,tdb,suffix,oneName->val,TRUE) > 0)
         clensed++;
     freeMem(oneName);
     }
 if  (containerVisChanged && !hasViews)
     { // vis is a special additive case!
-    if (cartRemoveFromTdbTree(newCart,tdb,NULL,TRUE) > 0)
+    char *vis = hStringFromTv(tdbVisLimitedByAncestry(newCart, tdb, FALSE));
+    if (cartRemoveOldFromTdbTree(newCart,oldVars,tdb,NULL,vis,TRUE) > 0)
         clensed++;
     }
 

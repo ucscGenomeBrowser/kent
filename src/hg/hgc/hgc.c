@@ -688,9 +688,9 @@ if (featDna && end > start)
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	   "View DNA for this feature</A><BR>\n",  hgcPathAndSettings(),
+	   "View DNA for this feature</A> (%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
-	   chrom, start, end, strand, tbl);
+	   chrom, start, end, strand, tbl, database, hGenome(database));
     }
 }
 
@@ -2695,6 +2695,10 @@ char *html = getHtmlFromSelfOrParent(tdb);
 if (html != NULL && html[0] != 0)
     {
     htmlHorizontalLine();
+
+    // Add pennantIcon
+    printPennantIconNote(tdb);
+
     puts(html);
     }
 hPrintf("<BR>\n");
@@ -3796,14 +3800,15 @@ void doGetDna1()
 {
 struct hTableInfo *hti = NULL;
 char *tbl = cgiUsualString("table", "");
-char rootName[256];
-char parsedChrom[32];
 if (dbIsFound)
     {
+    char rootName[256];
+    char parsedChrom[32];
     hParseTableName(database, tbl, rootName, parsedChrom);
     hti = hFindTableInfo(database, seqName, rootName);
     }
-cartWebStart(cart, database, "Get DNA in Window");
+char *otherOrg = hOrganism(database);
+cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, otherOrg);
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
@@ -3823,10 +3828,11 @@ if (!hIsGsidServer())
     if (tbl[0] == 0)
     	{
     	puts("<P>"
-	     "Note: if you would prefer to get DNA for features of a particular "
-	     "track or table, try the ");
+             "Note: This page retrieves genomic DNA for a single region. "
+             "If you would prefer to get DNA for many items in a particular track, "
+             "or get DNA with formatting options based on gene structure (introns, exons, UTRs, etc.), try using the ");
     	printf("<A HREF=\"%s\" TARGET=_blank>", hgTablesUrl(TRUE, NULL));
-    	puts("Table Browser</A> using the output format sequence.");
+    	puts("Table Browser</A> with the \"sequence\" output format.");
     	}
     else
     	{
@@ -9871,7 +9877,7 @@ if (desc != NULL)
     htmlTextOut(desc);
     printf("<BR>\n");
     }
-    
+
 printCcdsForSrcDb(conn, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
@@ -18278,13 +18284,8 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
-#ifdef USE_PNG
 trashDirFile(&gifTn, "hgc", "hgc", ".png");
 hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#else
-trashDirFile(&gifTn, "hgc", "hgc", ".gif");
-hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#endif /* USE_PNG */
 makeGrayShades(hvg);
 hvGfxSetClip(hvg, 0, 0, pixWidth, pixHeight);
 altGraphXDrawPack(ag, ssList, hvg, 0, 0, pixWidth, lineHeight, lineHeight-1,
@@ -21591,16 +21592,11 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName = NULL, *tableName, *userName = NULL;
+char *escName = NULL, *tableName;
 int hasAttr = 0;
 int i;
 int start = cartInt(cart, "o");
 
-if (wikiTrackEnabled(database, &userName) && sameWord("0", itemName))
-    {
-    if (userName != NULL)
-        itemName = cartUsualString(cart, "gvPos.create.annotation", "0");
-    }
 /* official name, position, band, genomic size */
 escName = sqlEscapeString(itemName);
 safef(query, sizeof(query), "select * from hgFixed.gv where id = '%s'", escName);
@@ -22542,19 +22538,16 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     r = bedDetailLoadWithGaps(row, bedPart+2);
     bedPrintPos((struct bed*)r, bedPart, tdb);
-    //print bedPart using bed routines?
-    //printf("<B>Name:</B> %s <BR>\n", r->name);
-    //print ID as link if have url
     if (r->id != NULL)
         {
         printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
         }
-    //printf("<B>Position:</B> %s:%u-%u<BR><BR>", r->chrom, *(r->chromStart)+1, *(r->chromEnd));
     if (r->description != NULL)
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
+printTrackHtml(tdb);
 
 bedDetailFree(&r);
 freeMem(escName);
@@ -22831,6 +22824,14 @@ else if (sameWord(table, G_CREATE_WIKI_ITEM))
     {
     doCreateWikiItem(item, seqName, winStart, winEnd);
     }
+else if (sameString(track, "variome"))
+    doVariome(item, seqName, winStart, winEnd);
+else if (sameString(track, "variome.create"))
+    doCreateVariomeItem(item, seqName, winStart, winEnd);
+else if (sameString(track, "variome.delete"))
+    doDeleteVariomeItem(item, seqName, winStart, winEnd);
+else if (sameString(track, "variome.addComments"))
+    doAddVariomeComments(item, seqName, winStart, winEnd);
 else if (startsWith("transMapAln", table) || startsWith("reconTransMapAln", table))
     transMapClickHandler(tdb, item);
 else if (startsWith("hgcTransMapCdnaAli", table))

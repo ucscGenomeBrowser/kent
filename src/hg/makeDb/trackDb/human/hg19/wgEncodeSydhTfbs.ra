@@ -6,12 +6,12 @@
 #               - Peaks = Pk
 #               - Signal = Sg
 #       - cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
-#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks for Tier 1 cell lines
+#       - Default Tracks on: 
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
 #       - Track Long Label: Standardize as Encode (dataType) from Univeristy
 #       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
 #       - View Displays: Deafult view filters:
-#               - Peaks-??
+
 
 track wgEncodeSydhTfbs
 release alpha
@@ -25,16 +25,19 @@ type bed 3
 origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
-subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC K562=K562 K562b=K562b HeLaS3=HeLa-S3 HepG2=HepG2 HepG2b=HepG2(b)   HUVEC=HUVEC GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y  U2OS=U2OS uK562=K562_<i>IFN&alpha;_30min</i> wK562=K562_<i>IFN&gamma;_30min</i> xK562=K562_<i>IFN&gamma;_6hrs</i> yMCF10AES=MCF10A-Er-Src<i>EtOH;_36hr</i> zMCF10AES=MCF10A-Er-Src<i>TAM;_36hr</i>
-subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1  BRCA1C=BRCA1_(C-1863) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CEBPB=CEBPB  CHD21250=CHD2_(N-1250) cFOS=c-FOS cJUN=c-Jun cMYC=c-Myc CCNT2=CCNT2 CTBP2=CtBP2 E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GRP20=GRp20 GTF2F1RAP=GTF2F1_(RAP-74) GTF2B=GTF2B HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF3=IRF3 IRF1=IRF1 JUND=JunD KAP1=KAP1 MAX=Max  Mxi1BHLH=Mxi1_(bHLH) NFKB=NFKB P300F4=p300_(F-4) P300N15=p300_(N-15) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM1V=PRDM1_(Val90)  NFE2H=NF-E2_(H-230) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFYA=NF-YA NFYB=NF-YB  RAD21=Rad21 RFX5N494=RFX5_(N-494) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3i zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputstd=Input_(<i>Standard</i>) zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
-subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
-subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs ETOH01=EtOH;_36hr FORSKLN=forskolin INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM;_36hr TNFa=TNFa
-dimensions dimensionX=cellType dimensionY=factor
-#dimensions dimensionX=cellType dimensionY=factor dimensionZ=control 
-#Need to figure out how to use dimesions and make check boxes
-#dimensions dimensionX=cellType dimensionY=factor dimA=control dimB=treatment 
-#dimensionZchecked Standard,IgG_Mouse,IgG_Rabbit
-sortOrder cellType=+ factor=+ control=+ view=+
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) K562b=K562b&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HepG2b=HepG2(b)&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y  U2OS=U2OS 
+#subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC K562=K562 K562b=K562b HeLaS3=HeLa-S3 HepG2=HepG2 HepG2b=HepG2(b)   HUVEC=HUVEC GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y  U2OS=U2OS uK562=K562_<i>IFN&alpha;_30min</i> wK562=K562_<i>IFN&gamma;_30min</i> xK562=K562_<i>IFN&gamma;_6hrs</i> yMCF10AES=MCF10A-Er-Src<i>EtOH;_36hr</i> zMCF10AES=MCF10A-Er-Src<i>TAM;_36hr</i>
+subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1  BRCA1C=BRCA1_(C-1863) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD21250=CHD2_(N-1250) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GRP20=GRp20 GTF2B=GTF2B GTF2F1RAP=GTF2F1_(RAP-74)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MAX=Max  Mxi1BHLH=Mxi1_(bHLH) NFE2H=NF-E2_(H-230) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300F4=p300_(F-4) P300N15=p300_(N-15) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM1V=PRDM1_(Val90)    RAD21=Rad21 RFX5N494=RFX5_(N-494) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3i zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
+#subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1  BRCA1C=BRCA1_(C-1863) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CEBPB=CEBPB  CHD21250=CHD2_(N-1250) cFOS=c-FOS cJUN=c-Jun cMYC=c-Myc CCNT2=CCNT2 CTBP2=CtBP2 E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GRP20=GRp20 GTF2F1RAP=GTF2F1_(RAP-74) GTF2B=GTF2B HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF3=IRF3 IRF1=IRF1 JUND=JunD KAP1=KAP1 MAX=Max  Mxi1BHLH=Mxi1_(bHLH) NFKB=NFKB P300F4=p300_(F-4) P300N15=p300_(N-15) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM1V=PRDM1_(Val90)  NFE2H=NF-E2_(H-230) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFYA=NF-YA NFYB=NF-YB  RAD21=Rad21 RFX5N494=RFX5_(N-494) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3i zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputstd=Input_(<i>Standard</i>) zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
+subGroup4 control Control std=Standard IGGmus=IgG_mus IGGrab=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
+#subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
+subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs ETOH01=EtOH FORSKLN=forskolin INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM TNFa=TNFa
+#subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs ETOH01=EtOH;_36hr FORSKLN=forskolin INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM;_36hr TNFa=TNFa
+dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
+dimensionZchecked aNone
+dimensionAchecked std,IGGmus,IGGrab,UCD
+filterComposite dimZ=one dimA=multi
+sortOrder cellType=+ factor=+ control=+ treatment=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody control=control treatment=treatment
 visibilityViewDefaults Peaks=pack  Signal=full
@@ -58,10 +61,9 @@ wgEncode 1
     qValueFilter 0
     qValueFilterLimits 0:300
 
-		#Tier 1 cell turned on by default #
 	    track wgEncodeSydhTfbsGm12878WhipIggmusPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks 
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel GM12878 WHIP   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (WHIP in GM12878 cells)
 	    subGroups view=Peaks factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
@@ -149,10 +151,9 @@ wgEncode 1
 	    color 0,107,27
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=H1-hESC antibody=SUZ12 treatment=None control=UCDavis setType=exp inputType=H1-hESC/None/Input/UCDavis view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1175 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsH1hescSuz12UcdPk fileName=wgEncodeSydhTfbsH1hescSuz12UcdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Ccnt2StdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    CCNT2  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (CCNT2 in K562 cells)
 	    subGroups view=Peaks factor=CCNT2 cellType=K562 control=std treatment=aNone
@@ -160,10 +161,9 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=CCNT2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1147 dateSubmitted=2010-04-28 dateUnrestricted=2011-01-28 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Ccnt2StdPk fileName=wgEncodeSydhTfbsK562Ccnt2StdPk.narrowPeak.gz
 
-	    #Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Hmgn3StdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    HMGN3  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (HMGN3 in K562 cells)
 	    subGroups view=Peaks factor=HMGN3 cellType=K562 control=std treatment=aNone
@@ -177,7 +177,7 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562/a3 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
-	    subGroups view=Peaks factor=IRF1 cellType=uK562 control=std treatment=IFNa30
+	    subGroups view=Peaks factor=IRF1 cellType=K562 control=std treatment=IFNa30
 	    type narrowPeak
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNa30 control=std setType=exp inputType=K562/IFNa30/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1135 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifna30StdPk fileName=wgEncodeSydhTfbsK562Irf1Ifna30StdPk.narrowPeak.gz
@@ -188,15 +188,14 @@ wgEncode 1
 	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562/g6 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
-	    subGroups view=Peaks factor=IRF1 cellType=xK562 control=std treatment=IFNg6h
+	    subGroups view=Peaks factor=IRF1 cellType=K562 control=std treatment=IFNg6h
 	    type narrowPeak
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=IRF1 treatment=IFNg6h control=std setType=exp inputType=K562/IFNg6h/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1139 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Irf1Ifng6hStdPk fileName=wgEncodeSydhTfbsK562Irf1Ifng6hStdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Nrf1IggrabPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    Nrf1   Pk 
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Nrf1 in K562 cells)
 	    subGroups view=Peaks factor=NRF1 cellType=K562 control=IGGrab treatment=aNone
@@ -204,10 +203,9 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=Nrf1 treatment=None control=IgG-rab setType=exp inputType=K562/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1133 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Nrf1IggrabPk fileName=wgEncodeSydhTfbsK562Nrf1IggrabPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Gtf2bStdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    GTF2B  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (GTF2B in K562 cells)
 	    subGroups view=Peaks factor=GTF2B cellType=K562 control=std treatment=aNone
@@ -215,10 +213,9 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Harvard(Weissman) dataType=ChIPseq cell=K562 antibody=GTF2B treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1149 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Gtf2bStdPk fileName=wgEncodeSydhTfbsK562Gtf2bStdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsK562Usf2StdPk
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewPeaks on
+	    subTrack wgEncodeSydhTfbsViewPeaks off
 	    shortLabel K562    USF2   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (USF2 in K562 cells)
 	    subGroups view=Peaks factor=USF2 cellType=K562 control=std treatment=aNone
@@ -236,10 +233,9 @@ wgEncode 1
 	    color 189,0,157
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdPk fileName=wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 
-		#Tier 1 Cell Line, deafult track on #
         track wgEncodeSydhTfbsGm12878Znf274UcdPk
         release alpha
-        subTrack wgEncodeSydhTfbsViewPeaks on
+        subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 ZNF274 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in GM12878 cells)
         subGroups view=Peaks factor=ZNF274 cellType=GM12878 control=UCD treatment=aNone
@@ -276,10 +272,9 @@ wgEncode 1
         type narrowPeak
     # subId=1209 dateSubmitted=2010-05-20
 
-		#Tier 1 Cell Line, deafult track on #
         track wgEncodeSydhTfbsGm12878TbpIggmusPk
         release alpha
-        subTrack wgEncodeSydhTfbsViewPeaks on
+        subTrack wgEncodeSydhTfbsViewPeaks off
         shortLabel GM12878 TBP    Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in GM12878 cells)
         subGroups view=Peaks factor=TBP cellType=GM12878 control=IGGmus treatment=aNone
@@ -356,10 +351,9 @@ wgEncode 1
         color 189,0,157
     # subId=1365 dateSubmitted=2010-06-11
 
-	#Tier 1 cell turned on by default #
         track wgEncodeSydhTfbsK562Pol2s2StdPk
         release alpha
-        parent wgEncodeSydhTfbsViewPeaks on
+        parent wgEncodeSydhTfbsViewPeaks off 
         shortLabel K562    Pol2S2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2(phosphoS2) in K562 cells)
         subGroups view=Peaks factor=POL2S2 cellType=K562 control=std treatment=aNone
@@ -389,7 +383,7 @@ wgEncode 1
 
         track wgEncodeSydhTfbsK562Kap1UcdPk
         release alpha
-        parent wgEncodeSydhTfbsViewPeaks 
+        parent wgEncodeSydhTfbsViewPeaks off 
         shortLabel K562 KAP1 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (KAP1 in K562 cells)
         subGroups view=Peaks factor=KAP1 cellType=K562 control=UCD treatment=aNone
@@ -402,7 +396,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel K562 c-Myc Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (c-Myc in K562 cells)
-        subGroups view=Peaks factor=cMYC cellType=wK562 control=std treatment=IFNg30
+        subGroups view=Peaks factor=cMYC cellType=K562 control=std treatment=IFNg30
         type narrowPeak
         color 46,0,184
         # subId=2111 dateSubmitted=2010-08-17
@@ -677,7 +671,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=STAT3 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=std treatment=TAM
         type narrowPeak
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -686,7 +680,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=POL2 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=std treatment=TAM
         type narrowPeak
         # subId=2548 dateSubmitted=2010-10-20
 
@@ -695,7 +689,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=STAT3 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=std treatment=ETOH01
         type narrowPeak
         # subId=2767 dateSubmitted=2010-10-27
 
@@ -704,7 +698,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=POL2 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=std treatment=ETOH01
         type narrowPeak
         # subId=2768 dateSubmitted=2010-10-27
 
@@ -735,10 +729,9 @@ wgEncode 1
     windowingFunction mean
    
 
-		#Tier 1 Cell Line, deafult track on #
 	    track wgEncodeSydhTfbsGm12878WhipIggmusSig
 	    release alpha
-	    subTrack wgEncodeSydhTfbsViewSignal on
+	    subTrack wgEncodeSydhTfbsViewSignal off
 	    shortLabel GM12878 WHIP   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (WHIP in GM12878 cells)
 	    subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
@@ -1155,10 +1148,9 @@ wgEncode 1
         color 189,0,157
         # subId=3072 dateSubmitted=2010-12-06
 
-		#Tier 1 Cell Line, deafult track on #
         track wgEncodeSydhTfbsGm12878Znf274UcdSig
         release alpha
-        subTrack wgEncodeSydhTfbsViewSignal on
+        subTrack wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 ZNF274 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in GM12878 cells)
         subGroups view=Signal factor=ZNF274 cellType=GM12878 control=UCD treatment=aNone
@@ -1439,10 +1431,9 @@ wgEncode 1
         color 189,0,157
         # subId=3072 dateSubmitted=2010-12-06
 
-	#Tier 1 cell turned on by default #
         track wgEncodeSydhTfbsK562Pol2s2StdSig
         release alpha
-        parent wgEncodeSydhTfbsViewSignal 
+        parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562    Pol2S2 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2(phosphoS2) in K562 cells)
         subGroups view=Signal factor=POL2S2 cellType=K562 control=std treatment=aNone
@@ -1472,7 +1463,7 @@ wgEncode 1
 
         track wgEncodeSydhTfbsK562Kap1UcdSig
         release alpha
-        parent wgEncodeSydhTfbsViewSignal 
+        parent wgEncodeSydhTfbsViewSignal off 
         shortLabel K562 KAP1 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (KAP1 in K562 cells)
         subGroups view=Signal factor=KAP1 cellType=K562 control=UCD treatment=aNone
@@ -1485,7 +1476,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel K562 c-Myc Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (c-Myc in K562 cells)
-        subGroups view=Signal factor=cMYC cellType=wK562 control=std treatment=IFNg30
+        subGroups view=Signal factor=cMYC cellType=K562 control=std treatment=IFNg30
         type bigWig 1.000000 5759.000000
         color 46,0,184
         # subId=2111 dateSubmitted=2010-08-17
@@ -1761,7 +1752,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=STAT3 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=std treatment=TAM
         type bigWig 1.000000 15726.000000
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -1770,7 +1761,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=POL2 cellType=zMCF10AES control=std treatment=TAM
+        subGroups view=Signal factor=POL2 cellType=MCF10AES control=std treatment=TAM
         type bigWig 1.000000 74444.000000
         # subId=2548 dateSubmitted=2010-10-20
 
@@ -1780,7 +1771,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=STAT3 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=std treatment=ETOH01
         type bigWig 1.000000 19260.000000
         # subId=2767 dateSubmitted=2010-10-27
 
@@ -1789,7 +1780,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=POL2 cellType=yMCF10AES control=std treatment=ETOH01
+        subGroups view=Signal factor=POL2 cellType=MCF10AES control=std treatment=ETOH01
         type bigWig 1.000000 59340.000000
         # subId=2768 dateSubmitted=2010-10-27
 

@@ -203,12 +203,12 @@ struct htmlPage *fetchEditPage(char *descriptionKey);
 
 void prefixComments(struct wikiTrack *item, char *comments, char *userName,
     char *seqName, int winStart, int winEnd, char *database,
-	char *extraHeader, char *extraTag);
+	char *extraHeader, char *extraTag, char *category);
 /* add comments at the beginning of an existing wiki item */
 
 void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd, struct cart *cart,
-	char *database, char *extraHeader, char *extraTag);
+	char *database, char *extraHeader, char *extraTag, char *category);
 /* add description to the end of an existing wiki item */
 
 char *encodedReturnUrl(char *(*hgUrl)());

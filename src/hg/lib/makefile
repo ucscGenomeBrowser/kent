@@ -33,7 +33,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
-    fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
+    fbTables.o featureBits.o fileUi.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBase2004Xref.o \
     flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbWarn.o gbMiscDiff.o gbProtAnn.o gcPercent.o gbSeq.o \
     genbank.o gencodeGeneClass.o gencodeIntron.o genMapDb.o \
@@ -76,7 +76,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     sanger22extra.o sangerGene.o sangerGeneToWBGeneID.o  sargassoSeaXra.o \
     scopDes.o scoredRef.o searchTracks.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
-    snp.o snp125.o snp125CodingCoordless.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
+    snp.o snp125.o snp125CodingCoordless.o snp132Ext.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
     snpUi.o snp125Exceptions.o snp125Ui.o softPromoter.o softberryHom.o \
     spDb.o splignAlign.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
@@ -95,7 +95,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     zdobnovSynt.o oreganno.o \
     oregannoUi.o gvUi.o gv.o omicia.o protVar.o pgSnp.o \
     alignInfo.o cddInfo.o loweutils.o cddDesc.o arCOGs.o arcogdesc.o geneTree.o \
-    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o 
+    megablastInfo.o pgPhenoAssoc.o pgSiftPred.o pgPolyphenPred.o variome.o
 
 ifeq (${GBROWSE}, 1)
   GBROWSE_D=-DGBROWSE
@@ -106,7 +106,7 @@ endif
 %.o: %.c
 	${CC} ${COPT} ${CFLAGS} ${GBROWSE_D} ${LOWELAB_DEFS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o $@ -c $<
 
-../../lib/$(MACHTYPE)/jkhgap.a: $(O) 
+../../lib/$(MACHTYPE)/jkhgap.a: $(O)
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 
 clean:

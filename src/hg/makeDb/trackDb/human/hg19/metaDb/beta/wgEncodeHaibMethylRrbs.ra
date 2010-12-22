@@ -894,7 +894,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1220
-tableName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
 treatment None
 view Sites
 
@@ -914,7 +913,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
-tableName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
 treatment None
 view Sites
 
@@ -1054,7 +1052,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1152
-tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
 treatment None
 view Sites
 
@@ -1074,7 +1071,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1152
-tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
 treatment None
 view Sites
 
@@ -1994,7 +1990,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 1223
-tableName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
 treatment None
 view Sites
 
@@ -2014,7 +2009,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
-tableName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
 treatment None
 view Sites
 
@@ -2034,7 +2028,6 @@ origAssembly hg19
 project wgEncode
 replicate 1
 subId 2348
-tableName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
 treatment None
 view Sites
 
@@ -2054,7 +2047,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 2348
-tableName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
 treatment None
 view Sites
 
@@ -2294,7 +2286,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1223
-tableName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
 treatment None
 view Sites
 
@@ -2678,4 +2669,4 @@ tableName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 327442777
+# MAGIC: 517912470

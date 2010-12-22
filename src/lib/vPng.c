@@ -1,6 +1,5 @@
 /* vPng - a virtual graphic object wrapper around an in-memory buffer destined to become a 256-color PNG file. */
 
-#ifdef USE_PNG
 
 #include "common.h"
 #include "memgfx.h"
@@ -65,4 +64,3 @@ vg->data = png;
 return vg;
 }
 
-#endif//def USE_PNG

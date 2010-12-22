@@ -8,6 +8,7 @@ track chainNetOryLat2 override
 priority 220.3
 
 track chainNetOryLat1 override
+release alpha
 priority 220.3
 chainMinScore 2000
 chainLinearGap loose
@@ -16,6 +17,11 @@ track chainNetGasAcu1 override
 priority 230.3
 chainMinScore 5000
 chainLinearGap loose
+
+track chainNetDanRer7 override
+priority 240.3
+chainMinScore 2000
+chainLinearGap medium
 
 track chainNetDanRer6 override
 priority 240.3

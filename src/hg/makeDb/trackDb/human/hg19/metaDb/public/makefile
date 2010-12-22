@@ -6,6 +6,9 @@ wgEncodeGencode.ra \
 wgEncodeCshlShortRnaSeq.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeAffyRnaChip.ra \
+wgEncodeUwDgf.ra \
+wgEncodeHaibMethylRrbs.ra \
+wgEncodeUwDnase.ra \
 
 include ../../../../makefile.metaDb
 

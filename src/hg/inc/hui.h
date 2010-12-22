@@ -849,13 +849,11 @@ struct trackNameAndLabel
 int trackNameAndLabelCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
-struct hash *makeTrackHashWithComposites(char *database, char *chrom,
-                                        bool withComposites);
-/* Make hash of trackDb items for this chromosome, optionally includingc
-   omposites, not just the subtracks. */
-
-struct hash *makeTrackHash(char *database, char *chrom);
-/* Make hash of trackDb items for this chromosome. */
+struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **tdbList,bool withComposites);
+// Make hash of trackDb items for this chromosome, including composites, not just the subtracks.
+// May pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
+#define makeTrackHashWithComposites(db,chrom,withComposites) trackHashMakeWithComposites(db,chrom,NULL,withComposites)
+#define makeTrackHash(db,chrom) trackHashMakeWithComposites(db,chrom,NULL,FALSE)
 
 char *genePredDropDown(struct cart *cart, struct hash *trackHash,
                                         char *formName, char *varName);
@@ -1171,5 +1169,9 @@ void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boo
 
 boolean hPrintPennantIcon(struct trackDb *tdb);
 // Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
+
+boolean printPennantIconNote(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" and note when found.
+//This is used by hgTrackUi and hgc before printing out trackDb "html"
 
 #endif /* HUI_H */

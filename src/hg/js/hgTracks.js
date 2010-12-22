@@ -1195,7 +1195,7 @@ function postToSaveSettings(obj)
     if(blockUseMap==true) {
         return false;
     }
-    if(obj.href == undefined) // called directly with obj and from callback without obj
+    if(obj == undefined || obj.href == undefined) // called directly with obj and from callback without obj
         obj = this;
     if( obj.href.match('#') || obj.target.length > 0) {
         //alert("Matched # ["+obj.href+"] or has target:"+obj.target);
@@ -1555,7 +1555,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    if(window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
+                    if(window.open("../cgi-bin/hgc?g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
                         windowOpenFailedMsg();
                     }
                 } else {
@@ -1592,19 +1592,19 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 
     } else if (cmd == 'hgTrackUi_follow') {
 
-        var link = $( 'td#td_btn_'+ selectedMenuItem.id ).children('a'); // The button already has the ref
-        if( $(link) != undefined) {
-            location.assign($(link).attr('href'));
-        } else {
-            var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
-            var id = selectedMenuItem.id;
-            var rec = trackDbJson[id];
-            if (tdbHasParent(rec) && tdbIsLeaf(rec))
-                url += rec.parentTrack
+        var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
+        var id = selectedMenuItem.id;
+        var rec = trackDbJson[id];
+        if (tdbHasParent(rec) && tdbIsLeaf(rec))
+            url += rec.parentTrack
+        else {
+            var link = $( 'td#td_btn_'+ selectedMenuItem.id ).children('a'); // The button already has the ref
+            if( $(link) != undefined)
+                url = $(link).attr('href');
             else
-                url = selectedMenuItem.id;
-            location.assign(url);
+                url += selectedMenuItem.id;
         }
+        location.assign(url);
 
     } else if (cmd == 'dragZoomMode') {
         autoHideSetting = true;
@@ -1658,7 +1658,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             // Hide local display of this track and update server side cart.
             // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
             if(rec.parentTrack != undefined)
-                setCartVars( [ id, id+"_sel" ], [ "[]", 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
+                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
@@ -1779,8 +1779,10 @@ function loadContextMenu(img)
                     var any = false;
                     if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
+                        if(rec && !(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0)) {
                         o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
                         o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
+                        }
                         o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
                     }
@@ -1876,15 +1878,17 @@ function parseMap(ele, reset)
                 // src is necessary under msie
                 var src = ele.next().attr('src');
                 ele.children().each(function() {
-                                      mapItems[i++] = {
-                                          r : new Rectangle(this.coords),
-                                          href : this.href,
-                                          title : this.title,
-                                          id : this.id,
-                                          src : src,
-                                          obj : this
-                                      };
-                                  });
+                    if (this.coords != undefined) {
+                        mapItems[i++] = {
+                            r : new Rectangle(this.coords),
+                            href : this.href,
+                            title : this.title,
+                            id : this.id,
+                            src : src,
+                            obj : this
+                        };
+                    }
+                });
     }
     return mapItems;
 }
@@ -2064,6 +2068,8 @@ function handleUpdateTrackMap(response, status)
                 limitedVis = visibilityStrsOrder[json[this.id].limitedVis];
             if(this.newVisibility && limitedVis && this.newVisibility != limitedVis)
                 alert("There are too many items to display the track in " + this.newVisibility + " mode.");
+            var rec = trackDbJson[this.id];
+            rec.limitedVis = json[this.id].limitedVis;
             updateVisibility(this.id, visibility);
         } else {
             showWarning("Invalid trackDbJson received from the server");
@@ -2095,6 +2101,9 @@ function handleUpdateTrackMap(response, status)
                // loadContextMenu($('#tr_' + id));
                if(trackImgTbl.tableDnDUpdate)
                    trackImgTbl.tableDnDUpdate();
+               // NOTE: Want to examine the png? Uncomment:
+               //var img = $('#tr_' + id).find("img[id^='img_data_']").attr('src');
+               //warn("Just parsed image:<BR>"+img);
           } else {
                showWarning("Couldn't parse out new image for id: " + id);
                //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
@@ -2478,6 +2487,15 @@ function findTracksSortNow(obj)
         $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
     else
         $('#sortIt').val($(obj).val());
+
+    // How to hold onto selected tracks?
+    // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
+    var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
+    if($(inp).length > 0) {
+        $(inp).appendTo('form#trackSearch');
+        $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+    }
+
     $('#searchSubmit').click();
     return true;
 }
@@ -2488,7 +2506,6 @@ function findTracksPage(pageVar,startAt)
     if( $(pager).length == 1)
         $(pager).val(startAt);
 
-    // FIXME: Remove this code if sving settings on paging is not wanted
     // How to hold onto selected tracks?
     // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
     var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
@@ -2496,10 +2513,16 @@ function findTracksPage(pageVar,startAt)
         $(inp).appendTo('form#trackSearch');
         $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
     }
-    // FIXME: Remove this code if sving settings on paging is not wanted
 
     $('#searchSubmit').click();
     return false;
+}
+
+function findTracksConfigureSet(name)
+{// Called when configuring a composite or superTrack
+    var thisForm =  $('form#searchResults');
+    $(thisForm).attr('action',"../cgi-bin/hgTrackUi?hgt_tSearch=Search&g="+name);
+    $(thisForm).find('input.viewBtn').click();
 }
 
 /////////////////////////////////////////////////////

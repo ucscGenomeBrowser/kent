@@ -17,7 +17,7 @@ longLabel Selective Sweep Scan (S) on Neandertal vs. Human Polymorphisms (Z-Scor
 group neandertal
 priority 3.1
 visibility hide
-type bigWig
+type bigWig -8.8332 33.637199
 autoScale off
 maxHeightPixels 128:32:11
 viewLimits -5:1

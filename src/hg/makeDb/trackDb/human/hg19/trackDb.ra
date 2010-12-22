@@ -5,13 +5,41 @@ include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
 
 #large composites
-# include uMassBrainHistone.ra
+include uMassBrainHistone.ra
 
 track stsMap override
 visibility hide
 
 track gap override
 visibility hide
+
+track fishClones override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+release alpha
+
+track gad override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track fosEndPairs override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track decipher override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+release alpha
+
+track rgdQtl override
+shortLabel RGD Human QTL
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track rgdRatQtl override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+release alpha
 
 track gwasCatalog override
 snpTable snp131
@@ -1518,6 +1546,7 @@ codingAnnoLabel_snp130CodingDbSnp dbSNP
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 # Use hg18 file so we don't have to duplicate the 18G:
 snpSeqFile /gbdb/hg18/snp/snp130.fa
+origAssembly hg18
 
 track nscanGene override
 informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
@@ -1755,6 +1784,8 @@ dataVersion GRCh37 Patch 2 update, August 2010
 	longLabel Haplotypes to GRCh37 Reference Sequence
 	html altSeqComposite
 	priority 1
+	urlLabel Fetch alternate sequence (GRCh37.p2):
+	url http:/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
 	track altSeqPatches
         parent altSeqCompositeViewlocation
@@ -1764,6 +1795,8 @@ dataVersion GRCh37 Patch 2 update, August 2010
 	longLabel Patches to GRCh37 Reference Sequence
 	html altSeqComposite
 	priority 2
+	urlLabel Fetch alternate sequence (GRCh37.p2):
+	url http:/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
     track altSeqCompositeViewpsl
     shortLabel Alignment
@@ -1819,3 +1852,56 @@ dataVersion GRCh37 Patch 2 update, August 2010
         type netAlign hg19Patch2 chainHg19Patch2
         html chainNet
 	priority 5
+
+track vistaEnhancers override
+url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
+
+track evofold override
+mafTrack multiz46way
+origAssembly hg17
+pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
+
+track targetScanS
+shortLabel TS miRNA sites
+longLabel TargetScan miRNA Regulatory Sites
+group regulation
+priority 0
+visibility hide
+color 0,96,0
+scoreFilterMax 100
+type bed 6 .
+urlLabel TargetScan link:
+url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
+track ntSeqReads override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntHumChimpCodingDiff override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssTop5p override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssZScorePMVar override
+origAssembly hg18
+type bigWig -8.8332 33.63719
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssSnps override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntOoaHaplo override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntMito override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track cgapSage override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"

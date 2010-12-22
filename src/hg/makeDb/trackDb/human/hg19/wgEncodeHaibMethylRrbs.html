@@ -38,37 +38,17 @@ least 10 sequencing reads (10x coverage, score=10).  The default view for this t
 is set at 10X coverage.
 </p>
 
-Differentiating where Cells were "obtainedBy" in Browser:
-<p>
-When displaying tracks in Dense mode the following translation should be used
-to determine the source of cells:
-<ul>
-<li>UW = L1</li>
-<li>Hudson Alpha = L2</li>
-<li>Stanford = L3</li>
-<li>Duke = L4</li>
-</ul>
-
-When displaying tracks in any other mode the following translation should be 
-used to determine the source of cells:
-<ul>
-<li>UW = UW</li>
-<li>Hudson Alpha = HAIB</li>
-<li>Stanford = Stanford</li>
-<li>Duke = Duke</li>
-</ul>
-</p>
-
-
 <a name="Methods"></a><h2>Methods</h2>
 DNA methylation at CpG sites was assayed with a modified version of Reduced 
 Representation Bisulfite Sequencing (RRBS; Meissner <span style="font-style: italic">
-et al</span>., 2008).
-
-<h3>Growth protocol</h3>
-RRBS was performed on cell lines grown by many ENCODE production groups.
-The production group that grew the cells and isolated genomic DNA is
-indicated in the "obtainedBy" columns of the data table above. 
+et al</span>., 2008). RRBS was performed on cell lines grown by many ENCODE 
+production groups. The production group that grew the cells and isolated genomic 
+DNA is indicated in the "obtainedBy" field of the metadata. When a cell
+type was provided by more than one lab, the data for the cells from only one
+lab are displayed in the table above. However, the data for every cell type
+from every lab is available from the
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/"
+TARGET=_BLANK>Downloads</A> page.
 RRBS was carried out by the Myers production group at 
 the HudsonAlpha Institute for Biotechnology.
 
@@ -85,7 +65,7 @@ DNA from rare or precious samples.
 
 
 <h3>RRBS library construction and sequencing</h3>
-RBS library construction starts with MspI digestion of genomic DNA
+RRBS library construction starts with MspI digestion of genomic DNA
 , which cuts at every CCGG regardless of methylation status. Klenow
 exo- DNA Polymerase is then used to fill in the recessed end of the
 genomic DNA and add an adenosine as a 3prime overhang. Next, a 
@@ -103,7 +83,8 @@ thymines resulting in a thymine in the PCR products wherever an
 unmethylated cytosine existed in the genomic DNA. The sample is
 now ready for sequencing on the Illumina sequencing platform.
 These libraries were sequenced with an Illumina Genome Analyzer
-IIx according to the manufacturer's recommendations
+IIx according to the manufacturer's recommendations. The full
+RRBS protocol can be found
 <A HREF="http://hudsonalpha.org/myers-lab/protocols" TARGET=_BLANK>here</A>.</P> 
 
 <h3>Data analysis</h3>
@@ -154,16 +135,6 @@ et al</span>.
  differentiated cells</A>.
     <em>Nature</em>. 2008 Aug 7;454(7205):766-70.
 </p>
-
-<P>
-Meissner A, Gnirke A, Bell GW, Ramsahoye B, Lander ES, Jaenisch R.
-<A HREF="http://nar.oxfordjournals.org/content/33/18/5868.full"
-class="external text" title="http://nar.oxfordjournals.org/content/33/18/5868.full"
-rel="nofollow" TARGET = _BLANK>Reduced representation bisulfite sequencing for 
-   comparative high-resolution DNA methylation analysis</A>.
-<em>Nucleic Acids Res.</em> 2005 Oct 13;33(18):5868-77.
-</P>
-
 
 
 <H2> Data Release Policy </H2>

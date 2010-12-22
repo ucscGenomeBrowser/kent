@@ -18,7 +18,7 @@ canPack On
 priority 0
 type broadPeak
 wgEncode 1
-
+superTrack wgEncodeExonArraySuper dense
 
     track wgEncodeUwAffyExonArrayViewSimpleSignal
     release alpha

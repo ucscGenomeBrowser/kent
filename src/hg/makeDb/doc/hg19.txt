@@ -10934,81 +10934,6 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 	/hive/data/genomes/hg18/hg18.2bit stdout \
 	| pslToBed stdin hg19ToHg18.10K.bed
 
-##############################################################################
-# UNIGENE/SAGE TRACK (RE-BUILT - 2010-08-06 Fan)
-
-# Create the uniGene alignments
-
-    # Download of the latest UniGene version is now automated by a
-    # cron job -- see /cluster/home/angie/crontab ,
-    # /cluster/home/angie/unigeneVers/unigene.csh .
-
-    ssh hgwdev
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806
-    cd /hive/data/genomes/hg19/bed/uniGene/100806
-
-    set Version = 225
-
-    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
-    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
-
-    ssh pk
-    set Version = 225
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
-    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
-
-    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
-    ls -1S \
-    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
-      > uniGene.lst
-    
-    cat << '_EOF_' > template.sub
-#LOOP
-/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95
-ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
-#ENDLOOP
-'_EOF_'
-
-    gensub2 genome.lst uniGene.lst template.sub para.spec
-    para create para.spec
-    mkdir psl
-    para try
-    para check
-    para push
-
-    # Completed: 93 of 93 jobs
-    # CPU time in finished jobs:      61305s    1021.74m    17.03h    0.71d  0.002 y
-    # IO & Wait Time:                  1117s      18.62m     0.31h    0.01d  0.000 y
-    # Average job time:                 671s      11.19m     0.19h    0.01d
-    # Longest finished job:            4574s      76.23m     1.27h    0.05d
-    # Submission to last job:          4709s      78.48m     1.31h    0.05d
-    # Estimated complete:                 0s       0.00m     0.00h    0.00d
-
-    pslSort dirs raw.psl tmp psl >& pslSort.log
-    cat raw.psl|\
-    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
-      stdin hg19.uniGene.pslReps.psl /dev/null
-    #Processed 800002 alignments
-    
-    gzip raw.psl
-
-    ssh hgwdev
-    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
-
-    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
-
-    mkdir -p /gbdb/hg19/uniGene
-    cd /gbdb/hg19/uniGene
-
-    rm Hs.seq.uniq.simpleHeader.fa
-    ln -s \
-    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
-    Hs.seq.uniq.simpleHeader.fa
-
-# load the sequence
-
-    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
-
 #############################################################################
 # GENSCAN PREDICTIONS (DONE - 2010-07-30 Fan)
 # 		      (PARTIALLY RE-DONE AFTER FIXING .LTF FILES - 2010-08-03 Fan)
@@ -13078,6 +13003,7 @@ hgLoadBed hg19 darned allChroms.bed
 # at human, level
 # added darned.html
 # added trackDb.ra entry
+
 #############################################################################
 # lsSnpPdb: import of LS-SNP/PDB data for SNP 131 (2010-12-03 markd)
     # down load from JHU
@@ -13090,7 +13016,62 @@ hgLoadBed hg19 darned allChroms.bed
     cd /cluster/data/genbank
     ./bin/lsSnpPdbDbLoadStep hg19
     # once this has been QAed, will auto-update from genbank scripts
+
 #############################################################################
+# NEW SNP132 (DONE 12/17/10 angie)
+
+    mkdir -p /hive/data/outside/dbSNP/132test/human
+    cd /hive/data/outside/dbSNP/132test/human
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (human_9606 in this case).
+    # Then click into that directory and look for file names like 
+    #    b(1[0-9][0-9])_*_([0-9]+_[0-9])
+    # -- use the first num for build and the second num_num for buildAssembly.
+    # jkStuff/liftContigs.lft maps NCBI contig names to chroms; use that for liftUp.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606
+build 132
+buildAssembly 37_1
+liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test >& do.log & tail -f do.log
+# *** This release contains more than one assembly label.
+# *** Please examine this list in case we need to exclude any of these:
+#
+#CRA_TCAGchr7v2
+#Celera
+#GRCh37
+#HuRef
+# *** Add refAssemblyLabel to config.ra.  If keeping all labels, it will
+# *** look like this:
+#
+#refAssemblyLabel CRA_TCAGchr7v2,Celera,GRCh37,HuRef
+#
+# *** Edit out any of those that are not included in hg19 (e.g. Celera).
+# *** Then restart this script with -continue=loadDnSnp .
+    # GRCh37 is the only one that corresponds to hg19, so add it to config.ra:
+    echo "refAssemblyLabel GRCh37" >> config.ra
+
+    # Try again with updated config:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+
+    # Needed to tweak hg19-specific liftOver awk; run again from bigJoin but don't load:
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin -stop translate >>& do.log &
+    tail -f do.log
+
+    # Load it up with new columns!
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
+      -buildDir /hive/data/outside/dbSNP/132test \
+      -continue bigJoin >>& do.log &
+    tail -f do.log
+
 
 #############################################################################
 # Agilent arrays (2010-12-01 Andy)
@@ -13175,3 +13156,535 @@ pslCDnaFilter -globalNearBest=0.01 -minCover=0.85 hg19/Rfam.psl \
 
 # Load
 hgLoadPsl -table="Rfam" hg19 hg19/Rfam.bestHits.psl
+
+
+
+#####################################################
+# Vista Enhancers (galt 2010-12-09 done)
+#
+# Vista from Lawrence-Berkeley has assayed
+# 301 human conserved non-coding intra- and inter-
+# genic elements for their ability to promote
+# lacZ in mouse embryos.  A positive looks like
+# a mouse with a purple spine.
+#
+
+mkdir /hive/data/genomes/hg19/bed/vistaEnhancers
+cd /hive/data/genomes/hg19/bed/vistaEnhancers
+
+# download data file from the vista browser (coordinates are for hg19)
+wget -O enhancerbrowser.datadownload.txt 'http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?page_size=100;show=1;search.result=yes;form=search;search.form=no;action=search;search.sequence=1'
+
+# give elements with positive label a score of 900, 
+# give elements with negative label a score of 200.
+# print to 5-field bed file
+cat enhancerbrowser.datadownload.txt \
+        | grep ">" \
+        | sed -e 's#^<pre>##' \
+        | sed -e 's#</pre>$##' \
+        | grep "^>Human" \
+        | sed -e 's#^>Human|##' \
+        | tr :- ' ' \
+        | sed -e 's/positive/900/'\
+        | sed -e 's/negative/200/' \
+        | awk '{print $1"\t"$2"\t"$3"\telement_"$6"\t"$8}' \
+        | grep -P -v "^chr\t" \  
+        > vistaEnhancers.bed
+hgLoadBed hg19 vistaEnhancers vistaEnhancers.bed
+#Loaded 1339 elements of size 5
+
+
+# add to hg19/trackDb.ra
+track vistaEnhancers override
+url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
+
+
+#####################################################
+# UNIGENE/SAGE TRACK (RE-BUILT - 2010-12-10 Fan)
+
+# Create the uniGene alignments
+
+    # Download of the latest UniGene version is now automated by a
+    # cron job -- see /cluster/home/angie/crontab ,
+    # /cluster/home/angie/unigeneVers/unigene.csh .
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/101210
+    cd /hive/data/genomes/hg19/bed/uniGene/101210
+
+    set Version = 228
+
+    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
+    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
+
+    ssh swarm
+    set Version = 228
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/101210/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/101210/run.blat
+
+    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
+    ls -1S \
+    /hive/data/genomes/hg19/bed/uniGene/101210/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95 ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+
+#Completed: 93 of 93 jobs
+#CPU time in finished jobs:      68896s    1148.26m    19.14h    0.80d  0.002 y
+#IO & Wait Time:                  4789s      79.82m     1.33h    0.06d  0.000 y
+#Average job time:                 792s      13.21m     0.22h    0.01d
+#Longest finished job:            5274s      87.90m     1.47h    0.06d
+#Submission to last job:          5840s      97.33m     1.62h    0.07d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    cat raw.psl|\
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg19.uniGene.pslReps.psl /dev/null
+    
+    gzip raw.psl
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/uniGene/101210/run.blat
+
+    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
+
+    mkdir -p /gbdb/hg19/uniGene
+    cd /gbdb/hg19/uniGene
+
+    rm Hs.seq.uniq.simpleHeader.fa
+    ln -s \
+    /hive/data/genomes/hg19/bed/uniGene/101210/Hs.seq.uniq.simpleHeader.fa \
+    Hs.seq.uniq.simpleHeader.fa
+
+# load the sequence
+
+    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+
+##############################################################################
+
+##############################################################################
+# GAD View Lift (DONE, Andy 2010-12-12)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir gad
+cd gad/
+echo "select * from gad" | hgsql hg18 | tail -n +2 > hg18.bed
+liftOver hg18.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.{bed,unmapped}
+hgLoadBed -noBin hg19 gad hg19.bed
+rm bed.tab
+wc -l *.bed
+#  1883 hg18.bed
+#  1860 hg19.bed
+grep -i split hg19.unmapped | wc -l
+#18
+grep -i part hg19.unmapped | wc -l
+#5
+for table in gadAll gadList; do 
+    echo "create table "$table" select * from hg18."$table | hgsql hg19
+done
+
+#############################################################################
+# EVOFOLD (Done, 2010-12-13) - Galt using Jakob's procedure from hg18.txt.
+
+# RNA secondary structure predictions lifted from hg17 and filtered
+  ssh -C hgwdev
+  mkdir -p /cluster/data/hg19/bed/evofold
+  cd /cluster/data/hg19/bed/evofold
+  echo "select chrom, chromStart, chromEnd, name, score, strand, size, secStr, conf from evofold;" | hgsql hg17 | sed -e 1d > foldsHg17.bed
+  liftOver -bedPlus=6 -minMatch=1.0 foldsHg17.bed /cluster/data/hg17/bed/liftOver/hg17ToHg19.over.chain.gz tmp.bed unmapped.bed
+  # remove elements which are wrong size after lifting
+  awk '$3-$2 == $7' tmp.bed | sort -k4,4 > rawFoldsHg19.bed
+
+  # structure filters
+  # first, remove pairs that can't form in human
+  cut -f 1-6 rawFoldsHg19.bed > tmp.bed
+  # sequenceForBed can be found and compiled from here: $HOME/kent/src/hg/altSplice/altSplice/
+  nice sequenceForBed -db=hg19 -bedIn=tmp.bed -fastaOut=tmp.fa
+  cat tmp.fa | sed -e 's/\.[+-]\.chr.*$//' \
+             | sed -e '/^>/s/$/\t/' | tr -d '\n' | sed -e 's/>/\n/g' | sed -e '1d' -e '$s/$/\n/' | sort -k1,1 > foldsHg19Seq.tab
+  # Several python scripts were originally in /cluster/home/jsp/scripts/
+  # I copied them to this directory and
+  # I removed the optional "psyco" speedup library which does not work with our 64-bit python
+  join -1 4 -2 1 -o "1.4 1.8 2.2" rawFoldsHg19.bed foldsHg19Seq.tab | sed -e 's/  */\t/g' | sort -k1,1 \
+	     | ./tabFoldFilter.py > cleanFolds.tab
+  join -1 4 -2 1 -o "1.1 1.2 1.3 1.4 1.5 1.6 1.7 2.2 1.9" rawFoldsHg19.bed cleanFolds.tab | sed -e 's/  */\t/g' > tmp1.bed
+  # second, remove poor predictions
+  # scripts can be found in cvs tree at: cvsroot/jsp/scripts/. They use a few modules which can be found at: cvsroot/jsp/py_modules
+  cat tmp1.bed | ./bedRnassFilter.py --dangling --minAvrStemSize=3 | ./bedRnassFilter.sh 1 3 \
+	       | ./roundListFloats.py -c9 > foldsHg19.bed
+  # clean up
+  rm tmp.bed tmp1.bed foldsHg17.bed foldsHg19Seq.tab rawFoldsHg19.bed tmp.fa cleanFolds.tab
+
+  # upload
+  hgLoadBed -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/evofold.sql hg19 evofold foldsHg19.bed
+
+
+##########################################################################
+# Build targetScanS track - (DONE - 2010-12-13 galt)
+#       requested by: George Bell gbell at wi.mit.edu
+    ssh hgwdev
+    mkdir -p /cluster/data/hg19/bed/targetScanS
+    cd /cluster/data/hg19/bed/targetScanS
+
+    wget --timestamping http://www.targetscan.org/vert_50/ucsc/hg19/hg19Cons_ALL_CHRS.BED
+
+    hgLoadBed hg19 targetScanS hg19Cons_ALL_CHRS.BED
+    #	Loaded 54199 elements of size 6
+    featureBits hg19 targetScanS
+    #   354163 bases of 2897316137 (0.012%) in intersection
+
+    # Create/edit/check in targetScans.html and trackDb.ra under
+    # kent/src/hg/makeDb/trackDb/human/hg19
+
+##########################################################################
+# Neandertal tracks for hg19 (DONE - 2010-12-14 - Hiram)
+    # data supplied by Ed Green into /hive/data/outside/homNea/hg19
+    # add Neandertal group to hg19 grp
+    hgsql hg19 -e \
+      "insert into grp values ('neandertal', 'Neandertal Assembly and Analysis', 6.5, 1);"
+
+    mkdir -p /hive/data/genomes/hg19/bed/homNea/seqAlis
+    cd /hive/data/genomes/hg19/bed/homNea/seqAlis
+
+for T in Feld1 Mez1 Sid1253 Vi33.16 Vi33.25 Vi33.26
+do
+    ln -s /hive/data/outside/homNea/hg19/${T}.hg18.bam \
+	./SL${T}.hg19.bam
+done
+
+    ln -s /hive/data/outside/homNea/hg19/*.bam .
+    for F in *.bam
+do
+    samtools index $F
+done
+
+    mkdir -p /gbdb/hg19/neandertal/seqAlis
+    ln -s `pwd`/SL*.b* /gbdb/hg19/neandertal/seqAlis/
+
+for T in Feld1 Mez1 Sid1253
+do
+    hgBbiDbLink hg19 bamSL${T} \
+	/gbdb/hg19/neandertal/seqAlis/SL${T}.hg19.bam
+done
+for T in 16 25 26
+do
+    hgBbiDbLink hg19 bamSLVi33dot${T} \
+	/gbdb/hg19/neandertal/seqAlis/SLVi33.${T}.hg19.bam
+done
+
+##########################################################################
+# DECIPHER, RGD QTL, RGD RAT QTL (MAYBE DONE, Andy 2010-12-13)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir decipher rgdQtl rgdRatQtl
+for tab in decipher rgdQtl rgdRatQtl; do 
+  echo "select * from "$tab | hgsql hg18 | tail -n +2 | cut -f2- > ${tab}/hg18.bed
+  liftOver ${tab}/hg18.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz ${tab}/hg19.{bed,unmapped}
+  hgLoadBed hg19 $tab ${tab}/hg19.bed
+done
+rm bed.tab
+wc -l {decipher,rgdQtl,rgdRatQtl}/hg1{8,9}.bed
+#  4227 decipher/hg18.bed
+#  4048 decipher/hg19.bed
+#   254 rgdQtl/hg18.bed
+#   225 rgdQtl/hg19.bed
+#  6033 rgdRatQtl/hg18.bed
+#  5804 rgdRatQtl/hg19.bed
+## This isn't very good.  In each case, the unmapped % is over 2%.
+## DECIPHER: 95.8%, RGD QTL: 88.6%, RGD RAT QTL: 96.2%
+## update for rgdQtl:
+hgsql hg19 -e "create table rgdQtlLink select * from hg18.rgdQtlLink"
+
+#############################################################################
+# FISH CLONES LIFT (DONE, Andy 2010-12-14)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir fishClones
+cd fishClones/
+echo "select * from fishClones" | hgsql hg18 | tail -n +2 > hg18.bed5p
+liftOver -bedPlus=5 hg18.bed5p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed5p hg19.unmapped 
+wc -l *.bed5p
+#   9788 hg18.bed5p
+#   9758 hg19.bed5p
+grep -i split hg19.unmapped  | wc -l
+# 17
+grep -i partially  hg19.unmapped  | wc -l
+# 13
+cp ~/kent/src/hg/lib/fishClones.sql .
+hgLoadBed -tab -sqlTable=fishClones.sql -notItemRgb hg19 fishClones hg19.bed5p
+
+#############################################################################
+# CGAP SAGE LIFT (DONE, Galt 2010-12-16)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir cgapSage
+cd cgapSage
+echo "select * from cgapSage" | hgsql hg18 -N > hg18.bed8p
+liftOver -tab -bedPlus=8 -hasBin hg18.bed8p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.bed8p hg19.unmapped 
+wc -l *.bed8p
+#  276905 hg18.bed8p
+#  276865 hg19.bed8p
+grep -i split hg19.unmapped  | wc -l
+# 0
+grep -i partially  hg19.unmapped  | wc -l
+# 3
+cp ~/kent/src/hg/lib/cgapSage/cgapSage.sql .
+hgLoadBed -tab -hasBin -sqlTable=cgapSage.sql -notItemRgb hg19 cgapSage hg19.bed8p
+
+# no lift needed for the lib table
+echo "select * from cgapSageLib" | hgsql hg18 -N > cgapSageLib.tab
+cp ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql .
+hgLoadSqlTab hg19 cgapSageLib cgapSageLib.sql cgapSageLib.tab
+
+#############################################################################
+# LASTZ Zebrafish DanRer7 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+    cd /hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+
+    cat << '_EOF_' > DEF
+# human vs X. zebrafish
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	Elapsed time: 1698m29s
+    cat fb.hg19.chainDanRer7Link.txt 
+    #	80849592 bases of 2897316137 (2.790%) in intersection
+
+    #	running the swap
+    mkdir /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    42m52.920s
+    cat fb.danRer7.chainHg19Link.txt 
+    #	86716552 bases of 1409770109 (6.151%) in intersection
+
+##############################################################################
+# UMass Med School brain histone ChIP-seq 
+# (DONE - 2010-12-17 - Kate)
+#
+# From Troy Whitfield, submitting for Zhiping Weng, collab with Akbarian
+# Published in PNAS, April 2010
+# Variables: cell, sample, sex, age
+# Tissue:  Prefrontal cortex (PFC)
+#
+# 11 individuals, age .5 to 69 years
+# 13 bigWigs of H3K4me3 enrichment: 11 neuronal, 2 non-neuronal 
+# 3 peaks files (bed5FloatScore)
+# Neuronal cells selected by FACS sorting, based on NeuN marker (NeuN+)
+# Non-neuronal (NeuN-) cells are largely glia, microglia, and endothelium
+# 3 peak files
+
+# Note: used publicly available blood cell (lymphocyte)
+# ChIP-seq as controls:
+# K562, GM12878 (from Bernstein ENCODE group), CD4+ (from Barski, HLB)
+
+    cd /hive/data/genomes/hg19/bed
+
+    mkdir uMassBrainHistone
+    cd uMassBrainHistone
+
+    wget http://zlab.umassmed.edu/~whitfiet/hg19/uMassBrainHist.tar.gz
+    tar xvfz uMassBrainHist.tar.gz
+    cd data
+
+    set t = "uMassBrainHistone"
+
+# Load peak tracks
+# peaks in neuron not in  blood
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksNeuron 11Neuronal_vs_3Blood_hg19.bed
+# Loaded 7947 elements of size 6
+
+# peaks in infants (<1 year), not in seniors (>60)
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksInfant 3Young_vs3Old_hg19.bed
+# Loaded 1292 elements of size 6
+
+# peaks specific to individuals
+    hgLoadBed hg19 -noNameIx -renameSqlTable \
+      -sqlTable=/cluster/bin/sqlCreate/bed5FloatScore.sql \
+      ${t}PeaksSample SampleSpecific_hg19.bed
+# Loaded 3214 elements of size 6
+
+# Load signal tracks
+# Get metadata from .ddf file
+
+    cd ..
+    cat uMassMedBrainHist.ddf
+
+#files   view    sample  cell    sex     age
+#data/s6.bw      Signal  6       neuron  male    4.7
+#data/s6n.bw     Signal  6       non-neuron      male    4.7
+#data/s2.bw      Signal  2       neuron  male    0.58
+#data/s3.bw      Signal  3       neuron  female  0.75
+#data/s1.bw      Signal  1       neuron  male    0.5
+#data/s9.bw      Signal  9       neuron  female  68
+#data/s5.bw      Signal  5       neuron  female  2.8
+#data/s11.bw     Signal  11      neuron  female  69
+#data/s11n.bw    Signal  11      non-neuron      female  69
+#data/s7.bw      Signal  7       neuron  male    8.8
+#data/s8.bw      Signal  8       neuron  male    14
+#data/s10.bw     Signal  10      neuron  female  69
+#data/s4.bw      Signal  4       neuron  male    1.3
+#data/11Neuronal_vs_3Blood_hg19.bed      Peaks   N/A     N/A     N/A     N/A
+#data/3Young_vs3Old_hg19.bed     Peaks   N/A     N/A     N/A     N/
+#data/SampleSpecific_hg19.bed    Peaks   N/A     N/A     N/A     N/A
+
+
+# Generate table names from DDF
+# Format:  uMassBrainHistoneSignalS<sample>Neu<P|M><age>yrs<M|F>
+# e.g. uMassBrainHistoneSignalS1185Neu4pt7yrsM
+
+    grep Signal uMassMedBrainHist.ddf | \
+
+    cat << 'EOF' > list.pl
+while (<>) {
+    ($file, $view, $sample, $cell, $sex, $age) = split;
+    next unless $view eq 'Signal';
+    $cell = ($cell eq 'neuron' ? 'P' : 'M');
+    $age =~ s/\./pt/;
+    $sex = ($sex eq 'male' ? 'M' : 'F');
+    $table = "uMassBrainHistoneSignalS" . $sample . "Neu" . $cell . $age . "yrs" . $sex;
+    print $file . "." . $table . "\n";
+}
+'EOF'
+
+    cat << 'EOF' > load.csh
+set gbdb = "/gbdb/hg19/bbi/uMassBrainHistone"
+foreach x (`perl list.pl < uMassMedBrainHist.ddf`)
+    set f = $x:r
+    set t = $x:e
+    echo "Loading $f into $t"
+    bigWigInfo $f
+    ln -s `pwd`/$f $gbdb/$t.bw
+    hgBbiDbLink hg19 $t $gbdb/$t.bw
+end
+'EOF'
+
+    csh load.csh >&! load.out &
+
+#############################################################################
+# SwitchDB TSS Track (DONE 2010-12-17 galt)
+#
+# This liftover is tricky because of the gmStart and gmEnd, which
+# are not lifted automatically.  
+# The gm coordinates have to be lifted separately.
+
+ssh hgwdev
+mkdir /cluster/data/hg19/bed/switchDbTss
+cd /cluster/data/hg19/bed/switchDbTss
+ln -s /cluster/data/hg17/bed/switchDbTss/hg17.bed hg17.bed
+liftOver -tab -bedPlus=6 hg17.bed /gbdb/hg17/liftOver/hg17ToHg19.over.chain.gz hg19.bed unMapped
+cat unMapped | grep '^#' | sort | uniq -c
+#     61 #Deleted in new
+
+ln -s ~/kent/src/hg/lib/switchDbTss.sql
+hgLoadBed -renameSqlTable -sqlTable=switchDbTss.sql hg19 switchDbTssTemp hg19.bed
+
+mysql> select count(*) from switchDbTssTemp;
++----------+
+| count(*) |
++----------+
+|   132332 | 
++----------+
+
+hgsql -N hg19 -e "select distinct chrom, gmChromStart, gmChromEnd, gmName from switchDbTssTemp" > gmLoc.hg17.bed4
+liftOver -tab -bedPlus=4 gmLoc.hg17.bed4 /gbdb/hg17/liftOver/hg17ToHg19.over.chain.gz gmLoc.hg19.bed4 gmUnMapped
+
+cat gmUnMapped | grep '^#' | sort | uniq -c
+#      1 #Deleted in new
+#     58 #Partially deleted in new
+#     57 #Split in new
+
+hgLoadBed hg19 switchDbTssGmLocTemp gmLoc.hg19.bed4
+
+
+hgsql hg19 < switchDbTss.sql
+
+hgsql hg19 -e "insert into switchDbTss select a.bin, a.chrom, a.chromStart, a.chromEnd, a.name, a.score, a.strand, a.confScore, a.gmName, b.chromStart as gmChromStart, b.chromEnd as gmChromEnd, a.isPseudo from switchDbTssTemp a, switchDbTssGmLocTemp b where a.gmName = b.name"
+
+mysql> select count(*) from switchDbTss;
++----------+
+| count(*) |
++----------+
+|   131780 | 
++----------+
+
+hgsql hg19 -e "drop table switchDbTssTemp"
+hgsql hg19 -e "drop table switchDbTssGmLocTemp"
+
+#############################################################################
+
+#############################################################################
+# FOSMID END PAIRS LIFT FROM HG18 (DONE 2010-12-20, Andy)
+
+mkdir /hive/data/genomes/hg19/bed/hg18MassiveLift/fosEndPairs
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift/fosEndPairs/
+echo "select * from fosEndPairs" | hgsql hg18 | tail -n +2 | cut -f2- > hg18.fosEndPairs.bed
+echo "select * from all_fosends" | hgsql hg18 | tail -n +2 | cut -f2- > hg18.all_fosends.psl
+liftOver -bedPlus=6 hg18.fosEndPairs.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.fosEndPairs.{bed,unmapped}
+liftOver -pslT hg18.all_fosends.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.{psl,unmapped}
+# remove pairs which have one (or both) ends not in the lifted set of all ends
+cut -f11 hg19.fosEndPairs.bed | tr ',' '\n' | sort > hg19.fosEndPairs.names
+cut -f10 hg19.all_fosends.psl | sort > hg19.all_fosends.names
+grep -Fxv -f hg19.all_fosends.names hg19.fosEndPairs.names > bad.names
+grep -Fv -f bad.names hg19.fosEndPairs.bed > hg19.fosEndPairs.good.bed
+wc -l hg19*.bed
+#  384189 hg19.fosEndPairs.bed
+#  383945 hg19.fosEndPairs.good.bed
+## so... 254 bad ones were removed.  These would have caused join errors if they were left in.
+
+cp ~/kent/src/hg/lib/fosEndPairs.sql .
+hgLoadBed -sqlTable=fosEndPairs.sql -notItemRgb hg19 fosEndPairs hg19.fosEndPairs.good.bed 
+hgLoadPsl -table=all_fosends hg19 hg19.all_fosends.psl
+
+wc -l hg18.fosEndPairs.bed hg19.fosEndPairs.good.bed
+#  386129 hg18.fosEndPairs.bed
+#  383945 hg19.fosEndPairs.good.bed
+## 99.4% lifted
