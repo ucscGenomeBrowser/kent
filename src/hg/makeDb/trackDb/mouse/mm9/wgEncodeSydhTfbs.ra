@@ -1,16 +1,28 @@
 # Stanford/Yale ChIP-seq wrangler:vsmalladi assited by tdreszer, cricket)
 # Notes:
+#       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale
+#       - Track Short Label: Stan/Yale TFBS
+#       - View Long Labels: [cell] [factor] Transcription Factor Binding [view] from ENCODE/Stanford/Yale 
+#       - cellType Order: Ordering is alphabetical
+#       - Default View selections
+#               - Peaks = dense
+#               - Signal = full
+#       - Short Labels: 
+#               Template: [cell] {factor] [view]
+#               - Views: For consistency sake view will be
+#                       - Peaks = Pk
+#                       - Signal = Sg
+#               - Treatment
+#			- DMSO20 = D
 #	- Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human 
 #		p300 - Signals and Peaks
 #		Pol2 - Signals and Peaks
 #		CTCF = Signals and Peaks
-#	- Dimensions:
+#	- Matrix Dimensions:
 #               X - Cell Line
 #               Y - Factor
 #               Z - Treatment
-#	- Short Labels
-#		Peaks - Pk
-#		Signal - Sg 
+
 track wgEncodeSydhTfbs
 release beta
 compositeTrack on
