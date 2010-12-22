@@ -28,3 +28,23 @@ $3=="pseudo_polyA"{$3="exon"}
 {print $0}' gencode.v5.polyAs.gtf | gtfToGenePred -genePredExt stdin gencode.v5.polyAs.gp
 hgLoadGenePred -genePredExt hg19 wgEncodeGencodePolyaV5 gencode.v5.polyAs.gp
 
+cd metadata
+cat > map << _EOF_
+gencode_Exon_supporting_feature gencodeExonSupport.sql wgEncodeGencodeMetaExonV5
+gencode_HGNC gencodeGeneSymbol.sql wgEncodeGencodeMetaSymbolV5
+gencode_PDB gencodePdb.sql wgEncodeGencodeMetaPdbV5
+gencode_Pubmed_id gencodePubMed.sql wgEncodeGencodeMetaPubmedV5
+gencode_RefSeq gencodeRefSeq.sql wgEncodeGencodeMetaRefSeqV5
+gencode_Source gencodeSource.sql wgEncodeGencodeMetaSourceV5
+gencode_SwissProt gencodeUniProt.sql wgEncodeGencodeMetaUniProtV5
+gencode_Transcript_supporting_feature gencodeTranscriptSupport.sql wgEncodeGencodeMetaTranscriptV5
+_EOF_
+
+for i in gencode*; 
+do 
+set `grep $i map`;  
+echo "hgLoadSqlTab hg19 $3 /hive/groups/encode/dcc/data/gencodeV5/sql/$2 $1"
+done > loadMetaJobs.txt
+
+sh -x  loadMetaJobs.txt
+
