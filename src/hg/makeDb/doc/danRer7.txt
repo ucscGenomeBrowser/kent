@@ -708,7 +708,7 @@ TMPDIR=/scratch/tmp
     #	80078057 bases of 393312790 (20.360%) in intersection
 
 ############################################################################
-## 8-Way Multiz (WORKING - 2010-12-21 - Hiram)
+## 8-Way Multiz (DONE - 2010-12-22 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/danRer7/bed/multiz8way
     cd /hive/data/genomes/danRer7/bed/multiz8way
@@ -822,13 +822,14 @@ end
 set path = ($binDir $path); rehash
 $binDir/autoMZ + T=. E=$db "`cat ../tree.nh`" $db.*.sing.maf ../multiz8way.maf
 cd ..
-rm -fr $tmp
+rm -fr tmp
 '_EOF_'
     # << happy emacs
     chmod +x autoMultiz
 
     screen
     time ./autoMultiz > autoMultiz.log 2>&1 &
+    #	real    236m40.207s
 XXX - running - Wed Dec 22 11:19:32 PST 2010
     # took 3 hours, log shows no errors.
 
@@ -836,45 +837,57 @@ XXX - running - Wed Dec 22 11:19:32 PST 2010
     ssh hgwdev
     cd /hive/data/genomes/danRer7/bed/multiz8way
     mkdir /gbdb/danRer7/multiz8way
-    ln -s /hive/data/genomes/danRer7/bed/multiz8way/multiz8way.maf \
-	/gbdb/danRer7/multiz8way
-    time nice hgLoadMaf danRer7 multiz8way
-    #	Loaded 2228353 mafs in 1 files from /gbdb/danRer7/multiz8way
-    #	43 sec
+    ln -s `pwd`/multiz8way.maf /gbdb/danRer7/multiz8way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf danRer7 multiz8way
+    #	Indexing and tabulating /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	Loaded 2997980 mafs in 1 files from /gbdb/danRer7/multiz8way
+    #	real    0m32.612s
 
-    time nice hgLoadMafSummary -minSize=10000 -mergeGap=500 \
-	-maxSize=50000 danRer7 multiz8waySummary multiz8way.maf
-    #	Created 786724 summary blocks from 4850023 components 
-    #		and 2228353 mafs from multiz8way.maf
-    #	49 sec
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 danRer7 multiz8waySummary \
+	/gbdb/danRer7/multiz8way/multiz8way.maf
+    #	Created 1160917 summary blocks from 9252014 components
+    #	and 2997980 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	real    0m34.656s
 
     wc -l multiz8way*.tab
-    #  2228353 multiz8way.tab
-    #   786724 multiz8waySummary.tab
-    #  3015077 total
+    #	2997980 multiz8way.tab
+    #	1160917 multiz8waySummary.tab
+    #	4158897 total
+
     rm multiz8way*.tab
 
-    #	Create tree image for details page
-    #	You can get a better image from the phyloGif tool:
-    #	http://genome.ucsc.edu/cgi-bin/phyloGif
-    cp 8way.nh treeImage.nh
-    #	Edit treeImage.nh to make the names as desired
-
-# (
-# (zebrafish,(tetraodon,stickleback)),
-# (X._tropicalis,(mouse,human))
-# );
-
-    #	Submit this treeImage.nh to the phyloGif program
-
-    # Organism Image
-    pushd $HOME/browser/images/phylo
-    wget -O danRer7_8way.gif \
-	'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloGif?hgsid=1831836&phyloGif_width=200&phyloGif_height=320&boolshad.phyloGif_branchLengths=0&boolshad.phyloGif_lengthLegend=0&boolshad.phyloGif_branchLabels=0&phyloGif_branchDecimals=2&phyloGif_branchMultiplier=1&phyloGif_underscores=on&boolshad.phyloGif_underscores=0&boolshad.phyloGif_htmlPage=0&phyloGif_tree=(%0D%0A(zebrafish%2C(tetraodon%2Cstickleback))%2C%0D%0A(X._tropicalis%2C(mouse%2Chuman))%0D%0A)%3B&phyloGif_submit=submit'
-    #  check this .jpg file into the browser doc source tree images directory
-    cvs add -kb danRer7_8way.gif 
-    cvs commit -m 'organism tree for danRer7 8way' danRer7_8way.gif 
-    cp -p danRer7_8way.gif /usr/local/apache/htdocs/images/phylo/
-    popd
-
 #########################################################################
+# GAP ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE - 2010-12-22 - Hiram)
+
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer7/bed/multiz8way/anno
+    cd /hive/data/genomes/danRer7/bed/multiz8way/anno
+    time nice -n +19 mafAddIRows ../multiz8way.maf \
+	/hive/data/genomes/danRer7/danRer7.2bit multiz8way.maf
+    #	real    7m18.967s
+
+    # Load into database
+    rm /gbdb/danRer7/multiz8way/multiz8way.maf   # remove old symlink
+    ln -s `pwd`/multiz8way.maf /gbdb/danRer7/multiz8way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf danRer7 multiz8way
+    #	Loaded 3399056 mafs in 1 files from /gbdb/danRer7/multiz8way
+    #	real    1m9.821s
+
+    time nice hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 danRer7 multiz8waySummary \
+	/gbdb/danRer7/multiz8way/multiz8way.maf
+    #	Created 1160917 summary blocks from 9252014 components
+    #	and 3399056 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	real    1m5.241s
+
+    wc -l multiz8way*.tab
+    #	3399056 multiz8way.tab
+    #	1160917 multiz8waySummary.tab
+    #	4559973 total
+
+    rm multiz8way*.tab
+
+############################################################################
