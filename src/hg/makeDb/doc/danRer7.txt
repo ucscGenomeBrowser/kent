@@ -593,7 +593,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -qRepeats=windowmaskerSdust \
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
     #	real    258m58.096s
-    cat fb.oryLat2.chainDanRer7Link.txt
+    cat fb.danRer7.chainOryLat2Link.txt
     #	141428502 bases of 1409770109 (10.032%) in intersection
 
     mkdir /hive/data/genomes/oryLat2/bed/blastz.danRer7.swap
@@ -729,53 +729,35 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
 #(((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,((tetNig2:0.416610,gasAcu1:0.372371):0.322824,danRer7:0.731166):0.155214);
 
+# reorder to get danRer7 on top:
+    cat << '_EOF_' > zFishOnTop.nh
+((danRer7:0.731166,((gasAcu1:0.313967,oryLat2:0.478451):0.058404,(tetNig2:0.224774,fr2:0.205294):0.191836):0.322824):0.155214,(xenTro2:0.852482,(mm9:0.352605,hg19:0.131183):0.525173):0.300396);
+'_EOF_'
+    # << happy emacs
+
+    # convert to species names
+    /cluster/bin/phast/tree_doctor --rename \
+"danRer7->Zebrafish; gasAcu1->Stickleback; oryLat2->Medaka; tetNig2->Tetraodon; fr2->Fugu; xenTro2->X_Tropicalis; mm9->Mouse; hg19->Human" \
+zFishOnTop.nh
+
+((Zebrafish:0.731166,((Stickleback:0.313967,Medaka:0.478451):0.058404,(Tetraodon:0.224774,Fugu:0.205294):0.191836):0.322824):0.155214,(X_Tropicalis:0.852482,(Mouse:0.352605,Human:0.131183):0.525173):0.300396);
+
     #	Use this specification in the phyloGif tool:
     #	http://genome.ucsc.edu/cgi-bin/phyloGif
-    #	to obtain a gif image for /usr/local/apache/htdocs/images/phylo/danRer7_8way.gif
-    #   See below, I redo this on species names.
-    wget -O /usr/local/apache/htdocs/images/phylo/danRer7_8way.gif \
-'http://genome.ucsc.edu/cgi-bin/phyloGif?hgsid=151159276&phyloGif_width=200&phyloGif_height=320&boolshad.phyloGif_branchLengths=0&boolshad.phyloGif_lengthLegend=0&boolshad.phyloGif_branchLabels=0&phyloGif_branchDecimals=2&phyloGif_branchMultiplier=1&phyloGif_underscores=on&boolshad.phyloGif_underscores=0&boolshad.phyloGif_htmlPage=0&phyloGif_tree=(((Human%3A0.131183%2CMouse%3A0.352605)%3A0.525173%2CX.tropicalis%3A0.852482)%3A0.300396%2C((Tetraodon%3A0.416610%2CStickleback%3A0.372371)%3A0.322824%2CZebrafish%3A0.731166)%3A0.155214)%3B%0D%0A&phyloGif_submit=submit'
+    #	to obtain a png image for /usr/local/apache/htdocs/images/phylo/danRer7_8way.gif
 
     /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
     #	Use this output to create the table below
     grep -i danRer7 8way.distances.txt | sort -k3,3n
 
-#gasAcu1 danRer7 1.426361
-#tetNig2 danRer7 1.470600
-#hg19    danRer7 1.843132
-#xenTro2 danRer7 2.039258
-#mm9     danRer7 2.064554
+# gasAcu1 danRer7 1.426361
+# fr2     danRer7 1.451120
+# tetNig2 danRer7 1.470600
+# oryLat2 danRer7 1.590845
+# hg19    danRer7 1.843132
+# xenTro2 danRer7 2.039258
+# mm9     danRer7 2.064554
 
-
-# hiram says these should already have been created 
-# and are in the build dirs already.
-
-featureBits danRer7 chainGasAcu1Link
-#147479454 bases of 1506896106 (9.787%) in intersection
-featureBits gasAcu1 chainDanRer6Link
-#114451338 bases of 446627861 (25.626%) in intersection
-
-featureBits danRer7 chainTetNig2Link
-#93349443 bases of 1506896106 (6.195%) in intersection
-featureBits tetNig2 chainDanRer6Link
-#70626082 bases of 302314788 (23.362%) in intersection
-
-featureBits danRer7 chainHg19Link
-#96424507 bases of 1506896106 (6.399%) in intersection
-featureBits hg19 chainDanRer6Link
-#88391631 bases of 2897316137 (3.051%) in intersection
-
-featureBits danRer7 chainXenTro2Link
-#100078259 bases of 1506896106 (6.641%) in intersection
-featureBits xenTro2 chainDanRer6Link
-#92089833 bases of 1359412157 (6.774%) in intersection
-
-featureBits danRer7 chainMm9Link
-#77099032 bases of 1506896106 (5.116%) in intersection
-featureBits mm9 chainDanRer6Link
-#73444297 bases of 2620346127 (2.803%) in intersection
-
-#
 #	If you can fill in all the numbers in this table, you are ready for
 #	the multiple alignment procedure
 #
@@ -783,28 +765,21 @@ featureBits mm9 chainDanRer6Link
 #                         featureBits chainLink measures
 #                                           chainDanRer6Link  chain linearGap
 #    distance                    on danRer7  on other     minScore
-#  1  1.43 - stickleback gasAcu1   (% 9.79) (% 25.63)       2000     loose
-#  2  1.47 - tetraodon tetNig2     (% 6.20) (% 23.36)       2000     loose
-#  3  1.84 - human hg19            (% 6.40) (%  3.05)       2000     loose
-#  4  2.04 - xenopus xenTro2       (% 6.64) (%  6.77)       2000     loose
-#  5  2.06 - mouse mm9             (% 5.12) (%  2.80)       2000     loose
+#  1  1.43 - stickleback gasAcu1   (% 10.27) (% 27.52)       2000     medium
+#  2  1.45 - Fugu fr2              (%  7.36) (% 20.36)       2000     medium
+#  3  1.47 - tetraodon tetNig2     (%  6.27) (% 23.57)       2000     medium
+#  4  1.59 - medaka oryLat2        (% 10.03) (% 17.78)       2000     medium
+#  5  1.84 - human hg19            (%  2.79) (%  6.15)       5000     loose
+#  6  2.04 - xenopus xenTro2       (%  6.43) (%  6.61)       5000     loose
+#  7  2.06 - mouse mm9             (%  2.60) (%  5.10)       5000     loose
 
 # None of this concern for distances matters in building the first step, the
 # maf files.
 
-    # fix missing symlinks
-    cd /hive/data/genomes/danRer7/bed/
-    ln -s lastzMm9.2009-12-17/ lastz.mm9
-    ln -s lastzXenTro2.2009-12-22/ lastz.xenTro2
-    ln -s blastz.hg19.swap/ lastz.hg19
-    ln -s blastz.tetNig2.swap/ lastz.tetNig2
-
-    cd /hive/data/genomes/danRer7/bed/multiz8way
-
     #	bash shell syntax here ...
     export H=/hive/data/genomes/danRer7/bed
     mkdir mafLinks
-    for G in gasAcu1 tetNig2 hg19 xenTro2 mm9
+    for G in gasAcu1 fr2 tetNig2 oryLat2 hg19 xenTro2 mm9
     do
 	mkdir mafLinks/$G
 	if [ ! -d ${H}/lastz.${G}/mafNet ]; then
@@ -814,6 +789,13 @@ featureBits mm9 chainDanRer6Link
 	ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
     done
 
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	8way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
     # location for cluster run
     #/hive/data/genomes/danRer7/bed/multiz8way/mafLinks/ 
 
@@ -821,13 +803,6 @@ featureBits mm9 chainDanRer6Link
     cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
     cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
     cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
-
-    # create species list and stripped down tree for autoMZ
-    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
-	8way.nh > tmp.nh
-    echo `cat tmp.nh` > tree-commas.nh
-    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
-    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
 
 
     # this one is simple enough that it doesn't need a cluster run.
@@ -853,7 +828,8 @@ rm -fr $tmp
     chmod +x autoMultiz
 
     screen
-    ./autoMultiz > & autoMultiz.log
+    time ./autoMultiz > autoMultiz.log 2>&1 &
+XXX - running - Wed Dec 22 11:19:32 PST 2010
     # took 3 hours, log shows no errors.
 
     # Load into database
