@@ -1,8 +1,27 @@
+# UW DnaseI HS Track wrangler:vsmalladi
+
+# Notes:
+#       - Track Long Label:DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
+#       - Track Short Label: UW DNaseI HS
+#       - View Long Labels:
+#       - cellType Order: Ordering is alphabetical
+#       - Default View selections
+#               - Hotspots = pack
+#               - Peaks = pack
+#               - Raw Signal = full
+#       - Short Labels: 
+#               Template:
+#               - Views: For consistency sake view will be
+#                       - Peaks = Pk
+#                       - Raw Signal = Sig
+#                       - Hotspots = Hspt 
+#		- Replicate
+
 track wgEncodeUwDnase
 compositeTrack on
 release alpha
-shortLabel UW-Mouse DNase-seq
-longLabel ENCODE UW-Mouse Stam DNase-seq
+shortLabel UW DNaseI HS
+longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 3134=3134 416B=416B BCellCD19p=B-cell_(CD19+) Cerebellum=Cerebellum Cerebrum=Cerebrum ESCJ7=ES-CJ7 Fibroblast=Fibroblast Kidney=Kidney Liver=Liver Lung=Lung MEL=MEL TNaive=T-Naive WholeBrain=Whole_Brain
