@@ -33,8 +33,8 @@ assembly          hg19
 validationSettings none
 
 # Track/view definition
-view             RawData
+view             Signal
 longLabelPrefix  Proteogenomic Mapping Hits
-type             bed6+
+type             peptideMapping
 hasReplicates    no
 required         yes
