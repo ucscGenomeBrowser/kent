@@ -2695,6 +2695,10 @@ char *html = getHtmlFromSelfOrParent(tdb);
 if (html != NULL && html[0] != 0)
     {
     htmlHorizontalLine();
+
+    // Add pennantIcon
+    printPennantIconNote(tdb);
+
     puts(html);
     }
 hPrintf("<BR>\n");
@@ -9873,7 +9877,7 @@ if (desc != NULL)
     htmlTextOut(desc);
     printf("<BR>\n");
     }
-    
+
 printCcdsForSrcDb(conn, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);
