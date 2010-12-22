@@ -6967,6 +6967,11 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
+term DMSO_0.02pct_24hr
+tag DMSO224h
+description 24h,0.02% DMSO (Myers)
+type treatment
+
 term DMSO_2.0pct
 tag DMSO20
 description 5d,2% DMSO (Weissman)
@@ -6975,6 +6980,11 @@ type treatment
 term Estradiol_10nM
 tag ESTRADIa1h
 description  1h,10nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_10nM_24hr
+tag ESTRADIa24hh
+description  24,10nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM

@@ -307,6 +307,7 @@ our %formatCheckers = (
     fpkm2  => \&validateFreepass,
     fpkm => \&validateFreepass,
     insDist  => \&validateFreepass,
+    peptideMapping  => \&validateFreepass,
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
