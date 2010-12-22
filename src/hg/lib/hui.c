@@ -3527,6 +3527,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         }
     }
     printf("</SELECT>\n");
+
     // The following is needed to make msie scroll to selected option.
     printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->track);
 puts("</TR></TABLE>");
@@ -5223,11 +5224,14 @@ if(!sameString(tdb->track, "tigrGeneIndex")
 && !sameString(tdb->track, "encodeGencodeRaceFrags"))
     baseColorDropLists(cart, tdb, name);
 
-filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-if(filterBySet != NULL)
+if (cartOptionalString(cart, "ajax") == NULL)
     {
-    filterBySetCfgUi(tdb,filterBySet);
-    filterBySetFree(&filterBySet);
+    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+    if(filterBySet != NULL)
+        {
+        filterBySetCfgUi(tdb,filterBySet);
+        filterBySetFree(&filterBySet);
+        }
     }
 cfgEndBox(boxed);
 }
