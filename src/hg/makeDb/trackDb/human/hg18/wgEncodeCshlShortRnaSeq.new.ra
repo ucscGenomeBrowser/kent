@@ -1,4 +1,5 @@
 track wgEncodeCshlShortRnaSeq
+release alpha
 compositeTrack on
 shortLabel CSHL Sm RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Small RNA-seq
