@@ -2727,6 +2727,8 @@ noInherit on
     	shortLabel Alignments
     	view Alignments
     	visibility hide
+	pairEndsByName on
+	type bam
     	subTrack wgEncodeCshlLongRnaSeq
 
 		track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1

@@ -593,7 +593,7 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -qRepeats=windowmaskerSdust \
 	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
     #	real    258m58.096s
-    cat fb.oryLat2.chainDanRer7Link.txt
+    cat fb.danRer7.chainOryLat2Link.txt
     #	141428502 bases of 1409770109 (10.032%) in intersection
 
     mkdir /hive/data/genomes/oryLat2/bed/blastz.danRer7.swap
@@ -647,3 +647,247 @@ TMPDIR=/scratch/tmp
     #	86716552 bases of 1409770109 (6.151%) in intersection
 
 #########################################################################
+# lastz Fugu fr2 (DONE - 2010-12-21 - Hiram)
+    mkdir /hive/data/genomes/danRer7/bed/lastzFr2.2010-12-21
+    cd /hive/data/genomes/danRer7/bed/lastzFr2.2010-12-21
+
+    cat << '_EOF_' > DEF
+# Zebrafish vs. Fugu
+
+# using the "close" genome alignment parameters
+#       see also: http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment
+BLASTZ_Y=9400
+BLASTZ_L=3000
+BLASTZ_K=3000
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer7
+SEQ1_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ1_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: Fugu fr2
+#       Align to the scaffolds, results lifed up to chrUn.sdTrf coordinates
+SEQ2_DIR=/scratch/data/fr2/fr2.2bit
+SEQ2_LEN=/hive/data/genomes/fr2/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/fr2/noUn/fr2.scaffolds.2bit
+SEQ2_CTGLEN=/hive/data/genomes/fr2/noUn/fr2.scaffolds.sizes
+SEQ2_LIFT=/hive/data/genomes/fr2/jkStuff/liftAll.lft
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/danRer7/bed/lastzFr2.2010-12-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long running job
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-smallClusterHub=memk -bigClusterHub=swarm > do.log 2>&1 &
+    #	real    144m0.459s
+
+    cat fb.danRer7.chainFr2Link.txt 
+    #	103798841 bases of 1409770109 (7.363%) in intersection
+
+    mkdir /hive/data/genomes/fr2/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/fr2/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzFr2.2010-12-21/DEF \
+	-chainMinScore=2000 -chainLinearGap=medium \
+	-noLoadChainSplit -qRepeats=windowmaskerSdust \
+	-swap -smallClusterHub=memk -bigClusterHub=swarm > swap.log 2>&1 &
+    #	real    10m26.244s
+    cat fb.fr2.chainDanRer7Link.txt 
+    #	80078057 bases of 393312790 (20.360%) in intersection
+
+############################################################################
+## 8-Way Multiz (DONE - 2010-12-22 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer7/bed/multiz8way
+    cd /hive/data/genomes/danRer7/bed/multiz8way
+
+    wget -O 46way.nh \
+http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
+
+# ((Zebrafish,
+# (Stickleback,
+# Tetraodon)),
+# (X_tropicalis,
+# (Mouse,
+# Human))) 
+
+
+    #	All distances remain as specified in the 46way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but danRer7,oryLat2,gasAcu1,tetNig2,xenTro2,mm9,hg19 46way.nh > 8way.nh
+
+#(((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,((tetNig2:0.416610,gasAcu1:0.372371):0.322824,danRer7:0.731166):0.155214);
+
+# reorder to get danRer7 on top:
+    cat << '_EOF_' > zFishOnTop.nh
+((danRer7:0.731166,((gasAcu1:0.313967,oryLat2:0.478451):0.058404,(tetNig2:0.224774,fr2:0.205294):0.191836):0.322824):0.155214,(xenTro2:0.852482,(mm9:0.352605,hg19:0.131183):0.525173):0.300396);
+'_EOF_'
+    # << happy emacs
+
+    # convert to species names
+    /cluster/bin/phast/tree_doctor --rename \
+"danRer7->Zebrafish; gasAcu1->Stickleback; oryLat2->Medaka; tetNig2->Tetraodon; fr2->Fugu; xenTro2->X_Tropicalis; mm9->Mouse; hg19->Human" \
+zFishOnTop.nh
+
+((Zebrafish:0.731166,((Stickleback:0.313967,Medaka:0.478451):0.058404,(Tetraodon:0.224774,Fugu:0.205294):0.191836):0.322824):0.155214,(X_Tropicalis:0.852482,(Mouse:0.352605,Human:0.131183):0.525173):0.300396);
+
+    #	Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a png image for /usr/local/apache/htdocs/images/phylo/danRer7_8way.gif
+
+    /cluster/bin/phast/all_dists 8way.nh > 8way.distances.txt
+    #	Use this output to create the table below
+    grep -i danRer7 8way.distances.txt | sort -k3,3n
+
+# gasAcu1 danRer7 1.426361
+# fr2     danRer7 1.451120
+# tetNig2 danRer7 1.470600
+# oryLat2 danRer7 1.590845
+# hg19    danRer7 1.843132
+# xenTro2 danRer7 2.039258
+# mm9     danRer7 2.064554
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+
+#                         featureBits chainLink measures
+#                                           chainDanRer6Link  chain linearGap
+#    distance                    on danRer7  on other     minScore
+#  1  1.43 - stickleback gasAcu1   (% 10.27) (% 27.52)       2000     medium
+#  2  1.45 - Fugu fr2              (%  7.36) (% 20.36)       2000     medium
+#  3  1.47 - tetraodon tetNig2     (%  6.27) (% 23.57)       2000     medium
+#  4  1.59 - medaka oryLat2        (% 10.03) (% 17.78)       2000     medium
+#  5  1.84 - human hg19            (%  2.79) (%  6.15)       5000     loose
+#  6  2.04 - xenopus xenTro2       (%  6.43) (%  6.61)       5000     loose
+#  7  2.06 - mouse mm9             (%  2.60) (%  5.10)       5000     loose
+
+# None of this concern for distances matters in building the first step, the
+# maf files.
+
+    #	bash shell syntax here ...
+    export H=/hive/data/genomes/danRer7/bed
+    mkdir mafLinks
+    for G in gasAcu1 fr2 tetNig2 oryLat2 hg19 xenTro2 mm9
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/lastz.${G}/mafNet ]; then
+	echo "missing directory lastz.${G}/mafNet"
+		exit 255
+	fi
+	ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	8way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    # location for cluster run
+    #/hive/data/genomes/danRer7/bed/multiz8way/mafLinks/ 
+
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21/autoMZ penn
+
+
+    # this one is simple enough that it doesn't need a cluster run.
+
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = danRer7
+set binDir = /hive/data/genomes/danRer7/bed/multiz8way/penn
+rm -fr tmp
+mkdir -p tmp
+cd tmp
+foreach s (`cat ../species.lst`)
+    if ($s != $db) then
+        zcat ../mafLinks/$s/$db.$s.net.maf > $db.$s.sing.maf
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=. E=$db "`cat ../tree.nh`" $db.*.sing.maf ../multiz8way.maf
+cd ..
+rm -fr tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+    screen
+    time ./autoMultiz > autoMultiz.log 2>&1 &
+    #	real    236m40.207s
+XXX - running - Wed Dec 22 11:19:32 PST 2010
+    # took 3 hours, log shows no errors.
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/danRer7/bed/multiz8way
+    mkdir /gbdb/danRer7/multiz8way
+    ln -s `pwd`/multiz8way.maf /gbdb/danRer7/multiz8way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf danRer7 multiz8way
+    #	Indexing and tabulating /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	Loaded 2997980 mafs in 1 files from /gbdb/danRer7/multiz8way
+    #	real    0m32.612s
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 danRer7 multiz8waySummary \
+	/gbdb/danRer7/multiz8way/multiz8way.maf
+    #	Created 1160917 summary blocks from 9252014 components
+    #	and 2997980 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	real    0m34.656s
+
+    wc -l multiz8way*.tab
+    #	2997980 multiz8way.tab
+    #	1160917 multiz8waySummary.tab
+    #	4158897 total
+
+    rm multiz8way*.tab
+
+#########################################################################
+# GAP ANNOTATE MULTIZ6WAY MAF AND LOAD TABLES (DONE - 2010-12-22 - Hiram)
+
+    ssh hgwdev
+    mkdir /hive/data/genomes/danRer7/bed/multiz8way/anno
+    cd /hive/data/genomes/danRer7/bed/multiz8way/anno
+    time nice -n +19 mafAddIRows ../multiz8way.maf \
+	/hive/data/genomes/danRer7/danRer7.2bit multiz8way.maf
+    #	real    7m18.967s
+
+    # Load into database
+    rm /gbdb/danRer7/multiz8way/multiz8way.maf   # remove old symlink
+    ln -s `pwd`/multiz8way.maf /gbdb/danRer7/multiz8way
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf danRer7 multiz8way
+    #	Loaded 3399056 mafs in 1 files from /gbdb/danRer7/multiz8way
+    #	real    1m9.821s
+
+    time nice hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 danRer7 multiz8waySummary \
+	/gbdb/danRer7/multiz8way/multiz8way.maf
+    #	Created 1160917 summary blocks from 9252014 components
+    #	and 3399056 mafs from /gbdb/danRer7/multiz8way/multiz8way.maf
+    #	real    1m5.241s
+
+    wc -l multiz8way*.tab
+    #	3399056 multiz8way.tab
+    #	1160917 multiz8waySummary.tab
+    #	4559973 total
+
+    rm multiz8way*.tab
+
+############################################################################

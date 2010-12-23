@@ -1170,4 +1170,8 @@ void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boo
 boolean hPrintPennantIcon(struct trackDb *tdb);
 // Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
 
+boolean printPennantIconNote(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" and note when found.
+//This is used by hgTrackUi and hgc before printing out trackDb "html"
+
 #endif /* HUI_H */

@@ -2640,6 +2640,10 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     // include anchor for Description link
     puts("<A NAME=TRACK_HTML></A>");
     printf("<table class='windowSize'><tr valign='top'><td>");
+
+    // Add pennantIcon
+    printPennantIconNote(tdb);
+
     puts(tdb->html);
     printf("</td><td>");
     makeTopLink(tdb);
