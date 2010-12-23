@@ -14,7 +14,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortAln
 view Alignments
@@ -34,7 +34,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
 view MinusRawSignal
@@ -54,7 +54,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
 view PlusRawSignal
@@ -93,7 +93,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags
 view Transfrags
@@ -114,7 +114,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
 view Alignments
@@ -134,7 +134,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
 view MinusRawSignal
@@ -154,7 +154,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
 view PlusRawSignal
@@ -193,7 +193,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
 view Transfrags
@@ -214,7 +214,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
 view Alignments
@@ -234,7 +234,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
 view MinusRawSignal
@@ -254,7 +254,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
 view PlusRawSignal
@@ -293,7 +293,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
 view Transfrags
@@ -314,7 +314,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortAln
 view Alignments
@@ -334,7 +334,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
 view MinusRawSignal
@@ -354,7 +354,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
 view PlusRawSignal
@@ -393,7 +393,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562CellShortTransfrags
 view Transfrags
@@ -414,7 +414,7 @@ lab CSHL
 localization chromatin
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortAln
 view Alignments
@@ -434,7 +434,7 @@ lab CSHL
 localization chromatin
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
 view MinusRawSignal
@@ -454,7 +454,7 @@ lab CSHL
 localization chromatin
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
 view PlusRawSignal
@@ -493,7 +493,7 @@ lab CSHL
 localization chromatin
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
 view Transfrags
@@ -514,7 +514,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortAln
 view Alignments
@@ -534,7 +534,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
 view MinusRawSignal
@@ -554,7 +554,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
 view PlusRawSignal
@@ -593,7 +593,7 @@ lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
 view Transfrags
@@ -614,7 +614,7 @@ lab CSHL
 localization nucleolus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortAln
 view Alignments
@@ -634,7 +634,7 @@ lab CSHL
 localization nucleolus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
 view MinusRawSignal
@@ -654,7 +654,7 @@ lab CSHL
 localization nucleolus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
 view PlusRawSignal
@@ -693,7 +693,7 @@ lab CSHL
 localization nucleolus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
 view Transfrags
@@ -714,7 +714,7 @@ lab CSHL
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
 view Alignments
@@ -734,7 +734,7 @@ lab CSHL
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
 view MinusRawSignal
@@ -754,7 +754,7 @@ lab CSHL
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
 view PlusRawSignal
@@ -793,7 +793,7 @@ lab CSHL
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
 view Transfrags
@@ -814,7 +814,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortAln
 view Alignments
@@ -834,7 +834,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
 view MinusRawSignal
@@ -854,7 +854,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
 view PlusRawSignal
@@ -893,7 +893,7 @@ lab CSHL
 localization nucleus
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
 view Transfrags
@@ -914,7 +914,7 @@ lab CSHL
 localization polysome
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortAln
 view Alignments
@@ -934,7 +934,7 @@ lab CSHL
 localization polysome
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
 view MinusRawSignal
@@ -954,7 +954,7 @@ lab CSHL
 localization polysome
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
 view PlusRawSignal
@@ -993,7 +993,7 @@ lab CSHL
 localization polysome
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
 view Transfrags
@@ -1013,7 +1013,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
 view Transfrags
@@ -1034,7 +1034,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalAln
 view Alignments
@@ -1054,7 +1054,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
 view MinusRawSignal
@@ -1074,7 +1074,7 @@ lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
 view PlusRawSignal
@@ -1098,4 +1098,4 @@ rnaExtract shortTotal
 subId 535
 view RawData
 
-# MAGIC: 149228392
+# MAGIC: 1881054664
