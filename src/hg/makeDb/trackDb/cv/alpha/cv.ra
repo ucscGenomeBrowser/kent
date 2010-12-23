@@ -6732,11 +6732,11 @@ description Total RNA extract (longer than 200 nt)
 label Total_RNA
 
 # Short should be retired turning into short total
-term short
-tag short
-type rnaExtract
-description RNA shorter than 200 nt
-label short_RNA
+#term short
+#tag short
+#type rnaExtract
+#description RNA shorter than 200 nt
+#label PROVISIONAL   (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
 
 term shortTotal
 tag shortTotal
@@ -6744,10 +6744,11 @@ type rnaExtract
 description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
 label short_Total_RNA
 
-term shortDeplRrna
-tag shortDeplRrna
-type rnaExtract
-description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
+#term shortDeplRrna
+#tag shortDeplRrna
+#type rnaExtract
+#description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
+#Provisional Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake
 
 term longPolyA
 tag pAP
