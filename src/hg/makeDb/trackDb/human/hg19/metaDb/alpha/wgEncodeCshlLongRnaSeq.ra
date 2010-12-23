@@ -3765,29 +3765,6 @@ subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep1
 view AllRawSig
 
-metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep2
-objType table
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID8793
-labProtocolId 014WC-
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract longNonPolyA
-subId 2410
-tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep2
-view AllRawSig
-
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1
 objType table
 bioRep 013WC
@@ -3809,29 +3786,6 @@ replicate 1
 rnaExtract longNonPolyA
 subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1
-view Alignments
-
-metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2
-objType table
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2.bam
-grant Gingeras
-lab CSHL
-labExpId LID8793
-labProtocolId 014WC-
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract longNonPolyA
-subId 2410
-tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep1
@@ -3856,28 +3810,6 @@ rnaExtract longNonPolyA
 subId 2409
 view FastqRd1
 
-metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep2
-objType file
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep2.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID8793
-labProtocolId 014WC-
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract longNonPolyA
-subId 2410
-view FastqRd1
-
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep1
 objType file
 bioRep 013WC
@@ -3898,28 +3830,6 @@ project wgEncode
 replicate 1
 rnaExtract longNonPolyA
 subId 2409
-view FastqRd2
-
-metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep2
-objType file
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep2.fastq.gz
-grant Gingeras
-lab CSHL
-labExpId LID8793
-labProtocolId 014WC-
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract longNonPolyA
-subId 2410
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep1
@@ -3945,29 +3855,6 @@ subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep1
 view MinusRawSig
 
-metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
-objType table
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID8793
-labProtocolId 014WC-
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract longNonPolyA
-subId 2410
-tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
-view MinusRawSig
-
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1
 objType table
 bioRep 013WC
@@ -3989,29 +3876,6 @@ replicate 1
 rnaExtract longNonPolyA
 subId 2409
 tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1
-view PlusRawSig
-
-metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
-objType table
-bioRep 014WC
-cell HepG2
-composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
-fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2.bigWig
-grant Gingeras
-lab CSHL
-labExpId LID8793
-labProtocolId 014WC-
-localization cell
-origAssembly hg19
-project wgEncode
-replicate 2
-rnaExtract longNonPolyA
-subId 2410
-tableName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
 view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellPapAllRawSigRep1
@@ -11313,4 +11177,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: -1774671270
+# MAGIC: 1539345492
