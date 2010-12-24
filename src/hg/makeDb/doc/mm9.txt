@@ -11410,3 +11410,131 @@ TMPDIR=/scratch/tmp
     #	71960602 bases of 1409770109 (5.104%) in intersection
 
 #########################################################################
+# YALE PSEUDOPIPE PSEUDOGENE PREDICTIONS BASED ON ENSEMBL 60
+# (hartera, 2010-12-23 - 2010-12-24, DONE)
+# FTP site e-mailed on 2010-12-22 by Suganthi Balasubramanian 
+# (suganthi.bala@yale.edu) from the Gerstein lab. Data is from their 
+# PseudoPipe pipeline and it is based on proteins from Ensembl Build 60 
+# (pseudogene data from December 2010?). 
+# NOTE: this data will be replaced before being released to the RR as there 
+# is a problem with the IDs. 
+
+mkdir -p /hive/data/genomes/mm9/bed/pseudoYale60
+cd /hive/data/genomes/mm9/bed/pseudoYale60
+
+# Go to http://tables.pseudogene.org/set.py?id=Mouse60 and click on the
+# download link to download Mouse60.tx and copy the file to this directory.
+# Header from data file.
+ID      Chromosome      Start Coordinate        Stop Coordinate Strand  Parent
+Protein  Protein Start   Protein Stop    Parent Gene     Fraction        Num
+Insertions  Num Deletions   Num Shifts      Num Stops       E Value Identity
+PolyA   Disablements    Exons   Introns Class   Sequence        Link
+
+# urls are of type:
+# http://tables.pseudogene.org/mouse60/<ID> so this can be added to the
+# trackDb as for the previous track. Just update the Ensembl 59 trackDb entry.
+
+# Get list of chroms:
+awk '{print $2}' Mouse60.txt | sort | uniq
+# chromosomes are 1-19, X, Y
+
+# Convert data to genePred:
+
+cat << '_EOF_' > formatPseudogenesToGenePred
+#!/usr/bin/awk -f
+# Parse Yale pseudogene data file.
+# Exon coordinates are in this format: [[28688544, 28688864], [28689678, 2869117# 4], [28694308, 28694460], [28701327, 28701749]]
+# Ignore header line
+/^ID/ {
+  next;
+}
+# Parse the data lines
+BEGIN {FS="\t"} {OFS="\t"} {
+  gsub(/\[/, "", $19);
+  gsub(/\]/, "", $19); 
+  split($19, exons, ",");
+  # Count the number of start and end coordinates for exons and 
+  # calculate the number of exons.
+  count=(length(exons))/2;
+  # Write out genePred. Add chr in front of chrom only if not haplotype.
+  if ($2 !~ /HSCHR/) {
+     printf "%s\tchr%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  else {
+     printf "%s\t%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  # get list of exon starts, convert from 1-based to 0-based
+  for (i=1; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]-1","; 
+  }
+  printf "\t";
+  # get list of exon ends
+  for (i=2; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]","; 
+  }
+  printf "\n"; 
+}
+'_EOF_'
+
+chmod +x formatPseudogenesToGenePred
+# format the Yale pseudogenes data to genePred.
+./formatPseudogenesToGenePred Mouse60.txt > pseudoYaleMouse60.gp 
+
+# Load the genePred file into mm9
+hgLoadGenePred mm9 pseudoYale60 pseudoYaleMouse60.gp
+# Didn't load. There are 4 invalid genePreds:
+Error: invalid genePred: PGOMOU00000130313 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000139101 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000136201 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000128816 exon 1 overlaps previous exon
+Error: 4 invalid genePreds, database unchanged
+
+# File didn't load into database.
+# Make a file of these ids - invalidIds
+grep -f invalidIds -vw pseudoYaleMouse60.gp > pseudoYaleMouse60NoInvalidGps.gp
+wc -l pseudoYale*gp
+# 19086 pseudoYaleMouse60.gp
+# 19082 pseudoYaleMouse60NoInvalidGps.gp
+
+# Then re-load database
+hgLoadGenePred mm9 pseudoYale60 pseudoYaleMouse60NoInvalidGps.gp
+
+# 2010-12-24
+# Add trackDb.ra entry for track, add a search and make sure
+# there is a description page, copy over from the gencodeYalePseudoBuild59
+# html. 
+
+cp
+/hive/users/hartera/GencodeWG/ccds/trunk/gencode/browser/trackDb/human/hg19/gencodeYalePseudoBuild59.html \
+~/kent/src/hg/makeDbb/trackDb/mouse/mm9/pseudoYale60.html
+# Edit this for mouse and add the list of 4 IDs of genes that were removed due
+# to overlapping exon coordinates. Commit to git.
+# Check pseudogene types in data:
+tail -n +2 Mouse60.txt | tawk '{print $21}' | sort | uniq
+#Ambiguous
+#Duplicated
+#Processed
+# Build class table for colouring pseudogenes by type. 
+# copy over class table definition from a previous set of Yale pseudogenes.
+cp -p /hive/groups/gencode/browser/hg19/gencodeYalePseudoBuild59/gencodeYalePseudoBuild59Class.sql \
+ pseudoYale60Class.sql
+
+# Make the class table file:
+tail -n +2 Mouse60.txt \
+  | tawk '{print $1, $21, "Yale"}' | sort > pseudoYale60Class.txt
+
+# load table
+hgLoadSqlTab mm9 pseudoYale60Class \
+    pseudoYale60Class.sql pseudoYale60Class.txt
+
+hgsql -e 'select distinct(class) from pseudoYale60Class;' mm9
++------------+
+| class      |
++------------+
+| Ambiguous  | 
+| Processed  | 
+| Duplicated | 
++------------+
+
+# Add these classes to the trackDb.ra entry for the geneClasses field and 
+# to the list of classes with colours.
