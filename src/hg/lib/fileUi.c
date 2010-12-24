@@ -264,6 +264,18 @@ if (sortOrder && fileList)
     }
 }
 
+static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
+{
+puts("<p><B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
+puts("in publication  until the restriction date noted for the given data file.</B></p");
+puts("<p>\nThere are two files within this directory that contain information about the downloads:");
+printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/files.txt'>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
+                hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
+printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/md5sum.txt'>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
+                hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
+puts("<P>");
+}
+
 void filesDownloadUi(char *db, struct cart *cart, struct trackDb *tdb)
 // UI for a "composite like" track: This will list downloadable files associated with
 // a single trackDb entry (composite or of type "downloadsOnly". The list of files
@@ -274,13 +286,13 @@ void filesDownloadUi(char *db, struct cart *cart, struct trackDb *tdb)
     // 1) tdb of composite or type=downloadsOnly tableless track
     // 2) All mdb Objs associated with "composite=tdb->track" and having fileName
     // 3) Verification of each file in its discovered location
-    // 4) Lookup of filters (tdb dimensions?) and filterComposite style controls
-    // 5) Presort of files list
-    // 6) make table class=sortable
-    // 7) Final file count
-    // Get preamble from dir ??
-    // Use trackDb settings to get at html description, long and short labels
-    // Recommend different color background to get the point across that these are files, not tracks
+    // 4) Lookup of 'fileSortOrder'
+    // 5) TODO: present filter controls
+    // 6) Presort of files list
+    // 7) make table class=sortable
+    // 8) Final file count
+    // 9) Use trackDb settings to get at html description
+    // Nice to have: Make filtering and sorting persistent (saved to cart)
 
 // FIXME: Trick while developing:
 if (tdb->table != NULL)
@@ -395,6 +407,9 @@ if (sortOrder != NULL)
 
 jsIncludeFile("hui.js",NULL);
 jsIncludeFile("ajax.js",NULL);
+
+// standard preamble
+filesDownloadsPreamble(db,tdb);
 
 // Table class=sortable
 int columnCount = 0;

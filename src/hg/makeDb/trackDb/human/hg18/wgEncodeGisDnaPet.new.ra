@@ -1,4 +1,5 @@
 track wgEncodeGisDnaPet
+release alpha
 compositeTrack on
 shortLabel GIS DNA PET
 longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags

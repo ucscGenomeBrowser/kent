@@ -142,15 +142,17 @@ endif
 endif # BRACKET
 
 # Get the Rfams that overlap with blocks that are syntenic to Mm9.
-# FIXME: this should be generalized for other species
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.bestHits.psl rfam/rfam.all.bed
 bedToExons rfam/rfam.all.bed rfam/rfam.exons.bed
-hgLoadBed $db rfamExons rfam/rfam.exons.bed
-hgsql hg19 -e "SELECT DISTINCT r.name FROM rfamExons r, chainMm9 c WHERE r.bin = c.bin AND r.chrom = c.tName AND r.chromStart < c.tStart AND r.chromEnd < c.tEnd" \
- | awk '{ print "grep \"" $1 "\" rfam/rfam.all.bed"}' |bash \
- > rfam/rfam.syntenic.bed
-hgsql hg19 -e "DROP TABLE rfamExons"
+hgsql ${db} -N -e "SELECT DISTINCT tName, tStart, tEnd FROM chain${Xdb}" \
+  | cat > ${xdb}.syntenic.blocks.bed
+bedIntersect rfam/rfam.all.bed ${xdb}.syntenic.blocks.bed rfam/rfam.syntenic.bed
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
+
  
 # Create directories full of alignments split by chromosome.
 mkdir -p est refSeq mrna trna
@@ -188,8 +190,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 
 # Get list of accessions that are associated with antibodies from database.

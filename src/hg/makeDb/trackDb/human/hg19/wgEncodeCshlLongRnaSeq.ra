@@ -478,17 +478,6 @@ noInherit on
         color 189,0,157
         # subId=2409 dateSubmitted=2010-09-29
 
-        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
-        release alpha
-        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
-        shortLabel HepG cell pA- + 2
-        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Rep 2 (PolyA- in HepG2 whole cell)
-        subGroups view=PlusRawSig cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
-        type bigWig 1.000000 1260018.000000
-        origAssembly hg19
-        color 189,0,157
-        # subId=2410 dateSubmitted=2010-09-30
-
         track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep2
         release alpha
         parent wgEncodeCshlLongRnaSeqViewPlusRawSig on 
@@ -1391,17 +1380,6 @@ noInherit on
         color 189,0,157
         # subId=2409 dateSubmitted=2010-09-29
 
-        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
-        release alpha
-        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
-        shortLabel HepG cell pA- 2
-        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Rep 2 (PolyA- in HepG2 whole cell)
-        subGroups view=MinusRawSig cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
-        type bigWig 1.000000 1224734.000000
-        origAssembly hg19
-        color 189,0,157
-        # subId=2410 dateSubmitted=2010-09-30
-
         track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep2
         release alpha
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig on
@@ -2300,17 +2278,6 @@ noInherit on
         color 189,0,157
         # subId=2409 dateSubmitted=2010-09-29
 
-        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep2
-        release alpha
-        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
-        shortLabel HepG cell pA- 2
-        longLabel ENCODE CSHL Long RNA-seq All Raw Signal Rep 2 (PolyA- in HepG2 whole cell)
-        subGroups view=AllRawSig cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
-        type bigWig 1.000000 1260365.000000
-        origAssembly hg19
-        color 189,0,157
-        # subId=2410 dateSubmitted=2010-09-30
-
         track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAllRawSigRep2
         release alpha
         parent wgEncodeCshlLongRnaSeqViewAllRawSig on 
@@ -2760,6 +2727,8 @@ noInherit on
     	shortLabel Alignments
     	view Alignments
     	visibility hide
+	pairEndsByName on
+	type bam
     	subTrack wgEncodeCshlLongRnaSeq
 
 		track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
@@ -3203,17 +3172,6 @@ noInherit on
         origAssembly hg19
         color 189,0,157
         # subId=2409 dateSubmitted=2010-09-29
-
-        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2
-        release alpha
-        parent wgEncodeCshlLongRnaSeqViewAlignments off
-        shortLabel HepG cell pA- A 2
-        longLabel ENCODE CSHL Long RNA-seq Alignments Rep 2 (PolyA- in HepG2 whole cell)
-        subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
-        type bam
-        origAssembly hg19
-        color 189,0,157
-        # subId=2410 dateSubmitted=2010-09-30
 
         track wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep2
         release alpha
