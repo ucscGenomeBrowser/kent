@@ -11538,3 +11538,6 @@ hgsql -e 'select distinct(class) from pseudoYale60Class;' mm9
 
 # Add these classes to the trackDb.ra entry for the geneClasses field and 
 # to the list of classes with colours.
+# Added the classes to:
+# ~/kentJuly2010/kent/src/hg/makeDb/trackDb/tagTypes.tab
+# e.g. gClass_Processed genePred
