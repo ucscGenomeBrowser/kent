@@ -13688,3 +13688,29 @@ wc -l hg18.fosEndPairs.bed hg19.fosEndPairs.good.bed
 #  386129 hg18.fosEndPairs.bed
 #  383945 hg19.fosEndPairs.good.bed
 ## 99.4% lifted
+
+#############################################################################
+# DECIPHER LIFT FORM HG18 (DONE 2010-12-27, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift/
+mkdir decipher
+cd decipher/
+hgsql -e "select * from decipherRaw" hg18 | tail -n +2 > hg18.decipherRaw.txt
+cat hg18.decipherRaw.txt | awk 'BEGIN{FS="\t";OFS="\t"}{ chr="chr"$4; $4=$1; $1=chr; $2 = $2 - 1; print;}' | liftOver -bedPlus=4 -tab stdin /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz stdout hg19.decipherRaw.unmapped | sed 's/^chr//' | awk 'BEGIN{FS="\t";OFS="\t"}{ t=$1; $1=$4; $4=t; print;}' > hg19.decipherRaw.txt
+cp ~/kent/src/hg/lib/decipherRaw.sql .
+hgLoadSqlTab hg19 decipherRaw decipherRaw.sql hg19.decipherRaw.txt
+hgsql -e "select * from decipher" hg18 | tail -n +2 | cut -f2- > hg18.decipher.bed
+liftOver hg18.decipher.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.decipher.{bed,unmapped}
+cut -f1 hg19.decipherRaw.txt > hg19.decipherRaw.names
+cut -f4 hg19.decipher.bed > hg19.decipher.names
+# how many of the lifted deciphers are not in the lifted decipherRaws?
+grep -Fvx -f hg19.decipher.names hg19.decipherRaw.names | wc -l
+#0
+# none. ok then, we are done.
+rm *.names
+wc -l *.bed
+#  4227 hg18.decipher.bed
+#  4048 hg19.decipher.bed
+hgLoadBed hg19 decipher hg19.decipher.bed
+
+#############################################################################
