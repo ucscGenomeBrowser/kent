@@ -1,6 +1,6 @@
 metaObject wgEncodeUwDnase3134C3hMAdult8wksAlnRep1
 objType file
-age adult-8wks
+age immortalized
 cell 3134
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -20,7 +20,7 @@ view Alignments
 
 metaObject wgEncodeUwDnase3134C3hMAdult8wksHotspotsRep1
 objType table
-age adult-8wks
+age immortalized
 cell 3134
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -41,7 +41,7 @@ view Hotspots
 
 metaObject wgEncodeUwDnase3134C3hMAdult8wksPkRep1
 objType table
-age adult-8wks
+age immortalized
 cell 3134
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -62,7 +62,7 @@ view Peaks
 
 metaObject wgEncodeUwDnase3134C3hMAdult8wksRawDataRep1
 objType file
-age adult-8wks
+age immortalized
 cell 3134
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -82,7 +82,7 @@ view RawData
 
 metaObject wgEncodeUwDnase3134C3hMAdult8wksRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell 3134
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -103,7 +103,7 @@ view RawSignal
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep1
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -123,7 +123,7 @@ view Alignments
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep2
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -143,7 +143,7 @@ view Alignments
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -164,7 +164,7 @@ view Hotspots
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep2
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -185,7 +185,7 @@ view Hotspots
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksPkRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -206,7 +206,7 @@ view Peaks
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksPkRep2
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -227,7 +227,7 @@ view Peaks
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksRawDataRep1
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -247,7 +247,7 @@ view RawData
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksRawDataRep2
 objType file
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -267,7 +267,7 @@ view RawData
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -288,7 +288,7 @@ view RawSignal
 
 metaObject wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
 objType table
-age adult-8wks
+age immortalized
 cell 416B
 composite wgEncodeUwDnase
 dataType DnaseSeq
@@ -3305,4 +3305,4 @@ subId 2028
 tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 view RawSignal
 
-# MAGIC: 1011719481
+# MAGIC: -1213530911
