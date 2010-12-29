@@ -13406,6 +13406,8 @@ wc -l {decipher,rgdQtl,rgdRatQtl}/hg1{8,9}.bed
 ## DECIPHER: 95.8%, RGD QTL: 88.6%, RGD RAT QTL: 96.2%
 ## update for rgdQtl:
 hgsql hg19 -e "create table rgdQtlLink select * from hg18.rgdQtlLink"
+hgsql hg19 -e "create table rgdRatQtlLink select * from hg18.rgdRatQtlLink"
+
 
 #############################################################################
 # FISH CLONES LIFT (DONE, Andy 2010-12-14)
@@ -13662,32 +13664,38 @@ hgsql hg19 -e "drop table switchDbTssGmLocTemp"
 #############################################################################
 
 #############################################################################
-# FOSMID END PAIRS LIFT FROM HG18 (DONE 2010-12-20, Andy)
+# FOSMID END PAIRS LIFT FROM HG18 (DONE 2010-12-28, Andy)
 
 mkdir /hive/data/genomes/hg19/bed/hg18MassiveLift/fosEndPairs
 cd /hive/data/genomes/hg19/bed/hg18MassiveLift/fosEndPairs/
-echo "select * from fosEndPairs" | hgsql hg18 | tail -n +2 | cut -f2- > hg18.fosEndPairs.bed
+echo "select * from fosEndPairs" | hgsql hg18 | tail -n +2 | cut -f2- > hg18.fosEndPairs.fep.bed
 echo "select * from all_fosends" | hgsql hg18 | tail -n +2 | cut -f2- > hg18.all_fosends.psl
-liftOver -bedPlus=6 hg18.fosEndPairs.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.fosEndPairs.{bed,unmapped}
+# Converting to bed 12 because of the positional info in nonstandard fields.
+# the awk script is pretty simple and is in the directory.
+awk -f toBed12.awk hg18.fosEndPairs.fep.bed > hg18.fosEndPairs.bed12
+liftOver -bedPlus=12 hg18.fosEndPairs.bed12 /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.fosEndPairs.{bed12,unmapped12}
 liftOver -pslT hg18.all_fosends.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.{psl,unmapped}
 # remove pairs which have one (or both) ends not in the lifted set of all ends
-cut -f11 hg19.fosEndPairs.bed | tr ',' '\n' | sort > hg19.fosEndPairs.names
+cut -f14 hg19.fosEndPairs.bed12 | tr ',' '\n' | sort > hg19.fosEndPairs.names
 cut -f10 hg19.all_fosends.psl | sort > hg19.all_fosends.names
 grep -Fxv -f hg19.all_fosends.names hg19.fosEndPairs.names > bad.names
-grep -Fv -f bad.names hg19.fosEndPairs.bed > hg19.fosEndPairs.good.bed
-wc -l hg19*.bed
-#  384189 hg19.fosEndPairs.bed
-#  383945 hg19.fosEndPairs.good.bed
-## so... 254 bad ones were removed.  These would have caused join errors if they were left in.
+grep -Fv -f bad.names hg19.fosEndPairs.bed12 > hg19.fosEndPairs.good.bed12
+wc -l hg19*.bed12
+#  384635 hg19.fosEndPairs.bed12
+#  384442 hg19.fosEndPairs.good.bed12
+## so... 193 bad ones were removed.  These would have caused join errors if they were left in.
+
+## convert back to fosEndPairs bed6+
+awk -f toFosEndPairs.awk hg19.fosEndPairs.good.bed12 > hg19.fosEndPairs.fep.bed
 
 cp ~/kent/src/hg/lib/fosEndPairs.sql .
-hgLoadBed -sqlTable=fosEndPairs.sql -notItemRgb hg19 fosEndPairs hg19.fosEndPairs.good.bed 
+hgLoadBed -sqlTable=fosEndPairs.sql -notItemRgb hg19 fosEndPairs hg19.fosEndPairs.fep.bed 
 hgLoadPsl -table=all_fosends hg19 hg19.all_fosends.psl
 
-wc -l hg18.fosEndPairs.bed hg19.fosEndPairs.good.bed
-#  386129 hg18.fosEndPairs.bed
-#  383945 hg19.fosEndPairs.good.bed
-## 99.4% lifted
+wc -l *.fep.bed
+#  386129 hg18.fosEndPairs.fep.bed
+#  384442 hg19.fosEndPairs.fep.bed
+## 99.6% lifted
 
 #############################################################################
 # DECIPHER LIFT FORM HG18 (DONE 2010-12-27, Andy)
