@@ -2,7 +2,7 @@ track wgEncodeRikenCage
 release alpha
 compositeTrack on
 shortLabel RIKEN CAGE Loc
-        longLabel CAGE Alignments Localization RNA Subcellular from ENCODE/RIKEN
+longLabel RNA Subcellular CAGE Alignments Localization from ENCODE/RIKEN
 group expression
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters Alignments=Alignments
 subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC MCF7=MCF7 NHEK=NHEK prostate=Prostate
@@ -669,6 +669,17 @@ superTrack wgEncodeRnaSeqSuper
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
 
+        track wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewPlusClusters on
+        shortLabel K562 nlos tot 1
+        longLabel K562 nucleolus total CAGE Plus strand start sites replicate 1 from ENCODE/RIKEN
+        subGroups view=PlusClusters cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
+        type bigWig 0.050000 38081.750000
+        origAssembly hg19
+        color 46,0,184
+        # subId=2929 dateSubmitted=2010-11-09
+
 
     track wgEncodeRikenCageViewMinusClusters
     release alpha
@@ -1319,6 +1330,17 @@ superTrack wgEncodeRnaSeqSuper
         origAssembly hg18
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
+
+        track wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewMinusClusters on
+        shortLabel K562 nlos tot 1
+        longLabel K562 nucleolus total CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
+        subGroups view=MinusClusters cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
+        type bigWig 0.050000 19662.699219
+        origAssembly hg19
+        color 46,0,184
+        # subId=2929 dateSubmitted=2010-11-09
 
 
     track wgEncodeRikenCageViewAlignments
@@ -1980,6 +2002,17 @@ superTrack wgEncodeRnaSeqSuper
         origAssembly hg18
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
+
+        track wgEncodeRikenCageK562NucleolusTotalAlnRep1
+        release alpha
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel K562 nlos tot Aln 1
+        longLabel K562 nucleolus total CAGE Alignments rep 1 from ENCODE/RIKEN
+        subGroups view=Alignments cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=2929 dateSubmitted=2010-11-09
 
 
 

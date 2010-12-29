@@ -1,4 +1,4 @@
-# Data Agreement File for University of Chicago (White Lab) TFBS by Epitope-tagged ChipSeq $Revision: 1.1 $
+# Data Agreement File for University of Chicago (White Lab) TFBS by Epitope-tagged ChipSeq $Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -37,7 +37,7 @@ variables         cell, antibody, control
 assembly          hg19
 
 #medianFragmentLength 200
-validationSettings validateFiles.tagAlign:mmCheckOneInN=1000,mismatches=3,nMatch,matchFirst=32;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mismatches=2
 
 # Track/view definition
 view             Peaks
