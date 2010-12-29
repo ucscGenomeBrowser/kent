@@ -5249,6 +5249,9 @@ rm -f $c.gp $c.maf $c.ss
     /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
 	--aggregate `cat species.lst` mfa/*.mfa | sed s/"> "/">"/ > 4dX.chrX.mfa
 
+XXXX ! 2010-12-29 - There is an error in the awk below.
+XXXX It ends up only working on the first file mfa/chr1.mfa
+XXXX with the result in placentals.mfa only from chr1.mfa
     sed -e 's/,macEug1.*//' species.lst > placentals.lst
     awk '
 BEGIN { good = 1 }
@@ -5261,6 +5264,9 @@ BEGIN { good = 1 }
 	--aggregate `cat placentals.lst` placentals.mfa | sed s/"> "/">"/ \
 	> 4dX.placentals.mfa
 
+XXXX ! 2010-12-29 - There is an error in the awk below.
+XXXX It ends up only working on the first file mfa/chr1.mfa
+XXXX with the result in primates.mfa only from chr1.mfa
     sed -e 's/,tupBel1.*//' species.lst > primates.lst
     awk '
 BEGIN { good = 1 }
