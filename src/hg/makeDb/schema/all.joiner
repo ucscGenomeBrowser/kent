@@ -1962,7 +1962,7 @@ identifier rgdEstId external=RGD
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
     $rn,$hg.rgdQtl.name
-    $rn,$hg.rgdQtlLink.name minCheck=0.89
+    $rn,$hg.rgdQtlLink.name minCheck=0.88
 
 identifier rgdRatQtlId external=RGD
 "RGD Rat QTL ID mapped to other organism"

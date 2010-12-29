@@ -103,7 +103,9 @@ firstItemPos customTracks
 frames wigMaf
 gClass_2way_consensus_pseudogene genePred
 gClass_2way_pseudogene genePred
+gClass_Ambiguous genePred
 gClass_Artifact bed genePred
+gClass_Duplicated genePred
 gClass_Ensembl_RNA genePred
 gClass_Ensembl_coding genePred
 gClass_Ensembl_non_coding genePred
@@ -124,6 +126,7 @@ gClass_Novel_Transcript bed genePred
 gClass_Novel_transcript genePred
 gClass_Novel_transcript_gencode_conf genePred
 gClass_Polymorphic bed genePred
+gClass_Processed genePred
 gClass_Processed_pseudogene bed genePred
 gClass_Pseudogene_fragment genePred
 gClass_Putative bed genePred
