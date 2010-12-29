@@ -14,7 +14,7 @@ labVersion Bowtie 0.12.5
 project wgEncode
 replicate 1
 sex M
-strain C3H
+strain RIII
 subId 2016
 view Alignments
 
@@ -34,7 +34,7 @@ labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
 sex M
-strain C3H
+strain RIII
 subId 2016
 tableName wgEncodeUwDnase3134C3hMAdult8wksHotspotsRep1
 view Hotspots
@@ -55,7 +55,7 @@ labVersion lmax-v1.0
 project wgEncode
 replicate 1
 sex M
-strain C3H
+strain RIII
 subId 2016
 tableName wgEncodeUwDnase3134C3hMAdult8wksPkRep1
 view Peaks
@@ -76,7 +76,7 @@ labVersion 1
 project wgEncode
 replicate 1
 sex M
-strain C3H
+strain RIII
 subId 2016
 view RawData
 
@@ -96,7 +96,7 @@ labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
 sex M
-strain C3H
+strain RIII
 subId 2016
 tableName wgEncodeUwDnase3134C3hMAdult8wksRawRep1
 view RawSignal
@@ -117,7 +117,7 @@ labVersion Bowtie 0.12.5
 project wgEncode
 replicate 1
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 2000
 view Alignments
 
@@ -137,7 +137,7 @@ labVersion Bowtie 0.12.5
 project wgEncode
 replicate 2
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 1997
 view Alignments
 
@@ -157,7 +157,7 @@ labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 2000
 tableName wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep1
 view Hotspots
@@ -178,7 +178,7 @@ labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 1997
 tableName wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep2
 view Hotspots
@@ -199,7 +199,7 @@ labVersion lmax-v1.0
 project wgEncode
 replicate 1
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 2000
 tableName wgEncodeUwDnase416bC57bl6MAdult8wksPkRep1
 view Peaks
@@ -220,7 +220,7 @@ labVersion lmax-v1.0
 project wgEncode
 replicate 2
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 1997
 tableName wgEncodeUwDnase416bC57bl6MAdult8wksPkRep2
 view Peaks
@@ -241,7 +241,7 @@ labVersion 1
 project wgEncode
 replicate 1
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 2000
 view RawData
 
@@ -261,7 +261,7 @@ labVersion 1
 project wgEncode
 replicate 2
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 1997
 view RawData
 
@@ -281,7 +281,7 @@ labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 2000
 tableName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1
 view RawSignal
@@ -302,7 +302,7 @@ labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
 sex M
-strain C57BL/6
+strain B6D2F1/J
 subId 1997
 tableName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2
 view RawSignal
@@ -3305,4 +3305,4 @@ subId 2028
 tableName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2
 view RawSignal
 
-# MAGIC: -1213530911
+# MAGIC: -1203082391

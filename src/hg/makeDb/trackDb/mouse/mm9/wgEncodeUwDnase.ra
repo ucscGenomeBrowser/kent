@@ -25,7 +25,7 @@ longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Wa
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 3134=3134 416B=416B BCellCD19p=B-cell_(CD19+) Cerebellum=Cerebellum Cerebrum=Cerebrum ESCJ7=ES-CJ7 Fibroblast=Fibroblast Kidney=Kidney Liver=Liver Lung=Lung MEL=MEL TNaive=T-Naive WholeBrain=Whole_Brain
-subGroup3 strain Strain C3H=C3H C57BL6=C57BL/6 S129=129 UKN=Unknown
+subGroup3 strain Strain B6D2F1J=B6D2F1/J C57BL6=C57BL/6 RIII=RIII S129=129 UKN=Unknown
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks E0=E0 E14half=E14.5 immortal=immortalized
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
@@ -66,7 +66,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel 416B Hspt 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in 416B cells)
-        subGroups view=Hotspots age=immortal cellType=416B sex=M strain=C57BL6 rep=rep2
+        subGroups view=Hotspots age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
         type broadPeak
         color 153,38,0
         # subId=1997 dateSubmitted=2010-07-22
@@ -76,7 +76,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel 416B Hspt 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in 416B cells)
-        subGroups view=Hotspots age=immortal cellType=416B sex=M strain=C57BL6 rep=rep1
+        subGroups view=Hotspots age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
         type broadPeak
         color 153,38,0
         # subId=2000 dateSubmitted=2010-07-23
@@ -366,7 +366,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel 3134 Hspt 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in 3134 cells)
-        subGroups view=Hotspots age=immortal cellType=3134 sex=M strain=C3H rep=rep1
+        subGroups view=Hotspots age=immortal cellType=3134 sex=M strain=RIII rep=rep1
         type broadPeak
         color 153,38,0
         # subId=2016 dateSubmitted=2010-07-24
@@ -397,7 +397,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel 416B Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in 416B cells)
-        subGroups view=Peaks age=immortal cellType=416B sex=M strain=C57BL6 rep=rep2
+        subGroups view=Peaks age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
         type narrowPeak
         color 153,38,0
         # subId=1997 dateSubmitted=2010-07-22
@@ -407,7 +407,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel 416B Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in 416B cells)
-        subGroups view=Peaks age=immortal cellType=416B sex=M strain=C57BL6 rep=rep1
+        subGroups view=Peaks age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
         type narrowPeak
         color 153,38,0
         # subId=2000 dateSubmitted=2010-07-23
@@ -697,7 +697,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel 3134 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in 3134 cells)
-        subGroups view=Peaks age=immortal cellType=3134 sex=M strain=C3H rep=rep1
+        subGroups view=Peaks age=immortal cellType=3134 sex=M strain=RIII rep=rep1
         type narrowPeak
         color 153,38,0
         # subId=2016 dateSubmitted=2010-07-24
@@ -731,7 +731,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 416B Sig 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in 416B cells)
-        subGroups view=RawSignal age=immortal cellType=416B sex=M strain=C57BL6 rep=rep2
+        subGroups view=RawSignal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep2
         type bigWig 1.000000 74554.000000
         color 153,38,0
         # subId=1997 dateSubmitted=2010-07-22
@@ -741,7 +741,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 416B Sig 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in 416B cells)
-        subGroups view=RawSignal age=immortal cellType=416B sex=M strain=C57BL6 rep=rep1
+        subGroups view=RawSignal age=immortal cellType=416B sex=M strain=B6D2F1J rep=rep1
         type bigWig 1.000000 109673.000000
         color 153,38,0
         # subId=2000 dateSubmitted=2010-07-23
@@ -1031,7 +1031,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel 3134 Sig 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in 3134 cells)
-        subGroups view=RawSignal age=immortal cellType=3134 sex=M strain=C3H rep=rep1
+        subGroups view=RawSignal age=immortal cellType=3134 sex=M strain=RIII rep=rep1
         type bigWig 1.000000 53562.000000
         color 153,38,0
         # subId=2016 dateSubmitted=2010-07-24
