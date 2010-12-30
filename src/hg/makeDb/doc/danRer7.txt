@@ -1918,12 +1918,12 @@ exit 1
 
     para time
 
-#Completed: 351155 of 351155 jobs
-# CPU time in finished jobs:   15263537s  254392.28m  4239.87h  176.66d  0.484 y
-# IO & Wait Time:               1999082s   33318.04m   555.30h   23.14d  0.063 y
-# Average job time:                  49s       0.82m     0.01h    0.00d
-# Longest finished job:             128s       2.13m     0.04h    0.00d
-# Submission to last job:         21587s     359.78m     6.00h    0.25d
+# Completed: 250096 of 250096 jobs
+# CPU time in finished jobs:    7759615s  129326.92m  2155.45h   89.81d  0.246 y
+# IO & Wait Time:               1198357s   19972.62m   332.88h   13.87d  0.038 y
+# Average job time:                  36s       0.60m     0.01h    0.00d
+# Longest finished job:            1267s      21.12m     0.35h    0.01d
+# Submission to last job:         18191s     303.18m     5.05h    0.21d
 
     ssh swarm
     cd /cluster/data/danRer7/bed/tblastn.hg18KG

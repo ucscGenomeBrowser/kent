@@ -13746,4 +13746,21 @@ awk 'BEGIN{OFS="\t";}{fname=$1"_gl.txt"; print $4, $2, $3, $6 >> fname;}' hg19.g
 for f in chr*.txt; do hgLoadSqlTab hg19 ${f%.txt} glDbRep.sql $f; done
 
 #############################################################################
+# MGI MOUSE QTL LIFT (DONE 2010-12-30, Andy)
 
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir mgiMouseQtl
+cd mgiMouseQtl/
+## There are two subtracks to deal with but it's not a big deal.
+## Both are bed4.
+for tab in jaxQtlAsIs jaxQtlPadded; do
+   hgsql hg18 --skip-column-names -e "select chrom,chromStart,chromEnd,name from "$tab > hg18.${tab}.bed
+   liftOver hg18.${tab}.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bed,unmapped}
+   hgLoadBed hg19 $tab hg19.${tab}.bed
+done
+wc -l *.bed
+#    398 hg18.jaxQtlAsIs.bed
+#   1463 hg18.jaxQtlPadded.bed
+#    383 hg19.jaxQtlAsIs.bed
+#   1462 hg19.jaxQtlPadded.bed
+## 96.2% for jaxQtlAsIs, 99.9% for jaxQtlPadded.
