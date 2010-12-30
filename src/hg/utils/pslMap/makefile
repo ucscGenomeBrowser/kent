@@ -1,6 +1,6 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 L += -lm
 
