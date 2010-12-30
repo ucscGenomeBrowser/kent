@@ -726,9 +726,9 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
 
     #	All distances remain as specified in the 46way.nh
-    /cluster/bin/phast/tree_doctor --prune-all-but danRer7,oryLat2,gasAcu1,tetNig2,xenTro2,mm9,hg19 46way.nh > 8way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but danRer6,fr2,oryLat2,gasAcu1,tetNig2,xenTro2,mm9,hg19 46way.nh | sed -e "s/danRer6/danRer7/" > 8way.nh
 
-#(((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,((tetNig2:0.416610,gasAcu1:0.372371):0.322824,danRer7:0.731166):0.155214);
+# (((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,(((tetNig2:0.224774,fr2:0.205294):0.191836,(gasAcu1:0.313967,oryLat2:0.478451):0.058404):0.322824,danRer7:0.731166):0.155214);
 
 # reorder to get danRer7 on top:
     cat << '_EOF_' > zFishOnTop.nh
@@ -1154,7 +1154,7 @@ done
 	--aggregate "`cat fish.lst`" fishMfa/*.mfa | sed s/"> "/">"/ \
 	> 4d.fish.mfa
 
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/tree_doctor \
+    /cluster/bin/phast/tree_doctor \
         --no-branchlen --prune-all-but="`cat fish.lst`" ../tree-commas.nh \
                 > tree-commas.fish.nh
     # use phyloFit to create tree model (output is phyloFit.mod)
@@ -1918,12 +1918,12 @@ exit 1
 
     para time
 
-#Completed: 351155 of 351155 jobs
-# CPU time in finished jobs:   15263537s  254392.28m  4239.87h  176.66d  0.484 y
-# IO & Wait Time:               1999082s   33318.04m   555.30h   23.14d  0.063 y
-# Average job time:                  49s       0.82m     0.01h    0.00d
-# Longest finished job:             128s       2.13m     0.04h    0.00d
-# Submission to last job:         21587s     359.78m     6.00h    0.25d
+# Completed: 250096 of 250096 jobs
+# CPU time in finished jobs:    7759615s  129326.92m  2155.45h   89.81d  0.246 y
+# IO & Wait Time:               1198357s   19972.62m   332.88h   13.87d  0.038 y
+# Average job time:                  36s       0.60m     0.01h    0.00d
+# Longest finished job:            1267s      21.12m     0.35h    0.01d
+# Submission to last job:         18191s     303.18m     5.05h    0.21d
 
     ssh swarm
     cd /cluster/data/danRer7/bed/tblastn.hg18KG
