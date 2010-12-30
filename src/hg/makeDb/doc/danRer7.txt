@@ -726,9 +726,9 @@ http://hgdownload.cse.ucsc.edu/goldenPath/hg19/multiz46way/46way.corrected.nh
 
 
     #	All distances remain as specified in the 46way.nh
-    /cluster/bin/phast/tree_doctor --prune-all-but danRer7,oryLat2,gasAcu1,tetNig2,xenTro2,mm9,hg19 46way.nh > 8way.nh
+    /cluster/bin/phast/tree_doctor --prune-all-but danRer6,fr2,oryLat2,gasAcu1,tetNig2,xenTro2,mm9,hg19 46way.nh | sed -e "s/danRer6/danRer7/" > 8way.nh
 
-#(((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,((tetNig2:0.416610,gasAcu1:0.372371):0.322824,danRer7:0.731166):0.155214);
+# (((hg19:0.131183,mm9:0.352605):0.525173,xenTro2:0.852482):0.300396,(((tetNig2:0.224774,fr2:0.205294):0.191836,(gasAcu1:0.313967,oryLat2:0.478451):0.058404):0.322824,danRer7:0.731166):0.155214);
 
 # reorder to get danRer7 on top:
     cat << '_EOF_' > zFishOnTop.nh
@@ -1154,7 +1154,7 @@ done
 	--aggregate "`cat fish.lst`" fishMfa/*.mfa | sed s/"> "/">"/ \
 	> 4d.fish.mfa
 
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/tree_doctor \
+    /cluster/bin/phast/tree_doctor \
         --no-branchlen --prune-all-but="`cat fish.lst`" ../tree-commas.nh \
                 > tree-commas.fish.nh
     # use phyloFit to create tree model (output is phyloFit.mod)
