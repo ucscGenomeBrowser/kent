@@ -13764,3 +13764,18 @@ wc -l *.bed
 #    383 hg19.jaxQtlAsIs.bed
 #   1462 hg19.jaxQtlPadded.bed
 ## 96.2% for jaxQtlAsIs, 99.9% for jaxQtlPadded.
+
+#############################################################################
+# H-INV LIFT (DONE 2010-12-30, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir HInv
+cd HInv/
+hgsql hg18 --skip-column-names -e "select * from HInvGeneMrna" | cut -f2- > hg18.HInvGeneMrna.psl
+liftOver -pslT hg18.HInvGeneMrna.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.HInvGeneMrna.{psl,unmapped}
+hgLoadPsl -table=HInvGeneMrna hg19 hg19.HInvGeneMrna.psl
+## A couple non-positional tables too:
+hgsql hg19 -e "create table knownToHInv select * from hg18.knownToHInv"
+hgsql hg19 -e "create table HInv select * from hg18.HInv"
+
+#############################################################################

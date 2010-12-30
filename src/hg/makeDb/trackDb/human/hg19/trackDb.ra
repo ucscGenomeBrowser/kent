@@ -47,6 +47,10 @@ track jaxQtlMapped override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+track HInvGeneMrna override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 track gwasCatalog override
 snpTable snp131
 snpVersion 131
