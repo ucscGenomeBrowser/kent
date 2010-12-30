@@ -13,6 +13,10 @@ visibility hide
 track gap override
 visibility hide
 
+track clonePos override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 track fishClones override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"

@@ -13728,3 +13728,22 @@ wc -l *.bed
 hgLoadBed hg19 decipher hg19.decipher.bed
 
 #############################################################################
+# CLONE COVERAGE LIFT FROM HG18 (DONE 2010-12-29, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift/
+mkdir clonePos
+cd clonePos/
+hgsql --skip-column-names -e "select * from clonePos" hg18 | awk 'BEGIN{FS="\t"; OFS="\t";}{print $4, $5, $6, $1, $2, $3, $7, $8;}' > hg18.clonePos.bed4p
+liftOver -tab -bedPlus=4 hg18.clonePos.bed4p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.clonePos.{bed4p,unmapped}
+awk 'BEGIN{FS="\t"; OFS="\t";}{print $4, $5, $6, $1, $2, $3, $7, $8;}' hg19.clonePos.bed4p > hg19.clonePos.txt
+hgLoadSqlTab hg19 clonePos clonePos.sql hg19.clonePos.txt
+## it loaded but there seems to be a dependency on the "chr*_gl" tables.  sigh..
+mkdir gl
+cd gl/
+echo "show tables like 'chr%_gl'" | hgsql hg18 | tail -n +2 | while read table; do echo "select * from "$table | hgsql hg18 | tail -n +2 | cut -f2- | awk -v chr=${table%_gl} 'BEGIN{OFS="\t"}{print chr, $2, $3, $1, "1000", $4;}'; done > hg18.gl.bed
+liftOver hg18.gl.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.gl.{bed,unmapped}
+awk 'BEGIN{OFS="\t";}{fname=$1"_gl.txt"; print $4, $2, $3, $6 >> fname;}' hg19.gl.bed
+for f in chr*.txt; do hgLoadSqlTab hg19 ${f%.txt} glDbRep.sql $f; done
+
+#############################################################################
+
