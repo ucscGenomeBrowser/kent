@@ -13852,3 +13852,19 @@ wc -l *.bed
 ## field.  I doubt it's important to keep it that way.
 
 #############################################################################
+# ORegAnno LIFT TO HG19 (DONE 2010-12-31, Andy)
+
+mkdir oreganno
+cd oreganno
+hgsql hg18 --skip-column-names -e "select * from oreganno" | cut -f2- > hg18.oreganno.bed3p
+liftOver -bedPlus=3 -tab hg18.oreganno.bed3p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.oreganno.{bed3p,unmapped}
+cp ~/kent/src/hg/lib/oreganno.sql .
+hgLoadBed -tab -sqlTable=oreganno.sql hg19 oreganno hg19.oreganno.bed3p
+hgsql hg19 -e "create table oregannoLink select * from hg18.oregannoLink"
+hgsql hg19 -e "create table oregannoAttr select * from hg18.oregannoAttr"
+wc -l *.bed3p
+#  23130 hg18.oreganno.bed3p
+#  23118 hg19.oreganno.bed3p
+## 99.9% lifted.
+
+#############################################################################
