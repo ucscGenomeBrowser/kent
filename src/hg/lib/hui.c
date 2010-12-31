@@ -1078,7 +1078,7 @@ else if (gotCds)
     puts("<br /><b>Show codon numbering</b>:\n");
     if(curOpt == baseColorDrawOff)
         disabled = "disabled";
-    cgiMakeCheckBoxJS(buf, cartUsualBoolean(cart, buf, FALSE), disabled);
+    cgiMakeCheckBoxJS(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE), disabled);
     }
 else if (gotSeq)
     {
