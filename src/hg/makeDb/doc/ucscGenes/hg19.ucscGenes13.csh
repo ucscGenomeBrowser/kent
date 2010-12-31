@@ -28,7 +28,7 @@ set wormDb = ce6
 set yeastDb = sacCer2
 
 # The net alignment for the closely-related species indicated in $xdb
-set xdbNet = $genomes/$xdb/bed/lastz.${db}/axtChain/${xdb}.${db}.net.gz
+set xdbNet = $genomes/$db/bed/lastz.${xdb}/axtChain/${db}.${xdb}.net.gz
 
 # Blast tables
 set rnBlastTab = rnBlastTab
@@ -149,9 +149,9 @@ endif
 endif # BRACKET
 
 # Get the blocks in this genome that are syntenic to the $xdb genome
-netFilter -syn $xdbNet > ${xdb}.${db}.syn.net
-netToBed ${xdb}.${db}.syn.net ${db}.${xdb}.syntenicBlocks.bed
-gzip ${xdb}.${db}.syn.net
+netFilter -syn $xdbNet > ${db}.${xdb}.syn.net
+netToBed ${db}.${xdb}.syn.net ${db}.${xdb}.syntenicBlocks.bed
+gzip ${db}.${xdb}.syn.net
 
 # Get the Rfams that overlap with blocks that are syntenic to $Xdb
 mkdir -p rfam
