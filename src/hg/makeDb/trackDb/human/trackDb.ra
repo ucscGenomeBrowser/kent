@@ -4115,6 +4115,99 @@ type bed 3
 track cpgIslandExt override
 priority 0
 
+track snpArray
+compositeTrack on
+shortLabel SNP Arrays
+longLabel SNP Genotyping Arrays
+group varRep
+priority 101
+visibility hide
+type bed 4 .
+
+    track snpArrayAffy6
+    parent snpArray
+    shortLabel Affy SNP 6.0
+    longLabel Affymetrix SNP 6.0
+    type bed 6 +
+    priority 1
+
+    track snpArrayAffy6SV
+    parent snpArray
+    shortLabel Affy SNP 6.0 SV
+    longLabel Affymetrix SNP 6.0 Structural Variation
+    type bed 6 +
+    priority 2
+
+    track snpArrayAffy5
+    parent snpArray off
+    shortLabel Affy SNP 5.0
+    longLabel Affymetrix SNP 5.0
+    type bed 6 +
+    priority 3
+
+    track snpArrayAffy250Nsp
+    parent snpArray off
+    shortLabel Affy 250KNsp
+    longLabel Affymetrix GeneChip Human Mapping 250K Nsp
+    type bed 6 +
+    priority 4
+
+    track snpArrayAffy250Sty
+    parent snpArray off
+    shortLabel Affy 250KSty
+    longLabel Affymetrix GeneChip Human Mapping 250K Sty
+    type bed 6 +
+    priority 5
+
+    track snpArrayIllumina650
+    parent snpArray off
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
+    type bed 6 +
+    priority 6
+
+    track snpArrayIllumina550
+    parent snpArray off
+    shortLabel Illumina 550
+    longLabel Illumina Human Hap 550v3
+    type bed 6 +
+    priority 7
+
+    track snpArrayIllumina300
+    parent snpArray off
+    shortLabel Illumina 300
+    longLabel Illumina Human Hap 300v3
+    type bed 6 +
+    priority 8
+
+    track snpArrayIllumina1M
+    parent snpArray
+    shortLabel Illumina 1M-Duo
+    longLabel Illumina Human1M-Duo
+    type bed 6 +
+    priority 9
+
+    track snpArrayIlluminaHumanCytoSNP_12
+    parent snpArray
+    shortLabel Illumina Cyto-12
+    longLabel Illumina Human CytoSNP-12
+    type bed 6 +
+    priority 10
+
+    track snpArrayIlluminaHuman660W_Quad
+    parent snpArray
+    shortLabel Illumina 660W-Q
+    longLabel Illumina Human 660W-Quad
+    type bed 6 +
+    priority 11
+
+    track snpArrayIlluminaHumanOmni1_Quad
+    parent snpArray
+    shortLabel Illumina Omni1-Q
+    longLabel Illumina Human Omni1-Quad
+    type bed 6 +
+    priority 12
+
 searchName decipherId
 searchTable decipher
 termRegex [0-9]+

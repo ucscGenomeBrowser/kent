@@ -13962,3 +13962,72 @@ done
 for f in *; do gzip $f; echo $f zipped; done
 
 #############################################################################
+# SNP ARRAYS LIFT TO HG19 (DONE 2010-12-31, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir snpArray
+cd snpArray/
+
+## 12 arrays:
+## 
+## snpArrayAffy6                   (bed6+, 8 fields)
+## snpArrayAffy6SV                 (bed6)
+## snpArrayAffy5                   (bed6+, 8 fields)
+## snpArrayAffy250Nsp              (bed6+, 8 fields)
+## snpArrayAffy250Sty              (bed6+, 8 fields)
+## snpArrayIllumina650             (bed6+, 7 fields)
+## snpArrayIllumina550             (bed6+, 7 fields)
+## snpArrayIllumina300             (bed6+, 7 fields)
+## snpArrayIllumina1M              (bed6+, 7 fields)
+## snpArrayIlluminaHumanCytoSNP_12 (bed6+, 7 fields)
+## snpArrayIlluminaHuman660W_Quad  (bed6+, 7 fields)
+## snpArrayIlluminaHumanOmni1_Quad (bed6+, 7 fields)
+
+## Get the bed6 one out of the way first:
+
+hgsql hg18 --skip-column-names -e "select * from snpArrayAffy6SV" | cut -f2- > hg18.snpArrayAffy6SV.bed
+liftOver hg18.snpArrayAffy6SV.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.snpArrayAffy6SV.{bed,unmapped}
+hgLoadBed hg19 snpArrayAffy6SV hg19.snpArrayAffy6SV.bed
+wc -l *.bed
+#  945805 hg18.snpArrayAffy6SV.bed
+#  945615 hg19.snpArrayAffy6SV.bed
+
+## The rest each may or may not have their own module in lib
+## For simplicity sake, I'll just dump the CREATEs straight from
+## hg18 into their own .sql file.
+
+for table in snpArrayAffy6 snpArrayAffy5 snpArrayAffy250Nsp snpArrayAffy250Sty snpArrayIllumina650 snpArrayIllumina550 snpArrayIllumina300 snpArrayIllumina1M snpArrayIlluminaHumanCytoSNP_12 snpArrayIlluminaHuman660W_Quad snpArrayIlluminaHumanOmni1_Quad; do
+   hgsql hg18 --skip-column-names -e "select * from "$table | cut -f2- > hg18.${table}.bed6p
+   hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > hg18.${table}.sql
+   liftOver -bedPlus=6 hg18.${table}.bed6p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed6p,unmapped}
+   hgLoadBed -sqlTable=hg18.${table}.sql -renameSqlTable hg19 $table hg19.${table}.bed6p
+done
+for table in snpArrayAffy6 snpArrayAffy5 snpArrayAffy250Nsp snpArrayAffy250Sty snpArrayIllumina650 snpArrayIllumina550 snpArrayIllumina300 snpArrayIllumina1M snpArrayIlluminaHumanCytoSNP_12 snpArrayIlluminaHuman660W_Quad snpArrayIlluminaHumanOmni1_Quad; do
+   hg18=`wc -l hg18.${table}.bed6p | awk '{print $1}'`
+   hg19=`wc -l hg19.${table}.bed6p | awk '{print $1}'`
+   perc=`echo ${hg19}"/"${hg18}" * 100" | R --vanilla | grep "\[1\]" | awk '{print $2}'`
+   printf "%s: %d/%d items lifted (%.3f%%)\n" $table $hg19 $hg18 $perc
+done
+# snpArrayAffy6: 909297/909508 items lifted (99.977%)
+# snpArrayAffy5: 440638/440734 items lifted (99.978%)
+# snpArrayAffy250Nsp: 257159/257213 items lifted (99.979%)
+# snpArrayAffy250Sty: 233887/233941 items lifted (99.977%)
+# snpArrayIllumina650: 660388/660557 items lifted (99.974%)
+# snpArrayIllumina550: 560972/561122 items lifted (99.973%)
+# snpArrayIllumina300: 318046/318117 items lifted (99.978%)
+# snpArrayIllumina1M: 1217520/1219961 items lifted (99.800%)
+# snpArrayIlluminaHumanCytoSNP_12: 302127/302402 items lifted (99.909%)
+# snpArrayIlluminaHuman660W_Quad: 664655/665901 items lifted (99.813%)
+# snpArrayIlluminaHumanOmni1_Quad: 1169872/1175447 items lifted (99.526%)
+
+## Now there's a few "Raw" tables to lift. Convert them to bed3+ first:
+
+for tab in `echo show tables like "'snpArray%Raw'" | hgsql hg18 | tail -n +2`; do 
+  hgsql hg18 --skip-column-names -e "select * from "$table | awk 'BEGIN{FS="\t";OFS="\t"}{print "chr"$6, $7 - 1, $7, $1, $2, $3, $4, $5}' > hg18.${table}.bed3p
+  liftOver -bedPlus=3 -tab hg18.${table}.bed3p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed3p,unmapped}
+  awk 'BEGIN{FS="\t";OFS="\t"}{print $4, $5, $6, $7, $8, substr($1, 4), $3;}' hg19.${table}.bed3p > hg19.${table}.txt
+  hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > hg18.${table}.sql
+  hgLoadSqlTab hg19 $table hg18.${table}.sql hg19.${table}.txt
+done
+
+#############################################################################
