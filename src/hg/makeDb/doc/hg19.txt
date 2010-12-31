@@ -13779,3 +13779,29 @@ hgsql hg19 -e "create table knownToHInv select * from hg18.knownToHInv"
 hgsql hg19 -e "create table HInv select * from hg18.HInv"
 
 #############################################################################
+# SIB ALT-SPLICING LIFT (DONE 2010-12-30, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir sibTxGraph
+cd sibTxGraph/
+## there is positional data in the 9th column, so I'll convert it to a bed12+
+## and back to the native format later.  Again, the awk scripts to do that
+## are aptly named, and reside in the hg19 directory with the data. 
+hgsql hg18 --skip-column-names -e "select * from sibTxGraph" | cut -f2- | awk -f toBed12Plus.awk > hg18.sibTxGraph.bed12p
+liftOver -tab -bedPlus=12 hg18.sibTxGraph.bed12p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.sibTxGraph.{bed12p,unmapped}
+awk -f toSib.awk hg19.sibTxGraph.bed12p > hg19.sibTxGraph.txt
+cut -f1-3 hg19.sibTxGraph.bed12p > hg19.sibTxGraph.bed3
+hgLoadBed -noLoad hg19 sibTxGraph hg19.sibTxGraph.bed3
+cut -f1 bed.tab > hg19.sibTxGraph.bins
+paste hg19.sibTxGraph.bins hg19.sibTxGraph.txt > hg19.sibTxGraph.withBin.txt
+## Oddly, there's no .sql file for this in the kent source-tree, so I'll 
+## make one directly from hg18 that's suitable for hgLoadSqlTab
+hgsqldump --no-data --compact hg18 sibTxGraph | sed '/^SET/d;s/ENGINE.*//'  > sibTxGraph.sql
+hgLoadSqlTab hg19 sibTxGraph sibTxGraph.sql hg19.sibTxGraph.withBin.txt
+
+wc -l *.bed12p
+#    47094 hg18.sibTxGraph.bed12p
+#    47008 hg19.sibTxGraph.bed12p
+## 99.8% lifted, not bad.
+
+#############################################################################
