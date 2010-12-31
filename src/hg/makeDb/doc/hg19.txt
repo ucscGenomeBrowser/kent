@@ -13854,6 +13854,7 @@ wc -l *.bed
 #############################################################################
 # ORegAnno LIFT TO HG19 (DONE 2010-12-31, Andy)
 
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir oreganno
 cd oreganno
 hgsql hg18 --skip-column-names -e "select * from oreganno" | cut -f2- > hg18.oreganno.bed3p
@@ -13866,5 +13867,34 @@ wc -l *.bed3p
 #  23130 hg18.oreganno.bed3p
 #  23118 hg19.oreganno.bed3p
 ## 99.9% lifted.
+
+#############################################################################
+# NK NUC LAMINA LIFT TO HG19 (DONE 2010-12-31, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir laminB1
+cd laminB1/
+hgsql hg18 --skip-column-names -e "select * from laminB1Lads" | cut -f2- > hg18.laminB1Lads.bed
+liftOver hg18.laminB1Lads.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.laminB1Lads.{bed,unmapped}
+hgLoadBed hg19 laminB1Lads hg19.laminB1Lads.bed
+wc -l *.bed
+# 1344 hg18.laminB1Lads.bed
+# 1302 hg19.laminB1Lads.bed
+## 96.9% lifted... ok, not bad I guess.
+
+ln -s /hive/data/genomes/hg18/bed/nuclearLamina/LaminB1_080513.wig hg18.laminB1.customWigVarStep
+awk -f toBedGraph.awk hg18.laminB1.customWigVarStep > hg18.laminB1.bg
+liftOver -bedPlus=3 -tab hg18.laminB1.bg /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.laminB1.{bg,unmapped}
+awk '{if ($3 - $2 == 60) print;}' hg19.laminB1.bg | sort -k1,1 -k2,2n | awk 'BEGIN{prev=-100;chrom="";FS="\t";OFS="\t";}{ if ((chrom != $1) || ($2 - prev > 60)) {print; chrom = $1; prev = $2;}}'> hg19.laminB1.span60.bg
+wigBedToStep hg19.laminB1.span60.bg hg19.laminB1.span60.wigVarStep
+ln -s hg19.laminB1.span60.wigVarStep laminB1.wig
+wigEncode laminB1.{wig,wiggle,wib}
+#Converted laminB1.wig, upper limit 5.68, lower limit -6.60
+ln -s `pwd`/laminB1.wib /gbdb/hg19/wib/laminB1.wib
+hgLoadWiggle hg19 laminB1 laminB1.wiggle
+wc -l hg18.laminB1.bg hg19.laminB1.span60.bg
+#  2909178 hg18.laminB1.bg
+#  2908692 hg19.laminB1.span60.bg
+## In total, 99.98% of the datapoints lifted cleanly.
 
 #############################################################################
