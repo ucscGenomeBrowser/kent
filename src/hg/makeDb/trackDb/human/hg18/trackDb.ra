@@ -1167,29 +1167,6 @@ type bed 3
     color 50,150,50
     priority 3
 
-track eioJcviNAS
-compositeTrack on
-shortLabel EIO/JCVI NAS
-longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites
-group regulation
-visibility hide
-priority 0
-type bed 3 .
-
-    track eioJcviNASNeg
-    parent eioJcviNAS
-    shortLabel EIO/JCVI CD34- NAS
-    longLabel CD34- cells Nuclease Accessible sites
-    priority 2
-    color 100,30,250
-
-    track eioJcviNASPos
-    parent eioJcviNAS
-    shortLabel EIO/JCVI CD34+ NAS
-    longLabel CD34+ cells Nuclease Accessible sites
-    priority 1
-    color 100,30,150
-
 # AFFY TRANSCRIPTOME SUPERTRACK
         track affyTxnPhase3Super
         superTrack on
