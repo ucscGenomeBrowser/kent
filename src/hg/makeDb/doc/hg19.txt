@@ -13898,3 +13898,67 @@ wc -l hg18.laminB1.bg hg19.laminB1.span60.bg
 ## In total, 99.98% of the datapoints lifted cleanly.
 
 #############################################################################
+# UCSF BRAIN METHYLATION (DONE 2010-12-31, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir ucsfBrainMethyl
+cd ucsfBrainMethyl/
+
+## 10 tables:
+##
+## ucsfChipSeqH3K4me3BrainCoverage    (bedGraph/bed3+)
+## ucsfMreSeqBrainReads               (bed9)
+## ucsfMreSeqBrainCpG                 (bedGraph/bed3+)
+## ucsfMedipSeqBrainReads             (bed9)
+## ucsfMedipSeqBrainCpG               (bedGraph/bed3+)
+## ucsfMedipSeqBrainCoverage          (bedGraph/bed3+)
+## ucsfRnaSeqBrainAllReads            (bed9)
+## ucsfRnaSeqBrainAllCoverage         (bedGraph/bed3+)
+## ucsfRnaSeqBrainSmartReads          (bed9)
+## ucsfRnaSeqBrainSmartCoverage       (bedGraph/bed3+)
+
+## Do the bed9s first:
+
+for tab in ucsfMreSeqBrainReads ucsfMedipSeqBrainReads ucsfRnaSeqBrainAllReads ucsfRnaSeqBrainSmartReads; do
+   hgsql hg18 --skip-column-names -e "select * from "$tab | cut -f2- > hg18.${tab}.bed
+   liftOver hg18.${tab}.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bed,unmapped}
+   hgLoadBed hg19 $tab hg19.${tab}.bed
+   wc -l *.${tab}.bed
+done
+
+#   10110644 hg18.ucsfMreSeqBrainReads.bed
+#   10109979 hg19.ucsfMreSeqBrainReads.bed
+## 99.99% lifted
+#   44130143 hg18.ucsfMedipSeqBrainReads.bed
+#   44120612 hg19.ucsfMedipSeqBrainReads.bed
+## 99.98% lifted
+#   63033692 hg18.ucsfRnaSeqBrainAllReads.bed
+#   63031432 hg19.ucsfRnaSeqBrainAllReads.bed
+#   26767318 hg18.ucsfRnaSeqBrainSmartReads.bed
+#   26766288 hg19.ucsfRnaSeqBrainSmartReads.bed
+## getting old now, we get it... it lifts.
+    
+for tab in ucsfChipSeqH3K4me3BrainCoverage ucsfMreSeqBrainCpG ucsfMedipSeqBrainCpG ucsfMedipSeqBrainCoverage ucsfRnaSeqBrainAllCoverage ucsfRnaSeqBrainSmartCoverage; do
+   hgsql hg18 --skip-column-names -e "select * from "$tab | cut -f2- > hg18.${tab}.bg
+   liftOver -bedPlus=3 hg18.${tab}.bg /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bg,unmapped}
+   hgLoadBed -bedGraph=4 hg19 $tab hg19.${tab}.bg
+   wc -l *.${tab}.bg
+done
+
+#  2598517 hg18.ucsfChipSeqH3K4me3BrainCoverage.bg
+#  2598085 hg19.ucsfChipSeqH3K4me3BrainCoverage.bg
+#  1165599 hg18.ucsfMreSeqBrainCpG.bg
+#  1165521 hg19.ucsfMreSeqBrainCpG.bg
+# 20862283 hg18.ucsfMedipSeqBrainCpG.bg
+# 20859033 hg19.ucsfMedipSeqBrainCpG.bg
+# 80960101 hg18.ucsfMedipSeqBrainCoverage.bg
+# 80943454 hg19.ucsfMedipSeqBrainCoverage.bg
+# 17019268 hg18.ucsfRnaSeqBrainAllCoverage.bg
+# 17017461 hg19.ucsfRnaSeqBrainAllCoverage.bg
+#  6141663 hg18.ucsfRnaSeqBrainSmartCoverage.bg
+#  6140890 hg19.ucsfRnaSeqBrainSmartCoverage.bg
+## again in each case, almost all the data in the table lifts.
+
+for f in *; do gzip $f; echo $f zipped; done
+
+#############################################################################

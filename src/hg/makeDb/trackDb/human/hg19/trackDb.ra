@@ -148,6 +148,10 @@ track laminB1Super override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+track ucsfBrainMethyl override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
