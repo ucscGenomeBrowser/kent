@@ -27,6 +27,9 @@ set flyDb = dm3
 set wormDb = ce6
 set yeastDb = sacCer2
 
+# The net alignment for the closely-related species indicated in $xdb
+set xdbNet = $genomes/$db/bed/lastz.${xdb}/axtChain/${db}.${xdb}.net.gz
+
 # Blast tables
 set rnBlastTab = rnBlastTab
 if ($db =~ hg* ) then
@@ -65,6 +68,10 @@ set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/flybase5.3/flyBasePep.fa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
+
+# The net files in the external (xdb) species, for identifying blocks syntenic
+# between that species and the current one.
+set xdbNet = $genomes/$db/bed/lastzMm9.2009-05-13/mafSynNet
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
@@ -141,7 +148,12 @@ endif
 # move this endif statement past business that has been successfully completed
 endif # BRACKET
 
-# Get the Rfams that overlap with blocks that are syntenic to Mm9.
+# Get the blocks in this genome that are syntenic to the $xdb genome
+netFilter -syn $xdbNet > ${db}.${xdb}.syn.net
+netToBed ${db}.${xdb}.syn.net ${db}.${xdb}.syntenicBlocks.bed
+gzip ${db}.${xdb}.syn.net
+
+# Get the Rfams that overlap with blocks that are syntenic to $Xdb
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.bestHits.psl rfam/rfam.all.bed
 bedToExons rfam/rfam.all.bed rfam/rfam.exons.bed

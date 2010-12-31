@@ -26,6 +26,7 @@ errAbort(
 }
 
 
+char *docIdTable = DEFAULT_DOCID_TABLE;
 boolean editInput = FALSE;
 char *toBeDecided = "not yet assigned";
 
@@ -306,7 +307,7 @@ for(; mdbObj; mdbObj = nextObj)
         else
             docIdSub.valVersion = getReportVersion(docIdSub.valReport);
 
-        char *docId = docIdSubmit(conn, &docIdSub, docIdDir, type);
+        char *docId = docIdSubmit(conn, docIdTable, &docIdSub, docIdDir, type);
         char *composite = mdbObjFindValue(mdbObj, "composite");
         if (composite == NULL)
             errAbort("could not find composite name in metadata");

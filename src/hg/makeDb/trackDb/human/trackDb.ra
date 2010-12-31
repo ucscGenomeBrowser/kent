@@ -2210,6 +2210,29 @@ type bed 5 .
 useScore 1
 origAssembly hg16
 
+track eioJcviNAS
+compositeTrack on
+shortLabel EIO/JCVI NAS
+longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites
+group regulation
+visibility hide
+priority 0
+type bed 3 .
+
+    track eioJcviNASNeg
+    parent eioJcviNAS
+    shortLabel EIO/JCVI CD34- NAS
+    longLabel CD34- cells Nuclease Accessible sites
+    priority 2
+    color 100,30,250
+
+    track eioJcviNASPos
+    parent eioJcviNAS
+    shortLabel EIO/JCVI CD34+ NAS
+    longLabel CD34+ cells Nuclease Accessible sites
+    priority 1
+    color 100,30,150
+
 # explicitly give this a priority >100, so it doesn't precede
 # the others in this group, which are assigned pri=100, and alpha sorted by short label
 track regPotential7X
@@ -3852,6 +3875,41 @@ priority 0
 
 track oreganno override
 priority 0
+
+# laminB1 supertrack
+
+        track laminB1Super
+        superTrack on
+        shortLabel NKI Nuc Lamina
+        longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
+        group regulation
+        priority 300
+
+track laminB1Lads
+superTrack laminB1Super dense
+shortLabel  NKI LADs (Tig3)
+longLabel NKI LADs (Lamina Associated Domains, Tig3 cells)
+group regulation
+priority 300
+visibility hide
+color 0,0,127
+type bed 3
+
+track laminB1
+superTrack laminB1Super dense
+shortLabel LaminB1 (Tig3)
+longLabel NKI LaminB1 DamID Map (log2-ratio scores, Tig3 cells)
+group regulation
+priority 300
+visibility hide
+color 0,0,127
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -6.602 5.678
+spanList 60
+viewLimits -2:2
 
 track cpgIslandExt override
 priority 0
