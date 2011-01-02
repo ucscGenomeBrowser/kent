@@ -561,45 +561,47 @@ this.each(function(){
     {   // Called at init: determine the dimensions of chrom from 'cytoband' map items
         var lastX = -1;
         $('.cytoBand').each(function(ix) {
-            var loc = this.coords.split(",");
-            if(loc.length == 4) {
-                var myLeft  = parseInt(loc[0]);
-                var myRight = parseInt(loc[2]);
-                if( chr.top == -1) {
-                    chr.left   = myLeft;
-                    chr.right  = myRight;
-                    chr.top    = parseInt(loc[1]);
-                    chr.bottom = parseInt(loc[3]);
-                } else {
-                    if( chr.left  > myLeft)
-                        chr.left  = myLeft;
-                    if( chr.right < parseInt(loc[2]))
-                        chr.right = parseInt(loc[2]);
-                }
-
-                var range = this.title.substr(this.title.lastIndexOf(':')+1)
-                var pos = range.split('-');
-                if(pos.length == 2) {
-                    if( chr.name.length == 0) {
-                        chr.beg = parseInt(pos[0]);
-                        //chr.end = parseInt(pos[1]);
-                        chr.name = this.title.substring(this.title.lastIndexOf(' ')+1,this.title.lastIndexOf(':'))
+            if(this.coords) {
+                var loc = this.coords.split(",");
+                if(loc.length == 4) {
+                    var myLeft  = parseInt(loc[0]);
+                    var myRight = parseInt(loc[2]);
+                    if( chr.top == -1) {
+                        chr.left   = myLeft;
+                        chr.right  = myRight;
+                        chr.top    = parseInt(loc[1]);
+                        chr.bottom = parseInt(loc[3]);
                     } else {
-                        if( chr.beg > parseInt(pos[0]))
-                            chr.beg = parseInt(pos[0]);
+                        if( chr.left  > myLeft)
+                            chr.left  = myLeft;
+                        if( chr.right < parseInt(loc[2]))
+                            chr.right = parseInt(loc[2]);
                     }
-                    if( chr.end < parseInt(pos[1])) {
-                        chr.end = parseInt(pos[1]);
-                        if(lastX == -1)
-                            lastX = myRight;
-                        else if(lastX > myRight)
-                            chr.reverse = true;  // end is advancing, but X is not, so reverse
-                    } else if(lastX != -1 && lastX < myRight)
-                        chr.reverse = true;      // end is not advancing, but X is, so reverse
-
+    
+                    var range = this.title.substr(this.title.lastIndexOf(':')+1)
+                    var pos = range.split('-');
+                    if(pos.length == 2) {
+                        if( chr.name.length == 0) {
+                            chr.beg = parseInt(pos[0]);
+                            //chr.end = parseInt(pos[1]);
+                            chr.name = this.title.substring(this.title.lastIndexOf(' ')+1,this.title.lastIndexOf(':'))
+                        } else {
+                            if( chr.beg > parseInt(pos[0]))
+                                chr.beg = parseInt(pos[0]);
+                        }
+                        if( chr.end < parseInt(pos[1])) {
+                            chr.end = parseInt(pos[1]);
+                            if(lastX == -1)
+                                lastX = myRight;
+                            else if(lastX > myRight)
+                                chr.reverse = true;  // end is advancing, but X is not, so reverse
+                        } else if(lastX != -1 && lastX < myRight)
+                            chr.reverse = true;      // end is not advancing, but X is, so reverse
+    
+                    }
+                    $(this).css( 'cursor', 'text');
+                    $(this).attr("href","");
                 }
-            $(this).css( 'cursor', 'text');
-            $(this).attr("href","");
             }
         });
         chr.size  = (chr.end   - chr.beg );
