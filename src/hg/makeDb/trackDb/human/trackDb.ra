@@ -3911,8 +3911,302 @@ type wig -6.602 5.678
 spanList 60
 viewLimits -2:2
 
+track ucsfBrainMethyl
+compositeTrack on
+shortLabel UCSF Brain Methyl
+longLabel UCSF Brain DNA Methylation
+group regulation
+subGroup1 view Views ALN=Alignments COV=Raw_Signal CG=CpG_score
+subGroup2 sampleType Sample_Type Brain=Brain
+subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
+dimensions 
+sortOrder assayType=+ view=+
+#dimensions dimensionX=sampleType dimensionY=assayType
+dividers assayType 
+#hierachy view ALN=2 COV=3 CG=4
+dragAndDrop subTracks
+priority 1999
+visibility hide
+#itemRgb on
+type bed 3
+
+    track ucsfBrainMethylViewALN
+    shortLabel Alignments
+    view ALN
+    parent ucsfBrainMethyl
+    visibility hide
+
+        track ucsfMedipSeqBrainReads
+        shortLabel MeDIP Reads
+        longLabel MeDIP-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MeDIP1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 1
+
+        track ucsfMreSeqBrainReads
+        shortLabel MRE Reads
+        longLabel MRE-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MRE1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 2
+
+        track ucsfRnaSeqBrainSmartReads
+        shortLabel Smart Reads
+        longLabel RNA-seq Smart-Tagged Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA2
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 3
+
+        track ucsfRnaSeqBrainAllReads
+        shortLabel RNA-seq Reads
+        longLabel RNA-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA1
+        type bed 9
+        noInherit on
+        configurable on
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        itemRgb on
+        spectrum on
+        priority 4
+
+    track ucsfBrainMethylViewCOV
+    shortLabel Raw Signal
+    view COV
+    minLimit 0
+    maxLimit 1000
+    viewLimits 0:100
+    parent ucsfBrainMethyl
+    visibility full
+
+        track ucsfChipSeqH3K4me3BrainCoverage
+        shortLabel H3K4me3 RawSignal
+        longLabel H3K4me3 ChIP-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=H3K4me3
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,200,0
+        altColor 200,100,0
+        configurable on
+        autoScale on
+        priority 5
+
+        track ucsfMedipSeqBrainCoverage
+        shortLabel MeDIP RawSignal
+        longLabel MeDIP-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=MeDIP2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 100,0,0
+        altColor 200,100,0
+        configurable on
+        autoScale on
+        priority 6
+
+        track ucsfRnaSeqBrainSmartCoverage
+        shortLabel Smart RawSignal
+        longLabel RNA-seq Smart-Tagged Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=RNA2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,0,200
+        altColor 100,0,0
+        autoScale on
+        configurable on
+        priority 7
+
+        track ucsfRnaSeqBrainAllCoverage
+        shortLabel RNA-seq RawSignal
+        longLabel RNA-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=RNA1
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,0,200
+        altColor 100,0,0
+        autoScale on
+        configurable on
+        priority 8
+
+    track ucsfBrainMethylViewCG
+    shortLabel CpG score
+    view CG
+    minLimit 0
+    maxLimit 1000
+    viewLimits 0:100
+    parent ucsfBrainMethyl
+    visibility full
+
+        track ucsfMedipSeqBrainCpG
+        shortLabel MeDIP CpG
+        longLabel MeDIP-seq CpG Score
+        parent ucsfBrainMethylViewCG
+        subGroups view=CG sampleType=Brain assayType=MeDIP2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        configurable on
+        color 100,0,0
+        altColor 200,100,0
+        autoScale on
+        priority 9
+
+        track ucsfMreSeqBrainCpG
+        shortLabel MRE CpG
+        longLabel MRE-seq CpG Score
+        parent ucsfBrainMethylViewCG
+        subGroups view=CG sampleType=Brain assayType=MRE3
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        configurable on
+        color 0,100,0
+        altColor 200,100,0
+        autoScale on
+        priority 10
+  
 track cpgIslandExt override
 priority 0
+
+track snpArray
+compositeTrack on
+shortLabel SNP Arrays
+longLabel SNP Genotyping Arrays
+group varRep
+priority 101
+visibility hide
+type bed 4 .
+
+    track snpArrayAffy6
+    parent snpArray
+    shortLabel Affy SNP 6.0
+    longLabel Affymetrix SNP 6.0
+    type bed 6 +
+    priority 1
+
+    track snpArrayAffy6SV
+    parent snpArray
+    shortLabel Affy SNP 6.0 SV
+    longLabel Affymetrix SNP 6.0 Structural Variation
+    type bed 6 +
+    priority 2
+
+    track snpArrayAffy5
+    parent snpArray off
+    shortLabel Affy SNP 5.0
+    longLabel Affymetrix SNP 5.0
+    type bed 6 +
+    priority 3
+
+    track snpArrayAffy250Nsp
+    parent snpArray off
+    shortLabel Affy 250KNsp
+    longLabel Affymetrix GeneChip Human Mapping 250K Nsp
+    type bed 6 +
+    priority 4
+
+    track snpArrayAffy250Sty
+    parent snpArray off
+    shortLabel Affy 250KSty
+    longLabel Affymetrix GeneChip Human Mapping 250K Sty
+    type bed 6 +
+    priority 5
+
+    track snpArrayIllumina650
+    parent snpArray off
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
+    type bed 6 +
+    priority 6
+
+    track snpArrayIllumina550
+    parent snpArray off
+    shortLabel Illumina 550
+    longLabel Illumina Human Hap 550v3
+    type bed 6 +
+    priority 7
+
+    track snpArrayIllumina300
+    parent snpArray off
+    shortLabel Illumina 300
+    longLabel Illumina Human Hap 300v3
+    type bed 6 +
+    priority 8
+
+    track snpArrayIllumina1M
+    parent snpArray
+    shortLabel Illumina 1M-Duo
+    longLabel Illumina Human1M-Duo
+    type bed 6 +
+    priority 9
+
+    track snpArrayIlluminaHumanCytoSNP_12
+    parent snpArray
+    shortLabel Illumina Cyto-12
+    longLabel Illumina Human CytoSNP-12
+    type bed 6 +
+    priority 10
+
+    track snpArrayIlluminaHuman660W_Quad
+    parent snpArray
+    shortLabel Illumina 660W-Q
+    longLabel Illumina Human 660W-Quad
+    type bed 6 +
+    priority 11
+
+    track snpArrayIlluminaHumanOmni1_Quad
+    parent snpArray
+    shortLabel Illumina Omni1-Q
+    longLabel Illumina Human Omni1-Quad
+    type bed 6 +
+    priority 12
 
 searchName decipherId
 searchTable decipher
