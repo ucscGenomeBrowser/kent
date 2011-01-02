@@ -13764,3 +13764,270 @@ wc -l *.bed
 #    383 hg19.jaxQtlAsIs.bed
 #   1462 hg19.jaxQtlPadded.bed
 ## 96.2% for jaxQtlAsIs, 99.9% for jaxQtlPadded.
+
+#############################################################################
+# H-INV LIFT (DONE 2010-12-30, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir HInv
+cd HInv/
+hgsql hg18 --skip-column-names -e "select * from HInvGeneMrna" | cut -f2- > hg18.HInvGeneMrna.psl
+liftOver -pslT hg18.HInvGeneMrna.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.HInvGeneMrna.{psl,unmapped}
+hgLoadPsl -table=HInvGeneMrna hg19 hg19.HInvGeneMrna.psl
+## A couple non-positional tables too:
+hgsql hg19 -e "create table knownToHInv select * from hg18.knownToHInv"
+hgsql hg19 -e "create table HInv select * from hg18.HInv"
+
+#############################################################################
+# SIB ALT-SPLICING LIFT (DONE 2010-12-30, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir sibTxGraph
+cd sibTxGraph/
+## there is positional data in the 9th column, so I'll convert it to a bed12+
+## and back to the native format later.  Again, the awk scripts to do that
+## are aptly named, and reside in the hg19 directory with the data. 
+hgsql hg18 --skip-column-names -e "select * from sibTxGraph" | cut -f2- | awk -f toBed12Plus.awk > hg18.sibTxGraph.bed12p
+liftOver -tab -bedPlus=12 hg18.sibTxGraph.bed12p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.sibTxGraph.{bed12p,unmapped}
+awk -f toSib.awk hg19.sibTxGraph.bed12p > hg19.sibTxGraph.txt
+cut -f1-3 hg19.sibTxGraph.bed12p > hg19.sibTxGraph.bed3
+hgLoadBed -noLoad hg19 sibTxGraph hg19.sibTxGraph.bed3
+cut -f1 bed.tab > hg19.sibTxGraph.bins
+paste hg19.sibTxGraph.bins hg19.sibTxGraph.txt > hg19.sibTxGraph.withBin.txt
+## Oddly, there's no .sql file for this in the kent source-tree, so I'll 
+## make one directly from hg18 that's suitable for hgLoadSqlTab
+hgsqldump --no-data --compact hg18 sibTxGraph | sed '/^SET/d;s/ENGINE.*//'  > sibTxGraph.sql
+hgLoadSqlTab hg19 sibTxGraph sibTxGraph.sql hg19.sibTxGraph.withBin.txt
+
+wc -l *.bed12p
+#    47094 hg18.sibTxGraph.bed12p
+#    47008 hg19.sibTxGraph.bed12p
+## 99.8% lifted, not bad.
+
+#############################################################################
+# ILLUMINA WG-6 LIFT TO HG19 (DONE 2010-12-30, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir illuminaProbes
+cd illuminaProbes/
+## Just copy the seq table to hg19
+hgsql hg19 -e "create table illuminaProbesSeq select * from hg18.illuminaProbesSeq"
+## Two tables: a PSL and a BED:
+hgsql hg18 --skip-column-names -e "select * from illuminaProbes" | cut -f2- > hg18.illuminaProbes.bed
+hgsql hg18 --skip-column-names -e "select * from illuminaProbesAlign" | cut -f2- > hg18.illuminaProbesAlign.psl
+liftOver hg18.illuminaProbes.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.illuminaProbes.{bed,unmapped}
+liftOver -pslT hg18.illuminaProbesAlign.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.illuminaProbesAlign.{psl,unmapped}
+hgLoadBed hg19 illuminaProbes hg19.illuminaProbes.bed
+hgLoadPsl -table=illuminaProbesAlign hg19 hg19.illuminaProbesAlign.psl
+## Just to check the probes and align tables are essentially the same
+cut -f4 hg19.illuminaProbes.bed | sort > hg19.illuminaProbes.names
+cut -f10 hg19.illuminaProbesAlign.psl | sort > hg19.illuminaProbesAlign.names
+diff *.names
+#(no output)
+wc -l *.bed *.psl
+#   44163 hg18.illuminaProbes.bed
+#   44088 hg19.illuminaProbes.bed
+#   44163 hg18.illuminaProbesAlign.psl
+#   44088 hg19.illuminaProbesAlign.psl
+## 99.8% lifted
+
+#############################################################################
+# EIO/JCVI NAS LIFT TO HG19 (DONE 2010-12-30, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir eioJcviNAS
+cd eioJcviNAS/
+for tab in eioJcviNASNeg eioJcviNASPos; do
+   hgsql hg18 --skip-column-names -e "select * from "$tab > hg18.${tab}.bed 
+   liftOver hg18.${tab}.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bed,unmapped}
+   hgLoadBed hg19 ${tab} hg19.${tab}.bed
+done
+wc -l *.bed 
+#  338278 hg18.eioJcviNASNeg.bed
+#  130535 hg18.eioJcviNASPos.bed
+#  338238 hg19.eioJcviNASNeg.bed
+#  130504 hg19.eioJcviNASPos.bed
+## > 99.9% of items lifted in both tables: pretty good.
+## One strange thing about this one is that the hg18 tables don't have a bin
+## field.  I doubt it's important to keep it that way.
+
+#############################################################################
+# ORegAnno LIFT TO HG19 (DONE 2010-12-31, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir oreganno
+cd oreganno
+hgsql hg18 --skip-column-names -e "select * from oreganno" | cut -f2- > hg18.oreganno.bed3p
+liftOver -bedPlus=3 -tab hg18.oreganno.bed3p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.oreganno.{bed3p,unmapped}
+cp ~/kent/src/hg/lib/oreganno.sql .
+hgLoadBed -tab -sqlTable=oreganno.sql hg19 oreganno hg19.oreganno.bed3p
+hgsql hg19 -e "create table oregannoLink select * from hg18.oregannoLink"
+hgsql hg19 -e "create table oregannoAttr select * from hg18.oregannoAttr"
+wc -l *.bed3p
+#  23130 hg18.oreganno.bed3p
+#  23118 hg19.oreganno.bed3p
+## 99.9% lifted.
+
+#############################################################################
+# NK NUC LAMINA LIFT TO HG19 (DONE 2010-12-31, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir laminB1
+cd laminB1/
+hgsql hg18 --skip-column-names -e "select * from laminB1Lads" | cut -f2- > hg18.laminB1Lads.bed
+liftOver hg18.laminB1Lads.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.laminB1Lads.{bed,unmapped}
+hgLoadBed hg19 laminB1Lads hg19.laminB1Lads.bed
+wc -l *.bed
+# 1344 hg18.laminB1Lads.bed
+# 1302 hg19.laminB1Lads.bed
+## 96.9% lifted... ok, not bad I guess.
+
+ln -s /hive/data/genomes/hg18/bed/nuclearLamina/LaminB1_080513.wig hg18.laminB1.customWigVarStep
+awk -f toBedGraph.awk hg18.laminB1.customWigVarStep > hg18.laminB1.bg
+liftOver -bedPlus=3 -tab hg18.laminB1.bg /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.laminB1.{bg,unmapped}
+awk '{if ($3 - $2 == 60) print;}' hg19.laminB1.bg | sort -k1,1 -k2,2n | awk 'BEGIN{prev=-100;chrom="";FS="\t";OFS="\t";}{ if ((chrom != $1) || ($2 - prev > 60)) {print; chrom = $1; prev = $2;}}'> hg19.laminB1.span60.bg
+wigBedToStep hg19.laminB1.span60.bg hg19.laminB1.span60.wigVarStep
+ln -s hg19.laminB1.span60.wigVarStep laminB1.wig
+wigEncode laminB1.{wig,wiggle,wib}
+#Converted laminB1.wig, upper limit 5.68, lower limit -6.60
+ln -s `pwd`/laminB1.wib /gbdb/hg19/wib/laminB1.wib
+hgLoadWiggle hg19 laminB1 laminB1.wiggle
+wc -l hg18.laminB1.bg hg19.laminB1.span60.bg
+#  2909178 hg18.laminB1.bg
+#  2908692 hg19.laminB1.span60.bg
+## In total, 99.98% of the datapoints lifted cleanly.
+
+#############################################################################
+# UCSF BRAIN METHYLATION (DONE 2010-12-31, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir ucsfBrainMethyl
+cd ucsfBrainMethyl/
+
+## 10 tables:
+##
+## ucsfChipSeqH3K4me3BrainCoverage    (bedGraph/bed3+)
+## ucsfMreSeqBrainReads               (bed9)
+## ucsfMreSeqBrainCpG                 (bedGraph/bed3+)
+## ucsfMedipSeqBrainReads             (bed9)
+## ucsfMedipSeqBrainCpG               (bedGraph/bed3+)
+## ucsfMedipSeqBrainCoverage          (bedGraph/bed3+)
+## ucsfRnaSeqBrainAllReads            (bed9)
+## ucsfRnaSeqBrainAllCoverage         (bedGraph/bed3+)
+## ucsfRnaSeqBrainSmartReads          (bed9)
+## ucsfRnaSeqBrainSmartCoverage       (bedGraph/bed3+)
+
+## Do the bed9s first:
+
+for tab in ucsfMreSeqBrainReads ucsfMedipSeqBrainReads ucsfRnaSeqBrainAllReads ucsfRnaSeqBrainSmartReads; do
+   hgsql hg18 --skip-column-names -e "select * from "$tab | cut -f2- > hg18.${tab}.bed
+   liftOver hg18.${tab}.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bed,unmapped}
+   hgLoadBed hg19 $tab hg19.${tab}.bed
+   wc -l *.${tab}.bed
+done
+
+#   10110644 hg18.ucsfMreSeqBrainReads.bed
+#   10109979 hg19.ucsfMreSeqBrainReads.bed
+## 99.99% lifted
+#   44130143 hg18.ucsfMedipSeqBrainReads.bed
+#   44120612 hg19.ucsfMedipSeqBrainReads.bed
+## 99.98% lifted
+#   63033692 hg18.ucsfRnaSeqBrainAllReads.bed
+#   63031432 hg19.ucsfRnaSeqBrainAllReads.bed
+#   26767318 hg18.ucsfRnaSeqBrainSmartReads.bed
+#   26766288 hg19.ucsfRnaSeqBrainSmartReads.bed
+## getting old now, we get it... it lifts.
+    
+for tab in ucsfChipSeqH3K4me3BrainCoverage ucsfMreSeqBrainCpG ucsfMedipSeqBrainCpG ucsfMedipSeqBrainCoverage ucsfRnaSeqBrainAllCoverage ucsfRnaSeqBrainSmartCoverage; do
+   hgsql hg18 --skip-column-names -e "select * from "$tab | cut -f2- > hg18.${tab}.bg
+   liftOver -bedPlus=3 hg18.${tab}.bg /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${tab}.{bg,unmapped}
+   hgLoadBed -bedGraph=4 hg19 $tab hg19.${tab}.bg
+   wc -l *.${tab}.bg
+done
+
+#  2598517 hg18.ucsfChipSeqH3K4me3BrainCoverage.bg
+#  2598085 hg19.ucsfChipSeqH3K4me3BrainCoverage.bg
+#  1165599 hg18.ucsfMreSeqBrainCpG.bg
+#  1165521 hg19.ucsfMreSeqBrainCpG.bg
+# 20862283 hg18.ucsfMedipSeqBrainCpG.bg
+# 20859033 hg19.ucsfMedipSeqBrainCpG.bg
+# 80960101 hg18.ucsfMedipSeqBrainCoverage.bg
+# 80943454 hg19.ucsfMedipSeqBrainCoverage.bg
+# 17019268 hg18.ucsfRnaSeqBrainAllCoverage.bg
+# 17017461 hg19.ucsfRnaSeqBrainAllCoverage.bg
+#  6141663 hg18.ucsfRnaSeqBrainSmartCoverage.bg
+#  6140890 hg19.ucsfRnaSeqBrainSmartCoverage.bg
+## again in each case, almost all the data in the table lifts.
+
+for f in *; do gzip $f; echo $f zipped; done
+
+#############################################################################
+# SNP ARRAYS LIFT TO HG19 (DONE 2010-12-31, Andy)
+
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift
+mkdir snpArray
+cd snpArray/
+
+## 12 arrays:
+## 
+## snpArrayAffy6                   (bed6+, 8 fields)
+## snpArrayAffy6SV                 (bed6)
+## snpArrayAffy5                   (bed6+, 8 fields)
+## snpArrayAffy250Nsp              (bed6+, 8 fields)
+## snpArrayAffy250Sty              (bed6+, 8 fields)
+## snpArrayIllumina650             (bed6+, 7 fields)
+## snpArrayIllumina550             (bed6+, 7 fields)
+## snpArrayIllumina300             (bed6+, 7 fields)
+## snpArrayIllumina1M              (bed6+, 7 fields)
+## snpArrayIlluminaHumanCytoSNP_12 (bed6+, 7 fields)
+## snpArrayIlluminaHuman660W_Quad  (bed6+, 7 fields)
+## snpArrayIlluminaHumanOmni1_Quad (bed6+, 7 fields)
+
+## Get the bed6 one out of the way first:
+
+hgsql hg18 --skip-column-names -e "select * from snpArrayAffy6SV" | cut -f2- > hg18.snpArrayAffy6SV.bed
+liftOver hg18.snpArrayAffy6SV.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.snpArrayAffy6SV.{bed,unmapped}
+hgLoadBed hg19 snpArrayAffy6SV hg19.snpArrayAffy6SV.bed
+wc -l *.bed
+#  945805 hg18.snpArrayAffy6SV.bed
+#  945615 hg19.snpArrayAffy6SV.bed
+
+## The rest each may or may not have their own module in lib
+## For simplicity sake, I'll just dump the CREATEs straight from
+## hg18 into their own .sql file.
+
+for table in snpArrayAffy6 snpArrayAffy5 snpArrayAffy250Nsp snpArrayAffy250Sty snpArrayIllumina650 snpArrayIllumina550 snpArrayIllumina300 snpArrayIllumina1M snpArrayIlluminaHumanCytoSNP_12 snpArrayIlluminaHuman660W_Quad snpArrayIlluminaHumanOmni1_Quad; do
+   hgsql hg18 --skip-column-names -e "select * from "$table | cut -f2- > hg18.${table}.bed6p
+   hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > hg18.${table}.sql
+   liftOver -bedPlus=6 hg18.${table}.bed6p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed6p,unmapped}
+   hgLoadBed -sqlTable=hg18.${table}.sql -renameSqlTable hg19 $table hg19.${table}.bed6p
+done
+for table in snpArrayAffy6 snpArrayAffy5 snpArrayAffy250Nsp snpArrayAffy250Sty snpArrayIllumina650 snpArrayIllumina550 snpArrayIllumina300 snpArrayIllumina1M snpArrayIlluminaHumanCytoSNP_12 snpArrayIlluminaHuman660W_Quad snpArrayIlluminaHumanOmni1_Quad; do
+   hg18=`wc -l hg18.${table}.bed6p | awk '{print $1}'`
+   hg19=`wc -l hg19.${table}.bed6p | awk '{print $1}'`
+   perc=`echo ${hg19}"/"${hg18}" * 100" | R --vanilla | grep "\[1\]" | awk '{print $2}'`
+   printf "%s: %d/%d items lifted (%.3f%%)\n" $table $hg19 $hg18 $perc
+done
+# snpArrayAffy6: 909297/909508 items lifted (99.977%)
+# snpArrayAffy5: 440638/440734 items lifted (99.978%)
+# snpArrayAffy250Nsp: 257159/257213 items lifted (99.979%)
+# snpArrayAffy250Sty: 233887/233941 items lifted (99.977%)
+# snpArrayIllumina650: 660388/660557 items lifted (99.974%)
+# snpArrayIllumina550: 560972/561122 items lifted (99.973%)
+# snpArrayIllumina300: 318046/318117 items lifted (99.978%)
+# snpArrayIllumina1M: 1217520/1219961 items lifted (99.800%)
+# snpArrayIlluminaHumanCytoSNP_12: 302127/302402 items lifted (99.909%)
+# snpArrayIlluminaHuman660W_Quad: 664655/665901 items lifted (99.813%)
+# snpArrayIlluminaHumanOmni1_Quad: 1169872/1175447 items lifted (99.526%)
+
+## Now there's a few "Raw" tables to lift. Convert them to bed3+ first:
+
+for tab in `echo show tables like "'snpArray%Raw'" | hgsql hg18 | tail -n +2`; do 
+  hgsql hg18 --skip-column-names -e "select * from "$table | awk 'BEGIN{FS="\t";OFS="\t"}{print "chr"$6, $7 - 1, $7, $1, $2, $3, $4, $5}' > hg18.${table}.bed3p
+  liftOver -bedPlus=3 -tab hg18.${table}.bed3p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed3p,unmapped}
+  awk 'BEGIN{FS="\t";OFS="\t"}{print $4, $5, $6, $7, $8, substr($1, 4), $3;}' hg19.${table}.bed3p > hg19.${table}.txt
+  hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > hg18.${table}.sql
+  hgLoadSqlTab hg19 $table hg18.${table}.sql hg19.${table}.txt
+done
+
+#############################################################################

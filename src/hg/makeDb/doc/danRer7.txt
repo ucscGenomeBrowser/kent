@@ -1816,7 +1816,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
-# HUMAN (hg18) PROTEINS TRACK (Working braney 2010-12-29)
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-12-29)
     # bash  if not using bash shell already
 )
     cd /cluster/data/danRer7
@@ -1946,12 +1946,12 @@ chainOne $(path1)
     para create chainSpec
     para try, check, push, check etc.
 
-# Completed: 127 of 127 jobs
-# CPU time in finished jobs:     548201s    9136.68m   152.28h    6.34d  0.017 y
-# IO & Wait Time:                 87455s    1457.59m    24.29h    1.01d  0.003 y
-# Average job time:                5005s      83.42m     1.39h    0.06d
-# Longest finished job:           24309s     405.15m     6.75h    0.28d
-# Submission to last job:         24318s     405.30m     6.75h    0.28d
+# Completed: 176 of 176 jobs
+# CPU time in finished jobs:      70348s    1172.47m    19.54h    0.81d  0.002 y
+# IO & Wait Time:                 36253s     604.21m    10.07h    0.42d  0.001 y
+# Average job time:                 606s      10.09m     0.17h    0.01d
+# Longest finished job:           15700s     261.67m     4.36h    0.18d
+# Submission to last job:         15708s     261.80m     4.36h    0.18d
 
     cd /cluster/data/danRer7/bed/tblastn.hg18KG/blastOut
     for i in kg??
@@ -1964,7 +1964,7 @@ chainOne $(path1)
     sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
     cd ..
     pslCheck blastHg18KG.psl
-# checked: 50782 failed: 0 errors: 0
+# checked: 45598 failed: 0 errors: 0
 
     # load table 
     ssh hgwdev
@@ -1973,13 +1973,14 @@ chainOne $(path1)
 
     # check coverage
     featureBits danRer7 blastHg18KG 
-# 23826621 bases of 1990635005 (1.197%) in intersection
+# 21889813 bases of 1409770109 (1.553%) in intersection
 
     featureBits danRer7 blastHg18KG refGene  -enrichment
-# blastHg18KG 1.197%, refGene 0.021%, both 0.013%, cover 1.12%, enrich 52.66x
+# blastHg18KG 1.553%, refGene 1.960%, both 0.816%, cover 52.58%, enrich 26.83x
 
-    featureBits danRer7 blastHg18KG xenoRefGene  -enrichment
-# blastHg18KG 1.197%, xenoRefGene 2.088%, both 1.011%, cover 84.43%, enrich  40.44x
+    featureBits danRer7 blastHg18KG ensGene  -enrichment
+# blastHg18KG 1.553%, ensGene 3.961%, both 1.392%, cover 89.68%, enrich 22.64x
+
     rm -rf blastOut
 #end tblastn
 
