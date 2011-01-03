@@ -13,7 +13,7 @@ patch1test: mkout
 	${gff3ToPsl} input/locusNameAndSize.txt input/GL339450_CM000671.gff output/$@.psl
 	diff expected/$@.psl output/$@.psl
 	pslRecalcMatch output/$@.psl /cluster/data/hg19/hg19.2bit input/GL339449.2bit output/$@.2.psl
-	pslCheck output/$@.2.psl
+	pslCheck -verbose=0 output/$@.2.psl
 	pslPretty output/$@.2.psl /cluster/data/hg19/hg19.2bit input/GL339449.2bit output/$@.2.axt
 	diff expected/$@.2.axt output/$@.2.axt
 
