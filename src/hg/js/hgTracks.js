@@ -423,7 +423,7 @@ this.each(function(){
         else {
             hiliteSetup();
 
-            $('.cytoBand').mousedown( function(e)
+            $('area.cytoBand').mousedown( function(e)
             {   // mousedown on chrom portion of image only (map items)
                 updateImgOffsets();
                 pxDown = e.clientX - img.scrolledLeft;
@@ -524,7 +524,7 @@ this.each(function(){
                     //    dontAsk = true;
                     if(dontAsk || confirm("Jump to new position:\n\n"+chr.name+":"+commify(selRange.beg)+"-"+commify(selRange.end)+" size:"+commify(selRange.width)) ) {
                         setPositionByCoordinates(chr.name, selRange.beg, selRange.end)
-                        $('.cytoBand').mousedown( function(e) { return false; }); // Stop the presses :0)
+                        $('area.cytoBand').mousedown( function(e) { return false; }); // Stop the presses :0)
                         document.TrackHeaderForm.submit();
                         return true; // Make sure the setTimeout below is not called.
                     }
@@ -560,7 +560,7 @@ this.each(function(){
     function findDimensions()
     {   // Called at init: determine the dimensions of chrom from 'cytoband' map items
         var lastX = -1;
-        $('.cytoBand').each(function(ix) {
+        $('area.cytoBand').each(function(ix) {
             var loc = this.coords.split(",");
             if(loc.length == 4) {
                 var myLeft  = parseInt(loc[0]);
@@ -598,8 +598,8 @@ this.each(function(){
                         chr.reverse = true;      // end is not advancing, but X is, so reverse
 
                 }
-            $(this).css( 'cursor', 'text');
-            $(this).attr("href","");
+                $(this).css( 'cursor', 'text');
+                $(this).attr("href","");
             }
         });
         chr.size  = (chr.end   - chr.beg );
@@ -609,7 +609,7 @@ this.each(function(){
     function findCytoBand(pxDown,pxUp)
     {   // Called when mouseup and ctrl: Find the bounding cytoband dimensions, both in pix and bases
         var cyto = { left: -1, right: -1, beg: -1, end: -1 };
-        $('.cytoBand').each(function(ix) {
+        $('area.cytoBand').each(function(ix) {
             var loc = this.coords.split(",");
             if(loc.length == 4) {
                 var myLeft  = parseInt(loc[0]);
@@ -1312,7 +1312,7 @@ $(document).ready(function()
         }
     }
     if($('img#chrom').length == 1) {
-        if($('.cytoBand').length > 1) {
+        if($('area.cytoBand').length > 1) {
             $('img#chrom').chromDrag();
         }
     }

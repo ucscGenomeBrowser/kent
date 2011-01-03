@@ -1,5 +1,5 @@
- Data Agreement File $Revision: 1.0 $
-
+# Data Agreement File $Revision: 1.0 $
+#
 # This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
 
@@ -26,7 +26,7 @@ lab               UNC/BSU
 dataType          Proteogenomics
 compositeSuffix   uncBsuProtgeno
 group             expression
-variables         cell
+variables         cell, localization
 assembly          hg19
 
 
