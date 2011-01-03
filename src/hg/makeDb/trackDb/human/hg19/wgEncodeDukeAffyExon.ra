@@ -8,7 +8,7 @@ release alpha
 group expression
 subGroup1 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AoSMC Astrocy=Astrocy Chorion=Chorion CLL=CLL Fibrobl=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9ES=H9ES Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7 HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LNCaP=LNCaP MCF7=MCF-7 Medullo=Medullo MELANO=Melano MYOMETR=Myometr NHEK=NHEK Osteobl=Osteobl ProgFib=ProgFib Stellate=Stellate UROtsa=Urothelia 8988T=8988T
 subGroup2 rep Rep rep1=1 rep2=2 rep3=3 rep4=4
-subGroup3 treatment Treatment None=None IFNa4h=IFN&alpha;4h IFNg4h=IFN&gamma;4h TGFb=TGFb SERUMFREE=serum_free_media ANDRO=androgen ESTRO=estrogen VEH=vehicle UT189=UT189  
+subGroup3 treatment Treatment None=None IFNa4h=IFN&alpha;4h IFNg4h=IFN&gamma;4h TGFb=TGFb SERUMFREE=serum_free_media ANDRO=Methyltrienolone ESTRO=Estradiol_100nM VEH=vehicle UT189=UT189  
 subGroup4 view View SimpleSignal=Signal
 dimensions dimensionA=rep dimensionY=cellType dimensionX=treatment
 dimensionAchecked rep1,rep2
