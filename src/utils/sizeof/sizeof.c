@@ -7,6 +7,7 @@
 int main()
 {
 unsigned int byteOrder = 0x12345678;
+unsigned char *cp = (unsigned char *) &byteOrder;
 
 printf("     type   bytes    bits\n");
 printf("     char\t%d\t%d\n", (int)sizeof(char), 8*(int)sizeof(char));
@@ -31,21 +32,10 @@ printf("long double\t%d\t%d\n", (int)sizeof(long double),
 	8*(int)sizeof(long double));
 printf("byte order: normal order: 0x12345678 in memory: 0x");
 int i;
-#define nibSize 4
-int rightJustify = (8 * sizeof(byteOrder)) - nibSize;
-unsigned int mask = 0xf0000000;
 for (i = 0; i < sizeof(byteOrder); ++i)
     {
-    unsigned int n0 = byteOrder & mask;
-    n0 >>= rightJustify;
-    printf("%u", n0);
-    rightJustify -= nibSize;
-    mask >>= nibSize;
-    n0 = byteOrder & mask;
-    n0 >>= rightJustify;
-    rightJustify -= nibSize;
-    mask >>= nibSize;
-    printf("%u", n0);
+    printf("%02x", *cp);
+    ++cp;
     }
 printf("\n");
 return(0);
