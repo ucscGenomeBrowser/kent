@@ -24,24 +24,24 @@
  dafVersion        2.0
  dataVersion       1
  medianFragmentLength 0
- validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,nMatch,matchFirst=25
+ validationSettings validateFiles.bam:mismatches=3,nMatch,matchFirst=25
 
  # Track/view definition
 
  view             Peaks
- longLabelPrefix  TFBS, Yale/UCD/Harvard RNA-Seq Peaks
+ longLabelPrefix  Yale/UCD/Harvard RNA-Seq Peaks
  type             narrowPeak
  hasReplicates    no
  required         no 
 
- view             RawSignal
- longLabelPrefix  TFBS, Yale/UCD/Harvard RNA-Seq Raw Signal
+ view             Signal
+ longLabelPrefix  Yale/UCD/Harvard RNA-Seq Raw Signal
  type             bigWig
  hasReplicates    no 
  required         no
 
  view             Alignments
- longLabelPrefix  TFBS, Yale/UCD/Harvard RNA-seq Alignments
+ longLabelPrefix  Yale/UCD/Harvard RNA-seq Alignments
  type             bam
  hasReplicates    no
  required         no 
