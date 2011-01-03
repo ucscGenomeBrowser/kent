@@ -6587,4 +6587,8 @@ metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
 select db,id,name,status,user_id from projects where db = 'hg18' and status not in ('reviewing','released','revoked','new') and user_id = 39;
 Empty set (0.00 sec)
 
-
+2011-01-03 For some reason subId=193 marked as loaded but is actually released.
+===================================================
+193 shows every sign of being released.  I have verified that the data is on RR (hg18) and see that the submission was moved to "released" on 2009-03-16. 
+ I show no record of its status being changed since, either in the status logs or the makeDb/doc file.  I will change its status back to released.
+update projects set status = released where id = 193;
