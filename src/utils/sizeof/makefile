@@ -8,4 +8,7 @@ sizeof: $O
 	${STRIP} ${BINDIR}/sizeof${EXE}
 
 clean::
-	rm -f ${O}
+	rm -f ${O} sizeof${EXE}
+
+compile: $O
+	${CC} ${COPT} ${CFLAGS} -o sizeof${EXE} $O
