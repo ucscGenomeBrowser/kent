@@ -29,6 +29,7 @@ include wgEncodeUwTfbs.ra
 include wgEncodeCshlLongRnaSeq.ra
 include wgEncodeCaltechRnaSeq.ra
 include wgEncodeYaleRnaSeq.ra
+include wgEncodeBuOrchid.ra
 
 track wgEncodeMapability
 compositeTrack on
