@@ -2839,8 +2839,8 @@ identifier lsSnpPdbSnpHg19
 
 identifier consIndelsId
 "consIndels tables name field"
-    hg17,hg18.consIndelsHgMmCanFam.name
-    hg17,hg18.consIndelsHgMmCanFamConf.id
+    hg17,hg18,hg19.consIndelsHgMmCanFam.name
+    hg17,hg18,hg19.consIndelsHgMmCanFamConf.id
 
 identifier text2GenomeArticle
 "Article abstracts from publications"
