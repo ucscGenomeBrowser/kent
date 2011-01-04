@@ -5,7 +5,7 @@ species and measurements of evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
 PHAST package</A>, for
-all species (vertebrate) and two subsets (glires and placental mammal).
+all species (vertebrate) and two subsets (euarchontoglire and placental mammal).
 The multiple alignments were generated using multiz and
 other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
 TARGET=_blank>Penn State Bioinformatics</A>
@@ -69,13 +69,13 @@ and 1.
 <P>
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data, and both were run with the same parameters for each
-species set (vertebrates, placental mammals, and glires).
-Thus, in regions in which only glires appear in the alignment, all three
+species set (vertebrates, placental mammals, and euarchontoglires).
+Thus, in regions in which only euarchontoglires appear in the alignment, all three
 sets of scores will be the same, but in regions in which additional species
 are available, the mammalian and/or vertebrate scores may differ from the
-glire scores.  The alternative
+euarchontoglire scores.  The alternative
 plots help to identify sequences that are under different evolutionary
-pressures in, say, glires and non-glires, or mammals and non-mammals.
+pressures in, say, euarchontoglires and non-euarchontoglires, or mammals and non-mammals.
 </P>
 
 <P>
@@ -163,8 +163,8 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
     Feb 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=anoCar1"
     TARGET=_blank>anoCar1</A></TD></TR>
 <TR ALIGN=left><TD>Marmoset</TD><TD>Callithrix jacchus</TD><TD>June 2007</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/calJac1/"
-    TARGET=_blank>calJac1</A>*</TD></TR>
+    <TD><A HREF="../cgi-bin/hgGateway?db=calJac1"
+    TARGET=_blank>calJac1</A></TD></TR>
 <TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>
     Apr 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/oryLat1/"
     TARGET=_blank>oryLat1</A>*</TD></TR>
@@ -172,8 +172,8 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
     Jan 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=monDom4"
     TARGET=_blank>monDom4</A></TD></TR>
 <TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>
-    July 2007</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/ponAbe2/"
-    TARGET=_blank>ponAbe2</A>*</TD></TR>
+    July 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ponAbe2"
+    TARGET=_blank>ponAbe2</A></TD></TR>
 <TR ALIGN=left><TD>Platypus</TD><TD>Ornithorhychus anatinus</TD><TD>
     Mar 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=ornAna1"
     TARGET=_blank>ornAna1</A></TD></TR>
@@ -222,11 +222,8 @@ Downloads for data in this track are available:
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The track configuration options allow the user to display either
-the vertebrate or placental mammal conservation scores, or both
-simultaneously.
-In full and pack display modes, conservation scores are displayed as a
-<EM>wiggle track</EM> (histogram) in which the height reflects the 
+In full and pack display modes, conservation scores are displayed as
+<EM>wiggle tracks</EM> (histograms) in which the height reflects the 
 size of the score. 
 The conservation wiggles can be configured in a variety of ways to 
 highlight different aspects of the displayed information. 
@@ -317,7 +314,7 @@ displayed without translation.
 <LI>
 <B>Use default species reading frames for translation:</B> the annotations from the genome
 displayed 
-in the <EM>Default species for translation</EM>; pull-down menu are used to
+in the <EM>Default species for translation</EM> pull-down menu are used to
 translate all the aligned species present in the alignment. 
 <LI>
 <B>Use reading frames for species if available, otherwise no translation:</B> codon
@@ -400,19 +397,20 @@ rate matrix.  The
 TARGET=_blank>vertebrate tree model</A> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package  
 (REV model, EM algorithm, medium precision) using multiple alignments of 
-4-fold degenerate sites extracted from the 30way alignment
+4-fold degenerate sites extracted from the 30-way alignment
 (msa_view).  The 4d sites were derived from the 
-<A HREF="http://genome.imim.es/gencode" TARGET=_blank>Oct 2005 Gencode 
+<A HREF="http://www.sanger.ac.uk/PostGenomics/encode/" TARGET=_blank>Oct 2005 Gencode 
 Reference Gene set</A>,
-which was filtered to select single-coverage long transcripts.  A second, 
+which was filtered to select single-coverage long transcripts. The
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/placental.mod" 
-TARGET=_blank>mammalian tree model</A> including only placental mammals was
-used to generate
-the placental mammal conservation scoring. The phastCons parameters were
+TARGET=_blank>placental mammal tree model</A> and the
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/euarchontoglires.mod" 
+TARGET=_blank>euarchontoglire tree model</A> were extracted from the vertebrate model.
+The phastCons parameters were
 tuned to produce 5% conserved elements in the genome for the vertebrate
 conservation measurement.  This parameter set (expected-length=45, 
 target-coverage=.3, rho=.31) was then used to generate the placental
-mammal conservation scoring.</P>
+mammal and euarchontoglire conservation scoring.</P>
 <P>
 The phastCons program computes conservation scores based on a phylo-HMM, a
 type of probabilistic model that describes both the process of DNA
@@ -474,7 +472,7 @@ TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view
 and other programs in PHAST by 
 <A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" 
-TARGET=_blank>Adam Siepel</A> at Cornell University (originaly development
+TARGET=_blank>Adam Siepel</A> at Cornell University (original development
 done at the Haussler lab at UCSC).
 <LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC

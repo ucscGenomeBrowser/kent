@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.ra,v 1.3 2010/06/11 21:12:02 katrina Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.8 2010/06/11 21:05:41 katrina Exp $
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 
@@ -9,7 +9,7 @@ longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha
 #longLabelClip all
 group regulation
 subGroup1 view Views Peaks=Peaks zRaw=Raw_Signal
-subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i> 2H1=H1-hESC&nbsp;<i>Tier2</i> 2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 JURKAT=Jurkat PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA U87=U87
+subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1H1=H1-hESC&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i>  2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 HTB11=HTB-11 JURKAT=Jurkat PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC U87=U87
 subGroup3 factor Factor BATF=BATF BCL03=BCL3 BCL11A=BCL11A BHLHE40=BHLHE40 CTCF=CTCF EBF=EBF EGR1=Egr-1 FOSL2=FOSL2 FOXP2=FOXP2 GABP=GABP GR=GR HEY1=HEY1 JUND=JunD IRF4=IRF4 NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=Pbx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SRF=SRF SP1=SP1 TAF1=TAF1 TCF12=TCF12 USF1=USF-1 ZBTB33=ZBTB33 zCTRL=Input zCTRL2=Input_<i>(PCR2x)</i>
 subGroup4 rep Replicate rep1=1 rep2=2
 subGroup5 prot Protocol PCR1x=PCR_1x PCR2x=PCR_2x
@@ -562,7 +562,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in HepG2 cells)
-        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
         color 189,0,157
 
@@ -570,7 +570,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in HepG2 cells)
-        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
         color 189,0,157
 
@@ -715,28 +715,28 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel BE2_C NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in BE2_C cells)
-        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Be2cNrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel BE2_C NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in BE2_C cells)
-        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Panc1Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PANC-1 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in PANC-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Panc1Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PANC-1 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in PANC-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2
@@ -759,14 +759,14 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PFSK-1 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in PFSK-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PFSK-1 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in PFSK-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2
@@ -785,32 +785,32 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type narrowPeak
         color 107,112,43
 
-        track wgEncodeHudsonalphaChipSeqPeaksRep1SknshraNrsf
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel SK-N-SHr NRSF P1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in SK-N-SH_RA cells)
-        subGroups view=Peaks factor=NRSF cellType=SKNSHRA rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF P1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in HTB-11 cells)
+        subGroups view=Peaks factor=NRSF cellType=HTB11 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
-        track wgEncodeHudsonalphaChipSeqPeaksRep2SknshraNrsf
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel SK-N-SHr NRSF P2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in SK-N-SH_RA cells)
-        subGroups view=Peaks factor=NRSF cellType=SKNSHRA rep=rep2 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF P2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in HTB-11 cells)
+        subGroups view=Peaks factor=NRSF cellType=HTB11 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1U87Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel U87 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in U87 cells)
-        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2U87Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel U87 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in U87 cells)
-        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Helas3Gabp
@@ -927,7 +927,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in H1-hESC cells)
-        subGroups view=Peaks factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
@@ -935,7 +935,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in H1-hESC cells)
-        subGroups view=Peaks factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
@@ -975,7 +975,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in H1-hESC cells)
-        subGroups view=Peaks factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
@@ -983,7 +983,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in H1-hESC cells)
-        subGroups view=Peaks factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
@@ -1039,7 +1039,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in H1-hESC cells)
-        subGroups view=Peaks factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
@@ -1047,7 +1047,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in H1-hESC cells)
-        subGroups view=Peaks factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
@@ -1099,7 +1099,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC Pol2h P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=Peaks factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
@@ -1107,7 +1107,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC Pol2h P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=Peaks factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
@@ -1911,7 +1911,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in HepG2 cells)
-        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 28336.00
         color 189,0,157
 
@@ -1919,7 +1919,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in HepG2 cells)
-        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 40471.00
         color 189,0,157
 
@@ -2071,56 +2071,56 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in BE2_C cells)
-        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 8626.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cNrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in BE2_C cells)
-        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 13242.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cControl
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in BE2_C cells)
-        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10057.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cControl
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in BE2_C cells)
-        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11125.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in PANC-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 15016.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in PANC-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 17289.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in PANC-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 25110.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in PANC-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11542.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
@@ -2145,28 +2145,28 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in PFSK-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 22008.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in PFSK-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 34029.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in PFSK-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 21708.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in PFSK-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11343.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
@@ -2194,60 +2194,60 @@ dataVersion through the ENCODE Jan 2010 Freeze
         subGroups view=zRaw factor=zCTRL cellType=SKNMC rep=rep1 prot=PCR1x treat=aNONE
         type wig 1.00 835.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHr NRSF R1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=NRSF cellType=SKNSHRA rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF R1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in HTB-11 cells)
+        subGroups view=zRaw factor=NRSF cellType=HTB11 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10807.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHr NRSF R2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=NRSF cellType=SKNSHRA rep=rep2 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF R2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in HTB-11 cells)
+        subGroups view=zRaw factor=NRSF cellType=HTB11 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 12410.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraControl
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHra Ctl R1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=zCTRL cellType=SKNSHRA rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 Ctl R1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in HTB-11 cells)
+        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10286.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraControl
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHra Ctl R2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=zCTRL cellType=SKNSHRA rep=rep2 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 Ctl R2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in HTB-11 cells)
+        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 2739.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in U87 cells)
-        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 17664.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in U87 cells)
-        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 22370.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in U87 cells)
-        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 26957.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in U87 cells)
-        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 7552.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Gabp
@@ -2372,7 +2372,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in H1-hESC cells)
-        subGroups view=zRaw factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 20892.00
         color 0,107,27
 
@@ -2380,7 +2380,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in H1-hESC cells)
-        subGroups view=zRaw factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 16528.00
         color 0,107,27
 
@@ -2388,7 +2388,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in H1-hESC cells)
-        subGroups view=zRaw factor=zCTRL cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=zCTRL cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 12593.00
         color 0,107,27
 
@@ -2428,7 +2428,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in H1-hESC cells)
-        subGroups view=zRaw factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 6812.00
         color 0,107,27
 
@@ -2436,7 +2436,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in H1-hESC cells)
-        subGroups view=zRaw factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 5364.00
         color 0,107,27
 
@@ -2484,7 +2484,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR2x treat=aNONE rep=rep2
         type wig 1.00 11467.00
         color 189,0,157
 
@@ -2492,7 +2492,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR2x treat=aNONE rep=rep1
         type wig 1.00 8979.00
         color 189,0,157
 
@@ -2508,7 +2508,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in H1-hESC cells)
-        subGroups view=zRaw factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 7790.00
         color 0,107,27
 
@@ -2516,7 +2516,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in H1-hESC cells)
-        subGroups view=zRaw factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 5888.00
         color 0,107,27
 
@@ -2575,7 +2575,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC Pol2h R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=zRaw factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 8813.00
         color 0,107,27
 
@@ -2583,7 +2583,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC Pol2h R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=zRaw factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 5649.00
         color 0,107,27
 

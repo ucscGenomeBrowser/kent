@@ -460,7 +460,7 @@ _EOF_
   } else {
     # No AGP -- just make an unmasked 2bit.
     $bossScript->add(<<_EOF_
-$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' \\
+$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' | \\
     faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
 _EOF_
     );
@@ -654,7 +654,7 @@ _EOF_
     if ($qualFiles =~ /^\S+\.qac$/) {
       # Single .qac file:
       $horseScript->add(<<_EOF_
-qacToWig -fixed $qualFiles stdout \\
+qacToWig -fixed $qualFiles stdout | gzip -c > $db.qual.wigVarStep.gz
 _EOF_
         );
     } else {
@@ -667,13 +667,12 @@ else
 endif
 \$qcat $qualFiles \\
 | qaToQac stdin stdout \\
-| qacToWig -fixed stdin stdout \\
+| qacToWig -fixed stdin stdout | gzip -c > $db.qual.wigVarStep.gz
 _EOF_
       );
     }
     $horseScript->add(<<_EOF_
-| wigEncode stdin qual.{wig,wib}
-
+wigToBigWig $db.qual.wigVarStep.gz ../../chrom.sizes $db.quality.bw
 _EOF_
     );
   }
@@ -772,6 +771,18 @@ _EOF_
   }
 
   $bossScript->add(<<_EOF_
+# verify gold and gap tables cover everything
+featureBits -or -countGaps $db gold gap >&fb.$db.gold.gap.txt
+cat fb.$db.gold.gap.txt
+set allCovered = `awk '{print \$4-\$1}' fb.$db.gold.gap.txt`
+if (\$allCovered != 0) then
+    echo "ERROR: gold and gap tables do not cover whole genome"
+    exit 255
+endif
+_EOF_
+      );
+
+  $bossScript->add(<<_EOF_
 
 # Load gc5base
 mkdir -p $HgAutomate::gbdb/$db/bbi
@@ -786,11 +797,11 @@ _EOF_
     $bossScript->add(<<_EOF_
 
 # Load qual
-cd $bedDir/qual
-rm -f $HgAutomate::gbdb/$db/wib/qual.wib
-ln -s $bedDir/qual/qual.wib $HgAutomate::gbdb/$db/wib/
-hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
-  $db quality qual.wig
+rm -f $HgAutomate::gbdb/$db/bbi/quality.bw
+ln -s $bedDir/qual/$db.quality.bw $HgAutomate::gbdb/$db/bbi/quality.bw
+hgsql $db -e 'drop table if exists qualityBw; \\
+            create table qualityBw (fileName varchar(255) not null); \\
+            insert into qualityBw values ("$HgAutomate::gbdb/$db/bbi/quality.bw");'
 _EOF_
     );
   }
@@ -1343,7 +1354,7 @@ Then copy these files to your ~/kent/src/hg/makeDb/trackDb/$dbDbSpeciesDir/$db
  - edit makefile to add $db to DBS.
  - git add $dbDbSpeciesDir/$db/*.{ra,html}
  - git commit -m "Added $db to DBS." makefile
- - git commit -m "Initial descriptions for $db." $dbDbSpeciesDir/$db/*.{ra.html}
+ - git commit -m "Initial descriptions for $db." $dbDbSpeciesDir/$db/*.{ra,html}
  - git pull; git push
  - Run make update DBS=$db and make alpha when done.
  - (optional) Clean up $runDir

@@ -16,6 +16,9 @@ char *hgTracksName();
 char *hgTrackUiName();
 /* Relative URL to extended track UI. */
 
+char *hgFileUiName();
+/* Relative URL to downloladable files UI. */
+
 char *hgTextName();
 /* Relative URL to old table browser. */
 
@@ -47,7 +50,7 @@ void faRecNameToQacFileName(char *dir, char *recName, char *fileName);
 /* Convert fa record name to file name. */
 
 void gsToUcsc(char *gsName, char *ucscName);
-/* Convert from 
+/* Convert from
  *    AC020585.5~1.2 Fragment 2 of 29 (AC020585.5:1..1195)
  * to
  *    AC020585.5_1_2
@@ -57,7 +60,7 @@ char *skipChr(char *s);
 /* Skip leading 'chr' in string (to get the actual chromosome part). */
 
 int chromToInt(char *s);
-/* converts a chrom name chrXX into an integer from 1 to 54. 
+/* converts a chrom name chrXX into an integer from 1 to 54.
  *  X = 23 Y = 24 Un = 25 M = 26 random = chr + 26;*/
 
 boolean hIsGisaidServer();
@@ -85,7 +88,7 @@ void hTableEnd();
 #define	hgDefaultLeftLabelWidth	120
 #define	hgDefaultGfxBorder	1
 
-/* gisaid selection file option variable names */ 
+/* gisaid selection file option variable names */
 #define gisaidSubjList "gisaidTable.gisaidSubjList"
 #define gisaidSeqList "gisaidTable.gisaidSeqList"
 #define gisaidAaSeqList "gisaidTable.gisaidAaSeqList"

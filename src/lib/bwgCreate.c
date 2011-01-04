@@ -406,7 +406,7 @@ while ((varEqVal = nextWord(&initialLine)) != NULL)
 if (chrom == NULL)
     errAbort("Missing chrom= setting line %d of %s\n", lf->lineIx, lf->fileName);
 bits32 chromSize = (chromSizeHash ? hashIntVal(chromSizeHash, chrom) : BIGNUM);
-if (start >= chromSize)
+if (start > chromSize)
     {
     warn("line %d of %s: chromosome %s has %u bases, but item starts at %u",
     	lf->lineIx, lf->fileName, chrom, chromSize, start);

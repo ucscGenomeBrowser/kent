@@ -28,6 +28,12 @@ struct bbiFile *bigWigFileOpen(char *fileName)
 return bbiFileOpen(fileName, bigWigSig, "big wig");
 }
 
+boolean bigWigFileCheckSigs(char *fileName)
+/* check file signatures at beginning and end of file */
+{
+return bbiFileCheckSigs(fileName, bigWigSig, "big wig");
+}
+
 struct bwgSectionHead
 /* A header from a bigWig file section */
     {

@@ -6,6 +6,8 @@
         <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, sequence, gene prediction, SNP, EST, mRNA">
 	<TITLE>UCSC Genome Bioinformatics: FAQ</TITLE>
 	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+	<script type="text/javascript" src="/js/jquery.js"></script>
+	<script type="text/javascript" src="/js/staticDoc.js"></script>
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
@@ -31,6 +33,7 @@
 				<UL>
                 		<LI><A HREF="#format1">BED format</A>
                 		<LI><A HREF="#format1.5">bigBed format</A>
+				<LI><A HREF="#format1.7">BED detail format</A>
                 		<LI><A HREF="#format2">PSL format</A>
                 		<LI><A HREF="#format3">GFF format</A>
                 		<LI><A HREF="#format4">GTF format</A>
@@ -45,6 +48,7 @@
                 		<LI><A HREF="#format7">.2bit format</A>
                 		<LI><A HREF="#format8">.nib format</A>
                 		<LI><A HREF="#format9">GenePred table format</A>
+				<LI><A HREF="#format10">Personal Genome SNP format</A>
 				</UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -216,6 +220,62 @@ on the bigBed format.</P>
 	<BR>
 
 <!--Content Table-->
+<A NAME="format1.7"></A>
+    <!--outer table is for border purposes-->
+        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+             <TR><TD>
+                <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+                     <TR><TD>
+                        <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
+                             <TR><TD>
+                             <!--cheap trick to get background on row to be continuous-->
+                                <TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+                                     <TR><TD ALIGN="left"><FONT SIZE="4"><b>&nbsp; BED detail format</b></FONT></TD>
+                                     <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="/images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+                                     </TD></TR>
+                                </TABLE>
+                             </TD></TR>
+                        </TABLE>
+                        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                            <TR><TH HEIGHT=10></TH></TR>
+                            <TR><TD WIDTH=10>&nbsp;</TD>
+                            <TD>
+                            <P>
+This is an extension of BED format. BED detail uses the first 4 to
+12 columns of BED format, plus 2 additional fields that are used to enhance
+the track details pages.  The first additional field is an ID, which can be
+used in place of the name field for creating links from the details pages.  The
+second additional field is a description of the item, which can be a long
+description and can consist of html, including tables and lists.
+<P><b>Requirements</b> for BED detail custom tracks are: fields must be
+tab-separated, &quot;type=bedDetail&quot; must be included in the
+<A HREF=../goldenPath/help/customTrack.html#TRACK TARGET=_blank>track line</A>,
+and the name and position fields should uniquely describe items so that the
+correct ID and description will be displayed on the details pages.
+<P><B><I>Example:</I></B><BR>
+This example uses the first 4 columns of BED format, but up to 12 may be used.
+Note that line breaks have been inserted into the track line in this example
+for documentation display purposes.
+Click <a class="insideLink" href="../../cgi-bin/hgTracks?db=hg19&hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/bedDetailExample.txt" 
+TARGET=_blank>here</a> to view this track in the Genome Browser.</P>
+<PRE>
+track name=HbVar type=bedDetail description="HbVar custom track" db=hg19 visibility=3
+url="http://globin.bx.psu.edu/cgi-bin/hbvar/query_vars3?display_format=page&mode=output&id=$$"
+chr11   5246919 5246920 Hb_North_York   2619    Hemoglobin variant
+chr11   5255660 5255661 HBD c.1 G>A     2659    delta0 thalassemia
+chr11   5247945 5247946 Hb Sheffield    2672    Hemoglobin variant
+chr11   5255415 5255416 Hb A2-Lyon      2676    Hemoglobin variant
+chr11   5248234 5248235 Hb Aix-les-Bains        2677    Hemoglobin variant
+</PRE>
+                            </TD><TD WIDTH=15></TD></TR>
+                        </TABLE><BR>
+                     </TD></TR>
+                </TABLE>
+             </TD></TR>
+        </TABLE>
+<BR>
+
+<!--Content Table-->
 <A NAME="format2"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -352,8 +412,8 @@ However, the <I>qStart</I> and <I>qEnd</I> are not reversed. To convert one to t
 lines have nine required fields that <I>must</I> be tab-separated. If the fields are
 separated by spaces instead of tabs, the track will not display correctly. For more
 information on GFF format, refer to <A
-HREF="http://www.sanger.ac.uk/Software/formats/GFF"
-TARGET=_blank>http://www.sanger.ac.uk/Software/formats/GFF</A>. </P>
+HREF="http://www.sanger.ac.uk/resources/software/gff"
+TARGET=_blank>http://www.sanger.ac.uk/resources/software/gff</A>. </P>
 <P>
 Here is a brief description of the GFF fields:</P>
 
@@ -1244,6 +1304,90 @@ this table.
      	     </TD></TR>
     	</TABLE>
 	<BR>
+
+<!--Content Table-->
+<A NAME="format10"></A>
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+            <TR><TD>
+            <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%">
+                <TR><TD>
+                <TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+                    <TR><TD ALIGN="left">
+                    <FONT SIZE="4"><b>&nbsp; Personal Genome SNP format</b></FONT></TD>
+                    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+                    </TD></TR>
+                </TABLE>
+                </TD></TR>
+            </TABLE>
+            <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+                <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+                    <TD>
+<P>
+This format is for displaying SNPs from personal genomes.  It is the same as
+is used for the Genome Variants and Population Variants tracks.</P>
+
+<OL>
+    <LI><B>chrom</B> - The name of the chromosome (e.g. chr3, chrY, chr2_random)
+     or scaffold (e.g. scaffold10671). 
+    <LI><B>chromStart</B> - The starting position of the feature in the
+     chromosome or scaffold. The first base in a chromosome is numbered 0.
+    <LI><B>chromEnd</B> - The ending position of the feature in the
+     chromosome or scaffold. The <I>chromEnd</I> base is not included in the
+     display of the feature. For example, the first 100 bases of a
+     chromosome are defined as <I>chromStart=0, chromEnd=100</I>, and span
+     the bases numbered 0-99.
+    <LI><B>name</B> - The allele or alleles, consisting of one or more A, C, T,
+     or G, optionally followed by one or more '/' and another allele (there can
+     be more than 2 alleles). A '-'
+     can be used in place of a base to denote an insertion or deletion; if the
+     position given is zero bases wide, it is an insertion. The alleles are
+     expected to be for the plus strand.
+    <LI><B>alleleCount</B> - The number of alleles listed in the name field.
+    <LI><B>alleleFreq</B> - A comma-separated list of the frequency of each
+     allele, given in the same order as the name field.  If unknown, a list of
+     zeroes (matching the alleleCount) should be used.
+    <LI><B>alleleScores</B> - A comma-separated list of the quality score of
+     each allele, given in the same order as the name field.  If unknown, a list
+     of zeroes (matching the alleleCount) should be used.
+</OL>
+<P>
+In the Genome Browser, when viewing the forward strand of the reference genome
+(the normal case), the displayed alleles are relative to the forward strand.
+When viewing the reverse strand of the reference genome (via the &quot;<--&quot;
+or &quot;reverse&quot; button), the displayed alleles are reverse-complemented
+to match the reverse strand. If the allele frequencies are given, the coloring
+of the box will reflect the frequency for each allele.</P>
+<P>
+The details pages for this track type will automatically compute amino acid
+changes for coding SNPs as well as give a chart of amino acid properties if
+there is a non-synonymous change. (The Sift and PolyPhen predictions that are
+in some of the Genome Variants subtracks are not available.)</P>
+<P><B><I>Example:</I></B><BR>
+Here is an example of an annotation track in Personal Genome SNP format. The
+first SNP using a '-' is an insertion; the second is a deletion. The last 3
+SNPs are in a coding region.</P>
+<PRE><TT>track type=pgSnp visibility=3 db=hg19 name="pgSnp" description="Personal Genome SNP example"
+browser position chr21:31811924-31812937
+chr21	31812007	31812008	T/G	2	21,70	90,70
+chr21	31812031	31812032	T/G/A	3	9,60,7	80,80,30
+chr21	31812035	31812035	-/CGG	2	20,80	0,0
+chr21	31812088	31812093	-/CTCGG	2	30,70	0,0
+chr21	31812277	31812278	T	1	15	90
+chr21	31812771	31812772	A	1	36	80
+chr21	31812827	31812828	A/T	2	15,5	0,0
+chr21	31812879	31812880	C	1	0	0
+</TT></PRE>
+                            </TD><TD WIDTH=15></TD></TR>
+                        </TABLE><BR>
+                     </TD></TR>
+                </TABLE>
+             </TD></TR>
+        </TABLE>
+        <BR>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
+
 </BODY></HTML>

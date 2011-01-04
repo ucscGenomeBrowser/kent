@@ -1,0 +1,133 @@
+Node 0:
+	parent = -1
+	lchild = 1
+	rchild = 18
+	name = 'ce9-bruMal1'
+	dparent = 0.000000
+
+Node 1:
+	parent = 0
+	lchild = 2
+	rchild = 15
+	name = 'ce9-melHap1'
+	dparent = 0.060000
+
+Node 2:
+	parent = 1
+	lchild = 3
+	rchild = 14
+	name = 'ce9-priPac1'
+	dparent = 0.060000
+
+Node 3:
+	parent = 2
+	lchild = 4
+	rchild = 13
+	name = 'ce9-haeCon1'
+	dparent = 0.060000
+
+Node 4:
+	parent = 3
+	lchild = 5
+	rchild = 12
+	name = 'ce9-caeJap3'
+	dparent = 0.040000
+
+Node 5:
+	parent = 4
+	lchild = 6
+	rchild = 7
+	name = 'ce9-cb3'
+	dparent = 0.001000
+
+Node 6:
+	parent = 5
+	lchild = -1
+	rchild = -1
+	name = 'ce9'
+	dparent = 0.003000
+
+Node 7:
+	parent = 5
+	lchild = 8
+	rchild = 11
+	name = 'cb3-caePb2'
+	dparent = 0.002000
+
+Node 8:
+	parent = 7
+	lchild = 9
+	rchild = 10
+	name = 'cb3-caeRem3'
+	dparent = 0.004000
+
+Node 9:
+	parent = 8
+	lchild = -1
+	rchild = -1
+	name = 'cb3'
+	dparent = 0.005000
+
+Node 10:
+	parent = 8
+	lchild = -1
+	rchild = -1
+	name = 'caeRem3'
+	dparent = 0.003000
+
+Node 11:
+	parent = 7
+	lchild = -1
+	rchild = -1
+	name = 'caePb2'
+	dparent = 0.013000
+
+Node 12:
+	parent = 4
+	lchild = -1
+	rchild = -1
+	name = 'caeJap3'
+	dparent = 0.023000
+
+Node 13:
+	parent = 3
+	lchild = -1
+	rchild = -1
+	name = 'haeCon1'
+	dparent = 0.060000
+
+Node 14:
+	parent = 2
+	lchild = -1
+	rchild = -1
+	name = 'priPac1'
+	dparent = 0.120000
+
+Node 15:
+	parent = 1
+	lchild = 16
+	rchild = 17
+	name = 'melHap1-melInc1'
+	dparent = 0.030000
+
+Node 16:
+	parent = 15
+	lchild = -1
+	rchild = -1
+	name = 'melHap1'
+	dparent = 0.140000
+
+Node 17:
+	parent = 15
+	lchild = -1
+	rchild = -1
+	name = 'melInc1'
+	dparent = 0.150000
+
+Node 18:
+	parent = 0
+	lchild = -1
+	rchild = -1
+	name = 'bruMal1'
+	dparent = 0.240000
+

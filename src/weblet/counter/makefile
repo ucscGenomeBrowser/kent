@@ -14,4 +14,4 @@ push:
 	mv counter.exe ${CGI_BIN}-${USER}
 
 clean::
-	rm -f ${O} ${AOUT} counter.exe
+	rm -f ${O} ${AOUT} counter${EXE}

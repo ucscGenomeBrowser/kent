@@ -1,13 +1,13 @@
 # Data Agreement File for Stanford/Yale ChIP-seq (Transcription Factor Binding Sites) experiments for mm9  
 
-#$Revision: 1.6 $
+#$Revision: 1.7 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
 
 # The header for the associated DDF should look like this:
-#files   view    cell	treatment    antibody        sex     age     strain  control replicate	setType	controlId	seqPlatform	labVersion
+#files   view    cell	treatment    antibody        sex     age   control replicate	setType	controlId	seqPlatform	labVersion
 
 
 #Explanation of DDF terms
@@ -33,11 +33,10 @@ dafVersion        2.0
 grant             Snyder
 lab               Stanford
 #Alternative labs: lab Yale
-dataType          ChIP-seq
+dataType          ChipSeq 
 compositeSuffix   SydhTfbs
-dataAgreementSuffix Stanf
 group             regulation
-variables         cell,strain, antibody, treatment, control
+variables         cell, antibody, treatment, control
 assembly          mm9
 
 medianFragmentLength 200

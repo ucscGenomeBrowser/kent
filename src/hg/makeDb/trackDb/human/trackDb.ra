@@ -7,6 +7,9 @@ include trackDb.chainNet.ra
 # Neandertal tracks
 include trackDb.nt.ra
 
+# Denisova tracks
+include trackDb.denisova.ra
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -915,6 +918,57 @@ snpExceptions snp131Exceptions
 snpExceptionDesc snp131ExceptionDesc
 snpSeq snp131Seq
 
+track snp131Composite
+compositeTrack on
+shortLabel SNPs (131) Comp
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) -- Composite version
+group varRep
+priority 99.093
+visibility dense 
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
+snpExceptions snp131Exceptions
+snpExceptionDesc snp131ExceptionDesc
+snpSeq snp131Seq
+subGroup1 view Views common=Common_SNPs misc=Misc_SNPs nonu=Non-Unique_SNPs
+dimensions dimX=view
+#configurable on
+
+    track snp131Common
+    parent snp131Composite
+    shortLabel Common SNPs (131)
+    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) from HapMap and/or 1000Genomes
+    subGroups view=common
+    visibility pack
+    priority 1
+
+    track snp131Misc
+    parent snp131Composite
+    shortLabel Misc SNPs (131)
+    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) not from HapMap and/or 1000Genomes
+    subGroups view=misc
+    visibility dense
+    priority 2
+
+    track snp131NonUnique
+    parent snp131Composite
+    shortLabel Non-Unique SNPs
+    longLabel Non-uniquely Mapped Simple Nucleotide Polymorphisms (dbSNP build 131)
+    subGroups view=nonu
+    visibility hide
+    priority 3
+
+
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
@@ -1169,6 +1223,23 @@ color 150,0,150
 type bed 4 +
 
 track dgv
+release alpha
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+priority 144.8
+visibility hide
+color 0,100,0
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+urlLabel DGV Browser and Report:
+url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
+dataVersion v10
+
+track dgv
+release beta,public
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
 group varRep
@@ -1182,6 +1253,136 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v9
+
+track covMask1kGPilotLowCov
+compositeTrack on
+shortLabel 1000Genomes Cov
+longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase
+group varRep
+priority 101.5
+visibility hide
+subGroup1 view Views Depth=Abnormal_Depth MapQ=Mapping_Quality_Failure Uncov=No_Coverage sum=Summary
+subGroup2 pop Population Ceu=CEU ChbJpt=CHB/JPT Yri=YRI all=All
+dimensions dimX=view dimY=pop
+sortOrder view=+ pop=+
+dragAndDrop subTracks
+type bed 3
+
+    track covMask1kGPilotLowCovDepth
+    view Depth
+    shortLabel Abnormal Depth
+    visibility hide
+    parent covMask1kGPilotLowCov
+    color 180,0,0
+
+	track covMask1kGPilotLowCovCeuDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, CEU
+	subGroups view=Depth pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, CHB/JPT
+	subGroups view=Depth pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, YRI
+	subGroups view=Depth pop=Yri
+
+    track covMask1kGPilotLowCovMapQ
+    view MapQ
+    shortLabel Map Qual Failure
+    visibility hide
+    parent covMask1kGPilotLowCov
+    color 224,108,108
+
+	track covMask1kGPilotLowCovCeuMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, CEU
+	subGroups view=MapQ pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, CHB/JPT
+	subGroups view=MapQ pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, YRI
+	subGroups view=MapQ pop=Yri
+
+    track covMask1kGPilotLowCovUncov
+    view Uncov
+    shortLabel No Coverage
+    visibility hide
+    parent covMask1kGPilotLowCov
+    color 150,150,150
+
+	track covMask1kGPilotLowCovCeuUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, CEU
+	subGroups view=Uncov pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, CHB/JPT
+	subGroups view=Uncov pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, YRI
+	subGroups view=Uncov pop=Yri
+
+    track covMask1kGPilotLowCovSumView
+    view sum
+    shortLabel Summary
+    visibility dense
+    parent covMask1kGPilotLowCov
+
+	track covMask1kGPilotLowCovUnionDepth
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Depth Union
+	longLabel Union of all populations' depth masks
+	subGroups view=sum pop=all
+	color 180,0,0
+
+	track covMask1kGPilotLowCovUnionMapQ
+	parent covMask1kGPilotLowCovSumView
+	shortLabel MapQ Union
+	longLabel Union of all populations' mapping quality masks
+	subGroups view=sum pop=all
+	color 224,108,108
+
+	track covMask1kGPilotLowCovUnionUncov
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Uncov Union
+	longLabel Union of all populations' uncovered regions
+	subGroups view=sum pop=all
+	color 150,150,150
+
+	track covMask1kGPilotLowCovIntersectionUncov
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Uncov Intsct
+	longLabel Intersection of all populations' uncovered regions
+	subGroups view=sum pop=all
+	color 150,150,150
+
+	track covMask1kGPilotLowCovUnion
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Union
+	longLabel Union of all masks
+	subGroups view=sum pop=all
+
 
 track kiddEichlerDisc
 compositeTrack on
@@ -2009,6 +2210,29 @@ type bed 5 .
 useScore 1
 origAssembly hg16
 
+track eioJcviNAS
+compositeTrack on
+shortLabel EIO/JCVI NAS
+longLabel Eur. Inst. Oncology/J. C. Venter Inst. Nuclease Accessible Sites
+group regulation
+visibility hide
+priority 0
+type bed 3 .
+
+    track eioJcviNASNeg
+    parent eioJcviNAS
+    shortLabel EIO/JCVI CD34- NAS
+    longLabel CD34- cells Nuclease Accessible sites
+    priority 2
+    color 100,30,250
+
+    track eioJcviNASPos
+    parent eioJcviNAS
+    shortLabel EIO/JCVI CD34+ NAS
+    longLabel CD34+ cells Nuclease Accessible sites
+    priority 1
+    color 100,30,150
+
 # explicitly give this a priority >100, so it doesn't precede
 # the others in this group, which are assigned pri=100, and alpha sorted by short label
 track regPotential7X
@@ -2202,7 +2426,9 @@ type bed 8 +
 urlLabel Laboratoire de Biologie Mol&#233;culaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
-url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+#url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
+
 
 track wgRna
 shortLabel sno/miRNA
@@ -2212,10 +2438,12 @@ priority 63.6
 visibility hide
 color 200,80,0
 type bed 8 +
+noScoreFilter .
 urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
-url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+#url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track affyHuEx1
@@ -2272,8 +2500,9 @@ compositeTrack on
 group expression
 visibility hide
 noScoreFilter .
+noInherit on
 html agilentCghAlpha
-type bed 4 .
+type bed 3 .
 
     track agilentCgh1x1m
     release alpha
@@ -2281,6 +2510,7 @@ type bed 4 .
     shortLabel Ag CGH 1x1m
     longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
     color 0,128,0
+    type bed 4 .
     priority 1
 
     track agilentHrd1x1m
@@ -2289,7 +2519,18 @@ type bed 4 .
     shortLabel Ag HRD 1x1m
     longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
     color 255,128,0
+    type bed 4 .
     priority 2
+
+    track agilentCghSnp2x400k
+    release alpha
+    parent agilentCgh
+    shortLabel Ag SNP 2x400k
+    longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 2x400K AMADID 028081
+    color 0,0,128
+    type bed 9 .
+    itemRgb on
+    priority 3
 
     track agilentCgh2x400k
     release alpha
@@ -2297,7 +2538,18 @@ type bed 4 .
     shortLabel Ag CGH 2x400k
     longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
     color 0,128,0
-    priority 3
+    type bed 4 .
+    priority 4
+
+    track agilentCghSnp4x180k
+    release alpha
+    parent agilentCgh
+    shortLabel Ag SNP 4x180k
+    longLabel Agilent SurePrint G3 Human CGH+SNP Microarray 4x180K AMADID 029830
+    color 0,0,128
+    type bed 9 .
+    itemRgb on
+    priority 5
 
     track agilentCgh4x180k
     release alpha
@@ -2305,15 +2557,17 @@ type bed 4 .
     shortLabel Ag CGH 4x180k
     longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
     color 255,128,0
-    priority 4
+    type bed 4 .
+    priority 6
 
     track agilentCgh8x60k
     release alpha
     parent agilentCgh
     shortLabel Ag CGH 8x60k
     longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
+    type bed 4 .
     color 0,128,0
-    priority 5
+    priority 7
 
     track agilentCgh244a
     release alpha
@@ -2321,7 +2575,8 @@ type bed 4 .
     shortLabel Ag CGH 1x244k
     longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
     color 255,128,0
-    priority 6
+    type bed 4 .
+    priority 8
 
     track agilentCgh105a
     release alpha
@@ -2329,7 +2584,8 @@ type bed 4 .
     shortLabel Ag CGH 2x105k
     longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
     color 0,128,0
-    priority 7
+    type bed 4 .
+    priority 9
 
     track agilentCgh44k
     release alpha
@@ -2337,7 +2593,8 @@ type bed 4 .
     shortLabel Ag CGH 4x44k
     longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
     color 255,128,0
-    priority 8
+    type bed 4 .
+    priority 10
 
 track agilentCgh
 release beta,public
@@ -3343,79 +3600,218 @@ longLabel Personal Genome Variants
 group varRep
 priority 500
 visibility hide
+subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_1off=Single-Genome_Projects
+subGroup2 id Genome A_KB1=KB1 B_NB1=NB1 C_MD8=MD8 D_TK1=TK1 E_ABT=ABT F_12878=NA12878 G_12891=NA12891 H_12892=NA12892 I_19240=NA19240 J_19238=NA19238 K_19239=NA19239 L_Venter=Venter M_Watson=Watson N_18507=NA18507 O_YH=YH P_SJK=SJK Q_AK1=AK1 R_Quake=Quake RS_Irish=Irish S_Saqqaq=Saqqaq
+dragAndDrop subTracks
+configurable on
+dimensions dimX=view dimY=id
+sortOrder view=+ id=+
 type bed 4 +
 
-    track pgVenter
+    track pgSnpPSU
+    shortLabel PSU Bushmen
+    view A_PSU
+    visibility pack
     parent pgSnp
-    shortLabel Venter
-    longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
-    group varRep
-    priority 1
-    color 128,0,128
 
-    track pgWatson
-    parent pgSnp
-    shortLabel Watson
-    longLabel James Watson (CSHL)
-    group varRep
-    priority 2
-    color 153,0,0
+        track pgKb1Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=A_KB1
+        shortLabel KB1 indels
+        longLabel KB1 indels from 454 and Illumina
 
-    track pgYoruban3
-    parent pgSnp
-    shortLabel YRI NA18507
-    longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
-    group varRep
-    priority 5
-    color 128,0,128
+        track pgKb1Comb
+        parent pgSnpPSU
+	subGroups view=A_PSU id=A_KB1
+        shortLabel KB1
+        longLabel KB1 Genome Variants, combination of 454, Illumina, and genotyping
+        pgDbLink pgKb1PhenCode pgKb1Snpedia pgKb1Hgmd
 
-    track pgYh1
-    parent pgSnp
-    shortLabel YanHuang
-    longLabel Han Chinese Individual (YanHuang Project)
-    group varRep
-    priority 6
-    color 0,128,128
+        track pgNb1
+        parent pgSnpPSU
+	subGroups view=A_PSU id=B_NB1
+        shortLabel NB1
+        longLabel NB1 Genome Variants (all SNPs, 2X genome plus 16x exome)
+        pgDbLink pgNb1PhenCode pgNb1Snpedia pgNb1Hgmd
 
-    track pgSjk
-    parent pgSnp
-    shortLabel SJK
-    longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
-    group varRep
-    priority 7
-    color 0,128,128
+        track pgNb1Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=B_NB1
+        shortLabel NB1 indels
+        longLabel NB1 Genome Variants indels
 
-    track pgNA12878
-    parent pgSnp
-    shortLabel CEU daught '2878
-    longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
-    group varRep
-    priority 8
-    color 128,64,0
+        track pgMd8
+        parent pgSnpPSU
+	subGroups view=A_PSU id=C_MD8
+        shortLabel MD8
+        longLabel MD8 Genome Variants (all SNPs, 16x exome)
+        pgDbLink pgMd8PhenCode pgMd8Snpedia pgNb1Hgmd
 
-    track pgNA12891
-    parent pgSnp
-    shortLabel CEU father '2891
-    longLabel CEU Trio Father NA12891 (1000 Genomes Project)
-    group varRep
-    priority 9
-    color 128,64,0
+        track pgMd8Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=C_MD8
+        shortLabel MD8 indels
+        longLabel MD8 Genome Variants indels
 
-    track pgNA12892
-    parent pgSnp
-    shortLabel CEU mother '2892
-    longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
-    group varRep
-    priority 10
-    color 128,64,0
+        track pgTk1
+        parent pgSnpPSU
+	subGroups view=A_PSU id=D_TK1
+        shortLabel TK1
+        longLabel TK1 Genome Variants (all SNPs, 16x exome)
+        pgDbLink pgTk1PhenCode pgTk1Snpedia pgTk1Hgmd
 
-    track pgNA19240
+        track pgTk1Indel
+        parent pgSnpPSU
+	subGroups view=A_PSU id=D_TK1
+        shortLabel TK1 indels
+        longLabel TK1 Genome Variants indels
+
+        track pgAbtSolid
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT
+        longLabel ABT Genome Variants, SOLiD
+        pgDbLink pgAbtPhenCode pgAbtSnpedia pgAbtHgmd
+
+        track pgAbt454
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT exome
+        longLabel ABT Genome Variants, 454 exome
+
+        track pgAbt454indels
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT exome indels
+        longLabel ABT Genome Variants, 454 exome indels
+
+        track pgAbtIllum
+        parent pgSnpPSU
+	subGroups view=A_PSU id=E_ABT
+        shortLabel ABT Illum
+        longLabel ABT Genome Variants, Illumina 7.2X
+
+    track pgSnp1kG
+    shortLabel 1000GenomesPilot
+    view B_1kG
+    visibility pack
     parent pgSnp
-    shortLabel YRI daught '9240
-    longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
-    group varRep
-    priority 11
-    color 128,64,0
+
+        track pgNA12878
+        parent pgSnp1kG
+	subGroups view=B_1kG id=F_12878
+        shortLabel CEU daught '2878
+        longLabel CEU Trio Daughter NA12878 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA12891
+        parent pgSnp1kG
+	subGroups view=B_1kG id=G_12891
+        shortLabel CEU father '2891
+        longLabel CEU Trio Father NA12891 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA12892
+        parent pgSnp1kG
+	subGroups view=B_1kG id=H_12892
+        shortLabel CEU mother '2892
+        longLabel CEU Trio Mother NA12892 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA19240
+        parent pgSnp1kG
+	subGroups view=B_1kG id=I_19240
+        shortLabel YRI daught '9240
+        longLabel YRI Trio Daughter NA19240 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA19238
+        parent pgSnp1kG
+	subGroups view=B_1kG id=J_19238
+        shortLabel YRI mother '9238
+        longLabel YRI Trio Mother NA19238 (1000 Genomes Project)
+        color 128,64,0
+
+        track pgNA19239
+        parent pgSnp1kG
+	subGroups view=B_1kG id=K_19239
+        shortLabel YRI father '9239
+        longLabel YRI Trio Father NA19239 (1000 Genomes Project)
+        color 128,64,0
+
+    track pgSnp1off
+    shortLabel Single Genomes
+    view C_1off
+    visibility pack
+    parent pgSnp
+
+        track pgVenter
+        parent pgSnp1off
+	subGroups view=C_1off id=L_Venter
+        shortLabel Venter
+        longLabel J. Craig Venter - Published Method 1, Variant in Original Form (JCVI)
+        color 128,0,128
+
+        track pgWatson
+        parent pgSnp1off
+	subGroups view=C_1off id=M_Watson
+        shortLabel Watson
+        longLabel James Watson (CSHL)
+        color 153,0,0
+
+        track pgYoruban3
+        parent pgSnp1off
+	subGroups view=C_1off id=N_18507
+        shortLabel YRI NA18507
+        longLabel YRI NA18507 (Illumina Cambridge/Solexa, SNPs called by PSU)
+        color 128,0,128
+
+        track pgYh1
+        parent pgSnp1off
+	subGroups view=C_1off id=O_YH
+        shortLabel YanHuang
+        longLabel Han Chinese Individual (YanHuang Project)
+        color 0,128,128
+
+        track pgSjk
+        parent pgSnp1off
+	subGroups view=C_1off id=P_SJK
+        shortLabel SJK
+        longLabel Seong-Jin Kim (SJK, GUMS/KOBIC)
+        color 0,128,128
+
+        track pgAk1
+        parent pgSnp1off
+	subGroups view=C_1off id=Q_AK1
+        shortLabel AK1
+        longLabel Anonymous Korean individual, AK1 (Genomic Medicine Institute)
+        color 0,128,64
+
+        track pgQuake
+        parent pgSnp1off
+	subGroups view=C_1off id=R_Quake
+        shortLabel S. Quake
+        longLabel Stephen Quake (Stanford)
+
+        track pgIrish
+        parent pgSnp1off
+        subGroups view=C_1off id=RS_Irish
+        shortLabel Irish Male
+        longLabel Anonymous Irish Male
+        color 0,100,100
+
+        track pgSaqqaq
+        parent pgSnp1off
+	subGroups view=C_1off id=S_Saqqaq
+        shortLabel Saqqaq
+        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq (Saqqaq Genome Project)
+
+        track pgSaqqaqHc
+        parent pgSnp1off
+	subGroups view=C_1off id=S_Saqqaq
+        shortLabel Saqqaq HC
+        longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
+
 
 track pgSnpHgwdev
 compositeTrack on
@@ -3427,145 +3823,25 @@ visibility hide
 type bed 4 +
 
     track pgKb1Illum
-    parent pgSnpHgwdev off
-    shortLabel KB1
+    parent pgSnpHgwdev
+    shortLabel KB1 Illumina
     longLabel KB1 Genome Variants, Illumina 23.2X
     priority 1
 
     track pgKb1454
-    parent pgSnpHgwdev off
-    shortLabel KB1
+    parent pgSnpHgwdev
+    shortLabel KB1 454
     longLabel KB1 Genome Variants, 454
     priority 2
 
-    track pgKb1Indel
+    track pgYoruban2
     parent pgSnpHgwdev
-    shortLabel KB1 indels
-    longLabel KB1 indels from 454 and Illumina
-    priority 3
-
-    track pgKb1Comb
-    parent pgSnpHgwdev
-    shortLabel KB1
-    longLabel KB1 Genome Variants, combination of 454, Illumina, and genotyping
-    priority 4
-    pgDbLink pgKb1PhenCode pgKb1Snpedia pgKb1Hgmd
-    visibility pack
-
-    track pgNb1
-    parent pgSnpHgwdev
-    shortLabel NB1
-    longLabel NB1 Genome Variants (all SNPs, 2X genome plus 16x exome)
-    visibility pack
-    pgDbLink pgNb1PhenCode pgNb1Snpedia pgNb1Hgmd
-    priority 5
-
-    track pgNb1Indel
-    parent pgSnpHgwdev
-    shortLabel NB1 indels
-    longLabel NB1 Genome Variants indels
-    visibility pack
-    priority 6
-
-    track pgMd8
-    parent pgSnpHgwdev
-    shortLabel MD8
-    longLabel MD8 Genome Variants (all SNPs, 16x exome)
-    visibility pack
-    pgDbLink pgMd8PhenCode pgMd8Snpedia pgNb1Hgmd
-    priority 7
-
-    track pgMd8Indel
-    parent pgSnpHgwdev
-    shortLabel MD8 indels
-    longLabel MD8 Genome Variants indels
-    visibility pack
-    priority 8
-
-    track pgTk1
-    parent pgSnpHgwdev
-    shortLabel TK1
-    longLabel TK1 Genome Variants (all SNPs, 16x exome)
-    visibility pack
-    pgDbLink pgTk1PhenCode pgTk1Snpedia pgTk1Hgmd
-    priority 9
-
-    track pgTk1Indel
-    parent pgSnpHgwdev
-    shortLabel TK1 indels
-    longLabel TK1 Genome Variants indels
-    visibility pack
-    priority 10
-
-    track pgAbtSolid
-    parent pgSnpHgwdev
-    shortLabel ABT
-    longLabel ABT Genome Variants, SOLiD
-    visibility pack
-    pgDbLink pgAbtPhenCode pgAbtSnpedia pgAbtHgmd
-    priority 11
-
-    track pgAbt454
-    parent pgSnpHgwdev off
-    shortLabel ABT exome
-    longLabel ABT Genome Variants, 454 exome
-    visibility hide
-    priority 12
-
-    track pgAbt454indels
-    parent pgSnpHgwdev off
-    shortLabel ABT exome indels
-    longLabel ABT Genome Variants, 454 exome indels
-    visibility hide
-    priority 13
-
-    track pgAbtIllum
-    parent pgSnpHgwdev off
-    shortLabel ABT Illum
-    longLabel ABT Genome Variants, Illumina 7.2X
-    visibility hide
-    priority 14
-
-    track pgAk1
-    parent pgSnpHgwdev
-    shortLabel AK1
-    longLabel Anonymous Korean individual, AK1 (Genomic Medicine Institute)
-    color 0,128,64
-    priority 50
-
-    track pgQuake
-    parent pgSnpHgwdev
-    shortLabel S. Quake
-    longLabel Stephen Quake (Stanford)
-    priority 51
-
-    track pgSaqqaq
-    parent pgSnpHgwdev
-    shortLabel Saqqaq
-    longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq (Saqqaq Genome Project)
-    priority 55
-
-    track pgSaqqaqHc
-    parent pgSnpHgwdev off
-    shortLabel Saqqaq hc
-    longLabel Individual from the Extinct Palaeo-Eskimo Saqqaq, high confidence SNPs (Saqqaq Genome Project)
-    priority 56
-
-    track pgNA19238
-    subTrack pgSnpHgwdev
-    shortLabel YRI '9238
-    longLabel YRI Trio Mother NA19238 (1000 Genomes Project)
+    shortLabel YRI '8507, SOLiD
+    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
     group varRep
-    priority 57
-    color 128,64,0
+    priority 20
+    color 128,0,128
 
-    track pgNA19239
-    subTrack pgSnpHgwdev
-    shortLabel YRI '9239
-    longLabel YRI Trio Father NA19239 (1000 Genomes Project)
-    group varRep
-    priority 58
-    color 128,64,0
 
 track darned
 shortLabel Human RNA Editing
@@ -3600,8 +3876,337 @@ priority 0
 track oreganno override
 priority 0
 
+# laminB1 supertrack
+
+        track laminB1Super
+        superTrack on
+        shortLabel NKI Nuc Lamina
+        longLabel NKI Nuclear Lamina Associated Domains (LaminB1 DamID)
+        group regulation
+        priority 300
+
+track laminB1Lads
+superTrack laminB1Super dense
+shortLabel  NKI LADs (Tig3)
+longLabel NKI LADs (Lamina Associated Domains, Tig3 cells)
+group regulation
+priority 300
+visibility hide
+color 0,0,127
+type bed 3
+
+track laminB1
+superTrack laminB1Super dense
+shortLabel LaminB1 (Tig3)
+longLabel NKI LaminB1 DamID Map (log2-ratio scores, Tig3 cells)
+group regulation
+priority 300
+visibility hide
+color 0,0,127
+maxHeightPixels 100:40:11
+autoScale Off
+windowingFunction mean
+smoothingWindow 2
+type wig -6.602 5.678
+spanList 60
+viewLimits -2:2
+
+track ucsfBrainMethyl
+compositeTrack on
+shortLabel UCSF Brain Methyl
+longLabel UCSF Brain DNA Methylation
+group regulation
+subGroup1 view Views ALN=Alignments COV=Raw_Signal CG=CpG_score
+subGroup2 sampleType Sample_Type Brain=Brain
+subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
+dimensions 
+sortOrder assayType=+ view=+
+#dimensions dimensionX=sampleType dimensionY=assayType
+dividers assayType 
+#hierachy view ALN=2 COV=3 CG=4
+dragAndDrop subTracks
+priority 1999
+visibility hide
+#itemRgb on
+type bed 3
+
+    track ucsfBrainMethylViewALN
+    shortLabel Alignments
+    view ALN
+    parent ucsfBrainMethyl
+    visibility hide
+
+        track ucsfMedipSeqBrainReads
+        shortLabel MeDIP Reads
+        longLabel MeDIP-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MeDIP1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 1
+
+        track ucsfMreSeqBrainReads
+        shortLabel MRE Reads
+        longLabel MRE-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MRE1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 2
+
+        track ucsfRnaSeqBrainSmartReads
+        shortLabel Smart Reads
+        longLabel RNA-seq Smart-Tagged Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA2
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 3
+
+        track ucsfRnaSeqBrainAllReads
+        shortLabel RNA-seq Reads
+        longLabel RNA-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA1
+        type bed 9
+        noInherit on
+        configurable on
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        itemRgb on
+        spectrum on
+        priority 4
+
+    track ucsfBrainMethylViewCOV
+    shortLabel Raw Signal
+    view COV
+    minLimit 0
+    maxLimit 1000
+    viewLimits 0:100
+    parent ucsfBrainMethyl
+    visibility full
+
+        track ucsfChipSeqH3K4me3BrainCoverage
+        shortLabel H3K4me3 RawSignal
+        longLabel H3K4me3 ChIP-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=H3K4me3
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,200,0
+        altColor 200,100,0
+        configurable on
+        autoScale on
+        priority 5
+
+        track ucsfMedipSeqBrainCoverage
+        shortLabel MeDIP RawSignal
+        longLabel MeDIP-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=MeDIP2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 100,0,0
+        altColor 200,100,0
+        configurable on
+        autoScale on
+        priority 6
+
+        track ucsfRnaSeqBrainSmartCoverage
+        shortLabel Smart RawSignal
+        longLabel RNA-seq Smart-Tagged Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=RNA2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,0,200
+        altColor 100,0,0
+        autoScale on
+        configurable on
+        priority 7
+
+        track ucsfRnaSeqBrainAllCoverage
+        shortLabel RNA-seq RawSignal
+        longLabel RNA-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=RNA1
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,0,200
+        altColor 100,0,0
+        autoScale on
+        configurable on
+        priority 8
+
+    track ucsfBrainMethylViewCG
+    shortLabel CpG score
+    view CG
+    minLimit 0
+    maxLimit 1000
+    viewLimits 0:100
+    parent ucsfBrainMethyl
+    visibility full
+
+        track ucsfMedipSeqBrainCpG
+        shortLabel MeDIP CpG
+        longLabel MeDIP-seq CpG Score
+        parent ucsfBrainMethylViewCG
+        subGroups view=CG sampleType=Brain assayType=MeDIP2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        configurable on
+        color 100,0,0
+        altColor 200,100,0
+        autoScale on
+        priority 9
+
+        track ucsfMreSeqBrainCpG
+        shortLabel MRE CpG
+        longLabel MRE-seq CpG Score
+        parent ucsfBrainMethylViewCG
+        subGroups view=CG sampleType=Brain assayType=MRE3
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        configurable on
+        color 0,100,0
+        altColor 200,100,0
+        autoScale on
+        priority 10
+  
 track cpgIslandExt override
 priority 0
+
+track snpArray
+compositeTrack on
+shortLabel SNP Arrays
+longLabel SNP Genotyping Arrays
+group varRep
+priority 101
+visibility hide
+type bed 4 .
+
+    track snpArrayAffy6
+    parent snpArray
+    shortLabel Affy SNP 6.0
+    longLabel Affymetrix SNP 6.0
+    type bed 6 +
+    priority 1
+
+    track snpArrayAffy6SV
+    parent snpArray
+    shortLabel Affy SNP 6.0 SV
+    longLabel Affymetrix SNP 6.0 Structural Variation
+    type bed 6 +
+    priority 2
+
+    track snpArrayAffy5
+    parent snpArray off
+    shortLabel Affy SNP 5.0
+    longLabel Affymetrix SNP 5.0
+    type bed 6 +
+    priority 3
+
+    track snpArrayAffy250Nsp
+    parent snpArray off
+    shortLabel Affy 250KNsp
+    longLabel Affymetrix GeneChip Human Mapping 250K Nsp
+    type bed 6 +
+    priority 4
+
+    track snpArrayAffy250Sty
+    parent snpArray off
+    shortLabel Affy 250KSty
+    longLabel Affymetrix GeneChip Human Mapping 250K Sty
+    type bed 6 +
+    priority 5
+
+    track snpArrayIllumina650
+    parent snpArray off
+    shortLabel Illumina 650
+    longLabel Illumina Human Hap 650v3
+    type bed 6 +
+    priority 6
+
+    track snpArrayIllumina550
+    parent snpArray off
+    shortLabel Illumina 550
+    longLabel Illumina Human Hap 550v3
+    type bed 6 +
+    priority 7
+
+    track snpArrayIllumina300
+    parent snpArray off
+    shortLabel Illumina 300
+    longLabel Illumina Human Hap 300v3
+    type bed 6 +
+    priority 8
+
+    track snpArrayIllumina1M
+    parent snpArray
+    shortLabel Illumina 1M-Duo
+    longLabel Illumina Human1M-Duo
+    type bed 6 +
+    priority 9
+
+    track snpArrayIlluminaHumanCytoSNP_12
+    parent snpArray
+    shortLabel Illumina Cyto-12
+    longLabel Illumina Human CytoSNP-12
+    type bed 6 +
+    priority 10
+
+    track snpArrayIlluminaHuman660W_Quad
+    parent snpArray
+    shortLabel Illumina 660W-Q
+    longLabel Illumina Human 660W-Quad
+    type bed 6 +
+    priority 11
+
+    track snpArrayIlluminaHumanOmni1_Quad
+    parent snpArray
+    shortLabel Illumina Omni1-Q
+    longLabel Illumina Human Omni1-Quad
+    type bed 6 +
+    priority 12
 
 searchName decipherId
 searchTable decipher

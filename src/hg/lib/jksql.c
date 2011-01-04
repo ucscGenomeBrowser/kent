@@ -43,6 +43,8 @@ struct sqlProfile
     struct sqlProfile *next;
     char *name;         // name of profile
     char *host;         // host name for database server
+    unsigned int port;  // port for database server
+    char *socket;       // unix-domain socket path for database server
     char *user;         // database server user name
     char *password;     // database server password
     struct slName *dbs; // database associated with profile, can be NULL.
@@ -89,14 +91,16 @@ else
     return val;
 }
 
-static struct sqlProfile *sqlProfileNew(char *profileName, char *host, char *user,
-                                        char *password)
+static struct sqlProfile *sqlProfileNew(char *profileName, char *host, unsigned int port,
+					char *socket, char *user, char *password)
 /* create a new profile object */
 {
 struct sqlProfile *sp;
 AllocVar(sp);
 sp->name = cloneString(profileName);
 sp->host = cloneString(host);
+sp->port = port;
+sp->socket = cloneString(socket);
 sp->user = cloneString(user);
 sp->password = cloneString(password);
 return sp;
@@ -117,11 +121,11 @@ if (sp2 == NULL)
     }
 }
 
-static void sqlProfileCreate(char *profileName, char *host, char *user,
-                             char *password)
+static void sqlProfileCreate(char *profileName, char *host, unsigned int port,
+			    char *socket, char *user, char *password)
 /* create a profile and add to global data structures */
 {
-struct sqlProfile *sp = sqlProfileNew(profileName, host, user, password);
+struct sqlProfile *sp = sqlProfileNew(profileName, host, port, socket, user, password);
 hashAdd(profiles, sp->name, sp);
 if (sameString(sp->name, defaultProfileName))
     defaultProfile = sp;  // save default
@@ -132,8 +136,11 @@ static void sqlProfileAddProfIf(char *profileName)
  * sqlProfile object for it if doesn't already exist. */
 {
 char *host = cfgOption2(profileName, "host");
+char *portstr = cfgOption2(profileName, "port");
+char *socket = cfgOption2(profileName, "socket");
 char *user = cfgOption2(profileName, "user");
 char *password = cfgOption2(profileName, "password");
+unsigned int port = 0;
 
 if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profiles, profileName) == NULL))
     {
@@ -141,10 +148,16 @@ if ((host != NULL) && (user != NULL) && (password != NULL) && (hashLookup(profil
     if (sameString(profileName, defaultProfileName))
         {
         host = envOverride("HGDB_HOST", host);
+        portstr = envOverride("HGDB_PORT", portstr);
+        socket = envOverride("HGDB_SOCKET", socket);
         user = envOverride("HGDB_USER", user);
         password = envOverride("HGDB_PASSWORD", password);
         }
-    sqlProfileCreate(profileName, host, user, password);
+
+    if (portstr != NULL)
+	port = atoi(portstr);
+
+    sqlProfileCreate(profileName, host, port, socket, user, password);
     }
 }
 
@@ -292,25 +305,29 @@ freeMem(*str);
 *str = cloneString(val);
 }
 
-void sqlProfileConfig(char *profileName, char *host, char *user, char *password)
+void sqlProfileConfig(char *profileName, char *host, unsigned int port,
+			char *socket, char *user, char *password)
 /* Set configuration for the profile.  This overrides an existing profile in
  * hg.conf or defines a new one.  Results are unpredictable if a connect cache
  * has been established for this profile. */
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, NULL);
 if (sp == NULL)
-    return  sqlProfileCreate(profileName, host, user, password);
+    return  sqlProfileCreate(profileName, host, port, socket, user, password);
 replaceStr(&sp->host, host);
+replaceStr(&sp->socket, socket);
+sp->port = port;
 replaceStr(&sp->user, user);
 replaceStr(&sp->password, password);
 }
 
-void sqlProfileConfigDefault(char *host, char *user, char *password)
+void sqlProfileConfigDefault(char *host, unsigned int port, char *socket,
+				char *user, char *password)
 /* Set configuration for the default profile.  This overrides an existing
  * profile in hg.conf or defines a new one.  Results are unpredictable if a
  * connect cache has been established for this profile. */
 {
-sqlProfileConfig(defaultProfileName, host, user, password);
+sqlProfileConfig(defaultProfileName, host, port, socket, user, password);
 }
 
 static void monitorInit(void)
@@ -683,7 +700,8 @@ if (sqlOpenConnections == NULL)
     }
 }
 
-static struct sqlConnection *sqlConnRemote(char *host, char *user, char *password,
+static struct sqlConnection *sqlConnRemote(char *host, unsigned int port, char *socket,
+					   char *user, char *password,
                                            char *database, boolean abort)
 /* Connect to database somewhere as somebody. Database maybe NULL to just
  * connect to the server.  If abort is set display error message and abort on
@@ -711,8 +729,8 @@ if (mysql_real_connect(
 	user,	/* user name */
 	password,	/* password */
 	database, /* database */
-	0,	/* port */
-	NULL,	/* socket */
+	port,	/* port */
+	socket,	/* socket */
 	0)	/* flags */  == NULL)
     {
     monitorLeave();
@@ -751,7 +769,7 @@ struct sqlConnection *sqlConnectRemote(char *host, char *user, char *password,
 /* Connect to database somewhere as somebody. Database maybe NULL to
  * just connect to the server. Abort on error. */
 {
-return sqlConnRemote(host, user, password, database, TRUE);
+return sqlConnRemote(host, 0, NULL, user, password, database, TRUE);
 }
 
 struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password,
@@ -759,14 +777,14 @@ struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password
 /* Connect to database somewhere as somebody. Database maybe NULL to
  * just connect to the server.  Return NULL can't connect */
 {
-return sqlConnRemote(host, user, password, database, FALSE);
+return sqlConnRemote(host, 0, NULL, user, password, database, FALSE);
 }
 
 static struct sqlConnection *sqlConnProfile(struct sqlProfile* sp, char *database, boolean abort)
 /* Connect to database using the profile.  Database maybe NULL to connect to
  * the server. Optionally abort on failure. */
 {
-struct sqlConnection *conn = sqlConnRemote(sp->host, sp->user, sp->password, database, abort);
+struct sqlConnection *conn = sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, abort);
 if (conn != NULL)
     conn->profile = sp;  // remember profile, mainly for debugging
 return conn;
@@ -794,7 +812,7 @@ struct sqlConnection *sqlConnectProfile(char *profileName, char *database)
  */
 {
 struct sqlProfile* sp = sqlProfileMustGet(profileName, database);
-return sqlConnectRemote(sp->host, sp->user, sp->password, database);
+return sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, TRUE);
 }
 
 struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
@@ -806,7 +824,7 @@ struct sqlConnection *sqlMayConnectProfile(char *profileName, char *database)
  */
 {
 struct sqlProfile* sp = sqlProfileGet(profileName, database);
-return sqlMayConnectRemote(sp->host, sp->user, sp->password, database);
+return sqlConnRemote(sp->host, sp->port, sp->socket, sp->user, sp->password, database, FALSE);
 }
 
 void sqlVaWarn(struct sqlConnection *sc, char *format, va_list args)
@@ -1121,7 +1139,7 @@ struct sqlResult *sqlGetResultExt(struct sqlConnection *sc, char *query, unsigne
  * and *error will be set to the mysql error string, which MUST NOT be freed. */
 {
 struct sqlResult *sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE);
-if (sr)
+if (sr == NULL)
     {
     MYSQL *conn = sc->conn;
     if (errorNo)
@@ -1862,7 +1880,7 @@ struct sqlConnection *conn;
 if (cache->entryCnt >= sqlConnCacheMax)
     errAbort("Too many open sqlConnections for cache");
 if (cache->host != NULL)
-    conn = sqlConnRemote(cache->host, cache->user,
+    conn = sqlConnRemote(cache->host, 0, NULL, cache->user,
                          cache->password, database, abort);
 else
     conn = sqlConnProfile(profile, database, abort);

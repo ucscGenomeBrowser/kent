@@ -49,6 +49,8 @@ errAbort(
 );
 }
 
+static int maxChromNameSize = 0;
+
 char *createGapSplit = 
 "CREATE TABLE %s (\n"
 "   bin smallint not null,"
@@ -77,8 +79,8 @@ char *createGapUnsplit =
 "   type varchar(255) not null,	# contig, clone, fragment, etc.\n"
 "   bridge varchar(255) not null,	# yes, no, mrna, bacEndPair, etc.\n"
 "             #Indices\n"
-"   INDEX(chrom(16), bin),\n"
-"   UNIQUE(chrom(16), chromStart)\n"
+"   INDEX(chrom(%d), bin),\n"
+"   UNIQUE(chrom(%d), chromStart)\n"
 ")\n";
 
 
@@ -100,6 +102,14 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
 	errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
     if (words[4][0] == 'N' || words[4][0] == 'U')
 	{
+	int len = strlen(words[0]);
+	if (len > maxChromNameSize)
+	    {
+	    maxChromNameSize = len;
+	    if (maxChromNameSize > 254)
+		errAbort("ERROR: chrom name size is over 254(%d) characters: "
+			"'%s'", maxChromNameSize, words[0]);
+	    }
 	struct agpGap gap;
 	agpGapStaticLoad(words, &gap);
 	gap.chromStart -= 1;
@@ -112,15 +122,19 @@ fclose(tabFile);
 
 if (! noLoad)
     {
-    char *createGapBase = unsplit ? createGapUnsplit : createGapSplit;
-    char createGap[2048];
+    struct dyString *ds = newDyString(2048);
+    if (unsplit)
+	dyStringPrintf(ds,  createGapUnsplit, gapTableName,
+		maxChromNameSize, maxChromNameSize);
+    else
+	dyStringPrintf(ds,  createGapSplit, gapTableName);
     char query[1024];
-    safef(createGap, sizeof(createGap), createGapBase, gapTableName);
-    sqlRemakeTable(conn, gapTableName, createGap);
+    sqlRemakeTable(conn, gapTableName, ds->string);
     safef(query, sizeof(query), "LOAD data local infile '%s' into table %s", 
 	  tabFileName, gapTableName);
     sqlUpdate(conn, query);
     remove(tabFileName);
+    freeDyString(&ds);
     }
 }
 

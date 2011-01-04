@@ -4,15 +4,122 @@
 include trackDb.chainNet.ra
 include trackDb.wgEncode.ra
 
+#large composites
+include uMassBrainHistone.ra
+
 track stsMap override
 visibility hide
 
 track gap override
 visibility hide
 
+track clonePos override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track fishClones override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track gad override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track fosEndPairs override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track decipher override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+release alpha
+
+track rgdQtl override
+shortLabel RGD Human QTL
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track rgdRatQtl override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track jaxQtlMapped override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track HInvGeneMrna override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track sibTxGraph
+shortLabel SIB Alt-Splicing
+longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
+group rna
+priority 74.5
+visibility hide
+type altGraphX
+url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&tromer=$$
+urlLabel SIB link:
+idInUrlSql select name from sibTxGraph where id=%s
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 track gwasCatalog override
 snpTable snp131
 snpVersion 131
+
+track ucscRetroAli2
+shortLabel Retroposed GenesV2
+longLabel Retroposed GenesV2, Including Pseudogenes November 2010 [ucscRetroAli]
+group genes
+type psl
+priority 37.5
+color 20,0,250
+visibility hide
+nextItemButton on
+retroMrnaInfo ucscRetroInfo2
+baseColorDefault diffCodons
+baseColorUseCds table ucscRetroCds
+baseColorUseSequence extFile ucscRetroSeq ucscRetroExtFile
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 10000.0
+showCdsAllScales .
+showCdsMaxZoom 10000.0
+
+searchName ucscRetroInfoRefSeq2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+xrefTable refLink, ucscRetroInfo2
+dontCheckXrefQueryFormat 1
+xrefQuery select ucscRetroInfo2.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+searchPriority 3.52
+
+searchName ucscRetroInfoMrna2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+searchPriority 3.55
+
+searchName ucscRetroUniProt2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo2
+xrefQuery select ucscRetroInfo2.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID 
+searchPriority 3.54
+
+searchName ucscRetroKnownGene2
+searchTable ucscRetroAli2
+searchDescription Retroposed GenesV2, Including Pseudogenes [ucscRetroAli]
+query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
+dontCheckXrefQueryFormat 1
+xrefTable kgXref, ucscRetroInfo2
+xrefQuery select ucscRetroInfo2.name, geneSymbol from %s where geneSymbol like '%s%%' and kgName = kgID 
+searchPriority 3.53
 
 track tRNAs
 shortLabel tRNA Genes
@@ -24,6 +131,26 @@ color 0,20,150
 type bed 6 +
 nextItemButton on
 noScoreFilter .
+
+track illuminaProbes override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track eioJcviNAS override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track oreganno override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track laminB1Super override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ucsfBrainMethyl override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track hapChainNet
 compositeTrack on
@@ -289,12 +416,13 @@ otherDb hg19
 chainNormScoreAvailable yes
 
 track ctgPos2
-shortLabel Supercontig
-longLabel Assembly Supercontigs
+shortLabel GRC Map Contigs
+longLabel Genome Reference Consortium Map Contigs
 group map
 priority 10
 visibility hide
 type ctgPos
+url none
 
 track multiz4way
 shortLabel 4-way Multiz
@@ -1410,11 +1538,32 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp132 override
+release alpha
+visibility hide
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
 track snp131Clinical override
 snpSeqFile /gbdb/hg19/snp/snp131.fa
 
 track snp131NonClinical override
 snpSeqFile /gbdb/hg19/snp/snp131.fa
+
+track snp131 override
+release beta,public
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
 
 track snp131 override
 release alpha
@@ -1437,8 +1586,10 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp130CodingDbSnp,
 codingAnnoLabel_snp130CodingDbSnp dbSNP
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 # Use hg18 file so we don't have to duplicate the 18G:
 snpSeqFile /gbdb/hg18/snp/snp130.fa
+origAssembly hg18
 
 track nscanGene override
 informant Human N-SCAN Human N-SCAN uses mouse (mm9) as the informant and iterative pseudogene masking.
@@ -1508,9 +1659,9 @@ searchPriority 5
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex HSCHR[0-9XYMUN]+(_RANDOM)?_CTG[0-9]+(_[0-9]+|_PAR)?
+termRegex ^(AF[0-9]+)+|^(HSCHR)+[0-9XYMUN]+(_RANDOM|_1|_MHC)?(_[ACDMQS][A-Z]+)?(_CTG[0-9]+)?(_[0-9]+|_PAR)?
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
-searchPriority 5
+searchPriority 1
 
 track vegaGeneComposite
 compositeTrack on
@@ -1527,7 +1678,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     track vegaGene
     subTrack vegaGeneComposite
     shortLabel Vega Protein Genes
-    longLabel Vega Protein Coding Annotations
+    longLabel Vega Protein-Coding Annotations
     priority 1
     color 0,50,225
     html vegaGeneComposite
@@ -1626,13 +1777,6 @@ searchType bed
 shortCircuit 1
 searchPriority 15
 
-track rfamHuman
-shortLabel RfamConsensus
-longLabel Strong genomic alignments of Rfam consensus sequences with $organism annotations
-visibility hide
-group genes
-type psl mRNA
-
 track hg19ContigDiff
 shortLabel Hg18 Diff
 longLabel Contigs new to GRCh37/(hg19), not carried forward from NCBI build 36(hg18)
@@ -1649,46 +1793,56 @@ dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
 track altSeqComposite
 compositeTrack on
-shortLabel Alt Sequence
+shortLabel GRC Patch Release
 longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
-subGroup1 view Views location=Location psl=Psl chain=Chain net=Net
+subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
-sortOrder view=+
+# sortOrder view=+
 visibility hide
 type bed 6
 noInherit on
 group map
 priority 25
-chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
+chromosomes  chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
 otherDb hg19Patch2
+chainMinScore 2000
+chainLinearGap medium
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
 html altSeqComposite
+dataVersion GRCh37 Patch 2 update, August 2010
 
     track altSeqCompositeViewlocation
-    shortLabel Location
+    shortLabel Patch/Haplotype
     view location
     visibility pack
     parent altSeqComposite
+    noScoreFilter .
 
 	track altSeqHaplotypes
         parent altSeqCompositeViewlocation
         subGroups view=location
 	color 32,32,190
 	shortLabel Haplotypes
-	longLabel Haplotypes to GRCh37 reference sequence (patch2 update)
+	longLabel Haplotypes to GRCh37 Reference Sequence
 	html altSeqComposite
 	priority 1
+	urlLabel Fetch alternate sequence (GRCh37.p2):
+	url http:/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
 	track altSeqPatches
         parent altSeqCompositeViewlocation
         subGroups view=location
 	color 190,32,32
-	shortLabel GRCh37.p2 updates
-	longLabel Patches to GRCh37 reference sequence (patch2 update)
+	shortLabel Patches
+	longLabel Patches to GRCh37 Reference Sequence
 	html altSeqComposite
 	priority 2
+	urlLabel Fetch alternate sequence (GRCh37.p2):
+	url http:/cgi-bin/hgc?db=hg19Patch2&o=0&g=getDna&i=mixed&r=5000000&c=$$&l=0&position=$$
 
     track altSeqCompositeViewpsl
-    shortLabel Psl
+    shortLabel Alignment
     view psl
     visibility pack
     parent altSeqComposite
@@ -1706,8 +1860,8 @@ html altSeqComposite
 	track altSeqLiftOverPsl
         parent altSeqCompositeViewpsl
         subGroups view=psl
-	shortLabel Lift Over
-	longLabel GRCh37.p2 Lift over alignments
+	shortLabel Alignment
+	longLabel GRCh37 Alternate Sequence Lift Over Alignments
 	html altSeqComposite
 	priority 3
 
@@ -1717,16 +1871,12 @@ html altSeqComposite
     visibility pack
     parent altSeqComposite
     spectrum on
-    chainMinScore 3000
-    chainLinearGap medium
-    matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-    matrixHeader A, C, G, T
 
         track chainHg19Patch2
         parent altSeqCompositeViewchain
         subGroups view=chain
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
+        shortLabel Chain
+        longLabel GRCh37 Alternate Sequence Chained Alignments
         type chain hg19Patch2
         html chainNet
 	priority 4
@@ -1736,16 +1886,69 @@ html altSeqComposite
     view net
     visibility full
     parent altSeqComposite
-    chainMinScore 3000
-    chainLinearGap medium
-    matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
-    matrixHeader A, C, G, T
 
         track netHg19Patch2
         parent altSeqCompositeViewnet
         subGroups view=net
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment net
+        shortLabel Net
+        longLabel GRCh37 Alternate Sequence Alignment Net
         type netAlign hg19Patch2 chainHg19Patch2
         html chainNet
 	priority 5
+
+track vistaEnhancers override
+url http://enhancer.lbl.gov/cgi-bin/imagedb3.pl?form=presentation&show=1&experiment_id=$$&organism_id=1
+
+track evofold override
+mafTrack multiz46way
+origAssembly hg17
+pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
+
+track targetScanS
+shortLabel TS miRNA sites
+longLabel TargetScan miRNA Regulatory Sites
+group regulation
+priority 0
+visibility hide
+color 0,96,0
+scoreFilterMax 100
+type bed 6 .
+urlLabel TargetScan link:
+url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
+
+track ntSeqReads override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntHumChimpCodingDiff override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssTop5p override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssZScorePMVar override
+origAssembly hg18
+type bigWig -8.8332 33.63719
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntSssSnps override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntOoaHaplo override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ntMito override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track cgapSage override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track snpArray override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"

@@ -140,3 +140,11 @@ searchType genePred
 #termRegex [a-z][a-z0-9][0-9]+
 searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencode2wayConsPseudoV4
+searchTable wgEncodeGencode2wayConsPseudoV4
+searchMethod exact
+searchType genePred
+termRegex Overlap[0-9]+
+searchPriority 2.6
+

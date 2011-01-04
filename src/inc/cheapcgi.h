@@ -19,18 +19,23 @@
 
 #define COLOR_BG_DEFAULT        "#FFFEE8"
 #define COLOR_BG_ALTDEFAULT     "#FFF9D2"
+#define COLOR_BG_DEFAULT_DARKER "#FCECC0"
 #define COLOR_BG_GHOST          "#EEEEEE"
 #define COLOR_BG_PALE           "#F8F8F8"
+#define COLOR_BG_HEADER_LTBLUE  "#D9E4F8"
 #define COLOR_DARKGREEN         "#008800"
 #define COLOR_LTGREEN           "#CCFFCC"
 #define COLOR_DARKBLUE          "#000088"
 #define COLOR_BLUE_BUTTON       "#91B3E6"
-#define COLOR_DARKGREY          "#DDDDDD"
+#define COLOR_DARKGREY          "#666666"
 #define COLOR_LTGREY            "#CCCCCC"
 #define COLOR_YELLOW            "#FFFF00"
 #define COLOR_LTYELLOW          "#FFF380"
 #define COLOR_WHITE             "#FFFFFF"
 #define COLOR_RED               "#AA0000"
+#define COLOR_TRACKLIST_LEVEL1  COLOR_BG_DEFAULT
+#define COLOR_TRACKLIST_LEVEL2  COLOR_BG_ALTDEFAULT
+#define COLOR_TRACKLIST_LEVEL3  COLOR_BG_DEFAULT_DARKER
 
 void initSigHandlers(boolean dumpStack);
 /* set handler for various terminal signals for logging purposes.

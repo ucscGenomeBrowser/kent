@@ -1,0 +1,4 @@
+input/errorCasesTest.gff3:28: expected Target attribute in the form "target_id start end [strand]", got "CG41424-RA AABU01002023_1064-818 22000976 22001221 +"
+Annotation records for discontinuous features with ID="DMG5-chr2RHet.4.001.a" do not have the same type, found "gene" and "mRNA"
+Can't find annotation record "DMG5-chr2RHet.4.001" referenced by "DMG5-chr2RHet.4.001.a" Parent attribute
+GFF3: 3 parser errors

@@ -10,7 +10,7 @@ usage() {
     echo "  directory with these scripts."
     echo "This script will fetch the static HTML hierarchy from UCSC"
     echo "  into your specified DOCUMENTROOT from the browserEnvironment.txt file."
-    echo "It specifically ignores the encode/ js/ and trash directories."
+    echo "It specifically ignores all encode directories and the trash directory."
     exit 255
 }
 
@@ -37,8 +37,7 @@ export DS=`date "+%Y-%m-%d"`
 export FETCHLOG="${LOGDIR}/htdocs/update.${DS}"
 mkdir -p "${LOGDIR}/htdocs"
 
-${RSYNC} --stats --exclude="encode/" --exclude="js/" --exclude="trash" \
-	${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/ > ${FETCHLOG} 2>&1
-# remove garbage
-rm -f ${DOCUMENTROOT}/html
-rm -f ${DOCUMENTROOT}/ENCODE
+echo "#    ${RSYNC} --stats --exclude=\"encode\" --exclude=\"trash\" --exclude=\"lost+found/\" --exclude=\"ENCODE/\" --exclude=\"encodeDCC/\" ${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/" > ${FETCHLOG}
+${RSYNC} --stats --exclude="encode" --exclude="trash" \
+	--exclude="lost+found/" --exclude="ENCODE/" --exclude="encodeDCC/" \
+	${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/ >> ${FETCHLOG} 2>&1

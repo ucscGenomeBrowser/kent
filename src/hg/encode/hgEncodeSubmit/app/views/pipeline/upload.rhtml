@@ -6,11 +6,6 @@
   <p><label for="project_upload_url">Upload from URL</label><br/>
   <%= text_field_tag 'upload_url', "http://", :size => 40 %><br/>
 
-  <label for="project_upload_auto_resume"></label>
-  <%= check_box 'auto_resume', '0' %>
-Resume if the previous upload  was interrupted.
-<br/>
-
   <p><label for="project_upload_file">or Upload a local file</label><br/>
   <%= file_field_tag 'upload_file', :size => 25 %><br/>
 
@@ -58,6 +53,6 @@ Use 'Submit' to upload and expand the archive, validate the data and metadata, <
 and load the data to the database.
 </p>
 <p>
-The archive file must have one of these extensions: <br/>
+The compressed archive file must have one of these extensions: <br/>
 .zip, .tar.gz, .tgz, .tar.bz2 <br/>
 </p>

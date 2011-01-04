@@ -320,7 +320,7 @@ char *track = dtfList->table;
 struct customTrack *ct = ctLookupName(track);
 char *type = ct->dbTrackType;
 struct slName *fieldList = NULL;
-if (startsWithWord("makeItems", type))
+if (startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     fieldList = sqlListFields(conn, ct->dbTableName);

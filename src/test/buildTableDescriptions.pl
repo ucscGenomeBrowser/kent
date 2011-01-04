@@ -142,7 +142,7 @@ sub getTableFields {
     $fields = &simplifyFields($fields);
     if (defined $tableFields{$t} && 
 	$tableFields{$t} ne $fields) {
-      warn "Duplicate fieldSpec for table $db.$t:\n$tableFields{$t}\n$fields";
+      warn "table fields differ for split table $db.$t:\n$tableFields{$t} != $fields";
     }
     my $tableInsens = $t;
     $tableInsens =~ tr/A-Z/a-z/;

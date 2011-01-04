@@ -1,9 +1,213 @@
+metaObject wgEncodeGisDnaPetGm1287810kFasta3p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm1287810kFasta3p.csfasta.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta3p
+
+metaObject wgEncodeGisDnaPetGm1287810kFasta5p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm1287810kFasta5p.csfasta.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta5p
+
+metaObject wgEncodeGisDnaPetGm1287810kQual3p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm1287810kQual3p.csqual.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual3p
+
+metaObject wgEncodeGisDnaPetGm1287810kQual5p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm1287810kQual5p.csqual.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual5p
+
+metaObject wgEncodeGisDnaPetGm128781kFasta3p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128781kFasta3p.csfasta.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta3p
+
+metaObject wgEncodeGisDnaPetGm128781kFasta5p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128781kFasta5p.csfasta.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta5p
+
+metaObject wgEncodeGisDnaPetGm128781kQual3p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128781kQual3p.csqual.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual3p
+
+metaObject wgEncodeGisDnaPetGm128781kQual5p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128781kQual5p.csqual.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual5p
+
+metaObject wgEncodeGisDnaPetGm128785kFasta3p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128785kFasta3p.csfasta.gz
+fragSize 5k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta3p
+
+metaObject wgEncodeGisDnaPetGm128785kFasta5p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128785kFasta5p.csfasta.gz
+fragSize 5k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta5p
+
+metaObject wgEncodeGisDnaPetGm128785kQual3p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128785kQual3p.csqual.gz
+fragSize 5k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual3p
+
+metaObject wgEncodeGisDnaPetGm128785kQual5p
+objType file
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetGm128785kQual5p.csqual.gz
+fragSize 5k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual5p
+
 metaObject wgEncodeGisDnaPetGm12878F10kAln
 objType table
 cell GM12878
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -58,12 +262,216 @@ subId 1521
 tableName wgEncodeGisDnaPetGm12878F5kAln
 view Alignments
 
+metaObject wgEncodeGisDnaPetK56210kFasta3p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK56210kFasta3p.csfasta.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta3p
+
+metaObject wgEncodeGisDnaPetK56210kFasta5p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK56210kFasta5p.csfasta.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta5p
+
+metaObject wgEncodeGisDnaPetK56210kQual3p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK56210kQual3p.csqual.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual3p
+
+metaObject wgEncodeGisDnaPetK56210kQual5p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK56210kQual5p.csqual.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual5p
+
+metaObject wgEncodeGisDnaPetK5621kFasta3p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK5621kFasta3p.csfasta.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta3p
+
+metaObject wgEncodeGisDnaPetK5621kFasta5p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK5621kFasta5p.csfasta.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Fasta5p
+
+metaObject wgEncodeGisDnaPetK5621kQual3p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK5621kQual3p.csqual.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual3p
+
+metaObject wgEncodeGisDnaPetK5621kQual5p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetK5621kQual5p.csqual.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view Qual5p
+
+metaObject wgEncodeGisDnaPetK56220kFasta3p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-05
+dateUnrestricted 2011-01-05
+fileName wgEncodeGisDnaPetK56220kFasta3p.csfasta.gz
+fragSize 20k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 1075
+view Fasta3p
+
+metaObject wgEncodeGisDnaPetK56220kFasta5p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-05
+dateUnrestricted 2011-01-05
+fileName wgEncodeGisDnaPetK56220kFasta5p.csfasta.gz
+fragSize 20k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 1075
+view Fasta5p
+
+metaObject wgEncodeGisDnaPetK56220kQual3p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-05
+dateUnrestricted 2011-01-05
+fileName wgEncodeGisDnaPetK56220kQual3p.csqual.gz
+fragSize 20k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 1075
+view Qual3p
+
+metaObject wgEncodeGisDnaPetK56220kQual5p
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-05
+dateUnrestricted 2011-01-05
+fileName wgEncodeGisDnaPetK56220kQual5p.csqual.gz
+fragSize 20k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 1075
+view Qual5p
+
 metaObject wgEncodeGisDnaPetK562F10kAln
 objType table
 cell K562
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -83,7 +491,7 @@ objType table
 cell K562
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -118,4 +526,72 @@ subId 1524
 tableName wgEncodeGisDnaPetK562F20kAln
 view Alignments
 
-# MAGIC: 1813998527
+metaObject wgEncodeGisDnaPetRd1K56210kFastq
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetRd1K56210kFastq.fastq.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view FastqRd1
+
+metaObject wgEncodeGisDnaPetRd1K5621kFastq
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetRd1K5621kFastq.fastq.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view FastqRd1
+
+metaObject wgEncodeGisDnaPetRd2K56210kFastq
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetRd2K56210kFastq.fastq.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view FastqRd2
+
+metaObject wgEncodeGisDnaPetRd2K5621kFastq
+objType file
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisDnaPetRd2K5621kFastq.fastq.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+origAssembly hg18
+project wgEncode
+subId 761
+view FastqRd2
+
+# MAGIC: 1116762533

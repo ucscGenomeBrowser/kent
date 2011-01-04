@@ -1597,13 +1597,8 @@ if (psOutput)
     }
 else
     {
-#ifdef USE_PNG
     trashDirFile(&gifTn, "pbt", "pbt", ".png");
     vg = vgOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#else
-    trashDirFile(&gifTn, "pbt", "pbt", ".gif");
-    vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-#endif
     }
 
 /* Put up horizontal scroll controls. */

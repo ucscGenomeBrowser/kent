@@ -7,7 +7,7 @@ require File.dirname(__FILE__) + '/config/boot'
 
 require RAILS_ROOT + '/config/environment'
 
-#require "pp"
+#require "pp"  # debug remove
 
 #pp User.find(:all)
 
@@ -78,7 +78,15 @@ print "--- Pipeline Main Background Runner Starting -----------\n"
 print "#{Time.now.strftime("%a %b %e %H:%M:%S %Y")}\n"
 
 # We are currently only throttling the background instances
-# for validating and loading:
+# for expanding, validating, and loading:
+maxExpanders = ActiveRecord::Base.configurations[RAILS_ENV]['maxExpanders']
+if maxExpanders
+  maxExpanders = maxExpanders.to_i
+else  
+  maxExpanders = 4 # default
+end
+print "maxExpanders = #{maxExpanders}\n"
+
 maxValidators = ActiveRecord::Base.configurations[RAILS_ENV]['maxValidators']
 if maxValidators
   maxValidators = maxValidators.to_i
@@ -107,8 +115,13 @@ MAXPROCESSES = 50
 print "MAXPROCESSES = #{MAXPROCESSES}\n"
 
 alljobs = {}
+expanders = {}
 validators = {}
 loaders = {}
+
+paraFetchRunCount = {}
+paraFetchRunProtoSite = {}
+paraFetchConfig = get_paraFetch_config
 
 while true
 
@@ -142,6 +155,7 @@ while true
       job.save!
       # presumably the counts have gotten out of whack
       alljobs = {}
+      expanders = {}
       validators = {}
       loaders = {}
       print "all lists reset!\n"
@@ -152,14 +166,20 @@ while true
       job.destroy
       job.save!
       # presumably the counts have gotten out of whack
-      print "alljobs(#{alljobs.length}) validators(#{validators.length}) loaders(#{loaders.length})\n"
+      print "alljobs(#{alljobs.length}) expanders(#{expanders.length}) validators(#{validators.length}) loaders(#{loaders.length})\n"
       next 
     end
     if source == "done"
       # remove the project id from running lists
+      expanders.delete(project_id)
       validators.delete(project_id)
       loaders.delete(project_id)
       alljobs.delete(project_id)
+      protoSite = paraFetchRunProtoSite[project_id]
+      if protoSite != nil
+        paraFetchRunCount[protoSite] = paraFetchRunCount[protoSite] - 1
+        paraFetchRunProtoSite.delete(project_id)
+      end
 
       # remove this simple done message immediately
       job.destroy
@@ -172,22 +192,51 @@ while true
     else  
       doRun = true
       # check to remove the project id from running lists
-      if source.starts_with? "validate_background("
+      if source.starts_with? "expand_background("
+        if expanders.length >= maxExpanders
+          doRun = false
+        end
+      elsif source.starts_with? "validate_background("
         if validators.length >= maxValidators
           doRun = false
         end
-      end
-      if source.starts_with? "load_background("
+      elsif source.starts_with? "load_background("
         if loaders.length >= maxLoaders
           doRun = false
         end
+      elsif source.starts_with? "upload_background("
+        # parse out the url parameter from the source command
+        #  the parameters are comma-separated, and literal strings are surrounded by quotes.
+        pastFirstComma = source.index(',"')+2
+        beforeSecondComma = source.index('",', pastFirstComma) - 1
+        upurl = source[pastFirstComma..beforeSecondComma]
+        if upurl != ""
+          # load-balance paraFetch in a site-specific manner 
+          # determined by the config/paraFetch.yml settings.
+          protoSite = get_proto_site(upurl)
+          maxParaFetches = paraFetchConfig["default"]["instances"]
+          if paraFetchConfig[protoSite] != nil
+            if paraFetchConfig[protoSite]["instances"] != nil
+              maxParaFetches = paraFetchConfig[protoSite]["instances"]
+            end
+          end
+          paraRunCount = paraFetchRunCount[protoSite]
+          if paraRunCount == nil
+            paraRunCount = 0
+          end
+          if paraRunCount >= maxParaFetches
+            doRun = false
+          end
+        end
       end
+
+
       # is it already running, or trying to start?
       if alljobs[project_id] 
         doRun = false  
       end
 
-      # check the 
+      # check the load
       if doRun
         myLoad = (`cat /proc/loadavg | gawk '{print $2}'`).to_f
         if (myLoad > maxServerLoad)
@@ -219,11 +268,17 @@ while true
 
       if doRun
         # add the project id to running lists
-        if source.starts_with? "validate_background("
+        if source.starts_with? "expand_background("
+          expanders[project_id] = true
+        elsif source.starts_with? "validate_background("
           validators[project_id] = true
-        end
-        if source.starts_with? "load_background("
+        elsif source.starts_with? "load_background("
           loaders[project_id] = true
+        elsif source.starts_with? "upload_background("
+          if upurl != ""
+            paraFetchRunCount[protoSite] = paraRunCount + 1
+            paraFetchRunProtoSite[project_id] = protoSite
+          end
         end
         alljobs[project_id] = true
 

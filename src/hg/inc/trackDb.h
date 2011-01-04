@@ -47,7 +47,8 @@ struct trackDb
     /* additional info, determined from settings */
     char treeNodeType;          /* bit map containing defining supertrack, composite and children of same (may be parent & child) */
     struct trackDb *parent;     /* parent of composite or superTracks */
-    struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */ // NOTE: can only be on one sl at a time!
+    struct trackDb *subtracks;  /* children of composite not supertracks */ // NOTE: can only be on one sl at a time!
+    struct slRef *children;     /* children of folders (superTracks) only.  Needed as slRef since these children are on the main trackList and can't be in 2 sl's at once */
     char *parentName;           /* set if this is a supertrack member */
     boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
     struct hash *overrides;     /* If not NULL, this is an override
@@ -58,19 +59,27 @@ struct trackDb
                                    And example is the metadata looked looked up once in the metaTbl and used again and again. */
     };
 
-#define SUPERTRACK_MASK                 0x10
-#define COMPOSITE_MASK                  0x20
-#define SUPERTRACK_CHILD_MASK           0x01
-#define COMPOSITE_CHILD_MASK            0x02
-#define PARENT_MASK                     0xF0
-#define CHILD_MASK                      0x0F
-#define TREETYPE_MASK                   0xFF
-#define PARENT_NODE(nodeType)           ((nodeType) & PARENT_MASK)
-#define CHILD_NODE(nodeType)            ((nodeType) & CHILD_MASK)
-#define SUPERTRACK_NODE(nodeType)       (((nodeType) & SUPERTRACK_MASK) == SUPERTRACK_MASK)
-#define COMPOSITE_NODE(nodeType)        (((nodeType) & COMPOSITE_MASK ) == COMPOSITE_MASK )
-#define SUPERTRACK_CHILD_NODE(nodeType) (((nodeType) & SUPERTRACK_CHILD_MASK) == SUPERTRACK_CHILD_MASK)
-#define COMPOSITE_CHILD_NODE(nodeType)  (((nodeType) & COMPOSITE_CHILD_MASK ) == COMPOSITE_CHILD_MASK )
+#define FOLDER_MASK                      0x10
+#define COMPOSITE_MASK                   0x20
+#define MULTI_TRACK_MASK                 0x80
+#define FOLDER_CHILD_MASK                0x01
+#define COMPOSITE_CHILD_MASK             0x02
+#define COMPOSITE_VIEW_MASK              0x04
+#define MULTI_TRACK_CHILD_MASK           0x08
+#define PARENT_MASK                      0xF0
+#define CHILD_MASK                       0x0F
+#define TREETYPE_MASK                    0xFF
+#define PARENT_NODE(nodeType)            ((nodeType) & PARENT_MASK)
+#define CHILD_NODE(nodeType)             ((nodeType) & CHILD_MASK)
+#define FOLDER_NODE(nodeType)            ((nodeType) & FOLDER_MASK)
+#define COMPOSITE_NODE(nodeType)         ((nodeType) & COMPOSITE_MASK)
+#define MULTI_TRACK_NODE(nodeType)       ((nodeType) & MULTI_TRACK_MASK)
+#define CONTAINER_NODE(nodeType)         ((nodeType) & (MULTI_TRACK_MASK | COMPOSITE_MASK))
+#define FOLDER_CHILD_NODE(nodeType)      ((nodeType) & FOLDER_CHILD_MASK)
+#define COMPOSITE_CHILD_NODE(nodeType)   ((nodeType) & COMPOSITE_CHILD_MASK)
+#define COMPOSITE_VIEW_NODE(nodeType)    ((nodeType) & COMPOSITE_VIEW_MASK)
+#define MULTI_TRACK_CHILD_NODE(nodeType) ((nodeType) & MULTI_TRACK_CHILD_MASK)
+#define CONTAINER_CHILD_NODE(nodeType)   ((nodeType) & (MULTI_TRACK_CHILD_MASK | COMPOSITE_CHILD_MASK))
 #define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
 //#define tdbIsParent(tdb)              ((tdb)->subtracks)
 //#define tdbIsChild(tdb)               ((tdb)->parent   )
@@ -79,59 +88,156 @@ struct trackDb
 //#define tdbIsTreeBranch(tdb)          (!INDEPENDENT_NODE((tdb)->treeNodeType) &&  tdbIsParent(tdb) &&  tdbIsChild(tdb))
 //#define tdbIsNotInTree(tdb)           ( INDEPENDENT_NODE((tdb)->treeNodeType) && !tdbIsParent(tdb) && !tdbIsChild(tdb))
 
-INLINE boolean tdbIsSuper(struct trackDb *tdb)
-/* Is this trackDb struct marked as a supertrack ? */
+// --- Folders are superTracks.  Currently only one level deep
+INLINE void tdbMarkAsFolder(struct trackDb *tdb)
+// Marks a trackDb struct as a supertrack
 {
-return tdb && SUPERTRACK_NODE(tdb->treeNodeType);
+tdb->treeNodeType |= FOLDER_MASK;
 }
+#define tdbMarkAsSuperTrack(tdb) tdbMarkAsFolder(tdb)
 
-INLINE boolean tdbIsSuperTrack(struct trackDb *tdb)
-/* Is this trackDb struct marked as a supertrack ? */
+INLINE void tdbMarkAsFolderChild(struct trackDb *tdb)
+// Marks a trackDb struct as a child of a folder
 {
-return tdb && /*tdb->subtracks &&*/ SUPERTRACK_NODE(tdb->treeNodeType); // TODO: superTrack code needs rewrite to contain it's children
+tdb->treeNodeType |= FOLDER_CHILD_MASK;
 }
+#define tdbMarkAsSuperTrackChild(tdb) tdbMarkAsFolderChild(tdb)
 
-INLINE boolean tdbIsComposite( struct trackDb *tdb)
-/* Is this trackDb struct marked as a composite with children ?  */
+INLINE boolean tdbIsFolder(struct trackDb *tdb)
+// Is this trackDb struct marked as a folder ?
 {
-return tdb && tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType);
+return tdb && FOLDER_NODE(tdb->treeNodeType);  // && tdb->children  NOTE: The children list is not always filled in, but should be
 }
+#define tdbIsSuper(tdb) tdbIsFolder(tdb)
+#define tdbIsSuperTrack(tdb) tdbIsFolder(tdb)
 
-INLINE boolean tdbIsSuperTrackChild(struct trackDb *tdb)
-/* Is this trackDb struct marked as a child of a supertrack ?  */
+INLINE boolean tdbIsFolderContent(struct trackDb *tdb)
+// Is this trackDb struct marked as a contained in a folder ?
 {
-return tdb && tdb->parent && SUPERTRACK_CHILD_NODE(tdb->treeNodeType);
+return tdb && tdb->parent && FOLDER_CHILD_NODE(tdb->treeNodeType);
 }
+#define tdbIsSuperTrackChild(tdb) tdbIsFolderContent(tdb)
 
-INLINE boolean tdbIsCompositeChild(struct trackDb *tdb)
-/* Is this trackDb struct marked as a child of a composite track ?  */
+INLINE struct trackDb *tdbGetImmediateFolder(struct trackDb *tdb)
+// Return closest ancestor who is a folder track.
 {
-return tdb && tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType);
+struct trackDb *parent = tdb->parent;
+for ( ; parent != NULL && !tdbIsFolder(parent); parent = parent->parent)
+     ;
+return parent;
 }
+#define tdbGetSuperTrack(tdb) tdbGetImmediateFolder(tdb)
 
-INLINE void tdbMarkAsSuperTrack(struct trackDb *tdb)
-/* Marks a trackDb struct as a supertrack */
-{
-tdb->treeNodeType |= SUPERTRACK_MASK;
-}
 
+// --- Composites are 2 or 3 level containers of tracks organized into a single hgTrackUi cfg page
 INLINE void tdbMarkAsComposite( struct trackDb *tdb)
-/* Marks a trackDb struct as a composite track  */
+// Marks a trackDb struct as a composite track
 {
 tdb->treeNodeType |= COMPOSITE_MASK;
 }
 
-INLINE void tdbMarkAsSuperTrackChild(struct trackDb *tdb)
-/* Marks a trackDb struct as a child of a supertrack  */
+INLINE void tdbMarkAsCompositeView( struct trackDb *tdb)
+// Marks a trackDb struct as a view of a composite track
 {
-tdb->treeNodeType |= SUPERTRACK_CHILD_MASK;
+tdb->treeNodeType |= COMPOSITE_VIEW_MASK;
 }
 
 INLINE void tdbMarkAsCompositeChild( struct trackDb *tdb)
-/* Marks a trackDb struct as a child of a composite track  */
+// Marks a trackDb struct as a child or subtrack of a composite track
 {
 tdb->treeNodeType |= COMPOSITE_CHILD_MASK;
 }
+#define tdbMarkAsCompositeSubtrack(tdb) tdbMarkAsCompositeChild(tdb)
+
+INLINE boolean tdbIsComposite( struct trackDb *tdb)
+// Is this trackDb struct marked as a composite with children ?
+{
+return tdb && tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType);
+}
+
+INLINE boolean tdbIsCompositeView(struct trackDb *tdb)
+// Is this trackDb struct marked as a view of a composite track ?
+{
+return tdb && tdb->parent && tdb->subtracks && COMPOSITE_VIEW_NODE( tdb->treeNodeType);
+}
+
+INLINE boolean tdbIsCompositeChild(struct trackDb *tdb)
+// Is this trackDb struct marked as a child of a composite track ?
+{
+return tdb && tdb->parent && COMPOSITE_CHILD_NODE(tdb->treeNodeType);
+}
+#define tdbIsCompositeSubtrack(tdb) tdbIsCompositeChild(tdb)
+
+INLINE struct trackDb *tdbGetComposite(struct trackDb *tdb)
+// Return closest ancestor who is a composite track.
+{
+struct trackDb *parent = tdb->parent;
+for ( ; parent != NULL && !tdbIsComposite(parent); parent = parent->parent)
+     ;
+return parent;
+}
+
+
+// --- MultiTracks are container tracks with one level of subtracks combined into a unified hgTracks image track
+INLINE void tdbMarkAsMultiTrack( struct trackDb *tdb)
+// Marks a trackDb struct as a multiTrack (like multiWig)
+{
+tdb->treeNodeType |= MULTI_TRACK_MASK;
+}
+
+INLINE void tdbMarkAsMultiTrackChild( struct trackDb *tdb)
+// Marks a trackDb struct as a child of a multiTrack (like multiWig)
+{
+tdb->treeNodeType |= MULTI_TRACK_CHILD_MASK;
+}
+#define tdbMarkAsMultiTrackSubtrack(tdb) tdbMarkAsMultiTrackChild(tdb)
+
+INLINE boolean tdbIsMultiTrack( struct trackDb *tdb)
+// Is this trackDb struct marked as a multiTrack (like multiWig) ?
+{
+return tdb && tdb->subtracks && MULTI_TRACK_NODE( tdb->treeNodeType);
+}
+
+INLINE boolean tdbIsMultiTrackChild(struct trackDb *tdb)
+// Is this trackDb struct marked as a child of a multiTrack (like multiWig) ?
+{
+return tdb && tdb->parent && MULTI_TRACK_CHILD_NODE(tdb->treeNodeType);
+}
+#define tdbIsMultiTrackSubtrack(tdb) tdbIsMultiTrackChild(tdb)
+
+INLINE struct trackDb *tdbGetMultiTrack(struct trackDb *tdb)
+// Return closest ancestor who is a multiTrack.
+{
+struct trackDb *parent = tdb->parent;
+for ( ; parent != NULL && !tdbIsMultiTrack(parent); parent = parent->parent)
+     ;
+return parent;
+}
+
+
+// --- CONTAINERS are composites or multiTracks, which behave in similar ways through some code paths
+INLINE boolean tdbIsContainer( struct trackDb *tdb)
+// Is this trackDb struct marked as a composite or multiTrack with children ?
+{
+return tdb && tdb->subtracks && CONTAINER_NODE(tdb->treeNodeType);
+}
+
+INLINE boolean tdbIsContainerChild(struct trackDb *tdb)
+// Is this trackDb struct marked as a child of a composite or multiTrack ?
+{
+return tdb && tdb->parent && CONTAINER_CHILD_NODE(tdb->treeNodeType);
+}
+#define tdbIsSubtrack(tdb) tdbIsContainerChild(tdb)
+
+INLINE struct trackDb *tdbGetContainer(struct trackDb *tdb)
+// Return closest ancestor who is a container track.
+{
+struct trackDb *parent = tdb->parent;
+for ( ; parent != NULL && !tdbIsContainer(parent); parent = parent->parent)
+     ;
+return parent;
+}
+
 
 struct trackDb *trackDbLoad(char **row);
 /* Load a trackDb from row fetched with select * from trackDb
@@ -187,7 +293,7 @@ int trackDbCmp(const void *va, const void *vb);
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
 
-struct trackDb *trackDbFromRa(char *raFile);
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag);
 /* Load track info from ra file into list. */
 
 void trackDbPolish(struct trackDb *bt);
@@ -240,7 +346,7 @@ void trackDbSuperMarkup(struct trackDb *tdbList);
  * Child:    'supertrack <parent> [vis]
  * Returns NULL if there is no such setting */
 
-char *trackDbInclude(char *raFile, char *line);
+char *trackDbInclude(char *raFile, char *line, char **releaseTag);
 /* Get include filename from trackDb line.
    Return NULL if line doesn't contain include */
 
@@ -303,7 +409,10 @@ struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
 
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
-/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
+
+void tdbExtrasRemove(struct trackDb *tdb,char *name);
+/* Removes a value from the extras hash. */
 
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal);
 /* Returns a value if it is found in the extras hash. */
@@ -361,15 +470,15 @@ int trackDbCountDescendants(struct trackDb *tdb);
 int trackDbCountDescendantLeaves(struct trackDb *tdb);
 /* Count the number of leaves in children list and their children. */
 
-struct trackDb *trackDbCompositeParent(struct trackDb *tdb);
-/* Return closest ancestor who is a composite track. */
-
 struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb);
-/* Look for a parent who is a composite track and return that.  Failing that
+/* Look for a parent who is a composite or multiTrack track and return that.  Failing that
  * just return self. */
 
 boolean trackDbUpdateOldTag(char **pTag, char **pVal);
 /* Look for obscolete tags and update them to new format.  Return TRUE if any update
  * is done.  Will allocate fresh memory for new tag and val if updated. */
+
+boolean trackDbCheckValidRelease(char *tag);
+/* check to make sure release tag is valid */
 #endif /* TRACKDB_H */
 

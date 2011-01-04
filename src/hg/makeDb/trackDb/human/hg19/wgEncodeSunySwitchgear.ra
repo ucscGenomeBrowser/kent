@@ -1,0 +1,48 @@
+track wgEncodeSunySwitchgear
+compositeTrack on
+shortLabel SUNY Switchgear
+longLabel ENCODE SUNY Albany Tenenbaum RBP Associatediated RNA by Switchgear 
+group regulation
+subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA
+subGroup2 cellType Cell_Line HT1080=HT-1080 
+subGroup3 factor Target_Protien ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag IGF2BP1=IGF2BP1 
+dimensions dimensionX=factor dimensionY=cellType
+sortOrder cellType=+ factor=+
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
+dragAndDrop subTracks
+visibilityViewDefaults  RbpAssocRna=hide
+priority 0
+type bed 3
+wgEncode 1
+origAssembly hg19
+
+    track wgEncodeSunySwitchgearView
+    shortLabel Suny Switchgear
+    view RbpAssocRna
+    visibility pack
+    viewUi on
+    subTrack wgEncodeSunySwitchgear
+    pValueFilter 0.0
+    pValueFilterLimits 0:5
+    scoreFilter 2
+    scoreFilterLimits 1:800
+    scoreMin 95
+
+        track wgEncodeSunySwitchgearHt1080Elavl1RbpAssocRna
+        release alpha
+        parent wgEncodeSunySwitchgearView off
+        shortLabel HT-1080 ELAVL1
+        longLabel ENCODE SUNY Albany RBP Associated RNA by Switchgear (ELAVL1 in HT-1080 cells)
+        subGroups view=RbpAssocRna factor=ELAVL1 cellType=HT1080
+        type broadPeak
+        # subId=3086 dateSubmitted=2010-12-10
+
+        track wgEncodeSunySwitchgearHt1080Igf2bp1RbpAssocRna
+        release alpha
+        parent wgEncodeSunySwitchgearView off
+        shortLabel HT-1080 IGF2BP1
+        longLabel ENCODE SUNY Albany RBP Associated RNA by Switchgear (IGF2BP1 in HT-1080 cells)
+        subGroups view=RbpAssocRna factor=IGF2BP1 cellType=HT1080
+        type broadPeak
+        # subId=3086 dateSubmitted=2010-12-10
+

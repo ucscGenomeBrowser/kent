@@ -850,7 +850,7 @@ void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING]
  * something like this:
  *
  * Code somewhere wants to check for a split table existing.  If the table is not split,
- * but contains an underscore, such as 
+ * but contains an underscore, such as
  *     encodeUcsdChipHeLaH3H4dmH3K4_p0
  * results it in calling this function with the default chromosome name pre-pended:
  *     chr9_encodeUcsdChipHeLaH3H4dmH3K4_p0
@@ -1380,7 +1380,7 @@ if (hTableExists(sqlGetDatabase(conn), seqTbl))
           extFileFld, seqTbl, acc);
     struct sqlResult *sr = sqlMustGetResult(conn, query);
     char **row = sqlNextRow(sr);
-    if (row != NULL) 
+    if (row != NULL)
         {
         if (retId != NULL)
             *retId = sqlUnsigned(row[0]);
@@ -3378,13 +3378,19 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
-static void addTrackIfDataAccessible(char *database, struct trackDb *tdb, char *chrom,
-                           boolean privateHost, struct trackDb **tdbRetList)
+static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
+	       boolean privateHost, struct trackDb **tdbRetList)
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
 if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->table) != NULL)
     slAddHead(tdbRetList, tdb);
+else if (sameWord(tdb->type,"downloadsOnly"))
+    {
+    if (sameString(tdb->table,tdb->track))
+        tdb->table = NULL;
+    slAddHead(tdbRetList, tdb);
+    }
 else
     trackDbFree(&tdb);
 }
@@ -3416,11 +3422,11 @@ static void inheritFromSuper(struct trackDb *subtrackTdb,
  * effect to the inheritance of subtracks in effect if not in method.  Rather
  * than relying on trackDbSetting to chase missing settings from parents, this
  * on copies in the settings from parent to child settingsHash.  I suspect that
- * this is no longer needed, but am leaving it in until such time as the 
+ * this is no longer needed, but am leaving it in until such time as the
  * supertrack system as a whole is factored out -jk. */
 {
 assert(subtrackTdb->parent == compositeTdb);
-subtrackTdb->parentName = compositeTdb->track; 
+subtrackTdb->parentName = compositeTdb->track;
 if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     {
     if (isEmpty(subtrackTdb->type))
@@ -3457,27 +3463,39 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-static void trackDbCompositeMarkup(struct trackDb *parent, struct trackDb *tdbList)
+static void trackDbContainerMarkup(struct trackDb *parent, struct trackDb *tdbList)
 /* Set up things so that the COMPOSITE_NODE and related macros work on tdbList. */
 {
+if (parent != NULL)
+    {
+    if (trackDbLocalSetting(parent, "compositeTrack"))
+        tdbMarkAsComposite(parent);
+    if (trackDbLocalSetting(parent, "container"))
+        tdbMarkAsMultiTrack(parent);
+    }
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (parent != NULL)
         {
-	if (trackDbSetting(parent, "compositeTrack"))
-	    {
-	    tdbMarkAsComposite(parent);
-	    tdbMarkAsCompositeChild(tdb);
-	    }
-	}
-    trackDbCompositeMarkup(tdb, tdb->subtracks);
+        if (tdbIsMultiTrack(parent))
+            tdbMarkAsMultiTrackChild(tdb);
+
+        if (tdbIsComposite(parent) || (parent->parent != NULL && tdbIsComposite(parent->parent)))
+            {
+            if (tdb->subtracks == NULL)
+                tdbMarkAsCompositeChild(tdb);
+            else
+               tdbMarkAsCompositeView(tdb);
+            }
+        }
+    trackDbContainerMarkup(tdb, tdb->subtracks);
     }
 }
 
 
 static struct trackDb *pruneEmpties(struct trackDb *tdbList, char *db,
-	char *chrom, boolean privateHost, int level)
+	boolean privateHost, int level)
 /* Remove tracks without data.  For parent tracks data in any child is sufficient to keep
  * them alive. */
 {
@@ -3487,15 +3505,15 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     next = tdb->next;
     if (tdb->subtracks != NULL)
 	{
-	tdb->subtracks = pruneEmpties(tdb->subtracks, db, chrom, privateHost, level+1);
+	tdb->subtracks = pruneEmpties(tdb->subtracks, db, privateHost, level+1);
 	}
     if (tdb->subtracks != NULL)
         {
 	slAddHead(&newList, tdb);
 	}
-    else 
+    else
         {
-        addTrackIfDataAccessible(db, tdb, chrom, privateHost, &newList);
+        addTrackIfDataAccessible(db, tdb, privateHost, &newList);
 	}
     }
 slReverse(&newList);
@@ -3541,20 +3559,30 @@ else
 }
 #endif /* DEBUG */
 
-struct trackDb *hTrackDb(char *db, char *chrom)
-/* Load tracks associated with current chromosome (which may be NULL for
- * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
+struct trackDb *hTrackDb(char *db)
+/* Load tracks associated with current db.
+ * Supertracks are loaded as a trackDb, but are not in the returned list,
  * but are accessible via the parent pointers of the member tracks.  Also,
  * the supertrack trackDb subtrack fields are not set here (would be
- * incompatible with the returned list).
- * Returns list sorted by priority */
+ * incompatible with the returned list)
+ * Returns list sorted by priority
+ *	NOTE: this result is cached, do not free it !
+ */
 {
-struct trackDb *tdbList = loadTrackDb(db, NULL);
-tdbList = trackDbLinkUpGenerations(tdbList);
-tdbList = pruneEmpties(tdbList, db, chrom, hIsPrivateHost(), 0);
-trackDbCompositeMarkup(NULL, tdbList);
-rInheritFields(tdbList);
-slSort(&tdbList, trackDbCmp);
+// static char *existingDb = NULL;
+// static struct trackDb *tdbList = NULL;
+struct trackDb *tdbList = NULL;
+//if (differentStringNullOk(existingDb, db))
+//    {
+    tdbList = loadTrackDb(db, NULL);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+//    freeMem(existingDb);
+//    existingDb = cloneString(db);
+    tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
+    trackDbContainerMarkup(NULL, tdbList);
+    rInheritFields(tdbList);
+    slSort(&tdbList, trackDbCmp);
+//    }
 return tdbList;
 }
 
@@ -3601,21 +3629,30 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     }
 hFreeConn(&conn);
 }
-  
-struct trackDb *hTrackDbForTrack(char *db, char *track)
+
+struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
  * subtrack then inheritance will be handled.  (Unless a subtrack has
  * "noInherit on"...) This will die if the current database does not have
- * a trackDb, but will return NULL if track is not found. */
+ * a trackDb, but will return NULL if track is not found.
+ * MAY pass in prepopulated trackDb list, or may receive the trackDb list as an inout. */
 {
 /* Get track list .*/
-struct trackDb *tdbList = hTrackDb(db, NULL);
-return rFindTrack(0, tdbList, track);
+struct trackDb *theTdbs = NULL;
+if (tdbList == NULL || *tdbList == NULL)
+    {
+    theTdbs = hTrackDb(db);
+    if (tdbList != NULL)
+        *tdbList = theTdbs;
+    }
+else
+    theTdbs = *tdbList;
+return rFindTrack(0, theTdbs, track);
 }
 
 struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
-/* Load trackDb object for a track. If need be grab its ancestors too. 
+/* Load trackDb object for a track. If need be grab its ancestors too.
  * This does not load children. hTrackDbForTrack will handle children, and
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
@@ -3631,7 +3668,7 @@ for (;;)
     char *parentTrack = NULL;
     char *parent = trackDbLocalSetting(ancestor, "parent");
     if (parent != NULL)
-	parentTrack = cloneFirstWord(parent);  
+	parentTrack = cloneFirstWord(parent);
     if (parentTrack == NULL)
         {
 	char *super = trackDbLocalSetting(ancestor, "superTrack");
@@ -3854,7 +3891,7 @@ return hoh;
 }
 
 static struct hash *makeDbTableToTrackHash(char *db)
-/* Create a hash based on trackDb tables in given database that 
+/* Create a hash based on trackDb tables in given database that
  * will give you a track name given a table name as a key. */
 {
 struct hash *hoh = hTdbGetTrackSettingsHash(db);
@@ -4338,7 +4375,7 @@ struct sqlConnection *conn = hConnectCentral();
 boolean gotIx;
 char query[256];
 
-safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+safef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
 gotIx = sqlExists(conn, query);
 hDisconnectCentral(&conn);
 return gotIx;
@@ -4768,10 +4805,10 @@ return sqlQuickString(conn, query);
 }
 
 struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table))
-/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) 
- * References an externally defined function ctLookupName() which looks up a 
+/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables)
+ * References an externally defined function ctLookupName() which looks up a
  * custom track by name
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {
@@ -4798,8 +4835,8 @@ return tdb;
 
 char *findTypeForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table))
 /* Finds the TrackType for this Table
- * if table has no parent trackDb pass NULL for parent 
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {
@@ -4811,9 +4848,9 @@ return (parent?parent->type:NULL);
 
 boolean trackIsType(char *database, char *table, struct trackDb *parent, char *type, struct customTrack *(*ctLookupName)(char *table))
 /* Return TRUE track is a specific type.  Type should be something like "bed" or
- * "bigBed" or "bigWig" 
- * if table has no parent trackDb pass NULL for parent 
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * "bigBed" or "bigWig"
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {
@@ -4822,9 +4859,9 @@ return (tdbType && startsWithWord(type, tdbType));
 }
 
 boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table))
-/* Return TRUE if table corresponds to a bigBed file. 
- * if table has no parent trackDb pass NULL for parent 
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+/* Return TRUE if table corresponds to a bigBed file.
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {

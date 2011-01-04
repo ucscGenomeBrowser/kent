@@ -2742,7 +2742,7 @@ dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst
 
 
 #########################################################################
-# LIFTOVER BDTNP DATA FROM DM2 (DONE 1/29/09 angie - REDONE with more data 2/2/09, more 8/30/10)
+# LIFTOVER BDTNP DATA FROM DM2 (DONE 1/29/09 angie - REDONE with more data 2/2/09, more 9/14/10)
     ssh hgwdev
     mkdir /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver
     cd /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver
@@ -2857,7 +2857,7 @@ dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst
     end
     rm wiggle.tab
 
-    # New data 8/27, 8/30/10
+    # New data 8/27, 8/30/10, 9/14/10
     mkdir /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver/100827
     cd /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver/100827
     # DNase and ChIP/chip:

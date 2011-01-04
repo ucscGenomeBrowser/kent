@@ -1,19 +1,285 @@
+metaObject wgEncodeOpenChromFaireAstrocyAlnRep1
+objType file
+cell Astrocy
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2481
+view Alignments
+
+metaObject wgEncodeOpenChromFaireAstrocyAlnRep2
+objType file
+cell Astrocy
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2481
+view Alignments
+
+metaObject wgEncodeOpenChromFaireAstrocyBaseOverlapSignal
+objType table
+cell Astrocy
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireAstrocyBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2481
+tableName wgEncodeOpenChromFaireAstrocyBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireAstrocyPk
+objType table
+cell Astrocy
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireAstrocyPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2481
+tableName wgEncodeOpenChromFaireAstrocyPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireAstrocyRawDataRep1
+objType file
+cell Astrocy
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireAstrocyRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 2481
+view RawData
+
+metaObject wgEncodeOpenChromFaireAstrocyRawDataRep2
+objType file
+cell Astrocy
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireAstrocyRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 2481
+view RawData
+
+metaObject wgEncodeOpenChromFaireAstrocySig
+objType table
+cell Astrocy
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireAstrocySig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 2481
+tableName wgEncodeOpenChromFaireAstrocySig
+view Signal
+
+metaObject wgEncodeOpenChromFaireGlioblaAlnRep1
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2515
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGlioblaAlnRep2
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2515
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGlioblaAlnRep3
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 3
+subId 2515
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
+objType table
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2515
+tableName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireGlioblaPk
+objType table
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2515
+tableName wgEncodeOpenChromFaireGlioblaPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireGlioblaRawDataRep1
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 2515
+view RawData
+
+metaObject wgEncodeOpenChromFaireGlioblaRawDataRep2
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 2515
+view RawData
+
+metaObject wgEncodeOpenChromFaireGlioblaRawDataRep3
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaRawDataRep3.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 3
+subId 2515
+view RawData
+
+metaObject wgEncodeOpenChromFaireGlioblaSig
+objType table
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaSig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_H54
+project wgEncode
+subId 2515
+tableName wgEncodeOpenChromFaireGlioblaSig
+view Signal
+
 metaObject wgEncodeOpenChromFaireGm12878AlnRep1
 objType file
 cell GM12878
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam
 fileIndex wgEncodeOpenChromFaireGm12878AlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireGm12878AlnRep1
 project wgEncode
 replicate 1
 subId 1480
@@ -23,18 +289,17 @@ metaObject wgEncodeOpenChromFaireGm12878AlnRep2
 objType file
 cell GM12878
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam
 fileIndex wgEncodeOpenChromFaireGm12878AlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireGm12878AlnRep2
 project wgEncode
 replicate 2
 subId 1480
@@ -44,18 +309,17 @@ metaObject wgEncodeOpenChromFaireGm12878AlnRep3
 objType file
 cell GM12878
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam
 fileIndex wgEncodeOpenChromFaireGm12878AlnRep3.bam.bai
+fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireGm12878AlnRep3
 project wgEncode
 replicate 3
 subId 1480
@@ -65,14 +329,14 @@ metaObject wgEncodeOpenChromFaireGm12878BaseOverlapSignal
 objType table
 cell GM12878
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeOpenChromFaireGm12878BaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -84,14 +348,14 @@ metaObject wgEncodeOpenChromFaireGm12878Pk
 objType table
 cell GM12878
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 fileName wgEncodeOpenChromFaireGm12878Pk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -99,18 +363,78 @@ subId 1480
 tableName wgEncodeOpenChromFaireGm12878Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireGm12878RawDataRep1V2
+objType file
+cell GM12878
+composite wgEncodeOpenChromFaire
+controlId GM12878/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-04-20
+dateUnrestricted 2010-01-20
+fileName wgEncodeOpenChromFaireGm12878RawDataRep1V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 471
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm12878RawDataRep2V2
+objType file
+cell GM12878
+composite wgEncodeOpenChromFaire
+controlId GM12878/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-04-20
+dateUnrestricted 2010-01-20
+fileName wgEncodeOpenChromFaireGm12878RawDataRep2V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 471
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm12878RawDataRep3V2
+objType file
+cell GM12878
+composite wgEncodeOpenChromFaire
+controlId GM12878/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-04-20
+dateUnrestricted 2010-01-20
+fileName wgEncodeOpenChromFaireGm12878RawDataRep3V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 3
+subId 471
+submittedDataVersion V2 - new sequences generated
+view RawData
+
 metaObject wgEncodeOpenChromFaireGm12878Sig
 objType table
 cell GM12878
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeOpenChromFaireGm12878Sig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_GM12878
 origAssembly hg18
 project wgEncode
@@ -118,22 +442,255 @@ subId 1480
 tableName wgEncodeOpenChromFaireGm12878Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireGm12891AlnRep1
+objType file
+cell GM12891
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2494
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGm12891AlnRep2
+objType file
+cell GM12891
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2494
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGm12891BaseOverlapSignal
+objType table
+cell GM12891
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12891BaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2494
+tableName wgEncodeOpenChromFaireGm12891BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireGm12891Pk
+objType table
+cell GM12891
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12891Pk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2494
+tableName wgEncodeOpenChromFaireGm12891Pk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireGm12891RawDataRep1
+objType file
+cell GM12891
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12891RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 2494
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm12891RawDataRep2
+objType file
+cell GM12891
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12891RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 2494
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm12891Sig
+objType table
+cell GM12891
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12891Sig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 2494
+tableName wgEncodeOpenChromFaireGm12891Sig
+view Signal
+
+metaObject wgEncodeOpenChromFaireGm12892AlnRep1
+objType file
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2488
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGm12892AlnRep2
+objType file
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2488
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGm12892BaseOverlapSignal
+objType table
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12892BaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2488
+tableName wgEncodeOpenChromFaireGm12892BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireGm12892Pk
+objType table
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12892Pk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2488
+tableName wgEncodeOpenChromFaireGm12892Pk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireGm12892RawDataRep1
+objType file
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12892RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 2488
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm12892RawDataRep2
+objType file
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12892RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 2488
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm12892Sig
+objType table
+cell GM12892
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromFaireGm12892Sig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 2488
+tableName wgEncodeOpenChromFaireGm12892Sig
+view Signal
+
 metaObject wgEncodeOpenChromFaireGm18507AlnRep1
 objType file
 cell GM18507
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam
 fileIndex wgEncodeOpenChromFaireGm18507AlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireGm18507AlnRep1
 project wgEncode
 replicate 1
 subId 1513
@@ -143,18 +700,17 @@ metaObject wgEncodeOpenChromFaireGm18507AlnRep2
 objType file
 cell GM18507
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam
 fileIndex wgEncodeOpenChromFaireGm18507AlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireGm18507AlnRep2
 project wgEncode
 replicate 2
 subId 1513
@@ -164,14 +720,14 @@ metaObject wgEncodeOpenChromFaireGm18507BaseOverlapSignal
 objType table
 cell GM18507
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromFaireGm18507BaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -183,14 +739,14 @@ metaObject wgEncodeOpenChromFaireGm18507Pk
 objType table
 cell GM18507
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromFaireGm18507Pk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.1
 origAssembly hg18
 project wgEncode
@@ -198,18 +754,54 @@ subId 1513
 tableName wgEncodeOpenChromFaireGm18507Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireGm18507RawDataRep1
+objType file
+cell GM18507
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-20
+dateUnrestricted 2010-09-19
+fileName wgEncodeOpenChromFaireGm18507RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 852
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm18507RawDataRep2
+objType file
+cell GM18507
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-20
+dateUnrestricted 2010-09-19
+fileName wgEncodeOpenChromFaireGm18507RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 852
+view RawData
+
 metaObject wgEncodeOpenChromFaireGm18507Sig
 objType table
 cell GM18507
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromFaireGm18507Sig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -221,18 +813,17 @@ metaObject wgEncodeOpenChromFaireGm19239AlnRep1
 objType file
 cell GM19239
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam
 fileIndex wgEncodeOpenChromFaireGm19239AlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireGm19239AlnRep1
 project wgEncode
 replicate 1
 subId 1508
@@ -242,18 +833,17 @@ metaObject wgEncodeOpenChromFaireGm19239AlnRep2
 objType file
 cell GM19239
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam
 fileIndex wgEncodeOpenChromFaireGm19239AlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireGm19239AlnRep2
 project wgEncode
 replicate 2
 subId 1508
@@ -263,14 +853,14 @@ metaObject wgEncodeOpenChromFaireGm19239BaseOverlapSignal
 objType table
 cell GM19239
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromFaireGm19239BaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -282,14 +872,14 @@ metaObject wgEncodeOpenChromFaireGm19239Pk
 objType table
 cell GM19239
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromFaireGm19239Pk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -297,18 +887,54 @@ subId 1508
 tableName wgEncodeOpenChromFaireGm19239Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireGm19239RawDataRep1
+objType file
+cell GM19239
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-18
+dateUnrestricted 2010-09-18
+fileName wgEncodeOpenChromFaireGm19239RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 847
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm19239RawDataRep2
+objType file
+cell GM19239
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-18
+dateUnrestricted 2010-09-18
+fileName wgEncodeOpenChromFaireGm19239RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 847
+view RawData
+
 metaObject wgEncodeOpenChromFaireGm19239Sig
 objType table
 cell GM19239
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromFaireGm19239Sig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -320,18 +946,17 @@ metaObject wgEncodeOpenChromFaireH1hescAlnRep1
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam
 fileIndex wgEncodeOpenChromFaireH1hescAlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireH1hescAlnRep1
 project wgEncode
 replicate 1
 subId 1496
@@ -341,18 +966,17 @@ metaObject wgEncodeOpenChromFaireH1hescAlnRep2
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam
 fileIndex wgEncodeOpenChromFaireH1hescAlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireH1hescAlnRep2
 project wgEncode
 replicate 2
 subId 1496
@@ -362,14 +986,14 @@ metaObject wgEncodeOpenChromFaireH1hescBaseOverlapSignal
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireH1hescBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -381,14 +1005,14 @@ metaObject wgEncodeOpenChromFaireH1hescPk
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireH1hescPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -396,18 +1020,54 @@ subId 1496
 tableName wgEncodeOpenChromFaireH1hescPk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireH1hescRawDataRep1
+objType file
+cell H1-hESC
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeOpenChromFaireH1hescRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 629
+view RawData
+
+metaObject wgEncodeOpenChromFaireH1hescRawDataRep2
+objType file
+cell H1-hESC
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeOpenChromFaireH1hescRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 629
+view RawData
+
 metaObject wgEncodeOpenChromFaireH1hescSig
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireH1hescSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -419,18 +1079,17 @@ metaObject wgEncodeOpenChromFaireHelas3AlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam
 fileIndex wgEncodeOpenChromFaireHelas3AlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHelas3AlnRep1
 project wgEncode
 replicate 1
 subId 1497
@@ -440,18 +1099,17 @@ metaObject wgEncodeOpenChromFaireHelas3AlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam
 fileIndex wgEncodeOpenChromFaireHelas3AlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHelas3AlnRep2
 project wgEncode
 replicate 2
 subId 1497
@@ -461,14 +1119,14 @@ metaObject wgEncodeOpenChromFaireHelas3BaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3BaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -480,18 +1138,17 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam
 fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1
 project wgEncode
 replicate 1
 subId 1611
@@ -502,18 +1159,17 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam
 fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2
 project wgEncode
 replicate 2
 subId 1611
@@ -524,14 +1180,14 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -544,14 +1200,14 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hPk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromFaireHelas3Ifna4hPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -560,18 +1216,56 @@ tableName wgEncodeOpenChromFaireHelas3Ifna4hPk
 treatment IFNa4h
 view Peaks
 
+metaObject wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-20
+dateUnrestricted 2010-09-20
+fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 858
+treatment IFNa4h
+view RawData
+
+metaObject wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep2
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-20
+dateUnrestricted 2010-09-20
+fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 858
+treatment IFNa4h
+view RawData
+
 metaObject wgEncodeOpenChromFaireHelas3Ifna4hSig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifna4hSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
@@ -584,18 +1278,17 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam
 fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1
 project wgEncode
 replicate 1
 subId 1612
@@ -606,18 +1299,17 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam
 fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2
 project wgEncode
 replicate 2
 subId 1612
@@ -628,14 +1320,14 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -648,14 +1340,14 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hPk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromFaireHelas3Ifng4hPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -664,18 +1356,56 @@ tableName wgEncodeOpenChromFaireHelas3Ifng4hPk
 treatment IFNg4h
 view Peaks
 
+metaObject wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-20
+dateUnrestricted 2010-09-20
+fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 859
+treatment IFNg4h
+view RawData
+
+metaObject wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep2
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-12-20
+dateUnrestricted 2010-09-20
+fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 859
+treatment IFNg4h
+view RawData
+
 metaObject wgEncodeOpenChromFaireHelas3Ifng4hSig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifng4hSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
@@ -688,14 +1418,14 @@ metaObject wgEncodeOpenChromFaireHelas3Pk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Pk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -703,18 +1433,78 @@ subId 1497
 tableName wgEncodeOpenChromFaireHelas3Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireHelas3RawDataRep1V2
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-02
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromFaireHelas3RawDataRep1V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 639
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireHelas3RawDataRep2V2
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-02
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromFaireHelas3RawDataRep2V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 639
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireHelas3RawDataRep3V2
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-10
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromFaireHelas3RawDataRep3V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 3
+subId 494
+submittedDataVersion V2 - new sequences generated
+view RawData
+
 metaObject wgEncodeOpenChromFaireHelas3Sig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Sig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
@@ -726,18 +1516,17 @@ metaObject wgEncodeOpenChromFaireHepg2AlnRep1
 objType file
 cell HepG2
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam
 fileIndex wgEncodeOpenChromFaireHepg2AlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHepg2AlnRep1
 project wgEncode
 replicate 1
 subId 1515
@@ -747,18 +1536,17 @@ metaObject wgEncodeOpenChromFaireHepg2AlnRep2
 objType file
 cell HepG2
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam
 fileIndex wgEncodeOpenChromFaireHepg2AlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHepg2AlnRep2
 project wgEncode
 replicate 2
 subId 1515
@@ -768,18 +1556,17 @@ metaObject wgEncodeOpenChromFaireHepg2AlnRep3
 objType file
 cell HepG2
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam
 fileIndex wgEncodeOpenChromFaireHepg2AlnRep3.bam.bai
+fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHepg2AlnRep3
 project wgEncode
 replicate 3
 subId 1515
@@ -789,14 +1576,14 @@ metaObject wgEncodeOpenChromFaireHepg2BaseOverlapSignal
 objType table
 cell HepG2
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeOpenChromFaireHepg2BaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -808,14 +1595,14 @@ metaObject wgEncodeOpenChromFaireHepg2Pk
 objType table
 cell HepG2
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeOpenChromFaireHepg2Pk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -823,18 +1610,78 @@ subId 1515
 tableName wgEncodeOpenChromFaireHepg2Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireHepg2RawDataRep1V2
+objType file
+cell HepG2
+composite wgEncodeOpenChromFaire
+controlId HepG2/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-28
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeOpenChromFaireHepg2RawDataRep1V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 557
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireHepg2RawDataRep2V2
+objType file
+cell HepG2
+composite wgEncodeOpenChromFaire
+controlId HepG2/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-28
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeOpenChromFaireHepg2RawDataRep2V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 557
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireHepg2RawDataRep3V2
+objType file
+cell HepG2
+composite wgEncodeOpenChromFaire
+controlId HepG2/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-28
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeOpenChromFaireHepg2RawDataRep3V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 3
+subId 557
+submittedDataVersion V2 - new sequences generated
+view RawData
+
 metaObject wgEncodeOpenChromFaireHepg2Sig
 objType table
 cell HepG2
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeOpenChromFaireHepg2Sig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_HepG2
 origAssembly hg18
 project wgEncode
@@ -846,18 +1693,17 @@ metaObject wgEncodeOpenChromFaireHuvecAlnRep1
 objType file
 cell HUVEC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam
 fileIndex wgEncodeOpenChromFaireHuvecAlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHuvecAlnRep1
 project wgEncode
 replicate 1
 subId 1529
@@ -867,18 +1713,17 @@ metaObject wgEncodeOpenChromFaireHuvecAlnRep2
 objType file
 cell HUVEC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam
 fileIndex wgEncodeOpenChromFaireHuvecAlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireHuvecAlnRep2
 project wgEncode
 replicate 2
 subId 1529
@@ -888,14 +1733,14 @@ metaObject wgEncodeOpenChromFaireHuvecBaseOverlapSignal
 objType table
 cell HUVEC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromFaireHuvecBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -907,14 +1752,14 @@ metaObject wgEncodeOpenChromFaireHuvecPk
 objType table
 cell HUVEC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromFaireHuvecPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -922,18 +1767,54 @@ subId 1529
 tableName wgEncodeOpenChromFaireHuvecPk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireHuvecRawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeOpenChromFaire
+controlId HUVEC/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+fileName wgEncodeOpenChromFaireHuvecRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 546
+view RawData
+
+metaObject wgEncodeOpenChromFaireHuvecRawDataRep2
+objType file
+cell HUVEC
+composite wgEncodeOpenChromFaire
+controlId HUVEC/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+fileName wgEncodeOpenChromFaireHuvecRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 546
+view RawData
+
 metaObject wgEncodeOpenChromFaireHuvecSig
 objType table
 cell HUVEC
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromFaireHuvecSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_HUVEC
 origAssembly hg18
 project wgEncode
@@ -945,18 +1826,17 @@ metaObject wgEncodeOpenChromFaireK562AlnRep1
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
-fileName wgEncodeOpenChromFaireK562AlnRep1.bam
 fileIndex wgEncodeOpenChromFaireK562AlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireK562AlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireK562AlnRep1
 project wgEncode
 replicate 1
 subId 1531
@@ -966,18 +1846,17 @@ metaObject wgEncodeOpenChromFaireK562AlnRep2
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
-fileName wgEncodeOpenChromFaireK562AlnRep2.bam
 fileIndex wgEncodeOpenChromFaireK562AlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireK562AlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireK562AlnRep2
 project wgEncode
 replicate 2
 subId 1531
@@ -987,14 +1866,14 @@ metaObject wgEncodeOpenChromFaireK562BaseOverlapSignal
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
 fileName wgEncodeOpenChromFaireK562BaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1002,18 +1881,274 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562BaseOverlapSignal
 view Base_Overlap_Signal
 
-metaObject wgEncodeOpenChromFaireK562Pk
+metaObject wgEncodeOpenChromFaireK562NabutAlnRep1
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromFaireK562NabutAlnRep1
+project wgEncode
+replicate 1
+subId 2771
+treatment NaBut
+view Alignments
+
+metaObject wgEncodeOpenChromFaireK562NabutAlnRep2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromFaireK562NabutAlnRep2
+project wgEncode
+replicate 2
+subId 2771
+treatment NaBut
+view Alignments
+
+metaObject wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
 dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2771
+tableName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
+treatment NaBut
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireK562NabutPk
+objType table
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562NabutPk.narrowPeak.gz
+grant Crawford
+lab UNC(Lieb)
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2771
+tableName wgEncodeOpenChromFaireK562NabutPk
+treatment NaBut
+view Peaks
+
+metaObject wgEncodeOpenChromFaireK562NabutRawDataRep1
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562NabutRawDataRep1.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep1
+project wgEncode
+replicate 1
+subId 2771
+treatment NaBut
+view RawData
+
+metaObject wgEncodeOpenChromFaireK562NabutRawDataRep2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562NabutRawDataRep2.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep2
+project wgEncode
+replicate 2
+subId 2771
+treatment NaBut
+view RawData
+
+metaObject wgEncodeOpenChromFaireK562NabutSig
+objType table
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562NabutSig.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion fseq v 1.84, iff_K562
+project wgEncode
+subId 2771
+tableName wgEncodeOpenChromFaireK562NabutSig
+treatment NaBut
+view Signal
+
+metaObject wgEncodeOpenChromFaireK562OhureaAlnRep1
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromFaireK562OhureaAlnRep1
+project wgEncode
+replicate 1
+subId 2772
+treatment OHUrea
+view Alignments
+
+metaObject wgEncodeOpenChromFaireK562OhureaAlnRep2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromFaireK562OhureaAlnRep2
+project wgEncode
+replicate 2
+subId 2772
+treatment OHUrea
+view Alignments
+
+metaObject wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
+objType table
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2772
+tableName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
+treatment OHUrea
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireK562OhureaPk
+objType table
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562OhureaPk.narrowPeak.gz
+grant Crawford
+lab UNC(Lieb)
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2772
+tableName wgEncodeOpenChromFaireK562OhureaPk
+treatment OHUrea
+view Peaks
+
+metaObject wgEncodeOpenChromFaireK562OhureaRawDataRep1
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562OhureaRawDataRep1.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep1
+project wgEncode
+replicate 1
+subId 2772
+treatment OHUrea
+view RawData
+
+metaObject wgEncodeOpenChromFaireK562OhureaRawDataRep2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562OhureaRawDataRep2.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep2
+project wgEncode
+replicate 2
+subId 2772
+treatment OHUrea
+view RawData
+
+metaObject wgEncodeOpenChromFaireK562OhureaSig
+objType table
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeOpenChromFaireK562OhureaSig.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion fseq v 1.84, iff_K562
+project wgEncode
+subId 2772
+tableName wgEncodeOpenChromFaireK562OhureaSig
+treatment OHUrea
+view Signal
+
+metaObject wgEncodeOpenChromFaireK562Pk
+objType table
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 fileName wgEncodeOpenChromFaireK562Pk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -1021,18 +2156,78 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireK562RawDataRep1V2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+controlId K562/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-02
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-08-09
+fileName wgEncodeOpenChromFaireK562RawDataRep1V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 640
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireK562RawDataRep2V2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+controlId K562/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-02
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-08-09
+fileName wgEncodeOpenChromFaireK562RawDataRep2V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 640
+submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireK562RawDataRep3V2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+controlId K562/Input
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-09-08
+dateSubmitted 2009-04-20
+dateUnrestricted 2010-01-20
+fileName wgEncodeOpenChromFaireK562RawDataRep3V2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 3
+subId 483
+submittedDataVersion V2 - new sequences generated
+view RawData
+
 metaObject wgEncodeOpenChromFaireK562Sig
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-26
 dateUnrestricted 2009-11-26
 fileName wgEncodeOpenChromFaireK562Sig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_K562
 origAssembly hg18
 project wgEncode
@@ -1040,225 +2235,138 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
 
-metaObject wgEncodeOpenChromFaireLhsrAlnRep1
+metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
-cell LHSR
+cell Medullo
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAlnRep1.bam
-fileIndex wgEncodeOpenChromFaireLhsrAlnRep1.bam.bai
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
-origAssembly hg18
-parentTable wgEncodeOpenChromFaireLhsrAlnRep1
 project wgEncode
 replicate 1
-subId 1547
+subId 2501
 view Alignments
 
-metaObject wgEncodeOpenChromFaireLhsrAlnRep2
+metaObject wgEncodeOpenChromFaireMedulloAlnRep2
 objType file
-cell LHSR
+cell Medullo
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAlnRep2.bam
-fileIndex wgEncodeOpenChromFaireLhsrAlnRep2.bam.bai
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
-origAssembly hg18
-parentTable wgEncodeOpenChromFaireLhsrAlnRep2
 project wgEncode
 replicate 2
-subId 1547
+subId 2501
 view Alignments
 
-metaObject wgEncodeOpenChromFaireLhsrAndroAlnRep1
-objType file
-cell LHSR
+metaObject wgEncodeOpenChromFaireMedulloBaseOverlapSignal
+objType table
+cell Medullo
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroAlnRep1.bam
-fileIndex wgEncodeOpenChromFaireLhsrAndroAlnRep1.bam.bai
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
-labVersion align_on_cluster_bwa.pl v 1
-origAssembly hg18
-parentTable wgEncodeOpenChromFaireLhsrAndroAlnRep1
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2501
+tableName wgEncodeOpenChromFaireMedulloBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireMedulloPk
+objType table
+cell Medullo
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromFaireMedulloPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2501
+tableName wgEncodeOpenChromFaireMedulloPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireMedulloRawDataRep1
+objType file
+cell Medullo
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromFaireMedulloRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
 project wgEncode
 replicate 1
-subId 1610
-treatment androgen
-view Alignments
+subId 2501
+view RawData
 
-metaObject wgEncodeOpenChromFaireLhsrAndroAlnRep2
+metaObject wgEncodeOpenChromFaireMedulloRawDataRep2
 objType file
-cell LHSR
+cell Medullo
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroAlnRep2.bam
-fileIndex wgEncodeOpenChromFaireLhsrAndroAlnRep2.bam.bai
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromFaireMedulloRawDataRep2.fastq.gz
 grant Crawford
-lab UNC(Lieb)
-labVersion align_on_cluster_bwa.pl v 1
-origAssembly hg18
-parentTable wgEncodeOpenChromFaireLhsrAndroAlnRep2
+lab UNC
 project wgEncode
 replicate 2
-subId 1610
-treatment androgen
-view Alignments
+subId 2501
+view RawData
 
-metaObject wgEncodeOpenChromFaireLhsrAndroBaseOverlapSignal
+metaObject wgEncodeOpenChromFaireMedulloSig
 objType table
-cell LHSR
+cell Medullo
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroBaseOverlapSignal.bigWig
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromFaireMedulloSig.bigWig
 grant Crawford
-lab UNC(Lieb)
-labVersion baseAlignCounts.pl v 1
-origAssembly hg18
+lab UNC
+labVersion fseq v 1.84, iff_generic_female
 project wgEncode
-subId 1610
-tableName wgEncodeOpenChromFaireLhsrAndroBaseOverlapSignal
-treatment androgen
-view Base_Overlap_Signal
-
-metaObject wgEncodeOpenChromFaireLhsrAndroPk
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroPk.narrowPeak.gz
-grant Crawford
-lab UNC(Lieb)
-labVersion p-value cutoff: 0.1
-origAssembly hg18
-project wgEncode
-subId 1610
-tableName wgEncodeOpenChromFaireLhsrAndroPk
-treatment androgen
-view Peaks
-
-metaObject wgEncodeOpenChromFaireLhsrAndroSig
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-18
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroSig.bigWig
-grant Crawford
-lab UNC(Lieb)
-labVersion fseq v 1.84, iff_generic_male
-origAssembly hg18
-project wgEncode
-subId 1610
-tableName wgEncodeOpenChromFaireLhsrAndroSig
-treatment androgen
-view Signal
-
-metaObject wgEncodeOpenChromFaireLhsrBaseOverlapSignal
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrBaseOverlapSignal.bigWig
-grant Crawford
-lab UNC(Lieb)
-labVersion baseAlignCounts.pl v 1
-origAssembly hg18
-project wgEncode
-subId 1547
-tableName wgEncodeOpenChromFaireLhsrBaseOverlapSignal
-view Base_Overlap_Signal
-
-metaObject wgEncodeOpenChromFaireLhsrPk
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrPk.narrowPeak.gz
-grant Crawford
-lab UNC(Lieb)
-labVersion p-value cutoff: 0.1
-origAssembly hg18
-project wgEncode
-subId 1547
-tableName wgEncodeOpenChromFaireLhsrPk
-view Peaks
-
-metaObject wgEncodeOpenChromFaireLhsrSig
-objType table
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrSig.bigWig
-grant Crawford
-lab UNC(Lieb)
-labVersion fseq v 1.84, iff_generic_male
-origAssembly hg18
-project wgEncode
-subId 1547
-tableName wgEncodeOpenChromFaireLhsrSig
+subId 2501
+tableName wgEncodeOpenChromFaireMedulloSig
 view Signal
 
 metaObject wgEncodeOpenChromFaireNhbeAlnRep1
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
 fileIndex wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireNhbeAlnRep1
 project wgEncode
 replicate 1
 subId 1574
@@ -1268,18 +2376,17 @@ metaObject wgEncodeOpenChromFaireNhbeAlnRep2
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
 fileIndex wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireNhbeAlnRep2
 project wgEncode
 replicate 2
 subId 1574
@@ -1289,14 +2396,14 @@ metaObject wgEncodeOpenChromFaireNhbeBaseOverlapSignal
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1308,14 +2415,14 @@ metaObject wgEncodeOpenChromFaireNhbePk
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
@@ -1323,18 +2430,54 @@ subId 1574
 tableName wgEncodeOpenChromFaireNhbePk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireNhbeRawDataRep1
+objType file
+cell NHBE
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-09
+fileName wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 955
+view RawData
+
+metaObject wgEncodeOpenChromFaireNhbeRawDataRep2
+objType file
+cell NHBE
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-09
+fileName wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 955
+view RawData
+
 metaObject wgEncodeOpenChromFaireNhbeSig
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -1346,18 +2489,17 @@ metaObject wgEncodeOpenChromFaireNhekAlnRep1
 objType file
 cell NHEK
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireNhekAlnRep1.bam
 fileIndex wgEncodeOpenChromFaireNhekAlnRep1.bam.bai
+fileName wgEncodeOpenChromFaireNhekAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireNhekAlnRep1
 project wgEncode
 replicate 1
 subId 1530
@@ -1367,18 +2509,17 @@ metaObject wgEncodeOpenChromFaireNhekAlnRep2
 objType file
 cell NHEK
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireNhekAlnRep2.bam
 fileIndex wgEncodeOpenChromFaireNhekAlnRep2.bam.bai
+fileName wgEncodeOpenChromFaireNhekAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFaireNhekAlnRep2
 project wgEncode
 replicate 2
 subId 1530
@@ -1388,14 +2529,14 @@ metaObject wgEncodeOpenChromFaireNhekBaseOverlapSignal
 objType table
 cell NHEK
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1407,14 +2548,14 @@ metaObject wgEncodeOpenChromFaireNhekPk
 objType table
 cell NHEK
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireNhekPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
@@ -1422,18 +2563,54 @@ subId 1530
 tableName wgEncodeOpenChromFaireNhekPk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireNhekRawDataRep1
+objType file
+cell NHEK
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeOpenChromFaireNhekRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 630
+view RawData
+
+metaObject wgEncodeOpenChromFaireNhekRawDataRep2
+objType file
+cell NHEK
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeOpenChromFaireNhekRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 630
+view RawData
+
 metaObject wgEncodeOpenChromFaireNhekSig
 objType table
 cell NHEK
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireNhekSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
@@ -1445,18 +2622,17 @@ metaObject wgEncodeOpenChromFairePanisletsAlnRep1
 objType file
 cell PanIslets
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam
 fileIndex wgEncodeOpenChromFairePanisletsAlnRep1.bam.bai
+fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromFairePanisletsAlnRep1
 project wgEncode
 replicate 1
 subId 1546
@@ -1466,14 +2642,14 @@ metaObject wgEncodeOpenChromFairePanisletsBaseOverlapSignal
 objType table
 cell PanIslets
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
 fileName wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
@@ -1485,14 +2661,14 @@ metaObject wgEncodeOpenChromFairePanisletsPk
 objType table
 cell PanIslets
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
 fileName wgEncodeOpenChromFairePanisletsPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion Lieb Lab peaks
 origAssembly hg18
 project wgEncode
@@ -1500,18 +2676,35 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsPk
 view Peaks
 
+metaObject wgEncodeOpenChromFairePanisletsRawData
+objType file
+cell PanIslets
+composite wgEncodeOpenChromFaire
+controlId modelled
+dataType FaireSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-14
+dateUnrestricted 2010-07-14
+fileName wgEncodeOpenChromFairePanisletsRawData.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+subId 686
+view RawData
+
 metaObject wgEncodeOpenChromFairePanisletsSig
 objType table
 cell PanIslets
 composite wgEncodeOpenChromFaire
-dataType FAIRE-seq
+dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
 fileName wgEncodeOpenChromFairePanisletsSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
@@ -1519,4 +2712,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -1949030499
+# MAGIC: -1791628584

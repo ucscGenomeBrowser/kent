@@ -51,7 +51,7 @@ if [ ! -d "${SRC}" ]; then
 fi
 
 TC=`${HGSQL} -N -e "show tables;" ${DB} 2> /dev/null | wc -l`
-if [ "${TC}" != "0" ]; then
+if [ "${TC}" -ne 0 ]; then
     echo "ERROR: database ${DB} already exists with tables."
     echo "this is only for new databases."
     exit 255
@@ -66,7 +66,7 @@ do
     if [ -s "${T_NAME}.txt.gz" ]; then
 	${HGSQL} -e "drop table ${T_NAME};" ${DB} > /dev/null 2> /dev/null
 	grep -v "^----------------------" "${SQL}" | ${HGSQL} "${DB}"
-	zcat "${T_NAME}.txt.gz" | ${HGSQL} -e \
+	gunzip -c "${T_NAME}.txt.gz" | ${HGSQL} --local-infile=1 -e \
             "load data local infile \"/dev/stdin\" into table ${T_NAME};" ${DB}
     else
 	echo "ERROR: can not find: ${T_NAME}.txt.gz"

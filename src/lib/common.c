@@ -979,6 +979,58 @@ return list;
 }
 
 
+int slPairCmpCase(const void *va, const void *vb)
+/* Compare two slPairs, ignore case. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+void slPairSortCase(struct slPair **pList)
+/* Sort slPair list, ignore case. */
+{
+slSort(pList, slPairCmpCase);
+}
+
+int slPairCmp(const void *va, const void *vb)
+/* Compare two slPairs. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return strcmp(a->name, b->name);
+}
+
+
+int slPairValCmpCase(const void *va, const void *vb)
+/* Case insensitive compare two slPairs on their values (must be string). */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return strcasecmp((char *)(a->val), (char *)(b->val));
+}
+
+int slPairValCmp(const void *va, const void *vb)
+/* Compare two slPairs on their values (must be string). */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return strcmp((char *)(a->val), (char *)(b->val));
+}
+
+void slPairValSortCase(struct slPair **pList)
+/* Sort slPair list on values (must be string), ignore case. */
+{
+slSort(pList, slPairValCmpCase);
+}
+
+void slPairValSort(struct slPair **pList)
+/* Sort slPair list on values (must be string). */
+{
+slSort(pList, slPairValCmp);
+}
+
+
 void gentleFree(void *pt)
 {
 if (pt != NULL) freeMem((char*)pt);

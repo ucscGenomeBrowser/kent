@@ -723,7 +723,6 @@ TMPDIR=/scratch/tmp
 	-swap -syntenicNet \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-XXX - running Wed Feb 24 14:36:31 PST 2010
     #	real    120m42.991s
     cat fb.tarSyr1.chainCalJac3Link.txt 
     #	2030475813 bases of 2752505800 (73.768%) in intersection
@@ -1677,11 +1676,20 @@ do
     echo "done upstream${S}.maf.gz"
 done
 
+    # download stuff
     mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
     cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way/maf
     ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/maf/up*.gz .
-
     md5sum up*.gz >> md5sum.txt
+
+    cp /hive/data/genomes/calJac3/bed/multiz13way/13way.nh \
+       /hive/data/genomes/calJac3/bed/multiz13way/downloads/.
+
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/multiz13way
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/13way.nh .
+    # create /hive/data/genomes/calJac3/bed/multiz13way/downloads/README.txt
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/downloads/README.txt .
+    md5sum 13way.nh > md5sum.txt
 
 #########################################################################
 # Phylogenetic tree from 13-way (DONE 2010-05-28 - Chin)
@@ -2036,7 +2044,7 @@ rm -fr $tmp
 
 #orig set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
     cat << '_EOF_' | gnuplot > histo.png
-set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set terminal png small size 1000,600 x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
 set size 1.4, 0.8
 set key left box
 set grid noxtics
@@ -2056,6 +2064,14 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 
     display histo.png &
+
+
+    # download stuff
+    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/phastCons13way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/phastCons13way
+    md5sum phastCons13way.wigFix.gz > md5sum.txt
+    md5sum all.mod >> md5sum.txt
+    md5sum histo.png >> md4sum.txt
 
 
 #############################################################################
@@ -2218,7 +2234,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 
 
 #########################################################################
-# phyloP conservation for 13-way (working 2010-08-12 - Chin)
+# phyloP conservation for 13-way (working 2010-08-31 - Chin)
 #
 #
     # split SS files into 1M chunks, this business needs smaller files
@@ -2250,7 +2266,7 @@ rm -fr $WINDOWS
 mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+/cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_split \
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
@@ -2270,7 +2286,7 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
 # << happy emacs
 
     mkdir ss done
-    ssh memk
+    ssh swarm
     cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.split
     gensub2 maf.list single template jobList
     para -ram=8g create jobList
@@ -2278,13 +2294,12 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
     para push
     para check
     para time
-    # Completed: 10770 of 10770 jobs
-    # CPU time in finished jobs:   7911s     131.84m     2.20h    0.09d  0.000 y
-    # IO & Wait Time:             29864s     497.74m     8.30h    0.35d  0.001 y
-    # Average job time:               4s       0.06m     0.00h    0.00d
-    # Longest finished job:         865s      14.42m     0.24h    0.01d
-    # Submission to last job:      2474s      41.23m     0.69h    0.03d
-
+    # completed: 10770 of 10770 jobs
+    # CPU time in finished jobs:   4327s      72.12m     1.20h    0.05d  0.000 y
+    # IO & Wait Time:             57882s     964.70m    16.08h    0.67d  0.002 y
+    # Average job time:               6s       0.10m     0.00h    0.00d
+    # Longest finished job:         477s       7.95m     0.13h    0.01d
+    # Submission to last job:       736s      12.27m     0.20h    0.01d
 
     # run phyloP with --method LRT 
     ssh swarm
@@ -2353,12 +2368,11 @@ rm -fr $tmp
     para try ... check ... push ... etc ...
     para time
     # Completed: 7247 of 7247 jobs
-    # CPU time in finished jobs:  79856s    1330.93m    22.18h    0.92d  0.003 y
-    # IO & Wait Time:            310342s    5172.37m    86.21h    3.59d  0.010 y
-    # Average job time:              54s       0.90m     0.01h    0.00d
-    # Longest finished job:         121s       2.02m     0.03h    0.00d
-    # Submission to last job:       661s      11.02m     0.18h    0.01d
-
+    # CPU time in finished jobs:  80064s    1334.40m    22.24h    0.93d  0.003 y
+    # IO & Wait Time:            281964s    4699.40m    78.32h    3.26d  0.009 y
+    # Average job time:              50s       0.83m     0.01h    0.00d
+    # Longest finished job:         115s       1.92m     0.03h    0.00d
+    # Submission to last job:       454s       7.57m     0.13h    0.01d
 
     ssh hgwdev
     cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all
@@ -2366,17 +2380,11 @@ rm -fr $tmp
         | sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
         | sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
 
-XXXX 08-13 4:35PM SAME problem again!!
-error in log:
-Found start=0 at line 1192229886, the first chrom position is 1, not 0
-==> need to find the "start=1" in each header line of wigFix files
-==> using
-==> cat wigFile.list | xargs cat | grep "start=1 " > start1.txt
-XXXX 07-28 Waiting for Adam's phast fix
     cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
         | wigEncode stdin phyloP13way.wig \
                 phyloP13way.wib  > wigEncode.log 2>&1 &
-    #   Converted stdin, upper limit 5.04, lower limit -10.12
+    #  Converted stdin, upper limit 1.34, lower limit -9.32
+
 
     #   good test to make sure no overlapping coordinates, bigWig:
     #   consumes massive amount of memory, in bash raise your memory
@@ -2385,6 +2393,10 @@ XXXX 07-28 Waiting for Adam's phast fix
     ulimit -v 188743680
     time cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
         | wigToBigWig stdin ../../../../chrom.sizes phyloP13way.bw &
+
+    # real    73m38.408s
+    # user    42m25.322s
+    # sys     3m29.966s
 
     #   if you wanted to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phyloP13way.bw /gbdb/calJac3/bbi
@@ -2398,7 +2410,7 @@ XXXX 07-28 Waiting for Adam's phast fix
     ln -s `pwd`/phyloP13way.wib /gbdb/calJac3/multiz13way
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/calJac3/multiz13way calJac3 \
         phyloP13wayAll phyloP13way.wig
-    #   real    0m32.778s
+    #   real     0m57.574s
 
 
     #   create download files:
@@ -2413,34 +2425,38 @@ end
     chmod +x ./mkDown.csh
     mkdir downloads
     time ./mkDown.csh
-    #   real    16m19.683s
+    #   real    47m12.461s
 
     time gzip downloads/chr*.wigFix
-    #   real    47m11.017s
+    #   real    48m27.652s
+    cd downloads
+    md5sum chr*.wigFix.gz >> md5sum.txt
+    cd ..
 
     wigTableStats.sh calJac3 phyloP13wayAll
-# db.table      min max mean count sumData
-# calJac3.phyloP13wayAll      -10.116 5.038 0.119587 1914580285 2.28959e+08
-#       stdDev viewLimits
-#       0.760605 viewLimits=-3.68344:3.92261
-    #   that range is: 10.116+5.039 = 15.154
+# db.table                 min  max     mean     count     sumData 
+# calJac3.phyloP13wayAll -9.32 1.339 0.0985847 2299091936 2.26655e+08 
+#     stdDev  0.643136
+#    viewLimits=-3.11709:1.339
+#   that range is: 9.32 + 1.339 = 10.659
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-        -hBinSize=0.015154 -hBinCount=1000 -hMinVal=-10.116 -verbose=2 \
+        -hBinSize=0.010659 -hBinCount=1000 -hMinVal=-9.32 -verbose=2 \
             -db=calJac3 phyloP13wayAll > histogram.data 2>&1
-    #   real    8m15.623s
+    #   real    5m43.681s
+
 
     #   create plot of histogram:
 
     cat << '_EOF_' | gnuplot > histo.png
-set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set terminal png small size 1000,600 x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
 set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human Hg19 Histogram phyloP13way track, all 30 vertebrates"
-set xlabel " phyloP13way score, all 30 vertebrates"
+set title "  Marmoset calJac3 phyloP13way track"
+set xlabel " phyloP13way score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]
@@ -2455,5 +2471,79 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+    # download stuff
+    mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/phyloP13way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/phyloP13way
+    mkdir vertebrate
+    cd vertebrate
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all/downloads/chr*.wigFix.gz .
+     ln -s /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all/downloads/md5sum.txt .
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/phyloP13way
+    ln -s /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.phyloP/all.mod .
+    ln -s /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/phyloP13way/README.txt .
+     md5sum all.mod >> md5sum.txt
+     md5sum README.txt  >> md5sum.txt
+XXXX - 2010-09-15
+    # packs tracks 
+
+############################################################################
+# Add 13-Way conservation to pushQ
+ /hive/data/genomes/calJac3/bed/multiz13way/quals/calJac3] ln -s  /hive/data/genomes/calJac3/bed/qual/calJac3.qual.qac .
+
+
+/hive/data/genomes/calJac3/bed/multiz13way/quals/calJac3] ln -s /hive/data/genomes/calJac3/*.agp .
+
+
+
+qacAddGapIdx calJac3.agp calJac3.qual.qac calJac3.qac calJac3.qdx
+
+/hive/data/genomes/calJac3/bed/multiz13way/quals] time mafAddQRows 10way.list ../run/calJac3.13way.maf calJac3.quals.13way.maf
+
+############################################################################
+## Fix gold/gap tables (DONE - 2010-09-22 - Hiram)
+    # the hgGoldGapGl program has been fixed for chrom names > 16 characters
+    mkdir /hive/data/genomes/calJac3/bed/goldGap
+    cd /hive/data/genomes/calJac3/bed/goldGap
+    # record table status before loading anything:
+    hgsql -e "show table status;" calJac3 > before.status
+    # verify SQL create statements with -noLoad option:
+    hgGoldGapGl -noLoad -verbose=2 -noGl \
+        calJac3 /hive/data/genomes/calJac3/calJac3.agp
+    # if that looks OK, load the two tables:
+    hgGoldGapGl -verbose=2 -noGl \
+        calJac3 /hive/data/genomes/calJac3/calJac3.agp
+    # verify only gold and gap tables have changed
+    hgsql -e "show table status;" calJac3 > after.status
+    # it appears only the gold table actually changed
+    diff before.status after.status
+< gap   MyISAM  10      Dynamic 187214  44      8366704
+> gap   MyISAM  10      Dynamic 187214  44      8366704
+< gold  MyISAM  10      Dynamic 194974  46      9129232
+> gold  MyISAM  10      Dynamic 201523  47      9496340
+
+    # gold and gap tables together now cover the entire genome:
+    featureBits -countGaps -or calJac3 gold gap
+    #	2914958544 bases of 2914958544 (100.000%) in intersection
+
+############################################################################
+# BacEnd track (DONE - 2010-07-12 - Hiram)
+    # data obtained from Pat Minx (pminx at watson dot wustl dot edu)
+    # and Wes Warren (wwarren at watson dot wustl dot edu)
+    mkdir /hive/data/genomes/calJac3/bed/bacEnds
+    cd /hive/data/genomes/calJac3/bed/bacEnds
+    wget --timestamping \
+http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/marmoset_bac_ends.3.2.bed.gz
+    gunzip marmoset_bac_ends.3.2.bed.gz
+
+    egrep -v "^track|^browser" marmoset_bac_ends.3.2.bed \
+	| hgLoadBed calJac3 bacEnds stdin
+    checkTableCoords -verboseBlocks calJac3 bacEnds
+
+    wget --timestamping \
+http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/marmoset_singletons.3.2.bed.gz
+    gunzip marmoset_singletons.3.2.bed.gz
+    sort -k1,1 -k2,2n marmoset_singletons.3.2.bed \
+	| hgLoadBed calJac3 bacEndCalJac3Singles stdin
+    checkTableCoords -verboseBlocks calJac3 bacEndCalJac3Singles
 
 ############################################################################

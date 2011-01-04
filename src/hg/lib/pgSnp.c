@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "dnaseq.h"
 #include "pgPhenoAssoc.h"
+#include "hgFindSpec.h"
 
 static char const rcsid[] = "$Id: pgSnp.c,v 1.8 2010/03/08 17:45:41 giardine Exp $";
 
@@ -197,9 +198,6 @@ for (el = *pList; el != NULL; el = next)
 void pgSnpOutput(struct pgSnp *el, FILE *f, char sep, char lastSep) 
 /* Print out pgSnp.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%u", el->bin);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -623,3 +621,71 @@ for(i=0;i<tot;i++)
     }
 }
 
+char *pgSnpAutoSqlString =
+"table pgSnp"
+"\"personal genome SNP\""
+"   ("
+"   ushort  bin;            \"A field to speed indexing\""
+"   string  chrom;          \"Chromosome\""
+"   uint    chromStart;     \"Start position in chrom\""
+"   uint    chromEnd;       \"End position in chrom\""
+"   string  name;           \"alleles ACTG[/ACTG]\""
+"   int     alleleCount;    \"number of alleles\""
+"   string  alleleFreq;     \"comma separated list of frequency of each allele\""
+"   string  alleleScores;   \"comma separated list of quality scores\""
+"   )"
+;
+
+struct pgSnp *pgSnpLoadNoBin(char **row)
+/* load pgSnp struct from row without bin */
+{
+struct pgSnp *ret;
+
+AllocVar(ret);
+ret->bin = 0;
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->alleleCount = sqlSigned(row[4]);
+ret->alleleFreq = cloneString(row[5]);
+ret->alleleScores = cloneString(row[6]);
+return ret;
+}
+
+struct pgSnp *pgSnpLineFileLoad(char **row, struct lineFile *lf)
+/* Load pgSnp from a lineFile line, with error checking. */
+/* Requires comma separated zeroes for frequency and scores. */
+{
+struct pgSnp *item;
+AllocVar(item);
+item->chrom = cloneString(row[0]);
+item->chromStart = lineFileNeedNum(lf, row, 1);
+item->chromEnd = lineFileNeedNum(lf, row, 2);
+if (item->chromEnd < 1)
+    lineFileAbort(lf, "chromEnd less than 1 (%d)", item->chromEnd);
+if (item->chromEnd < item->chromStart)
+    lineFileAbort(lf, "chromStart after chromEnd (%d > %d)",
+        item->chromStart, item->chromEnd);
+/* use pattern match to check values and counts both */
+/* alleles are separated by / and can be ACTG- */
+item->name = cloneString(row[3]);
+/* allele count, positive integer matching # of alleles */
+item->alleleCount = lineFileNeedNum(lf, row, 4);
+char alleles[128]; /* pattern to match alleles */
+safef(alleles, sizeof(alleles), "^[ACTG-]+(\\/[ACTG-]+){%d}$", item->alleleCount - 1);
+if (! matchRegex(row[3], alleles))
+    lineFileAbort(lf, "invalid alleles %s", row[3]);
+/* read count, comma separated list of numbers with above # of items */
+item->alleleFreq = cloneString(row[5]);
+char pattern[128];
+safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", item->alleleCount - 1);
+if (! matchRegex(row[5], pattern))
+    lineFileAbort(lf, "invalid allele frequency, %s with count of %d", row[5], item->alleleCount);
+/* scores, comma separated list of numbers with above # of items */
+item->alleleScores = cloneString(row[6]);
+safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", item->alleleCount - 1);
+if (! matchRegex(row[6], pattern))
+    lineFileAbort(lf, "invalid allele scores, %s with count of %d", row[6], item->alleleCount);
+return item;
+}

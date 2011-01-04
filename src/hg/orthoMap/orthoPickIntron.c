@@ -401,7 +401,7 @@ void writeOutFrames(FILE *htmlOut, char *fileName, char *db, char *bedFile, char
 /** Write out frame for htmls. */
 {
 fprintf(htmlOut, "<html><head><title>Introns and flanking exons for exploratory PCR</title></head>\n"
-	"<frameset cols=\"18%,82%\">\n"
+	"<frameset cols=\"18%%,82%%\">\n"
 	"<frame name=\"_list\" src=\"./%s\">\n"
 	"<frame name=\"browser\" src=\"http://mgc.cse.ucsc.edu/cgi-bin/hgTracks?db=%s&position=%s&"
 	"hgt.customText=http://www.soe.ucsc.edu/~sugnet/mgc/%s\">\n"

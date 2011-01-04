@@ -1,17 +1,19 @@
 <H2>Description</H2>
 <P>
-This track indicates differences in the human genome assembly from
-this version, NCBI Build 36(hg18), to the next assembly GRCh37(hg19).
-Contigs used in this assembly, NCBI Build 36(hg18), that were not
-carried forward to GRCh37(hg19) are shown.
+This track indicates differences in genome assembly 
+NCBI Build 36 (hg18) when compared to the next version GRCh37 
+(hg19). Contigs used in this assembly, NCBI Build 36 (hg18), 
+that were not carried forward to GRCh37 (hg19) are shown.
 </P>
 
 <P>
-The items are categorized by color and score with the following meaning:
+The following color/score key is used:
+<br />
+<br />
 <TABLE BORDER=1>
 <TR><TH WIDTH=20>item<BR>color</TH><TH>item<BR>score</TH><TH>type of change from hg18 to hg19</TH></TR>
 <TR><TD WIDTH=20 HEIGHT=20 BGCOLOR="#D81E05">&nbsp;</TD><TD>0</TD><TD>Contigs in hg18 dropped in the transition to hg19</TD></TR>
-<TR><TD WIDTH=20 HEIGHT=20 BGCOLOR="#A38205">&nbsp;</TD><TD>500</TD><TD>Different section of the same contig used in hg19 compared to hg18</TD></TR>
+<TR><TD WIDTH=20 HEIGHT=20 BGCOLOR="#A38205">&nbsp;</TD><TD>500</TD><TD>Different portion of the same contig used in hg19 compared to hg18</TD></TR>
 <TR><TD WIDTH=20 HEIGHT=20 BGCOLOR="#1CCE28">&nbsp;</TD><TD>1000</TD><TD>Updated version of the same contig used in hg19 to correct errors in the hg18 sequence</TD></TR>
 </TABLE>
 </P>
@@ -22,8 +24,8 @@ You can use the score filter to eliminate or include the different categories in
 <H2>Methods</H2>
 <P>
 The contig coordinates were extracted from the AGP files for the assemblies.
-Contigs that match the same name, same version, and the identical specific
-portion of sequence from the contig are noted as identical in the two
+Contigs that match the same name, same version, and the same specific
+portion of sequence are noted as identical in the two
 assemblies.  Contigs not satisifying those identical characteristics are
 included in this track.
 </P>

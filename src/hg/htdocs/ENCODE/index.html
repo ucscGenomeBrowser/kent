@@ -54,11 +54,12 @@
                         <td bgcolor="#738ed3" height="100%" valign="top">
 			<font color="#FFFFAA"><b><em>Human</em></b></font><br>
                         <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-			<a class="leftbar" href="/cgi-bin/hgTracks?db=hg18">Genome Browser</a>
+			<a class="leftbar" href="/cgi-bin/hgTracks?db=hg18">Genome Browser (hg18)</a>
+			<hr> <a class="leftbar" href="/cgi-bin/hgTracks?db=hg19">Genome Browser (hg19)</a>
                         <hr> <a class="leftbar" href="cellTypes.html">Cell Types</a>
                         <hr> <a class="leftbar" href="downloads.html">Downloads</a>
 			<hr> <a class="leftbar" href="http://genomewiki.cse.ucsc.edu/index.php/Genome_Browser_Session_Gallery"
-TARGET=_blank>Session Gallery</a>
+			TARGET=_blank>Session Gallery</a>
                         <hr>
 			<img src="../images/DOT.gif" alt="" height="5" width="0"><br>
 			<font color="#FFFFAA"><b><em>Mouse</em></b></font><br>
@@ -74,7 +75,7 @@ TARGET=_blank>Session Gallery</a>
 			<hr> <a class="leftbar" href="otherTerms.html">Registered Variables</a>
 			<hr> <a class="leftbar" href="releaseLog.html">Release Log</a>
                         <hr> <a class="leftbar" href="terms.html">Data Policy</a>
-			<!-- <hr> <a class="leftbar" href="dataStandards.html">Data Standards</a> -->
+			<hr> <a class="leftbar" href="dataStandards.html">Data Standards</a>
                         <hr> <a class="leftbar" href="contributors.html">Contributors</a>
 		    	<hr> <a class="leftbar" href="pubs.html">Publications</a>
                         <hr> <a class="leftbar" href="pilot.html">Pilot Project</a>
@@ -254,108 +255,39 @@ months following the data release.<br>
                             <tr>
                               <td width="10"><br>
                               </td>
-                              <td
- style="font-family: Times New Roman,Times,serif;"><!-- start news item -->
- <P>
-                    <font size="3"><B>20 August 2010 -
-New ENCODE Integrated Regulation Super-track Released</B></FONT>
- <P>
-                    We are pleased to announce the release of the ENCODE Integrated
-                    Regulation super-track, a collection of regulatory tracks containing
-                    state-of-the-art information about the mechanisms that turn genes on and
-                    off at the transcription level. Individual tracks within the set show
-                    enrichment of histone modifications suggestive of enhancer and promoter
-                    activity, DNAse clusters indicating open chromatin, regions of
-                    transcription factor binding, and transcription levels. When viewed in
-                    combination, the complementary nature of the data within these tracks
-                    has the potential to greatly facilitate our understanding of regulatory
-                    DNA.
-                    </P>
-                    <P>
-                    The data comprising these tracks were generated from hundreds of
-                    experiments on multiple cell lines conducted by labs participating in
-                    the ENCODE project, and were submitted to
-                    the UCSC ENCODE Data Coordination Center for display on the Genome
-                    Browser.
-                    </P>
-                    <P>
-                    Faced with the problem of how to display such a large amount of data
-                    in a manner facilitating analysis, UCSC has developed new visualization
-                    methods that cluster and overlay the data, and then display the
-                    resulting tracks on a single screen. Each of the cell lines in a track
-                    is associated with a particular color. Light, saturated colors are used
-                    to produce the best transparent overlay.
-                    </P>
-                    <P>
-                    <A HREF="http://tiny.cc/aqtyt"><img style="border: 2px solid black; margin-left:auto; margin-right:auto; display: block;" src="/images/encodeRegShot.gif"
-                    alt="ENCODE Regulatory track screenshot" /> </A>
-                    </P>
-                    <P>
-                    Currently, the ENCODE Regulation data are available only on the
-                    March 2006 (NCBI Build 36, UCSC version hg18) assembly of the human
-                    genome.
-                    </P>
-                    <P>
-                    For a detailed description of the datasets contained in this super-track
-                    and a discussion of how the tracks can be used synergistically to
-                    examine regions of regulatory functionality within the genome, see the
-                    <A HREF="http://tiny.cc/ntvjk">track description</A> page.
-                    </P><HR>
-                              <font size="3"><b>6 August 2010 - June and July ENCODE news</b></font><br>
-                              <br>
-				<b>Initial Release of the
-				<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaRnaSeq">HudsonAlpha RNA-seq</a> track:</b> This track shows short
-				tag sequencing of cDNA obtained from biological replicate samples
-				(different culture plates) of the ENCODE cell lines. The sequences
-				were aligned to the human genome (hg18) and UCSC known-gene splice
-				junctions.<br>
-				<br>
-				<b>Release 2 of the 
-				<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeCaltechRnaSeq">Caltech RNA-seq</a>
-				track: </b></font> This track shows alignments, signal density, and
-				splice sites based on 75 bp paired reads and 32 bp strand-specific
-				single reads of polyA+ RNA aligned to the human genome (hg18) and
-				UCSC known-gene splice junctions. Also included with the track as
-				downloadable files are RPKM expression level measurements at the
-				gene-level and exon-level, and candidate novel exons.  Release 2
-				of this track adds five new cell types: H1-hESC, HeLa-S3, HepG2,
-				HUVEC, and NHEK.<br>
-                              	<br>
-				<b>Initial Release of the 
-				<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeGisPet">GIS PET Loc</a>
-				track: </b></font> This track shows starts and ends of full length
-				mRNA transcripts determined by PET sequencing of polyA+ and total
-				RNA from 6 subcellular compartments and whole cell, in 8 cell lines.<br>
-				<br>
-				<b>Release 2 of the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaChipSeq">HAIB TFBS</a>
-				track: </b></font> This track shows signal density and binding sites
-				of selected transcription factors in a variety of cell types.
-				Release 2 of this track adds 73 new experiments covering 13 new cell
-				lines and 27 antibodies. Additionally, DEX and EtOH treatments have
-				been included in the A549 cell line.<br>
-				<br>
-				<b>Initial Release of the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBuOrchid">BU ORChID</a>
-				track: </b></font> This track displays the predicted hydroxyl
-				radical cleavage intensity on naked DNA for each nucleotide in the
-				genome.<br>
-				<br>
-				<b>Update of the <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeMapability">Mapability</a>
-				track: </b></font> This track displays the level of sequence
-				uniqueness of the reference hg18 genome. The update adds CRG
-				Alignability data, which displays how uniquely k-mer sequences align
-				to a region of the genome.<br>
-			      	<br>
-                              <hr><!-- end news item --><!-- start archived item section-->
+                              <td style="font-family: Times New Roman,Times,serif;"><!-- start news item -->
+<p>
+<font size="3"><b>16 November 2010 - Release of the first ENCODE RNA-seq data on hg19</b>:</font>
+<p>
+We are pleased to announce the release of the first ENCODE RNA-seq data on the GRCh37/hg19 human
+browser. Two tracks have just been released; these are organized in the new
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?g=wgEncodeRnaSeqSuper">ENC RNA-seq</a> super-track
+within the browser 'Expression' track group. The super-track provides additional documentation and
+organization by data type.  The two tracks released are:
+</p>
+<p>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlShortRnaSeq"><b>CSHL Sm
+RNA-seq</b></a>: This track depicts NextGen sequencing information for RNAs between the sizes of
+20-200 nt isolated from RNA samples from tissues or subcellular compartments from ENCODE cell lines.
+</p>
+<p>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGisRnaSeq"><b>GIS RNA-seq</b></a>:
+This track shows high throughput sequencing of RNA samples from tissues or subcellular compartments
+from cell lines included in the ENCODE Transcriptome subproject.</p>
+<p>
+All of the data that comprise these tracks were originally released on hg18 and have been remapped
+to hg19.</p>
+<hr><!-- end news item --><!-- start archived item section-->
 <!-- start of archived news item -->
-<p><font size="3"><b>19 July 2010 - April and May ENCODE news</b></font>: During this period,
-four new tracks were released and two track updates were released.
-<a href="newsarch.html#071910">Read more</a>.</p><hr>
+<p><font size="3"><b>15 Nov 2010 - New ENCODE Tutorial at OpenHelix</b></font>:
+OpenHelix, together with the UCSC Genome Bioinformatics group, anounce a new online tutorial suite
+to teach users how to access the ENCODE data in the UCSC Genome Browser.
+<a href="newsarch.html#111510">Read more</a>.</p><hr>
 <!-- end of archived news item -->
 <!-- start of archived news item -->
-<p><font size="3"><b>18 March 2010 - February and March 2010 ENCODE news</b></font>:
-During this period, two new tracks and six track updates were released.
-<a href="newsarch.html#031810">Read more</a>.</p><br>
-<!-- end of archived news item -->
+<p><font size="3"><b>16 September 2010 - First Production ENCODE Data on hg19 has been Released</b></font>:
+We are pleased to announce the release of the first sets of production ENCODE data on hg19.
+<a href="newsarch.html#091610">Read more</a>.</p><hr>
 <!-- end archived item section--> </td>
                               <td width="15"><br>
                               </td>

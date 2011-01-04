@@ -399,13 +399,13 @@
 
 /* Tabs experiments
 ---------------------------------- */
-.ui-tabs { padding: .2em; zoom: 1; background:#FFF9D2;} /* border only */
+.ui-tabs { padding: .2em; background:#FFF9D2; } /* border only */
 .ui-tabs .ui-tabs-nav { list-style: none; position: relative; padding: .2em .2em 0; } /* background:#FFFEE8; }  /* where no tabs are seen */
 .ui-tabs .ui-tabs-nav li { position: relative; float: left; border-bottom-width: 0 !important; margin: 0 .2em -1px 0; padding: 0; background:#FFF9D2; } /* line between tab and panel */
-.ui-tabs .ui-tabs-nav li a { float: left; text-decoration: none; padding: .5em 1em; }
+.ui-tabs .ui-tabs-nav li a { float: left; text-decoration: none; padding: .1em 1.5em; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected { padding-bottom: .1em; border-bottom-width: 0; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; background:#FFF9D2; }  /* no effect ? */
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; }   /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
-.ui-tabs .ui-tabs-panel { padding: .6em 1em; display: block; border-width: 0; background:#FFF9D2; zoom: 0; }  /* panel */
+.ui-tabs .ui-tabs-panel { padding: .6em 1em; display: block; border-width: 0; background:#FFF9D2; }  /* panel */
 .ui-tabs .ui-tabs-hide { display: none !important; }
 .ui-tabs .ui-tabs-nav li a { background:#FFFEE8; } /* inactive tab */

@@ -18,7 +18,7 @@ set xdb = mm9
 set Xdb = Mm9
 set ydb = canFam2
 set zdb = rn4
-set spDb = sp100331
+set spDb = sp101005
 set pbDb = proteins100331
 set ratDb = rn4
 set RatDb = Rn4
@@ -26,6 +26,9 @@ set fishDb = danRer5
 set flyDb = dm3
 set wormDb = ce6
 set yeastDb = sacCer2
+
+# The net alignment for the closely-related species indicated in $xdb
+set xdbNet = $genomes/$db/bed/lastz.${xdb}/axtChain/${db}.${xdb}.net.gz
 
 # Blast tables
 set rnBlastTab = rnBlastTab
@@ -45,6 +48,7 @@ set tmpSuffix = "Foo13"
 set tempDb = ${tempPrefix}${tmpSuffix}
 set bioCycTempDb = tmpBioCyc${tmpSuffix}
 
+
 # Table for SNPs
 set snpTable = snp130
 
@@ -63,13 +67,19 @@ set ratFa = $genomes/$ratDb/bed/blastp/known.faa
 set fishFa = $genomes/$fishDb/bed/blastp/ensembl.faa
 set flyFa = $genomes/$flyDb/bed/flybase5.3/flyBasePep.fa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
-set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/090218/sgdPep.faa
+set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
+
+# The net files in the external (xdb) species, for identifying blocks syntenic
+# between that species and the current one.
+set xdbNet = $genomes/$db/bed/lastzMm9.2009-05-13/mafSynNet
 
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
   # mm9.txt
 set bioCycPathways = /hive/data/outside/bioCyc/090623/pathways.col
 set bioCycGenes = /hive/data/outside/bioCyc/090623/genes.col
+set rfam = /hive/data/outside/Rfam/110710
+
 
 # Tracks
 set multiz = multiz4way
@@ -94,7 +104,6 @@ cd $dir
 if (0) then  # BRACKET
 #	this section is completed, look for the corresponding endif
 #	to find the next section that is running.
-
 
 
 # Get Genbank info
@@ -126,12 +135,44 @@ else
     echo -n "" > ccds.bed
     echo -n "" > refToCcds.tab
 endif
+
+# Get tRNA for human (or else just an empty file)
+if ($db =~ hg* && \
+  `hgsql -N $db -e "show tables;" | grep -E -c "tRNAs|chromInfo"` == 2) then
+    hgsql -N $db -e "select chrom,chromStart,chromEnd,name,score,strand from tRNAs" > trna.bed 
+else
+    echo -n "" > trna.bed
+    echo -n "" > refToCcds.tab
+endif
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+# Get the blocks in this genome that are syntenic to the $xdb genome
+netFilter -syn $xdbNet > ${db}.${xdb}.syn.net
+netToBed ${db}.${xdb}.syn.net ${db}.${xdb}.syntenicBlocks.bed
+gzip ${db}.${xdb}.syn.net
+
+# Get the Rfams that overlap with blocks that are syntenic to $Xdb
+mkdir -p rfam
+pslToBed ${rfam}/${db}/Rfam.bestHits.psl rfam/rfam.all.bed
+bedToExons rfam/rfam.all.bed rfam/rfam.exons.bed
+hgsql ${db} -N -e "SELECT DISTINCT tName, tStart, tEnd FROM chain${Xdb}" \
+  | cat > ${xdb}.syntenic.blocks.bed
+bedIntersect rfam/rfam.all.bed ${xdb}.syntenic.blocks.bed rfam/rfam.syntenic.bed
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
+
  
 # Create directories full of alignments split by chromosome.
-mkdir -p est refSeq mrna
+mkdir -p est refSeq mrna trna
 pslSplitOnTarget refSeq.psl refSeq
 pslSplitOnTarget mrna.psl mrna
 bedSplitOnChrom ccds.bed ccds
+bedSplitOnChrom trna.bed trna
+bedSplitOnChrom rfam/rfam.syntenic.bed rfam
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     if (! -e refSeq/$c.psl) then
 	  echo creating empty refSeq/$c.psl
@@ -150,7 +191,17 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	  echo creating empty ccds/$c.bed
           echo -n "" >ccds/$c.bed
     endif
+    if (! -e trna/$c.bed) then
+	  echo creating empty trna/$c.bed
+          echo -n "" >trna/$c.bed
+    endif
+    if (! -e rfam/$c.bed) then
+	  echo creating empty rfam/$c.bed
+          echo -n "" >rfam/$c.bed
+    endif
 end
+
+
 
 
 # Get list of accessions that are associated with antibodies from database.
@@ -200,7 +251,7 @@ end
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
-    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna \
+    txBedToGraph -prefix=$c. ccds/$c.bed ccds refSeq/$c.bed refSeq mrna/$c.bed mrna trna/$c.bed trna rfam/$c.bed rfam \
 	bedToGraph/$c.txg
 end
 
@@ -211,14 +262,14 @@ end
 
 
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 
 # Create an evidence weight file
 cat > trim.weights <<end
 refSeq  100
 ccds    50
+trna    50
+rfam    20
 mrna    2
 txOrtho 1
 exoniphy 1
@@ -252,9 +303,6 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
     txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
 end
 
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
 
 # Clean up all but final other.txg
 rm -r est mrna refSeq

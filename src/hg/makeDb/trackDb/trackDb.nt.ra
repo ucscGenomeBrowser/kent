@@ -8,6 +8,7 @@ group neandertal
 priority 4
 visibility hide
 type bam
+aliQualRange 0:254
 baseColorUseSequence lfExtra
 baseColorDefault diffBases
 showDiffBasesAllScales .
@@ -73,6 +74,7 @@ group neandertal
 priority 4.1
 visibility hide
 type bam
+aliQualRange 0:254
 baseColorUseSequence lfExtra
 baseColorDefault diffBases
 showDiffBasesAllScales .

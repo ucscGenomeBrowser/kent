@@ -362,7 +362,7 @@ if (! noLoad)
 	    "new wiggle table %s from %s/%s with wib path %s", track,
 		getCurrentDir(), tab, pathAdded);
     if (! noHistory)
-	hgHistoryComment(conn, comment);
+	hgHistoryComment(conn, "%s", comment);
     verbose(2, "#\t%s\n", comment);
     hFreeConn(&conn);
     /*	if temp dir specified, unlink file to make it disappear */

@@ -31,12 +31,12 @@ tableTests: tablePsl tablePslx
 
 
 tablePsl: mkout
-	hgLoadPsl -verbose=0 -table=${TEST_TBL} ${DB} ${IN_DIR}/mrna.psl
+	hgLoadPsl -verbose=0 -noHistory -table=${TEST_TBL} ${DB} ${IN_DIR}/mrna.psl
 	${PSLREADER_TESTER} -output=${OUT_DIR}/$@.psl readTable ${DB} ${TEST_TBL}
 	diff -u ${IN_DIR}/mrna.psl ${OUT_DIR}/$@.psl
 
 tablePslx: mkout
-	hgLoadPsl -verbose=0 -table=${TEST_TBL} -xa ${DB} ${IN_DIR}/mrna.pslx
+	hgLoadPsl -verbose=0 -noHistory -table=${TEST_TBL} -xa ${DB} ${IN_DIR}/mrna.pslx
 	${PSLREADER_TESTER} -output=${OUT_DIR}/$@.psl readTable ${DB} ${TEST_TBL}
 	diff -u ${IN_DIR}/mrna.pslx ${OUT_DIR}/$@.psl
 

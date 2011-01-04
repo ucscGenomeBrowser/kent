@@ -1348,7 +1348,7 @@ int y = yOff;
 if (sameString(tg->table, "CGHBreastCancerUCSF"))
     loadFiltersAndHash("phenBreastTumors");
 
-if (isWithCenterLabels(tg))
+if (isCenterLabelIncluded(tg))
     y += mgFontLineHeight(font);
 if ((vis == tvFull) || (vis == tvPack))
     {

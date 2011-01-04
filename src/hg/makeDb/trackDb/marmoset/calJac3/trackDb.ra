@@ -34,43 +34,6 @@ sGroup_Vertebrate mm9 canFam2 monDom5
 itemFirstCharCase noChange
 treeImage phylo/calJac1_8way.gif
 
-track phastConsElements13way
-shortLabel 13-Way Most Conserved
-longLabel PhastCons Conserved Elements, 13-Way Vertebrate Multiz Alignment
-color 170,100,50
-group compGeno
-priority 104.2
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
-track multiz13way
-shortLabel 13-Way Conservation
-longLabel 13-Way Multiz Alignment & Conservation 
-group compGeno
-priority 104.1
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons13way
-spanList 1
-autoScale Off
-windowingFunction mean
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz13wayFrames
-irows on
-summary multiz13waySummary
-speciesCodonDefault calJac3
-speciesGroups Primates Vertebrate
-sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
-sGroup_Vertebrate mm9 canFam2 monDom5
-itemFirstCharCase noChange
-treeImage phylo/calJac3_13way.gif
-
 track nscanGene override
 visibility pack
 informant Marmoset N-SCAN used mouse (mm9) as the informant for conservation. PASA clustered human ESTs were mapped to the marmoset genome with the use of the human/marmoset synteny chain track. These remapped clusters were then filtered for splice sites, and used as the EST track on marmoset.
@@ -102,7 +65,7 @@ visibility hide
 type bed 12
 
 track bacEndCalJac3Singles
-shortLabel Bac End Singletons
+shortLabel Bac End Singles
 longLabel Marmoset BAC End singletons, without end pair
 group map
 priority 61
@@ -119,3 +82,134 @@ searchTable bacEndCalJac3Singles
 searchType bed
 searchMethod exact
 searchPriority 55
+
+
+
+#########################
+track cons13way
+compositeTrack on 
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation (13 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
+#subGroup2 clade Clade primate=Primates  vert=Vertebrate
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 103.29
+
+    track cons13wayViewalign 
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons13way
+
+        track multiz13way
+        subTrack cons13wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments of 13 Vertebrates
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz13waySummary
+        frames multiz13wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault calJac3
+        speciesGroups Primates Vertebrate
+        sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
+        sGroup_Vertebrate mm9 canFam2 monDom5
+        speciesDefaultOff ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1 mm9 canFam2 monDom5
+        itemFirstCharCase noChange
+        treeImage phylo/calJac3_13way.gif
+        priority 100
+
+    track cons13wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons13way
+    viewLimits -4:4
+    viewLimitsMax -15.41:7.13
+
+	# PhyloP conservation
+        track phyloP13wayAll
+        subTrack cons13wayViewphyloP on
+        subGroups view=phyloP 
+        shortLabel Vertebrate PhyloP Cons
+        longLabel  Vertebrate Basewise Conservation by PhyloP
+        noInherit on
+        #configurable on
+        type wig -9.32 1.34
+        maxHeightPixels 100:50:11
+        viewLimits -3:1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,10,70
+        altColor 70,10,10
+        priority 1
+
+
+
+         track phyloP13wayAllVert
+         subTrack cons13wayViewphyloP on
+         subGroups view=phyloP 
+         shortLabel Vertebrate Cons
+         longLabel Vertebrate Basewise Conservation by PhyloP
+         noInherit on
+         #configurable on
+         type wig -14.08 6.42
+         maxHeightPixels 100:50:11
+         viewLimits -4:4
+         autoScale off
+         spanList 1
+         windowingFunction mean
+         color 40,40,120
+         altColor 120,40,40
+         priority 2
+ 
+
+    track cons13wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons13way
+
+        track phastCons13way
+        subTrack cons13wayViewphastcons on
+        subGroups view=phastcons 
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Conservation by PhastCons
+        noInherit on
+        #configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,120,40
+        altColor 120,40,40
+        priority 13
+
+    track cons13wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons13way
+
+        # Conserved Elements (Most Conserved)
+        track phastConsElements13way
+        subTrack cons13wayViewelements off
+        subGroups view=elements 
+        shortLabel Vertebrate El
+        longLabel Vertebrate Conserved Elements
+        noInherit on
+        color 170,100,50
+        type bed 5 .
+        priority 23
+

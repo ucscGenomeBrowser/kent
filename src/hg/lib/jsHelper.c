@@ -19,6 +19,7 @@
 #include "hPrint.h"
 #include "hash.h"
 #include "jsHelper.h"
+#include "web.h"
 #include "hui.h"
 #include "hgConfig.h"
 #include "portable.h"
@@ -26,8 +27,6 @@
 static char const rcsid[] = "$Id: jsHelper.c,v 1.31 2009/09/10 04:19:26 larrym Exp $";
 
 static boolean jsInited = FALSE;
-static boolean defaultWarningShown = FALSE;
-struct hash *includedFiles = NULL;
 
 void jsInit()
 /* If this is the first call, set window.onload to the operations
@@ -338,93 +337,19 @@ void jsIncludeFile(char *fileName, char *noScriptMsg)
  * the noScriptMsg parameter (the string may contain HTML markup). A default msg is provided
  * if noScriptMsg == NULL; noscript msg is suppressed if noScriptMsg == "" (this is useful
  * if you want to more carefully control where the message will appear on the page). */
-
-if(!includedFiles)
-    includedFiles = newHash(0);
-if(hashLookup(includedFiles, fileName) == NULL)
+char *link = webTimeStampedLinkToResourceOnFirstCall(fileName,TRUE);
+if (link != NULL)
     {
-    char *docRoot = hDocumentRoot();
-    struct dyString *noScriptBuf = dyStringNew(0);
-    char baseName[PATH_LEN];
-    struct dyString *fileNameWithVersion = dyStringNew(0);
-    // dirName is configurable to allow developer specific javascript for developers on hgwdev;
-    // e.g. "javaScriptDir js/larrym"
-    char *dirName = cfgOptionDefault("browser.javaScriptDir", "js");
-    splitPath(fileName, NULL, baseName, NULL);
-
-    /* tolerate missing docRoot (i.e. when running from command line) */
-    if(docRoot != NULL)
-        {
-        struct dyString *fullDirName = dyStringNew(0);
-        dyStringPrintf(fullDirName, "%s/%s", docRoot, dirName);
-        if(fileExists(dyStringContents(fullDirName)))
-            {
-            struct dyString *realFileName = dyStringNew(0);
-            struct dyString *fullNameWithVersion = dyStringNew(0);
-            long mtime;
-            
-            dyStringPrintf(realFileName, "%s/%s", dyStringContents(fullDirName), fileName);
-            if(!fileExists(dyStringContents(realFileName)))
-                {
-                errAbort("jsIncludeFile: javascript file: %s doesn't exist.\n", dyStringContents(realFileName));
-                }
-            mtime = fileModTime(dyStringContents(realFileName));
-
-            // We add mtime to create a pseudo-version; this forces browsers to reload js file when it changes,
-            // which fixes bugs and odd behavior that occurs when the browser caches modified js files.
-            // We initially tried the simpler solution of appending the mtime as a query parameter (e.g. "?v=123456789"),
-            // but that reportedly caused problems in some versions of Firefox.
-
-            dyStringPrintf(fileNameWithVersion, "%s-%ld.js", baseName, mtime);
-            dyStringPrintf(fullNameWithVersion, "%s/%s", dyStringContents(fullDirName), dyStringContents(fileNameWithVersion));
-            if(!fileExists(dyStringContents(fullNameWithVersion)))
-                {
-                // The versioned copy should be created by the install process; however, mirrors may fail
-                // to preserve mtime's when copying over the javascript files, in which cased the
-                // versioned softlinks won't match the real file; in that case, we try to create
-                // the versioned links on the fly (which requires write access to the javascript directory).
-
-                struct dyString *pattern = dyStringNew(0);
-                struct slName *files, *file;
-                dyStringPrintf(pattern, "%s-[0-9]+\\.js", baseName);
-                files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
-                for (file = files; file != NULL; file = file->next)
-                    {
-                    struct dyString *tmp = dyStringNew(0);
-                    dyStringPrintf(tmp, "%s/%s", dyStringContents(fullDirName), file->name);
-                    unlink(dyStringContents(tmp));
-                    dyStringFree(&tmp);
-                    }
-                slFreeList(&files);
-                dyStringFree(&pattern);
-                if(symlink(dyStringContents(realFileName), dyStringContents(fullNameWithVersion)))
-                    {
-                    int err = errno;
-                    errAbort("jsIncludeFile: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n", 
-                             err, strerror(err), dyStringContents(fullDirName), getUser());
-                    }
-                }
-            dyStringFree(&fullNameWithVersion);
-            dyStringFree(&fullDirName);
-            }
-        else
-            {
-            errAbort("jsIncludeFile: javascript dir: %s doesn't exist.\n", dyStringContents(fullDirName));
-            }
-        dyStringFree(&fullDirName);
-        }
-    hashAdd(includedFiles, fileName, NULL);
+    static boolean defaultWarningShown = FALSE;
     if(noScriptMsg == NULL && !defaultWarningShown)
         {
-        noScriptMsg = "<b>Your browser does not support JavaScript so some functionality may be missing!</b>";
-        defaultWarningShown = 1;
+        noScriptMsg = "<b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser";
+        defaultWarningShown = TRUE;
         }
     if(noScriptMsg && strlen(noScriptMsg))
-        dyStringPrintf(noScriptBuf, "<noscript>%s</noscript>\n", noScriptMsg);
-    hPrintf("<script type='text/javascript' src='../%s/%s'></script>\n%s", dirName, 
-            dyStringLen(fileNameWithVersion) ? dyStringContents(fileNameWithVersion) : fileName, dyStringContents(noScriptBuf));
-    dyStringFree(&fileNameWithVersion);
-    dyStringFree(&noScriptBuf);
+        hPrintf("<noscript><div class='noscript'><div class='noscript-inner'><p>%s</p></div></div></noscript>\n", noScriptMsg);
+    hPrintf("%s",link);
+    freeMem(link);
     }
 }
 
@@ -495,4 +420,38 @@ for(i=0;i<ArraySize(regExs);i++)
     freeMem(tmp);
     }
 return str;
+}
+
+boolean advancedJavascriptFeaturesEnabled(struct cart *cart)
+// Returns TRUE if advanced javascript features are currently enabled
+{
+static boolean alreadyLookedForadvancedJs = FALSE;
+static boolean advancedJsEnabled = FALSE;
+if(!alreadyLookedForadvancedJs)
+    {
+    char *ua = cgiUserAgent();
+    boolean defaultVal = TRUE;
+
+    // dragZooming was broken in version 530.4 of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
+    // This was explicitly fixed by the WebKit team in version 531.0.1 (see http://trac.webkit.org/changeset/45143).
+    // The AppleWebKit version provided by the browser in user agent doesn't always include the minor version number, so to
+    // be overly conservative we default drag-and-drop to off when AppleWebKit major version == 530
+
+    if(ua != NULL)
+        {
+        char *needle = "AppleWebKit/";
+        char *ptr = strstr(ua, needle);
+        if(ptr != NULL)
+            {
+            int version = 0;
+            sscanf(ptr + strlen(needle), "%d", &version);
+            defaultVal = (version != 530);
+            }
+        }
+    advancedJsEnabled = cartUsualBoolean(cart, "enableAdvancedJavascript", defaultVal);
+    alreadyLookedForadvancedJs = TRUE;
+    }
+//else
+//    warn("already looked up advancedJsEnabled");  // got msg 41 times in one page!
+return advancedJsEnabled;
 }

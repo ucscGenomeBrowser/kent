@@ -11,6 +11,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "web.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
@@ -39,12 +40,8 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	    "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
 	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
 	    "hgt.jump", "hgt.refresh",
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-#ifdef TRACK_SEARCH
-	    searchTracks, "hgt.delRow", "hgt.addRow",
-#endif
+	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1",
+             TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             NULL };
 
 int main(int argc, char *argv[])
@@ -65,7 +62,10 @@ organization = (hIsGisaidServer() ? "GISAID" : organization);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">\n");
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link wrapped in html
+if (link)
+    htmlSetStyle(link);
+
 oldVars = hashNew(10);
 if (hIsGsidServer())
     cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);

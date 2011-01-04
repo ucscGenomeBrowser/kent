@@ -352,4 +352,7 @@ bits64 bbiWriteSummaryAndIndex(struct bbiSummary *summaryList,
 /* Write out summary and index to summary, returning start position of
  * summary index. */
 
+boolean bbiFileCheckSigs(char *fileName, bits32 sig, char *typeName);
+/* check file signatures at beginning and end of file */
+
 #endif /* BBIFILE_H */

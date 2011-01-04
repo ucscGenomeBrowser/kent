@@ -173,6 +173,9 @@ priority 590.3
 track chainNetXenTro2 override
 priority 590.3
 
+track chainNetDanRer7 override
+priority 600.3
+
 track chainNetDanRer6 override
 priority 600.3
 
@@ -198,6 +201,7 @@ chainMinScore 5000
 chainLinearGap loose
 
 track chainNetOryLat1 override
+release alpha
 priority 610.3
 chainMinScore 5000
 chainLinearGap loose

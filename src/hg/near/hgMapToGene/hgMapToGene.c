@@ -6,6 +6,7 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "bed.h"
+#include "basicBed.h"
 #include "binRange.h"
 #include "hdb.h"
 #include "hgConfig.h"
@@ -137,6 +138,8 @@ else
 return overlap;
 }
 
+
+
 struct bed *mostOverlappingBed(struct binKeeper *bk, struct genePred *gp)
 /* Find bed in bk that overlaps most with gp.  Return NULL if no overlap. */
 {
@@ -150,9 +153,20 @@ for (el = elList; el != NULL; el = el->next)
     overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
     if (overlap > bestOverlap)
         {
-	bestOverlap = overlap;
-	bestBed = bed;
-	}
+        bestOverlap = overlap;
+        bestBed = bed;
+        }
+    else if (overlap == bestOverlap)
+        {
+        // If two beds have the same number of overlapping bases to
+        // the gene prediction, then take the bed with the greatest proportion of
+        // overlapping bases, i.e. the shorter one.
+        if (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed))
+            {
+            bestOverlap = overlap;
+            bestBed = bed;
+            }
+        }
     }
 return bestBed;
 }

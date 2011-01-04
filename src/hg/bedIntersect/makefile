@@ -9,7 +9,11 @@ O = bedIntersect.o
 
 bedIntersect: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/bedIntersect $O $(MYLIBS) $L
-#	${STRIP} ${BINDIR}/bedIntersect${EXE}
+	${STRIP} ${BINDIR}/bedIntersect${EXE}
+
+test::
+	(cd tests && ${MAKE} test)
 
 clean::
 	rm -f ${O}
+	(cd tests && ${MAKE} clean)

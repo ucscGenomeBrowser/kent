@@ -7,6 +7,7 @@ track chainNetMm9 override
 priority 540.3
 
 track chainNetOryLat1 override
+release alpha
 priority 220.3
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 

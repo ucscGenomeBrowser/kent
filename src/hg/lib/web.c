@@ -1,22 +1,30 @@
 #include "common.h"
+#include <regex.h>
 #include "hCommon.h"
 #include "obscure.h"
 #include "dnautil.h"
 #include "errabort.h"
 #include "htmshell.h"
 #include "web.h"
+#include "hPrint.h"
 #include "hdb.h"
 #include "hui.h"
 #include "hgConfig.h"
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
+#include "searchTracks.h"
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "wikiLink.h"
 #include "googleAnalytics.h"
 #endif /* GBROWSE */
 #include "errabort.h"  // FIXME tmp hack to try to find source of popWarnHandler underflows in browse
+/* phoneHome business */
+#include <utime.h>
+#include <htmlPage.h>
+#include <signal.h>
+/* phoneHome business */
 
 static char const rcsid[] = "$Id: web.c,v 1.173 2010/05/20 03:14:17 kent Exp $";
 
@@ -96,9 +104,30 @@ char *scriptName = cgiScriptName();
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
 boolean isGisaid = hIsGisaidServer();
+if (theCart)
+    {
+    char *theGenome = NULL;
+    char *genomeEnc = NULL;
+
+    getDbAndGenome(theCart, &db, &theGenome, NULL);
+    genomeEnc = cgiEncode(theGenome);
+
+    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
+	     orgCgiName, genomeEnc,
+	     dbCgiName, db,
+	     cartSessionVarName(), cartSessionId(theCart));
+    }
+else
+    {
+    uiState[0] = 0;
+    uiState[1] = 0;
+    }
 if (db == NULL)
     db = hDefaultDb();
 boolean dbIsFound = hDbExists(db);
+boolean haveBlat = FALSE;
+if (dbIsFound)
+    haveBlat = hIsBlatIndexedDatabase(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -147,9 +176,8 @@ if (withHtmlHeader)
 	}
     *ptr1 = 0;
     htmlTextOut(newString);
-    puts(
-	"	</TITLE>" "\n"
-	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">" "\n");
+    printf("	</TITLE>\n    ");
+    webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
     printf("</HEAD>" "\n"
@@ -180,24 +208,6 @@ if (withLogo)
     puts("</TH></TR>" "\n"
     	 "" "\n" );
     }
-if (theCart)
-    {
-    char *theGenome = NULL;
-    char *genomeEnc = NULL;
-
-    getDbAndGenome(theCart, &db, &theGenome, NULL);
-    genomeEnc = cgiEncode(theGenome);
-
-    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
-	     orgCgiName, genomeEnc,
-	     dbCgiName, db,
-	     cartSessionVarName(), cartSessionId(theCart));
-    }
-else
-    {
-    uiState[0] = 0;
-    uiState[1] = 0;
-    }
 
 /* Put up the hot links bar. */
 if (isGisaid)
@@ -209,7 +219,8 @@ if (isGisaid)
     printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+    if (haveBlat)
+	printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
     /* Subject  View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSample\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Sample View</FONT>");
@@ -245,7 +256,8 @@ else if (isGsid)
     printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+    if (haveBlat)
+	printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
     /* Subject  View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
@@ -307,11 +319,11 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-	printf("       <A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSet%s\" class=\"topbar\">\n",
-	       uiState);
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
+	       uiState,TRACK_SEARCH);
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
-    if (!endsWith(scriptName, "hgBlat"))
+    if (haveBlat && !endsWith(scriptName, "hgBlat"))
 	{
     	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">",
 		theCart ? "&" : "", uiState+1 );
@@ -930,6 +942,77 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
+/* phoneHome business */
+static void alarmExit(int status)
+/* signal handler for SIGALRM for phoneHome function */
+{
+exit(0);
+}
+
+static void phoneHome()
+{
+static boolean beenHere = FALSE;
+if (beenHere)  /* one at a time please */
+    return;
+beenHere = TRUE;
+
+char trashFile[PATH_LEN];
+safef(trashFile, sizeof(trashFile), "%s/registration.txt", trashDir());
+if(fileExists(trashFile))	/* update access time for trashFile */
+    {
+    struct utimbuf ut;
+    struct stat mystat;
+    ZeroVar(&mystat);
+    if (stat(trashFile,&mystat)==0)
+	{
+	ut.actime = clock1();
+	ut.modtime = mystat.st_mtime;
+	}
+    else
+	{
+	ut.actime = ut.modtime = clock1();
+	}
+    (void) utime(trashFile, &ut);
+    return;
+    }
+
+char *scriptName = cgiScriptName();
+char *ip = getenv("SERVER_ADDR");
+if (scriptName && ip)  /* will not be true from command line execution */
+    {
+    FILE *f = fopen(trashFile, "w");
+    if (f)		/* rigamarole only if we can get a trash file */
+	{
+	time_t now = time(NULL);
+	char *localTime;
+	extern char *tzname[2];
+	struct tm *tm = localtime(&now);
+	localTime = sqlUnixTimeToDate(&now,FALSE); /* FALSE == localtime */
+	fprintf(f, "%s, %s, %s %s, %s\n", scriptName, ip, localTime,
+	    tm->tm_isdst ? tzname[1] : tzname[0], trashFile);
+	fclose(f);
+	chmod(trashFile, 0666);
+	pid_t pid0 = fork();
+	if (0 == pid0)	/* in child */
+	    {
+	    close(STDOUT_FILENO); /* do not hang up Apache finish for parent */
+	    (void) signal(SIGALRM, alarmExit);
+	    (void) alarm(6);	/* timeout here in 6 seconds */
+#include "versionInfo.h"
+	    char url[1024];
+	    safef(url, sizeof(url), "%s%s",
+	"http://genomewiki.ucsc.edu/cgi-bin/useCount?version=browser.v",
+		CGI_VERSION);
+
+	    /* 6 second alarm will exit this page fetch if it does not work */
+	    (void) htmlPageGetWithCookies(url, NULL); /* ignore return */
+
+	    exit(0);
+	    }	/* child of fork has done exit(0) normally or via alarm */
+	}		/* trash file open OK */
+    }			/* an actual CGI binary */
+}			/* phoneHome()	*/
+/* phoneHome business */
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars)
@@ -952,6 +1035,8 @@ boolean gotClade = hGotClade();
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 *retClade = cgiOptionalString(cladeCgiName);
+/* phoneHome business */
+phoneHome();
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
@@ -1009,9 +1094,9 @@ if (oldVars)
     char *oldDb = hashFindVal(oldVars, "db");
     char *oldOrg = hashFindVal(oldVars, "org");
     char *oldClade = hashFindVal(oldVars, "clade");
-    if ((oldDb    && differentWord(oldDb, *retDb)) ||
-	(oldOrg   && differentWord(oldOrg, *retGenome)) ||
-	(oldClade && differentWord(oldClade, *retClade)))
+    if ((!IS_CART_VAR_EMPTY(oldDb)    && differentWord(oldDb, *retDb)) ||
+	(!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
+	(!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
 	{
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)
@@ -1199,5 +1284,138 @@ void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
 /* Fill out partially empty last row. */
 {
 finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
+}
+
+char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
+// Returns full path of timestamped link to the requested resource file (js, or css).
+// If wrapInHtml, then returns link embedded in style or script html. Free after use.
+// NOTE: png, jpg and gif should also be supported but are untested.
+{
+char baseName[PATH_LEN];
+char extension[FILEEXT_LEN];
+splitPath(fileName, NULL, baseName, extension);
+boolean js = sameString(".js",extension);
+boolean style = !js && sameString(".css",extension);
+boolean image = !js && !style && (sameString(".png",extension) || sameString(".jpg",extension) || sameString(".gif",extension));
+if(!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
+    errAbort("webTimeStampedLinkToResource: unknown resource type for %s.\n", fileName);
+
+// Build and verify directory
+char *dirName = "";
+if (js)
+    dirName = cfgOptionDefault("browser.javaScriptDir", "js");
+else if (style)
+    dirName = cfgOptionDefault("browser.styleDir","style");
+else if (image)
+    dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
+struct dyString *fullDirName = NULL;
+char *docRoot = hDocumentRoot();
+if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
+    fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
+else
+    fullDirName = dyStringCreate("%s", dirName);
+if(!fileExists(dyStringContents(fullDirName)))
+    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n", dyStringContents(fullDirName));
+
+// build and verify real path to file
+struct dyString *realFileName = dyStringCreate("%s/%s", dyStringContents(fullDirName), fileName);
+if(!fileExists(dyStringContents(realFileName)))
+    errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n", dyStringContents(realFileName));
+
+// build and verify link path including timestamp in the form of dir/baseName-timeStamp.ext
+long mtime = fileModTime(dyStringContents(realFileName));   // We add mtime to create a pseudo-version; this forces browsers to reload css/js file when it changes
+struct dyString *linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
+
+// If link does not exist, then create it !!
+if(!fileExists(dyStringContents(linkWithTimestamp)))
+    {
+    // The versioned copy should be created by the install process; however, mirrors may fail
+    // to preserve mtime's when copying over the javascript/css files, in which case the
+    // versioned softlinks won't match the real file; in that case, we try to create
+    // the versioned links on the fly (which requires write access to the javascript or style directory!).
+
+    // Remove older links
+    struct dyString *pattern = dyStringCreate("%s-[0-9]+\\%s", baseName, extension);
+    struct slName *file, *files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
+    struct dyString *oldLink = dyStringNew(256);
+    for (file = files; file != NULL; file = file->next)
+        {
+        dyStringClear(oldLink);
+        dyStringPrintf(oldLink, "%s/%s", dyStringContents(fullDirName), file->name);
+        unlink(dyStringContents(oldLink));
+        }
+    dyStringFree(&oldLink);
+    slFreeList(&files);
+    dyStringFree(&pattern);
+
+    // Create new link
+    if(symlink(dyStringContents(realFileName), dyStringContents(linkWithTimestamp)))
+        {
+        int err = errno;
+        errAbort("webTimeStampedLinkToResource: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n",
+                    err, strerror(err), dyStringContents(fullDirName), getUser());
+        }
+    }
+// Free up all that extra memory
+dyStringFree(&realFileName);
+dyStringFree(&fullDirName);
+char *linkFull = dyStringCannibalize(&linkWithTimestamp);
+char *link = linkFull;
+if (docRoot != NULL)
+    link = cloneString(linkFull + strlen(docRoot) + 1);
+freeMem(linkFull);
+
+if (wrapInHtml) // wrapped for christmas
+    {
+    struct dyString *wrapped = dyStringNew(0);
+    if (js)
+        dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
+    else if (style)
+        dyStringPrintf(wrapped,"<LINK rel='STYLESHEET' href='../%s' TYPE='text/css' />\n", link);
+    else // Will be image, since these are the only three choices allowed
+        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link);
+    freeMem(link);
+    link = dyStringCannibalize(&wrapped);
+    }
+
+return link;
+}
+
+char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml)
+// If this is the first call, will
+//   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
+// else returns NULL.  Useful to ensure multiple references to the same resource file are not made
+// NOTE: png, jpg and gif should also be supported but are untested.
+{
+static struct hash *includedResourceFiles = NULL;
+if(!includedResourceFiles)
+    includedResourceFiles = newHash(0);
+
+if(hashLookup(includedResourceFiles, fileName))
+    return NULL;
+
+char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);
+if (link)
+    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because memory will be freed by caller!!!
+return link;
+}
+
+boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName)
+// Converts fileName to web Resource link and prints the html reference
+// This only prints and returns TRUE on first call for this resource.
+// Passing in NULL as the file pointer results in hPrintf call
+// The reference will be to a link with timestamp.
+{
+char *link = webTimeStampedLinkToResourceOnFirstCall(fileName,TRUE);
+if (link)
+    {
+    if (toFile == NULL)
+        hPrintf("%s",link);
+    else
+        fprintf(toFile,"%s",link);
+    freeMem(link);
+    return TRUE;
+    }
+return FALSE;
 }
 

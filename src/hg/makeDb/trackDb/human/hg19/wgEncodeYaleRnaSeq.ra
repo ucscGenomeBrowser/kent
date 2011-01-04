@@ -1,0 +1,167 @@
+track wgEncodeYaleRnaSeq
+release alpha
+compositeTrack on
+shortLabel Yale RNA-seq
+longLabel ENCODE Yale RNA-seq
+group expression
+superTrack wgEncodeRnaSeqSuper
+subGroup1 view Views Signal=Signal Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) 
+subGroup3 treatment Treatment AMA50=AMA50ug9h IFNg6h=IFNg6h IFNg30=IFNg30 IFNa30=IFNa30 IFNa6h=IFNa6h None=None 
+subGroup4 rnaExtract RnaExtract nonPolyA=PolyA- polyA=PolyA+
+dimensions dimensionX=cellType dimensionY=treatment dimensionB=rnaExtract
+dimensionBchecked polyA,nonPolyA
+sortOrder cellType=+ treatment=+ rnaExtract=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment rnaExtract=rnaExtract
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+
+    track wgEncodeYaleRnaSeqViewSignal
+    release alpha
+    shortLabel Signal
+    view Signal
+    visibility dense
+    subTrack wgEncodeYaleRnaSeq
+    viewLimits 0:500
+    #minLimit 0
+    #maxLimit 5059134
+    autoScale on
+    transformFunc NONE
+    windowingFunction mean
+    maxHeightPixels 100:24:16
+
+        track wgEncodeYaleRnaSeqK562Ama50PolyaSig
+        release alpha
+        parent wgEncodeYaleRnaSeqViewSignal on
+        shortLabel K562 AMA 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Signal (Amantin in K562 cells)
+        subGroups view=Signal cellType=K562 rnaExtract=polyA treatment=AMA50
+        type bigWig 1.000000 1941183.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=2084 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562PolyaSig
+        release alpha
+        parent wgEncodeYaleRnaSeqViewSignal on
+        shortLabel K562 pA+ 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Signal (PolyA+ in K562 cells)
+        subGroups view=Signal cellType=K562 rnaExtract=polyA treatment=None
+        type bigWig 1.000000 1655291.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=2085 dateSubmitted=2010-10-21
+
+
+
+    track wgEncodeYaleRnaSeqViewAlignments
+    release alpha
+    shortLabel Alignments
+    view Alignments
+    visibility hide 
+    subTrack wgEncodeYaleRnaSeq
+    type bam
+    pairEndsByName on
+    showNames off
+    noColorTag .
+    bamColorMode off 
+    bamGrayMode aliQual
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+
+        track wgEncodeYaleRnaSeqGm12878PolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel GM12878 pA+ 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (PolyA+ in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 rnaExtract=polyA treatment=None
+        type bam
+        origAssembly hg18
+        color 153,38,0
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562NonpolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel K562 pA- 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (PolyA- in K562 cells)
+        subGroups view=Alignments cellType=K562 rnaExtract=nonPolyA treatment=None
+        type bam
+        origAssembly hg18
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562Ifna30PolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel K562 Na30 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNa30 in K562 cells)
+        subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNa30
+        type bam
+        origAssembly hg18
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562Ifna6hPolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel K562 Na6h 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNa6h in K562 cells)
+        subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNa6h
+        type bam
+        origAssembly hg18
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562Ifng30PolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel K562 Ng30 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNg30 in K562 cells)
+        subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNg30
+        type bam
+        origAssembly hg18
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel K562 Ng6h 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNg6h in K562 cells)
+        subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNg6h
+        type bam
+        origAssembly hg18
+        color 46,0,184
+        # subId=2007 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562Ama50PolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel K562 AMA
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (Amantin in K562 cells)
+        subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=AMA50
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=2084 dateSubmitted=2010-10-21
+
+        track wgEncodeYaleRnaSeqK562PolyaAln
+        release alpha
+        parent wgEncodeYaleRnaSeqViewAlignments off
+        shortLabel K562 pA+ 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (PolyA+ in K562 cells)
+        subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=None
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=2085 dateSubmitted=2010-10-21
+

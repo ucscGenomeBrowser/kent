@@ -52,9 +52,9 @@ use vars qw( %cluster %clusterFilesystem $defaultDbHost );
     ( 'swarm' => ,
         { 'enabled' => 1, 'gigaHz' => 2.33, 'ram' => 8,
 	  'hostCount' => 1024, },
-      'pk' =>
-        { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 4,
-	  'hostCount' => 394, },
+#      'pk' =>
+#        { 'enabled' => 1, 'gigaHz' => 2.0, 'ram' => 4,
+#	  'hostCount' => 394, },
       'memk' =>
         { 'enabled' => 1, 'gigaHz' => 1.0, 'ram' => 32,
 	  'hostCount' => 32, },
@@ -75,9 +75,13 @@ my @allClusters = (keys %cluster);
 	  inputFor => \@allClusters, outputFor => [], },
       'hive' =>
         { root => '/hive/data/genomes', clusterLocality => 0.3,
-	  distrHost => ['pk', 'swarm'], distrCommand => '',
-	  inputFor => ['pk', 'memk', 'encodek', 'swarm'],
-	  outputFor => ['pk', 'memk', 'encodek', 'swarm'], },
+	  distrHost => ['swarm'], distrCommand => '',
+	  inputFor => ['memk', 'encodek', 'swarm'],
+	  outputFor => ['memk', 'encodek', 'swarm'], },
+#        { root => '/hive/data/genomes', clusterLocality => 0.3,
+#	  distrHost => ['pk', 'swarm'], distrCommand => '',
+#	  inputFor => ['pk', 'memk', 'encodek', 'swarm'],
+#	  outputFor => ['pk', 'memk', 'encodek', 'swarm'], },
 #      'san' =>
 #        { root => '/san/sanvol1/scratch', clusterLocality => 0.5,
 #	  distrHost => ['pk'], distrCommand => '',

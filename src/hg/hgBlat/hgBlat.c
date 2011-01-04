@@ -61,7 +61,7 @@ char **row;
 char dbActualName[32];
 
 /* If necessary convert database description to name. */
-sprintf(query, "select name from dbDb where name = '%s'", db);
+safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
 if (!sqlExists(conn, query))
     {
     sprintf(query, "select name from dbDb where description = '%s'", db);
@@ -70,7 +70,7 @@ if (!sqlExists(conn, query))
     }
 
 /* Do a little join to get data to fit into the serverTable. */
-sprintf(query, "select dbDb.name,dbDb.description,blatServers.isTrans"
+safef(query, sizeof(query), "select dbDb.name,dbDb.description,blatServers.isTrans"
                ",blatServers.host,blatServers.port,dbDb.nibPath "
 	       "from dbDb,blatServers where blatServers.isTrans = %d and "
 	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
@@ -93,6 +93,41 @@ st.nibDir = cloneString(row[5]);
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 return &st;
+}
+
+void findClosestServer(char **pDb, char **pOrg)
+/* If db doesn't have a blat server, look for the closest db (or org) that has one,
+ * as hgPcr does. */
+{
+char *db = *pDb, *org = *pOrg;
+struct sqlConnection *conn = hConnectCentral();
+char query[256];
+safef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
+if (!sqlExists(conn, query))
+    {
+    safef(query, sizeof(query), "select blatServers.db from blatServers,dbDb "
+	  "where blatServers.db = dbDb.name and dbDb.genome = '%s'", org);
+    char *db = sqlQuickString(conn, query);
+    if (db == NULL)
+	{
+	safef(query, sizeof(query), "select blatServers.db from blatServers,dbDb "
+	      "where blatServers.db = dbDb.name order by dbDb.orderKey,dbDb.name desc");
+	char *db = sqlQuickString(conn, query);
+	if (db == NULL)
+	    errAbort("central database tables blatServers and dbDb are disjoint/empty");
+	else
+	    {
+	    *pDb = db;
+	    *pOrg = hGenome(db);
+	    }
+	}
+    else
+	{
+	*pDb = db;
+	*pOrg = hGenome(db);
+	}
+    }
+hDisconnectCentral(&conn);
 }
 
 void usage()
@@ -751,6 +786,8 @@ cart = theCart;
 dnaUtilOpen();
 
 getDbAndGenome(cart, &db, &organism, oldVars);
+char *oldDb = cloneString(db);
+findClosestServer(&db, &organism);
 
 /* Get sequence - from userSeq variable, or if 
  * that is empty from a file. */
@@ -767,6 +804,10 @@ if (isEmpty(userSeq))
 if (isEmpty(userSeq) || orgChange)
     {
     cartWebStart(theCart, db, "%s BLAT Search", organism);
+    if (differentString(oldDb, db))
+	printf("<HR><P><EM><B>Note:</B> BLAT search is not available for %s %s; "
+	       "defaulting to %s %s</EM></P><HR>\n",
+	       hGenome(oldDb), hFreezeDate(oldDb), organism, hFreezeDate(db));
     askForSeq(organism,db);
     cartWebEnd();
     }

@@ -6,16 +6,20 @@
 #define SEARCHTRACKS_H
 
 #include "common.h"
+#include "cart.h"
 
-// UNCOMMENT TRACK_SEARCH to turn on 'find tracks' functionality
-// #define TRACK_SEARCH
-
-#define searchTracks "hgt_searchTracks"
+// UNCOMMENT TRACK_SEARCH to turn on 'Track Search' functionality
+#define TRACK_SEARCH             "hgt_tSearch"
+#define TRACK_SEARCH_PAGER       "hgt_tsPage"
+#define TRACK_SEARCH_ADD_ROW     "hgt_tsAddRow"
+#define TRACK_SEARCH_DEL_ROW     "hgt_tsDelRow"
+#define TRACK_SEARCH_BUTTON      "track search"
+#define TRACK_SEARCH_HINT        "Search for tracks in this genome assembly"
 
 void getSearchTrixFile(char *database, char *buf, int len);
 // Fill-in the name of the track search trix file
 
-boolean isSearchTracksSupported(char *database);
-// Return TRUE if searchTracks is supported for this database
+boolean isSearchTracksSupported(char *database, struct cart *cart);
+// Return TRUE if searchTracks is supported for this database and javascript is supported too
 
 #endif /* SEARCHTRACKS_H */

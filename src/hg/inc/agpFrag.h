@@ -59,8 +59,5 @@ struct agpFrag *agpFragLoadAllNotGaps(char *fileName) ;
 /* Load all agpFrag that aren't gaps from a tab-separated file.
  * Dispose of this with agpFragFreeList(). */
 
-void agpFragValidate(struct agpFrag *af);
-/* Check for weirdness */
-
 #endif /* AGPFRAG_H */
 

@@ -12,6 +12,9 @@
 #include "hui.h"
 #endif
 
+#include "jsHelper.h"
+#include "imageV2.h"
+
 #ifndef CART_H
 #include "cart.h"
 #endif
@@ -205,6 +208,7 @@ struct track
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
     struct track *parent;	/* Parent track if any */
+    struct track *prevTrack;    /* if not NULL, points to track immediately above in the image.  Needed by ConditionalCenterLabel logic */
 
     void (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
     /* Function will draw the button on a track item and assign a map */
@@ -231,6 +235,10 @@ struct track
 
     int loadTime;	/* Time it takes to load (for performance tuning) */
     int drawTime;	/* Time it takes to draw (for performance tuning) */
+
+    enum enumBool remoteDataSource; /* The data for this track is from a remote source */
+                   /* Slow retrieval means image can be rendered via an AJAX callback. */
+    boolean customTrack; /* Need to explicitly declare this is a custom track */
     };
 
 
@@ -268,6 +276,7 @@ struct simpleFeature
     int start, end;			/* Start/end in browser coordinates. */
     int qStart, qEnd;			/* query start/end */
     int grayIx;                         /* Level of gray usually. */
+    int codonIndex;                     /* 1-based codon index (ignored if 0) */
     };
 
 /* Some details of how to draw linked features. */
@@ -338,7 +347,7 @@ extern struct trackLayout tl;
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern struct hash *oldVars;       /* List of vars from previous cart. */
 extern struct track *trackList;    /* List of all tracks. */
-struct hash *trackHash; /* Hash of the tracks by their name. */
+extern struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
@@ -454,10 +463,11 @@ void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, in
  * program. */
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
-		    struct track *toggleGroup, char *chrom,
+		    struct track *track, boolean toggle, char *chrom,
 		    int start, int end, char *message, char *extra);
 /* Print out image map rectangle that would invoke this program again.
- * If toggleGroup is non-NULL then toggle that track between full and dense.
+ * If track is non-NULL then put that track's id in the map item.
+ * if toggle is true, then toggle track between full and dense.
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 
@@ -466,7 +476,7 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 
-void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
+void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, struct track *toggleGroup,
 		  char *newChrom, int newStart, int newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
@@ -997,6 +1007,11 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
 
+void bamLinkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
+			      struct hvGfx *hvg, int xOff, int yOff, int width,
+			      MgFont *font, Color color, enum trackVisibility vis);
+/* Draw BAM linked features series items. */
+
 void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis);
@@ -1068,6 +1083,9 @@ void initTl();
 void setLayoutGlobals();
 /* Figure out basic dimensions of display.  */
 
+struct hash *makeGlobalTrackHash(struct track *trackList);
+/* Create a global track hash and returns a pointer to it. */
+
 void makeActiveImage(struct track *trackList, char *psOutput);
 /* Make image and image map. */
 
@@ -1109,6 +1127,15 @@ boolean isWithCenterLabels(struct track *track);
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
 
+#define isCenterLabelConditional(track) ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
+// dense subtracks have conditional centerLabels
+
+boolean isCenterLabelConditionallySeen(struct track *track);
+// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+
+#define isCenterLabelIncluded(track) (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
+// Center labels may be conditionally included
+
 void affyTxnPhase2Methods(struct track *track);
 /* Methods for dealing with a composite transcriptome tracks. */
 
@@ -1135,6 +1162,9 @@ void wikiTrackMethods(struct track *tg);
 struct bed *wikiTrackGetBedRange(char *mapName, char *chromName,
 	int start, int end);
 /* fetch wiki track items as simple bed 3 list in given range */
+
+void addVariomeWikiTrack(struct track **pGroupList);
+/* Add variome wiki track and append to group list. */
 
 void bed8To12(struct bed *bed);
 /* Turn a bed 8 into a bed 12 by defining one block. */
@@ -1209,9 +1239,6 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
 
-boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
-// Returns TRUE if drag-and-zoom is currently on
-
 #define SMALLBUF 128
 
 char *bbiNameFromTable(struct sqlConnection *conn, char *table);
@@ -1219,6 +1246,34 @@ char *bbiNameFromTable(struct sqlConnection *conn, char *table);
 
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */
+
+void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
+/* Load bedDetail track from custom tracks as bed or linked features */
+
+void pgSnpCtMethods (struct track *tg);
+/* Load pgSnp track from custom tracks */
+
+void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
+/* When composite/view settings changes, remove subtrack specific vis
+   When superTrackChild is found and selected, shape superTrack to match. */
+
+void dontLoadItems(struct track *tg);
+/* No-op loadItems when we aren't going to try. */
+
+//#define REMOTE_TRACK_AJAX_CALLBACK
+#ifdef REMOTE_TRACK_AJAX_CALLBACK
+#define REMOTE_TRACK_HEIGHT (tl.fontHeight*2)
+
+boolean trackShouldUseAjaxRetrieval(struct track *track);
+/* Tracks with remote data sources should berendered via an ajax callback */
+
+#else//ifndef
+
+#define REMOTE_TRACK_HEIGHT 0
+#define trackShouldUseAjaxRetrieval(track)  FALSE
+
+#endif//ndef REMOTE_TRACK_AJAX_CALLBACK
+
 
 #endif /* HGTRACKS_H */
 

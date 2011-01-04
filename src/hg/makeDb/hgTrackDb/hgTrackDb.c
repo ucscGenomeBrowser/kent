@@ -51,9 +51,11 @@ static char *raName = "trackDb.ra";
 
 static char *release = "alpha";
 
-#define	RELEASE_ALPHA  (1 << 0)
-#define	RELEASE_BETA   (1 << 1)
-#define	RELEASE_PUBLIC (1 << 2)
+// release tags
+#define RELEASE_ALPHA  (1 << 0)
+#define RELEASE_BETA   (1 << 1)
+#define RELEASE_PUBLIC (1 << 2)
+
 unsigned releaseBit = RELEASE_ALPHA;
 
 static bool showSettings = FALSE;
@@ -142,13 +144,13 @@ slReverse(&newList);
 return newList;
 }
 
-unsigned buildReleaseBits(struct trackDb *tdb, char *rel)
+unsigned buildReleaseBits(char *rel)
 /* unpack the comma separated list of possible release tags */
 {
-
 if (rel == NULL)
     return RELEASE_ALPHA |  RELEASE_BETA |  RELEASE_PUBLIC;
 
+char *oldString = cloneString(rel);
 unsigned bits = 0;
 while(rel)
     {
@@ -165,7 +167,7 @@ while(rel)
     else if (sameString(rel, "public"))
 	bits |= RELEASE_PUBLIC;
     else
-	errAbort("tracks must have a release combination of alpha, beta, and public");
+	errAbort("track with release %s must have a release combination of alpha, beta, and public", oldString);
 
     rel = end;
     }
@@ -185,7 +187,7 @@ struct hash *haveHash = hashNew(3);
 while ((tdb = slPopHead(&tdbList)) != NULL)
     {
     char *rel = trackDbSetting(tdb, "release");
-    unsigned trackRelBits = buildReleaseBits(tdb, rel);
+    unsigned trackRelBits = buildReleaseBits(rel);
 
     if (trackRelBits & releaseBit)
 	{
@@ -258,7 +260,7 @@ static void addVersionRa(boolean strict, char *database, char *dirName, char *ra
 /* Read in tracks from raName and add them to table, pruning as required. Call
  * top-down so that track override will work. */
 {
-struct trackDb *tdbList = trackDbFromRa(raName), *tdb;
+struct trackDb *tdbList = trackDbFromRa(raName, NULL), *tdb;
 /* prune records of the incorrect release */
 tdbList= pruneRelease(tdbList);
 

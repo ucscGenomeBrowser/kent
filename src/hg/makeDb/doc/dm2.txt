@@ -5939,11 +5939,11 @@ chainOne $(path1)
 
 
 #########################################################################
-# BDTNP CHIP-CHIP UPDATE (DONE 8/25/10 angie)
+# BDTNP CHIP-CHIP UPDATE (DONE 9/14/10 angie)
     mkdir /hive/data/genomes/dm2/bed/bdtnpChipper/100819
     cd /hive/data/genomes/dm2/bed/bdtnpChipper/100819
     # Unpacked chip-chip and DNase accessible regions files emailed by 
-    # Mark Biggins Aug. 9th, 13th and 16th 2010.
+    # Mark Biggins Aug. 9th, 13th, 16th and Sep. 13, 2010.
     # Download some additional DNase accessibility files:
     alias wg 'wget --timestamping --no-check-certificate --user=biggin --password=xxxx'
     # NOTE: these files were replaced 8/30, see below...
@@ -5975,8 +5975,9 @@ chainOne $(path1)
       ln -s `pwd`/$f /gbdb/dm2/bdtnp/$f
       hgBbiDbLink dm2 $f:r /gbdb/dm2/bdtnp/$f
     end
-    # Accessible regions:
+    # Accessible regions (updated stage 9 9/14/10 with corrected data):
     foreach f (5%*.txt)
+      mac2unix "$f"
       set t = `echo "$f" | perl -wpe 's/^.*stage (\d+).txt/bdtnpDnaseAccS$1/'`
       echo $f --\> $t
       tail -n +3 "$f" \
@@ -5992,7 +5993,7 @@ chainOne $(path1)
 #5% FDR regions stage 5.txt --> bdtnpDnaseAccS5
 #Loaded 22694 elements of size 3
 #5% FDR regions stage 9.txt --> bdtnpDnaseAccS9
-#Loaded 15585 elements of size 3
+#Loaded 16217 elements of size 3
     # New ChIP/chip data:
     foreach f ({hb,med}*.wig)
       set t = `echo $f | perl -wpe 'm/^([a-z]+)_(\d+)(S\d+).*-(\d+).wig$/ || die; \

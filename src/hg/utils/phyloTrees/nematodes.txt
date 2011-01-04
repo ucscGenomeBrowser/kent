@@ -1,0 +1,25 @@
+
+#  Common to all:	Eukaryota; Fungi/Metazoa group; Metazoa;
+#	Eumetazoa; Bilateria; Pseudocoelomata; Nematoda; Chromadorea; 
+# ((((((((C._briggsae,C._remanei),C._brenneri),C._elegans),C._japonica),H._contortus),(M._hapla,M._incognita)),P._pacificus),B._malayi)
+
+ce	Rhabditida; Rhabditoidea; Rhabditidae; Peloderinae; Caenorhabditis
+
+caeJap	Rhabditida; Rhabditoidea; Rhabditidae; Peloderinae; Caenorhabditis
+
+caeRem	Rhabditida; Rhabditoidea; Rhabditidae; Peloderinae; Caenorhabditis
+
+cb	Rhabditida; Rhabditoidea; Rhabditidae; Peloderinae; Caenorhabditis
+
+caePb	Rhabditida; Rhabditoidea; Rhabditidae; Peloderinae; Caenorhabditis
+
+haeCon	Rhabditida; Strongylida; Trichostrongyloidea; Haemonchidae; Haemonchinae; Haemonchus
+
+melHap	Tylenchida; Tylenchina; Tylenchoidea; Meloidogynidae; Meloidogyninae; Meloidogyne
+
+melInc	Tylenchida; Tylenchina; Tylenchoidea; Meloidogynidae; Meloidogyninae; Meloidogyne; Meloidogyne incognita group
+
+bruMal	Spirurida; Filarioidea; Onchocercidae; Brugia
+
+priPac	Diplogasterida; Neodiplogasteridae; Pristionchus
+

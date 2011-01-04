@@ -9,17 +9,18 @@ set apiMel apiMel1,apiMel2
 set aplCal aplCal1
 set bosTau bosTau2,bosTau3,bosTau4,bosTau5
 set braFlo braFlo1
-set caeJap caeJap1
+set bruMal bruMal1
+set caeJap caeJap1,caeJap3
 set caePb caePb1,caePb2
 set caeRem caeRem2,caeRem3
 set calJac calJac1,calJac3
 set canFam canFam1,canFam2
 set cavPor cavPor3
 set cb cb1,cb3
-set ce ce2,ce4,ce6
+set ce ce2,ce4,ce6,ce9
 set ci ci1,ci2
 set cioSav cioSav1
-set danRer danRer3,danRer4,danRer5,danRer6
+set danRer danRer3,danRer4,danRer5,danRer6,danRer7
 set dm dm1,dm2,dm3
 set dp dp2,dp3
 set droEre droEre1
@@ -28,13 +29,16 @@ set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droG
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
 set equCab equCab1,equCab2
-set felCat felCat3,felCat4,felCatV17e
+set felCat felCat3,felCat4
 set fr fr1,fr2
 set galGal galGal2,galGal3
 set gasAcu gasAcu1
 set gorGor gorGor1
+set haeCon haeCon1
 set hg hg16,hg17,hg18,hg19
 set loxAfr loxAfr3
+set melInc melInc1
+set melHap melHap1
 set mm mm6,mm7,mm8,mm9
 set monDom monDom1,monDom4,monDom5
 set ornAna ornAna1
@@ -44,7 +48,7 @@ set oviAri oviAri1
 set panTro panTro1,panTro2
 set petMar petMar1
 set ponAbe ponAbe2
-set priPac priPac1
+set priPac priPac1,priPac2
 set rheMac rheMac2
 set rn rn3,rn4
 set sacCer sacCer1,sacCer2
@@ -55,14 +59,14 @@ set tetNig tetNig1,tetNig2
 set xenTro xenTro1,xenTro2
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur,$felCat,$gasAcu,$oryCun,$oryLat,$equCab,$anoCar,$ornAna,$caePb,$caeRem,$caeJap,$priPac,$ponAbe,$calJac,$cavPor,$petMar,$braFlo,$taeGut,$gorGor,$aplCal,$loxAfr,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
-set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri
+set wgs $rn,$panTro,$galGal,$canFam,$bosTau,$felCat,$monDom,$tetNig,$fr,$oryCun,$oryLat,$calJac,$cavPor,$taeGut,$aplCal,$susScr,$ailMel,$oviAri,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases for which we build a xenoRefGene track:
-set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,$aplCal,$ailMel,$loxAfr
+set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac,$monDom,$felCat,$oryCun,$oryLat,$anoCar,$caePb,$caeRem,$caeJap,$cb,$mm,$priPac,$strPur,$ponAbe,$calJac,$petMar,$braFlo,$ce,$taeGut,danRer6,danRer7,$aplCal,$ailMel,$loxAfr,$haeCon,$melInc,$melHap,$bruMal
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,mm9
@@ -71,6 +75,9 @@ set vegaGeneDbs hg18,hg19,mm9
 set snpDb127 hg18,bosTau3
 set snpDb126 hg18,mm8
 set snpDb125 hg17,panTro1,canFam1,rn4
+
+# LS/SNP databases
+set lsSnpDb hg18,hg19
 
 # Only consider one of members of gbd at a time.
 exclusiveSet $gbd
@@ -91,10 +98,10 @@ set transMapDb anoCar1,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,e
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
 databasesChecked $gbd,$otherDb
-databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash
+databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch2,hg19Patch2i,hg19snp131,hg19snp132,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
 
 # Define various non-self chains
-set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,ApiMel3,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap1,Cb3,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,AilMel1,FelCatV17e,CanFamPoodle1,ChoHof1,DasNov2,DipOrd1,EchTel1,EriEur1,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,TupBel1,TurTru1,VicPac1
+set chainDest Hg16,Hg17,Hg18,Hg19,Mm5,Mm6,Mm7,Mm8,Mm9,Rn3,Rn4,Cb1,Dm1,Dm2,Dm3,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,GalGal3,Fr1,Fr2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSec1,DroSim1,DroGri1,DroPer1,DroWil1,AnoGam1,ApiMel1,ApiMel2,ApiMel3,TetNig1,TetNig2,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,MonDom5,RheMac1,RheMac2,BosTau1,BosTau2,BosTau3,BosTau4,FelCat3,FelCat4,GasAcu1,OryLat1,OryLat2,EquCab1,EquCab2,AnoCar1,Ce2,Ce4,Ce6,Ce9,OrnAna1,CaePb1,CaePb2,CaeRem2,CaeRem3,CaeJap3,CaeJap1,Cb3,PriPac2,PriPac1,StrPur1,StrPur2,Ci1,Ci2,PonAbe2,CalJac1,CalJac3,CavPor3,PetMar1,BraFlo1,TaeGut1,GorGor1,AplCal1,PapHam1,TarSyr1,OtoGar1,MicMur1,LoxAfr2,LoxAfr3,SusScr1,SusScr2,AilMel1,CanFamPoodle1,ChoHof1,DasNov2,DipOrd1,EchTel1,EriEur1,MacEug1,MyoLuc1,OchPri2,OryCun1,OryCun2,ProCap1,PteVam1,SorAra1,SpeTri1,TupBel1,TurTru1,VicPac1,BruMal1,HaeCon1,MelHap1,MelInc1,Hg19Patch2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
@@ -122,7 +129,7 @@ set split splitPrefix=chr%\_
 set tRNAsDbs hg18,hg19,mm9,rn4
 
 # Databases with the CGAP SAGE track
-set cgapSageDbs hg18,mm8
+set cgapSageDbs hg18,hg19,mm8
 
 # Define the shared identifiers and the fields they appear in.
 
@@ -617,6 +624,15 @@ identifier wgEncodeGencodeClassesV4
     hg19.wgEncodeGencodeAutoV4.name unique
     hg19.wgEncodeGencodeManualV4.name unique
     hg19.wgEncodeGencodePolyaV4.name unique
+    hg19.wgEncodeGencode2wayConsPseudoV4.name unique
+
+identifier wgEncodeGencodeYalePseudoV4
+"Link together Gencode gene model and possible pseudogenes for May 2010 Data Version"
+    hg19.wgEncodeGencodeYalePseudoV4.transcript
+    hg19.wgEncodeGencodeAutoV4.name unique
+    hg19.wgEncodeGencodeManualV4.name unique
+    hg19.wgEncodeGencodePolyaV4.name unique
+    panTro2.wgEncodeNhgriBip.name unique
 
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
@@ -879,10 +895,16 @@ identifier affyU95
     $hg.affyRatio.name
     $hg.knownToU95.value
 
+identifier affyU133hg18
+# chopBefore and chopAfter needed for hg16, 17 and 18.
+"Affymetrix Human U133 chip identifiers"
+     hg18,hg17,hg16.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
+     hg18,hg17,hg16.knownToU133.value
+
 identifier affyU133
 "Affymetrix Human U133 chip identifiers"
-    $hg.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
-    $hg.knownToU133.value
+    $hg,!hg18,!hg17,!hg16.affyU133.qName dupeOk
+    $hg,!hg18,!hg17,!hg16.knownToU133.value
 
 identifier affyU133Plus2
 "Affymetrix Human U133 chip identifiers"
@@ -1484,11 +1506,17 @@ identifier ccdsGeneId
     $ccdsDb.ccdsGene.name dupeOk
     $ccdsDb.ccdsInfo.ccds full
     $ccdsDb.ccdsKgMap.ccdsId
+    $ccdsDb.ccdsNotes.ccds
 
 identifier ctdGeneSymbol
 "CTD Gene Symbol"
     hgFixed.ctdSorted.GeneSymbol dupeOk
     $hg.kgXref.geneSymbol minCheck=0.30
+
+identifier rdmrGene
+"R-DMR Gene"
+    $hg.rdmr.name dupeOk
+    $hg.rdmrRaw.gene minCheck=0.95
 
 identifier gadId
 "GAD Gene ID"
@@ -1695,8 +1723,8 @@ identifier ikmcName
 
 identifier hgIkmcName
 "IKMC (knockoutmouse.org) mapped gene name"
-    $mm.hgIkmc.name dupeOk
-    $mm.hgIkmcExtra.name
+    $hg.hgIkmc.name dupeOk
+    $hg.hgIkmcExtra.name
 
 # "Biological" Gene Names
 
@@ -1791,7 +1819,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!ce9,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -1934,7 +1962,7 @@ identifier rgdEstId external=RGD
 identifier rgdQtlId external=RGD
 "RGD QTL ID"
     $rn,$hg.rgdQtl.name
-    $rn,$hg.rgdQtlLink.name minCheck=0.89
+    $rn,$hg.rgdQtlLink.name minCheck=0.88
 
 identifier rgdRatQtlId external=RGD
 "RGD Rat QTL ID mapped to other organism"
@@ -1972,7 +2000,7 @@ identifier ensemblProteinId3 external=Ensembl
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
-    $gbd,!ce6,!felCat3.ensGene.name chopAfter=.
+    $gbd,!ce6,!ce9,!felCat3.ensGene.name chopAfter=.
     $gbd.ensGeneXref.transcript_name chopAfter=. minCheck=0.95
     $gbd.ensGtp.transcript chopAfter=. minCheck=0.94
     $gbd.ensPep.name chopAfter=. minCheck=0.96
@@ -2196,9 +2224,8 @@ identifier snpName130
     hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
     hg18.snpArrayIlluminaHumanCytoSNP_12.name minCheck=0.95
     hg18.snpArrayIlluminaHumanOmni1_Quad.name minCheck=0.85
-    # gwasCatalog SNPs were mapped to genome using snp130.  Move this and update trackDb
-    # settings if we remap to new version:
-    $hg.gwasCatalog.name
+    # gwasCatalog SNPs were mapped to hg18 using snp130:
+    hg18.gwasCatalog.name
 
 identifier snpExceptions130
 "Annotations of unusual conditions in dbSNP version 130"
@@ -2215,14 +2242,27 @@ identifier snpName131
     hg18.snpArrayIlluminaHuman660W_Quad.name minCheck=0.90
     hg18.snpArrayIlluminaHumanCytoSNP_12.name minCheck=0.95
     hg18.snpArrayIlluminaHumanOmni1_Quad.name minCheck=0.85
-    # gwasCatalog SNPs were mapped to genome using snp131.  Move this and update trackDb
-    # settings if we remap to new version:
-    $hg.gwasCatalog.name minCheck=0.99
+    # gwasCatalog SNPs were mapped to hg19 using snp131.  Move this and update trackDb
+    # settings if we remap to new dbSNP version:
+    hg19.gwasCatalog.name minCheck=0.99
 
 identifier snpExceptions131
 "Annotations of unusual conditions in dbSNP version 131"
     $gbd.snp131ExceptionDesc.exception
     $gbd.snp131Exceptions.exception
+
+identifier snpName132
+"dbSNP version 132 rs* identifiers"
+    $gbd.snp132.name dupeOk
+    $gbd.snp132Exceptions.name minCheck=.999
+    $gbd.snp132Seq.acc minCheck=.98
+    $gbd.snp132CodingDbSnp.name minCheck=.90
+    $hg.snp132OrthoPt2Pa2Rm2.name
+
+identifier snpExceptions132
+"Annotations of unusual conditions in dbSNP version 132"
+    $gbd.snp132ExceptionDesc.exception
+    $gbd.snp132Exceptions.exception
 
 # Other NCBI Identifiers
 
@@ -2287,6 +2327,11 @@ identifier bgiGeneId external=BGI
     $galGal.bgiGeneSnp.geneName minCheck=0.1
 
 # Other Identifiers
+
+identifier hg19Patch2ExtFileId
+"External file ID for hg19 patch2 sequences"
+    hg19.extHg19Patch2.id
+    hg19.seqHg19Patch2.extFile
 
 identifier extFileId
 "External file ID"
@@ -2442,7 +2487,6 @@ identifier blastHg18KGPep04Id
      aplCal1.blastHg18KG.qName
      ailMel1.blastHg18KG.qName
      oryCun2.blastHg18KG.qName
-     felCatV17e.blastHg18KG.qName
 
 identifier blastHg18KGRef04Id
 "hg18 ref 04"
@@ -2477,7 +2521,6 @@ identifier blastHg18KGRef04Id
      aplCal1.blastHg18KG.qName
      ailMel1.blastHg18KG.qName
      oryCun2.blastHg18KG.qName
-     felCatV17e.blastHg18KG.qName
 
 identifier blastHg17KGRef01SwissId
 "hg17 proteins swiss 01"
@@ -2495,6 +2538,12 @@ identifier blastCe6SG01
      $gbd.blastCe6SG.qName dupeOk
      ce6.blastSGPep01.name
      ce6.blastSGRef01.acc
+
+identifier blastCe9SG01
+"ce9 proteins 01"
+     $gbd.blastCe9SG.qName dupeOk
+     ce9.blastSGPep01.name
+     ce9.blastSGRef01.acc
 
 identifier tfbsCons
 "transcription factor binding sites"
@@ -2546,15 +2595,23 @@ identifier jaxRepTranscriptName external=MGI
 
 identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
-    $mm.jaxAllele.name dupeOk
-    $mm.jaxAlleleInfo.name
-    $mm.jaxAllelePheno.allele
+    # Using dupeOk here because there are some case-sensitive allele name diffs (ugh)
+    $mm.jaxAllelePheno.allele dupeOk
+    $mm.jaxAlleleInfo.name minCheck=0.9
+    $mm.jaxAllele.name minCheck=0.9
+    $mm.jaxGeneTrapInfo.name minCheck=0.000001
+    $mm.jaxGeneTrap.name minCheck=0.000001
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
     $mm.jaxPhenotype.name dupeOk
     $mm.jaxPhenotypeAlias.name
-    mm8.jaxAllelePheno.transcript minCheck=0.9
+    mm8,mm9.jaxAllelePheno.transcript minCheck=0.9
+
+identifier jaxGeneTrapName external=MGI
+"Jackson Labs/MGI GeneTrap name: concatenated representative transcript ID and allele ID"
+    $mm.jaxGeneTrap.name dupeOk
+    $mm.jaxGeneTrapInfo.name
 
 #links between the UniProt variants tables
 identifier protVarId
@@ -2744,26 +2801,41 @@ identifier transMapAlnKnownGeneMmId
     hg19.knownGene.name
     mm9.transMapAlnUcscGenes.qName chopAfter=-
 
+identifier hg18ContigDiff
+"contig difference track"
+    hg18.gold.frag dupeOk $split
+    hg18.hg18ContigDiff.name
+
+identifier hg19ContigDiff
+"contig difference track"
+    hg19.gold.frag dupeOk
+    hg19.hg19ContigDiff.name
+
 # lsSnpPdb tables
 identifier lsSnpPdbProtId
 "lsSnpPdb table protId field"
     uniProt.extDbRef.acc dupeOk
-    hg18.lsSnpPdb.protId
+    $lsSnpDb.lsSnpPdb.protId
 
 identifier lsSnpPdbKgId
 "lsSnpPdb table protId field"
-    hg18.kgXref.spID dupeOk
-    hg18.lsSnpPdb.protId
+    $lsSnpDb.kgXref.spID dupeOk
+    $lsSnpDb.lsSnpPdb.protId
 
 identifier lsSnpPdbPdbId
 "lsSnpPdb table pdbId field"
     uniProt.extDbRef.extAcc1 dupeOk
-    hg18.lsSnpPdb.pdbId minCheck=0.99
+    $lsSnpDb.lsSnpPdb.pdbId minCheck=0.99
 
-identifier lsSnpPdbSnpId
+identifier lsSnpPdbSnpHg18
 "lsSnpPdb table snpId field"
     hg18.snp129.name dupeOk
     hg18.lsSnpPdb.snpId
+
+identifier lsSnpPdbSnpHg19
+"lsSnpPdb table snpId field"
+    hg19.snp131.name dupeOk
+    hg19.lsSnpPdb.snpId
 
 identifier consIndelsId
 "consIndels tables name field"
@@ -3103,6 +3175,7 @@ tablesIgnored $gbd
     gbLoaded
     gbDelete_tmp
     gc5Base
+    gc5BaseBw
     gcPercent
     genscanSubopt
     %gold
@@ -3111,10 +3184,13 @@ tablesIgnored $gbd
     history
     intronEst
     knownAlt
+    metaDb%
+    microsat
     miRNA
     nestedRepeats
     nestedRepeatsRM327
     quality
+    qualityBw
     rnaCluster
     rnaGene
     regPotential%
@@ -3153,6 +3229,7 @@ tablesIgnored $gbd
     uwNucOccA375
     uwNucOccDennis
     uwNucOccMec
+    ws210Gene
 
 tablesIgnored $kgDb
     pbAaDist_
@@ -3161,7 +3238,16 @@ tablesIgnored $kgDb
     pbStamp
     pep%Dist
 
+tablesIgnored hg18
+    numtSAssembled
+    numtS
+    numtSMitochondrion
+    numtSMitochondrionChrPlacement
+
 tablesIgnored hg19
+    altSeqHaplotypes
+    altSeqLiftOverPsl
+    altSeqPatches
     bacEndPairsBad
     multizMHCSummary
     netSyn_mann_hap4
@@ -3452,9 +3538,6 @@ tablesIgnored $fr
     ecoresHg16
     ecoresRn3
 
-tablesIgnored $felCat
-    microsat
-
 tablesIgnored hg16
     chicken_hmrg
     rat_hmrg
@@ -3464,11 +3547,12 @@ tablesIgnored hg16
 tablesIgnored canFam2
     uncertified
 
-tablesIgnored oryLat2
-    microsat
-
 tablesIgnored susScr2
     bosTau4ChainPileUp
 
+tablesIgnored calJac3
+    bacEnds
+    bacEndCalJac3Singles
 
-
+tablesIgnored rheMac2
+    refSeqAnno

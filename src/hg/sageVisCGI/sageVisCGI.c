@@ -6,11 +6,11 @@ used standalone or called by the hgc.c program in ~kent/src/hg/hgc/.
 <p>sageVisCGI creates graphs on the fly for the sage data of different
 uniGene clusters. The clusters to be graphed are passed via cgi (or command
 line) in the form u=<uniGene number>. There is also an optional 'md' parameter
-which specifies a maximum tag count to go up to, default is 50. 
+which specifies a maximum tag count to go up to, default is 50.
 
-<p>Example 
+<p>Example
 <br><pre><code>
-sageVisCGI md=20 u=202 u=122566 > out.html 
+sageVisCGI md=20 u=202 u=122566 > out.html
 </code></pre>
 or http://genome-test.cse.ucsc.edu/cgi-bin/sageVisCGI?md=20&u=202&u=122566 .
 
@@ -46,7 +46,7 @@ printf( "<img src=\"%s\">\n", fileName);
 
 
 /**
- * Appends one string to another without having to 
+ * Appends one string to another without having to
  * worry about going over. Assumes that the total length
  * of dest is the strlen(dest) + 1. Wasteful if you want to
  * use it lots of times in a row as it reallocates memory every time
@@ -63,7 +63,7 @@ Assumes that the experiments are stored in order.
 */
 struct graphPoint2D*createSageGraphPoint(struct sage *sg, int i)
 {
- 
+
 struct graphPoint2D *gp = NULL;
 char name[128];
 
@@ -72,9 +72,9 @@ AllocVar(gp);
 gp->y = sg->meds[i-1];
 if(gp->y > maxDataVal && gp->y < dataValCeiling)
     maxDataVal = gp->y;
-gp->x = i; 
+gp->x = i;
 gp->name = cloneString(name);
-gp->hName = cloneString(name); 
+gp->hName = cloneString(name);
 gp->groupName = cloneString(name);
 return gp;
 }
@@ -91,7 +91,7 @@ int i;
 for(sg = sgList; sg != NULL; sg = sg->next)
     {
     struct graphPoint2D *gList = NULL;
-    for(i=0; i< sg->numExps; i++) 
+    for(i=0; i< sg->numExps; i++)
 	{
 	struct graphPoint2D *gTemp = NULL;
 	gTemp = createSageGraphPoint(sg, i+1);
@@ -102,7 +102,7 @@ for(sg = sgList; sg != NULL; sg = sg->next)
 return gp;
 }
 
-/* Creates a string which tells gnuPlot what label to put on 
+/* Creates a string which tells gnuPlot what label to put on
    xTics and where to put them. Will Chop "SAGE" from name if present */
 char * constructXticsFromExps(struct sageExp *seList)
 {
@@ -124,12 +124,13 @@ return ret;
 }
 
 /* Prints the header appropriate for the title
- * passed in. Links html to chucks stylesheet for 
- * easier maintaince 
+ * passed in. Links html to chucks stylesheet for
+ * easier maintaince
  */
-void chuckHtmlStart(char *title) 
+void chuckHtmlStart(char *title)
 {
 printf("<html><head>");
+//FIXME blueStyle should not be absolute to genome-test and should bae called by: webIncludeResourceFile("blueStyle.css");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
@@ -193,11 +194,11 @@ sc = sqlConnectRemote("localhost", user, password, db);
 dyStringPrintf(query, "%s", "select * from sage where ");
 for(nm=nmList;nm!=NULL;nm=nm->next)
     {
-    if(count++) 
+    if(count++)
 	{
 	dyStringPrintf(query," or uni=%s ", nm->name );
 	}
-    else 
+    else
 	{
 	dyStringPrintf(query," uni=%s ", nm->name);
 	}
@@ -215,7 +216,7 @@ freeDyString(&query);
 return sgList;
 }
 
-/** load the sage experiment data 
+/** load the sage experiment data
  */
 struct sageExp *loadSageExps(char *tableName, struct slName *nmList)
 {

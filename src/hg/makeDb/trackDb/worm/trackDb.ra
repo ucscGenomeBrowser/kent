@@ -1,3 +1,6 @@
+# chainNet tracks
+include trackDb.chainNet.ra
+
 track ctgPos2
 shortLabel Contigs
 longLabel Assembly Contigs
@@ -47,6 +50,7 @@ type genePred refPep refMrna
 idXref refLink mrnaAcc name
 
 track chainPriPac1
+release beta,public
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
@@ -61,6 +65,7 @@ type chain priPac1
 otherDb priPac1
 
 track netPriPac1
+release beta,public
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
@@ -143,58 +148,6 @@ spectrum on
 type netAlign caeJap1 chainCaeJap1
 otherDb caeJap1
 
-track cb3ChainNet
-release alpha
-compositeTrack on
-shortLabel C. briggsae Chain/Net
-longLabel C. briggsae (Jan. 2007/cb3), Chain and Net Alignments
-subGroup1 view Views chain=Chain net=Net
-dragAndDrop subTracks
-visibility hide
-group compGeno
-noInherit on
-priority 126
-color 0,0,0
-altColor 255,255,0
-type bed 3
-sortOrder view=+
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-otherDb caeCb2
-chainMinScore 1000
-chainLinearGap loose
-spectrum on
-html chainNet
-
-    track cb3ChainNetViewchain
-    shortLabel Chain
-    view chain
-    visibility pack
-    parent cb3ChainNet
-    spectrum on
-
-        track chainCb3
-        release alpha
-        parent cb3ChainNetViewchain
-        subGroups view=chain
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain cb3
-
-    track cb3ChainNetViewnet
-    shortLabel Net
-    view net
-    visibility dense
-    parent cb3ChainNet
-
-        track netCb3
-        release alpha
-        parent cb3ChainNetViewnet
-        subGroups view=net
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign cb3 chainCb3
-
 track chainCb3
 release beta,public
 shortLabel $o_Organism Chain
@@ -220,58 +173,6 @@ visibility dense
 spectrum on
 type netAlign cb3 chainCb3
 otherDb cb3
-
-track caeRem3ChainNet
-release alpha
-compositeTrack on
-shortLabel C. remanei Chain/Net
-longLabel C. remanei (May 2007/caeRem3), Chain and Net Alignments
-subGroup1 view Views chain=Chain net=Net
-dragAndDrop subTracks
-visibility hide
-group compGeno
-noInherit on
-priority 128
-color 0,0,0
-altColor 255,255,0
-type bed 3
-sortOrder view=+
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-otherDb caeCb2
-chainMinScore 1000
-chainLinearGap loose
-spectrum on
-html chainNet
-
-    track caeRem3ChainNetViewchain
-    shortLabel Chain
-    view chain
-    visibility pack
-    parent caeRem3ChainNet
-    spectrum on
-
-        track chainCaeRem3
-        release alpha
-        parent caeRem3ChainNetViewchain
-        subGroups view=chain
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain caeRem3
-
-    track caeRem3ChainNetViewnet
-    shortLabel Net
-    view net
-    visibility dense
-    parent caeRem3ChainNet
-
-        track netCaeRem3
-        release alpha
-        parent caeRem3ChainNetViewnet
-        subGroups view=net
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign caeRem3 chainCaeRem3
 
 track chainCaeRem3
 release beta,public
@@ -323,58 +224,6 @@ spectrum on
 type netAlign caeRem2 chainCaeRem2
 otherDb caeRem2
 
-track caePb2ChainNet
-release alpha
-compositeTrack on
-shortLabel C. brenneri Chain/Net
-longLabel C. brenneri (Feb. 2008/caePb2), Chain and Net Alignments
-subGroup1 view Views chain=Chain net=Net
-dragAndDrop subTracks
-visibility hide
-group compGeno
-noInherit on
-priority 130
-color 0,0,0
-altColor 255,255,0
-type bed 3
-sortOrder view=+
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-otherDb caeCb2
-chainMinScore 1000
-chainLinearGap loose
-spectrum on
-html chainNet
-
-    track caePb2ChainNetViewchain
-    shortLabel Chain
-    view chain
-    visibility pack
-    parent caePb2ChainNet
-    spectrum on
-
-        track chainCaePb2
-        release alpha
-        parent caePb2ChainNetViewchain
-        subGroups view=chain
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain caePb2
-
-    track caePb2ChainNetViewnet
-    shortLabel Net
-    view net
-    visibility dense
-    parent caePb2ChainNet
-
-        track netCaePb2
-        release alpha
-        parent caePb2ChainNetViewnet
-        subGroups view=net
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign caePb2 chainCaePb2
-
 track chainCaePb2
 release beta,public
 shortLabel $o_Organism Chain
@@ -402,6 +251,7 @@ type netAlign caePb2 chainCaePb2
 otherDb caePb2
 
 track chainCaePb1
+release beta,public
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
@@ -416,6 +266,7 @@ type chain caePb1
 otherDb caePb1
 
 track netCaePb1
+release beta,public
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
@@ -425,56 +276,8 @@ spectrum on
 type netAlign caePb1 chainCaePb1
 otherDb caePb1
 
-track ce7ChainNet
-compositeTrack on
-shortLabel C. elegans Chain/Net
-longLabel C. elegans (Feb. 2009/ce7/WS200), Chain and Net Alignments
-subGroup1 view Views chain=Chain net=Net
-dragAndDrop subTracks
-visibility hide
-group compGeno
-noInherit on
-priority 131
-color 0,0,0
-altColor 255,255,0
-type bed 3
-sortOrder view=+
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-otherDb ce7
-chainMinScore 1000
-chainLinearGap loose
-spectrum on
-html chainNet
-
-    track ce7ChainNetViewchain
-    shortLabel Chain
-    view chain
-    visibility pack
-    parent ce7ChainNet
-    spectrum on
-
-        track chainCe7
-        parent ce7ChainNetViewchain
-        subGroups view=chain
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain ce7
-
-    track ce7ChainNetViewnet
-    shortLabel Net
-    view net
-    visibility dense
-    parent ce7ChainNet
-
-        track netCe7
-        parent ce7ChainNetViewnet
-        subGroups view=net
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign ce7 chainCe7
-
 track chainCe6
+release beta,public
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date) Chained Alignments
 group compGeno
@@ -489,6 +292,7 @@ type chain ce6
 otherDb ce6
 
 track netCe6
+release beta,public
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date) Alignment Net
 group compGeno
@@ -544,6 +348,18 @@ url http://ws170.wormbase.org/db/gene/gene?name=
 type psl protein
 pred ce4.blastSGPep01
 blastRef ce4.blastSGRef01
+
+track blastCe9SG
+shortLabel C.elegans Prot.
+longLabel C. elegans Proteins WS210 Mapped by Chained tBLASTn
+group genes
+priority 250.2
+visibility pack
+colorChromDefault off
+url http://www.wormbase.org/db/gene/gene?name=
+type psl protein
+pred ce9.blastSGPep01
+blastRef ce9.blastSGRef01
 
 track blastCe6SG
 shortLabel C.elegans Prot.
@@ -622,3 +438,26 @@ searchMethod prefix
 searchType psl
 xrefTable ce6.blastSGRef01
 xrefQuery select acc,geneId from %s where geneId like '%s%%'
+
+searchName blastCe9SG
+searchTable blastCe9SG
+searchMethod prefix
+searchType psl
+xrefTable ce9.blastSGRef01
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
+
+track ws210Gene
+shortLabel WS210 Genes
+longLabel Genes predictions from WormBase WS210 release
+group genes
+priority 32
+visibility pack
+color 0,0,200
+type genePred
+url http://www.wormbase.org/db/gene/gene?name=$$;class=Gene
+
+searchName ws210GenePrefix
+searchTable ws210Gene
+searchMethod fuzzy
+searchType genePred
+searchPriority 21

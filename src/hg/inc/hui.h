@@ -166,6 +166,7 @@ enum trackVisibility
     tvPack=3,           /* Zig zag it up and down. */
     tvSquish=4,         /* Pack with thin boxes and no labels. */
     };
+#define tvShow tvFull
 
 enum trackVisibility hTvFromString(char *s);
 /* Given a string representation of track visibility, return as
@@ -181,10 +182,12 @@ char *hStringFromTv(enum trackVisibility vis);
 /* Standard width for visibility dropdowns */
 #define TV_DROPDOWN_STYLE "width: 70px"
 
-void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
-	boolean canPack, char *class, char *visOnly);
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+	boolean canPack, char *class, char *visOnly, char *extra);
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
+#define hTvDropDownClassVisOnly(varName,vis,canPack,class,visOnly) \
+        hTvDropDownClassVisOnlyAndExtra(varName,vis,canPack,class,visOnly,NULL)
 
 void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack, char *class,char *javascript);
 /* Make track visibility drop down for varName with style class and javascript */
@@ -197,7 +200,8 @@ void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boo
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
-void hideShowDropDown(char *varName, boolean show, char *class);
+void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra);
+#define hideShowDropDown(varName,show,class) hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
 /* Make hide/show dropdown for varName */
 
 /****** Some stuff for stsMap related controls *******/
@@ -628,6 +632,7 @@ enum baseColorDrawOpt
 
 /* Drawing mode per-track cart variable suffix: */
 #define BASE_COLOR_VAR_SUFFIX "baseColorDrawOpt"
+#define CODON_NUMBERING_SUFFIX "codonNumbering"
 
 /* trackDb settings: */
 #define BASE_COLOR_USE_CDS "baseColorUseCds"
@@ -844,13 +849,11 @@ struct trackNameAndLabel
 int trackNameAndLabelCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
-struct hash *makeTrackHashWithComposites(char *database, char *chrom,
-                                        bool withComposites);
-/* Make hash of trackDb items for this chromosome, optionally includingc
-   omposites, not just the subtracks. */
-
-struct hash *makeTrackHash(char *database, char *chrom);
-/* Make hash of trackDb items for this chromosome. */
+struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **tdbList,bool withComposites);
+// Make hash of trackDb items for this chromosome, including composites, not just the subtracks.
+// May pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
+#define makeTrackHashWithComposites(db,chrom,withComposites) trackHashMakeWithComposites(db,chrom,NULL,withComposites)
+#define makeTrackHash(db,chrom) trackHashMakeWithComposites(db,chrom,NULL,FALSE)
 
 char *genePredDropDown(struct cart *cart, struct hash *trackHash,
                                         char *formName, char *varName);
@@ -900,8 +903,8 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
         boolean embeddedInText,boolean showLongLabel, struct hash *trackHash);
 /* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 
-boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
-                                int visibleChild);
+boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
+                                int visibleChild,char *extra);
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
@@ -910,6 +913,7 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
  *   -1 don't know (this function should determine)
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
+#define superTrackDropDown(cart,tdb,visibleChild) superTrackDropDownWithExtra(cart,tdb,visibleChild,NULL)
 
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */
@@ -942,8 +946,16 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
 
-enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, enum trackVisibility vis, boolean noSupers);
-/* returns visibility limited by ancestry (or subtrack vis override) */
+enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,boolean *subtrackOverride);
+// returns visibility NOT limited by ancestry.  Fills optional boolean if subtrack specific vis is found
+// If not NULL cart will be examined without ClosestToHome.  Folders/supertracks resolve to hide/full
+
+enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb *tdb, boolean checkBoxToo, boolean foldersToo);
+// returns visibility limited by ancestry.  This includes subtrack vis override and parents limit maximum.
+// cart may be null, in which case, only trackDb settings (default state) are examined
+// checkBoxToo means ensure subtrack checkbox state is visible
+// foldersToo means limit by folders (aka superTracks) as well.
+#define tdbVisLimitedByAncestry(cart,tdb,noFolders) tdbVisLimitedByAncestors(cart, tdb, TRUE, !(noFolders))
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 /* Returns a string with the composite view control name if one exists */
@@ -1151,5 +1163,15 @@ void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char
 
 int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
 /* Returns the four state checked state of the subtrack */
+
+void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled);
+/* Sets the fourState Checked in the cart and updates cached state */
+
+boolean hPrintPennantIcon(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
+
+boolean printPennantIconNote(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" and note when found.
+//This is used by hgTrackUi and hgc before printing out trackDb "html"
 
 #endif /* HUI_H */

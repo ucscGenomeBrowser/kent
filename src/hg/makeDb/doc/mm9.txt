@@ -8238,25 +8238,93 @@ see doc/builds.txt for specific details.
 
 
 ############################################################################
-# JAX/MGI TRACKS (IN PROGRESS 3/12/10  angie)
+# JAX/MGI TRACKS (IN PROGRESS 9/20/10 angie)
 # Previously done 8/20/09 in /hive/data/genomes/mm9/bed/jax/2009_08 (pushed)
 # Previously done 6/11/09 in /hive/data/genomes/mm9/bed/jax/2009_06 (pushed)
 # Previously done 4/24/09 in /hive/data/genomes/mm9/bed/jax/2009_04 (not pushed)
 # Previously done 9/24/08 in /cluster/data/mm9/bed/jax/2008_09
-    mkdir -p /hive/data/genomes/mm9/bed/jax/2010_03
-    cd /hive/data/genomes/mm9/bed/jax/2010_03
-    wget ftp://ftp.informatics.jax.org/pub/gbrowse/\*
-    wget ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
+    mkdir -p /hive/data/genomes/mm9/bed/jax/2010_09
+    cd /hive/data/genomes/mm9/bed/jax/2010_09
+    wget --timestamping ftp://ftp.informatics.jax.org/pub/gbrowse/\*
+    wget --timestamping ftp://ftp.informatics.jax.org/pub/reports/MGI_PhenotypicAllele.rpt
 
     # Jax Rep Transcript track
     # SEQ_RepTransGenomic_rpt.gff --> jaxRepTranscript{,Alias}
     # -- names like AK016604_4933401J01Rik, NM_001011874_AY534250
     # -- aliases ~ MGI:\d+
-    # Use simple perl script to uniquify transcript names and make alias.tab.
-    # (Copied /hive/data/genomes/mm8/bed/jax/2007_07/parseRepTranscript.pl and
-    # modified to tweak a regex for tweaked name NR_027008_Gt(ROSA)26Sor_1)
-    ../2009_06/parseRepTranscript.pl SEQ_RepTransGenomic_rpt.gff \
-    | sed -e 's/^/chr/; s/chrMT/chrM/;' \
+    cat > parseRepTranscript.pl <<'_EOF_'
+#!/usr/bin/perl -w
+# Parse this particular flavor of GFF3 into GFF1 (stdout) 
+# plus an association file (alias.tab) and a fixit SQL file (fixit.sql).  
+
+use strict;
+
+# Keep track of transcript names; our GFF-parsing code requires unique 
+# transcript names but non-unique ones are used here.  Add uniquifying 
+# suffix.  Rely on the fact that a REP_transcript line always immediately 
+# precedes the REP_exon lines.  
+my %txNameIndx;
+my $tweakedName;
+
+my $alias = "jaxRepTranscriptAlias.tab";
+my $fixit = "fixJaxRepTranscript.sql";
+open(OUT, ">$alias") || die "Cant open $alias for writing: $!\n";
+open(SQL, ">$fixit") || die "Cant open $fixit for writing: $!\n";
+while (<>) {
+  chomp;
+  s/\s*$//;
+  my ($chr, undef, $type, $start, $end, undef, $strand, undef, $info) =
+    split("\t");
+  if ($type eq "mRNA") {
+    my ($name1, $latter) = split(/_MGI:/, $info);
+    $name1 =~ s/^mRNA //
+      || die "line parse, $type line $.:\n$info\n";
+    $latter =~ m/^(\d+)_([\w.\(\)\/-]+);/
+      || die "latter parse, $type line $.:\n$latter\n";
+    my ($mgiID, $name2) = ($1, $2);
+    my $name = $name1 . "_" . $name2;
+    if (defined $txNameIndx{$name}) {
+      $tweakedName = $name . "_" . $txNameIndx{$name};
+      print SQL "update jaxRepTranscript set name = \"$name\" " .
+                "where name = \"$tweakedName\";\n";
+    } else {
+      undef $tweakedName;
+      print OUT "$name\tMGI:$mgiID\n";
+    }
+    $txNameIndx{$name}++;
+  } elsif ($type eq "exon" || $type eq "CDS") {
+    $type = "exon" if ($type eq "CDS"); # They set cdsStart=txStart, cdsEnd=txEnd! even for N.C.
+    my ($name1, $latter) = split(/_MGI:/, $info);
+    $name1 =~ s/^mRNA //
+      || die "line parse, $type line $.:\n$info\n";
+    $latter =~ m/^(\d+)_([\w.\(\)\/-]+)$/
+      || die "latter parse, $type line $.:\n$latter\n";
+    my ($mgiID, $name2) = ($1, $2);
+    my $name = $name1 . "_" . $name2;
+    if (defined $tweakedName) {
+      my $quotedName = $name;  $quotedName =~ s/\(/\\(/g;  $quotedName =~ s/\)/\\)/g;
+      if ($tweakedName !~ /^${quotedName}_\d+$/) {
+        die "tweakedName $tweakedName does not match /^${quotedName}_\\d+\$/ like expected";
+      }
+      $name = $tweakedName;
+    }
+    $chr =~ s/MT/M/;
+    if (/^Chr/) {
+      $chr =~ s/^Chr/chr/;
+    } elsif (!/^chr/) {
+      $chr = "chr$chr";
+    }
+    print "$chr\tMGI\t$type\t$start\t$end\t.\t$strand\t.\t$name\n";
+  } elsif ($type ne "gene") {
+    die "unrecognized type $type, line $.";
+  }
+}
+close(OUT);
+close(SQL);
+'_EOF_'
+    # << emacs
+    chmod a+x parseRepTranscript.pl
+    ./parseRepTranscript.pl SEQ_RepTransGenomic_from_models.gff \
       > jaxRepTranscript.gff
 
     # Jax Allele track
@@ -8264,24 +8332,134 @@ see doc/builds.txt for specific details.
     # -- bed12Source -- add type from filename
     # -- names like NM_011283_Rp1h<tm1Jnz>, XM_129721_Slc9a2<tm1Ges>
     # -- Info: name, mgiID, source {"Gene trapped", ...}
-    rm -f jaxAllele.bed jaxAlleleInfo.tab fixJaxAllele.sql
-    foreach f (AL*.gff)
-      set type = `echo $f:t:r \
-        | sed -e 's/AL_//; s/GTRAP/GeneTrapped/; s/IND/Induced/; \
-            s/OTHER/Other/; s/SPON/Spontaneous/; s/TARG/Targeted/; \
-            s/TRANS/Transgenic/;'`
-      /hive/data/genomes/mm8/bed/jax//2007_09/parseAllele.pl $f \
+    cat > parseAllele.pl <<'_EOF_'
+#!/usr/bin/perl -w
+use strict;
+# Parse this particular flavor of GFF3 into GFF1 (stdout) with allele source 
+# appended to the name (for later parsing back out in to bed+ field).  
+# Also, *append* to an info file and a fixit SQL file.  
+# Add uniquifying suffix to transcript names when necessary.  
+# Rely on the fact that an mRNA line always immediately 
+# precedes the exon lines.  
+
+my $sourceSuffixes = "Induced|Other|Spontaneous|Targeted|Transgenic";
+my %gffSource = ( "AL_IND" => "Induced", "AL_OTHER" => "Other", "AL_SPON" => "Spontaneous",
+                  "AL_TARG" => "Targeted", "AL_TRANS" => "Transgenic",
+                  "MGI_DNA_GTRAP" => "GeneTrappedDna", "MGI_RNA_GTRAP" => "GeneTrappedRna", );
+
+my $alias = "jaxAlleleInfo.tab";
+my $fixit = "fixJaxAllele.sql";
+open(OUT, ">>$alias") || die "Cant open $alias for appending: $!\n";
+open(SQL, ">>$fixit") || die "Cant open $fixit for appending: $!\n";
+my (%txNameIndx, $tweakedName);
+while (<>) {
+  chomp;
+  s/\s*$//;
+  my ($chr, $source, $type, $start, $end, undef, $strand, undef, $info) = split("\t");
+  die "Unrecognized GFF source $source" if (! defined $gffSource{$source});
+  $chr =~ s/MT/M/;  $chr =~ s/Chr/chr/ || $chr =~ s/^([^c])/chr$1/;
+  $source = $gffSource{$source};
+  $info =~ s/Lexicon Genetics/LG/;  $info =~ s/BayGenomics/BG/;
+  if ($info =~ /Note "(\d)-RACE"/) {
+    $source .= $1;
+  }
+  if ($type eq "mRNA" || $type eq "genetrap_DNA") {
+    my ($name, $alName, $mgiID);
+    $info =~ s/^([^;]+)_($sourceSuffixes);/$1;/;
+    if ($info =~ /^mRNA ([\w.\/-]+(\<[\w\(\).,\*\/+-]+(\>|Byg))?); Dbxref "(MGI:\d+)";/) {
+      ($name, $mgiID) = ($1, $4);
+      if ($name =~ /\<.*[^\>]$/) {
+        print STDERR "Missing > for mRNA name $name\n";
+        $name = $name . ">";
+      }
+    } elsif ($info =~ /^Genetrap_DNA ([\w.\/-]+); Dbxref "(MGI:\d+)"/) {
+      ($name, $mgiID) = ($1, $2);
+      print "$chr\tMGI\texon\t$start\t$end\t.\t$strand\t.\t$name\|\|$source\n";
+    } else {
+      die "parse, mRNA/Genetrap_DNA line $.:\n$info\n";
+    }
+    if (defined $txNameIndx{$name}) {
+      $tweakedName = $name . "_" . $txNameIndx{$name};
+      print SQL "update jaxAllele set name = \"$name\" " .
+                "where name = \"$tweakedName\";\n";
+    } else {
+      undef $tweakedName;
+      $source =~ s/GeneTrapped([DR])na/Gene trapped $1NA/;
+      $source =~ s/([35])$/ ($1'-RACE)/;
+      if ($source =~ /GeneTrapped([DR])na([35]?)/) {
+        $source = "Gene";
+      }
+      print OUT "$name\t$mgiID\t$source\n";
+    }
+    $txNameIndx{$name}++;
+  } elsif ($type =~ /^exon$/) {
+    my ($name);
+    $info =~ s/_($sourceSuffixes)$//;
+    if ($info =~ /^mRNA ([\w.\/-]+(\<[\w\(\).,\*\/+-]+(\>|Byg))?)$/) {
+      $name = $1;
+      if ($name =~ /\<.*[^\>]$/) {
+        $name = $name . ">";
+      }
+    } elsif ($info =~ /^mRNA ([\w.\/-]+);/) {
+      $name = $1;
+    } else {
+      die "parse, exon line $.:\n$info\n";
+    }
+    if (defined $tweakedName) {
+      my $escName = $name;
+      $escName =~ s/\(/\\(/g;  $escName =~ s/\)/\\)/g;
+      if ($tweakedName !~ /^${escName}_\d+$/) {
+        die "tweakedName $tweakedName does not start with name $name and " .
+            " have a numeric suffix like expected";
+      }
+      $name = $tweakedName;
+    }
+    print "$chr\tMGI\t$type\t$start\t$end\t.\t$strand\t.\t$name\|\|$source\n";
+  } elsif ($type ne "gene") {
+    die "unrecognized type $type, line $.";
+  }
+}
+close(OUT);
+close(SQL);
+'_EOF_'
+    # << emacs
+    chmod a+x parseAllele.pl
+    rm -f jaxGeneTrap.bed jaxAlleleInfo.tab fixJaxAllele.sql
+    foreach f (MGI_GT[DR]NA_GBrowse.gff)
+      echo $f:t:r | sed -e 's/MGI_//; s/_GBrowse//'
+      ./parseAllele.pl $f \
       | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
       | /cluster/bin/scripts/genePredToBed \
-      | sed -e 's/^/chr/; s/$/'"\t$type"'/;' \
-      >> jaxAllele.bed
+      | perl -wpe 'chomp; @w = split; $w[3] =~ s/\|\|(\w+)$// || die;  $source = $1; \
+                   $w[8] = ($source eq "GeneTrappedDna") ? "218,112,214" : \
+                           ($source eq "GeneTrappedRna3") ? "50,205,50" : "25,25,112"; \
+                   $_ = join("\t", @w, $source) . "\n";' \
+      >> jaxGeneTrap.bed
+      if ($status) break
     end
-    # This round's formatting inconsistencies:
-#source not given for NM_010230_Fmn1<ld-Is(17_In2)1Gso>
-#source not given for NM_015770_a<jIs(17_In2)1Gso>
-#source not given for NM_009521_Wnt3<In(11Trp53_11Wnt3)8Brd>
-#source not given for NM_001127233_Trp53<In(11Trp53_11Wnt3)8Brd>
-#source not given for NM_029931_Mllt3<T(4Mllt3_9Mll)1Thr>
+    mv jaxAlleleInfo.tab jaxGeneTrapInfo.tab
+    mv fixJaxAllele.sql fixJaxGeneTrap.sql
+    cut -f 13 jaxGeneTrap.bed | sort | uniq -c
+#  297818 GeneTrappedDna
+#  184431 GeneTrappedRna3
+#   35236 GeneTrappedRna5
+    rm -f jaxAllele.bed jaxAlleleInfo.tab fixJaxAllele.sql
+    foreach f (AL_{IND,OTHER,SPON,TARG,TRANS}.gff)
+      echo $f:t:r | sed -e 's/AL_//;'
+      ./parseAllele.pl $f \
+      | ldHgGene mm9 placeholder stdin -nobin -out=stdout \
+      | /cluster/bin/scripts/genePredToBed \
+      | perl -wpe 'chomp; @w = split; $w[3] =~ s/\|\|(\w+)$// || die; \
+                   $_ = join("\t", @w, $1) . "\n";' \
+      >> jaxAllele.bed
+      if ($status) break
+    end
+    cut -f 13 jaxAllele.bed | sort | uniq -c
+#   1214 Induced
+#    102 Other
+#   1146 Spontaneous
+#  13329 Targeted
+#     39 Transgenic
 
     # Jax Phenotype track
     # MP_*.gff --> jaxPhenotype{,Alias}
@@ -8331,7 +8509,8 @@ see doc/builds.txt for specific details.
     # QTL*.gff --> jaxQtl2 (or 3?)... but we're missing MIT SSLP marker
     # and CM distance for 2, or those plus flanking markers for 3...
     cmp MGI_QTL.gff ../2009_06/MGI_QTL.gff 
-    # No output, so skip this part:
+#MGI_QTL.gff ../2009_06/MGI_QTL.gff differ: char 29629, line 232
+    # OK, don't skip this part:
     if (0)
       perl -wpe 'chomp; s/\s*$//; \
         ($c, undef, undef, $start, $end, undef, $strand, undef, $info) = \
@@ -8358,7 +8537,7 @@ see doc/builds.txt for specific details.
     # Load tables
     # jaxRepTranscript
     ldHgGene mm9 jaxRepTranscript jaxRepTranscript.gff
-#35505 gene predictions
+#  40689 groups 22 seqs 1 sources 1 feature types
     hgsql mm9 < fixJaxRepTranscript.sql
     hgLoadSqlTab mm9 jaxRepTranscriptAlias \
       ~/kent/src/hg/lib/genericAlias.sql jaxRepTranscriptAlias.tab
@@ -8366,35 +8545,53 @@ see doc/builds.txt for specific details.
     # jaxAllele
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       mm9 jaxAllele jaxAllele.bed
-#Loaded 15904 elements of size 13
+#Loaded 15830 elements of size 13
+    checkTableCoords mm9 jaxAllele
     # fixJaxAllele.sql is empty so don't need to do this:
     # hgsql mm9 < fixJaxAllele.sql
     hgLoadSqlTab mm9 jaxAlleleInfo \
       ~/kent/src/hg/lib/jaxAlleleInfo.sql jaxAlleleInfo.tab
+    # jaxGeneTrap
+    hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
+      mm9 jaxGeneTrap jaxGeneTrap.bed
+#Loaded 517485 elements of size 13
+    checkTableCoords mm9 jaxGeneTrap
+    # fixJaxGeneTrap.sql is empty so don't need to do this:
+    # hgsql mm9 < fixJaxGeneTrap.sql
+    hgLoadSqlTab mm9 jaxGeneTrapInfo \
+      ~/kent/src/hg/lib/jaxAlleleInfo.sql jaxGeneTrapInfo.tab
     # jaxPhenotype
     hgLoadBed -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed12Source.sql \
       -tab mm9 jaxPhenotype jaxPhenotype.bed
-#Loaded 32922 elements of size 13
-    # fixJaxPhenotype.sql is empty so don't need to do this:
+#Loaded 36501 elements of size 13
+    checkTableCoords mm9 jaxPhenotype
+    # fixJaxPhenotype.sql is empty so don't need to execute it.
     # hgsql mm9 < fixJaxPhenotype.sql
     hgLoadSqlTab mm9 jaxPhenotypeAlias \
       ~/kent/src/hg/lib/genericAlias.sql jaxPhenotypeAlias.tab
     # jaxQtl
     cmp MGI_QTL.gff ../2009_06/MGI_QTL.gff 
-    # No output ==> no data change, skip the following lines:
-#    hgLoadBed -tab -notItemRgb -noBin \
-#      -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql \
-#      mm9 jaxQtl jaxQtl.bed
+#MGI_QTL.gff ../2009_06/MGI_QTL.gff differ: char 29629, line 232
+    # If there were no output we would skip this:
+    hgLoadBed -tab -notItemRgb -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/jaxQtl.sql \
+      mm9 jaxQtl jaxQtl.bed
+    checkTableCoords -verbose=2 mm9 jaxQtl
+#mm9.jaxQtl item Ath13 chr14:51915898-165887941: chromEnd > chromSize 125194864
+#mm9.jaxQtl item Ity2 chr11:145756703-145756947: chromEnd > chromSize 121843856
+    hgsql mm9 -e 'update jaxQtl set chromEnd = 125194864 where chrom = "chr14" and chromEnd = 165887941'
+    hgsql mm9 -e 'delete from jaxQtl where chrom = "chr11" and chromStart > 121843856'
     checkTableCoords -verbose=2 mm9 jaxQtl
     # No output, good.
     # phenotype-allele relationships
     hgLoadSqlTab mm9 jaxAllelePheno \
       ~/kent/src/hg/lib/jaxAllelePheno.sql jaxAllelePheno.tab
 
-    # Check joiner:
-    runJoiner.csh mm9 jaxRepTranscript
-    runJoiner.csh mm9 jaxAllele
-    runJoiner.csh mm9 jaxPhenotype
+    # Check joiner (noTimes to avoid flood of refGene/knownGene timestamp warnings):
+    foreach t (jaxRepTranscript jaxAllele jaxPhenotype jaxGeneTrap)
+      echo $t
+      runJoiner.csh mm9 $t noTimes
+    end
 
 
 ############################################################################
@@ -11115,3 +11312,232 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+#############################################################################
+# Agilent arrays (2010-12-01 Andy)
+cd /hive/data/genomes/mm9/bed/agilentProbes/
+# FTP download from ftp.agilent.com using given user/pass from Anniek De-witte
+# (anniek_de-witte@agilent.com)
+# downloaded files are gzipped beds. The files are typically located in a 
+# directory called "FOR_UCSC" or something like that.  The user/pass and the
+# directory are deleted after it's confirmed they're received, so it's not
+# too helpful to mention specifics here.
+ftp -u user -p password ftp.agilent.com
+> cd directory
+> get 027411_D_BED_20100308.bed.gz
+> get 027414_D_BED_20100318.bed
+# unzip everything
+gunzip 027*.bed.gz
+ln -s 027414_D_BED_20100318.bed agilentCgh1x1m.ct.bed
+ln -s 027411_D_BED_20100308.bed agilentCgh4x180k.ct.bed
+for bed in agilent*.bed; do
+    tail -n +2 $bed | hgLoadBed mm9 ${bed%.ct.bed} stdin
+done
+rm bed.tab
+
+
+##########################################################################
+# Build targetScanS track - (DONE - 2010-12-14 galt)
+#       requested by: George Bell gbell at wi.mit.edu
+    ssh hgwdev
+    mkdir -p /cluster/data/mm9/bed/targetScanS
+    cd /cluster/data/mm9/bed/targetScanS
+
+    wget --timestamping http://www.targetscan.org/mmu_50/ucsc/mm9/mm9Cons_ALL_CHRS.BED
+
+    hgLoadBed mm9 targetScanS mm9Cons_ALL_CHRS.BED
+    #	Loaded 38961 elements of size 6
+    featureBits mm9 targetScanS
+    #   253088 bases of 2620346127 (0.010%) in intersection
+
+    # Create/edit/check in targetScans.html and trackDb.ra under
+    # kent/src/hg/makeDb/trackDb/mouse/mm9
+
+#########################################################################
+# LASTZ Mouse mm9 (DONE - 2010-12-17 - hiram)
+    mkdir /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+    cd /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+
+    cat << '_EOF_' > DEF
+# mouse vs zebrafish
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	Elapsed time: 254m42s
+
+    cat fb.danRer7.chainMm9Link.txt 
+    #	68190354 bases of 2620346127 (2.602%) in intersection
+
+    #	and the swap to danRer7
+    mkdir /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    16m8.672s
+
+    cat fb.danRer7.chainMm9Link.txt 
+    #	71960602 bases of 1409770109 (5.104%) in intersection
+
+#########################################################################
+# YALE PSEUDOPIPE PSEUDOGENE PREDICTIONS BASED ON ENSEMBL 60
+# (hartera, 2010-12-23 - 2010-12-24, DONE)
+# FTP site e-mailed on 2010-12-22 by Suganthi Balasubramanian 
+# (suganthi.bala@yale.edu) from the Gerstein lab. Data is from their 
+# PseudoPipe pipeline and it is based on proteins from Ensembl Build 60 
+# (pseudogene data from December 2010?). 
+# NOTE: this data will be replaced before being released to the RR as there 
+# is a problem with the IDs. 
+
+mkdir -p /hive/data/genomes/mm9/bed/pseudoYale60
+cd /hive/data/genomes/mm9/bed/pseudoYale60
+
+# Go to http://tables.pseudogene.org/set.py?id=Mouse60 and click on the
+# download link to download Mouse60.tx and copy the file to this directory.
+# Header from data file.
+ID      Chromosome      Start Coordinate        Stop Coordinate Strand  Parent
+Protein  Protein Start   Protein Stop    Parent Gene     Fraction        Num
+Insertions  Num Deletions   Num Shifts      Num Stops       E Value Identity
+PolyA   Disablements    Exons   Introns Class   Sequence        Link
+
+# urls are of type:
+# http://tables.pseudogene.org/mouse60/<ID> so this can be added to the
+# trackDb as for the previous track. Just update the Ensembl 59 trackDb entry.
+
+# Get list of chroms:
+awk '{print $2}' Mouse60.txt | sort | uniq
+# chromosomes are 1-19, X, Y
+
+# Convert data to genePred:
+
+cat << '_EOF_' > formatPseudogenesToGenePred
+#!/usr/bin/awk -f
+# Parse Yale pseudogene data file.
+# Exon coordinates are in this format: [[28688544, 28688864], [28689678, 2869117# 4], [28694308, 28694460], [28701327, 28701749]]
+# Ignore header line
+/^ID/ {
+  next;
+}
+# Parse the data lines
+BEGIN {FS="\t"} {OFS="\t"} {
+  gsub(/\[/, "", $19);
+  gsub(/\]/, "", $19); 
+  split($19, exons, ",");
+  # Count the number of start and end coordinates for exons and 
+  # calculate the number of exons.
+  count=(length(exons))/2;
+  # Write out genePred. Add chr in front of chrom only if not haplotype.
+  if ($2 !~ /HSCHR/) {
+     printf "%s\tchr%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  else {
+     printf "%s\t%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  # get list of exon starts, convert from 1-based to 0-based
+  for (i=1; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]-1","; 
+  }
+  printf "\t";
+  # get list of exon ends
+  for (i=2; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]","; 
+  }
+  printf "\n"; 
+}
+'_EOF_'
+
+chmod +x formatPseudogenesToGenePred
+# format the Yale pseudogenes data to genePred.
+./formatPseudogenesToGenePred Mouse60.txt > pseudoYaleMouse60.gp 
+
+# Load the genePred file into mm9
+hgLoadGenePred mm9 pseudoYale60 pseudoYaleMouse60.gp
+# Didn't load. There are 4 invalid genePreds:
+Error: invalid genePred: PGOMOU00000130313 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000139101 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000136201 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000128816 exon 1 overlaps previous exon
+Error: 4 invalid genePreds, database unchanged
+
+# File didn't load into database.
+# Make a file of these ids - invalidIds
+grep -f invalidIds -vw pseudoYaleMouse60.gp > pseudoYaleMouse60NoInvalidGps.gp
+wc -l pseudoYale*gp
+# 19086 pseudoYaleMouse60.gp
+# 19082 pseudoYaleMouse60NoInvalidGps.gp
+
+# Then re-load database
+hgLoadGenePred mm9 pseudoYale60 pseudoYaleMouse60NoInvalidGps.gp
+
+# 2010-12-24
+# Add trackDb.ra entry for track, add a search and make sure
+# there is a description page, copy over from the gencodeYalePseudoBuild59
+# html. 
+
+cp
+/hive/users/hartera/GencodeWG/ccds/trunk/gencode/browser/trackDb/human/hg19/gencodeYalePseudoBuild59.html \
+~/kent/src/hg/makeDbb/trackDb/mouse/mm9/pseudoYale60.html
+# Edit this for mouse and add the list of 4 IDs of genes that were removed due
+# to overlapping exon coordinates. Commit to git.
+# Check pseudogene types in data:
+tail -n +2 Mouse60.txt | tawk '{print $21}' | sort | uniq
+#Ambiguous
+#Duplicated
+#Processed
+# Build class table for colouring pseudogenes by type. 
+# copy over class table definition from a previous set of Yale pseudogenes.
+cp -p /hive/groups/gencode/browser/hg19/gencodeYalePseudoBuild59/gencodeYalePseudoBuild59Class.sql \
+ pseudoYale60Class.sql
+
+# Make the class table file:
+tail -n +2 Mouse60.txt \
+  | tawk '{print $1, $21, "Yale"}' | sort > pseudoYale60Class.txt
+
+# load table
+hgLoadSqlTab mm9 pseudoYale60Class \
+    pseudoYale60Class.sql pseudoYale60Class.txt
+
+hgsql -e 'select distinct(class) from pseudoYale60Class;' mm9
++------------+
+| class      |
++------------+
+| Ambiguous  | 
+| Processed  | 
+| Duplicated | 
++------------+
+
+# Add these classes to the trackDb.ra entry for the geneClasses field and 
+# to the list of classes with colours.
+# Added the classes to:
+# ~/kentJuly2010/kent/src/hg/makeDb/trackDb/tagTypes.tab
+# e.g. gClass_Processed genePred

@@ -17,7 +17,7 @@ my %expVarCVMapper = (
     "cell" => "Cell Line",
     "antibody" => "Antibody",
     "treatment" => "treatment",
-    "control" => "control",
+    "control" => "control"
 );
 
 # for each metadata term, what fields do we want to output
@@ -38,10 +38,14 @@ my %detailsCleaner = (
 # takes dirty metadata and outputs normalized form
 my %dataTypeCleaner = (
     "ChIPseq"   => "ChIP-seq",
+    "ChIPSeq"   => "ChIP-seq",
+    "Chipseq"   => "ChIP-seq",
     "ChipSeq"   => "ChIP-seq",
     "DNaseSeq"  => "DNase-seq",
+    "DnaseSeq"  => "DNase-seq",
     "FAIREseq"  => "FAIRE-seq",
     "RnaSeq"    => "RNA-seq",
+    "DnaseDgf"  => "DNase-seq",
 );
 
 # given a normalized datatype (see above), give the molecle involved
@@ -56,18 +60,21 @@ my %dataTypeMolecule = (
 my %dataTypeLibraryStrategy = (
     "ChIP-seq"  => "ChIP-Seq",
     "RNA-seq"   => "RNA-Seq",
+    "DNase-seq" => "DNase-Hypersensitivity",
 );
 
 # given a normalized datatype, give the library source
 my %dataTypeLibrarySource = (
     "ChIP-seq"  => "genomic",
     "RNA-seq"   => "genomic",
+    "DNase-seq" => "genomic",
 );
 
 # given a normalized datatype, give the library selection method
 my %dataTypeLibrarySelection = (
     "ChIP-seq"  => "ChIP",
     "RNA-seq"  => "cDNA",
+    "DNase-seq" => "DNase",
 );
 
 use vars qw/
@@ -104,7 +111,6 @@ sub getObjMetadata {
             my $key = $row[0];
             my $value = $row[1];
             $metadata{$key} =  $value;
-            #print "\t$key = $value\n";
         }
     }
 
@@ -158,14 +164,30 @@ sub mapMdbToCv {
 
 sub isRaw {
     my $type = shift;
-    return ($type eq "Fasta3p" or
-            $type eq "Fasta5p" or
-            $type eq "FastaRd1" or
-            $type eq "FastaRd2" or
+    return (
+            #$type eq "Fasta3p" or
+            #$type eq "Fasta5p" or
+            #$type eq "FastaRd1" or
+            #$type eq "FastaRd2" or
             $type eq "Fastq" or
             $type eq "FastqRd1" or
             $type eq "FastqRd2" or
             $type eq "RawData");
+}
+
+sub readMd5 {
+    my $checksum_filename = shift;
+    open(my $fh, "<", $checksum_filename) or die "can't open checksum file $checksum_filename";
+    my %checksums = ();
+    while(<$fh>) {
+        chomp;
+        my $checksum;
+        my $filename;
+        ($checksum, $filename) = split /  /, $_, 2;
+        $checksums{$filename} = $checksum;
+    }
+    
+    return %checksums;
 }
 
 ############################################################################
@@ -228,6 +250,9 @@ my $compositeDir = "$opt_downloadDir$database/$compositeName";
 # read the cv.ra file
 my %cvTerms = Encode::getControlledVocab($configPath);
 
+# read the checksum file
+my %checksums = readMd5($compositeDir . "/md5sum.txt");
+
 # connect to the database and read the metadata table for the obj
 my $dbHandle = HgDb->new(DB => $database);
 
@@ -235,39 +260,9 @@ my $dbHandle = HgDb->new(DB => $database);
 my @expVars = Encode::getExpVars($configPath, $compositeName);
 my $numDim = scalar(@expVars);
 
-# read all the possible experiment variables
-#my @expSpace;
-#my @currentTuple;
-#my @lastTuple;
-#for($i = 0; $i < $numDim; ++$i) {
-#    push @expSpace, [];
-#    push @currentTuple, 0;
-#    my $var = $expVars[$i];
-#    my $results = $dbHandle->execute("SELECT val FROM metaDb WHERE obj IN (SELECT obj FROM metaDb WHERE var = \"composite\" and val = \"$compositeName\") AND var = \"$var\" GROUP BY val;");
-#    if($results) {
-#        while(my @row = $results->fetchrow_array()) {
-#            my $val = $row[0];
-#            push @{$expSpace[$i]}, $val;
-#        }
-#    }
-#    push @{$expSpace[$i]}, "";
-#    push @lastTuple, scalar(@{$expSpace[$i]});
-#}
-
-#$, = "\t";
-#print @currentTuple, "\n";
-#while(nextTuple(@currentTuple, @lastTuple)) {
-#    print @currentTuple, "\n";
-#}
-#print @lastTuple, "\n";
-#exit;
-
 # get the list of objects of this composite and store it in a set (hash)
 my %objsSet = map { $_ => 0 } getObjsMatching($dbHandle, "composite", $compositeName);
 my @objects = keys %objsSet;
-for $o (@objects) {
-    print STDERR "$o\n";
-}
 
 print STDERR "Number of objects in composite track: ", scalar(keys %objsSet), "\n";
 print STDERR "Number of experimental variables: ", scalar(@expVars), "\n";
@@ -292,9 +287,7 @@ open MANIFEST, ">$packageName.soft";
 my @sampleIds;
 
 # while there are objects left
-my $count = 0;
 while(scalar(keys %objsSet) > 0) {
-    $count += 1;
     # get the 1st object
     my $firstObject = (keys(%objsSet))[0];
     my @currentObjects = ($firstObject);
@@ -310,11 +303,6 @@ while(scalar(keys %objsSet) > 0) {
         push @currentExpVars, $metadata{$i};
     }
 
-    #for($i = 0; $i < scalar(@expVars); ++$i) {
-    #    print $expVars[$i], ": ", $currentExpVars[$i], "\t";
-    #}
-    #print "\n";
-    
     # get other objs with the same metadata
     for $o (keys %objsSet) {
         %metadata = getObjMetadata($dbHandle, $o);
@@ -331,16 +319,6 @@ while(scalar(keys %objsSet) > 0) {
             delete $objsSet{$o};
         }
     }
-    #for $o (@currentObjects) {
-    #    print "\t", $o, "\n";
-    #}
-    #for my $objectName (@currentObjects) {
-    #    my %metadata = getObjMetadata($dbHandle, $objectName);
-    #    print $objectName, "\n";
-    #    for my $k (keys %metadata) {
-    #        print "\t", $k, " = ", $metadata{$k}, "\n";
-    #    }
-    #}
 
     my $grant = getSameMetadata("grant", @currentMetadata);
     my $sampleIdentifier = $grant . "_" . join "_", @currentExpVars;
@@ -353,8 +331,19 @@ while(scalar(keys %objsSet) > 0) {
     my %cellLines = %{$cvTerms{"Cell Line"}};
     my %cellLineInfo = %{$cellLines{$cell}};
     my $organism = $cellLineInfo{"organism"};
+    my $lowerOrganism = $organism;
+    $lowerOrganism=~ tr/[A-Z]/[a-z]/;
     my $provider = $cellLineInfo{"vendorName"};
-    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/" . $cellLineInfo{"protocol"};
+    if (not $provider) {
+        print STDERR "WARNING: No biomaterial provider given for $cell\n"
+    }
+    
+    #$cellLineInfo{"protocol"} or die "No growth protocol (in \"protocol\") defined for cell $cell\n";
+    if (not defined $cellLineInfo{"protocol"}) {
+        print $cell, "\n";
+        $cellLineInfo{"protocol"} = "NONE";
+    }
+    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cells/$lowerOrganism/" . $cellLineInfo{"protocol"};
     my $growthProtocol = "Cells were grown according to ENCODE cell culture protocols: $growthProtocolUrl";
 
     my $extractProtocolUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
@@ -370,7 +359,7 @@ while(scalar(keys %objsSet) > 0) {
     my $ibrarySource    = $dataTypeLibrarySource{$dataType};
     my $ibrarySelection = $dataTypeLibrarySelection{$dataType};
 
-    # generate the POST
+    # generate the SOFT
     print MANIFEST "^SAMPLE=$sampleIdentifier" . "\n";
     print MANIFEST "!Sample_title = $sampleTitle" . "\n";
     print MANIFEST "!Sample_source_name = $cell" . "\n";
@@ -385,7 +374,7 @@ while(scalar(keys %objsSet) > 0) {
             $currentExpVars[$i] eq "None" or
             $currentExpVars[$i] eq "none" or
             ($expVars[$i] eq "antibody" and $currentExpVars[$i] eq "Input") or
-            $expVars[$i] eq "replicate") {
+            $expVars[$i] eq "replicate" or $expVars[$i] eq "rank") {
             # do nothing more
         } else {
             # otherwise output the fields given by %expVarDetails from the cv.ra
@@ -393,15 +382,20 @@ while(scalar(keys %objsSet) > 0) {
             my %cvData = %{$cvType{$currentExpVars[$i]}};
             for $j (@{$expVarDetails{$expVars[$i]}}) {
                 # if there's a better label for this term use it
-                if (defined $detailsCleaner{$j}) {
-                    print MANIFEST "!Sample_characteristics = $expVars[$i] $detailsCleaner{$j}: ",  $cvData{$j}, "\n";
-                } else {
-                    print MANIFEST "!Sample_characteristics = $expVars[$i] $j: ",  $cvData{$j}, "\n";
+                if (defined $cvData{$j}) {
+                    if (defined $detailsCleaner{$j}) {
+                        print MANIFEST "!Sample_characteristics = $expVars[$i] $detailsCleaner{$j}: ",  $cvData{$j}, "\n";
+                    } else {
+                        print MANIFEST "!Sample_characteristics = $expVars[$i] $j: ", $cvData{$j}, "\n";
+                    }
                 }
             }
         }
     }
-    print MANIFEST "!Sample_biomaterial_provider = $provider" . "\n";
+    
+    if ($provider) {
+        print MANIFEST "!Sample_biomaterial_provider = $provider" . "\n";
+    }
     print MANIFEST "!Sample_growth_protocol = $growthProtocol" . "\n";
     print MANIFEST "!Sample_molecule = $molecule" . "\n";
     print MANIFEST "!Sample_extract_protocol = $extractProtocol" . "\n";
@@ -415,43 +409,61 @@ while(scalar(keys %objsSet) > 0) {
         my %metadata = %{$i};
         my $filename = $metadata{"fileName"};
         if (isRaw($metadata{"view"})) {
-            my ($name, $type, $compression) = split(/\./, $filename);
-            if (not defined $opt_soft) {
-                my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
+            if (-e "$compositeDir/$filename") {
+                my $checksum;
+                if (defined $checksums{$filename}) {
+                    $checksum = $checksums{$filename};
+                } else {
+                    $checksum = "MISSING";
+                    print STDERR "WARNING: $filename is missing checksum\n";
+                }
+                my ($name, $type, $compression) = split(/\./, $filename);
                 print MANIFEST "!Sample_raw_file_$rawCount = $filename" . "\n";
                 print MANIFEST "!Sample_raw_file_type_$rawCount = $type" . "\n";
                 print MANIFEST "!Sample_raw_file_checksum_$rawCount = $checksum" . "\n";
-                system("cp $compositeDir/$filename $packageName/$filename");
+                if (not defined $opt_soft) {
+                    system("cp $compositeDir/$filename $packageName/$filename");
+                }
+                ++$rawCount;
             } else {
-                my $checksum = 0;
-                print MANIFEST "!Sample_raw_file_$rawCount = $filename" . "\n";
-                print MANIFEST "!Sample_raw_file_type_$rawCount = $type" . "\n";
-                print MANIFEST "!Sample_raw_file_checksum_$rawCount = $checksum" . "\n";
+                print STDERR "WARNING: file $compositeDir/$filename not found\n";
             }
-            ++$rawCount;
         }
     }
     my $supplementCount = 1;
     for $i (@currentMetadata) {
         my %metadata = %{$i};
         my $filename = $metadata{"fileName"};
-        if (not isRaw($metadata{"view"})) {
-            if (not defined $opt_soft) {
-                my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
-                print MANIFEST "!Sample_supplementary_file_$supplementCount = $filename" . "\n";
-                print MANIFEST "!Sample_supplementary_file_checksum_$supplementCount = $checksum" . "\n";
-                print MANIFEST "!Sample_supplementary_file_build_$supplementCount = $database" . "\n";
-                system("cp $compositeDir/$filename $packageName/$filename");
-            } else {
-                my $checksum = 0;
-                print MANIFEST "!Sample_supplementary_file_$supplementCount = $filename" . "\n";
-                print MANIFEST "!Sample_supplementary_file_checksum_$supplementCount = $checksum" . "\n";
-                print MANIFEST "!Sample_supplementary_file_build_$supplementCount = $database" . "\n";
+        if (defined $filename) {
+            if (not isRaw($metadata{"view"})) {
+                if (-e "$compositeDir/$filename") {
+                    my $checksum;
+                    if (defined $checksums{$filename}) {
+                        $checksum = $checksums{$filename};
+                    } else {
+                        $checksum = "MISSING";
+                        print STDERR "WARNING: $filename is missing checksum\n";
+                    }
+                    print MANIFEST "!Sample_supplementary_file_$supplementCount = $filename" . "\n";
+                    print MANIFEST "!Sample_supplementary_file_checksum_$supplementCount = $checksum" . "\n";
+                    print MANIFEST "!Sample_supplementary_file_build_$supplementCount = $database" . "\n";
+                    if (not defined $opt_soft) {
+                        system("cp $compositeDir/$filename $packageName/$filename");
+                    }
+                    ++$supplementCount;
+                } else {
+                    print STDERR "WARNING: file $compositeDir/$filename not found\n";
+                }
             }
-            ++$supplementCount;
+        } else {
+            print "File was generated by DCC\n"
         }
     }
-    print MANIFEST "\n";
+    if ($rawCount == 1 and $supplementCount == 1) {
+        print STDERR "WARNING: no files found for $sampleIdentifier\n";
+    } elsif ($rawCount == 1) {
+        print STDERR "WARNING: no raw files found for $sampleIdentifier\n";
+    }
 }
 
 my $webLink = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";

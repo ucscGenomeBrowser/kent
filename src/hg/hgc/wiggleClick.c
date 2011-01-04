@@ -198,8 +198,8 @@ printf("<B>Statistics on:</B> %s <B>items covering</B> %s bases (%4.2f%% coverag
 printf("<B>Average item spans</B> %4.2f <B>bases.</B> ", (double)iTotalSize/iCount);
 if (biggestSize != smallestSize)
     {
-    sprintLongWithCommas(num1Buf, biggestSize);
-    sprintLongWithCommas(num2Buf, smallestSize);
+    sprintLongWithCommas(num1Buf, smallestSize);
+    sprintLongWithCommas(num2Buf, biggestSize);
     printf("<B>Minimum span</B> %s <B>maximum span</B> %s", num1Buf, num2Buf);
     }
 printf("<BR>\n");
@@ -240,7 +240,7 @@ if (bbList != NULL)
     {
     bbiIntervalStatsReport(bbList, tdb->table, chrom, winStart, winEnd);
     }
-else if (maxWTQ <= winEnd-winStart)
+else if ((bbi == NULL) && (maxWTQ <= winEnd-winStart))
     {
     sprintLongWithCommas(num1Buf, maxWTQ);
     printf("<P>Zoom in to a view less than %s bases to see data summary.</P>",num1Buf);

@@ -10,6 +10,7 @@
 #include "imageV2.h"
 #include "hgTracks.h"
 #include "hgConfig.h"
+#include "hgFindSpec.h"
 
 static char const rcsid[] = "$Id: imageV2.c,v 1.32 2010/05/24 19:53:42 hiram Exp $";
 
@@ -25,6 +26,7 @@ struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge r
 // A simplistic way of flattening the track list before building the image
 // NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
 /////////////////////////
+#define IMGORD_CUSTOM_ONTOP
 void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart)
 // Adds one track into the flatTracks list
 {
@@ -34,14 +36,28 @@ flatTrack->track = track;
 char var[256];  // The whole reason to do this is to reorder tracks/subtracks in the image!
 safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
 flatTrack->order = cartUsualInt(cart, var,IMG_ANYORDER);
+#ifdef IMGORD_CUSTOM_ONTOP
+if(flatTrack->order >= IMG_ORDERTOP)
+#else///ifndef IMGORD_CUSTOM_ONTOP
 if(flatTrack->order >= IMG_ORDEREND)
+#endif///ndef IMGORD_CUSTOM_ONTOP
     {
     cartRemove(cart,var);
     flatTrack->order = IMG_ANYORDER;
     }
+#ifdef IMGORD_CUSTOM_ONTOP
+static int topOrder  = IMG_ORDERTOP; // keep track of the order added to top of image
+#endif///def IMGORD_CUSTOM_ONTOP
 static int lastOrder = IMG_ORDEREND; // keep track of the order added and beyond end
 if( flatTrack->order == IMG_ANYORDER)
-    flatTrack->order = ++lastOrder;
+    {
+#ifdef IMGORD_CUSTOM_ONTOP
+    if (track->customTrack)
+        flatTrack->order = ++topOrder; // Custom tracks go to top
+    else
+#endif///def IMGORD_CUSTOM_ONTOP
+        flatTrack->order = ++lastOrder;
+    }
 
 slAddHead(flatTracks,flatTrack);
 }
@@ -53,6 +69,86 @@ const struct flatTracks *a = *((struct flatTracks **)va);
 const struct flatTracks *b = *((struct flatTracks **)vb);
 return (a->order - b->order);
 }
+
+#ifdef IMGORD_CUSTOM_ONTOP
+void flatTracksSort(struct flatTracks **flatTracks)
+// This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
+{
+// flatTracks list has 2 sets of "order": those already dragReordered (below IMG_ORDERTOP)
+// and those not yet reordered (above).  Within those not yet dragReordered are 2 sets:
+// Those that begin numbering at IMG_ORDERTOP and those that begin at IMG_ORDEREND.
+// This routine must determine if there are any already dragOrdered, and if so, position the
+// newcomers in place.  Newly appearing customTracks will appear at top, while newly appearing
+// standard tracks appear at the end of the image.
+int haveBeenOrderd = 0, imgOrdHighest=0; // Keep track of reordered count and position
+int notYetOrdered = 0, toBeTopHighest=0; // Keep track of those to be reordered, and top ordered
+
+// First determine what if anything needs to be rearranged.
+struct flatTracks *oneTrack = *flatTracks;
+for(;oneTrack!=NULL;oneTrack = oneTrack->next)
+    {
+    if (oneTrack->order <= IMG_ORDERTOP)
+        {
+        haveBeenOrderd++;
+        if (imgOrdHighest < oneTrack->order )
+            imgOrdHighest = oneTrack->order;
+        }
+    else
+        {
+        notYetOrdered++;
+        if (oneTrack->order <= IMG_ORDEREND) // && oneTrack->order >= IMG_ORDERTOP
+            {
+            if (toBeTopHighest < oneTrack->order )
+                toBeTopHighest = oneTrack->order;
+            }
+        }
+    }
+
+// If some have previously been dragOrdered AND some new ones need to be given an explicit order
+if (haveBeenOrderd > 0 && notYetOrdered > 0)
+    {
+    char var[256];
+    int gapOnTopNeeded = 0;
+    if (toBeTopHighest > 0)
+        {
+        gapOnTopNeeded = toBeTopHighest - IMG_ORDERTOP;
+        imgOrdHighest += gapOnTopNeeded; // Will be after this loop
+        // Warning: Will need to throw away ALL previous orderings (even those not currently in image)!
+        safef(var,sizeof(var),"*_%s",IMG_ORDER_VAR);
+        cartRemoveLike(cart, var);
+        }
+    int gapFromOrderedToEnd = (IMG_ORDEREND - imgOrdHighest);  // This difference should be removed from any with IMG_ORDEREND
+    for(oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
+        {
+        if (oneTrack->order <= IMG_FIXEDPOS)
+            ;  // Untouchables
+        else if (oneTrack->order <= IMG_ORDERTOP && gapOnTopNeeded > 0)
+            {  // Already order tracks will need to be pushed down.
+            oneTrack->order += gapOnTopNeeded;
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        else if (oneTrack->order >= IMG_ORDERTOP
+             &&  oneTrack->order <  IMG_ORDEREND && gapOnTopNeeded > 0)
+            {  // Unordered custom tracks will need to be added to top!
+            oneTrack->order -= IMG_ORDERTOP; // Force to top
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        else if (oneTrack->order >= IMG_ORDEREND && gapFromOrderedToEnd)
+            {  // Normal unordered tracks can fill in the trailing numbers
+            oneTrack->order -= gapFromOrderedToEnd;
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        }
+    }
+
+if (flatTracks && *flatTracks)
+    slSort(flatTracks, flatTracksCmp);
+}
+
+#else///ifndef IMGORD_CUSTOM_ONTOP
 
 void flatTracksSort(struct flatTracks **flatTracks)
 // This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
@@ -91,6 +187,8 @@ if (imgOrdSet > 0 && notYetOrdered) // Image order has previously been set, so g
 if (flatTracks && *flatTracks)
     slSort(flatTracks, flatTracksCmp);
 }
+#endif///ndef IMGORD_CUSTOM_ONTOP
+
 
 void flatTracksFree(struct flatTracks **flatTracks)
 // Frees all memory used to support flatTracks (underlying tracks are untouched)
@@ -103,51 +201,115 @@ if(flatTracks && *flatTracks)
     }
 }
 
+// TODO: Move to trackDb.h and trackDbCustom.c
+enum kindOfParent {
+    kopChildless     = 0,
+    kopFolder        = 1,
+    kopComposite     = 2,
+    kopMultiTrack    = 3,
+    kopCompositeView = 4
+};
+enum kindOfChild {
+    kocOrphan          = 0,
+    kocFolderContent   = 1,
+    kocCompositeChild  = 2,
+    kocMultiTrackChild = 3
+};
+
+enum kindOfParent tdbKindOfParent(struct trackDb *tdb)
+{
+enum kindOfParent kindOfParent = kopChildless;
+if (tdbIsFolder(tdb))
+    kindOfParent = kopFolder;
+else if (tdbIsComposite(tdb))
+    kindOfParent = kopComposite;
+else if (tdbIsMultiTrack(tdb))
+    kindOfParent = kopMultiTrack;
+else if (tdbIsCompositeView(tdb))   // NOTE: This should not be needed in js
+    kindOfParent = kopCompositeView;
+return kindOfParent;
+}
+
+enum kindOfChild tdbKindOfChild(struct trackDb *tdb)
+{
+enum kindOfChild kindOfChild = kocOrphan;
+if (tdbIsFolderContent(tdb))
+    kindOfChild = kocFolderContent;
+else if (tdbIsCompositeChild(tdb))
+    kindOfChild = kocCompositeChild;
+else if (tdbIsMultiTrackChild(tdb))
+    kindOfChild = kocMultiTrackChild;
+return kindOfChild;
+}
+
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track)
+
+
+static void jsonTdbSettingsInit(struct dyString **jsonTdbSettingsString)
+// Inititializes trackDbJson
+{
+*jsonTdbSettingsString = newDyString(1024);
+dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d, \"configureBy\": \"popup\", \"kindOfParent\": 0}", rulerMode);
+}
+
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable)
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 {
-if (*jsonTdbSettingsString==NULL)
+if(*jsonTdbSettingsString == NULL)
+    jsonTdbSettingsInit(jsonTdbSettingsString);
+dyStringAppend(*jsonTdbSettingsString, ", \n");
+
+// track name and type
+dyStringPrintf(*jsonTdbSettingsString, "\t\"%s\": {", track->track);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"type\": \"%s\",", track->tdb->type);
+
+// Tell which kind of parent and which kind of child
+enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
+enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"kindOfParent\": %d,\n\t\t\"kindOfChild\": %d,",kindOfParent,kindOfChild);
+
+// Tell something about the parent and/or children
+if (kindOfChild != kocOrphan)
     {
-    *jsonTdbSettingsString = newDyString(1024);
-    dyStringPrintf(*jsonTdbSettingsString, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d},\n", rulerMode);
-    }
-else
-    dyStringAppend(*jsonTdbSettingsString, ",\n");
-dyStringPrintf(*jsonTdbSettingsString, "\t%s: {", track->track);
-if (tdbIsSuperTrackChild(track->tdb))
-    {
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
-    }
-else if (tdbIsCompositeChild(track->tdb))
-    {
-    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
-    if (!track->canPack)
+    struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
+
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"parentTrack\": \"%s\",\n\t\t\"parentLabel\": \"%s\",",
+                    parentTdb->track, javaScriptLiteralEncode(parentTdb->shortLabel));
+    if (kindOfChild != kocFolderContent && !track->canPack)
         {
-        dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
+        dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shouldPack\": 0,"); // default vis is full, but pack is an option
         track->canPack = parentTdb->canPack;
         }
     }
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
-if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(track->tdb->subtracks));
+
+// Configuring?
+if (!configurable || track->hasUi == FALSE)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
+else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
+    matchRegex(track->track, "^snp[0-9]+") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"clickThrough\",");
+else
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"popup\",");
+
+// Remote access by URL?
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"url\": \"%s\",", trackDbSetting(track->tdb, "url"));
+
+// Close with some standard vars
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,",
+    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack);
+if(track->limitedVis != track->visibility)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"limitedVis\": %d,", track->limitedVis);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"visibility\": %d\n\t}", track->visibility);
 }
 
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
 // Closes and returns the contents of the jsonTdbSettingsString
 {
-dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n");
+dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n<!-- trackDbJson -->\n");
 return dyStringCannibalize(jsonTdbSettingsString);
 }
 
@@ -538,6 +700,20 @@ switch(type)
     }
 }
 
+static char *sliceTypeToClass(enum sliceType type)
+/* Translate enum slice type to the class */
+{
+switch (type)
+    {
+    case stSide:   return "sideLab";
+    case stCenter: return "cntrLab";
+    case stButton: return "button";
+    case stData:   return "dataImg";
+    default:       return "unknown";
+    }
+}
+
+
 struct imgSlice *sliceAddLink(struct imgSlice *slice,char *link,char *title)
 /* Adds a slice wide link.  The link and map are mutually exclusive */
 {
@@ -736,16 +912,17 @@ if(pSlice != NULL && *pSlice != NULL)
 
 /////////////////////// imgTracks
 
-struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
+struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order)
 /* Starts an image track which will contain all image slices needed to render one track
    Must completed by adding slices with imgTrackAddSlice() */
 {
 struct imgTrack *imgTrack;     //  gifTn.forHtml, pixWidth, mapName
 AllocVar(imgTrack);
-return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,showCenterLabel,vis,order);
+imgTrack->centerLabelSeen = clAlways;
+return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,hasCenterLabel,vis,order);
 }
 
-struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
+struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order)
 /* Updates an already existing image track */
 {
 if(tdb != NULL && tdb != imgTrack->tdb)
@@ -763,7 +940,7 @@ if(chrom != NULL && chrom != imgTrack->chrom)
 imgTrack->chromStart = chromStart;
 imgTrack->chromEnd   = chromEnd;
 imgTrack->plusStrand = plusStrand;
-imgTrack->showCenterLabel = showCenterLabel;
+imgTrack->hasCenterLabel = hasCenterLabel;
 imgTrack->vis             = vis;
 static int lastOrder = IMG_ORDEREND; // keep track of the order these images get added
 if(order == IMG_FIXEDPOS)
@@ -786,6 +963,12 @@ else
         imgTrack->order = order;
     }
 return imgTrack;
+}
+
+void imgTrackMarkForAjaxRetrieval(struct imgTrack *imgTrack,boolean ajaxRetrieval)
+/* Updates the imgTrack to trigger an ajax callback from the html client to get this track */
+{
+imgTrack->ajaxRetrieval = ajaxRetrieval;
 }
 
 int imgTrackOrderCmp(const void *va, const void *vb)
@@ -900,16 +1083,33 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
 return count;
 }
 
+static char *centerLabelSeenToString(enum centerLabelSeen seen)
+/* Translate enum slice type to string */
+{
+switch(seen)
+    {
+    case clAlways: return "always";
+    case clNowSeen:return "now";
+    case clNotSeen:return "notNow";
+    default:       return "unknown";
+    }
+}
+
 static void imgTrackShow(struct dyString **dy,struct imgTrack *imgTrack,int indent)
 /* show the imgTrack */
 {
 if(imgTrack)
     {
     struct dyString *myDy = addIndent(dy,indent);
-    dyStringPrintf(myDy,"imgTrack: name:%s tdb:%s%s%s order:%d vis:%s",
-            (imgTrack->name?imgTrack->name:""),(imgTrack->tdb && imgTrack->tdb->track?imgTrack->tdb->track:""),
-            (imgTrack->showCenterLabel?" centerLabel":""),(imgTrack->reorderable?" reorderable":""),
-            imgTrack->order,hStringFromTv(imgTrack->vis));
+    dyStringPrintf(myDy,"imgTrack: name:%s tdb:%s",
+            (imgTrack->name?imgTrack->name:""),(imgTrack->tdb && imgTrack->tdb->track?imgTrack->tdb->track:""));
+    if(imgTrack->hasCenterLabel)
+        dyStringPrintf(myDy," centerLabel:%s",centerLabelSeenToString(imgTrack->centerLabelSeen));
+    if(imgTrack->reorderable)
+        dyStringPrintf(myDy," reorderable");
+    if(imgTrack->ajaxRetrieval)
+        dyStringPrintf(myDy," ajaxRetrieval");
+    dyStringPrintf(myDy," order:%d vis:%s",imgTrack->order,hStringFromTv(imgTrack->vis));
     if(dy == NULL)
         warn("%s",dyStringCannibalize(&myDy));
 
@@ -1224,10 +1424,10 @@ return NULL;
 //return slRemoveEl(&(imgBox->images),img);
 //}
 
-struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
+struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order)
 /* Adds an imgTrack to an imgBox.  The imgTrack needs to be extended with imgTrackAddSlice() */
 {
-struct imgTrack *imgTrack = imgTrackStart(tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,order);
+struct imgTrack *imgTrack = imgTrackStart(tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,hasCenterLabel,vis,order);
 slAddHead(&(imgBox->imgTracks),imgTrack);
 return imgBox->imgTracks;
 }
@@ -1246,23 +1446,23 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
 return NULL;
 }
 
-struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
+struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order)
 /* Find the imgTrack, or adds it if not found */
 {
 struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
 if( imgTrack == NULL)
-    imgTrack = imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,order);
+    imgTrack = imgBoxTrackAdd(imgBox,tdb,name,vis,hasCenterLabel,order);
 return imgTrack;
 }
 
-struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
+struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order)
 /* Updates the imgTrack, or adds it if not found */
 {
 struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
 if( imgTrack == NULL)
-    return imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,order);
+    return imgBoxTrackAdd(imgBox,tdb,name,vis,hasCenterLabel,order);
 
-return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,order);
+return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,hasCenterLabel,vis,order);
 }
 
 // TODO: Will we need this?
@@ -1500,15 +1700,7 @@ if(slice->parentImg && slice->parentImg->file != NULL)
 
     if(useMap)
         hPrintf(" usemap='#map_%s'",name);
-    hPrintf(" class='sliceImg ");
-    switch (slice->type)
-        {
-        case stSide:   hPrintf("sideLab"); break;
-        case stCenter: hPrintf("cntrLab"); break;
-        case stButton: hPrintf("button");  break;
-        case stData:   hPrintf("dataImg"); break;
-        default: warn("unknown slice = %d !",slice->type); break;
-        }
+    hPrintf(" class='sliceImg %s",sliceTypeToClass(slice->type));
     if(slice->type==stData && imgBox->showPortal)
         hPrintf(" panImg' ondrag='{return false;}'");
     else
@@ -1521,7 +1713,16 @@ if(slice->parentImg && slice->parentImg->file != NULL)
     }
 else
     {
-    hPrintf("  <p id='p_%s' style='height:%dpx;",name,slice->height);
+    int height = slice->height;
+    // Adjustment for centerLabel Conditional
+    if (imgTrack->centerLabelSeen == clNotSeen
+    &&  (slice->type == stSide || slice->type == stButton))
+        {
+        struct imgSlice *centerSlice = imgTrackSliceGetByType(imgTrack,stCenter);
+        if (centerSlice != NULL)
+            height -= centerSlice->height;
+        }
+    hPrintf("  <p id='p_%s' style='height:%dpx;",name,height);
     if(slice->type==stButton)
         {
         char *trackName = imgTrack->name;
@@ -1529,10 +1730,10 @@ else
             {
             struct trackDb * tdb = imgTrack->tdb;
             if(tdbIsCompositeChild(tdb))
-                tdb = trackDbCompositeParent(tdb);
+                tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
-        hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN'></p>",trackName,(slice->link == NULL?"inset ":""));
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);
@@ -1556,9 +1757,22 @@ if(slice==NULL || slice->height == 0)
 
 boolean useMap=FALSE;
 int offsetX=slice->offsetX;
+int offsetY=slice->offsetY;
+int height = slice->height;
 int width=slice->width;
 if(slice->parentImg)
     {
+    // Adjustment for centerLabel Conditional
+    if (imgTrack->centerLabelSeen == clNotSeen
+    &&  (sliceType == stSide || sliceType == stButton))
+        {
+        struct imgSlice *centerSlice = imgTrackSliceGetByType(imgTrack,stCenter);
+        if (centerSlice != NULL)
+            {
+            height -= centerSlice->height;
+            offsetY += centerSlice->height;
+            }
+        }
     // Adjustment for portal
     if(imgBox->showPortal && imgBox->basesPerPixel > 0
     && (sliceType==stData || sliceType==stCenter))
@@ -1566,7 +1780,11 @@ if(slice->parentImg)
         offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
         width=imgBox->portalWidth;
         }
-        hPrintf("  <div style='width:%dpx; height:%dpx;' class='sliceDiv",width,slice->height);
+        hPrintf("  <div style='width:%dpx; height:%dpx;",width,height);
+        if (sliceType == stCenter && imgTrack->centerLabelSeen == clNotSeen)
+            hPrintf(" display:none;");
+        hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
+
     #ifdef IMAGEv2_DRAG_SCROLL
     if(imgBox->showPortal && sliceType==stData)
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
@@ -1590,10 +1808,10 @@ else if(slice->link != NULL)
             char *newLine = NEWLINE_TO_USE(browser);
             char *ellipsis = ELLIPSIS_TO_USE(browser);
             if(imgTrack->reorderable)
-                hPrintf(" TITLE='%s%sclick to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
+                hPrintf(" TITLE='%s%sclick or right click to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
                     ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
             else
-                hPrintf(" TITLE='%s%sclick to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
+                hPrintf(" TITLE='%s%sclick or right click to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
             }
         else
             hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
@@ -1601,7 +1819,7 @@ else if(slice->link != NULL)
     hPrintf(">\n" );
     }
 
-imageDraw(imgBox,imgTrack,slice,name,offsetX,slice->offsetY,useMap);
+imageDraw(imgBox,imgTrack,slice,name,offsetX,offsetY,useMap);
 if(slice->link != NULL)
     hPrintf("</A>");
 
@@ -1624,13 +1842,8 @@ imgBoxTracksNormalizeOrder(imgBox);
 //if(verbose)
 //    imgBoxShow(NULL,imgBox,0);
 
-hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
+hPrintf("<!-- - - - - - - - vvv IMAGEv2 vvv - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 jsIncludeFile("jquery.tablednd.js", NULL);
-hPrintf("<style type='text/css'>\n");
-hPrintf("div.dragZoom {cursor: text;}\n");
-hPrintf("img.button {position:relative; border:0;}\n");
-hPrintf("img.sliceImg {position:relative; border:0;}\n");
-hPrintf("div.sliceDiv {overflow:hidden;}\n");
 if(imgBox->bgImg)
     {
     int offset = 0;
@@ -1640,12 +1853,13 @@ if(imgBox->bgImg)
         if(slice)
             offset = (slice->offsetX * -1);  // This works because the ruler has a slice
          }
+    hPrintf("<style type='text/css'>\n");
     if(offset != 0)
         hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;background-position:%dpx;}\n",imgBox->bgImg->file,offset);
     else
         hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;}\n",imgBox->bgImg->file);
+    hPrintf("</style>\n");
     }
-hPrintf("</style>\n");
 
 #ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
@@ -1666,27 +1880,21 @@ hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWid
 hPrintf(" class='tableWithDragAndDrop'");
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 struct dyString *jsonTdbVars = NULL;
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+jsonTdbSettingsInit(&jsonTdbVars);
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-    if (!trackImgOnly)
-        {
-        struct track *track = hashFindVal(trackHash, trackName);
-        if(track)
-            jsonTdbSettingsBuild(&jsonTdbVars, track);
-        }
-#endif
-    //if(verbose && imgTrack->order == 3)
-    //    imgTrackShow(NULL,imgTrack,0);
-    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s'>\n",trackName,imgTrack->order,
-        (imgTrack->reorderable?" trDraggable":" nodrop nodrag"));
+    struct track *track = hashFindVal(trackHash, trackName);
+    if(track)
+        jsonTdbSettingsBuild(&jsonTdbVars, track, TRUE);
+    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
+        (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
+        (imgTrack->centerLabelSeen != clAlways?" clOpt":""),
+        (imgTrack->ajaxRetrieval ?" mustRetrieve":""));
 
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
@@ -1708,7 +1916,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     // Main/Data image region
     hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
     // centerLabel
-    if(imgTrack->showCenterLabel)
+    if(imgTrack->hasCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
         sliceAndMapDraw(imgBox,imgTrack,stCenter,name,FALSE);
@@ -1738,10 +1946,8 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
-hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
+hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-if (!trackImgOnly)
-    hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+if (jsonTdbVars != NULL)
+    hWrites(jsonTdbSettingsUse(&jsonTdbVars));
 }

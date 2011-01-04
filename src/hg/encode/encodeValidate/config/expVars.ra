@@ -7,6 +7,34 @@ expVar2 antibody
 expVar3 treatment
 expVar4 control
 
-composite wgEncodeYaleRNAseq
+composite wgEncodeCaltechRnaSeq
 expVar1 cell
-expVar2 treatment
+expVar2 localization
+expVar3 readType
+expVar4 insertLength
+expVar5 replicate
+
+composite wgEncodeUwChIPSeq
+expVar1 cell
+expVar2 antibody
+expVar3 rank
+
+composite wgEncodeCshlShortRnaSeq
+expVar1 cell
+expVar2 localization
+
+composite wgEncodeCshlLongRnaSeq
+expVar1 cell
+expVar2 localization
+expVar2 rnaExtract
+
+composite wgEncodeHudsonalphaMethylSeq
+expVar1 cell
+expVar2 replicate
+
+composite wgEncodeUwDgf
+expVar1 cell
+
+composite wgEncodeUwDnase
+expVar1 cell
+expVar2 replicate

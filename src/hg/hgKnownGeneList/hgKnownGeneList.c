@@ -3,6 +3,7 @@
 #include "hdb.h"
 #include "dbDb.h"
 #include "hCommon.h"
+#include "web.h"
 
 #define LINKSPERPAGE 30
 #define MAXPAGES 3000
@@ -11,7 +12,7 @@
 #define TESTSIZE 2600
 
 /* global variables */
-char *genome, *genomeDesc;  
+char *genome, *genomeDesc;
 char command[255];
 char *database;
 char startSymbol[MAXPAGES][20];
@@ -41,7 +42,7 @@ fprintf(outf, "<HTML><HEAD>");
 fprintf(outf, "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");
 fprintf(outf, "<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 fprintf(outf, "<TITLE>UCSC Known Genes Description and Page Index</TITLE>\n");
-fprintf(outf, "<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">\n");
+webIncludeResourcePrintToFile(outf,"HGStyle.css");
 fprintf(outf, "</HEAD><BODY BGCOLOR=\"FFF9D2\">\n");
 }
 
@@ -136,11 +137,11 @@ totalKgPage = totalKgId/LINKSPERPAGE + 1;
 
 safef(query2, sizeof(query2),
       "select kgID, geneSymbol, description from %s.kgXref where geneSymbol!= '' order by geneSymbol",
-      database); 
-      
+      database);
+
       /* for debugging */
-      /* "select kgID, geneSymbol, description from %s.kgXref order by geneSymbol limit %d", 
-      database, TESTSIZE);*/ 
+      /* "select kgID, geneSymbol, description from %s.kgXref order by geneSymbol limit %d",
+      database, TESTSIZE);*/
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 
@@ -150,11 +151,11 @@ row2 = sqlNextRow(sr2);
 while (kgIdCnt < totalKgId)
     {
     kgIdCnt++;
-    
+
     kgID 	= row2[0];
     geneSymbol  = strdup(row2[1]);
     desc 	= row2[2];
-    safef(query, sizeof(query), 
+    safef(query, sizeof(query),
     "select chrom,txSTart,txEnd,proteinID from %s.knownGene where name='%s'", database, kgID);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -165,31 +166,31 @@ while (kgIdCnt < totalKgId)
     	txStart   = row[1];
     	txEnd     = row[2];
     	proteinID = row[3];
-    	
-	if (newPage) 
+
+	if (newPage)
 	    {
 	    /* create a KG links page */
 	    pageNum++;
 	    currentPage++;
-	    
+
 	    /* use mkdir -p to make sure the subdirectory exists */
 	    safef(command, sizeof(command), "mkdir -p knownGeneList/%s/%d", database, topLevel);
 	    mustSystem(command);
-	    safef(fileName, sizeof(fileName), 
+	    safef(fileName, sizeof(fileName),
 	    	  "knownGeneList/%s/%d/kgList%d.html", database, topLevel, pageNum);
   	    outf = fopen(fileName, "w");
 	    printHtmlHead(outf);
 
-	    fprintf(outf,"<H2>UCSC %s Known Genes List (page %d of %d)</H2>\n", 
+	    fprintf(outf,"<H2>UCSC %s Known Genes List (page %d of %d)</H2>\n",
 	    	    genome, pageNum, totalKgPage);
 	    fprintf(outf, "<TABLE BORDER=1=CELLSPACING=1 CELLPADDING=3 BGCOLOR=\"#D9F8E4\"><TR>\n");
-	    fprintf(outf, 
+	    fprintf(outf,
 	    "<TR><TH>Gene Symbol</TH><TH>Known Gene ID</TH><TH>mRNA</TH><TH>UniProt</TH><TH>RefSeq Protein</TH><TH>Description</TH>\n");
 	    strcpy(startSymbol[pageNum], geneSymbol);
 	    strcpy(pageStartSymbol[currentPage], geneSymbol);
 	    newPage = FALSE;
 	    }
-	    
+
 	fprintf(outf,"<TR>");
     	fprintf(outf,"<TD>%s</TD>", geneSymbol);
     	/*fprintf(outf,"<TD>%d:%s</TD>", geneCnt, geneSymbol);*/
@@ -202,7 +203,7 @@ while (kgIdCnt < totalKgId)
 
 	safef(query3,sizeof(query3),"select spID from %s.kgXref where kgID = '%s'", database, kgID);
 	spID = cloneString(sqlQuickQuery(conn3, query3, buf, sizeof(buf)));
-	if (spID == NULL) 
+	if (spID == NULL)
 	    {
 	    spID = emptyString;
 	    }
@@ -210,10 +211,10 @@ while (kgIdCnt < totalKgId)
 	    {
 	    if (sameWord(spID,"")) spID = emptyString;
 	    }
-	    
+
 	safef(query3,sizeof(query3),"select mRNA from %s.kgXref where kgID = '%s'", database, kgID);
 	mRNA = cloneString(sqlQuickQuery(conn3, query3, buf, sizeof(buf)));
-	if (mRNA == NULL) 
+	if (mRNA == NULL)
 	    {
 	    mRNA = emptyString;
 	    }
@@ -221,10 +222,10 @@ while (kgIdCnt < totalKgId)
 	    {
 	    if (sameWord(mRNA,"")) mRNA = emptyString;
 	    }
-	    
+
 	safef(query3,sizeof(query3),"select protAcc from %s.kgXref where kgID = '%s'", database, kgID);
 	protAcc = sqlQuickQuery(conn3, query3, buf, sizeof(buf));
-	if (protAcc == NULL) 
+	if (protAcc == NULL)
 	    {
 	    protAcc = emptyString;
 	    }
@@ -232,17 +233,17 @@ while (kgIdCnt < totalKgId)
 	    {
 	    if (sameWord(protAcc,"")) protAcc = emptyString;
 	    }
-	
+
 	fprintf(outf,"<TD>%s</TD>", mRNA);
 	fprintf(outf,"<TD>%s</TD>", spID);
 	fprintf(outf,"<TD>%s</TD>", protAcc);
     	fprintf(outf,"<TD>%s</TD>", desc );
     	fprintf(outf,"</TR>\n");
-	
+
 	if ((geneCnt % LINKSPERPAGE) == 0)
     	    {
 	    /* flush out and close the page if a page is filled, and start a new page */
-	    fprintf(outf,"</TABLE>"); 
+	    fprintf(outf,"</TABLE>");
 	    strcpy(endSymbol[pageNum], geneSymbol);
 	    strcpy(pageEndSymbol[currentPage], endSymbol[pageNum]);
 	    fprintf(outf, "<BR>");
@@ -251,14 +252,14 @@ while (kgIdCnt < totalKgId)
 	    fprintf(outf, "Up");
 	    fprintf(outf,"</A><BR>\n");
 	    printHtmlEnd(outf);
-	    newPage = TRUE;	
+	    newPage = TRUE;
 	    fclose(outf);
 	    outf = NULL;
-	    
-	    if ((pageNum % LINKSPERPAGE) == 0 ) 
+
+	    if ((pageNum % LINKSPERPAGE) == 0 )
 	    	{
 	    	printf("Processing topLevel %d ...\n", topLevel);fflush(stdout);
-	    	safef(fileName, sizeof(fileName), 
+	    	safef(fileName, sizeof(fileName),
 	    	      "knownGeneList/%s/%d/kgIndex%d.html", database, topLevel, topLevel);
 	    	outf2 = fopen(fileName, "w");
 	    	printHtmlHead(outf2);
@@ -279,7 +280,7 @@ while (kgIdCnt < totalKgId)
 		fprintf(outf2,"</A><BR>\n");
 	    	printHtmlEnd(outf2);
 	    	fclose(outf2);
-	    
+
 	    strcpy(topStartSymbol[topLevel], pageStartSymbol[1]);
 	    strcpy(  topEndSymbol[topLevel], pageEndSymbol[currentPage]);
 	    currentPage = 0;
@@ -296,7 +297,7 @@ sqlFreeResult(&sr2);
 /* flush out and close the last list page */
 if (outf != NULL)
     {
-    fprintf(outf,"</TABLE>"); 
+    fprintf(outf,"</TABLE>");
     strcpy(endSymbol[pageNum], geneSymbol);
     strcpy(pageEndSymbol[currentPage], endSymbol[pageNum]);
     fprintf(outf, "<BR>");
@@ -311,7 +312,7 @@ if (outf != NULL)
 /* generate the last index page */
 safef(command, sizeof(command), "mkdir -p knownGeneList/%s/%d", database, topLevel);
 mustSystem(command);
-safef(fileName, sizeof(fileName), 
+safef(fileName, sizeof(fileName),
       "knownGeneList/%s/%d/kgIndex%d.html", database, topLevel, topLevel);
 outf2 = fopen(fileName, "w");
 printHtmlHead(outf2);
@@ -334,7 +335,7 @@ strcpy(topStartSymbol[topLevel], pageStartSymbol[1]);
 strcpy(  topEndSymbol[topLevel], pageEndSymbol[currentPage]);
 
 fclose(outf2);
-	    
+
 currentPage = 0;
 
 /* generate the top HTML page */

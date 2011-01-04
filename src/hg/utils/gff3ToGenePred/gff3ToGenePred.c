@@ -1,5 +1,6 @@
 /* gff3ToGenePred - convert a GFF3 file to a genePred file. */
 #include "common.h"
+#include <limits.h>
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -16,6 +17,10 @@ errAbort(
   "usage:\n"
   "   gff3ToGenePred inGff3 outGp\n"
   "options:\n"
+  "  -maxParseErrors=50 - Maximum number of parsing errors before aborting. A negative\n"
+  "   value will allow an unlimited number of errors.  Default is 50.\n"
+  "  -maxConverErrors=50 - Maximum number of conversion errors before aborting. A negative\n"
+  "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -honorStartStopCodons - only set CDS start/stop status to complete if there are\n"
   "   corresponding start_stop codon records\n"
   "This converts:\n"
@@ -33,12 +38,14 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+    {"maxParseErrors", OPTION_INT},
+    {"maxConvertErrors", OPTION_INT},
     {"honorStartStopCodons", OPTION_BOOLEAN},
     {NULL, 0},
 };
 static boolean honorStartStopCodons = FALSE;
-static int maxParseErrs = 50;  // maximum number of errors during parse
-static int maxConvertErrs = 50;  // maximum number of errors during conversion
+static int maxParseErrors = 50;  // maximum number of errors during parse
+static int maxConvertErrors = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
 
 
@@ -79,7 +86,7 @@ hashAdd(processed, mkAnnAddrKey(ann), ann);
 static struct gff3File *loadGff3(char *inGff3File)
 /* load GFF3 into memory */
 {
-struct gff3File *gff3File = gff3FileOpen(inGff3File, maxParseErrs, NULL);
+struct gff3File *gff3File = gff3FileOpen(inGff3File, maxParseErrors, NULL);
 if (gff3File->errCnt > 0)
     errAbort("%d errors parsing GFF3 file: %s", gff3File->errCnt, inGff3File); 
 return gff3File;
@@ -240,7 +247,7 @@ for (child = gene->children; child != NULL; child = child->next)
     if (sameString(child->ann->type, gff3FeatMRna) && !isProcessed(processed, child->ann))
         {
         processMRna(gpFh, gene, child->ann, processed);
-        if (convertErrCnt >= maxConvertErrs)
+        if (convertErrCnt >= maxConvertErrors)
             break;
         }
     }
@@ -270,7 +277,7 @@ for (root = gff3File->roots; root != NULL; root = root->next)
     if (!isProcessed(processed, root->ann))
         {
         processRoot(gpFh, root->ann, processed);
-        if (convertErrCnt >= maxConvertErrs)
+        if (convertErrCnt >= maxConvertErrors)
             break;
         }
     }
@@ -290,6 +297,13 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+
+maxParseErrors = optionInt("maxParseErrors", maxParseErrors);
+if (maxParseErrors < 0)
+    maxParseErrors = INT_MAX;
+maxConvertErrors = optionInt("maxConvertErrors", maxConvertErrors);
+if (maxConvertErrors < 0)
+    maxConvertErrors = INT_MAX;
 honorStartStopCodons = optionExists("honorStartStopCodons");
 gff3ToGenePred(argv[1], argv[2]);
 return 0;

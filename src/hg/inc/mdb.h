@@ -236,6 +236,15 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle);
 // prints objs and var=val pairs as formatted metadata lines or ra style
 
+void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file);
+// prints (to file) objs and var=val pairs as formatted metadata lines or ra style
+
+void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
+// prints (to stream) objs and var=val pairs as formatted metadata lines or ra style
+
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude);
+// returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
+
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle);
 // prints var=val pairs and objs that go with them single lines or ra style
 
@@ -246,6 +255,9 @@ int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
 
 // ----------------- Utilities -----------------
+struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var);
+// Finds the val associated with the var or retruns NULL
+
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 // Finds the val associated with the var or retruns NULL
 
@@ -265,6 +277,10 @@ void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var);
+// Removes var from set of mdbObjs but only if all that hav it have a commmon val
+// Returns the val if removed, else NULL
+
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis);
 // Replaces objs' vars with var=vap pairs provided, preparing for DB update.
 
@@ -273,6 +289,9 @@ void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *varType,ch
 
 struct mdbObj *mdbObjClone(const struct mdbObj *mdbObj);
 // Clones a single mdbObj, including hash and maintining order
+
+int mdbVarCmp(const void *va, const void *vb);
+/* Compare to sort on label. */
 
 
 // --------------- Free at last ----------------
@@ -291,6 +310,44 @@ const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table);
 const char *metadataFindValue(struct trackDb *tdb, char *var);
 // Finds the val associated with the var or retruns NULL
 
+
+#define MDB_VAL_STD_TRUNCATION 64
+struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files);
+// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+// Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+// Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
+// Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
+// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
+// Return is case insensitive sorted on name (label or else val).
+
+struct hash *mdbCvTermTypeHash();
+// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
+// Those terms should contain label,descrition,searchable,cvDefined,hidden
+
+struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
+// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
+
+#define CV_SEARCH_SUPPORTS_FREETEXT
+#ifdef CV_SEARCH_SUPPORTS_FREETEXT
+enum mdbCvSearchable
+// metadata Variavble are only certain declared types
+    {
+    cvsNotSearchable        =0,  // Txt is default
+    cvsSearchByMultiSelect  =1,  // Search by drop down multi-select of supplied list (NOT YET IMPLEMENTED)
+    cvsSearchBySingleSelect =2,  // Search by drop down single-select of supplied list
+    cvsSearchByFreeText     =3,  // Search by free text field (NOT YET IMPLEMENTED)
+    cvsSearchByDateRange    =4,  // Search by discovered date range (NOT YET IMPLEMENTED)
+    cvsSearchByIntegerRange =5   // Search by discovered integer range (NOT YET IMPLEMENTED)
+    };
+
+enum mdbCvSearchable mdbCvSearchMethod(char *term);
+// returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
+#endif//ndef CV_SEARCH_SUPPORTS_FREETEXT
 
 #endif /* MDB_H */
 

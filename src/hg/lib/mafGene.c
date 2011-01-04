@@ -473,7 +473,7 @@ if (noTrans)
 	    {
 	    char buffer[10 * 1024];
 
-	    safef(buffer, sizeof buffer, "%s_%s %d %s\n",
+	    safef(buffer, sizeof buffer, "%s_%s %d %s",
 		giList->name, si->name, si->size, allPos(si));
 
 	    if (doTable)

@@ -164,6 +164,15 @@ wgEncode 1
         type narrowPeak
         # subId=2108 dateSubmitted=2010-08-16
 
+        track wgEncodeSydhHistoneU2osH3k36me3bUcdPk
+        release alpha
+        parent wgEncodeSydhHistoneViewPeaks off
+        shortLabel U2OS H3K36me3B Pk
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K36me3B in U2OS cells)
+        subGroups view=Peaks factor=H3K36me3B cellType=U2OS control=UCD treatment=None
+        type narrowPeak
+        # subId=2763 dateSubmitted=2010-11-02
+
 
 
 	#Signal Track SYDH Histone#
@@ -296,6 +305,15 @@ wgEncode 1
         subGroups view=Signal factor=H3K9me3 cellType=U2OS control=UCD treatment=None
         type bigWig 1.000000 51513.000000
         # subId=2108 dateSubmitted=2010-08-16
+
+	track wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+        release alpha
+        parent wgEncodeSydhHistoneViewSignal off
+        shortLabel U2OS H3K36me3B Sig
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K36me3B in U2OS cells)
+        subGroups view=Signal factor=H3K36me3B cellType=U2OS control=UCD treatment=None
+        type bigWig 1.000000 12731.000000
+        # subId=2763 dateSubmitted=2010-11-02
 
 
 

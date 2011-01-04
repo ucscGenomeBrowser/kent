@@ -11,9 +11,11 @@
 #endif
 #include "bbiFile.h"
 #include "bigWig.h"
+#include "errCatch.h"
+#include "obscure.h"
+#include "hmmstats.h"
 
-static char const rcsid[] = "$Id: validateFiles.c,v 1.44 2010/06/08 04:37:31 braney Exp $";
-static char *version = "$Revision: 1.44 $";
+char *version = "4.3";
 
 #define MAX_ERRORS 10
 #define PEAK_WORDS 16
@@ -50,11 +52,14 @@ int mismatches;
 int matchFirst=0;
 int mmCheckOneInN;
 int allowErrors = 0;
+boolean doReport;
+double bamPercent = 0.0;
+boolean showBadAlign;
 
 void usage()
 /* Explain usage and exit. */
 {
-errAbort(
+  errAbort(
   "validateFiles - Validate format of different track input files\n"
   "                Program exits with non-zero status if any errors detected\n"
   "                  otherwise exits with zero status\n"
@@ -109,6 +114,9 @@ errAbort(
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
   "   -allowBadLength              allow chromosomes that have the wrong length\n in BAM\n"
   "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
+  "   -doReport                    output report in filename.report"
+  "   -showBadAlign                show non-compliant alignments\n"
+  "   -bamPercent=N.N              percentage of BAM alignments that must be compliant\n"
   "   -allowErrors=N               number of errors allowed to still pass (default 0)\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
   "                                  stopping (default %d)\n"
@@ -140,8 +148,70 @@ static struct optionSpec options[] = {
    {"allowBadLength", OPTION_BOOLEAN},
    {"allowErrors", OPTION_INT},
    {"complementMinus", OPTION_BOOLEAN},
+   {"bamPercent", OPTION_FLOAT},
+   {"showBadAlign", OPTION_BOOLEAN},
+   {"doReport", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+FILE *reportF;
+
+void vaErrAbort(char *format, va_list args);
+
+void reportErrAbort(char *format, ...)
+/* Abort function, with optional (printf formatted) error message. */
+{
+va_list args;
+va_start(args, format);
+
+if (reportF != NULL)
+    vfprintf(reportF, format, args);
+vaErrAbort(format, args);
+
+va_end(args);
+}
+
+void vaWarn(char *format, va_list args);
+
+void reportWarn(char *format, ...)
+/* Issue a warning message. */
+{
+va_list args;
+va_start(args, format);
+vaWarn(format, args);
+va_end(args);
+
+va_start(args, format);
+if (reportF != NULL)
+    vfprintf(reportF, format, args);
+va_end(args);
+}
+
+void report(char *format, ...)
+/* Issue a warning message. */
+{
+va_list args;
+va_start(args, format);
+if (reportF != NULL)
+    vfprintf(reportF, format, args);
+va_end(args);
+}
+
+void reportLongWithCommas(long long l)
+/* Print out a long number with commas at thousands, millions, etc. */
+{
+char ascii[32];
+sprintLongWithCommas(ascii, l);
+report("%s", ascii);
+}
+
+void reportLabelAndLongNumber(char *label, long long l)
+/* Print label: 1,234,567 format number */
+{
+report("%s: ", label);
+reportLongWithCommas( l);
+report("\n");
+}
 
 boolean checkMismatch(int ch1, int ch2)
 // checkMismatch -- if the sequence has an N, we call this a mismatch
@@ -220,7 +290,7 @@ while (((c = *(p++)) >= '0') && (c <= '9'))
     }
 if (c != '\0')
     {
-    warn("Error [file=%s, line=%d]: %s field invalid unsigned number (%s) [%s]", file, line, name, s, row);
+    reportWarn("Error [file=%s, line=%d]: %s field invalid unsigned number (%s) [%s]", file, line, name, s, row);
     return FALSE;
     }
 *val = res;
@@ -248,7 +318,7 @@ while ((*p >= '0') && (*p <= '9'))
 /* test for invalid character, empty, or just a minus */
 if ((*p != '\0') || (p == p0))
     {
-    warn("Error [file=%s, line=%d]: %s field invalid signed number (%s) [%s]", file, line, name, s, row);
+    reportWarn("Error [file=%s, line=%d]: %s field invalid signed number (%s) [%s]", file, line, name, s, row);
     return FALSE;
     }
 if (*s == '-')
@@ -265,7 +335,7 @@ boolean checkString(char *file, int line, char *row, char *s, char *name)
 verbose(3,"[%s %3d] %s(%s)\n", __func__, __LINE__, name, s);
 if (strlen(s) > 0)
     return TRUE;
-warn("Error [file=%s, line=%d]: %s column empty [%s]", file, line, name, row);
+reportWarn("Error [file=%s, line=%d]: %s column empty [%s]", file, line, name, row);
 return FALSE;
 }
 
@@ -287,7 +357,7 @@ if (strlen(s) > 0)
 	    }
 	else
 	    {
-	    warn("Error [file=%s, line=%d]: chrom %s not found [%s]", file, line, s, row);
+	    reportWarn("Error [file=%s, line=%d]: chrom %s not found [%s]", file, line, s, row);
 	    return FALSE; // chrom not found
 	    }
 	}
@@ -297,45 +367,47 @@ if (strlen(s) > 0)
 	return TRUE; // chrom name not blank, and not validating against chromInfo
 	}
     }
-warn("Error [file=%s, line=%d]: chrom column empty [%s]", file, line, row);
+reportWarn("Error [file=%s, line=%d]: chrom column empty [%s]", file, line, row);
 return FALSE;
 }
 
-boolean checkSeq(char *file, int line, char *row, char *s, char *name)
+int checkSeq(char *file, int line, char *row, char *s, char *name)
 // Return TRUE if string has non-zero length and contains only chars [ACGTNacgtn0-3]
 // Othewise print warning that name column is empty and return FALSE
 {
 verbose(3,"[%s %3d] inputLine=%d %s seq(%s) [%s]\n", __func__, __LINE__, line, name, s, row);
 int i;
+int len = 0;
 for ( i = 0; s[i] ; ++i)
     {
     if (!dnaChars[(int)s[i]])
 	{
 	if (s==row)
-	    warn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)", file, line, name, s);
+	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)", file, line, name, s);
 	else
-	    warn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", file, line, name, s, row);
-	return FALSE;
+	    reportWarn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", file, line, name, s, row);
+	return 0;
 	}
+    len++;
     }
 if (i == 0)
     {
     if(privateData)  // PrivateData means sequence should be empty
-        return TRUE;
+        return 1;
     if (s==row)
-	warn("Error [file=%s, line=%d]: %s empty", file, line, name);
+	reportWarn("Error [file=%s, line=%d]: %s empty", file, line, name);
     else
-	warn("Error [file=%s, line=%d]: %s empty in line [%s]", file, line, name, row);
-    return FALSE;
+	reportWarn("Error [file=%s, line=%d]: %s empty in line [%s]", file, line, name, row);
+    return 0;
     }
 else if(privateData) { // PrivateData means sequence should be empty
     if (s==row)
-        warn("Error [file=%s, line=%d]: %s is not empty but this should be private data", file, line, name);
+        reportWarn("Error [file=%s, line=%d]: %s is not empty but this should be private data", file, line, name);
     else
-        warn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]", file, line, name, row);
-    return FALSE;
+        reportWarn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]", file, line, name, row);
+    return 0;
     }
-return TRUE;
+return len;
 }
 
 boolean checkSeqName(char *file, int line, char *s, char firstChar, char *name)
@@ -345,12 +417,12 @@ boolean checkSeqName(char *file, int line, char *s, char firstChar, char *name)
 int i;
 if (s[0] == 0)
     {
-    warn("Error [file=%s, line=%d]: %s empty [%s]", file, line, name, s);
+    reportWarn("Error [file=%s, line=%d]: %s empty [%s]", file, line, name, s);
     return FALSE;
     }
 else if (s[0] != firstChar)
     {
-    warn("Error [file=%s, line=%d]: %s first char invalid (got '%c', wanted '%c') [%s]",
+    reportWarn("Error [file=%s, line=%d]: %s first char invalid (got '%c', wanted '%c') [%s]",
 	file, line, name, s[0], firstChar, s);
     return FALSE;
     }
@@ -360,7 +432,7 @@ for ( i = 1; s[i] ; ++i)
 	break;
     if (!seqName[(int)s[i]])
 	{
-	warn("Error [file=%s, line=%d]: invalid %s chars in [%s]", file, line, name, s);
+	reportWarn("Error [file=%s, line=%d]: invalid %s chars in [%s]", file, line, name, s);
 	return FALSE;
 	}
     }
@@ -404,12 +476,12 @@ boolean checkCsSeqName(char *file, int line, char *s)
 char *s0;
 if (s[0] == 0)
     {
-    warn("Error [file=%s, line=%d]: sequence name empty [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: sequence name empty [%s]", file, line, s);
     return FALSE;
     }
 else if (s[0] != '>')
     {
-    warn("Error [file=%s, line=%d]: sequence name first char invalid (got '%c', wanted '>') [%s]",
+    reportWarn("Error [file=%s, line=%d]: sequence name first char invalid (got '%c', wanted '>') [%s]",
 	file, line, s[0], s);
     return FALSE;
     }
@@ -425,12 +497,12 @@ if ( (s0 = getDigits(s+1))
     }
 else
     {
-    warn("Error [file=%s, line=%d]: invalid sequence name [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: invalid sequence name [%s]", file, line, s);
     return FALSE;
     }
 }
 
-boolean checkQual(char *file, int line, char *s)
+boolean checkQual(char *file, int line, char *s, int len)
 // Return TRUE if string has non-zero length and contains only qualChars[] chars
 // Othewise print warning that quality is empty and return FALSE
 {
@@ -439,15 +511,22 @@ for ( i = 0; s[i] ; ++i)
     {
     if (!qualChars[(int)s[i]])
 	{
-	warn("Error [file=%s, line=%d]: invalid quality chars in [%s]", file, line, s);
+	reportWarn("Error [file=%s, line=%d]: invalid quality chars in [%s]", file, line, s);
 	return FALSE;
 	}
     }
 if (i == 0)
     {
-    warn("Error [file=%s, line=%d]: quality empty [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: quality empty [%s]", file, line, s);
     return FALSE;
     }
+
+if (i != len)
+    {
+    reportWarn("Error [file=%s, line=%d]: quality not as long as sequence (%d bases) [%s]", file, line, len, s);
+    return FALSE;
+    }
+
 return TRUE;
 }
 
@@ -460,13 +539,13 @@ for ( i = 0; s[i] ; ++i)
     {
     if (!csQualChars[(int)s[i]])
 	{
-	warn("Error [file=%s, line=%d]: invalid colorspace quality chars in [%s]", file, line, s);
+	reportWarn("Error [file=%s, line=%d]: invalid colorspace quality chars in [%s]", file, line, s);
 	return FALSE;
 	}
     }
 if (i == 0)
     {
-    warn("Error [file=%s, line=%d]: colorspace quality empty [%s]", file, line, s);
+    reportWarn("Error [file=%s, line=%d]: colorspace quality empty [%s]", file, line, s);
     return FALSE;
     }
 return TRUE;
@@ -491,7 +570,7 @@ if (chromSize > 0)
     {
     if (e > chromSize && (differentString(chrom, "chrM") || s > chromSize)) // passes test if end < chromSize or chrM and start < chromSize
 	{
-        warn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", file, line, e, chrom, chromSize, row);
+        reportWarn("Error [file=%s, line=%d]: end(%u) > chromSize(%s=%u) [%s]", file, line, e, chrom, chromSize, row);
         return FALSE;
         }
     else
@@ -505,7 +584,7 @@ if (zeroSizeOk)
 	return TRUE;
 	}
     else
-	warn("Error [file=%s, line=%d]: start(%u) > end(%u) [%s]", file, line, s, e, row);
+	reportWarn("Error [file=%s, line=%d]: start(%u) > end(%u) [%s]", file, line, s, e, row);
     }
 else
     {
@@ -515,7 +594,7 @@ else
 	return TRUE;
 	}
     else
-	warn("Error [file=%s, line=%d]: start(%u) >= end(%u) [%s]", file, line, s, e, row);
+	reportWarn("Error [file=%s, line=%d]: start(%u) >= end(%u) [%s]", file, line, s, e, row);
     }
 return FALSE;
 }
@@ -526,13 +605,19 @@ boolean checkPeak(char *file, int line, char *row, char *peak, char *start, char
 {
 verbose(3,"[%s %3d] inputLine=%d peak(%s) (%s,%s) [%s]\n", __func__, __LINE__, line, peak, start, end, row);
 unsigned p, s, e;
+int i;
+if (!checkSigned(file, line, row, peak, &i, "peak"))
+    return FALSE;
+if (i == -1)
+    return TRUE;
+
 if (   !checkUnsigned(file, line, row, peak, &p, "peak")
     || !checkUnsigned(file, line, row, start, &s, "chromStart")
     || !checkUnsigned(file, line, row, end, &e, "chromEnd"))
     return FALSE;
 if (p > e - s)
     {
-    warn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]", file, line, p, e - s, row);
+    reportWarn("Error [file=%s, line=%d]: peak(%u) past block length (%u) [%s]", file, line, p, e - s, row);
     return FALSE;
     }
 return TRUE;
@@ -551,7 +636,7 @@ if (i >= min && i <= max)
     verbose(2,"[%s %3d] min <= value <= max (%d <= %d <= %d)\n", __func__, __LINE__, min, i, max);
     return TRUE;
     }
-warn("Error [file=%s, line=%d]: %s %d outside bounds (%d, %d) [%s]", file, line, name, i, min, max, row);
+reportWarn("Error [file=%s, line=%d]: %s %d outside bounds (%d, %d) [%s]", file, line, name, i, min, max, row);
 return FALSE;
 }
 
@@ -564,7 +649,7 @@ char* end;
 double discardMe = strtod(val, &end);
 if ((end == val) || (*end != '\0'))
     {
-    warn("Error [file=%s, line=%d]: invalid %s '%s' [%s]", file, line, name, val, row);
+    reportWarn("Error [file=%s, line=%d]: invalid %s '%s' [%s]", file, line, name, val, row);
     discardMe = 0.0;
     return FALSE;
     }
@@ -580,7 +665,7 @@ if (strlen(strand) == 1 && (*strand == '+' || *strand == '-' || *strand == '.'))
     verbose(2,"[%s %3d] strand(%s)\n", __func__, __LINE__, strand);
     return TRUE;
     }
-warn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]", file, line, strand, row);
+reportWarn("Error [file=%s, line=%d]: invalid strand '%s' (want '+','-','.') [%s]", file, line, strand, row);
 return FALSE;
 }
 
@@ -588,7 +673,7 @@ boolean wantNewLine(struct lineFile *lf, char *file, int line, char **row, char 
 {
 boolean res = lineFileNext(lf, row, NULL);
 if (!res)
-    warn("Error [file=%s, line=%d]: %s not found", file, line, msg);
+    reportWarn("Error [file=%s, line=%d]: %s not found", file, line, msg);
 return res;
 }
 
@@ -599,7 +684,7 @@ boolean checkColumns(char *file, int line, char *row, char *buf, char *words[], 
 int n = chopByChar(buf, '\t', words, wordSize);
 if ( n != expected)
     {
-    warn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]", file, line, n, expected, row);
+    reportWarn("Error [file=%s, line=%d]: found %d columns, expected %d [%s]", file, line, n, expected, row);
     return FALSE;
     }
 return TRUE;
@@ -651,7 +736,7 @@ else
 	}
     int len = chromEnd - chromStart;
     if (len > sizeof(bigArr))
-	errAbort("static array not big enough for sequence len %d on line %d\n",
+	reportErrAbort("static array not big enough for sequence len %d on line %d\n",
 	    len, line);
     g = &ourSeq;
     g->dna = bigArr;
@@ -664,7 +749,7 @@ if (strand == '-')
 
 if ((g->size != strlen(seq) || g->size != chromEnd-chromStart) && !chrMSizeAjustment)
     {
-    warn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
+    reportWarn("Error [file=%s, line=%d]: sequence (%s) length (%d) does not match genomic coords (%d / %d - %s %d %d %c)",
         file, line, seq, (int)strlen(seq), chromEnd-chromStart, g->size,
         chrom, chromStart, chromEnd, strand);
     return FALSE;
@@ -682,7 +767,7 @@ for (i=0 ; i < length; ++i)
     }
 if (mm > mismatches)
     {
-    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n",
+    reportWarn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s %d %d %c)\nseq=[%s]\ngen=[%s]\n",
          file, line, mm, g->size, mismatches, chrom, chromStart, chromEnd, strand, seq, g->dna);
     return FALSE;
     }
@@ -717,7 +802,7 @@ else
     }
 if (g1->size != len1 || g2->size != len2)
     {
-    warn("Error [file=%s, line=%d]: sequence lengths (%d, %d) do not match genomic ones (%d, %d)",
+    reportWarn("Error [file=%s, line=%d]: sequence lengths (%d, %d) do not match genomic ones (%d, %d)",
          file, line, len1, len2, g1->size, g2->size);
     return FALSE;
     }
@@ -739,7 +824,7 @@ if (mmPerPair)
     {
     if (mm1 > mismatches || mm2 > mismatches)
         {
-        warn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
+        reportWarn("Error [file=%s, line=%d]: too many mismatches in one or both (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
              file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
@@ -748,7 +833,7 @@ else
     {
     if (mm1+mm2 > mismatches)
         {
-        warn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
+        reportWarn("Error [file=%s, line=%d]: too many mismatches in pair (seq1=%d/%d, seq2=%d/%d, maximum is %d) (%s %d %d %c)\nseq1=[%s] seq2=[%s]\ngen1=[%s] gen2=[%s]\n",
              file, line, mm1, len1, mm2, len2, mismatches, chrom, chromStart, chromEnd, strand, seq1, seq2, g1->dna, g2->dna);
         return FALSE;
         }
@@ -798,7 +883,7 @@ while (lineFileNext(lf, &row, &size))
 	if (printFailLines)
 	    printf("%s\n", row);
 	if (++errs >= maxErrors)
-	    errAbort("Aborting .. found %d errors\n", errs);
+	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
 return errs;
@@ -865,7 +950,7 @@ while (lineFileNextReal(lf, &row))
 	if (printFailLines)
 	    printf("%s\n", row);
 	if (++errs >= maxErrors)
-	    errAbort("Aborting .. found %d errors\n", errs);
+	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
 return errs;
@@ -928,7 +1013,7 @@ while ( lineFileNext(lf, &seqName, NULL))
 	if (printFailLines)
 	    printf("%s\n%s\n", seqName, seq);
 	if (++errs >= maxErrors)
-	    errAbort("Aborting .. found %d errors\n", errs);
+	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
 return errs;
@@ -959,13 +1044,14 @@ while ( lineFileNext(lf, &seqName, NULL))
 	else
 	    startOfFile = FALSE;
 	}
+    int len = 0;
     if (checkSeqName(file, line, seqName, '@', "sequence name")
 	&& (wantNewLine(lf, file, ++line, &seq, "fastq sequence line"))
-	&& checkSeq(file, line, seq, seq, "sequence")
+	&& (len = checkSeq(file, line, seq, seq, "sequence"))
 	&& (wantNewLine(lf, file, ++line, &qName, "fastq sequence name (quality line)"))
 	&& checkSeqName(file, line, qName, '+', "quality name")
 	&& (wantNewLine(lf, file, ++line, &qual, "quality line"))
-	&& checkQual(file, line, qual) )
+	&& checkQual(file, line, qual, len) )
 	{
 	if (printOkLines)
 	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
@@ -975,9 +1061,10 @@ while ( lineFileNext(lf, &seqName, NULL))
 	if (printFailLines)
 	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
 	if (++errs >= maxErrors)
-	    errAbort("Aborting .. found %d errors\n", errs);
+	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
+reportLabelAndLongNumber("number of sequences", line / 4);
 return errs;
 }
 
@@ -1022,7 +1109,7 @@ while (lineFileNext(lf, &seqName, NULL))
 	if (printFailLines)
 	    printf("%s\n%s\n", seqName, seq);
 	if (++errs >= maxErrors)
-	    errAbort("Aborting .. found %d errors\n", errs);
+	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
 return errs;
@@ -1073,7 +1160,7 @@ while (lineFileNext(lf, &seqName, NULL))
 	if (printFailLines)
 	    printf("%s\n%s\n", seqName, qual);
 	if (++errs >= maxErrors)
-	    errAbort("Aborting .. found %d errors\n", errs);
+	    reportErrAbort("Aborting .. found %d errors\n", errs);
 	}
     }
 return errs;
@@ -1082,20 +1169,24 @@ return errs;
 int validateBigWig(struct lineFile *lf, char *file)
 {
 if (chrHash == NULL)
-    errAbort("bigWig validation requires the -chromInfo or -chromDb option\n");
+    reportErrAbort("bigWig validation requires the -chromInfo or -chromDb option\n");
 
 int errs = 0;
 struct bbiFile *bbiFile;
+
+if (!bigWigFileCheckSigs(file))
+    reportErrAbort("bad signatures in file %s\n", file);
+
 bbiFile = bigWigFileOpen(file);
 
 if (bbiFile == NULL)
-    errAbort("Aborting... Cannot open bigWig file: %s\n", file);
+    reportErrAbort("Aborting... Cannot open bigWig file: %s\n", file);
 
 
 struct bbiChromInfo *bbiChroms = bbiChromList(bbiFile);
 
 if (bbiChroms == NULL)
-    errAbort("Aborting... cannot get bigWig chromosome list in file: %s\n", file);
+    reportErrAbort("Aborting... cannot get bigWig chromosome list in file: %s\n", file);
 
 struct bbiChromInfo *chroms = bbiChroms;
 for(; chroms; chroms = chroms->next)
@@ -1104,7 +1195,7 @@ for(; chroms; chroms = chroms->next)
 
     if ( (size = hashFindVal(chrHash, chroms->name)) == NULL)
 	{
-	warn("bigWig contains invalid chromosome name: %s\n", 
+	reportWarn("bigWig contains invalid chromosome name: %s\n", 
 	    chroms->name);
 	errs++;
 	}
@@ -1112,7 +1203,7 @@ for(; chroms; chroms = chroms->next)
 	{
 	if (*size != chroms->size)
 	    {
-	    warn("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+	    reportWarn("bigWig contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
 		chroms->name,
 		*size, chroms->size);
 	    errs++;
@@ -1122,7 +1213,33 @@ for(; chroms; chroms = chroms->next)
 
 
 if (errs)
-    errAbort("Aborting... %d errors found in bigWig file\n", errs);
+    reportErrAbort("Aborting... %d errors found in bigWig file\n", errs);
+
+report("version: %d\n", bbiFile->version);
+report("isCompressed: %s\n", (bbiFile->uncompressBufSize > 0 ? "yes" : "no"));
+report("isSwapped: %d\n", bbiFile->isSwapped);
+reportLabelAndLongNumber("primaryDataSize", bbiFile->unzoomedIndexOffset - bbiFile->unzoomedDataOffset);
+if (bbiFile->levelList != NULL)
+    {
+    long long indexEnd = bbiFile->levelList->dataOffset;
+    reportLabelAndLongNumber("primaryIndexSize", indexEnd - bbiFile->unzoomedIndexOffset);
+    }
+report("zoomLevels: %d\n", bbiFile->zoomLevels);
+
+struct bbiZoomLevel *zoom;
+for (zoom = bbiFile->levelList; zoom != NULL; zoom = zoom->next)
+    report("\t%d\t%d\n", zoom->reductionLevel, (int)(zoom->indexOffset - zoom->dataOffset));
+
+struct bbiChromInfo *chrom, *chromList = bbiChroms;
+report("chromCount: %d\n", slCount(chromList));
+for (chrom=chromList; chrom != NULL; chrom = chrom->next)
+    report("\t%s %d %d\n", chrom->name, chrom->id, chrom->size);
+struct bbiSummaryElement sum = bbiTotalSummary(bbiFile);
+reportLabelAndLongNumber("basesCovered", sum.validCount);
+report("mean: %f\n", sum.sumData/sum.validCount);
+report("min: %f\n", sum.minVal);
+report("max: %f\n", sum.maxVal);
+report("std: %f\n", calcStdFromSums(sum.sumData, sum.sumSquares, sum.validCount));
 
 return errs;
 }
@@ -1136,6 +1253,7 @@ struct bamCallbackData
     int numAligns;
     int numNeg;
     int numPos;
+    struct hash *tagHash;
     };
 
 boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, UBYTE* quals, unsigned int *cigarPacked, int nCigar)
@@ -1144,7 +1262,7 @@ static char cacheChrom[1024];
 static struct dnaSeq *cacheSeq = NULL;
 
 if (!genome)
-    errAbort("Need to specify genome if checking BAM files");
+    reportErrAbort("Need to specify genome if checking BAM files");
 
 if ((line % mmCheckOneInN) != 0)
     return TRUE; // dont check if this is not one in N
@@ -1193,7 +1311,7 @@ for (i = 0;   (i < nCigar);  i++)
 	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
 	    break;
 	default:
-	    errAbort("unrecognized CIGAR op %c -- update me", op);
+	    reportErrAbort("unrecognized CIGAR op %c -- update me", op);
 	}
     }
 
@@ -1236,41 +1354,47 @@ for (i = start; (strand == '-') ? i >= 0 : i < strlen(seq); i += incr)
 
 if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality)))
     {
-    assert(checkLength < 10000);
-    char match[10000];
-
-    for(i = 0; i < strlen(seq); i++)
+    if (showBadAlign)
         {
-        if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
-            match[i] = ' ';
-        else
-            match[i] = 'x';
+        assert(checkLength < 10000);
+        char match[10000];
+
+        for(i = 0; i < strlen(seq); i++)
+            {
+            if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
+                match[i] = ' ';
+            else
+                match[i] = 'x';
+            }
+        match[i] = 0;
+
+        if (mm > mismatches)
+            {
+            reportWarn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
+                file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
+            }
+
+        if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
+            {
+            char squal[10000];
+            for (i = 0; i < checkLength; i++)
+                squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
+
+            reportWarn("Error [file=%s, line=%d]: total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+                file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
+            }        
         }
-    match[i] = 0;
-
-    if (mm > mismatches)
-        {
-        warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
-            file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
-        }
-
-    if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
-        {
-        char squal[10000];
-        for (i = 0; i < checkLength; i++)
-            squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
-
-        warn("Error [file=%s, line=%d]: total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
-            file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
-        }        
     return FALSE;
     }
 return TRUE;
 }
 
+unsigned long long numQuals[256];
+unsigned long quals[256];
+unsigned int flagOr = 0;
+
 int parseBamRecord(const bam1_t *bam, void *data)
-/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
- * into a linkedFeatures item, and add it to tg->items. */
+/* bam_fetch() calls this on each bam alignment retrieved. */
 {
 struct bamCallbackData *bd = data;
 char *chrom = bd->chrom;
@@ -1281,32 +1405,71 @@ unsigned int *cigarPacked = bam1_cigar(bam);
 char *query = bamGetQuerySequence(bam, FALSE);
 char strand = bamIsRc(bam) ? '-' : '+';
 UBYTE *queryQuals = NULL;
+quals[core->qual]++;
 
 bd->numAligns++;
+
+unsigned char *s = bam1_aux(bam);
+char str[3];
+str[2] = 0;
+while(s < bam->data + bam->data_len)
+    {
+    str[0] = s[0];
+    str[1] = s[1];
+    hashStore(bd->tagHash, str);
+    uint8_t type;
+    s += 2; type = *s; ++s;
+    if (type == 'A') {  ++s; }
+    else if (type == 'C') {  ++s; }
+    else if (type == 'c') {  ++s; }
+    else if (type == 'S') {  s += 2; }
+    else if (type == 's') {  s += 2; }
+    else if (type == 'I') {  s += 4; }
+    else if (type == 'i') {  s += 4; }
+    else if (type == 'f') {  s += 4; }
+    else if (type == 'd') {  s += 8; }
+    else if (type == 'Z' || type == 'H')
+        {
+        while (*s) s++;
+        ++s;
+        }
+    }
+
+
 
 if (core->flag &  BAM_FUNMAP)
     // read is unmapped... ignore
     return 0;
 
+flagOr |= core->flag;
+
 if ( mismatchTotalQuality)
+    {
     queryQuals = bamGetQueryQuals(bam, FALSE);
+    int ii;
+    int len = strlen(query);
+    for(ii=0; ii < len; ii++)
+        numQuals[queryQuals[ii]]++;
+    }
 
 if (bam->core.l_qseq == 0)
     {
-    warn("zero length sequence on line %d\n", bd->numAligns);
-    if (++(*errs) >= maxErrors)
-        errAbort("Aborting .. found %d errors\n", *errs);
+    reportWarn("zero length sequence on line %d\n", bd->numAligns);
+    ++(*errs);
     }
 else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos, 
             strand, query, queryQuals, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
-    warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
+    if (showBadAlign)
+        reportWarn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
 
-    if (++(*errs) >= maxErrors)
-        errAbort("Aborting .. found %d errors\n", *errs);
+    ++(*errs);
     }
     
+if ((bamPercent == 0.0) && (*errs) >= maxErrors)
+    reportErrAbort("Aborting .. found %d errors\n", *errs);
+
 if (strand == '+')
     bd->numPos++;
 else
@@ -1317,18 +1480,18 @@ return 0;
 int validateBAM(struct lineFile *lf, char *file)
 {
 if (chrHash == NULL)
-    errAbort("BAM validation requires the -chromInfo or -chromDb option\n");
+    reportErrAbort("BAM validation requires the -chromInfo or -chromDb option\n");
 
 int errs = 0;
 samfile_t *fh = samopen(file, "rb", NULL);
 
 if (fh == NULL)
-    errAbort("Aborting... Cannot open BAM file: %s\n", file);
+    reportErrAbort("Aborting... Cannot open BAM file: %s\n", file);
 
 bam_header_t *head = fh->header;
 
 if (head == NULL)
-    errAbort("Aborting... Bad BAM header in file: %s\n", file);
+    reportErrAbort("Aborting... Bad BAM header in file: %s\n", file);
 
 int ii;
 
@@ -1339,7 +1502,7 @@ for(ii=0; ii < head->n_targets; ii++)
     verbose(2,"has chrom %s\n", head->target_name[ii]);
     if ( (size = hashFindVal(chrHash, head->target_name[ii])) == NULL)
 	{
-        warn("BAM contains invalid chromosome name: %s\n", 
+        reportWarn("BAM contains invalid chromosome name: %s\n", 
             head->target_name[ii]);
 	if (!allowOther)
             errs++;
@@ -1348,7 +1511,7 @@ for(ii=0; ii < head->n_targets; ii++)
 	{
 	if (*size != head->target_len[ii])
 	    {
-            warn("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
+            reportWarn("BAM contains chromosome with wrong length: %s should be %d bases, not %d bases\n", 
                 head->target_name[ii],
                 *size, head->target_len[ii]);
             if (!allowBadLength)
@@ -1358,7 +1521,7 @@ for(ii=0; ii < head->n_targets; ii++)
     }
 
 if (errs > allowErrors)
-    errAbort("Aborting... %d errors found in BAM file\n", errs);
+    reportErrAbort("Aborting... %d errors found in BAM file\n", errs);
 
 if (!genome)
     return errs; // only check sequence if 2bit file specified
@@ -1366,13 +1529,17 @@ if (!genome)
 bam_index_t *idx = bam_index_load(file);
 
 if (idx == NULL)
-    errAbort("couldn't find index file for %s\n", file);
+    reportErrAbort("couldn't find index file for %s\n", file);
 struct bamCallbackData *bd;
 AllocVar(bd);
 
 bd->file = file;
+if (bamPercent != 0.0)
+    errs = 0;  // if we're testing on percent compliant, don't count header errs
 bd->errs = &errs;
 bd->numPos = bd->numNeg = 0;
+struct hash *tagHash = newHash(5);
+bd->tagHash = tagHash;
 
 for(ii=0; ii < head->n_targets; ii++)
     {
@@ -1386,8 +1553,45 @@ for(ii=0; ii < head->n_targets; ii++)
     ret = bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
 
     }
-verbose(2,"number of BAM alignments %d pos %d neg %d\n", 
-    bd->numAligns, bd->numPos, bd->numNeg );
+
+report("number of BAM alignments %d pos %d neg %d errors %d\n",
+    bd->numAligns, bd->numPos, bd->numNeg, errs );
+if (doReport)
+    {
+    struct hashCookie cook = hashFirst(tagHash);
+    struct hashEl *hel;
+    report("tags: ");
+    while((hel = hashNext(&cook)) != NULL)
+        {
+        report("%s ",hel->name);
+        }
+    report("\n");
+
+    report( "flagOr: %x\n", flagOr);
+    }
+
+double percentCorrect = 100.0 * (bd->numAligns - errs)/(double)bd->numAligns;
+report( "BAM alignment compliancy rate: %g\n", percentCorrect);
+if (bamPercent != 0.0) 
+    {
+    if (percentCorrect < bamPercent)
+        reportErrAbort("Aborting: too many non-compliant BAM alignments (%%%g compliancy rate)", percentCorrect);
+    errs = 0;
+    }
+
+report("alignQuals ");
+for(ii=0; ii < 256; ii++)
+    {
+    report("%ld ",quals[ii]);
+    }
+report("\n");
+
+report("seqQuals ");
+for(ii=0; ii < 256; ii++)
+    {
+    report("%lld ",numQuals[ii]);
+    }
+report("\n");
 
 return errs;
 }
@@ -1402,14 +1606,46 @@ verbose(2,"[%s %3d] numFiles=%d \n", __func__, __LINE__, numFiles);
 for (i = 0; i < numFiles ; ++i)
     {
     struct lineFile *lf = lineFileOpen(files[i], TRUE);
+
+    char buffer[10 * 1024];
+    if (doReport)
+        {
+        safef(buffer, sizeof buffer, "%s.report", files[i]);
+        verbose(2, "opening report %s\n", buffer);
+        reportF = mustOpen(buffer, "w");
+        }
+    else 
+        reportF = NULL;
+
+    report("validateFiles %s %s\n", version, files[i]);
     errs += validate(lf, files[i]);
-    lineFileClose(&lf);
+
+    if (quick)
+	{
+	/* set up error catch to allow SIGPIPE errors from gzip */
+	struct errCatch *errCatch = errCatchNew();
+	if (errCatchStart(errCatch))
+	    lineFileClose(&lf);
+	errCatchEnd(errCatch);
+	if (errCatch->gotError)
+	   warn("Ignoring: %s", errCatch->message->string);
+	errCatchFree(&errCatch);
+	}
+    else
+	lineFileClose(&lf);
+
+    report("endReport\n");
+    if (reportF != NULL)
+        {
+        fclose(reportF);
+        reportF = NULL;
+        }
     }
 verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
 if (errs > allowErrors)
     errAbort("Aborting ... found %d errors in total\n", errs);
 else
-    verbose(2, "Error count %d\n",errs);
+    printf( "Error count %d\n",errs);
 
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
 
@@ -1467,12 +1703,12 @@ optionInit(&argc, argv, options);
 ++argv;
 --argc;
 if (optionExists("version"))
-    errAbort("%s", version);
+    reportErrAbort("%s", version);
 if (argc==0)
     usage();
 type = optionVal("type", "");
 if (strlen(type) == 0)
-    errAbort("please specify type");
+    reportErrAbort("please specify type");
 maxErrors      = optionInt("maxErrors", MAX_ERRORS);
 allowErrors    = optionInt("allowErrors", allowErrors);
 zeroSizeOk     = optionExists("zeroSizeOk");
@@ -1492,6 +1728,12 @@ colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 allowOther     = optionExists("allowOther");
 allowBadLength = optionExists("allowBadLength");
 complementMinus = optionExists("complementMinus");
+bamPercent     = optionFloat("bamPercent", bamPercent);
+showBadAlign   = optionExists("showBadAlign");
+doReport       = optionExists("doReport");
+
+if ((bamPercent != 0.0) && (mmCheckOneInN != 1 ))
+    reportErrAbort("can't specify bamPercent and mmCheckOneInN");
 
 initArrays();
 dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is worth adding another option.  But it could be done.
@@ -1500,14 +1742,14 @@ dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is w
 if ( (chromDb = optionVal("chromDb", NULL)) != NULL)
     {
     if (!(ci = createChromInfoList(NULL, chromDb)))
-        errAbort("could not load chromInfo from DB %s\n", chromDb);
+        reportErrAbort("could not load chromInfo from DB %s\n", chromDb);
     chrHash = chromHash(ci);
     chromInfoFree(&ci);
     }
 else if ( (chromInfo=optionVal("chromInfo", NULL)) != NULL)
     {
     if (!(ci = chromInfoLoadFile(chromInfo)))
-	errAbort("could not load chromInfo file %s\n", chromInfo);
+	reportErrAbort("could not load chromInfo file %s\n", chromInfo);
     chrHash = chromHash(ci);
     chromInfoFree(&ci);
     }
@@ -1529,7 +1771,7 @@ hashAdd(funcs, "BAM",            &validateBAM);
 hashAdd(funcs, "bigWig",         &validateBigWig);
 //hashAdd(funcs, "test", &testFunc);
 if (!(func = hashFindVal(funcs, type)))
-    errAbort("Cannot validate %s type files\n", type);
+    reportErrAbort("Cannot validate %s type files\n", type);
 validateFiles(func, argc, argv);
 return 0;
 }

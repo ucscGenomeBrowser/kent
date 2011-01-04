@@ -1,11 +1,7 @@
 input/errCases1.gff3:5: expected name=value: Acc:KIBRLG]
 input/errCases1.gff3:13: CDS feature must have phase
 input/errCases1.gff3:14: CDS feature must have phase
-input/errCases1.gff3:14: duplicate annotation record with ID: vectorbase|AGAP000002-PA
 input/errCases1.gff3:15: CDS feature must have phase
-input/errCases1.gff3:15: duplicate annotation record with ID: vectorbase|AGAP000002-PA
 input/errCases1.gff3:16: CDS feature must have phase
-input/errCases1.gff3:16: duplicate annotation record with ID: vectorbase|AGAP000002-PA
 input/errCases1.gff3:17: CDS feature must have phase
-input/errCases1.gff3:17: duplicate annotation record with ID: vectorbase|AGAP000002-PA
-GFF3: 10 parser errors
+GFF3: 6 parser errors

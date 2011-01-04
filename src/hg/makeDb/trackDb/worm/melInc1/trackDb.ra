@@ -1,0 +1,33 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility hide
+html gap
+
+track mrna override
+visibility hide
+
+track intronEst override
+visibility hide
+
+track windowmaskerSdust override
+visibility dense
+
+track gc5BaseBw override
+visibility full
+
+track ws210Gene
+shortLabel WS210 Genes
+longLabel Genes predictions from WormBase WS210 release
+group genes
+priority 32
+visibility pack
+color 0,0,200
+type genePred
+
+track chainNetCe9 override
+otherDb ce9
+visibility dense

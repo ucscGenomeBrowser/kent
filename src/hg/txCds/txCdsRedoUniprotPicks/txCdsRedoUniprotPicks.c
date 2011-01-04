@@ -59,7 +59,7 @@ struct psl *psl, *bestPsl = NULL;
 double bestScore = 0;
 for (psl = start; psl != end; psl = psl->next)
     {
-    boolean isCurated = (hashLookup(curatedHash, psl->qName) == NULL);
+    boolean isCurated = (hashLookup(curatedHash, psl->qName) != NULL);
     double score = scoreAli(psl, isCurated);
     if (score > bestScore)
         {

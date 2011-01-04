@@ -79,6 +79,29 @@ visibility hide
     color 120,0,0
     priority 5
 
+track pseudoYale60
+shortLabel Yale Pseudo60
+longLabel Yale Pseudogenes based on Ensembl Release 60
+group genes
+priority 53
+visibility hide
+spectrum on
+type genePred
+autoTranslate 0
+geneClasses Processed Duplicated Ambiguous
+gClass_Processed 180,0,0
+gClass_Duplicated 100,50,0
+gClass_Ambiguous 100,91,191
+itemClassTbl pseudoYale60Class
+dataVersion December 2010
+urlLabel Yale pseudogene.org link:
+url http://tables.pseudogene.org/human55/$$
+
+searchTable pseudoYale60
+searchType genePred
+termRegex PGOMOU[0-9]+
+searchPriority 50
+
 track tRNAs
 shortLabel tRNA Genes
 longLabel Transfer RNA genes identified with tRNAscan-SE
@@ -101,6 +124,10 @@ altColor 200,220,255
 spectrum on
 type psl .
 url http://lgsun.grc.nia.nih.gov/geneindex/mm9/bin/giT.cgi?genename=$$
+
+track jaxAllele override
+release alpha
+html jaxAllele
 
 track jaxRepTranscriptLift
 shortLabel MGI RepTrns LftO
@@ -242,74 +269,7 @@ track miRNA override
 type bed 6 .
 dataVersion Release 13.0 (March 2009)
 
-track multiz30way
-release beta,public
-shortLabel Conservation
-longLabel 30-Way Multiz Alignment & Conservation
-group compGeno
-priority 103.2
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons30wayPlacental Mammal Placental_Mammal phastCons30wayEuarch Euarch Euarchontoglires phastCons30way Vertebrate Vertebrate
-spanList 1
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz30wayFrames
-irows on
-autoScale Off
-windowingFunction mean
-summary multiz30waySummary
-speciesCodonDefault mm9
-speciesGroups Glires Primates Placental_Mammal Vertebrate
-sGroup_Glires rn4 cavPor2 oryCun1
-sGroup_Primates hg18 panTro2 rheMac2 ponAbe2 calJac1 otoGar1
-sGroup_Placental_Mammal tupBel1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
-sGroup_Vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 gasAcu1 danRer5 tetNig1 fr2 oryLat1
-speciesDefaultOff rheMac2 calJac1 panTro2 cavPor2 tupBel1 otoGar1 dasNov1 oryCun1 felCat3 loxAfr1 bosTau3 eriEur1 sorAra1 echTel1 ornAna1 anoCar1 xenTro2 danRer5 tetNig1 fr2 oryLat1
-itemFirstCharCase noChange
-treeImage phylo/mm9_30way.gif
-
-track mostConserved30way
-release beta,public
-compositeTrack on
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, 30-way Vertebrate Multiz Alignment
-group compGeno
-priority 103.4
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
-    track phastConsElements30wayPlacental
-    release beta,public
-    parent mostConserved30way
-    shortLabel Mammal
-    longLabel PhastCons Placental Mammal Conserved Elements, 30-way Multiz Alignment
-    color 100,50,170
-    priority 1
-
-    track phastConsElements30wayEuarch
-    release beta,public
-    parent mostConserved30way
-    shortLabel Euarch
-    longLabel PhastCons Euarchontoglires Conserved Elements, 30-way Multiz Alignment
-    color 100,50,170
-    priority 2
-
-    track phastConsElements30way
-    release beta,public
-    parent mostConserved30way
-    shortLabel Vertebrate
-    longLabel PhastCons Vertebrate Conserved Elements, 30-way Multiz Alignment
-    color 170,100,50
-    priority 3
-
 track cons30way
-release alpha
 compositeTrack on
 shortLabel Conservation
 longLabel 30-Way Multiz Alignment & Conservation
@@ -323,7 +283,6 @@ group compGeno
 priority 103.2
 
     track cons30wayViewalign
-    release alpha
     shortLabel Multiz Alignments
     view align
     visibility pack
@@ -331,7 +290,6 @@ priority 103.2
     subTrack cons30way
 
 	track multiz30way
-	release alpha
 	subTrack cons30wayViewalign on
 	shortLabel Multiz Align
 	longLabel Multiz Alignments of 30 Vertebrates
@@ -357,7 +315,6 @@ priority 103.2
 	pairwiseHeight 12
 
     track cons30wayViewphyloP
-    release alpha
     shortLabel Basewise Conservation (phyloP)
     view phyloP
     visibility full
@@ -367,7 +324,6 @@ priority 103.2
 
 	# PhyloP conservation
 	track phyloP30wayEuarch
-	release alpha
 	subTrack cons30wayViewphyloP off
 	subGroups view=phyloP clade=glires
 	shortLabel Euarch Cons
@@ -385,7 +341,6 @@ priority 103.2
 	priority 1
 
 	track phyloP30wayPlacental
-	release alpha
 	subTrack cons30wayViewphyloP on
 	subGroups view=phyloP clade=mammal
 	shortLabel Mammal Cons
@@ -403,8 +358,7 @@ priority 103.2
 	priority 2
 
 	track phyloP30wayAll
-	release alpha
-	subTrack cons30wayViewphyloP on
+	subTrack cons30wayViewphyloP off
 	subGroups view=phyloP clade=vert
 	shortLabel Vertebrate Cons
 	longLabel Vertebrate Basewise Conservation by PhyloP
@@ -421,7 +375,6 @@ priority 103.2
 	priority 3
 
     track cons30wayViewphastcons
-    release alpha
     shortLabel Element Conservation (phastCons)
     view phastcons
     visibility hide
@@ -429,7 +382,6 @@ priority 103.2
 
 	# phastCons conservation
         track phastCons30wayEuarch
-	release alpha
         subTrack cons30wayViewphastcons off
         subGroups view=phastcons clade=glires
         shortLabel Euarch Cons
@@ -446,7 +398,6 @@ priority 103.2
         priority 10
 
         track phastCons30wayPlacental
-	release alpha
         subTrack cons30wayViewphastcons off
         subGroups view=phastcons clade=mammal
         shortLabel Mammal Cons
@@ -463,7 +414,6 @@ priority 103.2
         priority 11
 
         track phastCons30way
-	release alpha
         subTrack cons30wayViewphastcons off
         subGroups view=phastcons clade=vert
         shortLabel Vertebrate Cons
@@ -480,7 +430,6 @@ priority 103.2
         priority 12
 
     track cons30wayViewelements
-    release alpha
     shortLabel Conserved Elements
     view elements
     visibility hide
@@ -488,7 +437,6 @@ priority 103.2
 
 	# Conserved Elements (Most Conserved)
 	track phastConsElements30wayEuarch
-	release alpha
 	subTrack cons30wayViewelements on
 	subGroups view=elements clade=glires
 	shortLabel Euarch El
@@ -501,7 +449,6 @@ priority 103.2
 	priority 20
 
 	track phastConsElements30wayPlacental
-	release alpha
 	subTrack cons30wayViewelements off
 	subGroups view=elements clade=mammal
 	shortLabel Mammal El
@@ -514,7 +461,6 @@ priority 103.2
 	priority 22
 
 	track phastConsElements30way
-	release alpha
 	subTrack cons30wayViewelements off
 	subGroups view=elements clade=vert
 	shortLabel Vertebrate El
@@ -814,3 +760,16 @@ priority 100
 visibility hide
 color 176,48,96
 type bed 12 .
+
+track targetScanS
+shortLabel TS miRNA sites
+longLabel TargetScan miRNA Regulatory Sites
+group regulation
+priority 0
+visibility hide
+color 0,96,0
+scoreFilterMax 100
+type bed 6 .
+urlLabel TargetScan link:
+url http://www.targetscan.org/cgi-bin/targetscan/mmu_50/view_gene.cgi?gs=$P&taxid=10090&members=$p&showcnc=1
+

@@ -32,6 +32,8 @@ errAbort(
   "   -chrom=chrN - just do a single chromosome.  Don't delete old tables.\n"
   "   -chromLst=chrom.lst - chromosomes subdirs are named in chrom.lst (1, 2, ...)\n"
   "   -noLoad - do not load tables, leave SQL files instead.\n"
+  "   -verbose n - n==2 brief information and SQL table create statements\n"
+  "              - n==3 show all gaps\n"
   "example:\n"
   "   hgGoldGapGl -noGl hg16 /cluster/data/hg16 .\n");
 }
@@ -56,13 +58,16 @@ char *createGold =
 char *goldSplitIndex =
 "   INDEX(bin),\n"
 "   UNIQUE(chromStart),\n"
-"   INDEX(frag(14))\n"
+"   INDEX(frag(%d))\n"
 ")\n";
 
+static int maxChromNameSize = 0;
+static int maxFragNameSize = 0;
+
 char *goldIndex = 
-"   INDEX(chrom(16),bin),\n"
-"   UNIQUE(chrom(16),chromStart),\n"
-"   INDEX(frag(14))\n"
+"   INDEX(chrom(%d),bin),\n"
+"   UNIQUE(chrom(%d),chromStart),\n"
+"   INDEX(frag(%d))\n"
 ")\n";
 
 char *createGap = 
@@ -84,8 +89,8 @@ char *gapSplitIndex =
 ")\n";
 
 char *gapIndex =
-"   INDEX(chrom(16),bin),\n"
-"   UNIQUE(chrom(16),chromStart)\n"
+"   INDEX(chrom(%d),bin),\n"
+"   UNIQUE(chrom(%d),chromStart)\n"
 ")\n";
 
 char *createGl = 
@@ -97,9 +102,18 @@ char *createGl =
 "    strand char(1) not null,	# + or - for strand\n"
 "              #Indices\n"
 "   INDEX(bin),\n"
-"    PRIMARY KEY(frag(20))\n"
+"    PRIMARY KEY(frag(%d))\n"
 ")\n";
 
+
+static void agpFragValidate(struct agpFrag *af)
+/* Check for weirdness in agpFrag. */
+{
+/* OK if equal since these coords are 1-based */
+if (af->chromStart > af->chromEnd)
+  errAbort("hgGoldGapGl: unexpected coords start %d > end %d for frag %s in chrom %s\n", 
+         af->chromStart, af->chromEnd, af->frag, af->chrom);
+}
 
 void splitAgp(char *agpName, char *goldFileName, char *gapFileName)
 /* Split up agp file into gold and gap files. */
@@ -119,6 +133,15 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
     int start, end;
     if (wordCount < 5)
 	errAbort("Short line %d of %s", lf->lineIx, lf->fileName);
+    int len = strlen(words[0]);
+    if (len > maxChromNameSize)
+	{
+	maxChromNameSize = len;
+	if (maxChromNameSize > 254)
+	    errAbort("ERROR: chrom name size is over 254(%d) characters: "
+		"'%s'", maxChromNameSize, words[0]);
+	}
+
     start = sqlUnsigned(words[1])-1;
     end = sqlUnsigned(words[2]);
     if (words[4][0] == 'N' || words[4][0] == 'U')
@@ -128,13 +151,21 @@ while ((wordCount = lineFileChop(lf, words)) > 0)
 	gap.chromStart -= 1;
 	fprintf(gapTab, "%u\t", hFindBin(start, end));
 	agpGapTabOut(&gap, gapTab);
-	verbose(2,"#\t%s:%d-%d\n", gap.chrom, gap.chromStart, gap.chromEnd);
+	verbose(3,"#GAP\t%s:%d-%d\n", gap.chrom, gap.chromStart, gap.chromEnd);
 	}
     else
 	{
 	struct agpFrag gold;
 	agpFragStaticLoad(words, &gold);
 	agpFragValidate(&gold);
+	len = strlen(words[5]);
+	if (len > maxFragNameSize)
+	    {
+	    maxFragNameSize = len;
+	    if (maxFragNameSize > 254)
+		errAbort("ERROR: fragment name size is over 254(%d) "
+		    "characters: '%s'", maxFragNameSize, words[5]);
+	    }
 	// file is 1-based. agpFragLoad() now assumes 0-based. 
 	// and agpFragTabOut() will assume 1-based, but we will load 
 	// the generated file straight into the database, so 
@@ -195,7 +226,8 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     /* Create gold table and load it up. */
     dyStringClear(ds);
     dyStringPrintf(ds, createGold, goldName);
-    dyStringAppend(ds, goldSplitIndex);
+    dyStringPrintf(ds, goldSplitIndex, maxFragNameSize);
+    verbose(2, "%s", ds->string);
     if (! noLoad)
 	sqlRemakeTable(conn, goldName, ds->string);
     dyStringClear(ds);
@@ -211,6 +243,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     dyStringClear(ds);
     dyStringPrintf(ds, createGap, gapName);
     dyStringAppend(ds, gapSplitIndex);
+    verbose(2, "%s", ds->string);
     if (! noLoad)
 	{
 	sqlRemakeTable(conn, gapName, ds->string);
@@ -276,7 +309,8 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	sqlUpdate(conn, ds->string);
 	}
     dyStringClear(ds);
-    dyStringPrintf(ds, createGl, glTable);
+    dyStringPrintf(ds, createGl, glTable, maxFragNameSize);
+    verbose(2, "%s", ds->string);
     if (! noLoad)
 	sqlMaybeMakeTable(conn, glTable, ds->string);
     dyStringClear(ds);
@@ -390,7 +424,8 @@ splitAgp(agpFile, goldTabName, gapTabName);
 /* Create gold table and load it up. */
 dyStringClear(ds);
 dyStringPrintf(ds, createGold, "gold");
-dyStringAppend(ds, goldIndex);
+dyStringPrintf(ds, goldIndex, maxChromNameSize, maxChromNameSize, maxFragNameSize);
+verbose(2, "%s", ds->string);
 if (! noLoad)
     sqlRemakeTable(conn, "gold", ds->string);
 dyStringClear(ds);
@@ -405,7 +440,8 @@ if (! noLoad)
 /* Create gap table and load it up. */
 dyStringClear(ds);
 dyStringPrintf(ds, createGap, "gap");
-dyStringAppend(ds, gapIndex);
+dyStringPrintf(ds, gapIndex, maxChromNameSize, maxChromNameSize);
+verbose(2, "%s", ds->string);
 if (! noLoad)
     {
     sqlRemakeTable(conn, "gap", ds->string);

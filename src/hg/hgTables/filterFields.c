@@ -21,6 +21,8 @@
 #include "wiggle.h"
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
+#include "bedDetail.h"
+#include "pgSnp.h"
 
 static char const rcsid[] = "$Id: filterFields.c,v 1.82 2010/06/03 18:53:59 kent Exp $";
 
@@ -367,6 +369,22 @@ if (startsWithWord("makeItems", type))
    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
    hFreeConn(&conn);
    }
+else if (sameWord("bedDetail", type))
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
+    struct asObject *asObj = asParseText(bedDetailAutoSqlString);
+    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
+    hFreeConn(&conn);
+    }
+else if (sameWord("pgSnp", type))
+    {
+    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+    struct slName *fieldList = sqlListFields(conn, ct->dbTableName);
+    struct asObject *asObj = asParseText(pgSnpAutoSqlString);
+    showTableFieldsOnList(db, table, asObj, fieldList, FALSE, withGetButton);
+    hFreeConn(&conn);
+    }
 else
     showBedTableFields(db, table, ct->fieldCount, withGetButton);
 }
@@ -986,7 +1004,7 @@ if (type != NULL && startsWithWord("maf", type))
     integerFilter(db, table, "chromStart", "chromStart", " AND ");
     integerFilter(db, table, "chromEnd", "chromEnd", " AND ");
     }
-else if (type != NULL && startsWithWord("makeItems", type))
+else if (type != NULL && (startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     struct sqlFieldType *ftList = sqlListFieldsAndTypes(conn, ct->dbTableName);

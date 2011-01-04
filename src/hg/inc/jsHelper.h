@@ -127,4 +127,7 @@ char *stripRegEx(char *str, char *regEx, int flags);
    flags is passed through to regcomp as the cflags argument.
    Returned string should be free'ed after use. */
 
+boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
+// Returns TRUE if advanced javascript features are currently enabled
+
 #endif /* JSHELPER_H */

@@ -34,7 +34,11 @@ candidates. The genes undergo a quality evaluation, which must be approved by
 all collaborators. The following criteria are currently used to assess each
 gene: 
 <UL>
-<LI> an initiating ATG, a valid stop codon, and no in-frame stop codons
+<LI> an initiating ATG (Exception: a non-ATG translation start codon is 
+annotated if it has sufficient experimental support), a valid stop codon, and 
+no in-frame stop codons (Exception: selenoproteins, which contain a TGA codon 
+that is known to be translated to a selenocysteine instead of functioning as 
+a stop codon) 
 <LI> ability to be translated from the genome reference sequence without frameshifts
 <LI> recognizable splicing sites
 <LI> no intersection with putative pseudogene predictions

@@ -11364,6 +11364,11 @@ liftOver final.bed /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz hg18.bed unmappe
 hgLoadBed hg18 polyaDB hg18.bed
 # trackDb entry/html in human/hg18
 
+# redmine issue 19: wrong bed file format used on hgwdev
+# reload it with table from beta  (2010-10-28 - Chin)
+cd /cluster/data/hg18/bed/polyaDB
+hgLoadBed hg18 polyaDb hg18.beta.polyaDb.bed
+
 ############################################################################
 # Translate SNP Array data from hg17 (Heather August 2006)
 
@@ -21375,7 +21380,8 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V9 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V9 done 3/26/10
 # DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
@@ -21383,14 +21389,14 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # DGV V5 done 7/16/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg18/bed/dgv.v9
-    cd /hive/data/genomes/hg18/bed/dgv.v9
+    mkdir /hive/data/genomes/hg18/bed/dgv.v10
+    cd /hive/data/genomes/hg18/bed/dgv.v10
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg18.v10.nov.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg18.v10.nov.2010.txt
     # shuffle fields into bed8+
-    foreach f (*.v9.*.txt)
+    foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -21410,13 +21416,11 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    # Save previous version for comparison:
-    hgsql hg18 -e 'rename table dgv to dgvV8'
     hgLoadBed hg18 dgv *.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 89427 elements of size 15
+#Loaded 101923 elements of size 15
       hgsql hg18 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#38
+#42
 
 # 11-04-2009 color change from brown to magenta:
 # old color
@@ -22677,6 +22681,22 @@ CREATE TABLE ucscFunc (
 );
 EOF
     hgLoadSqlTab hg18snp130 ucscFunc{,.sql,.txt}
+    # 10/12/10: Those coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
+    # We need to leave the coords alone here so ucscFunc can be joined below.
+    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
+    # the list to determine what type of coord fix to apply to each annotation
+    # when making snp130CodingDbSnp below.
+    hgsql hg18snp130 -NBe \
+      'select ci.contig_acc, cl.asn_from, cl.asn_to, uf.snp_id \
+       from ucscFunc as uf, ContigLoc as cl, ContigInfo as ci \
+       where uf.snp_id = cl.snp_id and \
+             uf.ctg_id = cl.ctg_id and uf.asn_from = cl.asn_from and uf.asn_to = cl.asn_to and \
+             cl.loc_type = 3 and \
+             cl.ctg_id = ci.ctg_id and \
+             ci.group_label in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2")' \
+      > ncbiFuncInsertions.ctg.bed
+    wc -l ncbiFuncInsertions.ctg.bed
+#1089086 ncbiFuncInsertions.ctg.bed
 
     # Extract observed allele, molType and snp class from FASTA headers gnl
     zcat /hive/data/outside/dbSNP/130/human/rs_fasta/rs_ch*.fas.gz \
@@ -23015,13 +23035,38 @@ EOF
 
 
 #######################################################################
-# DBSNP CODING ANNOTATIONS (DONE 7/7/09 angie)
-# originally done 6/2/09 - redone w/snp130, using mapping locations of dbSNP's func. annos
+# DBSNP CODING ANNOTATIONS (DONE 10/12/10 angie)
+# Updated 10/12/10 - redone w/corrected genome coords (Redmine Track #1249)
+# Updated 7/7/09 - redone w/snp130, using mapping locations of dbSNP's func. annos
+# originally done 6/2/09
     cd /hive/data/outside/dbSNP/130/human
-    awk '$9 != NULL {print;}' ncbiFuncAnnotations.txt \
-    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n | uniq > ncbiCodingAnnotations.txt
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.  
+    # For anything except an insertion (0 bases between flanks), 
+    # we need to add 1 to the end coord.  For an insertion, we need
+    # to add 1 to the start coord.  Make a hash of the insertion IDs,
+    # then look up each ID in ncbiFuncAnnotations.txt to tell which
+    # transform to apply.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    perl -we 'open($IDS, "ncbiFuncInsertions.ctg.bed") || die "ids: $!"; \
+              while (<$IDS>) { chomp; $ids{$_} = 1; } \
+              close($IDS); \
+              while (<>) { \
+                chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+                next unless ($w[7] || $w[8] || $w[9]); \
+                $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+                if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                  $w[2]++; # 2-base insertions: increment start coord \
+                } else { \
+                  $w[3]++; # increment end coord to get half-open \
+                } \
+                print join("\t", @w) . "\n"; \
+              }' ncbiFuncAnnotations.txt \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
 #576726 ncbiCodingAnnotations.txt
+
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
@@ -27982,7 +28027,7 @@ while (<>) {
 
 
 #############################################################################
-# HGDP GEOGRAPHIC SNP MAPS (DONE 2/5/09 angie)
+# HGDP GEOGRAPHIC SNP MAPS (DONE 2/5/09 angie - UPDATED 9/15/10)
     # Project data downloaded and parsed in /hive/data/outside/hgdpGeo,
     # see makeDb/doc/hgdpGeo.txt.
     mkdir /hive/data/genomes/hg18/bed/hgdpGeo
@@ -28012,6 +28057,50 @@ while (<>) {
     hgLoadBed hg18 hgdpGeo hgdpGeo.tab \
       -sqlTable=$HOME/kent/src/hg/lib/hgdpGeo.sql
 #Loaded 660280 elements of size 7
+
+    # Correcting strand and remapping to snp130 9/15/10:
+    mkdir /hive/data/genomes/hg18/bed/hgdpGeo/100915
+    cd /hive/data/genomes/hg18/bed/hgdpGeo/100915
+    grep -Fwf /hive/data/outside/hgdpGeo/rsIDs.lst \
+      ../../snp130/snp130.bed \
+    | awk 'BEGIN{OFS="\t";} {print $4, $1, $2, $3, $8;}' \
+    | sort > snp130CoordsAndRef.txt
+    cut -f 1 snp130CoordsAndRef.txt | uniq | wc -l
+#656484
+    join -e ERROR -t'	' -o 1.2,1.3,1.4,1.1,2.2,2.3,2.4,1.5 \
+      snp130CoordsAndRef.txt /hive/data/outside/hgdpGeo/hgdpGeoCoordless.txt \
+    | sed -re 's/([AGTC])\*/\1/' \
+    | sort -k1,1 -k2n,2n \
+      > hgdpGeo.fixme
+    wc -l hgdpGeo.fixme
+#660265 hgdpGeo.fixme
+    # Use the snp130 reference allele to detect when we need to rev-comp
+    # the alleles to match the + strand.  Also, throw out SNPs for which 
+    # the ref allele is multi-base -- it's questionable whether we're giving
+    # the right coords (some funny things happen with dbSNP's clustering...):
+    cat > fixAlleles.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+my %rc = ('A' => 'T', 'C' => 'G', 'G' => 'C', 'T' => 'A');
+while (<>) {
+  chomp;  my ($c, $s, $e, $rs, $ancAl, $derAl, $freqs, $ref) = split;
+  next unless ($ref =~ /^[ACGT]$/);
+  if ($ancAl ne $ref && $derAl ne $ref) {
+    $ancAl = $rc{$ancAl};
+    $derAl = $rc{$derAl};
+  }
+  print join("\t", $c, $s, $e, $rs, $ancAl, $derAl, $freqs) . "\n";
+}
+'_EOF_'
+    # << emacs
+    chmod a+x fixAlleles.pl
+    ./fixAlleles.pl hgdpGeo.fixme > hgdpGeo.tab
+    wc -l hgdpGeo.tab
+#660221 hgdpGeo.tab
+    hgLoadBed hg18 hgdpGeo hgdpGeo.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/hgdpGeo.sql
+#Loaded 660219 elements of size 7
 
 
 #############################################################################
@@ -29694,7 +29783,10 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 9/1/10)
+# NHGRI GWAS CATALOG (DONE 12/7/10)
+# Updated 11/1/10
+# Updated 10/6/10
+# Updated 9/1/10
 # Updated 8/2/10
 # Updated 6/2/10
 # Updated 5/12/10
@@ -29713,7 +29805,8 @@ see doc/builds.txt for specific details.
     mkdir /hive/data/genomes/hg18/bed/gwasCatalog/$today
     cd /hive/data/genomes/hg18/bed/gwasCatalog/$today
     wget http://www.genome.gov/admin/gwascatalog.txt
-    # Column headers:
+    head -1 gwascatalog.txt | sed -re 's/\t/\n/g'
+    # Compare to original column headers:
 #  1 Date Added to Catalog
 #  2 PubMedID
 #  3 First Author
@@ -29769,18 +29862,21 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 3881 elements of size 22
+#Loaded 4562 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
-    # risk allele is on??  -- asking corresp. author Teri Manolio.
+    # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
+    # always available in the original publication, so sadly there is not always 
+    # a way to resolve these. GWAS catalog folks aren't going to modify their 
+    # database to add a column for these cases.
     hgsql hg18 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
                      from gwasCatalog as gc, snp130 as snp \
                      where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#190 ambigStrand.txt
+#250 ambigStrand.txt
 
 
 #############################################################################
@@ -30719,3 +30815,308 @@ close (DR);
     hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
 
 ##############################################################################
+# 1000 GENOMES COVERAGE MASK (DONE 10/1/10 angie)
+    mkdir /hive/data/genomes/hg18/bed/1000GenomesMask
+    cd /hive/data/genomes/hg18/bed/1000GenomesMask
+    wget --timestamping \
+      ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_07/low_coverage/other_data/\*
+    cat > pseudoFastaToBed.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+my ($base, $inFile) = @ARGV;
+
+die "usage: $0 outputBase input.gz\n" if (! $base || ! $inFile);
+my ($IN, $OUTD, $OUTM, $OUTU);
+open($IN, "zcat $inFile |") || die;
+my $outD = $base . "Depth.bed.gz";
+my $outM = $base . "MapQ.bed.gz";
+my $outU = $base . "Uncov.bed.gz";
+open($OUTD, "| gzip -c > $outD") || die;
+open($OUTM, "| gzip -c > $outM") || die;
+open($OUTU, "| gzip -c > $outU") || die;
+
+sub printItem {
+  my ($chr, $start, $end, $mask) = @_;
+  return unless $end > $start;
+  if ($mask eq 'D') {
+    print $OUTD join("\t", $chr, $start, $end) . "\n";
+  } elsif ($mask eq 'M') {
+    print $OUTM join("\t", $chr, $start, $end) . "\n";
+  } elsif ($mask eq 'B') {
+    print $OUTD join("\t", $chr, $start, $end) . "\n";
+    print $OUTM join("\t", $chr, $start, $end) . "\n";
+  } elsif ($mask eq "-") {
+    print $OUTU join("\t", $chr, $start, $end) . "\n";
+  }
+}
+
+sub maskToBed3Subtracks {
+  my ($chr, $seqRef) = @_;
+  $chr =~ s/MT$/M/; $chr =~ s/^([0-9XMY])/chr$1/;
+  my ($start, $end) = (0, 0);
+  my $len = length($$seqRef);
+  my $prevM;
+  while ($end < $len) {
+    my $m = substr $$seqRef, $end, 1;
+    if (defined $prevM && $m ne $prevM) {
+      &printItem($chr, $start, $end, $prevM);
+      $start = $end;
+    }
+    $end++;
+    $prevM = $m;
+  }
+  &printItem($chr, $start, $end, $prevM);
+}
+
+my ($prevChrom, $seq);
+while (<$IN>) {
+  if (/^>(\S+)/) {
+    my $chrom = $1;
+    if (defined $prevChrom) {
+      &maskToBed3Subtracks($prevChrom, \$seq);
+    }
+    $prevChrom = $chrom;
+    $seq = "";
+  } elsif (/^([NMDB0-]+)$/) {
+    $seq .= $1;
+  } else {
+    die "Unexpected line format:\n$_\t";
+  }
+}
+&maskToBed3Subtracks($prevChrom, \$seq);
+close($OUTD); close($OUTM); close($OUTU);
+'_EOF_'
+    # << emacs
+    chmod a+x pseudoFastaToBed.pl
+    foreach f ({CEU,CHBJPT,YRI}.low_coverage.mask.fa.gz)
+      set pop = `echo $f:r:r:r:r | perl -wpe '$_ = ucfirst lc; s/Chbjpt/ChbJpt/;'`
+      set tBase = "covMask1kGPilotLowCov$pop"
+      echo $tBase
+      ./pseudoFastaToBed.pl $tBase $f
+    end
+    # Use featureBits to merge adjacent regions
+    foreach f (covMask*.bed.gz)
+      echo $f:r:r
+      featureBits hg18 $f -bed=stdout \
+      | cut -f 1-3 \
+      | hgLoadBed hg18 $f:r:r stdin
+    end
+# covMask1kGPilotLowCovCeuDepth
+# 6718955 bases of 2881515245 (0.233%) in intersection
+# Loaded 97777 elements of size 3
+# covMask1kGPilotLowCovCeuMapQ
+# 408568477 bases of 2881515245 (14.179%) in intersection
+# Loaded 4052843 elements of size 3
+# covMask1kGPilotLowCovCeuUncov
+# 3942 bases of 2881515245 (0.000%) in intersection
+# Loaded 311 elements of size 3
+# covMask1kGPilotLowCovChbJptDepth
+# 12143572 bases of 2881515245 (0.421%) in intersection
+# Loaded 198277 elements of size 3
+# covMask1kGPilotLowCovChbJptMapQ
+# 429343803 bases of 2881515245 (14.900%) in intersection
+# Loaded 4198464 elements of size 3
+# covMask1kGPilotLowCovChbJptUncov
+# 50676 bases of 2881515245 (0.002%) in intersection
+# Loaded 2108 elements of size 3
+# covMask1kGPilotLowCovYriDepth
+# 11875006 bases of 2881515245 (0.412%) in intersection
+# Loaded 193700 elements of size 3
+# covMask1kGPilotLowCovYriMapQ
+# 454810959 bases of 2881515245 (15.784%) in intersection
+# Loaded 4338322 elements of size 3
+# covMask1kGPilotLowCovYriUncov
+# 21232 bases of 2881515245 (0.001%) in intersection
+# Loaded 1255 elements of size 3
+
+    # Make some union tables
+    featureBits hg18 -or covMask1kGPilotLowCovCeuDepth \
+                         covMask1kGPilotLowCovChbJptDepth \
+                         covMask1kGPilotLowCovYriDepth \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnionDepth.bed.gz
+#14033969 bases of 2881515245 (0.487%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnionDepth covMask1kGPilotLowCovUnionDepth.bed.gz
+#Loaded 232479 elements of size 3
+
+    featureBits hg18 -or covMask1kGPilotLowCovCeuMapQ \
+                         covMask1kGPilotLowCovChbJptMapQ \
+                         covMask1kGPilotLowCovYriMapQ \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnionMapQ.bed.gz
+#463864561 bases of 2881515245 (16.098%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnionMapQ covMask1kGPilotLowCovUnionMapQ.bed.gz
+#Loaded 4319382 elements of size 3
+
+    featureBits hg18 -or covMask1kGPilotLowCovCeuUncov \
+                         covMask1kGPilotLowCovChbJptUncov \
+                         covMask1kGPilotLowCovYriUncov \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnionUncov.bed.gz
+#66237 bases of 2881515245 (0.002%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnionUncov covMask1kGPilotLowCovUnionUncov.bed.gz
+#Loaded 3129 elements of size 3
+
+    # Make intersection of uncovered bits too:
+    featureBits hg18 covMask1kGPilotLowCovCeuUncov \
+                     covMask1kGPilotLowCovChbJptUncov \
+                     covMask1kGPilotLowCovYriUncov \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovIntersectionUncov.bed.gz
+#676 bases of 2881515245 (0.000%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovIntersectionUncov covMask1kGPilotLowCovIntersectionUncov.bed.gz
+#Loaded 49 elements of size 3
+
+    featureBits hg18 -or covMask1kGPilotLowCovCeuDepth covMask1kGPilotLowCovCeuMapQ \
+                         covMask1kGPilotLowCovCeuUncov \
+                         covMask1kGPilotLowCovChbJptDepth covMask1kGPilotLowCovChbJptMapQ \
+                         covMask1kGPilotLowCovChbJptUncov \
+                         covMask1kGPilotLowCovYriDepth covMask1kGPilotLowCovYriMapQ \
+                         covMask1kGPilotLowCovYriUncov \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnion.bed.gz
+#467348829 bases of 2881515245 (16.219%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnion covMask1kGPilotLowCovUnion.bed.gz
+#Loaded 4339659 elements of size 3
+
+
+#########################################################################
+# SNP "BAD APPLES" TRACK (IN PROGRESS 10/4/10 angie)
+    cd /hive/data/genomes/gs.19/build36/bed/1000GenomesMask
+    foreach t (Depth MapQ Uncov "")
+      echo $t
+      bedIntersect -tab -aHitAny -allowStartEqualEnd ../snp130/snp130.bed \
+        covMask1kGPilotLowCovUnion$t.bed.gz snp130BadApplesUnion$t.bed
+    end
+    wc -l snp130BadApplesUnion*.bed
+#   5240097 snp130BadApplesUnion.bed
+#    502329 snp130BadApplesUnionDepth.bed
+#   5150686 snp130BadApplesUnionMapQ.bed
+#      1491 snp130BadApplesUnionUncov.bed
+    cut -f 4 snp130BadApplesUnion.bed | sort -u | wc -l
+#4452279
+    sed -e 's/snp130/snp130BadApples/' /hive/data/outside/dbSNP/130/human/snp130.sql \
+      > snp130BadApples.sql
+    foreach t (Depth MapQ Uncov "")
+      echo $t
+      hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+        hg18 snp130BadApples$t -sqlTable=snp130BadApples.sql snp130BadApplesUnion$t.bed
+    end
+# Reading snp130BadApplesUnionDepth.bed
+# Loaded 502329 elements of size 17
+# Reading snp130BadApplesUnionMapQ.bed
+# Loaded 5150686 elements of size 17
+# Reading snp130BadApplesUnionUncov.bed
+# Loaded 1491 elements of size 17
+# Reading snp130BadApplesUnion.bed
+# Loaded 5240097 elements of size 17
+    hgsql hg18 -e 'rename table snp130BadApples to snp130BadApplesUnion'
+    gzip snp130BadApples*.bed
+
+    # rs ID lists
+    foreach f (snp130BadApples*.bed.gz)
+      zcat $f | cut -f 4 | sort -u > $f:r:r.rsIDs.txt
+    end
+    wc -l *.txt
+# 4452279 snp130BadApplesUnion.rsIDs.txt
+#  392307 snp130BadApplesUnionDepth.rsIDs.txt
+# 4376753 snp130BadApplesUnionMapQ.rsIDs.txt
+#    1477 snp130BadApplesUnionUncov.rsIDs.txt
+
+# use list of SNPs to port to hg19?  Try to port masked regions??  
+
+# asked richard and sendu to repeat for hg19/GRCh37.  Richard's reply:
+# --------------------------
+# No, we haven't done that.  We would be doing it for new call sets I
+# expect, not for the pilot calls.
+# We are developing new approaches to variant calling that might well
+# change the accessibility criteria and
+# masks.
+#
+# I am copying the 1000GP data processing group to remind ourselves that
+# amongst all the current discussion
+# about calling, we need to return to how we handle accessibility.
+# --------------------------
+
+#########################################################################
+# DENISOVA (ANCIENT HUMAN) (DONE 11/16/10 angie)
+    mkdir /hive/data/genomes/hg18/bed/denisova
+    cd /hive/data/genomes/hg18/bed/denisova
+    # Use username and password emailed by Ed Green 9/30/10
+    alias wg     wget -r --user=xxx --password=xxx
+    wg ftp://cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Catalog_of_changes/\*
+    # Ed says we don't need files with 'hcca' or 'hcscca' in the names
+    # (only hg18 or panTro2).
+    find . -name \*h\*cca\* -exec echo rm {} \;
+    # Inspect & execute output of the find command to save a bit of space (11G of 83G).
+
+    # Combine the two sequence-lib files for Denisova into one bam.  First ensure that
+    # the headers are identical:
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam > h1
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam > h2
+    cmp h1 h2
+    # No output, and they seem to be sorted by position, good to go:
+    samtools merge SL3003_SL3004_100122-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam
+#1023.571u 22.997s 17:34.24 99.2%        0+0k 0+0io 0pf+0w
+    # Build BAM index (.bam.bai) files.
+    samtools index SL3003_SL3004_100122-hg18.bam
+#94.811u 3.560s 1:51.16 88.4%    0+0k 0+0io 0pf+0w
+    pushd cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2
+    foreach f (*.bam)
+      echo $f
+      samtools index $f
+    end
+    popd
+
+    # Make /gbdb/ links and load database tables
+    mkdir /gbdb/hg18/denisova
+    ln -s `pwd`/SL3003_SL3004_100122-hg18.bam{,.bai} /gbdb/hg18/denisova/
+    mkdir /gbdb/hg18/denisova/modernHumanSeq
+    find `pwd` -name MMS\*hg18\*.bam\* -exec echo ln -s {} /gbdb/hg18/denisova/modernHumanSeq/ \;
+    # Inspect & execute output of the find command.
+
+    hgBbiDbLink hg18 bamSLDenisova /gbdb/hg18/denisova/SL3003_SL3004_100122-hg18.bam
+    foreach f (/gbdb/hg18/denisova/modernHumanSeq/MMS*.bam)
+      set track = `echo $f | perl -wpe 's/.*(MMS\d+)_HGDP\d+_(\w+)\..*/bam$1$2/ || die; s/_//;'`
+      echo $track
+      hgBbiDbLink hg18 $track $f
+    end
+
+    # to see the grp table:
+    hgsql -e "select * from grp order by priority;" hg18
+    # add new denisova group:
+    hgsql hg18 -e "INSERT INTO grp VALUES ('denisova', 'Denisova Assembly and Analysis', 6.6, 0);"
+
+#########################################################################
+# BUILD R-DMR TRACK.  DONE (Fan 7/23/2010)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/gs.19/build36/bed/rdmr
+cd /hive/data/genomes/gs.19/build36/bed/rdmr
+
+# download the supplemental data file, ng.471-S2.txt.
+
+cp -p ng.471-S2.txt rdmrRaw.tab
+# remove the header lines at the beginning of rdmrRaw.tab
+vi rdmrRaw.tab
+
+# load rdmrRaw table
+hgsql hg18 -e 'drop table rdmrRaw'
+hgsql hg18 < ~/kent/src/hg/lib/rdmrRaw.sql
+hgsql hg18 -e 'load data local infile "rdmrRaw.tab" into table rdmrRaw'
+
+# create rdmr table
+
+hgsql hg18 -N -e 'select chrom, chromStart-1, chromEnd, gene from rdmrRaw'
+>rdmr.tab
+
+hgLoadBed hg18 rdmr rdmr.tab
+
+#########################################################################
+

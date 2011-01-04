@@ -150,7 +150,7 @@ def main(argv=None):
     # some re we will be using
     table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+|pairedTagAlign|shortFrags)$")
     gbdb = re.compile("^(wig|tagAlign|bigWig|bam)$")
-    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta)$")
+    file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta|junction|fpkm|fpkm1|fpkm2|insDistrib|insDist|junction)$")
 
     # if new relase, add the full path to all files
     path_prefix = ""
@@ -326,7 +326,11 @@ def main(argv=None):
                     warnings.append(warn)
                     print >>sys.stderr, warn
                 gbdb_path = get_gbdb_pathname(database, name)
-                if gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
+                if gbdb_path == None:
+                    warn = "could not find gbdb path in table %s.%s" % (database, name)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+                elif gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
                     new_gbdbs_list.append(gbdb_path + ".bai")
                 else:
                     warn = "could not find %s file for %s" % (gbdb_path + ".bai", f)
@@ -336,7 +340,11 @@ def main(argv=None):
             if table_exists(database, name):
                 new_tables_list.append(name)
                 gbdb_path = get_gbdb_pathname(database, name)
-                if gbdb_path != None and os.path.exists(gbdb_path):
+                if gbdb_path == None:
+                    warn = "could not find gbdb path in table %s.%s" % (database, name)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+                elif gbdb_path != None and os.path.exists(gbdb_path):
                     new_gbdbs_list.append(gbdb_path)
                 else:
                     warn = "could not find %s file for %s" % (gbdb_path, f)
@@ -504,7 +512,7 @@ D) Additional items of note
     print "    current location on alpha:"
     print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
     print "    NOT on RR but must be placed in:"
-    print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
     print
 
     new_files_list.sort()
@@ -521,7 +529,7 @@ D) Additional items of note
     print "    current location on alpha:"
     print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/%s/" % (database, options.composite_name, current_release_dir)
     print "    should be placed on the RR in (overwritting any existing copy):"
-    print "      /usr/local/apache/htdocs-hgdownload/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
+    print "      /usr/local/apache/htdocs/goldenPath/%s/encodeDCC/%s/" % (database, options.composite_name)
     print
     for f in addition_files:
         print f

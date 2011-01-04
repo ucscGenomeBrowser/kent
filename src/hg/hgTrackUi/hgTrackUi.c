@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "hCommon.h"
 #include "hui.h"
+#include "fileUi.h"
 #include "ldUi.h"
 #include "snpUi.h"
 #include "snp125Ui.h"
@@ -1376,6 +1377,18 @@ safef(varName, sizeof(varName), "%s.%s", tdb->track, HIDE_NONCODING_SUFFIX);
 cartMakeCheckBox(cart, varName, HIDE_NONCODING_DEFAULT);
 }
 
+void rgdGene2UI(struct trackDb *tdb)
+/* Put up rgdGene2 gene ID track controls, with checkboxes */
+{
+/* Put up label line  - boxes for gene and accession. */
+printf("<B>Label:</B> ");
+labelMakeCheckBox(tdb, "gene", "gene", FALSE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+printf("<BR>\n");
+
+baseColorDrawOptDropDown(cart, tdb);
+}
+
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene or xenoRefGene gene ID track controls, with checkboxes */
 {
@@ -2147,8 +2160,9 @@ printf("<P><TABLE CELLPADDING=2>");
 tdbSortPrioritiesFromCart(cart, &superTdb->subtracks);
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
-    if (!hTableOrSplitExists(database, tdb->table) && tdb->subtracks != NULL &&
-    	trackDbLocalSetting(tdb, "compositeTrack") == NULL)
+    if (!hTableOrSplitExists(database, tdb->table)
+    && tdb->subtracks != NULL && trackDbLocalSetting(tdb, "compositeTrack") == NULL
+    && !tdbIsDownloadsOnly(tdb))
 	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
@@ -2156,12 +2170,17 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
                 hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
                 chromosome, cgiEncode(tdb->track), tdb->shortLabel);
     printf("<TD>");
-    enum trackVisibility tv =
-                    hTvFromString(cartUsualString(cart, tdb->track,
-                                            hStringFromTv(tdb->visibility)));
-    hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
-                            tv == tvHide ?  "hiddenText" : "normalText",
-                            trackDbSetting(tdb, "onlyVisibility"));
+    if (tdbIsDownloadsOnly(tdb))
+        printf("&nbsp;");
+    else
+    {
+        enum trackVisibility tv =
+                        hTvFromString(cartUsualString(cart, tdb->track,
+                                                hStringFromTv(tdb->visibility)));
+        hTvDropDownClassVisOnly(tdb->track, tv, tdb->canPack,
+                                tv == tvHide ?  "hiddenText" : "normalText",
+                                trackDbSetting(tdb, "onlyVisibility"));
+    }
     printf("<TD>%s", tdb->longLabel);
     char *dataVersion = trackDbSetting(tdb, "dataVersion");
     if (dataVersion)
@@ -2214,6 +2233,8 @@ else if (startsWith("transMapAln", track))
         transMapUI(tdb);
 else if (sameString(track, "refGene"))
         refGeneUI(tdb);
+else if (sameString(track, "rgdGene2"))
+        rgdGene2UI(tdb);
 else if (sameString(track, "knownGene"))
         knownGeneUI(tdb);
 else if (sameString(track, "omimGene"))
@@ -2424,7 +2445,7 @@ void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 if (!ajax)
     {
     jsIncludeFile("jquery.js", NULL);
-    printf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+    webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
     }
@@ -2439,13 +2460,6 @@ if (trackDbLocalSetting(tdb, "container"))
     {
     /* For the moment, be a composite... */
     tdbMarkAsComposite(tdb);
-    }
-if(tdbIsComposite(tdb))
-    {
-    safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
-    // NOTE: if you want track vis to not be reset, move to after vis dropdown
-    if(1 == cartUsualInt(cart, setting, 0))
-        cartRemoveAllForTdbAndChildren(cart,tdb);
     }
 if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
@@ -2468,6 +2482,15 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
+if(tdbIsContainer(tdb))
+    {
+    safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
+    // NOTE: if you want track vis to not be reset, move to after vis dropdown
+    if (1 == cartUsualInt(cart, setting, 0))
+        cartRemoveAllForTdbAndChildren(cart,tdb);
+    else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
+        cartTdbTreeReshapeIfNeeded(cart,tdb);
+    }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
@@ -2489,54 +2512,66 @@ if (parentTdb && !ajax)
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
-/* Display visibility menu */
-    if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
-        printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
-    else
-        printf("<B>Display&nbsp;mode:&nbsp;</B>");
-    if (tdbIsSuper(tdb))
-        {
-        /* This is a supertrack -- load its members and show hide/show dropdown */
-        hTrackDbLoadSuper(database, tdb);
-        superTrackDropDown(cart, tdb, 1);
-        }
-    else
-        {
-        /* normal visibility control dropdown */
-        enum trackVisibility vis = tdb->visibility;
-        boolean canPack = tdb->canPack;
-        if (ajax)
+// Don't bother with vis controls for downloadsOnly
+if (!tdbIsDownloadsOnly(tdb))
+    {
+    /* Display visibility menu */
+        if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
+            printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
+        else
+            printf("<B>Display&nbsp;mode:&nbsp;</B>");
+        if (tdbIsSuper(tdb))
             {
-            vis = tdbVisLimitedByAncestry(cart, tdb, vis, TRUE);  // ajax popups should show currently inherited visability
-            if (tdbIsCompositeChild(tdb))
-                canPack = TRUE;
+            /* This is a supertrack -- load its members and show hide/show dropdown */
+            hTrackDbLoadSuper(database, tdb);
+            superTrackDropDown(cart, tdb, 1);
             }
         else
-            vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
-        hTvDropDownClassVisOnly(tdb->track,vis,
-            canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
+            {
+            /* normal visibility control dropdown */
+            enum trackVisibility vis = tdb->visibility;
+            boolean canPack = tdb->canPack;
+            if (ajax)
+                {
+                vis = tdbVisLimitedByAncestry(cart, tdb, TRUE);  // ajax popups should show currently inherited visability
+                if (tdbIsCompositeChild(tdb))
+                    canPack = TRUE;
+                }
+            else
+                vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
+            hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,
+                canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
+                                (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
+            }
+    if (!ajax)
+        {
+        printf("&nbsp;");
+        cgiMakeButton("Submit", "Submit");
+
+        if(tdbIsComposite(tdb))
+            printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
         }
-if (!ajax)
-    {
-    printf("&nbsp;");
-    cgiMakeButton("Submit", "Submit");
 
-    if(tdbIsComposite(tdb))
-        printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
+    if (ct)
+        {
+        puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+        cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
+        cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
+        puts("&nbsp;");
+        if (differentString(tdb->type, "chromGraph"))
+            {
+            char buf[256];
+            if(ajax)
+                // reference to a separate form doesn't work in modal dialog, so change window.location directly.
+                safef(buf, sizeof(buf), "window.location='%s?hgsid=%d&%s=%s';return false;", hgCustomName(), cartSessionId(cart), CT_SELECTED_TABLE_VAR, tdb->track);
+            else
+                safef(buf, sizeof(buf), "document.customTrackForm.submit();return false;");
+            cgiMakeOnClickButton(buf, "Update custom track");
+            }
+        }
     }
 
-if (ct)
-    {
-    puts("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-    cgiMakeButton(CT_DO_REMOVE_VAR, "Remove custom track");
-    cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
-    puts("&nbsp;");
-    if (differentString(tdb->type, "chromGraph"))
-        cgiMakeOnClickButton("document.customTrackForm.submit();return false;",
-                                "Update custom track");
-    }
-
-if (!tdbIsSuper(tdb))
+if (!tdbIsSuper(tdb) && !tdbIsDownloadsOnly(tdb))
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
     if (trackDbSetting(tdb, "dimensions"))
@@ -2558,8 +2593,14 @@ if (!tdbIsSuper(tdb))
     }
 printf("<BR>\n");
 
-specificUi(tdb, ct, ajax);
+if (tdbIsDownloadsOnly(tdb))
+    filesDownloadUi(database,cart,tdb);  // Composites without tracks but with files to download are tdb->type: downloadsOnly
+else
+    specificUi(tdb, ct, ajax);
 puts("</FORM>");
+
+if (ajax)
+    return;
 
 if (ct)
     {
@@ -2569,9 +2610,6 @@ if (ct)
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
     }
-
-if (ajax)
-    return;
 
 if (!ct)
     {
@@ -2602,6 +2640,10 @@ if (tdb->html != NULL && tdb->html[0] != 0)
     // include anchor for Description link
     puts("<A NAME=TRACK_HTML></A>");
     printf("<table class='windowSize'><tr valign='top'><td>");
+
+    // Add pennantIcon
+    printPennantIconNote(tdb);
+
     puts(tdb->html);
     printf("</td><td>");
     makeTopLink(tdb);
@@ -2658,6 +2700,7 @@ return trackDbForPseudoTrack(OLIGO_MATCH_TRACK_NAME,
 void doMiddle(struct cart *theCart)
 /* Write body of web page. */
 {
+struct trackDb *tdbList = NULL;
 struct trackDb *tdb = NULL;
 char *track;
 struct customTrack *ct = NULL, *ctList = NULL;
@@ -2666,7 +2709,8 @@ cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
-trackHash = makeTrackHash(database, chromosome);
+
+trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE);
 if (sameWord(track, WIKI_TRACK_TABLE))
     tdb = trackDbForWikiTrack();
 else if (sameWord(track, RULER_TRACK_NAME))
@@ -2692,7 +2736,7 @@ else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();
 else
     {
-    tdb = hTrackDbForTrack(database, track);
+    tdb = tdbForTrack(database, track,&tdbList);
     }
 if (tdb == NULL)
    {
@@ -2712,7 +2756,8 @@ if (super)
         trackDbSuperMemberSettings(tdb);
         }
     }
-char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
+char *title = (tdbIsSuper(tdb) ? "Super-track Settings" :
+                tdbIsDownloadsOnly(tdb) ? DOWNLOADS_ONLY_TITLE : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
     {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html

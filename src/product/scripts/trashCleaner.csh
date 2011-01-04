@@ -57,6 +57,9 @@ set trashLog = "${logDir}/trash.${YYYY}-${MM}.txt"
 # number of minutes for expiration for find commands on trash files
 set eightHours = "+480"
 set seventyTwoHours = "+4320"
+# we do not want to do everything at once.  Limit the number of
+# files to process at once:
+set maxFiles = 2
 
 if ( $1 != "searchAndDestroy" ) then
     ${ECHO} "usage:  trashCleaner.csh searchAndDestroy"
@@ -128,9 +131,6 @@ find $userCt -type f | sed -e "s#${userCt}/##" | sort \
 comm -13 "${alreadySaved}" "${sessionFiles}" > "${saveList}"
 
 set filesToDo =  `cat "${saveList}" | wc -l`
-# we do not want to do everything at once.  Limit the number of
-# files to process at once.
-set maxFiles = 2
 
 # it appears that an empty list is OK for this foreach() loop
 #	it does nothing and is not a failure
@@ -162,6 +162,12 @@ foreach F (`cat "${saveList}"`)
         ${ECHO} "not file or symlink: ${trashFile}"
     endif
 end
+
+if ( $filesToDo > 0 ) then
+    if ( $filesDone <= $maxFiles ) then
+        ${ECHO} "completed all $filesToDo files (< maxFiles: $maxFiles)"
+    endif
+endif
 
 #############################################################################
 # can now clean customTrash tables that are aged out

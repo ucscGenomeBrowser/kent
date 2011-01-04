@@ -1,8 +1,9 @@
 <p>
-<b>DAF for project: <%= @project.name -%></b>
+<b>DAF (<%= @dafName -%>) for project: <%= @project.name -%></b>
 </p>
 <pre>
 <font size=-1>
 <%=@dafText-%>
 </font>
 </pre>
+<%= link_to 'Download Daf', {:action => 'download_daf', :id => @project.id} -%>

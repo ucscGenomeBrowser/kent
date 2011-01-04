@@ -1,17 +1,36 @@
+# UW DnaseI HS Track wrangler:vsmalladi
+
+# Notes:
+#       - Track Long Label:DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
+#       - Track Short Label: UW DNaseI HS
+#       - View Long Labels:
+#       - cellType Order: Ordering is alphabetical
+#       - Default View selections
+#               - Hotspots = pack
+#               - Peaks = pack
+#               - Raw Signal = full
+#       - Short Labels: 
+#               Template:
+#               - Views: For consistency sake view will be
+#                       - Peaks = Pk
+#                       - Raw Signal = Sig
+#                       - Hotspots = Hspt 
+#		- Replicate
+
 track wgEncodeUwDnase
 compositeTrack on
 release alpha
-shortLabel UW-Mouse DNase-seq
-longLabel ENCODE UW-Mouse Stam DNase-seq
+shortLabel UW DNaseI HS
+longLabel DNaseI Hypersensitivity by Digital DNaseI from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line 3134=3134 416B=416B BCellCD19p=B-cell_(CD19+) Cerebellum=Cerebellum Cerebrum=Cerebrum ESCJ7=ES-CJ7 Fibroblast=Fibroblast Kidney=Kidney Liver=Liver Lung=Lung MEL=MEL TNaive=T-Naive WholeBrain=Whole_Brain
-subGroup3 strain Strain C3H=C3H C57BL6=C57BL/6 S129=129
+subGroup3 strain Strain C3H=C3H C57BL6=C57BL/6 S129=129 UKN=Unknown
 subGroup4 sex Sex M=M
-subGroup5 age Age adult8wks=adult-8wks E0=E0 E14half=E14.5
+subGroup5 age Age adult8wks=adult-8wks E0=E0 E14half=E14.5 immortal=immortalized
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
 dimensions dimensionX=cellType dimensionY=age dimensionA=strain dimensionB=rep
-dimensionAchecked C57BL6,S129
+dimensionAchecked C57BL6,S129,UKN
 dimensionBchecked rep1
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
@@ -22,6 +41,7 @@ type bed 3
 wgEncode 1
 
     track wgEncodeUwDnaseViewHotspots
+    release alpha
     shortLabel Hot Spots
     view Hotspots
     visibility pack
@@ -196,7 +216,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHotspots 
         shortLabel MEL 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in MEL cells)
-        subGroups view=Hotspots age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep1
+        subGroups view=Hotspots age=immortal cellType=MEL sex=M strain=UKN rep=rep1
         type broadPeak
         color 46,0,184
         # subId=2017 dateSubmitted=2010-07-24
@@ -206,7 +226,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel MEL 3
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 3 (in MEL cells)
-        subGroups view=Hotspots age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep3
+        subGroups view=Hotspots age=immortal cellType=MEL sex=M strain=UKN rep=rep3
         type broadPeak
         color 46,0,184
         # subId=2018 dateSubmitted=2010-07-24
@@ -216,7 +236,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHotspots off
         shortLabel MEL 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in MEL cells)
-        subGroups view=Hotspots age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep2
+        subGroups view=Hotspots age=immortal cellType=MEL sex=M strain=UKN rep=rep2
         type broadPeak
         color 46,0,184
         # subId=2019 dateSubmitted=2010-07-24
@@ -352,6 +372,7 @@ wgEncode 1
         # subId=2016 dateSubmitted=2010-07-24
 
     track wgEncodeUwDnaseViewPeaks
+    release alpha
     shortLabel Peaks
     view Peaks
     visibility pack
@@ -526,7 +547,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewPeaks 
         shortLabel MEL Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in MEL cells)
-        subGroups view=Peaks age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep1
+        subGroups view=Peaks age=immortal cellType=MEL sex=M strain=UKN rep=rep1
         type narrowPeak
         color 46,0,184
         # subId=2017 dateSubmitted=2010-07-24
@@ -536,7 +557,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel MEL Pk 3
         longLabel ENCODE UW DNaseI HS Peaks Replicate 3 (in MEL cells)
-        subGroups view=Peaks age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep3
+        subGroups view=Peaks age=immortal cellType=MEL sex=M strain=UKN rep=rep3
         type narrowPeak
         color 46,0,184
         # subId=2018 dateSubmitted=2010-07-24
@@ -546,7 +567,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewPeaks off
         shortLabel MEL Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in MEL cells)
-        subGroups view=Peaks age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep2
+        subGroups view=Peaks age=immortal cellType=MEL sex=M strain=UKN rep=rep2
         type narrowPeak
         color 46,0,184
         # subId=2019 dateSubmitted=2010-07-24
@@ -683,6 +704,7 @@ wgEncode 1
 
 
     track wgEncodeUwDnaseViewRawSignal
+    release alpha
     shortLabel Raw Signal
     view RawSignal
     visibility full
@@ -859,7 +881,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewRawSignal 
         shortLabel MEL Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in MEL cells)
-        subGroups view=RawSignal age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep1
+        subGroups view=RawSignal age=immortal cellType=MEL sex=M strain=UKN rep=rep1
         type bigWig 1.000000 123367.000000
         color 46,0,184
         # subId=2017 dateSubmitted=2010-07-24
@@ -869,7 +891,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel MEL Raw 3
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 3 (in MEL cells)
-        subGroups view=RawSignal age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep3
+        subGroups view=RawSignal age=immortal cellType=MEL sex=M strain=UKN rep=rep3
         type bigWig 1.000000 121025.000000
         color 46,0,184
         # subId=2018 dateSubmitted=2010-07-24
@@ -879,7 +901,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewRawSignal off
         shortLabel MEL Raw 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in MEL cells)
-        subGroups view=RawSignal age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep2
+        subGroups view=RawSignal age=immortal cellType=MEL sex=M strain=UKN rep=rep2
         type bigWig 1.000000 228690.000000
         color 46,0,184
         # subId=2019 dateSubmitted=2010-07-24

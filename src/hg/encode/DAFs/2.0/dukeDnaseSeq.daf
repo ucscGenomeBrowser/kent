@@ -24,13 +24,13 @@ dafVersion       2.0
 # Lab and general info
 grant            Crawford
 lab              Duke
-dataType         DNase-seq
+dataType         DnaseSeq
 compositeSuffix  OpenChromDnase
 group            regulation
 variables        cell
 assembly         hg19
 
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=32;
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,nMatch,isSort,matchFirst=32;
 
 # Track/view definition
 view             Peaks

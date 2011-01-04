@@ -35,6 +35,9 @@ else
     return c;
 }
 
+// The maximum number of words per line that can be lifted:
+#define LIFTOVER_MAX_WORDS 64
+
 void readLiftOverMap(char *fileName, struct hash *chainHash)
 /* Read map file into hashes. */
 {
@@ -132,7 +135,7 @@ return ok;
 static char *remapRange(struct hash *chainHash, double minRatio, 
                         int minSizeT, int minSizeQ, 
                         int minChainSizeT, int minChainSizeQ, 
-                        char *chrom, int s, int e, char strand,
+                        char *chrom, int s, int e, char qStrand,
 			int thickStart, int thickEnd, bool useThick,
 			double minMatch,
                         char *regionName, char *db, char *chainTableName,
@@ -150,6 +153,7 @@ struct chain *chainsHit = NULL,
                 *chainsMissed = NULL, *chain;
 struct bed *bedList = NULL, *unmappedBedList = NULL;
 struct bed *bed = NULL;
+char strand = qStrand;
 /* initialize for single region case */
 int start = s, end = e;
 double minMatchSize = minMatch * (end - start);
@@ -235,7 +239,7 @@ for (chain = chainsHit; chain != NULL; chain = next)
     if (!mapThroughChain(chain, minRatio, &start, &end, &subChain, &toFree))
         errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
     if (chain->qStrand == '-')
-	strand = otherStrand(strand);
+	strand = otherStrand(qStrand);
     if (useThick)
 	{
 	struct chain *subChain2 = NULL;
@@ -378,7 +382,7 @@ static int bedOverSmall(struct lineFile *lf, int fieldCount,
  * ENCODE region mapping */  
 {
 int i, wordCount, s, e;
-char *words[20], *chrom;
+char *words[LIFTOVER_MAX_WORDS], *chrom;
 char strand = '.', strandString[2];
 char *error;
 int ct = 0;
@@ -1003,7 +1007,7 @@ static int bedOverBig(struct lineFile *lf, int refCount,
 /* Do a bed with block-list. */
 {
 int wordCount, bedCount;
-char *line, *words[64];
+char *line, *words[LIFTOVER_MAX_WORDS];
 char *whyNot = NULL;
 int ct = 0;
 int errs = 0;
@@ -1062,7 +1066,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
 int bedFieldCount = bedPlus;
 char *line;
-char *words[64];
+char *words[LIFTOVER_MAX_WORDS];
 int ct = 0;
 
 if (lineFileNextReal(lf, &line))
@@ -1122,7 +1126,7 @@ int liftOverPositions(char *fileName, struct hash *chainHash,
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
-char *words[32];
+char *words[LIFTOVER_MAX_WORDS];
 int wordCount;
 int ct = 0;
 struct tempName bedTn, mappedBedTn, unmappedBedTn;

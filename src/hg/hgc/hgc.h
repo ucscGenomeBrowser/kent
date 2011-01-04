@@ -31,6 +31,15 @@
 #ifndef WIKITRACK_H
 #include "wikiTrack.h"
 #endif
+
+#ifndef VARIOME_H
+#include "variome.h"
+#endif
+
+#ifndef BEDDETAIL_H
+#include "bedDetail.h"
+#endif
+
 #include "hgdpGeo.h"
 #include "dnaMotif.h"
 
@@ -341,6 +350,27 @@ void offerLogin(int id, char *loginType, char *table);
 void outputJavaScript();
 /* java script functions used in the create item form */
 
+void doVariome (char *wikiItemId, char *chrom, int winStart, int winEnd);
+/* handle item clicks on variome - may create new items */
+
+void displayVariomeItem (struct variome *item, char *userName);
+/* given an already fetched item, get the item description from
+ *      the wiki.  Put up edit form(s) if userName is not NULL
+ * separate from wikiTrack for form field differences and help
+ */
+
+void doCreateVariomeItem (char *itemName, char *chrom, int winStart, int winEnd);
+/* handle create item clicks for variome */
+
+void doAddVariomeComments(char *wikiItemId, char *chrom, int winStart, int winEnd);
+/* handle add comment item clicks for Variome Track */
+
+void doDeleteVariomeItem(char *wikiItemId, char *chrom, int winStart, int winEnd);
+/* handle delete item clicks for Variome Track */
+
+void printWikiVariomeForm (struct bedDetail *item);
+/* print the wiki annotation form for the variome track */
+
 void customMafClick(struct sqlConnection *conn, 
 	struct sqlConnection *conn2, struct trackDb *tdb);
 /* handle clicks on a custom maf */
@@ -369,6 +399,12 @@ void doBamDetails(struct trackDb *tdb, char *item);
 
 void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
 /* Show details of a makeItems item. */
+
+void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName);
+/* generate the detail page for a custom track of bedDetail type */
+
+void doPgSnp(struct trackDb *tdb, char *itemName, struct customTrack *ct);
+/* print detail page for personal genome track (pgSnp) */
 
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 

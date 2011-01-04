@@ -3364,4 +3364,35 @@ TMPDIR=/scratch/tmp
     ssh hgwdev
     cd /cluster/genbank/genbank
     ./bin/gbDbLoadStep -drop -initialLoad panTro2
+
+############################################################################
+# DENISOVA (ANCIENT HUMAN) (DONE 11/16/10 angie)
+    mkdir /hive/data/genomes/panTro2/bed/denisova
+    cd /hive/data/genomes/panTro2/bed/denisova
+    # Files for both hg18 and panTro2 were downloaded in hg18/bed/denisova,
+    # see analogous section in hg18.txt.
+
+    # Combine the two sequence-lib files for Denisova into one bam.  First ensure that
+    # the headers are identical:
+    set dataDir = /hive/data/genomes/hg18/bed/denisova/cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2
+    samtools view -H $dataDir/SL3003/SL3003-pt2.bam > h1
+    samtools view -H $dataDir/SL3004_100122/SL3004-pt2.bam > h2
+    cmp h1 h2
+    # No output, and they seem to be sorted by position, good to go:
+    samtools merge SL3003_SL3004_100122-panTro2.bam \
+      $dataDir/SL3003/SL3003-pt2.bam $dataDir/SL3004_100122/SL3004-pt2.bam
+#1017.838u 23.035s 17:36.97 98.4%        0+0k 0+0io 0pf+0w
+    # Build BAM index (.bam.bai) files.
+    samtools index SL3003_SL3004_100122-panTro2.bam
+#85.714u 3.458s 2:03.46 72.2%    0+0k 0+0io 0pf+0w
+    # Make /gbdb/ links and load database tables
+    mkdir /gbdb/panTro2/denisova
+    ln -s `pwd`/SL3003_SL3004_100122-panTro2.bam{,.bai} /gbdb/panTro2/denisova/
+    hgBbiDbLink panTro2 bamSLDenisova /gbdb/panTro2/denisova/SL3003_SL3004_100122-panTro2.bam
+
+    # to see the grp table:
+    hgsql -e "select * from grp order by priority;" panTro2
+    # add new denisova group:
+    hgsql panTro2 -e "INSERT INTO grp VALUES ('denisova', 'Denisova Assembly and Analysis', 6.6);"
+
 ############################################################################

@@ -13,7 +13,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878ControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878ControlV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -36,7 +36,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878CtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878CtcfV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -59,7 +59,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27acV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -82,7 +82,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -105,7 +105,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -128,7 +128,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -151,7 +151,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -174,7 +174,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -197,7 +197,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9acV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -220,7 +220,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1Gm12878H4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -241,7 +241,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -261,7 +261,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -281,7 +281,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -301,7 +301,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k36me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -321,7 +321,7 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -341,7 +341,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k4me2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -361,7 +361,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -381,7 +381,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -401,7 +401,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep1H1hescH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -421,7 +421,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2Control.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2Control
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -441,7 +441,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2Ctcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -461,7 +461,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -481,7 +481,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -501,7 +501,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -521,7 +521,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -541,7 +541,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -561,7 +561,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1Hepg2H4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -581,7 +581,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecControl
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -601,7 +601,7 @@ dateUnrestricted 2010-06-27
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecCtcf
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -621,7 +621,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -641,7 +641,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k27me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -661,7 +661,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -681,7 +681,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k4me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -701,7 +701,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k4me2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -721,7 +721,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k4me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -741,7 +741,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -761,7 +761,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1HmecH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH4k20me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -781,7 +781,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -801,7 +801,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -821,7 +821,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -841,7 +841,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -861,7 +861,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -881,7 +881,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -901,7 +901,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -921,7 +921,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -941,7 +941,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -961,7 +961,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1HsmmH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -983,7 +983,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecControlV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -1006,7 +1006,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecCtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecCtcfV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1029,7 +1029,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27acV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1052,7 +1052,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1075,7 +1075,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1098,7 +1098,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1121,7 +1121,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1144,7 +1144,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1167,7 +1167,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9acV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1190,7 +1190,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH3k9me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1213,7 +1213,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecH4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1236,7 +1236,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1HuvecPol2bV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecPol2bV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1259,7 +1259,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562ControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562ControlV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -1282,7 +1282,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562CtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562CtcfV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1305,7 +1305,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k27acV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1328,7 +1328,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1351,7 +1351,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1374,7 +1374,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1397,7 +1397,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1420,7 +1420,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1443,7 +1443,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k9acV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1466,7 +1466,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H3k9me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1489,7 +1489,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562H4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1512,7 +1512,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1K562Pol2bV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562Pol2bV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1535,7 +1535,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteControlV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -1558,7 +1558,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteCtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteCtcfV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1581,7 +1581,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k27acV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1604,7 +1604,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k27me3V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1627,7 +1627,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k36me3V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1650,7 +1650,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k4me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1673,7 +1673,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k4me2V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1696,7 +1696,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k4me3V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1719,7 +1719,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k9acV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1742,7 +1742,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH3k9me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH3k9me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1765,7 +1765,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocyteH4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocyteH4k20me1V2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1788,7 +1788,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep1KeratinocytePol2bV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1KeratinocytePol2bV2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -1809,7 +1809,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -1829,7 +1829,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1849,7 +1849,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1869,7 +1869,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1889,7 +1889,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1909,7 +1909,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1929,7 +1929,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1949,7 +1949,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1969,7 +1969,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -1989,7 +1989,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep1NhlfH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH4k20me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -2011,7 +2011,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878ControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878ControlV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -2034,7 +2034,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878CtcfV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2057,7 +2057,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27acV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2080,7 +2080,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2103,7 +2103,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2126,7 +2126,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2149,7 +2149,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2172,7 +2172,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2195,7 +2195,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9acV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2218,7 +2218,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2Gm12878H4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2239,7 +2239,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -2259,7 +2259,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2279,7 +2279,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2299,7 +2299,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2319,7 +2319,7 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k4me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2339,7 +2339,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2359,7 +2359,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2379,7 +2379,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2399,7 +2399,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep2H1hescH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2419,7 +2419,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2Control.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2Control
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -2439,7 +2439,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2Ctcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2459,7 +2459,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k27ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2479,7 +2479,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2499,7 +2499,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2519,7 +2519,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k4me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2539,7 +2539,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2559,7 +2559,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2Hepg2H4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2579,7 +2579,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -2599,7 +2599,7 @@ dateUnrestricted 2010-06-27
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2619,7 +2619,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k27ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2639,7 +2639,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k27me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2659,7 +2659,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2679,7 +2679,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k4me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2699,7 +2699,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k4me2
+labVersion Illumina Genome Analyzer IIe 
 project wgEncode
 replicate 2
 setType exp
@@ -2719,7 +2719,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2739,7 +2739,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2759,7 +2759,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2HmecH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2779,7 +2779,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType input
@@ -2799,7 +2799,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2819,7 +2819,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2839,7 +2839,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k27me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2859,7 +2859,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k36me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2879,7 +2879,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2899,7 +2899,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k4me2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2919,7 +2919,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2939,7 +2939,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -2959,7 +2959,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2HsmmH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -2981,7 +2981,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecControlV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType input
@@ -3004,7 +3004,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecCtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecCtcfV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3027,7 +3027,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27acV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3050,7 +3050,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3073,7 +3073,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3096,7 +3096,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3119,7 +3119,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3142,7 +3142,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3165,7 +3165,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9acV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3188,7 +3188,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH3k9me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3211,7 +3211,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecH4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1V2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3234,7 +3234,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2HuvecPol2bV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecPol2bV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3257,7 +3257,6 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562ControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562ControlV2
 project wgEncode
 replicate 2
 setType input
@@ -3280,7 +3279,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562CtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562CtcfV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3303,7 +3302,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k27acV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3326,7 +3325,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3349,7 +3348,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3372,7 +3371,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3395,7 +3394,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3418,7 +3417,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3441,7 +3440,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k9acV2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3464,7 +3463,6 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H3k9me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1V2
 project wgEncode
 replicate 2
 setType exp
@@ -3487,7 +3485,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562H4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3510,7 +3508,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2K562Pol2bV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562Pol2bV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3533,7 +3531,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteControlV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteControlV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -3556,7 +3554,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteCtcfV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteCtcfV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3579,7 +3577,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k27acV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3602,7 +3600,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k27me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k27me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3625,7 +3623,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k36me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k36me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3648,7 +3646,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k4me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3671,7 +3669,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me2V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k4me2V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3694,7 +3692,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k4me3V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k4me3V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3717,7 +3715,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9acV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k9acV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3740,7 +3738,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH3k9me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH3k9me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3763,7 +3761,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocyteH4k20me1V2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocyteH4k20me1V2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3786,7 +3784,7 @@ fileName wgEncodeBroadChipSeqAlignmentsRep2KeratinocytePol2bV2.tagAlign.gz
 fragLength 300
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2KeratinocytePol2bV2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3807,7 +3805,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfControl.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -3827,7 +3825,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfCtcf.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3847,7 +3845,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k27ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3867,7 +3865,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k27me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3887,7 +3885,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k36me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3907,7 +3905,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3927,7 +3925,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me2.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3947,7 +3945,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k4me3.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k4me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -3967,7 +3965,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH3k9ac.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -3987,7 +3985,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqAlignmentsRep2NhlfH4k20me1.tagAlign.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -5687,7 +5685,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878Control.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878Control
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -5707,7 +5705,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878Ctcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878Ctcf
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -5727,7 +5725,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5747,7 +5745,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5767,7 +5765,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k36me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -5787,7 +5785,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5807,7 +5805,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5827,7 +5825,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5847,7 +5845,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H3k9ac
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -5867,7 +5865,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1Gm12878H4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Gm12878H4k20me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -5887,7 +5885,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -5907,7 +5905,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5927,7 +5925,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5947,7 +5945,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k36me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -5967,7 +5965,7 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -5987,7 +5985,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k4me2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6007,7 +6005,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6027,7 +6025,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6047,7 +6045,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep1H1hescH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1H1hescH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6067,7 +6065,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2Control.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2Control
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -6087,7 +6085,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2Ctcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2Ctcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6107,7 +6105,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6127,7 +6125,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6147,7 +6145,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6167,7 +6165,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6187,7 +6185,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6207,7 +6205,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1Hepg2H4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1Hepg2H4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6227,7 +6225,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecControl
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -6247,7 +6245,7 @@ dateUnrestricted 2010-06-27
 fileName wgEncodeBroadChipSeqRawDataRep1HmecCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecCtcf
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6267,7 +6265,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6287,7 +6285,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k27me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6307,7 +6305,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6327,7 +6325,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k4me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6347,7 +6345,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k4me2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6367,7 +6365,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k4me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6387,7 +6385,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6407,7 +6405,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1HmecH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HmecH4k20me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6427,7 +6425,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -6447,7 +6445,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6467,7 +6465,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6487,7 +6485,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6507,7 +6505,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6527,7 +6525,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6547,7 +6545,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6567,7 +6565,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6587,7 +6585,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6607,7 +6605,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1HsmmH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HsmmH4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6627,7 +6625,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -6647,7 +6645,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecCtcf
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6667,7 +6665,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6687,7 +6685,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k27me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6707,7 +6705,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k36me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6727,7 +6725,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6747,7 +6745,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6767,7 +6765,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k4me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6787,7 +6785,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6807,7 +6805,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH3k9me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH3k9me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6827,7 +6825,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecH4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6847,7 +6845,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1HuvecPol2b.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1HuvecPol2b
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6867,7 +6865,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562Control.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562Control
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType input
@@ -6887,7 +6885,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562Ctcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562Ctcf
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6907,7 +6905,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k27ac
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6927,7 +6925,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -6947,7 +6945,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k36me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6967,7 +6965,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k4me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -6987,7 +6985,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k4me2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7007,7 +7005,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7027,7 +7025,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7047,7 +7045,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H3k9me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H3k9me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7067,7 +7065,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562H4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562H4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7087,7 +7085,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep1K562Pol2b.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1K562Pol2b
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7107,7 +7105,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -7127,7 +7125,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekCtcf
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7147,7 +7145,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k27ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7167,7 +7165,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k27me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7187,7 +7185,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k36me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7207,7 +7205,7 @@ dateUnrestricted 2009-10-06
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7227,7 +7225,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7247,7 +7245,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k4me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7267,7 +7265,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7287,7 +7285,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH3k9me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH3k9me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7307,7 +7305,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekH4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7327,7 +7325,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep1NhekPol2b.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhekPol2b
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7347,7 +7345,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType input
@@ -7367,7 +7365,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7387,7 +7385,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7407,7 +7405,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7427,7 +7425,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7447,7 +7445,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7467,7 +7465,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7487,7 +7485,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7507,7 +7505,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 1
 setType exp
@@ -7527,7 +7525,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep1NhlfH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep1NhlfH4k20me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 1
 setType exp
@@ -7547,7 +7545,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878Control.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878Control
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -7567,7 +7565,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878Ctcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878Ctcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7587,7 +7585,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7607,7 +7605,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7627,7 +7625,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7647,7 +7645,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7667,7 +7665,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7687,7 +7685,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7707,7 +7705,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7727,7 +7725,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2Gm12878H4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Gm12878H4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7747,7 +7745,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -7767,7 +7765,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7787,7 +7785,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7807,7 +7805,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7827,7 +7825,7 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k4me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -7847,7 +7845,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7867,7 +7865,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7887,7 +7885,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7907,7 +7905,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep2H1hescH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2H1hescH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7927,7 +7925,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2Control.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2Control
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -7947,7 +7945,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2Ctcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2Ctcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -7967,7 +7965,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k27ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -7987,7 +7985,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8007,7 +8005,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8027,7 +8025,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k4me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8047,7 +8045,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8067,7 +8065,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2Hepg2H4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2Hepg2H4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8087,7 +8085,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -8107,7 +8105,7 @@ dateUnrestricted 2010-06-27
 fileName wgEncodeBroadChipSeqRawDataRep2HmecCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8127,7 +8125,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k27ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8147,7 +8145,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k27me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8167,7 +8165,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8187,7 +8185,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k4me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8207,7 +8205,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k4me2
+labVersion Illumina Genome Analyzer IIe 
 project wgEncode
 replicate 2
 setType exp
@@ -8227,7 +8225,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8247,7 +8245,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH3k9ac
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8267,7 +8265,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2HmecH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HmecH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8287,7 +8285,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmControl
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType input
@@ -8307,7 +8305,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8327,7 +8325,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8347,7 +8345,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k27me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8367,7 +8365,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k36me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8387,7 +8385,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8407,7 +8405,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k4me2
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8427,7 +8425,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8447,7 +8445,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8467,7 +8465,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2HsmmH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HsmmH4k20me1
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8487,7 +8485,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecControl
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType input
@@ -8507,7 +8505,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecCtcf
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8527,7 +8525,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27ac
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8547,7 +8545,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k27me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8567,7 +8565,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k36me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8587,7 +8585,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8607,7 +8605,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me2
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8627,7 +8625,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k4me3
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8647,7 +8645,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9ac
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8667,7 +8665,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH3k9me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH3k9me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8687,7 +8685,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecH4k20me1
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8707,7 +8705,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2HuvecPol2b.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2HuvecPol2b
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8727,7 +8725,6 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562Control.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562Control
 project wgEncode
 replicate 2
 setType input
@@ -8747,7 +8744,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562Ctcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562Ctcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8767,7 +8764,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8787,7 +8784,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8807,7 +8804,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8827,7 +8824,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8847,7 +8844,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8867,7 +8864,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8887,7 +8884,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k9ac
+labVersion Illumina Genome Analyzer IIe and Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -8907,7 +8904,6 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H3k9me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H3k9me1
 project wgEncode
 replicate 2
 setType exp
@@ -8927,7 +8923,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562H4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562H4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8947,7 +8943,7 @@ dateUnrestricted 2009-10-05
 fileName wgEncodeBroadChipSeqRawDataRep2K562Pol2b.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2K562Pol2b
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -8967,7 +8963,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -8987,7 +8983,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9007,7 +9003,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9027,7 +9023,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9047,7 +9043,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9067,7 +9063,7 @@ dateUnrestricted 2009-10-06
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9087,7 +9083,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9107,7 +9103,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k4me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9127,7 +9123,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9147,7 +9143,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH3k9me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH3k9me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9167,7 +9163,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9187,7 +9183,7 @@ dateUnrestricted 2009-10-07
 fileName wgEncodeBroadChipSeqRawDataRep2NhekPol2b.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhekPol2b
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9207,7 +9203,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfControl.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfControl
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType input
@@ -9227,7 +9223,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfCtcf.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfCtcf
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9247,7 +9243,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k27ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k27ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9267,7 +9263,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k27me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k27me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9287,7 +9283,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k36me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k36me3
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9307,7 +9303,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k4me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9327,7 +9323,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me2.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k4me2
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9347,7 +9343,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k4me3.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k4me3
+labVersion Illumina Genome Analyzer IIx
 project wgEncode
 replicate 2
 setType exp
@@ -9367,7 +9363,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH3k9ac.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH3k9ac
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -9387,7 +9383,7 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeBroadChipSeqRawDataRep2NhlfH4k20me1.fastq.gz
 grant Bernstein
 lab Broad
-parentTable wgEncodeBroadChipSeqRawSignalRep2NhlfH4k20me1
+labVersion Illumina Genome Analyzer IIe
 project wgEncode
 replicate 2
 setType exp
@@ -11161,4 +11157,4 @@ subId 579
 tableName wgEncodeBroadChipSeqSignalNhlfH4k20me1
 view Signal
 
-# MAGIC: -380800573
+# MAGIC: 487550617

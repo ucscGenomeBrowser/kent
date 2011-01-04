@@ -41,6 +41,7 @@ char *fillInScoreColumn = NULL;      /* column to use to fill-in score column */
 boolean customTrackLoader = FALSE; /*TRUE == turn on all custom track options
                                     * turns on: noNameIx, ignoreEmpty, allowNegativeScores
                                     * -verbose=0, allowStartEqualEnd */
+boolean bedDetail = FALSE;      /* TRUE == bedDetail type, requires tab and sqlTable */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -57,6 +58,7 @@ static struct optionSpec optionSpecs[] = {
     {"noLoad", OPTION_BOOLEAN},
     {"noHistory", OPTION_BOOLEAN},
     {"bedGraph", OPTION_INT},
+    {"bedDetail", OPTION_BOOLEAN},
     {"minScore", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
     {"noStrict", OPTION_BOOLEAN},
@@ -95,6 +97,8 @@ errAbort(
   "   -notItemRgb  - Do not parse column nine as r,g,b when commas seen (bacEnds)\n"
   "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
   "               - bedGraph N is typically 4: -bedGraph=4\n"
+  "   -bedDetail  - bedDetail format with id and text for hgc clicks\n"
+  "               - requires tab and sqlTable options\n"
   "   -maxChromNameLength=N  - specify max chromName length to avoid\n"
   "               - reference to chromInfo table\n"
   "   -tmpDir=<path>  - path to directory for creation of temporary .tab file\n"
@@ -319,10 +323,16 @@ if (numFields != bedSize)
     {
     struct slName *oneName;
     int i;
+    int start = 0;
     if (!trimSqlTable || (bedSize > numFields))
 	errAbort(".sql table has wrong number of columns in the definition. Try -trimSqlTable");
     slReverse(&fieldNames);
-    for (oneName = fieldNames, i = 0; (i < numFields - bedSize) 
+    if (bedDetail) 
+        {
+        fieldNames = fieldNames->next; /* skip description */
+        fieldNames = fieldNames->next; /* skip id */
+        }
+    for (oneName = fieldNames, i = start; (i < numFields - bedSize) 
 	     && (oneName != NULL); i++, oneName = oneName->next)
 	{
 	char query[256];
@@ -348,6 +358,13 @@ if ((char *)NULL != tmpDir)
     tab = cloneString(rTempName(tmpDir,"loadBed",".tab"));
 else
     tab = cloneString("bed.tab");
+
+if (bedDetail && sqlTable == NULL) 
+    errAbort("bedDetail format requires sqlTable option");
+if (bedDetail && !strictTab) 
+    errAbort("bedDetail format must be tab separated");
+if (bedDetail && !noBin) 
+    noBin = TRUE;
 
 /* First make table definition. */
 if (sqlTable != NULL && !oldTable)
@@ -460,14 +477,8 @@ if ( ! noLoad )
 	sqlLoadTabFile(conn, tab, track, loadOptions);
 
     if (! noHistory)
-	{
-	char comment[256];
-	/* add a comment to the history table and finish up connection */
-	safef(comment, sizeof(comment),
-	    "Add %d element(s) from bed list to %s table",
-		slCount(bedList), track);
-	hgHistoryComment(conn, comment);
-	}
+	hgHistoryComment(conn, "Add %d element(s) from bed list to %s table",
+			 slCount(bedList), track);
     if(fillInScoreColumn != NULL)
         {
         char query[500];
@@ -589,6 +600,7 @@ hasBin = optionExists("hasBin");
 noLoad = optionExists("noLoad");
 noHistory = optionExists("noHistory");
 bedGraph = optionInt("bedGraph",0);
+bedDetail = optionExists("bedDetail");
 minScore = optionInt("minScore",100);
 if (minScore<0 || minScore>1000)
     errAbort("minScore must be between 0-1000\n");

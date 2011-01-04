@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "hdb.h"
+#include "mdb.h"
 #include "cheapcgi.h"
 #include "hPrint.h"
 #include "dystring.h"
@@ -50,6 +51,8 @@ makeIndent(tabs, sizeof(tabs), indent);
 dyStringPrintf(json, "\n%s}", tabs);
 }
 
+#define MDB_VAL_TRUNC_AT 64
+
 int main(int argc, char *argv[])
 {
 struct dyString *output = newDyString(10000);
@@ -74,7 +77,7 @@ if(!strcmp(cmd, "trackList"))
     // e.g. http://genome.ucsc.edu/hgApi?db=hg18&cmd=trackList
 
     struct trackDb *tdb, *tdbList = NULL;
-    tdbList = hTrackDb(database, NULL);
+    tdbList = hTrackDb(database);
     dyStringPrintf(output, "[\n");
     int count = 0;
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -93,34 +96,89 @@ else if(!strcmp(cmd, "metaDb"))
     boolean metaDbExists = sqlTableExists(conn, "metaDb");
     if(metaDbExists)
         {
-        char query[256];
-        struct sqlResult *sr = NULL;
-        char **row;
-        int i;
-        struct slName *el, *termList = NULL;
         char *var = cgiOptionalString("var");
         if(var)
             var = sqlEscapeString(var);
         else
             fail("Missing var parameter");
-        safef(query, sizeof(query), "select distinct val from metaDb where var = '%s'", var);
-        sr = sqlGetResult(conn, query);
-        while ((row = sqlNextRow(sr)) != NULL)
-            slNameAddHead(&termList, row[0]);
-        sqlFreeResult(&sr);
-        slSort(&termList, slNameCmpCase);
+        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+        struct slPair *pair;
         dyStringPrintf(output, "[\n");
-        for (el = termList, i = 0; el != NULL; el = el->next, i++)
+        for (pair = pairs; pair != NULL; pair = pair->next)
             {
-            if(i)
+            if(pair != pairs)
                 dyStringPrintf(output, ",\n");
-            dyStringPrintf(output, "'%s'", javaScriptLiteralEncode(el->name));
+            dyStringPrintf(output, "['%s','%s']", javaScriptLiteralEncode(pair->name), javaScriptLiteralEncode(pair->val));
             }
         dyStringPrintf(output, "\n]\n");
         }
     else
         fail("Assembly does not support metaDb");
     }
+#ifdef CV_SEARCH_SUPPORTS_FREETEXT
+// TODO: move to lib since hgTracks and hgApi share
+#define METADATA_VALUE_PREFIX    "hgt_mdbVal"
+else if(startsWith(METADATA_VALUE_PREFIX, cmd))
+    {
+    // Returns metaDb value control: drop down or free text, with or without help link.
+    // e.g. http://genome.ucsc.edu/hgApi?db=hg18&cmd=hgt_mdbVal3&var=cell
+
+    // TODO: Move guts to lib, so that hgTracks::searchTracks.c and hgApi.c can share
+
+    struct sqlConnection *conn = hAllocConn(database);
+    boolean metaDbExists = sqlTableExists(conn, "metaDb");
+    if(metaDbExists)
+        {
+        char *var = cgiOptionalString("var");
+        if(var)
+            var = sqlEscapeString(var);
+        else
+            fail("Missing var parameter");
+
+        int ix = atoi(cmd+strlen(METADATA_VALUE_PREFIX)); // 1 based index
+        if(ix == 0) //
+            fail("Unsupported 'cmd' parameter");
+
+        enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
+        if (searchBy == cvsSearchBySingleSelect)
+            {
+            dyStringPrintf(output,"<SELECT NAME=\"%s%i\" class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'>\n",
+                            METADATA_VALUE_PREFIX, ix);
+
+            // Get options list
+            struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+            struct slPair *pair;
+            if (pairs == NULL)
+                fail("No selectable values for this metadata variable");
+
+            dyStringPrintf(output, "<OPTION VALUE='Any'>Any</OPTION>\n");
+            dyStringPrintf(output, "[\n");
+            for (pair = pairs; pair != NULL; pair = pair->next)
+                {
+                dyStringPrintf(output, "<OPTION VALUE=\"%s\">%s</OPTION>\n", javaScriptLiteralEncode(pair->val), javaScriptLiteralEncode(pair->name));
+                }
+            dyStringPrintf(output,"</SELECT>\n");
+            }
+        else if (searchBy == cvsSearchByFreeText)
+            {
+            dyStringPrintf(output,"<input type='text' name='%s%i' value='' class='mdbVal freeText' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:310px; width:310px; font-size:.9em;'>",
+                            METADATA_VALUE_PREFIX, ix);
+            }
+        //else if (searchBy == cvsSearchByMultiSelect)
+        //    {
+        //    // TO BE IMPLEMENTED
+        //    }
+        //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByDateRange)
+        //    {
+        //    // TO BE IMPLEMENTED
+        //    }
+        else
+            fail("Metadata variable not searchable");
+        }
+    else
+        fail("Assembly does not support metaDb");
+    }
+#endif///def CV_SEARCH_SUPPORTS_FREETEXT
 else if(!strcmp(cmd, "tableMetadata"))
     { // returns an html table with metadata for a given track
     char *trackName = cgiOptionalString("track");
@@ -147,7 +205,10 @@ else if(!strcmp(cmd, "tableMetadata"))
             dyStringAppend(output,"No track variable found");
     }
 else
+    {
+    warn("unknwon cmd: %s",cmd);
     fail("Unsupported 'cmd' parameter");
+    }
 
 // It's debatable whether the type should be text/plain, text/javascript or application/javascript; I think
 // any of the types containing "javascript" don't work with IE6, so I'm using text/plain

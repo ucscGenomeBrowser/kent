@@ -1976,6 +1976,10 @@ cookieList = NULL;
 char *commonCssStyles()
 /* Returns a string of common CSS styles */
 {
+// Contents currently is OBSOLETE as these have been moved to HGStyle.css
+// However, don't loose this function call yet, as it may have future uses.
+return "";
+#ifdef OMIT
 static boolean commonStylesWritten = FALSE;
 if(commonStylesWritten)
     return "";
@@ -2024,5 +2028,6 @@ dyStringPrintf(style,".inOutButton {height:24px; width:24px; border-style: outse
 
 dyStringPrintf(style,"</style>\n");
 return dyStringCannibalize(&style);
+#endif///def OMIT
 }
 

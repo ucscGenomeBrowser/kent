@@ -27,16 +27,16 @@ function _matSelectViewForSubTracks(obj,view)
 
         // Needed for later
         classesHidden = matViewClasses('hidden');
-        classesHidden = classesHidden.concat( matAbcCBclasses('unchecked') );
+        classesHidden = classesHidden.concat( matAbcCBclasses(false) );
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
-        exposeComposite(compositeName);
+        exposeAll();
         matSubCBsEnable(true,view);
 
         // Needed for later
         classesHidden = matViewClasses('hidden');
-        classesHidden = classesHidden.concat( matAbcCBclasses('unchecked') );
+        classesHidden = classesHidden.concat( matAbcCBclasses(false) );
 
         // If hide => show then check all subCBs matching view and matCBs
         // If show => show than just enable subCBs for the view.
@@ -94,14 +94,12 @@ function matSelectViewForSubTracks(obj,view)
     waitOnFunction( _matSelectViewForSubTracks, obj,view);
 }
 
-function exposeComposite(compositeName)
+function exposeAll()
 {
     // Make main display dropdown show full if currently hide
-    var compositeDD = $("select[name='"+compositeName+"']");
-    if($(compositeDD).attr('selectedIndex') < 1) { // Composite vis display is HIDE
-        var maxVis = ($(compositeDD).children('option').length - 1);
-        $(compositeDD).attr('selectedIndex',maxVis);
-    }
+    var visDD = $("select.visDD"); // limit to hidden
+    if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0)   // limit to hidden
+        $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
 }
 
 function matSubCbClick(subCB)
@@ -113,7 +111,7 @@ function matSubCbClick(subCB)
     hideOrShowSubtrack(subCB);
     // When subCBs are clicked, 3-state matCBs may need to be set
     var classes = matViewClasses('hidden');
-    classes = classes.concat( matAbcCBclasses('unchecked') );
+    classes = classes.concat( matAbcCBclasses(false) );
     var matCB = matCbFindFromSubCb( subCB );
     if( matCB != undefined ) {
         matChkBoxNormalize( matCB, classes );
@@ -122,6 +120,10 @@ function matSubCbClick(subCB)
     //if( abcCB != undefined ) {
     //    matChkBoxNormalize( abcCB, classes );
     //}
+
+    if(subCB.checked)
+        exposeAll();  // Unhide composite vis?
+
     matSubCBsSelected();
 }
 
@@ -153,12 +155,15 @@ function matCbClick(matCB)
                     $( matCBs ).each( function (i) { matCbComplete( this, true ); });
                 else {
                     var classes = matViewClasses('hidden');
-                    classes = classes.concat( matAbcCBclasses('unchecked') );
+                    classes = classes.concat( matAbcCBclasses(false) );
                     $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
                 }
             }
         }
     }
+
+    if(matCB.checked)
+        exposeAll();  // Unhide composite vis?
     matSubCBsSelected();
 }
 
@@ -179,13 +184,15 @@ function matSetMatrixCheckBoxes(state)
         subCDs = $( subCDs ).filter("."+arguments[vIx]);  // Successively limit list by additional classes.
     }
     if(state) { // If clicking [+], further limit to only checked ABCs
-        var classes = matAbcCBclasses('unchecked');
+        var classes = matAbcCBclasses(false);
         subCDs = objsFilterByClasses(subCDs,"not",classes);  // remove unchecked abcCB classes
     }
     $( subCDs ).each( function (i) {
         this.checked = state;
         matSubCBsetShadow(this);
     });
+    if(state)
+        exposeAll();  // Unhide composite vis?
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
     //jQuery(this).css('cursor', '');
@@ -204,8 +211,7 @@ function filterCompositeSelectionChanged(obj)
     var classes = $(obj).val();  // It is already an array!
     if(classes == null) { // Nothing is selected.  Mark with "[empty]"
         classes = "";
-        setCartVar($(obj).attr('name'),"[empty]");
-        //$(obj).val("[empty]");
+        setCartVar($(obj).attr('name'),"[empty]");  // FIXME: setCartVar conflicts with "submit" button paradigm
     }
 
     // For all subtracks that DO NOT match selected classes AND are checked: uncheck
@@ -230,25 +236,36 @@ function filterCompositeSelectionChanged(obj)
             var filterComp = $("select.filterComp").not("[name='"+obj.name+"']"); // Exclude self from list
             for(var ix=0;ix<filterComp.length && subCBsToSelect.length > 0;ix++) {
                 var filterClasses = $(filterComp[ix]).val();
-                //alert(filterClasses);
                 if(filterClasses.length > 0 && filterClasses[0] != "All")
                     subCBsToSelect = objsFilterByClasses(subCBsToSelect,"or",filterClasses);     // Keep any that should be selected
                 else if(filterClasses.length == 0)
                     subCBsToSelect.length = 0;
             }
-            //alert("filterComp:"+filterComp.length);
         }
-        // FIXME: What about mat dimensions?
+        // Filter for Matrix CBs too
+        if (subCBsToSelect.length > 0) {
+            var matCb = $("input.matCb").filter(":checked");
+            if (matCb.length > 0) {
+                var matchClasses = "";
+                $( matCb ).each( function(i) {
+                    var filterClasses = $( this ).attr("class").split(" ");
+                    filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
+                    matchClasses = matchClasses + ",." + filterClasses.join('.');
+                });
+                if (matchClasses.length > 0) {
+                    matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
+                    subCBsToSelect = $(subCBsToSelect).filter(matchClasses);     // Keep any that should be selected
+                }
+            }
+        }
 
-        // What to do now?
+        // Now we have subCBs that should be checked.  Exclude already checked, then do it
         if (subCBsToSelect.length > 0)
             subCBsToSelect = $(subCBsToSelect).not(":checked");
         if (subCBsToSelect.length > 0)
             subCBsToSelect.each( function (i) { matSubCBcheckOne(this,true); });
     }
-    //alert("Subtracks:"+subCBs.length+"  To be selected:"+subCBsToSelect.length+"  unselected:"+subCBsToUnselect.length)
     matSubCBsSelected();
-    //$(obj).children("option:even").disabled = true;
 }
 
 ///////////// CB support routines ///////////////
@@ -274,7 +291,7 @@ function matSubCBsCheck(state)
     }
 
     if(state) { // If checking subCBs, then make sure up to 3 dimensions of matCBs agree with each other on subCB verdict
-        var classes = matAbcCBclasses('unchecked');
+        var classes = matAbcCBclasses(false);
         subCBs = objsFilterByClasses(subCBs,"not",classes);  // remove unchecked abcCB classes
         if(arguments.length == 1 || arguments.length == 3) { // Requested dimX&Y: check dim ABC state
             $( subCBs ).each( function (i) { matSubCBcheckOne(this,state); });
@@ -467,14 +484,14 @@ function matViewClasses(limitTo)
     return classes;
 }
 
-function matAbcCBclasses(limitTo)
+function matAbcCBclasses(wantSelected)
 {// returns an array of classes from the dim ABC CB classes: converts "matCB abc rep1"[]s to "rep1","rep2"
     var classes = new Array;
     var abcCBs = $("input.matCB.abc");
     if(abcCBs.length > 0) {
-        if(limitTo == 'unchecked') {
+        if (!wantSelected) {
             abcCBs = abcCBs.not(":checked");
-        } else if(limitTo == 'checked') {
+        } else {
             abcCBs = abcCBs.filter(":checked");
         }
         $(abcCBs).each( function (i) {
@@ -482,6 +499,8 @@ function matAbcCBclasses(limitTo)
             classList = aryRemove(classList,"matCB","abc");
             classes.push( classList[0] );
         });
+    } else { // No abcCBs so look for filterBox classes
+        return filterCompositeClasses(wantSelected);
     }
     return classes;
 }
@@ -597,6 +616,19 @@ function registerFormSubmit(formName)
     $('form[name="'+formName+'"]').each(function(i) { formSubmitWaitOnAjax(this)});
 }
 
+function visTriggersHiddenSelect(obj)
+{ // SuperTrack child changing vis should trigger superTrack reshaping.
+  // This is done by setting hidden input "_sel"
+    var trackName_Sel = $(obj).attr('name') + "_sel";
+    var theForm = $(obj).closest("form");
+    var visible = (obj.selectedIndex != 0);
+    if (visible) {
+        updateOrMakeNamedVariable(theForm,trackName_Sel,"1");
+    } else
+        disableNamedVariable(theForm,trackName_Sel);
+    return true;
+}
+
 function subtrackCfgHideAll(table)
 {
 // hide all the subtrack configuration stuff
@@ -604,6 +636,8 @@ function subtrackCfgHideAll(table)
         $( this ).css('display','none');
         $( this ).children("input[name$='.childShowCfg']").val("off");
     });
+    // Hide all "..." metadata displayed
+    $("div[id $= '_meta']:visible").toggle();
 }
 
 var popUpTrackName;
@@ -641,7 +675,7 @@ function popUpCfg(content, status)
         modal: true,
         closeOnEscape: true,
         autoOpen: false,
-        buttons: { "Ok": function() {
+        buttons: { "OK": function() {
             popUpCfgOk(this,popUpTrackName);
             $(this).dialog("close");
         }},
@@ -661,13 +695,13 @@ function _popUpSubrackCfg(trackName,label)
     popUpTrackName = trackName;
     popUpTitle = label;
 
-    // FIXME: Avoid this getting into history and making the back button not work!
     $.ajax({
         type: "GET",
         url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
         dataType: "html",
         trueSuccess: popUpCfg,
         success: catchErrorOrDispatch,
+        error: errorHandler,
         cmd: "cfg",
         cache: false
     });
@@ -676,6 +710,7 @@ function _popUpSubrackCfg(trackName,label)
 function popUpSubtrackCfg(trackName,label)
 {
     waitOnFunction( _popUpSubrackCfg, trackName, label );  // Launches the popup but shields the ajax with a waitOnFunction
+    return false;
 }
 
 function subtrackCfgShow(tableName)
@@ -736,371 +771,8 @@ function showConfigControls(name)
     });
 
     // Close the cfg controls in the subtracks
-    $("table[id^='subtracks.']").each( function (i) { subtrackCfgHideAll(this);} );
+    $("table.subtracks").each( function (i) { subtrackCfgHideAll(this);} );
     return true;
-}
-
-function trAlternateColors(table,cellIx)
-{
-// Will alternate colors each time the contents of the column(s) change
-    var lastContent = "not";
-    var bgColor1 = "#FFFEE8";
-    var bgColor2 = "#FFF9D2";
-    var curColor = bgColor1;
-    var lastContent = "start";
-    var cIxs = new Array();
-
-    for(var aIx=1;aIx<arguments.length;aIx++) {   // multiple columns
-        cIxs[aIx-1] = arguments[aIx];
-    }
-    if (document.getElementsByTagName)
-    {
-        for (var trIx=0;trIx<table.rows.length;trIx++) {
-            var curContent = "";
-            if(table.rows[trIx].style.display == 'none')
-                continue;
-            for(var ix=0;ix<cIxs.length;ix++) {
-                if(table.rows[trIx].cells[cIxs[ix]]) {
-                    curContent = (table.rows[trIx].cells[cIxs[ix]].abbr != "" ?
-                                  table.rows[trIx].cells[cIxs[ix]].abbr       :
-                                  table.rows[trIx].cells[cIxs[ix]].innerHTML  );
-                }
-            }
-            if( lastContent != curContent ) {
-                lastContent  = curContent;
-                if( curColor == bgColor1)
-                    curColor =  bgColor2;
-                else
-                    curColor =  bgColor1;
-            }
-            table.rows[trIx].bgColor = curColor;
-        }
-    }
-}
-
-//////////// Sorting ////////////
-
-function tableSort(table,fnCompare)
-{
-// Sorts table based upon rules passed in by function reference
-    //alert("tableSort("+table.id+") is beginning.");
-    subtrackCfgHideAll(table);
-    var trs=0,moves=0;
-    var colOrder = new Array();
-    var cIx=0;
-    var trTopIx,trCurIx,trBottomIx=table.rows.length - 1;
-    for(trTopIx=0;trTopIx < trBottomIx;trTopIx++) {
-        trs++;
-        var topRow = table.rows[trTopIx];
-        for(trCurIx = trTopIx + 1; trCurIx <= trBottomIx; trCurIx++) {
-            var curRow = table.rows[trCurIx];
-            var compared = fnCompare(topRow,curRow,arguments[2]);
-            if(compared < 0) {
-                table.insertBefore(table.removeChild(curRow), topRow);
-                topRow = curRow; // New top!
-                moves++;
-            }
-        }
-    }
-    if(fnCompare != trComparePriority)
-        tableSetPositions(table);
-    //alert("tableSort("+table.id+") examined "+trs+" rows and made "+moves+" moves.");
-}
-
-// Sorting a table by columns relies upon the sortColumns structure
-// The sortColumns structure looks like:
-//{
-//    char *  tags[];     // a list of trackDb.subGroupN tags in sort order
-//    boolean reverse[];  // the sort direction for that subGroup
-//    int     cellIxs[];  // The indexes of the columns in the table to be sorted
-//}
-///// Following functions are for Sorting by columns:
-function trCompareColumnAbbr(tr1,tr2,sortColumns)
-{
-// Compares a set of columns based upon the contents of their abbr
-    for(var ix=0;ix < sortColumns.cellIxs.length;ix++) {
-        //if(tr1.cells[sortColumns.cellIxs[ix]].abbr == undefined) {
-        //    if(tr1.cells[sortColumns.cellIxs[ix]].value < tr2.cells[sortColumns.cellIxs[ix]].value)
-        //        return (sortColumns.reverse[ix] ? -1: 1);
-        //    else if(tr1.cells[sortColumns.cellIxs[ix]].value > tr2.cells[sortColumns.cellIxs[ix]].value)
-        //        return (sortColumns.reverse[ix] ? 1: -1);
-        //} else {
-            if(tr1.cells[sortColumns.cellIxs[ix]].abbr < tr2.cells[sortColumns.cellIxs[ix]].abbr)
-                return (sortColumns.reverse[ix] ? -1: 1);
-            else if(tr1.cells[sortColumns.cellIxs[ix]].abbr > tr2.cells[sortColumns.cellIxs[ix]].abbr)
-                return (sortColumns.reverse[ix] ? 1: -1);
-        //}
-    }
-    return 0;
-}
-
-
-function tableSortByColumns(table,sortColumns)
-{
-// Will sort the table based on the abbr values on a et of <TH> colIds
-    if (document.getElementsByTagName)
-    {
-        tableSort(table,trCompareColumnAbbr,sortColumns);//cellIxs,columns.colRev);
-                        var columns = new sortColumnsGetFromTable(table);
-        if(sortColumns.tags.length>1)
-            trAlternateColors(table,sortColumns.cellIxs[sortColumns.tags.length-2]);
-
-    }
-}
-
-function sortOrderFromColumns(sortColumns)
-{// Creates the trackDB setting entry sortOrder subGroup1=+ ... from a sortColumns structure
-    var sortOrder ="";
-    for(ix=0;ix<sortColumns.tags.length;ix++) {
-        sortOrder += sortColumns.tags[ix] + "=" + (sortColumns.reverse[ix] ? "-":"+") + " ";
-    }
-    if(sortOrder.length > 0)
-        sortOrder = sortOrder.substr(0,sortOrder.length-1);
-    return sortOrder;
-}
-
-function sortOrderFromTr(tr)
-{// Looks up the sortOrder input value from a *.sortTr header row of a sortable table
-    var inp = tr.getElementsByTagName('input');
-    for(var ix=0;ix<inp.length;ix++) {
-        var offset = inp[ix].id.lastIndexOf(".sortOrder");
-        if(offset > 0 && offset == inp[ix].id.length - 10)
-            return inp[ix].value;
-    }
-    return "";
-}
-function sortColumnsGetFromSortOrder(sortOrder)
-{// Creates sortColumns struct (without cellIxs[]) from a trackDB.sortOrder setting string
-    this.tags = new Array();
-    this.reverse = new Array();
-    var order = sortOrder;
-    for(var ix=0;ix<12;ix++) {
-        if(order.indexOf("=") <= 0)
-            break;
-        this.tags[ix]    = order.substring(0,order.indexOf("="));
-        this.reverse[ix] = (order.substr(this.tags[ix].length+1,1) != '+');
-        if(order.length < (this.tags[ix].length+2))
-            break;
-        order = order.substring(this.tags[ix].length+3);
-    }
-}
-function sortColumnsGetFromTr(tr)
-{// Creates a sortColumns struct from the entries in the '*.sortTr' heading row of a sortable table
-    this.inheritFrom = sortColumnsGetFromSortOrder;
-    var inp = tr.getElementsByTagName('input');
-    var ix;
-    for(ix=0;ix<inp.length;ix++) {
-        var offset = inp[ix].id.lastIndexOf(".sortOrder");
-        if(offset > 0 && offset == inp[ix].id.length - 10) {
-            this.inheritFrom(inp[ix].value);
-            break;
-        }
-    }
-    if(ix == inp.length)
-        return;
-
-    // Add an additional array
-    this.cellIxs = new Array();
-    var cols = tr.getElementsByTagName('th');
-    for(var tIx=0;tIx<this.tags.length;tIx++) {
-        var colIdTag = this.tags[tIx] + ".sortTh";
-        for(ix=0; ix<cols.length; ix++) {
-            var offset = cols[ix].id.lastIndexOf(colIdTag);
-            if(offset > 0 && offset == cols[ix].id.length - colIdTag.length) {
-                this.cellIxs[tIx] = cols[ix].cellIndex;
-            }
-        }
-    }
-}
-function sortColumnsGetFromTable(table)
-{// Creates a sortColumns struct from the contents of a '*.sortable' table
-    this.inheritNow = sortColumnsGetFromTr;
-    var ix;
-    for(ix=0;ix<table.rows.length;ix++) {
-        var offset = table.rows[ix].id.lastIndexOf(".sortTr");
-        if(offset > 0 && offset == table.rows[ix].id.length - 7) {
-            this.inheritNow(table.rows[ix]);
-            break;
-        }
-    }
-}
-
-
-function tableSortUsingSortColumns(table)
-{// Sorts a table body based upon the marked columns
-    var columns = new sortColumnsGetFromTable(table);
-    tbody = table.getElementsByTagName("tbody")[0];
-    tableSortByColumns(tbody,columns);
-}
-
-function _tableSortAtButtonPressEncapsulated(anchor,tagId)
-{// Updates the sortColumns struct and sorts the table when a column header has been pressed
- // If the current primary sort column is pressed, its direction is toggled then the table is sorted
- // If a secondary sort column is pressed, it is moved to the primary spot and sorted in fwd direction
-    var th=anchor.parentNode;
-    var sup=th.getElementsByTagName("sup")[0];
-    var tr=th.parentNode;
-    var inp = tr.getElementsByTagName('input');
-    var iIx;
-    for(iIx=0;iIx<inp.length;iIx++) {
-        var offset = inp[iIx].id.lastIndexOf(".sortOrder");
-        if(offset > 0 && offset == inp[iIx].id.length - 10)
-            break;
-    }
-    var theOrder = new sortColumnsGetFromTr(tr);
-    var oIx;
-    for(oIx=0;oIx<theOrder.tags.length;oIx++) {
-        if(theOrder.tags[oIx] == tagId)
-            break;
-    }
-    if(oIx > 0) { // Need to reorder
-        var newOrder = new sortColumnsGetFromTr(tr);
-        var nIx=0;
-        newOrder.tags[nIx] = theOrder.tags[oIx];
-        newOrder.reverse[nIx] = false;  // When moving to the first position sort forward
-        newOrder.cellIxs[nIx] = theOrder.cellIxs[ oIx];
-        sups = tr.getElementsByTagName("sup");
-        sups[newOrder.cellIxs[nIx]-1].innerHTML = "&darr;1";
-        for(var ix=0;ix<theOrder.tags.length;ix++) {
-            if(ix != oIx) {
-                nIx++;
-                newOrder.tags[nIx]    = theOrder.tags[ix];
-                newOrder.reverse[nIx] = theOrder.reverse[ix];
-                newOrder.cellIxs[nIx] = theOrder.cellIxs[ix];
-                var dir = sups[newOrder.cellIxs[nIx]-1].innerHTML.substring(0,1);
-                sups[newOrder.cellIxs[nIx]-1].innerHTML = dir + (nIx+1);
-            }
-        }
-        theOrder = newOrder;
-    } else { // need to reverse directions
-        theOrder.reverse[oIx] = (theOrder.reverse[oIx] == false);
-        var ord = sup.innerHTML.substring(1);
-        sup.innerHTML = (theOrder.reverse[oIx] == false ? "&darr;":"&uarr;");
-        if(theOrder.tags.length>1)
-            sup.innerHTML += ord;
-    }
-    //alert("tableSortAtButtonPress(): count:"+theOrder.tags.length+" tag:"+theOrder.tags[0]+"="+(theOrder.reverse[0]?"-":"+"));
-    var newSortOrder = sortOrderFromColumns(theOrder);
-    inp[iIx].value = newSortOrder;
-    var thead=tr.parentNode;
-    var table=thead.parentNode;
-    tbody = table.getElementsByTagName("tbody")[0];
-    tableSortByColumns(tbody,theOrder);
-    return;
-
-}
-
-function tableSortAtButtonPress(anchor,tagId)
-{
-    waitOnFunction( _tableSortAtButtonPressEncapsulated, anchor, tagId);
-}
-
-function tableSortAtStartup()
-{
-    //alert("tableSortAtStartup() called");
-    var list = document.getElementsByTagName('table');
-    for(var ix=0;ix<list.length;ix++) {
-        var offset = list[ix].id.lastIndexOf(".sortable");  // TODO: replace with class and jQuery
-        if(offset > 0 && offset == list[ix].id.length - 9) {
-            tableSortUsingSortColumns(list[ix]);
-        }
-    }
-}
-
-function hintOverSortableColumnHeader(th)
-{// Upodates the sortColumns struct and sorts the table when a column headder has been pressed
-    //th.title = "Click to make this the primary sort column, or toggle direction";
-    //var tr=th.parentNode;
-    //th.title = "Current Sort Order: " + sortOrderFromTr(tr);
-}
-
-///// Following functions are for Sorting by priority
-function tableSetPositions(table)
-{
-// Sets the value for the *.priority input element of a table row
-// This gets called by sort or dradgndrop in order to allow the new order to affect hgTracks display
-    if (table.getElementsByTagName)
-    {
-        for(var trIx=0;trIx<table.rows.length;trIx++) {
-            if(table.rows[trIx].id.indexOf("tr_cb_") == 0) {
-                var inp = table.rows[trIx].getElementsByTagName('input');
-                for(var ix=0;ix<inp.length;ix++) {
-                    var offset = inp[ix].name.lastIndexOf(".priority");
-                    if( offset > 0 && offset == (inp[ix].name.length - 9)) {
-                        inp[ix].value = table.rows[trIx].rowIndex;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-}
-function trFindPosition(tr)
-{
-// returns the position (*.priority) of a sortable table row
-    var inp = tr.getElementsByTagName('input');
-    for(var ix=0;ix<inp.length;ix++) {
-        var offset = inp[ix].name.indexOf(".priority");
-        if(offset > 0 && offset == (inp[ix].name.length - 9)) {
-            return inp[ix].value;
-        }
-    }
-    return "unknown";
-}
-
-function trComparePriority(tr1,tr2)
-{
-// Compare routine for sorting by *.priority
-    var priority1 = 999999;
-    var priority2 = 999999;
-    var inp1 = tr1.getElementsByTagName('input');
-    var inp2 = tr2.getElementsByTagName('input');
-    for(var ix=0;ix<inp1.length;ix++) { // should be same length
-        if(inp1[ix].name.indexOf(".priority") == (inp1[ix].name.length - 9))
-            priority1 = inp1[ix].value;
-        if(inp2[ix].name.indexOf(".priority") == (inp2[ix].name.length - 9))
-            priority2 = inp2[ix].value;
-        if(priority1 < 999999 && priority2 < 999999)
-            break;
-    }
-    return priority2 - priority1;
-}
-
-///// Following functions support column reorganization
-function trReOrderCells(tr,cellIxFrom,cellIxTo)
-{
-// Reorders cells in a table row: removes cell from one spot and inserts it before another
-    //alert("tableSort("+table.id+") is beginning.");
-    if(cellIxFrom == cellIxTo)
-        return;
-
-    var tdFrom = tr.cells[cellIxFrom];
-    var tdTo   = tr.cells[cellIxTo];
-    if((cellIxTo - cellIxFrom) == 1) {
-        tdFrom = tr.cells[cellIxTo];
-        tdTo   = tr.cells[cellIxFrom];
-    } else if((cellIxTo - cellIxFrom) > 1)
-        tdTo   = tr.cells[cellIxTo + 1];
-
-    tr.insertBefore(tr.removeChild(tdFrom), tdTo);
-}
-
-function tableReOrderColumns(table,cellIxFrom,cellIxTo)
-{
-// Reorders cells in all the rows of a table row, thus reordering columns
-    if (table.getElementsByTagName) {
-        for(var ix=0;ix<table.rows.length;ix++) {
-            var offset = table.rows[ix].id.lastIndexOf(".sortTr");
-            if(offset > 0 && offset == table.rows[ix].id.length - 7) {
-                trReOrderCells(table.rows[ix],cellIxFrom,cellIxTo);
-                break;
-            }
-        }
-        tbody = table.getElementsByTagName('tbody');
-        for(var ix=0;ix<tbody[0].rows.length;ix++) {
-            trReOrderCells(tbody[0].rows[ix],cellIxFrom,cellIxTo);
-        }
-    }
 }
 
 function showOrHideSelectedSubtracks(inp)
@@ -1117,19 +789,11 @@ function showOrHideSelectedSubtracks(inp)
             return;
     }
     showSubTrackCheckBoxes(showHide);
-    var list = $("table.tableSortable")
-    for(var ix=0;ix<list.length;ix++) {
-        var columns = new sortColumnsGetFromTable(list[ix]);
-        var tbody = list[ix].getElementsByTagName('tbody');
-        if(columns.tags.length>1) {
-            if(columns.tags.length==2)
-                trAlternateColors(tbody[0],columns.cellIxs[0]);
-            else if(columns.tags.length==3)
-                trAlternateColors(tbody[0],columns.cellIxs[0],columns.cellIxs[1]);
-            else
-                trAlternateColors(tbody[0],columns.cellIxs[0],columns.cellIxs[1],columns.cellIxs[2]);
-        }
-    }
+
+    var tbody = $("tbody.sortable")
+    $(tbody).each(function (i) {
+        sortedTableAlternateColors(this);
+    });
 }
 
 ///// Following functions called on page load
@@ -1216,7 +880,7 @@ function filterCompositeSet(obj,all)
         });
     }
     if(vars.length > 0) {
-        setCartVars(vars,vals);
+        setCartVars(vars,vals);// FIXME: setCartVar conflicts with "submit" button paradigm
     }
     matSubCBsSelected(); // Be sure to update the counts!
 }
@@ -1246,7 +910,24 @@ function filterCompositeExcludeOptions(obj)
             }
         }
     });
-    // FIXME: What about mat dimensions?
+    // Matrix CBs need to be considered too
+    if (subCBs.length > 0) {
+        var matCb = $("input.matCb").filter(":checked");
+        if (matCb.length == 0)
+            oneEmpty = true;
+        else {//if (matCb.length > 0) {
+            var matchClasses = "";
+            $( matCb ).each( function(i) {
+                var filterClasses = $( this ).attr("class").split(" ");
+                filterClasses = aryRemove(filterClasses,"matCB","halfVis","abc");
+                matchClasses = matchClasses + ",." + filterClasses.join('.');
+            });
+            if (matchClasses.length > 0) {
+                matchClasses = matchClasses.substring(1); // Skip past leading comma: ",.HepG2.ZBTB33,.GM12878.CTCF"
+                subCBs = $(subCBs).filter(matchClasses);
+            }
+        }
+    }
 
     // Walk through all selected subCBs to get other related tags
     var possibleSelections = [ ];  // empty array
@@ -1279,6 +960,33 @@ function filterCompositeExcludeOptions(obj)
         }
     }
     return updated;
+}
+
+function filterCompositeClasses(wantSelected)
+{// returns an array of classes from the dim ABC filterComp classes: converts "matCB abc rep1"[]s to "rep1","rep2"
+    var classes = new Array;
+    var abcFBs = $("select.filterComp");
+    if(abcFBs.length > 0) {
+        $(abcFBs).each( function(i) {
+            // Need to walk through list of options
+            var ix=0;
+            var allAreSelected = false;
+            if (this.options[ix].value == "All") {
+                allAreSelected = this.options[ix].selected;
+                ix++;
+            }
+            for(;ix<this.length;ix++) {
+                if (allAreSelected || this.options[ix].selected) {
+                    if (wantSelected)
+                        classes.push(this.options[ix].value);
+                } else {
+                    if (!wantSelected)
+                        classes.push(this.options[ix].value);
+                }
+            }
+        });
+    }
+    return classes;
 }
 
 function multiSelectFocus(obj,sizeWhenOpen)
@@ -1337,37 +1045,29 @@ function navigationLinksSetup()
     }
 }
 
+function tableSortAtButtonPress(anchor,tagId)
+{ // Special ONLY for hgTrackUi sorting.  Others use utils.js::tableSortOnButtonPress()
+    var table = $( anchor ).parents("table.sortable");
+    if (table) {
+        subtrackCfgHideAll(table);
+        waitOnFunction( _tableSortOnButtonPressEncapsulated, anchor, tagId);
+    }
+    return false;  // called by link so return false means don't try to go anywhere
+}
+
 // The following js depends upon the jQuery library
 $(document).ready(function()
 {
-    //jQuery.each(jQuery.browser, function(i, val) {
-    //    if(val) {
-    //        browser = i;
-    //    }
-    //});
-    //matInitializeMatrix();
-    //$("div.multiSelectContainer").each( function (i) {
-    //    var sel = $(this).children("select:first");
-    //    multiSelectLoad(this,sel.openSize);
-    //});
+    // Initialize sortable tables
+    $('table.sortable').each(function (ix) {
+        sortTableInitialize(this,true,true);
+    });
 
-    // Allows rows to have their positions updated after a drag event
-    var tblDnd = $(".tableWithDragAndDrop");
-    if($(tblDnd).length > 0) {
-        $(tblDnd).tableDnD({
-            onDragClass: "trDrag",
-            dragHandle: "dragHandle",
-            onDrop: function(table, row, dragStartIndex) {
-                    if(tableSetPositions) {
-                        tableSetPositions(table);
-                    }
-                }
-            });
-        $(".dragHandle").hover(
-            function(){ $(this).parent('tr').addClass('trDrag'); },
-            function(){ $(this).parent('tr').removeClass('trDrag'); }
-        );
-    }
+    // Register tables with drag and drop
+    $("table.tableWithDragAndDrop").each(function (ix) {
+        tableDragAndDropRegister(this);
+    });
+
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
 
     $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually

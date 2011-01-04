@@ -1898,6 +1898,81 @@ if (psl->qSequence != NULL)
 *blockSpacePtr = newSpace;
 }
 
+static boolean getNextCigarOp(char **ptr, char *op, int *size)
+/* parts the next cigar op */
+{
+char *str = *ptr;
+
+if ((str == NULL) || (*str == 0))
+    return FALSE;
+
+char *end = strchr(str, '+');
+if (end)
+    {
+    *end = 0;
+    *ptr = end + 1;
+    }
+else 
+    *ptr = NULL;
+
+*op = *str++;
+*size = atoi(str);
+
+return TRUE;
+}
+
+struct psl* pslFromGff3Cigar(char *qName, int qSize, int qStart, int qEnd,
+                             char *tName, int tSize, int tStart, int tEnd,
+                             char* strand, char *cigar)
+/* create a PSL from a GFF3-style cigar formatted alignment */
+{
+// this is currently tested by the gff3ToPsl
+int blocksAlloced = 4;
+struct psl *psl = pslNew(qName, qSize, qStart, qEnd, tName, tSize, tStart, tEnd, strand, blocksAlloced, 0);
+
+char cigarSpec[strlen(cigar+1)];  // copy since parsing is destructive
+strcpy(cigarSpec, cigar);
+char *cigarNext = cigarSpec;
+char op;
+int size;
+int qNext = qStart, qBlkEnd = qEnd;
+if (strand[0] == '-')
+    reverseIntRange(&qNext, &qBlkEnd, qSize);
+int tNext = tStart, tBlkEnd = tEnd;
+if (strand[1] == '-')
+    reverseIntRange(&tNext, &tBlkEnd, tSize);
+
+while(getNextCigarOp(&cigarNext, &op, &size))
+    {
+    switch (op)
+        {
+        case 'M': // match or mismatch (gapless aligned block)
+            if (psl->blockCount == blocksAlloced)
+                pslGrow(psl, &blocksAlloced);
+
+            psl->blockSizes[psl->blockCount] = size;
+            psl->qStarts[psl->blockCount] = qNext;
+            psl->tStarts[psl->blockCount] = tNext;
+            psl->blockCount++;
+            tNext += size;
+            qNext += size;
+            break;
+        case 'I': // inserted in target
+            tNext += size;
+            break;
+        case 'D': // deleted from target
+            qNext += size;
+            break;
+        
+        default:
+            errAbort("unrecognized CIGAR op %c in %s", op, cigar);
+        }
+    }
+assert(qNext == qBlkEnd);
+assert(tNext == tBlkEnd);
+return psl;
+}
+
 int pslRangeTreeOverlap(struct psl *psl, struct rbTree *rangeTree)
 /* Return amount that psl overlaps (on target side) with rangeTree. */
 {

@@ -58,9 +58,13 @@ The sequence of instructions here are similar to the Mirror site
 		/some/other/directory/path/cgi-bin/
 		/some/other/directory/path/trash/
 	Symlinks to the trash directory should exist from the html
-	and cgi-bin directory.  As so:
+	directory.  As so:
 		/some/other/directory/path/html/trash -> ../trash
-		/some/other/directory/path/cgi-bin/trash -> ../trash
+	The actual trash directory can be somewhere else.  If it is
+	not in your Apache /var/www/trash/ directory, then create
+	that symlink as well as the html/trash symlink.  For example
+	/var/www/trash -> /some/other/directory/trash
+	/var/www/html/trash -> /some/other/directory/trash
 
 4.  Create html, cgi-bin and trash directories:
 	mkdir ${WEBROOT}/html
@@ -180,6 +184,21 @@ The sequence of instructions here are similar to the Mirror site
 		./src/product/README.*
 		./src/hg/makeDb/trackDB/README
 		./src/hg/makeDb/doc/make*.txt
+
+15. Apache configuration:
+
+    To lock down your trash directory from scanning via "indexes"
+    enter the following in your httpd.conf:
+
+<Directory "/var/www/html/trash">
+    Options MultiViews
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+
+    The specified directory name is your apache: DocumentRoot/trash
+    e.g. /usr/local/apache/htdocs/trash
 
 ====================================================================
 This file last updated: $Date: 2010/08/16 15:41:31 $

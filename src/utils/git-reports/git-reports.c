@@ -30,6 +30,7 @@ char *title = NULL;
 char *repoDir = NULL;
 char *outDir = NULL;
 char *outPrefix = NULL;
+int  contextSize;
 
 char gitCmd[1024];
 char *tempMakeDiffName = NULL;
@@ -77,12 +78,14 @@ errAbort(
     " repoDir is where the git repository (use absolute path)\n"
     " outDir is the output directory (use absolute path).\n"
     " outPrefix is typically \"branch\" or \"review\" directory.\n"
+    "  --context=N - show N lines of context around a change\n"
     "  --help - this help screen\n",
     msg);
 }
 
 static struct optionSpec options[] =
 {
+    {"-context", OPTION_INT},
     {"-help", OPTION_BOOLEAN},
     {NULL, 0},
 };
@@ -318,8 +321,8 @@ void makeDiffAndSplit(struct commit *c, char *u, boolean full)
  * a diff with everything we want, we just have to split it up. */
 {
 safef(gitCmd,sizeof(gitCmd), 
-    "git diff -b -w --no-prefix%s %s^! > %s"  
-    , full ? " --unified=1000000" : ""
+    "git diff -b -w --no-prefix --unified=%d %s^! > %s"  
+    , full ? 1000000 : contextSize
     , c->commitId, tempMakeDiffName);
 //git shorthand: x^! is equiv to range x^ x, 
 //  i.e. just the one commit and nothing more.
@@ -328,8 +331,8 @@ safef(gitCmd,sizeof(gitCmd),
 if (sameString(c->commitId, "dc78303b079985b5a146d093bbb8a5d06489562d"))
     {
     safef(gitCmd,sizeof(gitCmd), 
-	"git show -b -w --no-prefix%s %s > %s"  
-	, full ? " --unified=1000000" : ""
+	"git show -b -w --no-prefix --unified=%d %s > %s"  
+    , full ? 1000000 : contextSize
 	, c->commitId, tempMakeDiffName);
     }
 
@@ -848,9 +851,11 @@ repoDir = argv[6];
 outDir = argv[7];
 outPrefix = argv[8];
 
+contextSize = optionInt("-context", 15);
+
 userHash = hashNew(5);
 
-chdir(repoDir);
+setCurrentDir(repoDir);
 
 gitReports();
 

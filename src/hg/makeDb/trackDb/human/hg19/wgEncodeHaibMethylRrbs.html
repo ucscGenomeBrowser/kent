@@ -1,61 +1,141 @@
 <h2>Description</h2>
 <p>
-This track shows the percentage of molecules methylated at specific CpG dinucleotides.  In general, methylation of CpG sites within a promoter causes silencing of the gene associated with that promoter.
-Reduced Representation Bisulfite Sequencing (RRBS) is used to measure methylation status at more than 500,000 CpG dinucleotides in the genome.  Genomic DNA is digested with the methyl-insensitive restriction enzyme Msp1, small fragments are purified by gel electrophoresis, and they are then used to construct an Illumina sequencing library that is treated with bisulfite and amplified by PCR to convert every unmethylated cytosine to a thymidine.  The sequenced fragments are aligned to a customized reference genome sequence and used to calculate the number of reads at each CpG assayed and the percentage of those reads that detect methylation.
-<H2> Release Notes</H2>
-This is release 1 of this track.
+This track reports the percentage of DNA molecules that exhibit cytosine
+methylation at specific CpG dinucleotides. In general, DNA methylation
+within a gene's promoter is associated with gene silencing, and DNA
+methylation within the exons and introns of a gene is associated with
+gene expression. Proper regulation of DNA methylation is essential
+during development and aberrant DNA methylation is a hallmark of cancer. 
+DNA methylation status is assayed at more than 500,000 CpG dinucleotides 
+in the genome using Reduced Representation Bisulfite Sequencing (RRBS). 
+Genomic DNA is digested with the methyl-insensitive restriction enzyme MspI,
+small genomic DNA fragments are purified by gel electrophoresis, and then used
+to construct an Illumina sequencing library. The library fragments are treated
+with sodium bisulfite and amplified by PCR to convert every unmethylated cytosine
+to a thymidine while leaving methylated cytosines intact. The sequenced fragments
+are aligned to a customized reference genome sequence and for each assayed CpG we
+report the number of sequencing reads covering that CpG and the percentage of those
+reads that are methylated.
+</p>
 
-<h2>Track Conventions</h2>
+<h2>Display Conventions and Configuration</h2>
 Methylation status is represented with an 11-color gradient using the following convention:
 <ul>
 <li>red = 100% of molecules sequenced are methylated</li>
 <li>yellow = 50% of molecules sequenced are methylated</li>
 <li>green = 0% of molecules sequenced are methylated</li>
 </ul>
+
+<p>
+The score in this track reports the number of sequencing reads obtained for each CpG,
+which is often called 'coverage'.  This coverage is capped at 1000, so any CpGs
+that were covered by more than 1000 sequencing reads will only have a score
+of 1000.  The bed files contain two extra columns, one with the uncapped coverage
+(number of reads at that site), and one with the percentage of those reads that show
+methylation.  We obtain high reproducibility, with correlation coefficients greater 
+than 0.9 between biological replicates, when we only consider CpGs represented by at 
+least 10 sequencing reads (10x coverage, score=10).  The default view for this track
+is set at 10X coverage.
+</p>
+
 <a name="Methods"></a><h2>Methods</h2>
-CpG sites were assayed with Reduced Representation Bisulfite Sequencing (RRBS; Meissner et al., 2008).  RRBS uses the Msp1 restriction enzyme followed by size selection of small fragments to produce a "reduced" genome.  After Msp1 treatment and size selection, the fragments are treated with sodium bisulfite, which converts unmethylated cytosines to uracils and leaves methylated cytosines unchanged.  Bisulfite-treated fragments are then sequenced on a next-generation DNA sequencing platform (HudsonAlpha uses the Illumina Genome Analyzer IIX).  Sequence reads are aligned to a reference human genome sequence that takes into account bisulfite treatment (see data analysis below).  The fraction of molecules methylated at each CpG site is then directly calculated from the alignment and represents the percentage of methylated molecules in the mixture of cells from which the DNA was obtained.
-In an RRBS experiment, a single sequencing lane of approximately 20 million total reads is used to generate data at 500,000 CpGs with greater than 10-fold coverage.  More than 40% of these are located near the transcriptional start sites of genes, and about 70% are located in CpG islands.  Biological replicates of cell lines show 99% concordance on average in methylation status measured by RRBS.
+DNA methylation at CpG sites was assayed with a modified version of Reduced 
+Representation Bisulfite Sequencing (RRBS; Meissner <span style="font-style: italic">
+et al</span>., 2008). RRBS was performed on cell lines grown by many ENCODE 
+production groups. The production group that grew the cells and isolated genomic 
+DNA is indicated in the "obtainedBy" field of the metadata. When a cell
+type was provided by more than one lab, the data for the cells from only one
+lab are displayed in the table above. However, the data for every cell type
+from every lab is available from the
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeHaibMethylRrbs/"
+TARGET=_BLANK>Downloads</A> page.
+RRBS was carried out by the Myers production group at 
+the HudsonAlpha Institute for Biotechnology.
+
 
 <h3>Isolation of genomic DNA</h3>
-Genomic DNA is isolated from biological replicates of each cell line by using the QIAGEN DNeasy Blood & Tissue Kit according to the instructions provided by the manufacturer.  DNA concentrations and a level of quality of each preparation are determined by UV absorbance.  One microgram of DNA is used to make an RRBS library; however, we have also had success in making libraries with 500 ng genomic DNA.
+Genomic DNA is isolated from biological replicates of each cell line
+using the QIAGEN DNeasy Blood & Tissue Kit according to the instructions
+provided by the manufacturer. DNA concentrations for each genomic DNA
+preparation are determined using fluorescent DNA binding dye and a 
+fluorometer (Invitrogen Quant-iT dsDNA High Sensitivity Kit and 
+Qubit Fluorometer). Typically, 1 &micro;g of DNA is used to make an RRBS library;
+however, we have also had success in making libraries with 200 ng genomic
+DNA from rare or precious samples.
+
 
 <h3>RRBS library construction and sequencing</h3>
-RRBS library construction starts with Msp1 digestion of genomic DNA, which cuts at every CCGG regardless of methylation status.  DNA fragments are then end repaired and an adenosine is added to 3 prime ends.  Next, a methylated version of the illumina paired-end adapters is ligated onto the DNA.  Adapter ligated DNA between 105 and 185 basepairs is purified using gel electrophoresis and subsequently treated with sodium bisulfite, which converts unmethylated cytosines to uracils and leaves methylated cytosines unchanged.  Bisulfite treated DNA is amplified in a final PCR reaction (changing uracils to thymidines).  The sample is now ready for sequencing on the Illumina sequencing platform.  These libraries were sequenced with an Illumina Genome Analyzer IIx according to the manufacturer's recommendations.  The full RRBS protocol can be found 
+RRBS library construction starts with MspI digestion of genomic DNA
+, which cuts at every CCGG regardless of methylation status. Klenow
+exo- DNA Polymerase is then used to fill in the recessed end of the
+genomic DNA and add an adenosine as a 3prime overhang. Next, a 
+methylated version of the Illumina paired-end adapters is ligated 
+onto the DNA.  Adapter ligated genomic DNA fragments between 105 
+and 185 basepairs are selected using agarose gel electrophoresis 
+and Qiagen Qiaquick Gel Extraction Kit.  The selected adapter-ligated
+fragments are treated with sodium bisulfite using the Zymo Research
+EZ DNA Methylation Gold Kit, which converts unmethylated cytosines
+to uracils and leaves methylated cytosines unchanged. Bisulfite treated
+DNA is amplified in a final PCR reaction which has been optimized to
+uniformly amplify diverse fragment sizes and sequence contexts in the
+same reaction.  During this final PCR reaction uracils are copied as
+thymines resulting in a thymine in the PCR products wherever an
+unmethylated cytosine existed in the genomic DNA. The sample is
+now ready for sequencing on the Illumina sequencing platform.
+These libraries were sequenced with an Illumina Genome Analyzer
+IIx according to the manufacturer's recommendations. The full
+RRBS protocol can be found
 <A HREF="http://hudsonalpha.org/myers-lab/protocols" TARGET=_BLANK>here</A>.</P> 
+
 <h3>Data analysis</h3>
-To analyze the sequence data a reference genome is created that contains only the 36 base pairs downstream of every MspI site and every C in those sequences is changed to T.  A converted sequence read file is then created by changing each C in the original sequence reads to a T.  The converted sequence reads are aligned to the converted reference genome, and only reads that map uniquely to the reference genome are kept.   Once reads are aligned the percent methylation is calculated for each CpG using the original sequence reads.  The percent methylation and number of reads is reported for each CpG.
+To analyze the sequence data, a reference genome is created that
+contains only the 36 base pairs adjacent to every MspI site
+and every C in those sequences is changed to T. A converted
+sequence read file is then created by changing each C in the
+original sequence reads to a T. The converted sequence reads
+are aligned to the converted reference genome, and only reads
+that map uniquely to the reference genome are kept. Once
+reads are aligned the percent methylation is calculated for
+each CpG using the original sequence reads. The percent
+methylation and number of reads is reported for each CpG.
+
 
 <a name="Credits"></a><h2>Credits</h2>
 <p>
-<li>Dr. K-T Varley; 
+<ul>
+<li>
 <A HREF="mailto:&#107;t&#118;&#97;&#114;&#108;&#101;y&#64;&#104;&#117;&#100;&#115;on&#97;&#108;&#112;&#104;&#97;.
-&#111;&#114;&#103;">
-&#107;t&#118;&#97;&#114;&#108;&#101;y&#64;&#104;&#117;&#100;&#115;on&#97;&#108;&#112;&#104;&#97;.
-&#111;&#114;&#103;</A></li>
+&#111;&#114;&#103;">Dr. K-T Varley</A></li>
 <!-- above address is ktvarley at hudsonalpha.org -->
-<li>Dr. Jason Gertz; 
+<li>
 <A HREF="mailto:&#106;g&#101;&#114;&#116;z&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;">
-&#106;g&#101;&#114;&#116;z&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;</A></li>
+&#111;&#114;&#103;">Dr. Jason Gertz</A></li>
 <!-- above address is jgertz at hudsonalpha.org -->
-<li>Dr. Richard M. Myers; 
+<li>
 <A HREF="mailto:&#114;m&#121;&#101;&#114;s&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;">
-&#114;m&#121;&#101;&#114;s&#64;&#104;&#117;d&#115;&#111;&#110;&#97;&#108;p&#104;a.
-&#111;&#114;&#103;</A></ul>
+&#111;&#114;&#103;">Dr. Richard M. Myers</A></li>
 <!-- above address is rmyers at hudsonalpha.org -->
+</ul>
 
 <p>
 Contact:
-<A HREF="mailto:&#114;r&#97;&#117;&#99;h&#64;&#115;&#116;a&#110;&#102;o&#114;&#100;.
-e&#100;&#117;">Rami Rauch</A>
+<A HREF="mailto:&#102;&#112;a&#117;l&#105;&#64;&#104;ud&#115;&#111;&#110;&#97;l&#112;&#104;&#97;.
+&#111;&#114;&#103;">Dr. Florencia Pauli</A>
 <!-- above address is rrauch at stanford.edu -->
 <br />
-</p>
-<a name="References"></a><h2>References</h2>
+
+<H2> References </H2>
 <p>
-1. Meissner A, Gnirke A, Bell GW, Ramsahoye B, Lander ES, Jaenisch R. Reduced representation bisulfite sequencing for comparative high-resolution DNA methylation analysis. Nucleic Acids Res. 2005 Oct 13;33(18):5868-77.
+ Meissner A, Mikkelsen TS, Gu H, Wernig M, Hanna J, 
+ Sivachenko A, Zhang X, Bernstein BE, Nusbaum C, Jaffe DB, <span style="font-style: italic">
+et al</span>.
+ <A HREF="http://www.nature.com/nature/journal/v454/n7205/full/nature07107.html"
+ class="external text" title="http://www.nature.com/nature/journal/v454/n7205/full/nature07107.html"
+ rel="nofollow" TARGET = _BLANK>Genome-scale DNA methylation maps of pluripotent and 
+ differentiated cells</A>.
+    <em>Nature</em>. 2008 Aug 7;454(7205):766-70.
+</p>
+
 
 <H2> Data Release Policy </H2>
 

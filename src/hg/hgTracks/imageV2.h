@@ -6,11 +6,10 @@
 // UNCOMMENT
 //   CONTEXT_MENU to allow right-click funtionality
 //   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
-//   SUBTRACKS_HAVE_VIS (needed by CONTEXT_MENU or TRACK_SEARCH) to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
 //   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 
 // UNCOMMENT CONTEXT_MENU to allow right-click funtionality
-//#define CONTEXT_MENU
+#define CONTEXT_MENU
 
 //  UNCOMMENT IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
@@ -21,12 +20,6 @@
 #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     #define IMAGEv2_SHORT_MAPITEMS
 #endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
-
-// UNCOMMENT SUBTRACKS_HAVE_VIS to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
-#include "searchTracks.h"
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-    #define SUBTRACKS_HAVE_VIS
-#endif
 
 // UNCOMMENT  USE_NAVIGATION_LINKS for so far experimental UI changes to replace buttons at top with more streamlined links
 //#define USE_NAVIGATION_LINKS
@@ -74,7 +67,7 @@ void flatTracksFree(struct flatTracks **flatTracks);
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track);
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable);
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 
@@ -199,7 +192,7 @@ void imgFree(struct image **pImg);
 
 
 /////////////////////// Slices
-enum sliceType // IMAGEv2: currently 4
+enum sliceType
     {
     stUnknown=0,              // Invalid
     stData=1,                 // Data or track slice of an image
@@ -259,6 +252,14 @@ void sliceFree(struct imgSlice **pSlice);
 
 
 /////////////////////// imgTracks
+enum centerLabelSeen
+    {
+    clUnknown=0,              // Invalid
+    clAlways=1,               // Default is always seen
+    clNowSeen=2,              // Conditionally and currently seen
+    clNotSeen=3               // Conditionally and currently unseen
+    };
+
 struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     {
     struct imgTrack *next;    // slList
@@ -269,24 +270,36 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     int  chromStart;          // Image start (absolute, not portal position)
     int  chromEnd;            // Image end (absolute, not portal position)
     boolean plusStrand;       // Image covers plus strand, not minus strand
-    boolean showCenterLabel;  // Initially display center label? TODO: Isn't this redundent with vis?
+    boolean hasCenterLabel;   // A track may have a center label but not show it
+    enum centerLabelSeen centerLabelSeen;  // Conditionally displayed center labels are always there but sometimes hidden
     boolean reorderable;      // Is this track reorderable (by drag and drop) ?
+    boolean ajaxRetrieval;    // This track needs to be retrieved via ajax
     int order;                // Image order: This keeps track of dragReorder
     enum trackVisibility vis; // Current visibility of track image
     struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
     };
 
-#define IMG_ANYORDER  -2
-#define IMG_FIXEDPOS  -1
-#define IMG_ORDEREND  1000
+#define IMG_ANYORDER -2
+#define IMG_FIXEDPOS -1
+#define IMG_ORDERTOP  10000
+#define IMG_ORDEREND  20000
 #define IMG_ORDER_VAR "imgOrd"
 
-struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order);
+struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order);
 /* Starts an image track which will contain all image slices needed to render one track
    Must completed by adding slices with imgTrackAddSlice() */
 
-struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order);
+struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order);
 /* Updates an already existing image track */
+
+void imgTrackMarkForAjaxRetrieval(struct imgTrack *imgTrack,boolean ajaxRetrieval);
+/* Updates the imgTrack to trigger an ajax callback from the html client to get this track */
+
+#define imgTrackMarkedForAjaxRetrieval(imgTrack) ((imgTrack)->ajaxRetrieval)
+/* Is this imgTrack marked for Ajax retrieval */
+
+#define imgTrackUpdateCenterLabelSeen(slice,seen) { (slice)->centerLabelSeen = (seen); }
+/* Center slices are occasionally unseen */
 
 int imgTrackOrderCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
@@ -363,16 +376,16 @@ struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,int wid
 struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif);
 /* Finds a specific image already added to this imgBox */
 
-struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
+struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order);
 /* Adds an imgTrack to an imgBox.  The imgTrack needs to be extended with imgTrackAddSlice() */
 
 struct imgTrack *imgBoxTrackFind(struct imgBox *imgBox,struct trackDb *tdb,char *name);
 /* Finds a specific imgTrack already added to this imgBox */
 
-struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
+struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order);
 /* Find the imgTrack, or adds it if not found */
 
-struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
+struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order);
 /* Updates the imgTrack, or adds it if not found */
 
 void imgBoxTracksNormalizeOrder(struct imgBox *imgBox);

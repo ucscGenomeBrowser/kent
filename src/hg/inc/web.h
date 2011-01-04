@@ -8,7 +8,7 @@
 
 void webSetStyle(char *style);
 /* set a style to add to the header */
-  
+
 void webStartText();
 /* output the head for a text page */
 
@@ -54,46 +54,46 @@ void printCladeListHtml(char *genome, char *onChangeText);
 /* Make an HTML select input listing the clades. */
 
 void printGenomeListHtml(char *db, char *onChangeText);
-/* Prints to stdout the HTML to render a dropdown list containing 
- * a list of the possible genomes to choose from.  
- * param db - The database whose genome will be selected by default. 
- * If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in any 
+/* Prints to stdout the HTML to render a dropdown list containing
+ * a list of the possible genomes to choose from.
+ * param db - The database whose genome will be selected by default.
+ * If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in any
  * onChange javascript.
  */
 
 void printBlatGenomeListHtml(char *db, char *onChangeText);
-/* Prints to stdout the HTML to render a dropdown list containing 
- * a list of the possible genomes to choose from.  
- * param db - The database whose genome will be selected by default. 
- * If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in any 
+/* Prints to stdout the HTML to render a dropdown list containing
+ * a list of the possible genomes to choose from.
+ * param db - The database whose genome will be selected by default.
+ * If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in any
  * onChange javascript.
  */
 
 void printLiftOverGenomeList(char *customOrgCgiName, char *db,
 			     struct dbDb *dbList, char *onChangeText);
-/* Prints to stdout the HTML to render a dropdown list 
+/* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * Databases in dbList do not have to exist.
  * param db - a database whose genome will be the default genome.
- *                       If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in 
+ *                       If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in
  *                              any onChange javascript. */
 
 void printSomeGenomeListHtmlNamed(char *customOrgCgiName, char *db, struct dbDb *dbList, char *OnChangeText);
 
 void printSomeGenomeListHtml(char *db, struct dbDb *dbList, char *onChangeText);
-/* Prints to stdout the HTML to render a dropdown list 
+/* Prints to stdout the HTML to render a dropdown list
  * containing a list of the possible genomes to choose from.
  * param db - a database whose genome will be the default genome.
- *                       If NULL, no default selection.  
- * param onChangeText - Optional (can be NULL) text to pass in 
+ *                       If NULL, no default selection.
+ * param onChangeText - Optional (can be NULL) text to pass in
  *                              any onChange javascript. */
 
 void printGenomeListForCladeHtml(char *db, char *onChangeText);
-/* Prints to stdout the HTML to render a dropdown list containing 
- * a list of the possible genomes from db's clade to choose from.  
+/* Prints to stdout the HTML to render a dropdown list containing
+ * a list of the possible genomes from db's clade to choose from.
  * db's genome is the default for the select.
  */
 
@@ -111,7 +111,7 @@ void printAssemblyListHtml(char *curDb, char *onChangeText);
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
 assemblies to choose from.
 
-param curDb - The assembly (the database name) to choose as selected. 
+param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
@@ -120,47 +120,47 @@ void printAssemblyListHtmlExtra(char *curDb, char *javascript);
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
 assemblies to choose from.
 
-param curDb - The assembly (the database name) to choose as selected. 
+param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
 param javascript - The javascript text for the select box
  */
 
 void printSomeAssemblyListHtml(char *db, struct dbDb *dbList, char *javascript);
 /* Find all assemblies from the list that are active, and print
- * HTML to render dropdown list 
+ * HTML to render dropdown list
  * param db - default assembly.  If NULL, no default selection */
 
 void printSomeAssemblyListHtmlNamed(char *name, char *db, struct dbDb *dbList, char *onChangeText);
 /* Find all assemblies from the list that are active, and print
- * HTML to render dropdown list 
+ * HTML to render dropdown list
  * param db - default assembly.  If NULL, no default selection */
 
-void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+void printAllAssemblyListHtmlParm(char *db, struct dbDb *dbList,
                             char *dbCgi, bool allowInactive, char *javascript);
-/* Prints to stdout the HTML to render a dropdown list containing the list 
+/* Prints to stdout the HTML to render a dropdown list containing the list
 of assemblies for the current genome to choose from.  By default,
  this includes only active assemblies with a database (with the
  exception of the default assembly, which will be included even
  if it isn't active).
 
-param db - The default assembly (the database name) to choose as selected. 
+param db - The default assembly (the database name) to choose as selected.
                 If NULL, no default selection.
 param allowInactive - if set, print all assemblies for this genome,
                         even if they're inactive or have no database
 */
 
-void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList, 
+void printSomeAssemblyListHtmlParm(char *db, struct dbDb *dbList,
                                         char *dbCgi, char *javascript);
 /* Find all the assemblies from the list that are active.
-Prints to stdout the HTML to render a dropdown list containing the list 
+Prints to stdout the HTML to render a dropdown list containing the list
 of the possible assemblies to choose from.
 
-param db - The default assembly (the database name) to choose as selected. 
+param db - The default assembly (the database name) to choose as selected.
                 If NULL, no default selection.
  */
 
 void printOrgAssemblyListAxtInfo(char *dbCgi, char *javascript);
-/* Find all the organisms/assemblies that are referenced in axtInfo, 
+/* Find all the organisms/assemblies that are referenced in axtInfo,
  * and print the dropdown list. */
 
 void printBlatAssemblyListHtml(char *curDb);
@@ -168,14 +168,14 @@ void printBlatAssemblyListHtml(char *curDb);
 Prints to stdout the HTML to render a dropdown list containing a list of the possible
 assemblies to choose from that have blat servers available.
 
-param curDb - The assembly (the database name) to choose as selected. 
+param curDb - The assembly (the database name) to choose as selected.
 If NULL, no default selection.
  */
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars);
 /* Examine CGI and cart variables to determine which db, genome, or clade
-   has been selected, and then adjust as necessary so that all three are 
+   has been selected, and then adjust as necessary so that all three are
    consistent.  Detect changes and reset db-specific cart variables.
    Save db, genome and clade in the cart so it will be consistent hereafter.
   The order of preference here is as follows:
@@ -216,7 +216,7 @@ void webPrintLinkCellStart();
 /* Print link cell start in our colors. */
 
 void webPrintLinkOutCellStart();
-/* Print link cell that goes out of our site. End with 
+/* Print link cell that goes out of our site. End with
  * webPrintLinkTableEnd. */
 
 void webPrintWideCellStart(int colSpan, char *bgColorRgb);
@@ -257,4 +257,23 @@ void webFinishPartialLinkOutTable(int rowIx, int itemPos, int maxPerRow);
 
 boolean validateGisaidUser(struct cart *cart);
 /* validate if the web user is an authenticated GISAID user */
+
+char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml);
+// Returns full path of timestamped link to the requested resource file (js, or css).
+// If wrapInHtml, then returns link embedded in style or script html. Free after use.
+// NOTE: png, jpg and gif should also be supported but are untested.
+
+char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml);
+// If this is the first call, will
+//   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
+// else returns NULL.  Useful to ensure multiple references to the same resource file are not made
+// NOTE: png, jpg and gif should also be supported but are untested.
+
+boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName);
+// Converts fileName to web Resource link and prints the html reference
+// This only prints and returns TRUE on first call for this resource.
+// Passing in NULL as the file pointer results in hPrintf call
+// The reference will be to a link with timestamp.
+#define webIncludeResourceFile(fileName)  webIncludeResourcePrintToFile(NULL,fileName)
+
 #endif /* WEB_H */
