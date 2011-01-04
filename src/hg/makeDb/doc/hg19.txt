@@ -14141,4 +14141,25 @@ done
     # Add hg19 to the "identifier consIndelsId" in all.joiner.
 
 
+############################################################################
+# POLYA_DB TRACK (working 2011-01-04 - Chin)
+#
+
+    # Data files and program:
+    # "Bin Tian" <btian@umdnj.edu> provided the following two 
+    # data files at /hive/data/outside/polyA:
+    #   hg18.polyadb.bed  hg19.polyadb.bed
+    # Andy found the SVM program he used before, and in here:
+    #  /hive/data/genomes/hg18/bed/polyaDB/polya_svm_2.2.tar.gz
+    # Copy it to /hive/data/outside/polyA. Unzip the program to 
+    # polya_svm_2.2
+
+    mkdir /hive/data/genomes/hg19/bed/polyaDB
+    cd /hive/data/genomes/hg19/bed/polyaDB
+    cp /hive/data/outside/polyA/hg19.polyadb.bed .
+    hgLoadBed hg19 polyaDb hg19.polyadb.bed
+    # add trackDb entry in human/hg19
+    # polyA.html is at top human level 
+
+
 #############################################################################
