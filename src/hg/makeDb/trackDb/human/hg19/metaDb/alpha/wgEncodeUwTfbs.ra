@@ -1872,6 +1872,28 @@ setType exp
 subId 1255
 view RawData
 
+metaObject wgEncodeUwTfbsBjCtcfStdRawDataRep2
+objType file
+antibody CTCF
+cell BJ
+composite wgEncodeUwTfbs
+control std
+controlId BJ/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsBjCtcfStdRawDataRep2.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 2
+setType exp
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsBjCtcfStdRawRep1
 objType table
 antibody CTCF
@@ -1946,6 +1968,28 @@ replicate 1
 setType input
 subId 1283
 view Alignments
+
+metaObject wgEncodeUwTfbsBjInputStdRawDataRep1
+objType file
+antibody Input
+cell BJ
+composite wgEncodeUwTfbs
+control std
+controlId BJ/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsBjInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsBjInputStdRawRep1
 objType table
@@ -2281,6 +2325,28 @@ setType input
 subId 1287
 view Alignments
 
+metaObject wgEncodeUwTfbsCaco2InputStdRawDataRep1
+objType file
+antibody Input
+cell Caco-2
+composite wgEncodeUwTfbs
+control std
+controlId Caco-2/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsCaco2InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsCaco2InputStdRawRep1
 objType table
 antibody Input
@@ -2574,6 +2640,28 @@ setType input
 subId 1288
 view Alignments
 
+metaObject wgEncodeUwTfbsGm06990InputStdRawDataRep1
+objType file
+antibody Input
+cell GM06990
+composite wgEncodeUwTfbs
+control std
+controlId GM06990/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm06990InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsGm06990InputStdRawRep1
 objType table
 antibody Input
@@ -2745,6 +2833,28 @@ replicate 1
 setType input
 subId 1289
 view Alignments
+
+metaObject wgEncodeUwTfbsGm12801InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12801
+composite wgEncodeUwTfbs
+control std
+controlId GM12801/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12801InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsGm12801InputStdRawRep1
 objType table
@@ -3038,6 +3148,28 @@ setType input
 subId 1290
 view Alignments
 
+metaObject wgEncodeUwTfbsGm12864InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12864
+composite wgEncodeUwTfbs
+control std
+controlId GM12864/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12864InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsGm12864InputStdRawRep1
 objType table
 antibody Input
@@ -3329,6 +3461,28 @@ replicate 1
 setType input
 subId 1291
 view Alignments
+
+metaObject wgEncodeUwTfbsGm12865InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12865
+composite wgEncodeUwTfbs
+control std
+controlId GM12865/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12865InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsGm12865InputStdRawRep1
 objType table
@@ -3622,6 +3776,28 @@ setType input
 subId 1292
 view Alignments
 
+metaObject wgEncodeUwTfbsGm12872InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12872
+composite wgEncodeUwTfbs
+control std
+controlId GM12872/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12872InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsGm12872InputStdRawRep1
 objType table
 antibody Input
@@ -3913,6 +4089,28 @@ replicate 1
 setType input
 subId 1481
 view Alignments
+
+metaObject wgEncodeUwTfbsGm12873InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12873
+composite wgEncodeUwTfbs
+control std
+controlId GM12873/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12873InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsGm12873InputStdRawRep1
 objType table
@@ -4206,6 +4404,28 @@ setType input
 subId 1416
 view Alignments
 
+metaObject wgEncodeUwTfbsGm12874InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12874
+composite wgEncodeUwTfbs
+control std
+controlId GM12874/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12874InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsGm12874InputStdRawRep1
 objType table
 antibody Input
@@ -4497,6 +4717,28 @@ replicate 1
 setType input
 subId 1485
 view Alignments
+
+metaObject wgEncodeUwTfbsGm12875InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12875
+composite wgEncodeUwTfbs
+control std
+controlId GM12875/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12875InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsGm12875InputStdRawRep1
 objType table
@@ -4790,6 +5032,28 @@ replicate 1
 setType input
 subId 1293
 view Alignments
+
+metaObject wgEncodeUwTfbsGm12878InputStdRawDataRep1
+objType file
+antibody Input
+cell GM12878
+composite wgEncodeUwTfbs
+control std
+controlId GM12878/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsGm12878InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsGm12878InputStdRawRep1
 objType table
@@ -6572,6 +6836,28 @@ setType input
 subId 1295
 view Alignments
 
+metaObject wgEncodeUwTfbsHek293InputStdRawDataRep1
+objType file
+antibody Input
+cell HEK293
+composite wgEncodeUwTfbs
+control std
+controlId HEK293/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsHek293InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsHek293InputStdRawRep1
 objType table
 antibody Input
@@ -6863,6 +7149,28 @@ replicate 1
 setType input
 subId 1423
 view Alignments
+
+metaObject wgEncodeUwTfbsHelas3InputStdRawDataRep1
+objType file
+antibody Input
+cell HeLa-S3
+composite wgEncodeUwTfbs
+control std
+controlId HeLa-S3/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsHelas3InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsHelas3InputStdRawRep1
 objType table
@@ -7158,6 +7466,28 @@ setType input
 subId 1435
 view Alignments
 
+metaObject wgEncodeUwTfbsHepg2InputStdRawDataRep1
+objType file
+antibody Input
+cell HepG2
+composite wgEncodeUwTfbs
+control std
+controlId HepG2/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsHepg2InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsHepg2InputStdRawRep1
 objType table
 antibody Input
@@ -7330,6 +7660,28 @@ setType input
 subId 1438
 view Alignments
 
+metaObject wgEncodeUwTfbsHl60InputStdRawDataRep1
+objType file
+antibody Input
+cell HL-60
+composite wgEncodeUwTfbs
+control std
+controlId HL-60/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsHl60InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsHl60InputStdRawRep1
 objType table
 antibody Input
@@ -7500,6 +7852,28 @@ replicate 1
 setType input
 subId 1302
 view Alignments
+
+metaObject wgEncodeUwTfbsHmecInputStdRawDataRep1
+objType file
+antibody Input
+cell HMEC
+composite wgEncodeUwTfbs
+control std
+controlId HMEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsHmecInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsHmecInputStdRawRep1
 objType table
@@ -8702,6 +9076,28 @@ setType input
 subId 1303
 view Alignments
 
+metaObject wgEncodeUwTfbsHreInputStdRawDataRep1
+objType file
+antibody Input
+cell HRE
+composite wgEncodeUwTfbs
+control std
+controlId HRE/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsHreInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsHreInputStdRawRep1
 objType table
 antibody Input
@@ -9181,6 +9577,28 @@ setType input
 subId 1316
 view Alignments
 
+metaObject wgEncodeUwTfbsHuvecInputStdRawDataRep1
+objType file
+antibody Input
+cell HUVEC
+composite wgEncodeUwTfbs
+control std
+controlId HUVEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsHuvecInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsHuvecInputStdRawRep1
 objType table
 antibody Input
@@ -9611,6 +10029,28 @@ replicate 1
 setType input
 subId 1308
 view Alignments
+
+metaObject wgEncodeUwTfbsK562InputStdRawDataRep1
+objType file
+antibody Input
+cell K562
+composite wgEncodeUwTfbs
+control std
+controlId K562/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsK562InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsK562InputStdRawRep1
 objType table
@@ -10112,6 +10552,28 @@ setType input
 subId 1317
 view Alignments
 
+metaObject wgEncodeUwTfbsNhekInputStdRawDataRep1
+objType file
+antibody Input
+cell NHEK
+composite wgEncodeUwTfbs
+control std
+controlId NHEK/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsNhekInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsNhekInputStdRawRep1
 objType table
 antibody Input
@@ -10404,6 +10866,28 @@ setType input
 subId 1318
 view Alignments
 
+metaObject wgEncodeUwTfbsSaecInputStdRawDataRep1
+objType file
+antibody Input
+cell SAEC
+composite wgEncodeUwTfbs
+control std
+controlId SAEC/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsSaecInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsSaecInputStdRawRep1
 objType table
 antibody Input
@@ -10695,6 +11179,28 @@ replicate 1
 setType input
 subId 1319
 view Alignments
+
+metaObject wgEncodeUwTfbsSknshraInputStdRawDataRep1
+objType file
+antibody Input
+cell SK-N-SH_RA
+composite wgEncodeUwTfbs
+control std
+controlId SK-N-SH_RA/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsSknshraInputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
 
 metaObject wgEncodeUwTfbsSknshraInputStdRawRep1
 objType table
@@ -10990,6 +11496,28 @@ setType input
 subId 1320
 view Alignments
 
+metaObject wgEncodeUwTfbsWerirb1InputStdRawDataRep1
+objType file
+antibody Input
+cell WERI-Rb-1
+composite wgEncodeUwTfbs
+control std
+controlId WERI-Rb-1/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-21
+dateUnrestricted 2011-09-21
+fileName wgEncodeUwTfbsWerirb1InputStdRawDataRep1.fastq.gz
+fragLength 350
+grant Stam
+lab UW
+origAssembly hg19
+project wgEncode
+replicate 1
+setType input
+subId 3117
+view RawData
+
 metaObject wgEncodeUwTfbsWerirb1InputStdRawRep1
 objType table
 antibody Input
@@ -11015,4 +11543,4 @@ subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1483317770
+# MAGIC: -1430034959

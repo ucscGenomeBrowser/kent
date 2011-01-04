@@ -3134,7 +3134,7 @@ lineage
 karyotype
 termId BTO:0001178 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001178
-sex M
+sex F
 tier 3
 protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
@@ -4122,6 +4122,21 @@ targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
 
+term  ELF1_(SC-631) 
+tag  ELF1SC631 
+type Antibody
+target  ELF1
+antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Elf-1 of human origin. 
+targetDescription  This gene encodes an E26 transformation-specific related transcription factor.  The encoded protein is primarily expressed in lymphoid cells and acts as both an enhancer and a repressor to regulate transcription of various genes.  Alternative splicing results in multiple transcript variants. (provided by RefSeq) 
+vendorName Santa Cruz Biotech 
+vendorId sc-631
+orderUrl http://www.scbt.com/datasheet-631-elf-1-c-20-antibody.html
+lab  Myers 
+lots  L2707 
+targetId GeneCards:ELF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
+validation ELF1_(SC-631)(Immunoblot)_Myers:human_ELF1_SC-631_validation_Myers.pdf
+
 term ELK4
 tag ELK4
 type Antibody
@@ -4231,6 +4246,21 @@ lab Myers
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1(Immunoblot):human_FOXA1_C-20_validation_Myers.pdf
+
+term  FOXA1_(SC-101058) 
+tag  FOXA1SC101058 
+type Antibody
+target  FOXA1
+antibodyDescription  Mouse monoclonal IgG, raised against recombinant HNF-3a of human origin. 
+targetDescription  This gene encodes a member of the forkhead class of DNA-binding proteins.  These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver. (provided by RefSeq) 
+vendorName Santa Cruz Biotech 
+vendorId sc-101058
+orderUrl http://www.scbt.com/datasheet-101058-hnf-3alpha-q-6-antibody.html
+lab  Myers 
+lots  A2706 
+targetId GeneCards:FOXA1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
+validation FOXA1_SC-101058(Immunoblot)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
 
 term FOXP2
 tag FOXP2
@@ -4654,6 +4684,20 @@ targetId GeneCard:E2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
+term  HDAC2_(SC-6296) 
+tag  HDAC2SC6296 
+type Antibody
+target  HDAC2
+antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of HDAC2 of human origin. 
+targetDescription  This gene product belongs to the histone deacetylase family.  Histone deacetylases act via the formation of large multiprotein complexes, and are responsible for the deacetylation of lysine residues at the N-terminal regions of core histones (H2A, H2B, H3 and H4). This protein forms transcriptional repressor complexes by associating with many different proteins, including YY1, a mammalian zinc-finger transcription factor. (provided by RefSeq) 
+vendorName Santa Cruz Biotech 
+vendorId sc-6296
+orderUrl http://www.scbt.com/datasheet-6296-hdac2-c-19-antibody.html
+lab  Myers 
+lots  G0307 
+targetId GeneCards:HDAC2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
+validation HDAC2_(SC-6296)(Immunoblot)_Myers:human_HDAC2_SC-6296_validation_Myers.pdf
 
 term HEY1
 tag HEY1
@@ -5341,8 +5385,7 @@ lab  Farnham
 lots
 targetId Genecards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
-validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):
-human_SETDB1-SC66884_validation_Farnham.pdf
+validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
 
 
 
@@ -5703,6 +5746,21 @@ targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
 validation USF-1(Immunoblot):human_USF-1_C-20_validation_Myers.pdf
 
+term  USF1_(SC-8983) 
+tag  USF1SC8983 
+type Antibody
+target  USF1
+antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 75-160 mapping within internal region of USF1 of human origin. 
+targetDescription  This gene encodes a member of the basic helix-loop-helix leucine zipper family, and can function as a cellular transcription factor. The encoded protein can activate transcription through pyrimidine-rich initiator (Inr) elements and E-box motifs. This gene has been linked to familial combined hyperlipidemia (FCHL). Two transcript variants encoding distinct isoforms have been identified for this gene. (provided by RefSeq). 
+vendorName Santa Cruz Biotech 
+vendorId sc-8983
+orderUrl http://www.scbt.com/datasheet-8983-usf-1-h-86-antibody.html
+lab  Myers 
+lots  E2810 
+targetId GeneCards:USF1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
+validation USF1_SC-8983(Immunoblot)_Myers:human_USF1_SC-8983_validation_Myers.pdf
+
 term USF2
 tag USF2
 type Antibody
@@ -5802,6 +5860,21 @@ lab Myers
 targetId GeneCard:ZBTB33
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB33
 validation ZBTB33(Immunoblot):human_ZBTB33_6F8_validation_Myers.pdf
+
+term  ZBTB7A_(SC-34508) 
+tag  ZBTB7ASC34508 
+type Antibody
+target  ZBTB7A
+antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of LRF of human origin. 
+targetDescription  Plays a key role in the instruction of early lymphoid progenitors to develop into B lineage by repressing T-cell instructive Notch signals (By similarity). 
+vendorName Santa Cruz Biotech 
+vendorId sc-34508
+orderUrl http://www.scbt.com/datasheet-34508-lrf-c-18-antibody.html
+lab  Myers 
+lots  H2406 
+targetId GeneCards:ZBTB7A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
+validation ZBTB7A_SC-34508(Immunoblot)_Myers:human_ZBTB7A_SC-34508_validation_Myers.pdf
 
 term ZNF263
 tag ZNF263
@@ -6659,11 +6732,11 @@ description Total RNA extract (longer than 200 nt)
 label Total_RNA
 
 # Short should be retired turning into short total
-term short
-tag short
-type rnaExtract
-description RNA shorter than 200 nt
-label short_RNA
+#term short
+#tag short
+#type rnaExtract
+#description RNA shorter than 200 nt
+#label PROVISIONAL   (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
 
 term shortTotal
 tag shortTotal
@@ -6671,10 +6744,11 @@ type rnaExtract
 description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
 label short_Total_RNA
 
-term shortDeplRrna
-tag shortDeplRrna
-type rnaExtract
-description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
+#term shortDeplRrna
+#tag shortDeplRrna
+#type rnaExtract
+#description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
+#Provisional Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake
 
 term longPolyA
 tag pAP
@@ -6894,6 +6968,11 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
+term DMSO_0.02pct_24hr
+tag DMSO224h
+description 24h,0.02% DMSO (Myers)
+type treatment
+
 term DMSO_2.0pct
 tag DMSO20
 description 5d,2% DMSO (Weissman)
@@ -6902,6 +6981,11 @@ type treatment
 term Estradiol_10nM
 tag ESTRADIa1h
 description  1h,10nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_10nM_24hr
+tag ESTRADIa24hh
+description  24,10nM Estradiol  (Myers)
 type treatment
 
 term Estradiol_1nM
@@ -7791,6 +7875,20 @@ grantPi Snyder
 organism human
 
 
+### ARRA human labs
+###
+term UNC/BSU
+tag UNCBSU
+type lab
+label Giddings - University of North Carolina and Boise State University
+description Giddings - University of North Carolina and Boise State University
+labInst University of North Carolina / Boise State University
+labPi Giddings
+labPiFull Morgan Giddings
+grantPi Giddings
+organism human
+
+
 
 ### Mouse labs
 ###
@@ -7860,17 +7958,6 @@ labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
-organism mouse
-
-term UNC-m
-tag UNC
-type lab
-label Giddings - University of North Carolina
-description Giddings - University of North Carolina
-labInst University of North Carolina
-labPi Giddings
-labPiFull Morgan Giddings
-grantPi Giddings
 organism mouse
 
 term UW-m

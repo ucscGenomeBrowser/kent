@@ -688,7 +688,7 @@ if (featDna && end > start)
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	   "View DNA for this feature</A>(%s/%s)<BR>\n",  hgcPathAndSettings(),
+	   "View DNA for this feature</A> (%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
 	   chrom, start, end, strand, tbl, database, hGenome(database));
     }
@@ -2695,6 +2695,10 @@ char *html = getHtmlFromSelfOrParent(tdb);
 if (html != NULL && html[0] != 0)
     {
     htmlHorizontalLine();
+
+    // Add pennantIcon
+    printPennantIconNote(tdb);
+
     puts(html);
     }
 hPrintf("<BR>\n");
@@ -3803,8 +3807,8 @@ if (dbIsFound)
     hParseTableName(database, tbl, rootName, parsedChrom);
     hti = hFindTableInfo(database, seqName, rootName);
     }
-char *otherOrg = hOrganism(database);
-cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, otherOrg);
+char *thisOrg = hOrganism(database);
+cartWebStart(cart, database, "Get DNA in Window (%s/%s)", database, thisOrg);
 printf("<H2>Get DNA for </H2>\n");
 printf("<FORM ACTION=\"%s\">\n\n", hgcName());
 cartSaveSession(cart);
@@ -9873,7 +9877,7 @@ if (desc != NULL)
     htmlTextOut(desc);
     printf("<BR>\n");
     }
-    
+
 printCcdsForSrcDb(conn, rl->mrnaAcc);
 
 cdsCmpl = getRefSeqCdsCompleteness(conn, sqlRnaName);

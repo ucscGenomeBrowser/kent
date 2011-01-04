@@ -3390,4 +3390,9 @@ TMPDIR=/scratch/tmp
     ln -s `pwd`/SL3003_SL3004_100122-panTro2.bam{,.bai} /gbdb/panTro2/denisova/
     hgBbiDbLink panTro2 bamSLDenisova /gbdb/panTro2/denisova/SL3003_SL3004_100122-panTro2.bam
 
+    # to see the grp table:
+    hgsql -e "select * from grp order by priority;" panTro2
+    # add new denisova group:
+    hgsql panTro2 -e "INSERT INTO grp VALUES ('denisova', 'Denisova Assembly and Analysis', 6.6);"
+
 ############################################################################

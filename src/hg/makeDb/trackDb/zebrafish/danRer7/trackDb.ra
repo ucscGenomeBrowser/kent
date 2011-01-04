@@ -13,3 +13,159 @@ group map
 priority 10.1
 visibility hide
 type ctgPos
+
+
+track cons8way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (8 Species)
+subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
+subGroup2 clade Clade fish=Fish vert=Vertebrate
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 103.29
+
+    track cons8wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons8way
+
+	track multiz8way
+        subTrack cons8wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments & Conservation (8 species)
+        subGroups view=align clade=vert
+        noInherit on
+	irows on
+	summary multiz8waySummary
+	frames multiz8wayFrames
+	color 0, 10, 100
+	altColor 0,90,10
+	type wigMaf 0.0 1.0
+	speciesCodonDefault danRer7
+	speciesGroups fish vertebrate
+	sGroup_fish gasAcu1 oryLat2 tetNig2 fr2
+	sGroup_vertebrate xenTro2 mm9 hg19
+        itemFirstCharCase noChange
+	treeImage phylo/danRer7_8way.png
+        priority 100
+
+    track cons8wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons8way
+    viewLimits -2.14:2.56
+    viewLimitsMax -2.137:2.555
+
+        # PhyloP conservation
+        track phyloP8wayFish
+        subTrack cons8wayViewphyloP on
+        subGroups view=phyloP clade=fish
+        shortLabel Fish Cons
+        longLabel Fish Basewise Conservation by PhyloP (5 species)
+        noInherit on
+        configurable on
+        type wig -1.489 1.582
+        maxHeightPixels 100:50:11
+        viewLimits -1.49:1.582
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,10,70
+        altColor 70,10,10
+        priority 1
+
+        track phyloP8way
+        subTrack cons8wayViewphyloP off
+        subGroups view=phyloP clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Basewise Conservation by PhyloP (8 species)
+        noInherit on
+        configurable on
+        type wig -2.137 2.555
+        maxHeightPixels 100:50:11
+        viewLimits -2.14:2.56
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,40,120
+        altColor 120,40,40
+        priority 2
+
+    track cons8wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility full
+    subTrack cons8way
+
+        # phastCons conservation
+        track phastCons8wayFish
+        subTrack cons8wayViewphastcons on
+        subGroups view=phastcons clade=fish
+        shortLabel Fish Cons
+        longLabel Fish Conservation by PhastCons (5 species)
+        noInherit on
+        configurable on
+        type wig 0 1
+        viewLimits 0:1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 10
+
+        track phastCons8way
+        subTrack cons8wayViewphastcons off
+        subGroups view=phastcons clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Conservation by PhastCons (8 species)
+        noInherit on
+        configurable on
+        type wig 0 1
+        viewLimits 0:1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 40,120,40
+        altColor 120,40,40
+        priority 12
+
+    track cons8wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility dense
+    subTrack cons8way
+
+        # Conserved Elements (Most Conserved)
+	track phastConsElements8wayFish
+        subTrack cons8wayViewelements on
+        subGroups view=elements clade=fish
+	shortLabel Fish El
+        longLabel Fish Conserved Elements (5 species)
+        noInherit on
+        type bed 5 .
+        color 170,50,100
+	exonArrows off
+	showTopScorers 200
+        priority 20
+
+	track phastConsElements8way
+        subTrack cons8wayViewelements off
+        subGroups view=elements clade=vert
+	shortLabel Vertebrate El
+        longLabel Vertebrate Conserved Elements (8 species)
+        noInherit on
+        type bed 5 .
+        color 170,100,50
+	exonArrows off
+	showTopScorers 200
+        priority 23
