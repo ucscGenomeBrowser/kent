@@ -1952,3 +1952,23 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track snpArray override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+track consIndelsHgMmCanFam
+shortLabel Cons Indels MmCf
+longLabel Indel-based Conservation for human hg19, mouse mm8 and dog canFam2
+group compGeno
+priority 105
+visibility hide
+useScore 1
+color 0, 60, 120
+type bed 5 .
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+searchTable consIndelsHgMmCanFam
+searchType bed
+searchMethod exact
+shortCircuit 1
+termRegex IGS.+
+searchPriority 50
