@@ -14030,4 +14030,115 @@ for tab in `echo show tables like "'snpArray%Raw'" | hgsql hg18 | tail -n +2`; d
   hgLoadSqlTab hg19 $table hg18.${table}.sql hg19.${table}.txt
 done
 
+
+
+############################################################################
+# INDEL-BASED CONSERVATION TRACK liftOver to hg19 (DONE - 2010-12-21 - Chin )
+# Data from the Gerton Lunter (gerton.lunter at anat.ox.ac.uk), MRC
+# Functional Genetics Unit, University of Oxford, United Kingdom.
+# Data is from the paper:
+# Lunter G, Ponting CP and Hein J Genome-wide identification of human
+# functional DNA using a neutral indel model. PLoS Comput Biol. 2006
+# Jan;2(1):e5.
+    mkdir -p /hive/data/genomes/hg19/bed/consIndels/data
+    cd /hive/data/genomes/hg19/bed/consIndels
+    cp /hive/data/genomes/hg18/bed/consIndels/README.indels .
+    cp /hive/data/genomes/hg18/bed/consIndels/igs-hg18mm8cf2.zip .
+    # 38 Mb zip file in GFF format. This contains data for hg18
+    # comparing it to mm8 and cf2 (canFam2).
+    unzip igs-hg18mm8cf2.zip
+    mv *.gff ./data/
+    cd /hive/data/genomes/hg19/bed/consIndels/data    
+
+    for f in *.gff
+    do
+       echo processing $f
+       grep -v "track" $f >> ../allNoHeader.tmp
+    done
+
+    cd /hive/data/genomes/hg19/bed/consIndels/	
+    cat allNoHeader.tmp | \
+    awk '{print $1,$4,$5,$6,$9,$10,$11}' > consIndels.bed7p       
+
+    liftOver -bedPlus=3 consIndels.bed7p \
+      /hive/data/genomes/hg18/bed/liftOver/hg18ToHg19.over.chain.gz \
+      consIndelsHg19Mm8CanFam2.bed7p unMapped
+
+    wc -l *.bed7p
+    #  2603017 consIndels.bed7p
+    #  2602701 consIndelsHg19Mm8CanFam2.bed7p
+    grep -i split unMapped | wc -l
+    # 41
+    grep -i partially unMapped | wc -l
+    # 66
+    rm allNoHeader.tmp
+    rm consIndels.bed7p
+   
+    # strip off the end of the name e.g. IGS0001.1:p=.74; FDR 0.27
+    # so that the name displayed is short - IGS0001.1. The score field
+    # is used to determine colouring and this is calculated from FDR
+    cd /cluster/data/hg19/bed/consIndels
+    cat  consIndelsHg19Mm8CanFam2.bed7p | 
+      awk '{print $1,$2, $3, $5, $4}' | 
+      sed -e 's/:p[=<]\.[0-9][0-9]*;//' \
+       > consIndelsHg19Mm8CanFam2.bed
+
+    # load data
+    cd /hive/data/genomes/hg19/bed/consIndels
+    hgLoadBed hg19 consIndelsHgMmCanFam consIndelsHg19Mm8CanFam2.bed
+    # Reading consIndelsHg19Mm8CanFam2.bed
+    # Loaded 2602701 elements of size 5
+    # Sorted
+    # Creating table definition for consIndelsHgMmCanFam
+    # Saving bed.tab
+    # Loading hg19
+
+    # Get the IDs, posterior probabilities (p) for the segment being
+    # neutral,
+    # and the FDR from the original GFFs for a separate table. Some
+    # items
+    # have p<.001. Can not do Table Browser queries restricting
+    # p to <, =, or > a specified value unless all values are floats.
+    # Contacted the data contributor, Gerton Lunter, and he said it
+    # would be
+    # ok to change all p<.001 to p=0.0005
+    cd /hive/data/genomes/hg19/bed/consIndels/
+    cat consIndelsHg19Mm8CanFam2.bed7p \
+      | awk 'BEGIN {FS="\t"} {print $5, $6, $7}'  \
+      | sed -e 's/:/\t/' \
+      | sed -e 's/p=\./0\./' | sed -e 's/p<\.001/0\.0005/' \
+      | sed -e 's/;\sFDR/\t/' > consIndelsHg19Mm8CanFam2Conf.txt
+
+    # there are no GFF files for the haplotype chroms
+    # Reuse $HOME/kent/src/hg/lib/itemConf.* for the table of identifier,
+    # posterior probability and false discovery rate (FDR).
+    
+    cd /hive/data/genomes/hg19/bed/consIndels
+    hgLoadSqlTab hg19 consIndelsHgMmCanFamConf \
+         $HOME/kent/src/hg/lib/itemConf.sql \
+         consIndelsHg19Mm8CanFam2Conf.txt
+
+    # check that all itesm are in this table.
+    hgsql -N -e 'select distinct(name) from consIndelsHgMmCanFam;' hg19 \
+         | sort > consIndels.names.sort
+    hgsql -N -e 'select distinct(id) from consIndelsHgMmCanFamConf;' hg19 \
+         | sort > consIndels.idsfromConf.sort
+    wc -l *.sort
+    # 2602701 consIndels.idsfromConf.sort
+    # 2602701 consIndels.names.sort
+
+    comm -12 consIndels.names.sort consIndels.idsfromConf.sort | wc -l
+    # 2602701
+    # so all element IDs are in both tables.
+    # cleanup
+    rm ./data/*.bak *.sort
+
+    # add trackDb/human/hg19/trackDb.ra entry and add description that
+    # was written by the data contributor. Add code to hgc.c to display
+    # the posterior probability and the FDR on the details page for
+    # track elements. Gerton Lunter provided a description for the data
+    # on 2007-09-12.
+    # Add hg19 to the "identifier consIndelsId" in all.joiner.
+
+
 #############################################################################
