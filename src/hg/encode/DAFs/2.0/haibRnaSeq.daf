@@ -17,9 +17,8 @@
 #cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
 #rnaExtract     the features the RNA was selected on (long, short, polyA+) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract)
 #readType       the read type (single, paired, directional, length) (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#readType)
-#mapAlgorithm   the mapping algorithm (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#mapAlgorithm )
 #labVersion     free text for the lab to specify metadata (possibly 'These files produced for use with GENCODE V3c' or something of the like) (OPTIONAL)
-#treatment      the cellular compartement (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#treatment)
+#treatment      the treatment on the cell (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#treatment)
 #origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)  
 #labExpId       allows the lab to tag the files with own internal experiment ID (optional)
 #obtainedBy     The lab that the sample was obtained from
@@ -42,44 +41,46 @@ validationSettings validateFiles.bam:mismatches=3
 # Track/view definitions
 
 view             TranscriptGencV3c 
-longLabelPrefix  HAIB RNA-seq Transcripts RPKM 
+longLabelPrefix  HAIB RNA-seq Transcripts FPKM 
 type             gtf   
 hasReplicates    yes
 required         no
+downloadOnly	 yes
 
 view             TranscriptDeNovo 
-longLabelPrefix  HAIB RNA-seq Transcripts DeNovo RPKM 
+longLabelPrefix  HAIB RNA-seq Transcripts DeNovo FPKM 
 type             gtf   
 hasReplicates    yes
 required         no
 
 view             GeneDeNovo
-longLabelPrefix  HAIB RNA-seq Genes Denovo RPKM 
+longLabelPrefix  HAIB RNA-seq Genes Denovo FPKM 
 type             gtf   
 hasReplicates    yes
 required         no
+downloadOnly	 yes
 
 view             GeneGencV3c
-longLabelPrefix  HAIB RNA-seq Gene RPKM 
+longLabelPrefix  HAIB RNA-seq Gene FPKM 
 type             gtf   
 hasReplicates    yes
 required         no
+downloadOnly	 yes
 
-
-view             PlusRawSignal
+view             PlusSignal
 longLabelPrefix  HAIB RNA-seq Plus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
 required         yes
 
-view             MinusRawSignal
+view             MinusSignal
 longLabelPrefix  HAIB RNA-seq Minus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
 required         yes
 
 view             Aligns
-longLabelPrefix  Myers RNA-seq Map Algorithm Alignments
+longLabelPrefix  HAIB RNA-seq Alignments
 type             bam
 hasReplicates    yes
 required         yes
@@ -87,5 +88,5 @@ required         yes
 view             RawData
 type             fastq
 hasReplicates    yes
-required         no
+required         yes 
 downloadOnly	 yes

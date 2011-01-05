@@ -7920,6 +7920,17 @@ labPiFull Morgan Giddings
 grantPi Giddings
 organism human
 
+term UChicago
+tag UChicago
+type lab
+label White - University of Chicago
+description White - University of Chicago PROVISIONAL
+labInst University of Chicago
+labPi White
+labPiFull Kevin White
+grantPi White
+organism human
+
 
 
 ### Mouse labs
@@ -7980,17 +7991,6 @@ labPiFull Ross Hardison
 grantPi Hardison
 organism mouse
 
-
-term UChicago-m
-tag UChicago
-type lab
-label White - University of Chicago
-description White - University of Chicago
-labInst University of Chicago
-labPi White
-labPiFull Kevin White
-grantPi White
-organism mouse
 
 term UW-m
 tag UW
