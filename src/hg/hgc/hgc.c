@@ -8326,6 +8326,9 @@ char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
 boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+/* assume nothing found */
+versionString[0] = 0;
+dateReference[0] = 0;
 
 if (trackVersionExists)
     {
@@ -8345,12 +8348,6 @@ if (trackVersionExists)
 	}
     sqlFreeResult(&sr);
     }
-else
-    {
-    versionString[0] = 0;
-    dateReference[0] = 0;
-    }
-
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -10962,6 +10959,9 @@ char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
 boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+/* assume nothing found */
+versionString[0] = 0;
+dateReference[0] = 0;
 
 if (trackVersionExists)
     {
@@ -10982,11 +10982,6 @@ if (trackVersionExists)
 	}
     sqlFreeResult(&sr);
     hFreeConn(&conn);
-    }
-else
-    {
-    versionString[0] = 0;
-    dateReference[0] = 0;
     }
 
 if (itemForUrl == NULL)
