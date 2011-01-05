@@ -8,7 +8,7 @@ longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
 subGroup1 cellType Cell_Line K562=K562&nbsp;(Tier_1) GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) BG02ES=BG02ES BG02ESEBD=BG02ES-EBD  GM12891=GM12891 GM12892=GM12892 H9ESAFPPlus=H9ES-AFP+ H9ESAFPMinus=H9ES-AFP- H9ESCM=H9ES-CM H9ESE=H9ES-E H9ESEB=H9ES-EB H9ESEBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT116=HCT-116 HFL11W=HFL11W HFL24W=HFL24W
 subGroup2 rep Replicate rep1=1 rep2=2
-subGroup4 view View Regions=Regions
+subGroup3 view View Regions=Regions
 dimensions dimensionX=rep dimensionY=cellType
 sortOrder cellType=+ rep=+
 dragAndDrop subTracks
