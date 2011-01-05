@@ -782,7 +782,6 @@ visibility hide
 color 50,70,120
 type bed 5 +
 useScore 1
-url http://enhancer.lbl.gov/cgi-bin/imagedb.pl?form=presentation&show=1&experiment_id=$$
 
 track uc16
 shortLabel Ultra Conserved
