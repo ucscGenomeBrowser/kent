@@ -1816,6 +1816,63 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 #############################################################################
+# download data for 8-way (WORKING - 2011-01-04 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phastCons8way
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/cons/all/downloads/phastCons8way.wigFix.gz \
+	./vertebrate.phastCons8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/cons/fish/downloads/phastCons8wayFish.wigFix.gz \
+	./fish.phastCons8way.wigFix.gz
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/fish/fish.mod \
+	./fish.mod
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/all/all.mod \
+	./vertebrate.mod
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/README.txt .
+    md5sum * > /hive/data/genomes/danRer7/bed/multiz8way/cons/md5sum.txt
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/cons/md5sum.txt .
+
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phyloP8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/phyloP8way
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/all/downloads/phyloP8way.wigFix.gz \
+	./vertebrate.phyloP8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/fish/downloads/phyloP8wayFish.wigFix.gz \
+	./fish.phastCons8way.wigFix.gz
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/run.phyloP/fish.mod \
+	./fish.mod
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/run.phyloP/all.mod \
+	./vertebrate.mod
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/README.txt .
+    md5sum * > /hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/md5sum.txt
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/consPhyloP/md5sum.txt .
+
+    cd /hive/data/genomes/danRer7/bed/multiz8way
+    /cluster/bin/phast/tree_doctor --rename \
+"danRer7->Zebrafish; gasAcu1->Stickleback; oryLat2->Medaka; tetNig2->Tetraodon; fr2->Fugu; xenTro2->X_Tropicalis; mm9->Mouse; hg19->Human" \
+	zFishOnTop.nh > commonNames.8way.nh
+
+    mkdir /hive/data/genomes/danRer7/bed/multiz8way/downloads
+    cd /hive/data/genomes/danRer7/bed/multiz8way/downloads
+    cp -p ../anno/multiz8way.maf .
+    gzip multiz8way.maf
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/multiz8way
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer7/multiz8way
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/8way.nh .
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/commonNames.8way.nh .
+    ln -s \
+/hive/data/genomes/danRer7/bed/multiz8way/downloads/multiz8way.maf.gz \
+	.
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/downloads/README.txt .
+
+    md5sum * > /hive/data/genomes/danRer7/bed/multiz8way/downloads/md5sum.txt
+    ln -s /hive/data/genomes/danRer7/bed/multiz8way/downloads/md5sum.txt .
+
+#############################################################################
 # HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-12-29)
     # bash  if not using bash shell already
 )
@@ -1984,3 +2041,4 @@ chainOne $(path1)
     rm -rf blastOut
 #end tblastn
 
+#############################################################################
