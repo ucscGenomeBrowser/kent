@@ -69,10 +69,6 @@ set flyFa = $genomes/$flyDb/bed/flybase5.3/flyBasePep.fa
 set wormFa = $genomes/$wormDb/bed/blastp/wormPep190.faa
 set yeastFa = $genomes/$yeastDb/bed/hgNearBlastp/100806/sgdPep.faa
 
-# The net files in the external (xdb) species, for identifying blocks syntenic
-# between that species and the current one.
-set xdbNet = $genomes/$db/bed/lastzMm9.2009-05-13/mafSynNet
-
 # Other files needed
   # For bioCyc pathways - best to update these following build instructions in
   # mm9.txt
@@ -155,18 +151,13 @@ netChainSubset ${db}.{$xdb}.syn.net ${xdbNetDir}/${db}.${xdb}.over.chain.gz \
 chainToPsl ${db}.${xdb}.syn.chain ${genomes}/${db}/chrom.sizes \
     ${genomes}/${xdb}/chrom.sizes ${genomes}/${db}/${db}.2bit \
     ${genomes}/${xdb}/${xdb}.2bit ${db}.${xdb}.syn.psl
-
-
-netToBed ${db}.${xdb}.syn.net ${db}.${xdb}.syntenicBlocks.bed
+pslToBed ${db}.${xdb}.syn.psl ${db}.${xdb}.syn.bed
 
 
 # Get the Rfams that overlap with blocks that are syntenic to $Xdb
 mkdir -p rfam
 pslToBed ${rfam}/${db}/Rfam.bestHits.psl rfam/rfam.all.bed
-bedToExons rfam/rfam.all.bed rfam/rfam.exons.bed
-hgsql ${db} -N -e "SELECT DISTINCT tName, tStart, tEnd FROM chain${Xdb}" \
-  | cat > ${xdb}.syntenic.blocks.bed
-bedIntersect rfam/rfam.all.bed ${xdb}.syntenic.blocks.bed rfam/rfam.syntenic.bed
+bedIntersect rfam/rfam.all.bed ${db}.${xdb}.syn.bed rfam/rfam.syntenic.bed
 
 # move this exit statement to the end of the section to be done next
 exit $status # BRACKET
