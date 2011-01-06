@@ -491,7 +491,7 @@ for my $line (@fileList) {
                       "ripTgtProtein","restrictionEnzyme","promoter","control","replicate","expId","labExpId","setType","controlId","submittedDataVersion","subId","dataVersion",
                       "dateSubmitted","dateResubmitted","dateReloaded","dateUnrestricted","project","grant","lab","labVersion","softwareVersion",
                       "mapAlgorithm","fragSize","fragLength","medianFragmentLength","fragmentLengthRange","chromStart","view","type","composite",
-                      "tableName","parentTable","fileName","accession");
+                      "tableName","parentTable","fileName","dccInternalNotes");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my @colListVals;
     my $typePrefix = "";
@@ -594,7 +594,7 @@ for my $line (@fileList) {
                     unshift @vals, $metaData{type};
                 }
                 my %remove; # Don't display these metadata values
-                $remove{tableName} = $remove{fileIndex} = $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = 1;
+                $remove{tableName} = $remove{fileIndex} = $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = $remove{dccInternalNotes} = 1;
                 $remove{antibody} = 1 if($input eq "removeAntiBodyDup");  # remove antibody if input=antibody
                 ( $tagRef, $valRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%remove );
                 ( $tagRef, $valRef ) = metadataArraysMoveValuesToFront($tagRef, $valRef,\@sortFields);
