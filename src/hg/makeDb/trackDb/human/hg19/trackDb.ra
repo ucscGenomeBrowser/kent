@@ -1844,7 +1844,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewpsl
     shortLabel Alignment
     view psl
-    visibility pack
+    visibility hide
     parent altSeqComposite
     type psl
     indelDoubleInsert on
@@ -1868,7 +1868,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewchain
     shortLabel Chain
     view chain
-    visibility pack
+    visibility hide
     parent altSeqComposite
     spectrum on
 
@@ -1884,7 +1884,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewnet
     shortLabel Net
     view net
-    visibility full
+    visibility hide
     parent altSeqComposite
 
         track netHg19Patch2
