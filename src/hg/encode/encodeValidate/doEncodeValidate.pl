@@ -1906,7 +1906,7 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "Antibody";
             } elsif ($var eq "cell") {
                 $cvTypeVar = "Cell Line";
-            } elsif ($var eq "obtainedBy") {
+            } elsif ($var eq "obtainedBy") { 
 		$cvTypeVar = "lab";
 	     }
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
@@ -1983,7 +1983,9 @@ foreach my $ddfLine (@ddfLines) {
             } elsif ($var eq "cell") {
                 $groupVar = "cellType";
                 $cvTypeVar = "Cell Line";
-            } elsif ($var eq "obtainedBy") {		 
+            } elsif ($var eq "obtainedBy") {
+              #Not sure why when we check for obtainedBy subGroups prints out and when when this is
+	      # not pressent the subGroups provides error of unitialized. 							
      		$cvTypeVar = "lab";
 	    }
 
