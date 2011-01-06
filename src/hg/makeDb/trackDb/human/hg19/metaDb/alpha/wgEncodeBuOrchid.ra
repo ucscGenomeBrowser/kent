@@ -4,6 +4,7 @@ composite wgEncodeBuOrchid
 dataResubmitted 2011-01-03
 dataType Orchid
 dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2011-01-03
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
 fileName wgEncodeBuOrchidV1.bigWig
@@ -32,4 +33,4 @@ subId 3118
 tableName wgEncodeBuOrchidV2
 view Signal
 
-# MAGIC: -1262129629
+# MAGIC: 240803174

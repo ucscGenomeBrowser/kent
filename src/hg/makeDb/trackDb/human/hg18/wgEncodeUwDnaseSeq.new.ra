@@ -20,6 +20,7 @@ priority 0
 type bed 3 +
 dataVersion through the ENCODE Jan 2010 Freeze
 wgEncode 1
+html wgEncodeUwDnaseSeq.new
 
     track wgEncodeUwDnaseSeqViewaPeaks
     shortLabel Peaks
