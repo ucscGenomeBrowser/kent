@@ -8,7 +8,7 @@
 #               - F-Seq Density Signal = F-Seq
 #               - Raw Base Overlap Signal = Raw
 #       - cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
-#       - Default Tracks on: 
+#       - Default Tracks on:
 #       - Display matrix: Tier 1 (GM12878, K562, H1-hESC)
 #       - Track Long Label:ENCODE DNaseI Hypersensitivity by DNase-seq from Duke (Open Chromatin)
 #       - View Long Labels: [Track Short Label] $view (in $cell, with $treatment)
@@ -28,6 +28,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier
 #subGroup2 cellType Cell_Line AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
 subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs NaBut=Sodium_Butyrate OHUrea=Hydroxyurea SERUMFREE=Serum_Free
 sortOrder cellType=+ treatment=+ view=+
+fileSortOrder cell=Cell_Line treatment=Treatment view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dimensions dimensionY=cellType dimensionX=treatment
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
@@ -37,6 +38,7 @@ useScore 0
 priority 0
 type bed 3
 wgEncode 1
+dataVersion through the ENCODE Jan 2011 Freeze
 
     track wgEncodeOpenChromFaireViewPeaks
     shortLabel Peaks
@@ -280,7 +282,7 @@ wgEncode 1
 
         track wgEncodeOpenChromFaireH1hescSig
         release alpha
-        parent wgEncodeOpenChromFaireViewSignal 
+        parent wgEncodeOpenChromFaireViewSignal
         shortLabel H1-hESC F-seq
         longLabel ENCODE UNC FAIRE F-Seq Density Signal (in H1-hESC cells)
         subGroups view=SIG cellType=H1 treatment=AANONE
@@ -498,7 +500,7 @@ wgEncode 1
 
         track wgEncodeOpenChromFaireH1hescBaseOverlapSignal
         release alpha
-        parent wgEncodeOpenChromFaireViewSigBo 
+        parent wgEncodeOpenChromFaireViewSigBo
         shortLabel H1-hESC Raw
         longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in H1-hESC cells)
         subGroups view=SIGBO cellType=H1 treatment=AANONE
