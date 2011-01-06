@@ -268,6 +268,13 @@ static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 {
 puts("<p><B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
 puts("in publication  until the restriction date noted for the given data file.</B></p");
+
+struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
+if (oneFile != NULL)
+    {
+    printf("<p>\n<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s/supplemental/'>here</A>.</p>\n",
+          hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
+    }
 puts("<p>\nThere are two files within this directory that contain information about the downloads:");
 printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/files.txt'>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
                 hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
