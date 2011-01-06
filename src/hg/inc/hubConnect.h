@@ -10,10 +10,58 @@
 #define hubConnectTableName "hubConnect"
 /* Name of our table. */
 
+#define hubTrackPrefix "hub_"
+/* The names of all hub tracks begin with this.  Use in cart. */
+
+boolean isHubTrack(char *trackName);
+/* Return TRUE if it's a hub track. */
+
+struct hubConnectStatus
+/* Basic status on hubConnect.  Note it is *not* the same as the
+ * hubConnect table, that has a bunch of extra fields to help 
+ * keep track of whether the hub is alive. */
+    {
+    struct hubConnectStatus *next;
+    int id;	/* Hub ID */
+    char *shortLabel;	/* Hub short label. */
+    char *longLabel;	/* Hub long label. */
+    char *hubUrl;	/* URL to hub.ra file. */
+    char *errorMessage;	/* If non-empty hub has an error and this describes it. */
+    unsigned dbCount;	/* Number of databases hub has data for. */
+    char **dbArray;	/* Array of databases hub has data for. */
+    };
+
+void hubConnectStatusFree(struct hubConnectStatus **pHub);
+/* Free hubConnectStatus */
+
+void hubConnectStatusFreeList(struct hubConnectStatus **pList);
+/* Free a list of dynamically allocated hubConnectStatus's */
+
+struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id);
+/* Given a hub ID return associated status. */
+
+struct hubConnectStatus *hubConnectStatusFromCart(struct cart *cart);
+/* Return list of track hubs that are turned on by user in cart. */
+
+#define hubConnectTrackHubsVarName "trackHubs"
+/* Name of cart variable with list of track hubs. */
+
 #define hgHubConnectCgiDestUrl "hgHubConnect.destUrl"
 /* Cart variable to tell hgHubConnect where to go on submit. */
 
+#define hgHubConnectRemakeTrackHub "hgHubConnect.remakeTrackHub"
+/* Cart variable to indicate trackHub cart variable needs refreshing. */
+
+#define hgHubConnectHubVarPrefix "hgHubConnect.hub."
+/* Prefix to temporary variable holding selected cart names. */
+
 boolean hubConnectTableExists();
 /* Return TRUE if the hubConnect table exists. */
+
+struct slName  *hubConnectHubsInCart(struct cart *cart);
+/* Return list of track hub ids that are turned on by user. */
+
+int hubIdFromTrackName(char *trackName);
+/* Given something like "hub_123_myWig" return 123 */
 
 #endif /* HUBCONNECT_H */

@@ -31,6 +31,8 @@
 #include "nonCodingUi.h"
 #include "expRecord.h"
 #include "wikiTrack.h"
+#include "hubConnect.h"
+#include "trackHub.h"
 #include "pcrResult.h"
 #include "dgv.h"
 #include "transMapStuff.h"
@@ -2690,6 +2692,28 @@ else if (isCustomTrack(track))
             break;
             }
         }
+    }
+else if (isHubTrack(track))
+    {
+    int hubId = hubIdFromTrackName(track);
+    struct sqlConnection *conn = hConnectCentral();
+    struct hubConnectStatus *hubStatus = hubConnectStatusForId(conn, hubId);
+    hDisconnectCentral(&conn);
+    if (hubStatus == NULL)
+        errAbort("The hubId %d was not found", hubId);
+    if (!isEmpty(hubStatus->errorMessage))
+        errAbort("Hub %s at %s has the error: %s", hubStatus->shortLabel, 
+		hubStatus->hubUrl, hubStatus->errorMessage);
+    char hubName[16];
+    safef(hubName, sizeof(hubName), "%d", hubId);
+    struct trackHub *hub = trackHubOpen(hubStatus->hubUrl, hubName);
+    struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+    struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    rAddTrackListToHash(trackHash, tdbList, chromosome, FALSE);
+    tdb = hashFindVal(trackHash, track);
+    if (tdb == NULL)
+	errAbort("Can't find track %s in %s", track, hubStatus->hubUrl);
     }
 else if (sameString(track, "hgPcrResult"))
     tdb = pcrResultFakeTdb();

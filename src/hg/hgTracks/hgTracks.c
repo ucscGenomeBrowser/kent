@@ -40,6 +40,7 @@
 #include "bedCart.h"
 #include "customTrack.h"
 #include "trackHub.h"
+#include "hubConnect.h"
 #include "cytoBand.h"
 #include "ensFace.h"
 #include "liftOver.h"
@@ -3325,33 +3326,22 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void addTracksFromTrackHub(char *hubName, char *hubUrl, struct track **pTrackList,
+static void addTracksFromTrackHub(int id, char *hubUrl, struct track **pTrackList,
 	struct trackHub **pHubList)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 {
 /* Load trackDb.ra file and make it into proper trackDb tree */
-struct trackHub *hub = trackHubOpen(hubUrl);
+char hubName[8];
+safef(hubName, sizeof(hubName), "%d",id);
+struct trackHub *hub = trackHubOpen(hubUrl, hubName);
 if (hub != NULL)
     {
     struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-    hub->name = catTwoStrings("hub_", hubName);
     if (hubGenome != NULL)
 	{
-	struct trackDb *tdb, *tdbList = trackHubTracksForGenome(hub, hubGenome);
+	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
 	uglyf("Got %d tracks from %s@%s<BR>\n", slCount(tdbList), hubName, hubUrl);
-
-	trackDbAddTableField(tdbList);
-	trackHubAddNamePrefix(hubName, tdbList);
-	trackHubAddGroupName(hub->name, tdbList);
-	uglyf("added hub_%s_ prefix to track list<BR>\n", hubName);
-
-	for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-	    {
-	    trackDbFieldsFromSettings(tdb);
-	    trackDbPolish(tdb);
-	    }
-	uglyf("polished tracks<BR>\n");
 
 	trackDbLinkUpGenerations(tdbList);
 	uglyf("About to addTdbListToTrackList<BR>\n");
@@ -3367,18 +3357,13 @@ if (hub != NULL)
 void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
-char *trackHubs = cloneString(cartUsualString(cart, "trackHubs", NULL));
-uglyf("trackHubs=%s\n<BR>\n", trackHubs);
-if (trackHubs == NULL)
-    return;
-struct slPair *hubList = slPairFromString(trackHubs);
+struct hubConnectStatus *hub, *hubList =  hubConnectStatusFromCart(cart);
 uglyf("Got %d hubs<BR>\n", slCount(hubList));
-struct slPair *hub;
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
-    addTracksFromTrackHub(hub->name, hub->val, pTrackList, pHubList);
+    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
     }
-slPairFreeValsAndList(&hubList);
+hubConnectStatusFreeList(&hubList);
 }
 
 boolean restrictionEnzymesOk()

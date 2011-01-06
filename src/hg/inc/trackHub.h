@@ -49,8 +49,9 @@ struct trackHubGenome
 void trackHubClose(struct trackHub **pHub);
 /* Close up and free resources from hub. */
 
-struct trackHub *trackHubOpen(char *url);
-/* Open up a track hub from url.  Reads and parses hub.ra and the genomesFile. */
+struct trackHub *trackHubOpen(char *url, char *hubName);
+/* Open up a track hub from url.  Reads and parses hub.ra and the genomesFile. 
+ * The hubName is generally just the asciified ID number. */
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName);
 /* Return trackHubGenome of given name associated with hub.  Return NULL if no

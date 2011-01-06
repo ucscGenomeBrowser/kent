@@ -848,6 +848,10 @@ struct trackNameAndLabel
 int trackNameAndLabelCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
+void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
+	boolean leafOnly);
+/* Recursively add trackList to trackHash */
+
 struct hash *makeTrackHashWithComposites(char *database, char *chrom,
                                         bool withComposites);
 /* Make hash of trackDb items for this chromosome, optionally includingc

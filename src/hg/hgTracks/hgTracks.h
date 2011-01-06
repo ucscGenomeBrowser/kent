@@ -843,6 +843,7 @@ void wigLoadItems(struct track *tg);
 /*	load wiggle track data from database	*/
 void wigMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
+/* Set up wig pointers and do some other precalculations on a wig type track. */
 void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 void bigWigMethods(struct track *track, struct trackDb *tdb,

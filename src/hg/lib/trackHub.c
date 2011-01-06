@@ -107,8 +107,9 @@ if (val == NULL)
 return val;
 }
 
-struct trackHub *trackHubOpen(char *url)
-/* Open up a track hub from url.  Reads and parses hub.ra and the genomesFile. */
+struct trackHub *trackHubOpen(char *url, char *hubName)
+/* Open up a track hub from url.  Reads and parses hub.ra and the genomesFile. 
+ * The hubName is generally just the asciified ID number. */
 {
 struct lineFile *lf = udcWrapShortLineFile(url, NULL, 256*1024);
 struct hash *hubRa = raNextRecord(lf);
@@ -121,6 +122,7 @@ if (raNextRecord(lf) != NULL)
 struct trackHub *hub;
 AllocVar(hub);
 hub->url = cloneString(url);
+hub->name = cloneString(hubName);
 hub->settings = hubRa;
 
 /* Fill in required fields from settings. */
@@ -293,6 +295,19 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     checkTagsLegal(hub, genome, tdb);
     tdb->parent = tdb->subtracks = NULL;
     }
+
+trackDbAddTableField(tdbList);
+trackHubAddNamePrefix(hub->name, tdbList);
+trackHubAddGroupName(hub->name, tdbList);
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    trackDbFieldsFromSettings(tdb);
+    trackDbPolish(tdb);
+    }
+uglyf("polished tracks<BR>\n");
+
+uglyf("added hub_%s_ prefix to track list<BR>\n", hub->name);
+
 return tdbList;
 }
 

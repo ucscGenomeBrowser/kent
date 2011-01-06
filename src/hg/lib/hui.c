@@ -1869,7 +1869,7 @@ slFreeList(&trackList);
 return trackName;
 }
 
-static void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
+void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
 	boolean leafOnly)
 /* Recursively add trackList to trackHash */
 {

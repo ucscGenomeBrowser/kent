@@ -58,6 +58,7 @@ void hgHubConnect()
 destUrl = cartUsualString(cart, hgHubConnectCgiDestUrl, destUrl);
 printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
 cartSaveSession(cart);
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 printf(
    "<P>Track hubs are collections of tracks from outside of UCSC that can be imported into the "
    "Genome Browser.  To import a hub check the box in the list below. "
@@ -91,21 +92,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    webPrintLinkTableStart();
 	    gotAnyRows = TRUE;
 	    }
-	if (errorMessage)
-	    webPrintLinkCell("error");
-	else
+	if (isEmpty(errorMessage))
 	    {
 	    webPrintLinkCellStart();
 	    char hubName[32];
-	    safef(hubName, sizeof(hubName), "hub_%s", id);
+	    safef(hubName, sizeof(hubName), "%s%s", hgHubConnectHubVarPrefix, id);
 	    cartMakeCheckBox(cart, hubName, FALSE);
 	    webPrintLinkCellEnd();
 	    }
-	webPrintLinkCell(shortLabel);
-	if (errorMessage)
-	    webPrintLinkCell(errorMessage);
 	else
+	    webPrintLinkCell("error");
+	webPrintLinkCell(shortLabel);
+	if (isEmpty(errorMessage))
 	    webPrintLinkCell(longLabel);
+	else
+	    webPrintLinkCell(errorMessage);
 	webPrintLinkCell(url);
 	}
     }
