@@ -491,7 +491,7 @@ for my $line (@fileList) {
                       "ripTgtProtein","restrictionEnzyme","promoter","control","replicate","expId","labExpId","setType","controlId","submittedDataVersion","subId","dataVersion",
                       "dateSubmitted","dateResubmitted","dateReloaded","dateUnrestricted","project","grant","lab","labVersion","softwareVersion",
                       "mapAlgorithm","fragSize","fragLength","medianFragmentLength","fragmentLengthRange","chromStart","view","type","composite",
-                      "tableName","parentTable","fileName","accession");
+                      "tableName","parentTable","fileName","dccInternalNotes");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
     my @colListVals;
     my $typePrefix = "";

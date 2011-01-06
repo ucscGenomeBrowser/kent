@@ -8317,6 +8317,14 @@ searchable date
 cvDefined no
 validation date nine months more than dateSubmitted
 
+term dccInternalNotes
+type typeOfTerm
+label Internal DCC Notes
+description Notes about tracks that are internal to the DCC. (Provisional)
+searchable no
+cvDefined no
+hidden yes
+
 # term expVars
 # type typeOfTerm
 # label Experimental variables
