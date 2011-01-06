@@ -9,7 +9,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-dccNotes GEO accession provided by lab: GSE12872
+dccInternalNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz
 fragLength 200
 grant Snyder
@@ -32,7 +32,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-dccNotes GEO accession provided by lab: GSE12871
+dccInternalNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqAlignmentsHelas3Input.tagAlign.gz
 fragLength 200
 grant Snyder
@@ -9892,7 +9892,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12872
+dccInternalNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqPeaksHelas3ifngStat1.narrowPeak.gz
 grant Snyder
 lab Yale
@@ -11777,7 +11777,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12872
+dccInternalNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRawDataHelas3ifngInput.fastq.gz
 grant Snyder
 lab Yale
@@ -11798,7 +11798,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12871
+dccInternalNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataHelas3Input.fastq.gz
 grant Snyder
 lab Yale
@@ -13491,7 +13491,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12872
+dccInternalNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3ifngStat1.fastq.gz
 grant Snyder
 lab Yale
@@ -13684,7 +13684,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12871
+dccInternalNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataRep1Helas3Pol2.fastq.gz
 grant Snyder
 lab Yale
@@ -16917,7 +16917,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12872
+dccInternalNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3ifngStat1.fastq.gz
 grant Snyder
 lab Yale
@@ -17110,7 +17110,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12871
+dccInternalNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataRep2Helas3Pol2.fastq.gz
 grant Snyder
 lab Yale
@@ -19461,7 +19461,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12871
+dccInternalNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRawDataRep3Helas3Pol2.fastq.gz
 grant Snyder
 lab Yale
@@ -20374,7 +20374,7 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-03-20
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12872
+dccInternalNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqRel2SignalHelas3ifngInput.bedGraph4.gz
 grant Snyder
 lab Yale
@@ -20399,7 +20399,7 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-03-20
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12871
+dccInternalNotes GEO accession provided by lab: GSE12871
 fileName wgEncodeYaleChIPseqRel2SignalHelas3Input.bedGraph4.gz
 grant Snyder
 lab Yale
@@ -22130,7 +22130,7 @@ dataVersion ENCODE July 2009 Freeze
 dateResubmitted 2009-07-21
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-dccNotes GEO accession provided by lab: GSE12872
+dccInternalNotes GEO accession provided by lab: GSE12872
 fileName wgEncodeYaleChIPseqSignalHelas3ifngStat1V2.bedGraph4.gz
 grant Snyder
 lab Yale
@@ -24035,4 +24035,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: 1544874314
+# MAGIC: 2068039523
