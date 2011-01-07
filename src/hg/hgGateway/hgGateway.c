@@ -201,11 +201,9 @@ puts("</TD>");
 if (hubConnectTableExists())
     {
     puts("<TD VALIGN=\"TOP\">");
-    printf(
-	"<FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
-        "../cgi-bin/hgHubConnect", "import tracks");
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    puts("</FORM></TD>");
+    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
+        "../cgi-bin/hgHubConnect", "import tracks", "Import tracks");
+    puts("</TD>");
     }
 
 // configure button
