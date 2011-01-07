@@ -5,7 +5,7 @@
 
 
 # The header for the related .ddf should look like this:
-# files	view	replicate	cell	treatment	labVersion	origAssembly	labExpId	
+# files	view	replicate	cell	treatment	labVersion	origAssembly	obtainedBy
 #
 #files          a list of files that correspond to the metadata in this line
 #view           the view of the data as described below
@@ -14,15 +14,15 @@
 #treatment      the treatment on the cell (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#treatment)
 #labVersion     free text for the lab to specify metadata (will use for obtained by information) 
 #origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18) 
-#labExpId       allows the lab to tag the files with own internal experiment ID (optional)
+#obtainedBy     the lab the sample was obtained from 
 
 dafVersion        2.0
 
 # Lab and general info
 grant             Myers
 lab               HudsonAlpha
-dataType          Cnv
-compositeSuffix   HaibCnv
+dataType          Genotype
+compositeSuffix   HaibGenotype
 group             variation 
 variables         cell,treatment
 assembly          hg19
