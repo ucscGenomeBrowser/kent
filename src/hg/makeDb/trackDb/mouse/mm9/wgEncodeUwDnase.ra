@@ -10,12 +10,12 @@
 #               - Peaks = pack
 #               - Raw Signal = full
 #       - Short Labels: 
-#               Template:
+#               Template:[cell [Age] [view] [Rep #]
 #               - Views: For consistency sake view will be
 #                       - Peaks = Pk
 #                       - Raw Signal = Sig
 #                       - Hotspots = Hspt 
-#		- Replicate
+#		- Replicate #
 
 track wgEncodeUwDnase
 compositeTrack on
