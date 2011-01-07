@@ -24339,7 +24339,8 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V8 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V9 done 3/26/10
 # DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
@@ -24347,15 +24348,15 @@ See hg18.txt for details.
 # DGV V5 done 8/11/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg17/bed/dgv.v9
-    cd /hive/data/genomes/hg17/bed/dgv.v9
+    mkdir /hive/data/genomes/hg17/bed/dgv.v10
+    cd /hive/data/genomes/hg17/bed/dgv.v10
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg17.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg17.v10.nov.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg17.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg17.v10.nov.2010.txt
     # shuffle fields into bed8+ (input has one start coord==0, but min 
     # nonzero size of 99 not 100 implies most coords are 1-based):
-    foreach f (*.v9.*.txt)
+    foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -24375,11 +24376,13 @@ See hg18.txt for details.
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    # Save previous version for comparison:
-    hgsql hg17 -e 'rename table dgv to dgvV8'
     hgLoadBed hg17 dgv *.bed \
       -onServer -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 23424 elements of size 15
+#Loaded 23423 elements of size 15
+    # That's a decrease of 1.  Jeff MacDonald previously explained that
+    # hg17 is not getting anything new because all of the new studies 
+    # give hg18 or hg19 coords.  They map forward (hg18 -> hg19) but
+    # not backwards.
 
 # 11-04-2009 color change from brown to magenta:
 # old color

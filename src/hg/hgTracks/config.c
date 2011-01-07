@@ -48,6 +48,7 @@ cgiMakeDropListFull(groupCgiName, labels, groups, numGroups,
 }
 #endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 
+
 static void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
 /* Put up track configurations. If groupTarget is
@@ -104,23 +105,23 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<A HREF='%s?%s&%s=%s#%sGroup' class='bigBlue'><IMG height=22 width=22 onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' class='bigBlue'></A>&nbsp;&nbsp;",
+    hPrintf("<A HREF='%s?%s&%s=%s#%sGroup' class='bigBlue'><IMG height=22 width=22 onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
         hgTracksName(), cartSidUrlString(cart),collapseGroupVar(group->name),
-         otherState, group->name, group->name, group->name, indicatorImg, indicator);
+         otherState, group->name, group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Hide all tracks in this groups'>",
 	    configHideAll, "hide all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Show all tracks in this groups'>",
 	    configShowAll, "show all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Show default tracks in this group'>",
 	    configDefaultAll, "default", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
@@ -129,7 +130,7 @@ for (group = groupList; group != NULL; group = group->next)
      */
     char submitName[256];
     safef(submitName, sizeof(submitName), "%sSubmit", group->name);
-    cgiMakeButton(submitName, "submit");
+    cgiMakeButtonWithMsg(submitName, "submit","Submit your selections and view them in the browser");
 #ifdef PRIORITY_CHANGES_IN_CONFIG_UI
     if (withPriorityOverride)
         {
@@ -233,8 +234,10 @@ for (group = groupList; group != NULL; group = group->next)
         if (tdbIsSuperTrackChild(tdb))
             /* indent members of a supertrack */
             hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
-        if(trackDbSetting(track->tdb, "wgEncode") != NULL)
-            hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
+
+        // Print an icon before the title when one is defined
+        hPrintPennantIcon(track->tdb);
+
 	if (track->hasUi)
 	    hPrintf("<A %s%s%s HREF=\"%s?%s=%u&g=%s&hgTracksConfigPage=configure\">",
                 tdb->parent ? "TITLE=\"Part of super track: " : "",
@@ -447,20 +450,20 @@ else
 	  organization, browserName, organism, freeze, database);
 webNewSection(buf);
 hPrintf("Tracks: ");
-if(isSearchTracksSupported(database))
+if(isSearchTracksSupported(database,cart))
     {
-    cgiMakeButton(searchTracks, "find");
+    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     hPrintf(" ");
     }
-cgiMakeButton(configHideAll, "hide all");
+cgiMakeButtonWithMsg(configHideAll, "hide all","Hide all tracks in this genome assembly");
 hPrintf(" ");
-cgiMakeButton(configShowAll, "show all");
+cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome assembly");
 hPrintf(" ");
-cgiMakeButton(configDefaultAll, "default");
+cgiMakeButtonWithMsg(configDefaultAll, "default","Display only default tracks");
 hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
-hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
+hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return setAllTrackGroupVisibility(false)");
 hPrintf(" ");
-hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
+hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return setAllTrackGroupVisibility(true)");
 hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 
@@ -477,36 +480,3 @@ void configPage()
 configPageSetTrackVis(-2);
 }
 
-boolean advancedJavascriptFeaturesEnabled(struct cart *cart)
-// Returns TRUE if advanced javascript features are currently enabled
-{
-static boolean alreadyLookedForadvancedJs = FALSE;
-static boolean advancedJsEnabled = FALSE;
-if(!alreadyLookedForadvancedJs)
-    {
-    char *ua = cgiUserAgent();
-    boolean defaultVal = TRUE;
-
-    // dragZooming was broken in version 530.4 of AppleWebKit browsers (used by Safari, Chrome and some other browsers).
-    // This was explicitly fixed by the WebKit team in version 531.0.1 (see http://trac.webkit.org/changeset/45143).
-    // The AppleWebKit version provided by the browser in user agent doesn't always include the minor version number, so to
-    // be overly conservative we default drag-and-drop to off when AppleWebKit major version == 530
-
-    if(ua != NULL)
-        {
-        char *needle = "AppleWebKit/";
-        char *ptr = strstr(ua, needle);
-        if(ptr != NULL)
-            {
-            int version = 0;
-            sscanf(ptr + strlen(needle), "%d", &version);
-            defaultVal = (version != 530);
-            }
-        }
-    advancedJsEnabled = cartUsualBoolean(cart, "enableAdvancedJavascript", defaultVal);
-    alreadyLookedForadvancedJs = TRUE;
-    }
-//else
-//    warn("already looked up advancedJsEnabled");  // got msg 41 times in one page!
-return advancedJsEnabled;
-}

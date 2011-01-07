@@ -5,6 +5,7 @@
 #	Caenorhabditis n. sp. PB2801
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+n.+sp.+PB2801
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABEG02
 
 
 #########################################################################

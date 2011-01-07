@@ -90,6 +90,9 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
     track netHg17 override
     shortLabel $o_db Net
 
+track chainNetDanRer7 override
+priority 600.3
+
 track chainNetDanRer6 override
 priority 600.3
 

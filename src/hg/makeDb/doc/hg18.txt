@@ -11364,6 +11364,11 @@ liftOver final.bed /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz hg18.bed unmappe
 hgLoadBed hg18 polyaDB hg18.bed
 # trackDb entry/html in human/hg18
 
+# redmine issue 19: wrong bed file format used on hgwdev
+# reload it with table from beta  (2010-10-28 - Chin)
+cd /cluster/data/hg18/bed/polyaDB
+hgLoadBed hg18 polyaDb hg18.beta.polyaDb.bed
+
 ############################################################################
 # Translate SNP Array data from hg17 (Heather August 2006)
 
@@ -21375,7 +21380,8 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V9 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V9 done 3/26/10
 # DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
@@ -21383,14 +21389,14 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # DGV V5 done 7/16/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg18/bed/dgv.v9
-    cd /hive/data/genomes/hg18/bed/dgv.v9
+    mkdir /hive/data/genomes/hg18/bed/dgv.v10
+    cd /hive/data/genomes/hg18/bed/dgv.v10
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg18.v10.nov.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg18.v10.nov.2010.txt
     # shuffle fields into bed8+
-    foreach f (*.v9.*.txt)
+    foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -21410,13 +21416,11 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    # Save previous version for comparison:
-    hgsql hg18 -e 'rename table dgv to dgvV8'
     hgLoadBed hg18 dgv *.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 89427 elements of size 15
+#Loaded 101923 elements of size 15
       hgsql hg18 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#38
+#42
 
 # 11-04-2009 color change from brown to magenta:
 # old color
@@ -22677,6 +22681,22 @@ CREATE TABLE ucscFunc (
 );
 EOF
     hgLoadSqlTab hg18snp130 ucscFunc{,.sql,.txt}
+    # 10/12/10: Those coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
+    # We need to leave the coords alone here so ucscFunc can be joined below.
+    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
+    # the list to determine what type of coord fix to apply to each annotation
+    # when making snp130CodingDbSnp below.
+    hgsql hg18snp130 -NBe \
+      'select ci.contig_acc, cl.asn_from, cl.asn_to, uf.snp_id \
+       from ucscFunc as uf, ContigLoc as cl, ContigInfo as ci \
+       where uf.snp_id = cl.snp_id and \
+             uf.ctg_id = cl.ctg_id and uf.asn_from = cl.asn_from and uf.asn_to = cl.asn_to and \
+             cl.loc_type = 3 and \
+             cl.ctg_id = ci.ctg_id and \
+             ci.group_label in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2")' \
+      > ncbiFuncInsertions.ctg.bed
+    wc -l ncbiFuncInsertions.ctg.bed
+#1089086 ncbiFuncInsertions.ctg.bed
 
     # Extract observed allele, molType and snp class from FASTA headers gnl
     zcat /hive/data/outside/dbSNP/130/human/rs_fasta/rs_ch*.fas.gz \
@@ -23015,13 +23035,38 @@ EOF
 
 
 #######################################################################
-# DBSNP CODING ANNOTATIONS (DONE 7/7/09 angie)
-# originally done 6/2/09 - redone w/snp130, using mapping locations of dbSNP's func. annos
+# DBSNP CODING ANNOTATIONS (DONE 10/12/10 angie)
+# Updated 10/12/10 - redone w/corrected genome coords (Redmine Track #1249)
+# Updated 7/7/09 - redone w/snp130, using mapping locations of dbSNP's func. annos
+# originally done 6/2/09
     cd /hive/data/outside/dbSNP/130/human
-    awk '$9 != NULL {print;}' ncbiFuncAnnotations.txt \
-    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n | uniq > ncbiCodingAnnotations.txt
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.  
+    # For anything except an insertion (0 bases between flanks), 
+    # we need to add 1 to the end coord.  For an insertion, we need
+    # to add 1 to the start coord.  Make a hash of the insertion IDs,
+    # then look up each ID in ncbiFuncAnnotations.txt to tell which
+    # transform to apply.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    perl -we 'open($IDS, "ncbiFuncInsertions.ctg.bed") || die "ids: $!"; \
+              while (<$IDS>) { chomp; $ids{$_} = 1; } \
+              close($IDS); \
+              while (<>) { \
+                chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+                next unless ($w[7] || $w[8] || $w[9]); \
+                $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+                if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                  $w[2]++; # 2-base insertions: increment start coord \
+                } else { \
+                  $w[3]++; # increment end coord to get half-open \
+                } \
+                print join("\t", @w) . "\n"; \
+              }' ncbiFuncAnnotations.txt \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
 #576726 ncbiCodingAnnotations.txt
+
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
@@ -29738,7 +29783,9 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 10/6/10)
+# NHGRI GWAS CATALOG (DONE 12/7/10)
+# Updated 11/1/10
+# Updated 10/6/10
 # Updated 9/1/10
 # Updated 8/2/10
 # Updated 6/2/10
@@ -29815,18 +29862,21 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4175 elements of size 22
+#Loaded 4562 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
-    # risk allele is on??  -- asking corresp. author Teri Manolio.
+    # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
+    # always available in the original publication, so sadly there is not always 
+    # a way to resolve these. GWAS catalog folks aren't going to modify their 
+    # database to add a column for these cases.
     hgsql hg18 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
                      from gwasCatalog as gc, snp130 as snp \
                      where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#198 ambigStrand.txt
+#250 ambigStrand.txt
 
 
 #############################################################################
@@ -30991,3 +31041,82 @@ close($OUTD); close($OUTM); close($OUTU);
 # --------------------------
 
 #########################################################################
+# DENISOVA (ANCIENT HUMAN) (DONE 11/16/10 angie)
+    mkdir /hive/data/genomes/hg18/bed/denisova
+    cd /hive/data/genomes/hg18/bed/denisova
+    # Use username and password emailed by Ed Green 9/30/10
+    alias wg     wget -r --user=xxx --password=xxx
+    wg ftp://cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Catalog_of_changes/\*
+    # Ed says we don't need files with 'hcca' or 'hcscca' in the names
+    # (only hg18 or panTro2).
+    find . -name \*h\*cca\* -exec echo rm {} \;
+    # Inspect & execute output of the find command to save a bit of space (11G of 83G).
+
+    # Combine the two sequence-lib files for Denisova into one bam.  First ensure that
+    # the headers are identical:
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam > h1
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam > h2
+    cmp h1 h2
+    # No output, and they seem to be sorted by position, good to go:
+    samtools merge SL3003_SL3004_100122-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam
+#1023.571u 22.997s 17:34.24 99.2%        0+0k 0+0io 0pf+0w
+    # Build BAM index (.bam.bai) files.
+    samtools index SL3003_SL3004_100122-hg18.bam
+#94.811u 3.560s 1:51.16 88.4%    0+0k 0+0io 0pf+0w
+    pushd cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2
+    foreach f (*.bam)
+      echo $f
+      samtools index $f
+    end
+    popd
+
+    # Make /gbdb/ links and load database tables
+    mkdir /gbdb/hg18/denisova
+    ln -s `pwd`/SL3003_SL3004_100122-hg18.bam{,.bai} /gbdb/hg18/denisova/
+    mkdir /gbdb/hg18/denisova/modernHumanSeq
+    find `pwd` -name MMS\*hg18\*.bam\* -exec echo ln -s {} /gbdb/hg18/denisova/modernHumanSeq/ \;
+    # Inspect & execute output of the find command.
+
+    hgBbiDbLink hg18 bamSLDenisova /gbdb/hg18/denisova/SL3003_SL3004_100122-hg18.bam
+    foreach f (/gbdb/hg18/denisova/modernHumanSeq/MMS*.bam)
+      set track = `echo $f | perl -wpe 's/.*(MMS\d+)_HGDP\d+_(\w+)\..*/bam$1$2/ || die; s/_//;'`
+      echo $track
+      hgBbiDbLink hg18 $track $f
+    end
+
+    # to see the grp table:
+    hgsql -e "select * from grp order by priority;" hg18
+    # add new denisova group:
+    hgsql hg18 -e "INSERT INTO grp VALUES ('denisova', 'Denisova Assembly and Analysis', 6.6, 0);"
+
+#########################################################################
+# BUILD R-DMR TRACK.  DONE (Fan 7/23/2010)
+
+ssh hgwdev
+mkdir -p /hive/data/genomes/gs.19/build36/bed/rdmr
+cd /hive/data/genomes/gs.19/build36/bed/rdmr
+
+# download the supplemental data file, ng.471-S2.txt.
+
+cp -p ng.471-S2.txt rdmrRaw.tab
+# remove the header lines at the beginning of rdmrRaw.tab
+vi rdmrRaw.tab
+
+# load rdmrRaw table
+hgsql hg18 -e 'drop table rdmrRaw'
+hgsql hg18 < ~/kent/src/hg/lib/rdmrRaw.sql
+hgsql hg18 -e 'load data local infile "rdmrRaw.tab" into table rdmrRaw'
+
+# create rdmr table
+
+hgsql hg18 -N -e 'select chrom, chromStart-1, chromEnd, gene from rdmrRaw'
+>rdmr.tab
+
+hgLoadBed hg18 rdmr rdmr.tab
+
+#########################################################################
+

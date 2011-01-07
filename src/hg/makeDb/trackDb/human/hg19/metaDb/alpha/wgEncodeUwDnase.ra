@@ -13,7 +13,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg04449AlnRep1
 project wgEncode
 replicate 1
 subId 1257
@@ -34,7 +33,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg04449AlnRep2
 project wgEncode
 replicate 2
 subId 1548
@@ -120,6 +118,40 @@ subId 1548
 tableName wgEncodeUwDnaseAg04449PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseAg04449RawDataRep1
+objType file
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-05
+fileName wgEncodeUwDnaseAg04449RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 896
+view RawData
+
+metaObject wgEncodeUwDnaseAg04449RawDataRep2
+objType file
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04449RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 906
+view RawData
+
 metaObject wgEncodeUwDnaseAg04449RawRep1
 objType table
 cell AG04449
@@ -175,7 +207,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg04450AlnRep1
 project wgEncode
 replicate 1
 subId 1550
@@ -196,7 +227,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg04450AlnRep2
 project wgEncode
 replicate 2
 subId 1549
@@ -282,6 +312,40 @@ subId 1549
 tableName wgEncodeUwDnaseAg04450PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseAg04450RawDataRep1
+objType file
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 908
+view RawData
+
+metaObject wgEncodeUwDnaseAg04450RawDataRep2
+objType file
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 907
+view RawData
+
 metaObject wgEncodeUwDnaseAg04450RawRep1
 objType table
 cell AG04450
@@ -337,7 +401,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg09309AlnRep1
 project wgEncode
 replicate 1
 subId 1551
@@ -358,7 +421,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg09309AlnRep2
 project wgEncode
 replicate 2
 subId 1552
@@ -444,6 +506,40 @@ subId 1552
 tableName wgEncodeUwDnaseAg09309PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseAg09309RawDataRep1
+objType file
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 909
+view RawData
+
+metaObject wgEncodeUwDnaseAg09309RawDataRep2
+objType file
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 910
+view RawData
+
 metaObject wgEncodeUwDnaseAg09309RawRep1
 objType table
 cell AG09309
@@ -499,7 +595,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg09319AlnRep1
 project wgEncode
 replicate 1
 subId 1554
@@ -520,7 +615,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg09319AlnRep2
 project wgEncode
 replicate 2
 subId 1553
@@ -606,6 +700,40 @@ subId 1553
 tableName wgEncodeUwDnaseAg09319PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseAg09319RawDataRep1
+objType file
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 912
+view RawData
+
+metaObject wgEncodeUwDnaseAg09319RawDataRep2
+objType file
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 911
+view RawData
+
 metaObject wgEncodeUwDnaseAg09319RawRep1
 objType table
 cell AG09319
@@ -661,7 +789,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg10803AlnRep1
 project wgEncode
 replicate 1
 subId 1576
@@ -682,7 +809,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseAg10803AlnRep2
 project wgEncode
 replicate 2
 subId 1555
@@ -768,6 +894,40 @@ subId 1555
 tableName wgEncodeUwDnaseAg10803PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseAg10803RawDataRep1
+objType file
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 935
+view RawData
+
+metaObject wgEncodeUwDnaseAg10803RawDataRep2
+objType file
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 915
+view RawData
+
 metaObject wgEncodeUwDnaseAg10803RawRep1
 objType table
 cell AG10803
@@ -813,7 +973,7 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafAlnRep1.bam
@@ -821,7 +981,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseAoafAlnRep1
 project wgEncode
 replicate 1
 subId 2052
@@ -832,7 +991,7 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafAlnRep2.bam
@@ -840,7 +999,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseAoafAlnRep2
 project wgEncode
 replicate 2
 subId 2038
@@ -851,7 +1009,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafHotspotsRep1.broadPeak.gz
@@ -870,7 +1028,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafHotspotsRep2.broadPeak.gz
@@ -889,7 +1047,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafPkRep1.narrowPeak.gz
@@ -908,7 +1066,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafPkRep2.narrowPeak.gz
@@ -927,14 +1085,13 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseAoafRawSignalRep1
 project wgEncode
 replicate 1
 subId 2052
@@ -945,14 +1102,13 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseAoafRawSignalRep2
 project wgEncode
 replicate 2
 subId 2038
@@ -963,7 +1119,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafRawRep1.bigWig
@@ -982,7 +1138,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafRawRep2.bigWig
@@ -1011,7 +1167,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseBjAlnRep1
 project wgEncode
 replicate 1
 subId 1648
@@ -1032,7 +1187,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseBjAlnRep2
 project wgEncode
 replicate 2
 subId 1249
@@ -1131,7 +1285,6 @@ fileName wgEncodeUwDnaseBjRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg18
-parentTable wgEncodeUwDnaseBjRawSignalRep2
 project wgEncode
 replicate 2
 subId 1249
@@ -1177,6 +1330,40 @@ subId 1249
 tableName wgEncodeUwDnaseBjRawRep2
 view RawSignal
 
+metaObject wgEncodeUwDnaseBjtertRawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseBjtertRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 295
+view RawData
+
+metaObject wgEncodeUwDnaseBjtertRawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-30
+dateUnrestricted 2010-03-29
+fileName wgEncodeUwDnaseBjtertRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 393
+view RawData
+
 metaObject wgEncodeUwDnaseCaco2AlnRep1
 objType file
 cell Caco-2
@@ -1192,7 +1379,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseCaco2AlnRep1
 project wgEncode
 replicate 1
 subId 1644
@@ -1213,7 +1399,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseCaco2AlnRep2
 project wgEncode
 replicate 2
 subId 1590
@@ -1299,6 +1484,40 @@ subId 1590
 tableName wgEncodeUwDnaseCaco2PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseCaco2RawDataRep1
+objType file
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-04-24
+dateUnrestricted 2010-01-24
+fileName wgEncodeUwDnaseCaco2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 288
+view RawData
+
+metaObject wgEncodeUwDnaseCaco2RawDataRep2
+objType file
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-03-30
+fileName wgEncodeUwDnaseCaco2RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 394
+view RawData
+
 metaObject wgEncodeUwDnaseCaco2RawRep1
 objType table
 cell Caco-2
@@ -1354,7 +1573,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseCmkAlnRep1
 project wgEncode
 replicate 1
 subId 1586
@@ -1400,6 +1618,23 @@ subId 1586
 tableName wgEncodeUwDnaseCmkPkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseCmkRawDataRep1
+objType file
+cell CMK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseCmkRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 916
+view RawData
+
 metaObject wgEncodeUwDnaseCmkRawRep1
 objType table
 cell CMK
@@ -1435,7 +1670,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseGm06990AlnRep1
 project wgEncode
 replicate 1
 subId 1616
@@ -1456,7 +1690,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseGm06990AlnRep2
 project wgEncode
 replicate 2
 subId 1614
@@ -1542,6 +1775,40 @@ subId 1614
 tableName wgEncodeUwDnaseGm06990PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseGm06990RawDataRep1
+objType file
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseGm06990RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 46
+view RawData
+
+metaObject wgEncodeUwDnaseGm06990RawDataRep2
+objType file
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm06990RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 110
+view RawData
+
 metaObject wgEncodeUwDnaseGm06990RawRep1
 objType table
 cell GM06990
@@ -1597,7 +1864,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseGm12865AlnRep1
 project wgEncode
 replicate 1
 subId 1564
@@ -1618,7 +1884,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseGm12865AlnRep2
 project wgEncode
 replicate 2
 subId 1589
@@ -1704,6 +1969,40 @@ subId 1589
 tableName wgEncodeUwDnaseGm12865PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseGm12865RawDataRep1
+objType file
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 961
+view RawData
+
+metaObject wgEncodeUwDnaseGm12865RawDataRep2
+objType file
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 962
+view RawData
+
 metaObject wgEncodeUwDnaseGm12865RawRep1
 objType table
 cell GM12865
@@ -1759,7 +2058,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseGm12878AlnRep1
 project wgEncode
 replicate 1
 subId 1587
@@ -1780,7 +2078,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseGm12878AlnRep2
 project wgEncode
 replicate 2
 subId 1649
@@ -1866,6 +2163,40 @@ subId 1649
 tableName wgEncodeUwDnaseGm12878PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseGm12878RawDataRep1
+objType file
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 395
+view RawData
+
+metaObject wgEncodeUwDnaseGm12878RawDataRep2
+objType file
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 296
+view RawData
+
 metaObject wgEncodeUwDnaseGm12878RawRep1
 objType table
 cell GM12878
@@ -1906,6 +2237,23 @@ subId 1649
 tableName wgEncodeUwDnaseGm12878RawRep2
 view RawSignal
 
+metaObject wgEncodeUwDnaseH1esRawDataRep1
+objType file
+cell H1-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-18
+fileName wgEncodeUwDnaseH1esRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 506
+view RawData
+
 metaObject wgEncodeUwDnaseH1hescAlnRep1
 objType file
 cell H1-hESC
@@ -1921,7 +2269,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseH1hescAlnRep1
 project wgEncode
 replicate 1
 subId 1588
@@ -2002,7 +2349,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseH7esAlnRep1
 project wgEncode
 replicate 1
 subId 1592
@@ -2013,7 +2359,7 @@ objType file
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseH7esAlnRep2.bam.bai
@@ -2022,7 +2368,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseH7esAlnRep2
 project wgEncode
 replicate 2
 subId 2037
@@ -2053,7 +2398,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esHotspotsRep2.broadPeak.gz
@@ -2092,7 +2437,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esPkRep2.narrowPeak.gz
@@ -2106,19 +2451,35 @@ subId 2037
 tableName wgEncodeUwDnaseH7esPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseH7esRawDataRep1
+objType file
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseH7esRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 917
+view RawData
+
 metaObject wgEncodeUwDnaseH7esRawDataRep2
 objType file
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseH7esRawSignalRep2
 project wgEncode
 replicate 2
 subId 2037
@@ -2149,7 +2510,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esRawRep2.bigWig
@@ -2178,7 +2539,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHaeAlnRep1
 project wgEncode
 replicate 1
 subId 1565
@@ -2199,7 +2559,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHaeAlnRep2
 project wgEncode
 replicate 2
 subId 1579
@@ -2285,6 +2644,40 @@ subId 1579
 tableName wgEncodeUwDnaseHaePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHaeRawDataRep1
+objType file
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 918
+view RawData
+
+metaObject wgEncodeUwDnaseHaeRawDataRep2
+objType file
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 919
+view RawData
+
 metaObject wgEncodeUwDnaseHaeRawRep1
 objType table
 cell HAEpiC
@@ -2330,7 +2723,7 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecAlnRep1.bam
@@ -2338,7 +2731,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHbmecAlnRep1
 project wgEncode
 replicate 1
 subId 2090
@@ -2349,7 +2741,7 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecAlnRep2.bam
@@ -2357,7 +2749,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHbmecAlnRep2
 project wgEncode
 replicate 2
 subId 2087
@@ -2368,7 +2759,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecHotspotsRep1.broadPeak.gz
@@ -2387,7 +2778,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecHotspotsRep2.broadPeak.gz
@@ -2406,7 +2797,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecPkRep1.narrowPeak.gz
@@ -2425,7 +2816,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecPkRep2.narrowPeak.gz
@@ -2444,14 +2835,13 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHbmecRawSignalRep1
 project wgEncode
 replicate 1
 subId 2090
@@ -2462,14 +2852,13 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHbmecRawSignalRep2
 project wgEncode
 replicate 2
 subId 2087
@@ -2480,7 +2869,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawRep1.bigWig
@@ -2499,7 +2888,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawRep2.bigWig
@@ -2518,7 +2907,7 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaAlnRep1.bam
@@ -2526,7 +2915,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHcfaaAlnRep1
 project wgEncode
 replicate 1
 subId 2053
@@ -2537,7 +2925,7 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaAlnRep2.bam
@@ -2545,7 +2933,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHcfaaAlnRep2
 project wgEncode
 replicate 2
 subId 2054
@@ -2556,7 +2943,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaHotspotsRep1.broadPeak.gz
@@ -2575,7 +2962,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaHotspotsRep2.broadPeak.gz
@@ -2594,7 +2981,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaPkRep1.narrowPeak.gz
@@ -2613,7 +3000,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaPkRep2.narrowPeak.gz
@@ -2632,14 +3019,13 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHcfaaRawSignalRep1
 project wgEncode
 replicate 1
 subId 2053
@@ -2650,14 +3036,13 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHcfaaRawSignalRep2
 project wgEncode
 replicate 2
 subId 2054
@@ -2668,7 +3053,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawRep1.bigWig
@@ -2687,7 +3072,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawRep2.bigWig
@@ -2716,7 +3101,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHcfAlnRep1
 project wgEncode
 replicate 1
 subId 1591
@@ -2737,7 +3121,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHcfAlnRep2
 project wgEncode
 replicate 2
 subId 1593
@@ -2823,6 +3206,40 @@ subId 1593
 tableName wgEncodeUwDnaseHcfPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHcfRawDataRep1
+objType file
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcfRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 944
+view RawData
+
+metaObject wgEncodeUwDnaseHcfRawDataRep2
+objType file
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcfRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 921
+view RawData
+
 metaObject wgEncodeUwDnaseHcfRawRep1
 objType table
 cell HCF
@@ -2878,7 +3295,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHcmAlnRep1
 project wgEncode
 replicate 1
 subId 1600
@@ -2899,7 +3315,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHcmAlnRep2
 project wgEncode
 replicate 2
 subId 1595
@@ -2985,6 +3400,40 @@ subId 1595
 tableName wgEncodeUwDnaseHcmPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHcmRawDataRep1
+objType file
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 949
+view RawData
+
+metaObject wgEncodeUwDnaseHcmRawDataRep2
+objType file
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 948
+view RawData
+
 metaObject wgEncodeUwDnaseHcmRawRep1
 objType table
 cell HCM
@@ -3030,7 +3479,7 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfAlnRep1.bam
@@ -3038,7 +3487,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHconfAlnRep1
 project wgEncode
 replicate 1
 subId 2056
@@ -3049,7 +3497,7 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfAlnRep2.bam
@@ -3057,7 +3505,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHconfAlnRep2
 project wgEncode
 replicate 2
 subId 2055
@@ -3068,7 +3515,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfHotspotsRep1.broadPeak.gz
@@ -3087,7 +3534,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfHotspotsRep2.broadPeak.gz
@@ -3106,7 +3553,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfPkRep1.narrowPeak.gz
@@ -3125,7 +3572,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfPkRep2.narrowPeak.gz
@@ -3144,14 +3591,13 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHconfRawSignalRep1
 project wgEncode
 replicate 1
 subId 2056
@@ -3162,14 +3608,13 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHconfRawSignalRep2
 project wgEncode
 replicate 2
 subId 2055
@@ -3180,7 +3625,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawRep1.bigWig
@@ -3199,7 +3644,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawRep2.bigWig
@@ -3228,7 +3673,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHcpeAlnRep1
 project wgEncode
 replicate 1
 subId 1598
@@ -3249,7 +3693,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHcpeAlnRep2
 project wgEncode
 replicate 2
 subId 1599
@@ -3335,6 +3778,40 @@ subId 1599
 tableName wgEncodeUwDnaseHcpePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHcpeRawDataRep1
+objType file
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 922
+view RawData
+
+metaObject wgEncodeUwDnaseHcpeRawDataRep2
+objType file
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 923
+view RawData
+
 metaObject wgEncodeUwDnaseHcpeRawRep1
 objType table
 cell HCPEpiC
@@ -3380,7 +3857,7 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileIndex wgEncodeUwDnaseHct116AlnRep1.bam.bai
@@ -3389,7 +3866,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHct116AlnRep1
 project wgEncode
 replicate 1
 subId 2043
@@ -3400,7 +3876,7 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileIndex wgEncodeUwDnaseHct116AlnRep2.bam.bai
@@ -3409,7 +3885,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHct116AlnRep2
 project wgEncode
 replicate 2
 subId 2040
@@ -3420,7 +3895,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116HotspotsRep1.broadPeak.gz
@@ -3439,7 +3914,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116HotspotsRep2.broadPeak.gz
@@ -3458,7 +3933,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116PkRep1.narrowPeak.gz
@@ -3477,7 +3952,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116PkRep2.narrowPeak.gz
@@ -3496,14 +3971,13 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHct116RawSignalRep1
 project wgEncode
 replicate 1
 subId 2043
@@ -3514,14 +3988,13 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHct116RawSignalRep2
 project wgEncode
 replicate 2
 subId 2040
@@ -3532,7 +4005,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawRep1.bigWig
@@ -3551,7 +4024,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawRep2.bigWig
@@ -3580,7 +4053,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHeeAlnRep1
 project wgEncode
 replicate 1
 subId 1601
@@ -3601,7 +4073,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHeeAlnRep2
 project wgEncode
 replicate 2
 subId 1602
@@ -3687,6 +4158,40 @@ subId 1602
 tableName wgEncodeUwDnaseHeePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHeeRawDataRep1
+objType file
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseHeeRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 963
+view RawData
+
+metaObject wgEncodeUwDnaseHeeRawDataRep2
+objType file
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHeeRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 924
+view RawData
+
 metaObject wgEncodeUwDnaseHeeRawRep1
 objType table
 cell HEEpiC
@@ -3742,7 +4247,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHelas3AlnRep1
 project wgEncode
 replicate 1
 subId 1605
@@ -3763,7 +4267,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHelas3AlnRep2
 project wgEncode
 replicate 2
 subId 1604
@@ -3849,6 +4352,40 @@ subId 1604
 tableName wgEncodeUwDnaseHelas3PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHelas3RawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 396
+view RawData
+
+metaObject wgEncodeUwDnaseHelas3RawDataRep2
+objType file
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 397
+view RawData
+
 metaObject wgEncodeUwDnaseHelas3RawRep1
 objType table
 cell HeLa-S3
@@ -3904,7 +4441,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHepg2AlnRep1
 project wgEncode
 replicate 1
 subId 1617
@@ -3925,7 +4461,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHepg2AlnRep2
 project wgEncode
 replicate 2
 subId 1615
@@ -4011,6 +4546,40 @@ subId 1615
 tableName wgEncodeUwDnaseHepg2PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHepg2RawDataRep1
+objType file
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseHepg2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 48
+view RawData
+
+metaObject wgEncodeUwDnaseHepg2RawDataRep2
+objType file
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHepg2RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 111
+view RawData
+
 metaObject wgEncodeUwDnaseHepg2RawRep1
 objType table
 cell HepG2
@@ -4066,7 +4635,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHgfAlnRep1
 project wgEncode
 replicate 1
 subId 1563
@@ -4087,7 +4655,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHgfAlnRep2
 project wgEncode
 replicate 2
 subId 1603
@@ -4173,6 +4740,40 @@ subId 1603
 tableName wgEncodeUwDnaseHgfPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHgfRawDataRep1
+objType file
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 735
+view RawData
+
+metaObject wgEncodeUwDnaseHgfRawDataRep2
+objType file
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 736
+view RawData
+
 metaObject wgEncodeUwDnaseHgfRawRep1
 objType table
 cell HGF
@@ -4213,6 +4814,40 @@ subId 1603
 tableName wgEncodeUwDnaseHgfRawRep2
 view RawSignal
 
+metaObject wgEncodeUwDnaseHipeRawDataRep1
+objType file
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHipeRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 925
+view RawData
+
+metaObject wgEncodeUwDnaseHipeRawDataRep2
+objType file
+cell HIPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseHipeRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 964
+view RawData
+
 metaObject wgEncodeUwDnaseHl60AlnRep1
 objType file
 cell HL-60
@@ -4228,7 +4863,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHl60AlnRep1
 project wgEncode
 replicate 1
 subId 1571
@@ -4249,7 +4883,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHl60AlnRep2
 project wgEncode
 replicate 2
 subId 1570
@@ -4335,6 +4968,41 @@ subId 1570
 tableName wgEncodeUwDnaseHl60PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHl60RawDataRep1V2
+objType file
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeUwDnaseHl60RawDataRep1V2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 625
+submittedDataVersion V2 - Improved DNA library
+view RawData
+
+metaObject wgEncodeUwDnaseHl60RawDataRep2
+objType file
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseHl60RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 507
+view RawData
+
 metaObject wgEncodeUwDnaseHl60RawRep1
 objType table
 cell HL-60
@@ -4390,7 +5058,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHmecAlnRep1
 project wgEncode
 replicate 1
 subId 1572
@@ -4401,7 +5068,7 @@ objType file
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileIndex wgEncodeUwDnaseHmecAlnRep2.bam.bai
@@ -4410,7 +5077,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmecAlnRep2
 project wgEncode
 replicate 2
 subId 2044
@@ -4441,7 +5107,7 @@ objType table
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecHotspotsRep2.broadPeak.gz
@@ -4480,7 +5146,7 @@ objType table
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecPkRep2.narrowPeak.gz
@@ -4494,19 +5160,35 @@ subId 2044
 tableName wgEncodeUwDnaseHmecPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHmecRawDataRep1
+objType file
+cell HMEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeUwDnaseHmecRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 627
+view RawData
+
 metaObject wgEncodeUwDnaseHmecRawDataRep2
 objType file
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmecRawSignalRep2
 project wgEncode
 replicate 2
 subId 2044
@@ -4537,7 +5219,7 @@ objType table
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecRawRep2.bigWig
@@ -4556,7 +5238,7 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfAlnRep1.bam
@@ -4564,7 +5246,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmfAlnRep1
 project wgEncode
 replicate 1
 subId 2057
@@ -4575,7 +5256,7 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfAlnRep2.bam
@@ -4583,7 +5264,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmfAlnRep2
 project wgEncode
 replicate 2
 subId 2058
@@ -4594,7 +5274,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfHotspotsRep1.broadPeak.gz
@@ -4613,7 +5293,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfHotspotsRep2.broadPeak.gz
@@ -4632,7 +5312,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfPkRep1.narrowPeak.gz
@@ -4651,7 +5331,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfPkRep2.narrowPeak.gz
@@ -4670,14 +5350,13 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmfRawSignalRep1
 project wgEncode
 replicate 1
 subId 2057
@@ -4688,14 +5367,13 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmfRawSignalRep2
 project wgEncode
 replicate 2
 subId 2058
@@ -4706,7 +5384,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawRep1.bigWig
@@ -4725,7 +5403,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawRep2.bigWig
@@ -4744,7 +5422,7 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladAlnRep1.bam
@@ -4752,7 +5430,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdbladAlnRep1
 project wgEncode
 replicate 1
 subId 2063
@@ -4763,7 +5440,7 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladAlnRep2.bam
@@ -4771,7 +5448,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdbladAlnRep2
 project wgEncode
 replicate 2
 subId 2062
@@ -4782,7 +5458,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladHotspotsRep1.broadPeak.gz
@@ -4801,7 +5477,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladHotspotsRep2.broadPeak.gz
@@ -4820,7 +5496,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladPkRep1.narrowPeak.gz
@@ -4839,7 +5515,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladPkRep2.narrowPeak.gz
@@ -4858,14 +5534,13 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdbladRawSignalRep1
 project wgEncode
 replicate 1
 subId 2063
@@ -4876,14 +5551,13 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdbladRawSignalRep2
 project wgEncode
 replicate 2
 subId 2062
@@ -4894,7 +5568,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawRep1.bigWig
@@ -4913,7 +5587,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawRep2.bigWig
@@ -4932,7 +5606,7 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoAlnRep1.bam
@@ -4940,7 +5614,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdblneoAlnRep1
 project wgEncode
 replicate 1
 subId 2065
@@ -4951,7 +5624,7 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoAlnRep2.bam
@@ -4959,7 +5632,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdblneoAlnRep2
 project wgEncode
 replicate 2
 subId 2064
@@ -4970,7 +5642,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoHotspotsRep1.broadPeak.gz
@@ -4989,7 +5661,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoHotspotsRep2.broadPeak.gz
@@ -5008,7 +5680,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoPkRep1.narrowPeak.gz
@@ -5027,7 +5699,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoPkRep2.narrowPeak.gz
@@ -5046,14 +5718,13 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdblneoRawSignalRep1
 project wgEncode
 replicate 1
 subId 2065
@@ -5064,14 +5735,13 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdblneoRawSignalRep2
 project wgEncode
 replicate 2
 subId 2064
@@ -5082,7 +5752,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawRep1.bigWig
@@ -5101,7 +5771,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawRep2.bigWig
@@ -5120,7 +5790,7 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadAlnRep1.bam
@@ -5128,7 +5798,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyadAlnRep1
 project wgEncode
 replicate 1
 subId 2067
@@ -5139,7 +5808,7 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadAlnRep2.bam
@@ -5147,7 +5816,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyadAlnRep2
 project wgEncode
 replicate 2
 subId 2066
@@ -5158,7 +5826,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadHotspotsRep1.broadPeak.gz
@@ -5177,7 +5845,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadHotspotsRep2.broadPeak.gz
@@ -5196,7 +5864,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadPkRep1.narrowPeak.gz
@@ -5215,7 +5883,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadPkRep2.narrowPeak.gz
@@ -5234,14 +5902,13 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyadRawSignalRep1
 project wgEncode
 replicate 1
 subId 2067
@@ -5252,14 +5919,13 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyadRawSignalRep2
 project wgEncode
 replicate 2
 subId 2066
@@ -5270,7 +5936,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawRep1.bigWig
@@ -5289,7 +5955,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawRep2.bigWig
@@ -5308,7 +5974,7 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam
@@ -5316,7 +5982,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyneoAlnRep1
 project wgEncode
 replicate 1
 subId 2069
@@ -5327,7 +5992,7 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam
@@ -5335,7 +6000,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyneoAlnRep2
 project wgEncode
 replicate 2
 subId 2068
@@ -5346,7 +6010,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoHotspotsRep1.broadPeak.gz
@@ -5365,7 +6029,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoHotspotsRep2.broadPeak.gz
@@ -5384,7 +6048,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoPkRep1.narrowPeak.gz
@@ -5403,7 +6067,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoPkRep2.narrowPeak.gz
@@ -5422,14 +6086,13 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyneoRawSignalRep1
 project wgEncode
 replicate 1
 subId 2069
@@ -5440,14 +6103,13 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdlyneoRawSignalRep2
 project wgEncode
 replicate 2
 subId 2068
@@ -5458,7 +6120,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawRep1.bigWig
@@ -5477,7 +6139,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawRep2.bigWig
@@ -5496,7 +6158,7 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoAlnRep1.bam
@@ -5504,7 +6166,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdneoAlnRep1
 project wgEncode
 replicate 1
 subId 2071
@@ -5515,7 +6176,7 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoAlnRep2.bam
@@ -5523,7 +6184,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdneoAlnRep2
 project wgEncode
 replicate 2
 subId 2070
@@ -5534,7 +6194,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoHotspotsRep1.broadPeak.gz
@@ -5553,7 +6213,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoHotspotsRep2.broadPeak.gz
@@ -5572,7 +6232,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoPkRep1.narrowPeak.gz
@@ -5591,7 +6251,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoPkRep2.narrowPeak.gz
@@ -5610,14 +6270,13 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdneoRawSignalRep1
 project wgEncode
 replicate 1
 subId 2071
@@ -5628,14 +6287,13 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecdneoRawSignalRep2
 project wgEncode
 replicate 2
 subId 2070
@@ -5646,7 +6304,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawRep1.bigWig
@@ -5665,7 +6323,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawRep2.bigWig
@@ -5684,7 +6342,7 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblAlnRep1.bam
@@ -5692,7 +6350,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmveclblAlnRep1
 project wgEncode
 replicate 1
 subId 2039
@@ -5703,7 +6360,7 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblAlnRep2.bam
@@ -5711,7 +6368,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmveclblAlnRep2
 project wgEncode
 replicate 2
 subId 2059
@@ -5722,7 +6378,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblHotspotsRep1.broadPeak.gz
@@ -5741,7 +6397,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblHotspotsRep2.broadPeak.gz
@@ -5760,7 +6416,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblPkRep1.narrowPeak.gz
@@ -5779,7 +6435,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblPkRep2.narrowPeak.gz
@@ -5798,14 +6454,13 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmveclblRawSignalRep1
 project wgEncode
 replicate 1
 subId 2039
@@ -5816,14 +6471,13 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmveclblRawSignalRep2
 project wgEncode
 replicate 2
 subId 2059
@@ -5834,7 +6488,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblRawRep1.bigWig
@@ -5853,7 +6507,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblRawRep2.bigWig
@@ -5872,7 +6526,7 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyAlnRep1.bam
@@ -5880,7 +6534,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecllyAlnRep1
 project wgEncode
 replicate 1
 subId 2060
@@ -5891,7 +6544,7 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyAlnRep2.bam
@@ -5899,7 +6552,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecllyAlnRep2
 project wgEncode
 replicate 2
 subId 2061
@@ -5910,7 +6562,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyHotspotsRep1.broadPeak.gz
@@ -5929,7 +6581,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyHotspotsRep2.broadPeak.gz
@@ -5948,7 +6600,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyPkRep1.narrowPeak.gz
@@ -5967,7 +6619,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyPkRep2.narrowPeak.gz
@@ -5986,14 +6638,13 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecllyRawSignalRep1
 project wgEncode
 replicate 1
 subId 2060
@@ -6004,14 +6655,13 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHmvecllyRawSignalRep2
 project wgEncode
 replicate 2
 subId 2061
@@ -6022,7 +6672,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawRep1.bigWig
@@ -6041,7 +6691,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawRep2.bigWig
@@ -6070,7 +6720,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHnpceAlnRep1
 project wgEncode
 replicate 1
 subId 1619
@@ -6091,7 +6740,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHnpceAlnRep2
 project wgEncode
 replicate 2
 subId 1620
@@ -6177,6 +6825,40 @@ subId 1620
 tableName wgEncodeUwDnaseHnpcePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHnpceRawDataRep1
+objType file
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 926
+view RawData
+
+metaObject wgEncodeUwDnaseHnpceRawDataRep2
+objType file
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 927
+view RawData
+
 metaObject wgEncodeUwDnaseHnpceRawRep1
 objType table
 cell HNPCEpiC
@@ -6222,7 +6904,7 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafAlnRep1.bam
@@ -6230,7 +6912,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpafAlnRep1
 project wgEncode
 replicate 1
 subId 2072
@@ -6241,7 +6922,7 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafAlnRep2.bam
@@ -6249,7 +6930,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpafAlnRep2
 project wgEncode
 replicate 2
 subId 2073
@@ -6260,7 +6940,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafHotspotsRep1.broadPeak.gz
@@ -6279,7 +6959,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafHotspotsRep2.broadPeak.gz
@@ -6298,7 +6978,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafPkRep1.narrowPeak.gz
@@ -6317,7 +6997,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafPkRep2.narrowPeak.gz
@@ -6336,14 +7016,13 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpafRawSignalRep1
 project wgEncode
 replicate 1
 subId 2072
@@ -6354,14 +7033,13 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpafRawSignalRep2
 project wgEncode
 replicate 2
 subId 2073
@@ -6372,7 +7050,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawRep1.bigWig
@@ -6391,7 +7069,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawRep2.bigWig
@@ -6410,7 +7088,7 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfAlnRep1.bam
@@ -6418,7 +7096,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpdlfAlnRep1
 project wgEncode
 replicate 1
 subId 2077
@@ -6429,7 +7106,7 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfAlnRep2.bam
@@ -6437,7 +7114,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpdlfAlnRep2
 project wgEncode
 replicate 2
 subId 2076
@@ -6448,7 +7124,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfHotspotsRep1.broadPeak.gz
@@ -6467,7 +7143,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfHotspotsRep2.broadPeak.gz
@@ -6486,7 +7162,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfPkRep1.narrowPeak.gz
@@ -6505,7 +7181,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfPkRep2.narrowPeak.gz
@@ -6524,14 +7200,13 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpdlfRawSignalRep1
 project wgEncode
 replicate 1
 subId 2077
@@ -6542,14 +7217,13 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpdlfRawSignalRep2
 project wgEncode
 replicate 2
 subId 2076
@@ -6560,7 +7234,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawRep1.bigWig
@@ -6579,7 +7253,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawRep2.bigWig
@@ -6598,7 +7272,7 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfAlnRep1.bam
@@ -6606,7 +7280,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpfAlnRep1
 project wgEncode
 replicate 1
 subId 2075
@@ -6617,7 +7290,7 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfAlnRep2.bam
@@ -6625,7 +7298,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpfAlnRep2
 project wgEncode
 replicate 2
 subId 2074
@@ -6636,7 +7308,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfHotspotsRep1.broadPeak.gz
@@ -6655,7 +7327,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfHotspotsRep2.broadPeak.gz
@@ -6674,7 +7346,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfPkRep1.narrowPeak.gz
@@ -6693,7 +7365,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfPkRep2.narrowPeak.gz
@@ -6712,14 +7384,13 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpfRawSignalRep1
 project wgEncode
 replicate 1
 subId 2075
@@ -6730,14 +7401,13 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHpfRawSignalRep2
 project wgEncode
 replicate 2
 subId 2074
@@ -6748,7 +7418,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawRep1.bigWig
@@ -6767,7 +7437,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawRep2.bigWig
@@ -6796,7 +7466,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHrceAlnRep1
 project wgEncode
 replicate 1
 subId 1577
@@ -6817,7 +7486,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHrceAlnRep2
 project wgEncode
 replicate 2
 subId 1566
@@ -6862,6 +7530,40 @@ replicate 2
 subId 1566
 tableName wgEncodeUwDnaseHrceHotspotsRep2
 view Hotspots
+
+metaObject wgEncodeUwDnaseHrcepicRawDataRep1
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrcepicRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 398
+view RawData
+
+metaObject wgEncodeUwDnaseHrcepicRawDataRep2
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrcepicRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 399
+view RawData
 
 metaObject wgEncodeUwDnaseHrcePkRep1
 objType table
@@ -6958,7 +7660,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHreAlnRep1
 project wgEncode
 replicate 1
 subId 1578
@@ -6979,7 +7680,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHreAlnRep2
 project wgEncode
 replicate 2
 subId 1567
@@ -7065,6 +7765,40 @@ subId 1567
 tableName wgEncodeUwDnaseHrePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHreRawDataRep1
+objType file
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 400
+view RawData
+
+metaObject wgEncodeUwDnaseHreRawDataRep2
+objType file
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 401
+view RawData
+
 metaObject wgEncodeUwDnaseHreRawRep1
 objType table
 cell HRE
@@ -7120,7 +7854,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHrpeAlnRep1
 project wgEncode
 replicate 1
 subId 1622
@@ -7141,7 +7874,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHrpeAlnRep2
 project wgEncode
 replicate 2
 subId 1621
@@ -7227,6 +7959,40 @@ subId 1621
 tableName wgEncodeUwDnaseHrpePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHrpeRawDataRep1
+objType file
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 930
+view RawData
+
+metaObject wgEncodeUwDnaseHrpeRawDataRep2
+objType file
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 929
+view RawData
+
 metaObject wgEncodeUwDnaseHrpeRawRep1
 objType table
 cell HRPEpiC
@@ -7282,7 +8048,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseHuvecAlnRep1
 project wgEncode
 replicate 1
 subId 1624
@@ -7328,6 +8093,23 @@ subId 1624
 tableName wgEncodeUwDnaseHuvecPkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseHuvecRawDataRep1
+objType file
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseHuvecRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 297
+view RawData
+
 metaObject wgEncodeUwDnaseHuvecRawRep1
 objType table
 cell HUVEC
@@ -7353,7 +8135,7 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfAlnRep1.bam
@@ -7361,7 +8143,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHvmfAlnRep1
 project wgEncode
 replicate 1
 subId 2079
@@ -7372,7 +8153,7 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfAlnRep2.bam
@@ -7380,7 +8161,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseHvmfAlnRep2
 project wgEncode
 replicate 2
 subId 2078
@@ -7391,7 +8171,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfHotspotsRep1.broadPeak.gz
@@ -7410,7 +8190,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfHotspotsRep2.broadPeak.gz
@@ -7429,7 +8209,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfPkRep1.narrowPeak.gz
@@ -7448,7 +8228,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfPkRep2.narrowPeak.gz
@@ -7467,14 +8247,13 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHvmfRawSignalRep1
 project wgEncode
 replicate 1
 subId 2079
@@ -7485,14 +8264,13 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseHvmfRawSignalRep2
 project wgEncode
 replicate 2
 subId 2078
@@ -7503,7 +8281,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawRep1.bigWig
@@ -7522,7 +8300,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawRep2.bigWig
@@ -7535,6 +8313,60 @@ replicate 2
 subId 2078
 tableName wgEncodeUwDnaseHvmfRawRep2
 view RawSignal
+
+metaObject wgEncodeUwDnaseJurkatRawDataRep1
+objType file
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2010-01-13
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseJurkatRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 965
+view RawData
+
+metaObject wgEncodeUwDnaseJurkatRawDataRep1G1
+objType file
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-12
+fileName wgEncodeUwDnaseJurkatRawDataRep1G1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+phase G1
+project wgEncode
+replicate 1
+subId 931
+view RawData
+
+metaObject wgEncodeUwDnaseJurkatRawDataRep2
+objType file
+cell Jurkat
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateResubmitted 2010-01-13
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseJurkatRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 515
+view RawData
 
 metaObject wgEncodeUwDnaseK562AlnRep1
 objType file
@@ -7551,7 +8383,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseK562AlnRep1
 project wgEncode
 replicate 1
 subId 1676
@@ -7572,7 +8403,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseK562AlnRep2
 project wgEncode
 replicate 2
 subId 1675
@@ -7658,6 +8488,40 @@ subId 1675
 tableName wgEncodeUwDnaseK562PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseK562RawDataRep1
+objType file
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 106
+view RawData
+
+metaObject wgEncodeUwDnaseK562RawDataRep2
+objType file
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 106
+view RawData
+
 metaObject wgEncodeUwDnaseK562RawRep1
 objType table
 cell K562
@@ -7713,7 +8577,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseMcf7AlnRep1
 project wgEncode
 replicate 1
 subId 1628
@@ -7734,7 +8597,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseMcf7AlnRep2
 project wgEncode
 replicate 2
 subId 1562
@@ -7820,6 +8682,40 @@ subId 1562
 tableName wgEncodeUwDnaseMcf7PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseMcf7RawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwDnaseMcf7RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 592
+view RawData
+
+metaObject wgEncodeUwDnaseMcf7RawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseMcf7RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 966
+view RawData
+
 metaObject wgEncodeUwDnaseMcf7RawRep1
 objType table
 cell MCF-7
@@ -7875,7 +8771,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseNb4AlnRep1
 project wgEncode
 replicate 1
 subId 1559
@@ -7896,7 +8791,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseNb4AlnRep2
 project wgEncode
 replicate 2
 subId 1558
@@ -7982,6 +8876,41 @@ subId 1558
 tableName wgEncodeUwDnaseNb4PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseNb4RawDataRep1V2
+objType file
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNb4RawDataRep1V2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 936
+submittedDataVersion V2 - promoted replicate to 1st rank
+view RawData
+
+metaObject wgEncodeUwDnaseNb4RawDataRep2
+objType file
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNb4RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 932
+view RawData
+
 metaObject wgEncodeUwDnaseNb4RawRep1
 objType table
 cell NB4
@@ -8027,7 +8956,7 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaAlnRep1.bam
@@ -8035,7 +8964,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhaAlnRep1
 project wgEncode
 replicate 1
 subId 2088
@@ -8046,7 +8974,7 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaAlnRep2.bam
@@ -8054,7 +8982,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhaAlnRep2
 project wgEncode
 replicate 2
 subId 2089
@@ -8065,7 +8992,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaHotspotsRep1.broadPeak.gz
@@ -8084,7 +9011,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaHotspotsRep2.broadPeak.gz
@@ -8103,7 +9030,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaPkRep1.narrowPeak.gz
@@ -8122,7 +9049,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaPkRep2.narrowPeak.gz
@@ -8141,14 +9068,13 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhaRawSignalRep1
 project wgEncode
 replicate 1
 subId 2088
@@ -8159,14 +9085,13 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhaRawSignalRep2
 project wgEncode
 replicate 2
 subId 2089
@@ -8177,7 +9102,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawRep1.bigWig
@@ -8196,7 +9121,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawRep2.bigWig
@@ -8215,7 +9140,7 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadAlnRep1.bam
@@ -8223,7 +9148,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhdfadAlnRep1
 project wgEncode
 replicate 1
 subId 2081
@@ -8234,7 +9158,7 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadAlnRep2.bam
@@ -8242,7 +9166,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhdfadAlnRep2
 project wgEncode
 replicate 2
 subId 2080
@@ -8253,7 +9176,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadHotspotsRep1.broadPeak.gz
@@ -8272,7 +9195,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadHotspotsRep2.broadPeak.gz
@@ -8291,7 +9214,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadPkRep1.narrowPeak.gz
@@ -8310,7 +9233,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadPkRep2.narrowPeak.gz
@@ -8329,14 +9252,13 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawDataRep1.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhdfadRawSignalRep1
 project wgEncode
 replicate 1
 subId 2081
@@ -8347,14 +9269,13 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawDataRep2.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDnaseNhdfadRawSignalRep2
 project wgEncode
 replicate 2
 subId 2080
@@ -8365,7 +9286,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawRep1.bigWig
@@ -8384,7 +9305,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawRep2.bigWig
@@ -8413,7 +9334,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseNhdfneoAlnRep1
 project wgEncode
 replicate 1
 subId 1629
@@ -8434,7 +9354,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseNhdfneoAlnRep2
 project wgEncode
 replicate 2
 subId 1568
@@ -8520,6 +9439,40 @@ subId 1568
 tableName wgEncodeUwDnaseNhdfneoPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseNhdfneoRawDataRep1
+objType file
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 937
+view RawData
+
+metaObject wgEncodeUwDnaseNhdfneoRawDataRep2
+objType file
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 938
+view RawData
+
 metaObject wgEncodeUwDnaseNhdfneoRawRep1
 objType table
 cell NHDF-neo
@@ -8575,7 +9528,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseNhekAlnRep1
 project wgEncode
 replicate 1
 subId 1630
@@ -8621,6 +9573,23 @@ subId 1630
 tableName wgEncodeUwDnaseNhekPkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseNhekRawDataRep1
+objType file
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNhekRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 510
+view RawData
+
 metaObject wgEncodeUwDnaseNhekRawRep1
 objType table
 cell NHEK
@@ -8656,7 +9625,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseNhlfAlnRep1
 project wgEncode
 replicate 1
 subId 1560
@@ -8677,7 +9645,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseNhlfAlnRep2
 project wgEncode
 replicate 2
 subId 1561
@@ -8763,6 +9730,40 @@ subId 1561
 tableName wgEncodeUwDnaseNhlfPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseNhlfRawDataRep1
+objType file
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 967
+view RawData
+
+metaObject wgEncodeUwDnaseNhlfRawDataRep2
+objType file
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 968
+view RawData
+
 metaObject wgEncodeUwDnaseNhlfRawRep1
 objType table
 cell NHLF
@@ -8818,7 +9819,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnasePanc1AlnRep1
 project wgEncode
 replicate 1
 subId 1627
@@ -8839,7 +9839,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnasePanc1AlnRep2
 project wgEncode
 replicate 2
 subId 1569
@@ -8925,6 +9924,40 @@ subId 1569
 tableName wgEncodeUwDnasePanc1PkRep2
 view Peaks
 
+metaObject wgEncodeUwDnasePanc1RawDataRep1
+objType file
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 512
+view RawData
+
+metaObject wgEncodeUwDnasePanc1RawDataRep2
+objType file
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1RawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 511
+view RawData
+
 metaObject wgEncodeUwDnasePanc1RawRep1
 objType table
 cell PANC-1
@@ -8980,7 +10013,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseSaecAlnRep1
 project wgEncode
 replicate 1
 subId 1557
@@ -9001,7 +10033,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseSaecAlnRep2
 project wgEncode
 replicate 2
 subId 1556
@@ -9087,6 +10118,40 @@ subId 1556
 tableName wgEncodeUwDnaseSaecPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseSaecRawDataRep1
+objType file
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 514
+view RawData
+
+metaObject wgEncodeUwDnaseSaecRawDataRep2
+objType file
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 513
+view RawData
+
 metaObject wgEncodeUwDnaseSaecRawRep1
 objType table
 cell SAEC
@@ -9142,7 +10207,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseSkmcAlnRep1
 project wgEncode
 replicate 1
 subId 1573
@@ -9163,7 +10227,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseSkmcAlnRep2
 project wgEncode
 replicate 2
 subId 1642
@@ -9249,6 +10312,42 @@ subId 1642
 tableName wgEncodeUwDnaseSkmcPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseSkmcRawDataRep1V2
+objType file
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateResubmitted 2009-10-27
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseSkmcRawDataRep1V2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 755
+submittedDataVersion V2 - Improved DNA library
+view RawData
+
+metaObject wgEncodeUwDnaseSkmcRawDataRep2
+objType file
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-27
+dateUnrestricted 2010-07-26
+fileName wgEncodeUwDnaseSkmcRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 754
+view RawData
+
 metaObject wgEncodeUwDnaseSkmcRawRep1
 objType table
 cell SKMC
@@ -9304,7 +10403,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseSknshraAlnRep1
 project wgEncode
 replicate 1
 subId 1640
@@ -9325,7 +10423,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseSknshraAlnRep2
 project wgEncode
 replicate 2
 subId 1643
@@ -9411,6 +10508,41 @@ subId 1643
 tableName wgEncodeUwDnaseSknshraPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseSknshraRawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeUwDnaseSknshraRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 50
+view RawData
+
+metaObject wgEncodeUwDnaseSknshraRawDataRep2V2
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-21
+fileName wgEncodeUwDnaseSknshraRawDataRep2V2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 737
+submittedDataVersion V2 - Improved DNA library
+view RawData
+
 metaObject wgEncodeUwDnaseSknshraRawRep1
 objType table
 cell SK-N-SH_RA
@@ -9466,7 +10598,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseTh1AlnRep1
 project wgEncode
 replicate 1
 subId 1641
@@ -9512,6 +10643,23 @@ subId 1641
 tableName wgEncodeUwDnaseTh1PkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseTh1RawDataRep1
+objType file
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
+fileName wgEncodeUwDnaseTh1RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 49
+view RawData
+
 metaObject wgEncodeUwDnaseTh1RawRep1
 objType table
 cell Th1
@@ -9547,7 +10695,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDnaseTh2AlnRep1
 project wgEncode
 replicate 1
 subId 1677
@@ -9593,6 +10740,23 @@ subId 1677
 tableName wgEncodeUwDnaseTh2PkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseTh2RawDataRep1
+objType file
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseTh2RawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 312
+view RawData
+
 metaObject wgEncodeUwDnaseTh2RawRep1
 objType table
 cell Th2
@@ -9613,4 +10777,4 @@ subId 1677
 tableName wgEncodeUwDnaseTh2RawRep1
 view RawSignal
 
-# MAGIC: 1235979356
+# MAGIC: -1342548911

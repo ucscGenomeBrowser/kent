@@ -741,7 +741,7 @@ return (page);
 
 void prefixComments(struct wikiTrack *item, char *comments, char *userName,
     char *seqName, int winStart, int winEnd, char *database,
-	char *extraHeader, char *extraTag)
+	char *extraHeader, char *extraTag, char *category)
 /* add comments at the beginning of an existing wiki item */
 {
 /* do nothing if given nothing */
@@ -810,14 +810,14 @@ if (!(wpTextbox1->curVal && (strlen(wpTextbox1->curVal) > 2)))
     if (extraHeader)
 	{
 	dyStringPrintf(content, "%s\n%s\n",
-	    NEW_ITEM_CATEGORY, extraHeader);
+	    category, extraHeader);
 	}
     else
 	{
 	dyStringPrintf(content, "%s\n"
 "[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
 	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;",
-	NEW_ITEM_CATEGORY,
+	category,
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
 		seqName, winStart+1, winEnd, database, newPos, item->name);
 	}
@@ -876,7 +876,7 @@ freeDyString(&content);
 
 void addDescription(struct wikiTrack *item, char *userName,
     char *seqName, int winStart, int winEnd, struct cart *cart,
-	char *database, char *extraHeader, char *extraTag)
+	char *database, char *extraHeader, char *extraTag, char *category)
 /* add description to the end of an existing wiki item */
 {
 char *newComments = cartNonemptyString(cart, NEW_ITEM_COMMENT);
@@ -947,14 +947,14 @@ else
     if (extraHeader)
 	{
 	dyStringPrintf(content, "%s\n%s\n",
-	    NEW_ITEM_CATEGORY, extraHeader);
+	    category, extraHeader);
 	}
     else
 	{
 	dyStringPrintf(content, "%s\n"
 "[http://%s/cgi-bin/hgTracks?db=%s&wikiTrack=pack&position=%s:%d-%d %s %s]"
 	"&nbsp;&nbsp;<B>'%s'</B>&nbsp;&nbsp;",
-	NEW_ITEM_CATEGORY,
+	category,
 	    cfgOptionDefault(CFG_WIKI_BROWSER, DEFAULT_BROWSER), database,
 		seqName, winStart+1, winEnd, database, newPos, item->name);
 	}

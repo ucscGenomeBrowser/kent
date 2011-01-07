@@ -1,0 +1,42 @@
+#!/bin/bash -e
+usage='makeTrixLinks trixName outputPath ${DBS}'
+
+if [ $# -lt 3 ] ; then
+    echo "wrong # args: $usage" >&2
+    exit 1
+fi
+
+trixName="$1"; shift
+outPath="$1" ; shift
+dbs="$@"
+
+# check if a database exists, print note and return non-zero if it doesn't
+dbExists() {
+    local db="$1"
+    if [ -n "$local" ] ; then
+	local dbChk=$(hgsqlLocal -Ne 'show databases like "'$db'"')
+    else 
+	local dbChk=$(hgsql -Ne 'show databases like "'$db'"')
+    fi
+    if [ -z "$dbChk" ] ; then
+        echo "Note: database $db does not exist, skipping"
+        return 1
+    else
+        return 0
+    fi
+}
+
+makeTrixLinks() {
+    local db="$1"
+    local trixName="$2"
+    local outPath="$3"
+    rm -f /gbdb/$db/$trixName.ix /gbdb/$db/$trixName.ixx
+    ln -s $outPath/${db}_$trixName.ix /gbdb/$db/$trixName.ix
+    ln -s $outPath/${db}_$trixName.ixx /gbdb/$db/$trixName.ixx
+}
+
+for db in $dbs ; do
+    if dbExists $db ; then
+        makeTrixLinks $db $trixName $outPath
+    fi
+done

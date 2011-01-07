@@ -24,28 +24,20 @@
   <%= 
   if c.status == "validate failed"
     link_to c.status, {:action => 'valid_status', :id => c.id}
+  elsif c.status == "load failed"
+    link_to c.status, {:action => 'load_status', :id => c.id}
+  elsif c.status == "unload failed"
+    link_to c.status, {:action => 'unload_status', :id => c.id}
+  elsif c.status == "upload failed"
+    link_to c.status, {:action => 'upload_status', :id => c.id}
+  elsif c.status == "expand failed"
+    link_to c.status, {:action => 'expand_status', :id => c.id}
+  elsif c.status.starts_with?("schedule uploading ")
+    "schedule uploading"
+  elsif c.status.starts_with?("schedule expanding ")
+    "schedule expanding"
   else
-    if c.status == "load failed"
-      link_to c.status, {:action => 'load_status', :id => c.id}
-    else
-      if c.status == "unload failed"
-        link_to c.status, {:action => 'unload_status', :id => c.id}
-      else
-        if c.status == "upload failed"
-       	  link_to c.status, {:action => 'upload_status', :id => c.id}
-        else
-	  if c.status.starts_with?("schedule uploading ")
-	    "schedule uploading"
-	  else
-	    if c.status.starts_with?("schedule expanding ")
-	      "schedule expanding"
-            else
-    	      c.status 
-            end
-          end
-        end
-      end
-    end
+    c.status 
   end
   -%>
   </td><td>&nbsp;</td>

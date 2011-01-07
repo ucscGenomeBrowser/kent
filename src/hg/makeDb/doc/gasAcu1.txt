@@ -2814,4 +2814,22 @@ see doc/builds.txt for specific details.
     #  114451338 bases of 446627861 (25.626%) in intersection
 
 #######################################################################
+# lastz swap danRer7 (DONE - 2010-12-17 - Hiram
+    #	original alignment to danRer7
+    cd /hive/data/genomes/danRer7/bed/lastzGasAcu1.2010-12-17
+    cat fb.danRer7.chainGasAcu1Link.txt 
+    #	144782335 bases of 1409770109 (10.270%) in intersection
 
+    #	running the swap
+    mkdir /hive/data/genomes/gasAcu1/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/gasAcu1/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzGasAcu1.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=2000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    25m35.024s
+    cat fb.gasAcu1.chainDanRer7Link.txt 
+    #	122918766 bases of 446627861 (27.522%) in intersection
+
+#########################################################################

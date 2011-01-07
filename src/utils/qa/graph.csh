@@ -28,6 +28,7 @@ if ( $#argv < 1 || $#argv > 2 ) then
   echo "  where width is number of characters in longest bar"
   echo "  negative numbers in second field of file show as zero"
   echo "  ignores any columns beyond two"
+  echo "  default width = 50 char"
   echo
   exit
 else

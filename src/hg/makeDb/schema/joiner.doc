@@ -99,7 +99,7 @@ Field Line Attributes:
 	    rather than item itself.
      value: n/a
   dupeOk - used to indicate that duplicate identifiers are allowed in the
-           first field.
+	   first field. - valid only on primary key, not on secondary keys
      value: n/a
   minCheck - used to allow some identifiers not to be in primary key.
      value: A number between 0.0 and 1.0 that indicates the minimum ratio of

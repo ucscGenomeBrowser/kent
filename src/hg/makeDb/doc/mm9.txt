@@ -11312,3 +11312,232 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+#############################################################################
+# Agilent arrays (2010-12-01 Andy)
+cd /hive/data/genomes/mm9/bed/agilentProbes/
+# FTP download from ftp.agilent.com using given user/pass from Anniek De-witte
+# (anniek_de-witte@agilent.com)
+# downloaded files are gzipped beds. The files are typically located in a 
+# directory called "FOR_UCSC" or something like that.  The user/pass and the
+# directory are deleted after it's confirmed they're received, so it's not
+# too helpful to mention specifics here.
+ftp -u user -p password ftp.agilent.com
+> cd directory
+> get 027411_D_BED_20100308.bed.gz
+> get 027414_D_BED_20100318.bed
+# unzip everything
+gunzip 027*.bed.gz
+ln -s 027414_D_BED_20100318.bed agilentCgh1x1m.ct.bed
+ln -s 027411_D_BED_20100308.bed agilentCgh4x180k.ct.bed
+for bed in agilent*.bed; do
+    tail -n +2 $bed | hgLoadBed mm9 ${bed%.ct.bed} stdin
+done
+rm bed.tab
+
+
+##########################################################################
+# Build targetScanS track - (DONE - 2010-12-14 galt)
+#       requested by: George Bell gbell at wi.mit.edu
+    ssh hgwdev
+    mkdir -p /cluster/data/mm9/bed/targetScanS
+    cd /cluster/data/mm9/bed/targetScanS
+
+    wget --timestamping http://www.targetscan.org/mmu_50/ucsc/mm9/mm9Cons_ALL_CHRS.BED
+
+    hgLoadBed mm9 targetScanS mm9Cons_ALL_CHRS.BED
+    #	Loaded 38961 elements of size 6
+    featureBits mm9 targetScanS
+    #   253088 bases of 2620346127 (0.010%) in intersection
+
+    # Create/edit/check in targetScans.html and trackDb.ra under
+    # kent/src/hg/makeDb/trackDb/mouse/mm9
+
+#########################################################################
+# LASTZ Mouse mm9 (DONE - 2010-12-17 - hiram)
+    mkdir /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+    cd /hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+
+    cat << '_EOF_' > DEF
+# mouse vs zebrafish
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Mouse mm9
+SEQ1_DIR=/scratch/data/mm9/mm9.2bit
+SEQ1_LEN=/scratch/data/mm9/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Zebrafish danRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=40
+
+BASE=/hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	> do.log 2>&1 &
+    #	Elapsed time: 254m42s
+
+    cat fb.danRer7.chainMm9Link.txt 
+    #	68190354 bases of 2620346127 (2.602%) in intersection
+
+    #	and the swap to danRer7
+    mkdir /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm9/bed/lastzDanRer7.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    16m8.672s
+
+    cat fb.danRer7.chainMm9Link.txt 
+    #	71960602 bases of 1409770109 (5.104%) in intersection
+
+#########################################################################
+# YALE PSEUDOPIPE PSEUDOGENE PREDICTIONS BASED ON ENSEMBL 60
+# (hartera, 2010-12-23 - 2010-12-24, DONE)
+# FTP site e-mailed on 2010-12-22 by Suganthi Balasubramanian 
+# (suganthi.bala@yale.edu) from the Gerstein lab. Data is from their 
+# PseudoPipe pipeline and it is based on proteins from Ensembl Build 60 
+# (pseudogene data from December 2010?). 
+# NOTE: this data will be replaced before being released to the RR as there 
+# is a problem with the IDs. 
+
+mkdir -p /hive/data/genomes/mm9/bed/pseudoYale60
+cd /hive/data/genomes/mm9/bed/pseudoYale60
+
+# Go to http://tables.pseudogene.org/set.py?id=Mouse60 and click on the
+# download link to download Mouse60.tx and copy the file to this directory.
+# Header from data file.
+ID      Chromosome      Start Coordinate        Stop Coordinate Strand  Parent
+Protein  Protein Start   Protein Stop    Parent Gene     Fraction        Num
+Insertions  Num Deletions   Num Shifts      Num Stops       E Value Identity
+PolyA   Disablements    Exons   Introns Class   Sequence        Link
+
+# urls are of type:
+# http://tables.pseudogene.org/mouse60/<ID> so this can be added to the
+# trackDb as for the previous track. Just update the Ensembl 59 trackDb entry.
+
+# Get list of chroms:
+awk '{print $2}' Mouse60.txt | sort | uniq
+# chromosomes are 1-19, X, Y
+
+# Convert data to genePred:
+
+cat << '_EOF_' > formatPseudogenesToGenePred
+#!/usr/bin/awk -f
+# Parse Yale pseudogene data file.
+# Exon coordinates are in this format: [[28688544, 28688864], [28689678, 2869117# 4], [28694308, 28694460], [28701327, 28701749]]
+# Ignore header line
+/^ID/ {
+  next;
+}
+# Parse the data lines
+BEGIN {FS="\t"} {OFS="\t"} {
+  gsub(/\[/, "", $19);
+  gsub(/\]/, "", $19); 
+  split($19, exons, ",");
+  # Count the number of start and end coordinates for exons and 
+  # calculate the number of exons.
+  count=(length(exons))/2;
+  # Write out genePred. Add chr in front of chrom only if not haplotype.
+  if ($2 !~ /HSCHR/) {
+     printf "%s\tchr%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  else {
+     printf "%s\t%s\t%c\t%d\t%d\t0\t0\t%d\t", $1, $2, $5, $3-1, $4, count; 
+  }
+  # get list of exon starts, convert from 1-based to 0-based
+  for (i=1; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]-1","; 
+  }
+  printf "\t";
+  # get list of exon ends
+  for (i=2; i <= length(exons); i+=2) {
+     printf "%d,", exons[i]","; 
+  }
+  printf "\n"; 
+}
+'_EOF_'
+
+chmod +x formatPseudogenesToGenePred
+# format the Yale pseudogenes data to genePred.
+./formatPseudogenesToGenePred Mouse60.txt > pseudoYaleMouse60.gp 
+
+# Load the genePred file into mm9
+hgLoadGenePred mm9 pseudoYale60 pseudoYaleMouse60.gp
+# Didn't load. There are 4 invalid genePreds:
+Error: invalid genePred: PGOMOU00000130313 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000139101 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000136201 exon 1 overlaps previous exon
+Error: invalid genePred: PGOMOU00000128816 exon 1 overlaps previous exon
+Error: 4 invalid genePreds, database unchanged
+
+# File didn't load into database.
+# Make a file of these ids - invalidIds
+grep -f invalidIds -vw pseudoYaleMouse60.gp > pseudoYaleMouse60NoInvalidGps.gp
+wc -l pseudoYale*gp
+# 19086 pseudoYaleMouse60.gp
+# 19082 pseudoYaleMouse60NoInvalidGps.gp
+
+# Then re-load database
+hgLoadGenePred mm9 pseudoYale60 pseudoYaleMouse60NoInvalidGps.gp
+
+# 2010-12-24
+# Add trackDb.ra entry for track, add a search and make sure
+# there is a description page, copy over from the gencodeYalePseudoBuild59
+# html. 
+
+cp
+/hive/users/hartera/GencodeWG/ccds/trunk/gencode/browser/trackDb/human/hg19/gencodeYalePseudoBuild59.html \
+~/kent/src/hg/makeDbb/trackDb/mouse/mm9/pseudoYale60.html
+# Edit this for mouse and add the list of 4 IDs of genes that were removed due
+# to overlapping exon coordinates. Commit to git.
+# Check pseudogene types in data:
+tail -n +2 Mouse60.txt | tawk '{print $21}' | sort | uniq
+#Ambiguous
+#Duplicated
+#Processed
+# Build class table for colouring pseudogenes by type. 
+# copy over class table definition from a previous set of Yale pseudogenes.
+cp -p /hive/groups/gencode/browser/hg19/gencodeYalePseudoBuild59/gencodeYalePseudoBuild59Class.sql \
+ pseudoYale60Class.sql
+
+# Make the class table file:
+tail -n +2 Mouse60.txt \
+  | tawk '{print $1, $21, "Yale"}' | sort > pseudoYale60Class.txt
+
+# load table
+hgLoadSqlTab mm9 pseudoYale60Class \
+    pseudoYale60Class.sql pseudoYale60Class.txt
+
+hgsql -e 'select distinct(class) from pseudoYale60Class;' mm9
++------------+
+| class      |
++------------+
+| Ambiguous  | 
+| Processed  | 
+| Duplicated | 
++------------+
+
+# Add these classes to the trackDb.ra entry for the geneClasses field and 
+# to the list of classes with colours.
+# Added the classes to:
+# ~/kentJuly2010/kent/src/hg/makeDb/trackDb/tagTypes.tab
+# e.g. gClass_Processed genePred

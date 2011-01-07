@@ -665,9 +665,15 @@ bed->chromStart = bed->thickStart = chromStart = psl->tStart;
 bed->chromEnd = bed->thickEnd = psl->tEnd;
 bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
-strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+bed->strand[0] = psl->strand[0];
 bed->blockCount = blockCount = psl->blockCount;
 bed->blockSizes = (int *)cloneMem(psl->blockSizes,(sizeof(int)*psl->blockCount));
+if (pslIsProtein(psl))
+    {
+    /* Convert blockSizes from protein to dna. */
+    for (i=0; i<blockCount; ++i)
+	bed->blockSizes[i] *= 3;
+    }
 bed->chromStarts = chromStarts = (int *)cloneMem(psl->tStarts, (sizeof(int)*psl->blockCount));
 bed->name = cloneString(psl->qName);
 
@@ -678,7 +684,11 @@ if (psl->strand[1] == '-')
     reverseInts(bed->blockSizes, blockCount);
     reverseInts(chromStarts, blockCount);
     for (i=0; i<blockCount; ++i)
-	chromStarts[i] = chromSize - chromStarts[i];
+	chromStarts[i] = chromSize - chromStarts[i] - bed->blockSizes[i];
+    if (bed->strand[0] == '-')
+	bed->strand[0] = '+';
+    else
+	bed->strand[0] = '-';
     }
 
 /* Convert coordinates to relative. */
@@ -1108,6 +1118,18 @@ for (oldIx=0; oldIx < oldLastBlock; ++oldIx, ++newIx)
     if (iStartOld != iStartNew || iEndOld != iEndNew)
         return FALSE;
     }
+
+/* Finally, make sure that the new bed doesn't contain any introns that overlap with the
+ * last exon of the old bed */
+for(; newIx < newLastBlock; ++newIx)
+    {
+    int iStartNew = newBed->chromStart + newBed->chromStarts[newIx] + newBed->blockSizes[newIx];
+    if (iStartNew < oldBed->chromEnd)
+        return FALSE;
+    else if (iStartNew >= oldBed->chromEnd)
+        break;
+    }
+
 return TRUE;
 }
 

@@ -1630,3 +1630,22 @@ see doc/builds.txt for specific details.
     #   92089833 bases of 1359412157 (6.774%) in intersection
 
 #######################################################################
+# lastz swap from danRer7 (DONE - 2010-12-20 - Hiram)
+    # original alignment to danRer7
+    cd /hive/data/genomes/danRer7/bed/lastzXenTro2.2010-12-17
+    cat fb.danRer7.chainXenTro2Link.txt 
+    #	90625809 bases of 1409770109 (6.428%) in intersection
+
+    #   running the swap
+    mkdir /hive/data/genomes/xenTro2/bed/blastz.danRer7.swap
+    cd /hive/data/genomes/xenTro2/bed/blastz.danRer7.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/danRer7/bed/lastzXenTro2.2010-12-17/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-swap > swap.log 2>&1 &
+    #	real    32m57.901s
+    cat fb.xenTro2.chainDanRer7Link.txt 
+    #	89862892 bases of 1359412157 (6.610%) in intersection
+
+#######################################################################

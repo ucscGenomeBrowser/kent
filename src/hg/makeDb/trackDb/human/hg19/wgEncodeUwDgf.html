@@ -5,7 +5,7 @@
 that will be used to identify sites where regulatory factors bind to the genome
 (<i>footprints</i>).</P>
 <P>Footprinting is a technique used to define the DNA sequences that interact
-with and bind specific DNA-binding proteins, such as transcription factors,
+with and bind DNA-binding proteins, such as transcription factors,
 zinc-finger proteins, hormone-receptor complexes, and other 
 chromatin-modulating factors like CTCF.  The technique depends upon the
 strength and tight nature of protein-DNA interactions. In their native chromatin
@@ -48,15 +48,17 @@ smaller locations where proteins are most likely bound within the
 identified HotSpot regions.  
 </DT>
 -->
-</h2><DT><I>Signal</I>
-<DD> Cut-counts. Per-base count of tas whose 5' end 
-(corresponding to a DNaseI-induced DNA cut) coincidees 
-with the given position. (Exact Verbiage to be determined)
+<DT><I>Signal</I>
+<DD>Per-base count of sequence reads whose 5' end (corresponding to a 
+DNaseI-induced DNA cut) coincides with the given position.
 </DT>
 <DT><I>Raw Signal</I>
 <DD>The density of tags mapping within a 150 bp sliding window
 (at a 20 bp step across the genome).
 </DL>
+NOTE: The names of the signal views in this track are reversed from conventions used in
+other ENCODE tracks, where the less processed signal is termed 'Raw'.
+<P>
 <P>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM> 
 cleavage sites across the genome mapped using the Digital DNaseI methodology 
 (see below).  Data have been normalized to 25 million reads per cell type.  
@@ -74,8 +76,9 @@ intact nuclei, followed by isolating DNaseI 'double-hit' fragments as
 described in Sabo <EM>et al.</EM> (2006), and direct sequencing of
 fragment ends (which correspond to <EM>in vivo</EM> DNaseI cleavage
 sites) using the Solexa platform (27 bp reads).  High-quality reads were
-mapped to the genome; only unique mappings were kept.  DNaseI sensitivity is
-directly reflected in raw tag density (<I>Signal</I>), which is shown
+mapped to the GRCh37/hg19 human genome using Bowtie 0.12.5 (Eland was used to map to NCBI36/hg18);
+only unique mappings were kept. DNaseI sensitivity is directly reflected 
+in raw tag density (<I>Signal</I>), which is shown
 in the track as density of tags mapping within a 150 bp sliding window
 (at a 20 bp step across the genome).  DNaseI hypersensitive zones
 (<I>HotSpots</I>) were identified using the HotSpot algorithm
@@ -109,11 +112,6 @@ conventional DNaseI hypersensitivity assays using end-labeling/Southern
 blotting methods. 
 </P>
 
-
-<h2>Release Notes</h2>
-<P>
-This is the initial release of this track.
-</P>
 
 <H2>Credits</H2>
 

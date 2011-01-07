@@ -3,7 +3,7 @@ objType table
 antibody T7Tag
 cell GM12878
 composite wgEncodeSunyalbanyRnaGeneChip
-dataType RnaGeneChip
+dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
@@ -23,7 +23,7 @@ objType table
 antibody ELAVL1
 cell GM12878
 composite wgEncodeSunyalbanyRnaGeneChip
-dataType RnaGeneChip
+dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
@@ -43,7 +43,7 @@ objType table
 antibody PABPC1
 cell GM12878
 composite wgEncodeSunyalbanyRnaGeneChip
-dataType RnaGeneChip
+dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
@@ -63,7 +63,7 @@ objType table
 antibody T7Tag
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
-dataType RnaGeneChip
+dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
@@ -83,7 +83,7 @@ objType table
 antibody IGF2BP1
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
-dataType RnaGeneChip
+dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
@@ -103,7 +103,7 @@ objType table
 antibody ELAVL1
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
-dataType RnaGeneChip
+dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02
@@ -123,7 +123,7 @@ objType table
 antibody PABPC1
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
-dataType RnaGeneChip
+dataType RipChip
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-02
 dateUnrestricted 2009-09-02

@@ -27,10 +27,7 @@ static char extFileCreate[] =
   "index (name))";
 
 static char historyCreate[] =	
-/* This contains a row for each update made to database.
- * (The idea is that this is just updated in batch.)
- * It keeps track of which id global ids are used
- * as well as providing a record of updates. */
+/* This contains a row for each update made to database. */
 "create table history ("
   "ix int not null auto_increment primary key,"  /* Update number. */
   "startId int unsigned not null,"              /* Start this session's ids. */
@@ -39,31 +36,6 @@ static char historyCreate[] =
   "what varchar(255) not null,"        /* What they did. */
   "modTime timestamp not null,"        /* Modification time. */
   "errata varchar(255) )";            /* Deleted data */
-
-HGID hgIdQuery(struct sqlConnection *conn, char *query)
-/* Return first field of first table as HGID. 0 return ok. */
-{
-struct sqlResult *sr;
-char **row;
-HGID ret = 0;
-
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    errAbort("Couldn't find ID in response to %s\nDatabase needs updating", query);
-ret = sqlUnsigned(row[0]);
-sqlFreeResult(&sr);
-return ret;
-}
-
-HGID hgRealIdQuery(struct sqlConnection *conn, char *query)
-/* Return first field of first table as HGID- abort if 0. */
-{
-HGID ret = hgIdQuery(conn, query);
-if (ret == 0)
-    errAbort("Unexpected NULL response to %s", query);
-return ret;
-}
 
 HGID hgGetMaxId(struct sqlConnection *conn, char *tableName)
 /* get the maximum value of the id column in a table or zero if empry  */
@@ -87,84 +59,69 @@ sqlFreeResult(&sr);
 return maxId;
 }
 
-static HGID startUpdateId;	/* First ID in this update. */
-static HGID endUpdateId;	/* One past last ID in this update. */
-
-HGID hgNextId(void)
-/* Get next free global ID. */
+static void ensureHistoryTableExists(struct sqlConnection *conn)
+/* create history table if it doesn't exist */
 {
-return endUpdateId++;
+static boolean first = TRUE;
+if (first)
+    {
+    sqlMaybeMakeTable(conn, "history", historyCreate);
+    first = FALSE;
+    }
+}
+
+static void hgHistoryEnterVa(struct sqlConnection *conn, int startId, int endId, char *comment, va_list args)
+/* add an entry to the history table */
+{
+// create SQL encoded string for comment
+struct dyString *commentBuf = dyStringNew(256);
+dyStringVaPrintf(commentBuf, comment, args);
+char *commentStr = sqlEscapeString(commentBuf->string);
+dyStringFree(&commentBuf);
+struct dyString *query = dyStringNew(256);
+ensureHistoryTableExists(conn);
+dyStringPrintf(query, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,%d,%d,'%s',\"%s\",NOW(), NULL)",
+               startId, endId, getUser(), commentStr);
+sqlUpdate(conn,query->string);
+dyStringFree(&query); 
+freeMem(commentStr);
 }
 
 void hgHistoryComment(struct sqlConnection *conn, char *comment, ...)
-/* Add comment to history table.  Does not lock the process. */
+/* Add comment to history table. */
 {
-struct dyString *query = newDyString(256);
 va_list args;
-static boolean initialized = FALSE;
-
 va_start(args, comment);
-/* create history table if it does not exist already */
-if (!initialized)
-    {
-    if (sqlMaybeMakeTable(conn, "history", historyCreate))
-	{
-        char query[256];
-	safef(query, sizeof(query),
-		"INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,0,10,'%s','New',NOW(), NULL)",
-		getUser());
-        sqlUpdate(conn, query);
-	}
-    initialized = TRUE;
-    }
-/* add comment with startId and endId as 0 */
-dyStringPrintf(query, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,%d,%d,'%s',\"",
-         0, 0, getUser());
-dyStringVaPrintf(query, comment, args);
-dyStringAppend(query, "\",NOW(), NULL)");
-sqlUpdate(conn,query->string);
-dyStringFree(&query); 
+hgHistoryEnterVa(conn, 0, 0, comment, args);
+va_end(args);
+}
+
+void hgHistoryCommentWithIds(struct sqlConnection *conn, int startId, int endId, char *comment, ...)
+/* Add comment to history table, with id range. */
+{
+va_list args;
+va_start(args, comment);
+hgHistoryEnterVa(conn, startId, endId, comment, args);
+va_end(args);
 }
 
 struct sqlConnection *hgStartUpdate(char *db)
-/* Open and connection and get next global id from the history table */
+/* Open and connection and lock the history table */
 {
-static boolean initialized = FALSE;
 struct sqlConnection *conn = sqlConnect(db);
-
-if (!initialized)
-    {
-    if (sqlMaybeMakeTable(conn, "history", historyCreate))
-	{
-        char query[256];
-	safef(query, sizeof(query),
-		"INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,0,10,'%s','New',NOW(), NULL)",
-		getUser());
-        sqlUpdate(conn, query);
-	}
-    initialized = TRUE;
-    }
-/* put advisory lock on process while adding Ids to tables */
+ensureHistoryTableExists(conn);
 sqlGetLock(conn, "history");
-startUpdateId = endUpdateId = hgIdQuery(conn, "SELECT MAX(endId) from history");
-
 return conn;
-
 }
 
-void hgEndUpdate(struct sqlConnection **pConn, char *comment, ...)
-/* Finish up connection with a printf format comment. */
+void hgEndUpdate(struct sqlConnection **pConn, int startId, int endId, char *comment, ...)
+/* Finish up connection with a printf format comment and optional id range */
 {
 struct sqlConnection *conn = *pConn;
-struct dyString *query = newDyString(256);
 va_list args;
 va_start(args, comment);
-
-dyStringPrintf(query, "INSERT into history (ix, startId, endId, who, what, modTime, errata) VALUES(NULL,%d,%d,'%s',\"", 
-	startUpdateId, endUpdateId, getUser());
-dyStringVaPrintf(query, comment, args);
-dyStringAppend(query, "\",NOW(), NULL)");
-sqlUpdate(conn,query->string);
+hgHistoryEnterVa(conn, startId, endId, comment, args);
+va_end(args);
 sqlReleaseLock(conn, "history");
 sqlDisconnect(pConn);
 }
@@ -252,7 +209,6 @@ int hgAddToExtFileTbl(char *path, struct sqlConnection *conn, char *extFileTbl)
 char root[128], ext[64], name[256];
 struct dyString *dy = newDyString(1024);
 long long size = fileSize(path);
-HGID id = hgNextId();
 
 /* create table if it doesn't exist */
 if (!sqlTableExists(conn, extFileTbl))
@@ -261,6 +217,8 @@ if (!sqlTableExists(conn, extFileTbl))
     safef(query, sizeof(query), extFileCreate, extFileTbl);
     sqlMaybeMakeTable(conn, extFileTbl, query);
     }
+
+HGID id = hgGetMaxId(conn, extFileTbl) + 1;
 
 /* Construct file name without the directory. */
 splitPath(path, NULL, root, ext);
@@ -275,7 +233,7 @@ dyStringClear(dy);
 dyStringPrintf(dy, "INSERT into %s (id, name, path, size) VALUES(%u,'%s','%s',%lld)",
                extFileTbl, id, name, path, size);
 sqlUpdate(conn, dy->string);
-
+hgHistoryCommentWithIds(conn, id, id, "extFile table %s: added %s (%lld)", extFileTbl, path, size);
 dyStringFree(&dy);
 return id;
 }

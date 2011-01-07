@@ -144,7 +144,6 @@ static void loadDatabaseChain(char *database, char *tab, char *track, int count)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
-char comment[256];
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -207,9 +206,7 @@ dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
 /* add a comment to the history table and finish up connection */
-safef(comment, sizeof(comment),
-      "Loaded %d chains into %s chain table", count, track);
-hgHistoryComment(conn, comment);
+hgHistoryComment(conn, "Loaded %d chains into %s chain table", count, track);
 sqlDisconnect(&conn);
 }
 

@@ -1162,12 +1162,9 @@ static struct rgbColor white = {255, 255, 255};
 static struct rgbColor red   = {255,   0,   0};
 static struct rgbColor green = {  0, 255,   0};
 static struct rgbColor blue  = {  0,   0, 255};
-char var[512];
 char *ldPos = NULL;
 
-char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
-safef(var, sizeof(var), "%s_pos", track);
-ldPos = cartUsualString(cart, var, ldPosDefault);
+ldPos = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "_pos", ldPosDefault);
 ldHighLodLowDprime = hvGfxFindColorIx(hvg, 255, 224, 224); /* pink */
 ldHighDprimeLowLod = hvGfxFindColorIx(hvg, 192, 192, 240); /* blue */
 if (sameString(ldPos,"red"))
@@ -1387,11 +1384,7 @@ Color getOutlineColor(struct track *tg, int itemCount)
 /* get outline color from cart and set outlineColor*/
 {
 char *outColor = NULL;
-char var[512];
-
-char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
-safef(var, sizeof(var), "%s_out", track);
-outColor = cartUsualString(cart, var, ldOutDefault);
+outColor = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "_out", ldOutDefault);
 if (winEnd-winStart > 100000)
     return 0;
 if (sameString(outColor,"yellow"))
@@ -1549,10 +1542,7 @@ void ldDrawDense(struct hvGfx *hvg, struct track *tg, int xOff, int yOff,
 {
 static struct ldStats lds;
 struct ld2 *dPtr;
-char var[512];
-char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
-safef(var, sizeof(var), "%s_gap", track);
-boolean useTInt = cartUsualBoolean(cart, var, ldGapDefault);
+boolean useTInt = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, "_gap", ldGapDefault);
 for (dPtr = tg->items;  dPtr != NULL;  dPtr = dPtr->next)
     {
     lds.chromStart = dPtr->chromStart;
@@ -1587,7 +1577,6 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 /* Draw left labels. */
 {
 char  label[17];
-char  var[512];
 char *ldVal;
 int   yVisOffset;
 if (vis == tvDense)
@@ -1600,9 +1589,7 @@ if (vis == tvDense)
 else
     yVisOffset = tg->heightPer + height/2;
 
-char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
-safef(var, sizeof(var), "%s_val", track);
-ldVal = cartUsualString(cart, var, ldValDefault);
+ldVal = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, "_val", ldValDefault);
 if (sameString(ldVal, "lod"))
     ldVal = cloneString("LOD");
 else if (sameString(ldVal, "rsquared"))
@@ -1684,16 +1671,11 @@ Color        yellow    = hvGfxFindRgb(hvg, &undefinedYellowColor);
 char        *ldVal     = NULL;
 boolean      ldTrm;
 boolean      ldInv;
-char         var[512];
 boolean dynamicDense = FALSE;
 
-safef(var, sizeof(var), "%s_inv", tg->tdb->track);
-ldInv = cartUsualBoolean(cart, var, ldInvDefault);
-char *track = tg->tdb->parent ? tg->tdb->parent->track : tg->tdb->track;
-safef(var, sizeof(var), "%s_val", track);
-ldVal = cartUsualString( cart, var, ldValDefault);
-safef(var, sizeof(var), "%s_trm", track);
-ldTrm = cartUsualBoolean(cart, var, ldTrmDefault);
+ldInv = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, "_inv", ldInvDefault);
+ldVal = cartUsualStringClosestToHome( cart, tg->tdb, FALSE, "_val", ldValDefault);
+ldTrm = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, "_trm", ldTrmDefault);
 
 if (tg->limitedVisSet)
     vis = tg->limitedVis;

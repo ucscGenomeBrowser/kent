@@ -38,7 +38,6 @@ noInherit on
     longLabel ENCODE HudsonAlpha RNA-seq PolyA+ A549 w/DEX 100nM Rep 2 1x36 Aligns 
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep2
     type bigBed 6
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=DEX_100nM localization=cell view=Aligns replicate=2 labVersion=SL332 dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Dexa fileName=wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Dexa.tagAlign.gz
 
     track wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewAligns on
@@ -46,7 +45,6 @@ noInherit on
     longLabel ENCODE HudsonAlpha RNA-seq PolyA+ A549 w/EtOH 0.02pct Rep 2 1x36 Aligns 
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep2
     type bigBed 6
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=EtOH_0.02pct localization=cell view=Aligns replicate=2 labVersion="SL333 (Control)" dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Etoh02 fileName=wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Etoh02.tagAlign.gz
 
     track wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa
     subTrack wgEncodeHudsonalphaRnaSeqViewAligns on
@@ -54,7 +52,6 @@ noInherit on
     longLabel ENCODE HudsonAlpha RNA-seq PolyA+ A549 w/DEX 100nM Rep 1 1x36 Aligns 
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep1
     type bigBed 6
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=DEX_100nM localization=cell view=Aligns replicate=1 labVersion=SL330 dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa fileName=wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa.tagAlign.gz
 
     track wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewAligns on
@@ -62,7 +59,6 @@ noInherit on
     longLabel ENCODE HudsonAlpha RNA-seq PolyA+ A549 w/EtOH 0.02pct Rep 1 1x36 Aligns 
     subGroups view=Aligns cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep1
     type bigBed 6
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=EtOH_0.02pct localization=cell view=Aligns replicate=1 labVersion="SL331 (Control)" dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Etoh02 fileName=wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Etoh02.tagAlign.gz
 
         track wgEncodeHudsonalphaRnaSeqAlignsRep1JurkatCellPapBow10R1x25
         subTrack wgEncodeHudsonalphaRnaSeqViewAligns on
@@ -70,7 +66,6 @@ noInherit on
         longLabel ENCODE HudsonAlpha RNA-seq PolyA+ Jurkat w/None Rep 1 1x25 Aligns 
         subGroups view=Aligns cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep1
         type bigBed 6
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=Jurkat rnaExtract=longPolyA readType=1x25 mapAlgorithm=bow10 treatment=None localization=cell view=Aligns replicate=1 labVersion=SL316 dataVersion="ENCODE Jan 2010 Freeze" subId=1084 dateSubmitted=2010-01-16 dateUnrestricted=2010-10-15 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqAlignsRep1JurkatCellPapBow10R1x25 fileName=wgEncodeHudsonalphaRnaSeqAlignsRep1JurkatCellPapBow10R1x25.tagAlign.gz
 
         track wgEncodeHudsonalphaRnaSeqAlignsRep2JurkatCellPapBow10R1x25
         subTrack wgEncodeHudsonalphaRnaSeqViewAligns on
@@ -78,7 +73,6 @@ noInherit on
         longLabel ENCODE HudsonAlpha RNA-seq PolyA+ Jurkat w/None Rep 2 1x25 Aligns 
         subGroups view=Aligns cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep2
         type bigBed 6
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=Jurkat rnaExtract=longPolyA readType=1x25 mapAlgorithm=bow10 treatment=None localization=cell view=Aligns replicate=2 labVersion=SL317 dataVersion="ENCODE Jan 2010 Freeze" subId=1084 dateSubmitted=2010-01-16 dateUnrestricted=2010-10-15 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqAlignsRep2JurkatCellPapBow10R1x25 fileName=wgEncodeHudsonalphaRnaSeqAlignsRep2JurkatCellPapBow10R1x25.tagAlign.gz
 
     track wgEncodeHudsonalphaRnaSeqViewRPKM
     shortLabel RPKM
@@ -93,7 +87,6 @@ noInherit on
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep2
     type bed 12
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=DEX_100nM localization=cell view=RPKM replicate=2 labVersion=SL332 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Dexa fileName=wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Dexa.bed12.gz
 
     track wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewRPKM on
@@ -102,7 +95,6 @@ noInherit on
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep2
     type bed 12
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=EtOH_0.02pct localization=cell view=RPKM replicate=2 labVersion="SL333 (Control)" dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Etoh02 fileName=wgEncodeHudsonalphaRnaSeqRPKMRep2A549CellPapErng3R1x36Etoh02.bed12.gz
 
     track wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Dexa
     subTrack wgEncodeHudsonalphaRnaSeqViewRPKM on
@@ -111,7 +103,6 @@ noInherit on
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=DEXa rep=rep1
     type bed 12
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=DEX_100nM localization=cell view=RPKM replicate=1 labVersion=SL330 softwareVersion=MACS dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Dexa fileName=wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Dexa.bed12.gz
 
     track wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Etoh02
     subTrack wgEncodeHudsonalphaRnaSeqViewRPKM on
@@ -120,7 +111,6 @@ noInherit on
     useScore 1
     subGroups view=RPKM cellType=A549 localization=cell mapAlgorithm=erng3 readType=r1x36 rnaExtract=pAP treatment=EtOH02 rep=rep1
     type bed 12
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=A549 rnaExtract=longPolyA readType=1x36 mapAlgorithm=erng3 treatment=EtOH_0.02pct localization=cell view=RPKM replicate=1 labVersion="SL331 (Control)" dataVersion="ENCODE Jan 2010 Freeze" subId=902 dateSubmitted=2010-01-07 dateUnrestricted=2010-10-06 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Etoh02 fileName=wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Etoh02.bed12.gz
 
         track wgEncodeHudsonalphaRnaSeqRPKMRep1JurkatCellPapBow10R1x25
         subTrack wgEncodeHudsonalphaRnaSeqViewRPKM on
@@ -129,7 +119,6 @@ noInherit on
         longLabel ENCODE HudsonAlpha RNA-seq PolyA+ Jurkat w/None Rep 1 1x25 RPKM 
         subGroups view=RPKM cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep1
         type bed 12
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=Jurkat rnaExtract=longPolyA readType=1x25 mapAlgorithm=bow10 treatment=None localization=cell view=RPKM replicate=1 labVersion=SL316 dataVersion="ENCODE Jan 2010 Freeze" subId=1084 dateSubmitted=2010-01-16 dateUnrestricted=2010-10-15 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqRPKMRep1JurkatCellPapBow10R1x25 fileName=wgEncodeHudsonalphaRnaSeqRPKMRep1JurkatCellPapBow10R1x25.bed12.gz
 
         track wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25
         subTrack wgEncodeHudsonalphaRnaSeqViewRPKM on
@@ -138,4 +127,3 @@ noInherit on
         longLabel ENCODE HudsonAlpha RNA-seq PolyA+ Jurkat w/None Rep 2 1x25 RPKM 
         subGroups view=RPKM cellType=Jurkat localization=cell mapAlgorithm=bow10 readType=r1x25 rnaExtract=pAP treatment=None rep=rep2
         type bed 12
-        metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=RnaSeq cell=Jurkat rnaExtract=longPolyA readType=1x25 mapAlgorithm=bow10 treatment=None localization=cell view=RPKM replicate=2 labVersion=SL317 dataVersion="ENCODE Jan 2010 Freeze" subId=1084 dateSubmitted=2010-01-16 dateUnrestricted=2010-10-15 composite=wgEncodeHudsonalphaRnaSeq tableName=wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25 fileName=wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25.bed12.gz

@@ -8,8 +8,7 @@
 	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 	<META HTTP-EQUIV="Expires" CONTENT="-1">
 	<TITLE>Track and Table Releases	</TITLE>
-	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css" TYPE="text/css">
-
+    <LINK rel='STYLESHEET' href='../style/HGStyle.css' TYPE='text/css' />
 </HEAD>
 <BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"><script type='text/javascript'>
 document.write("<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'><CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
@@ -17,16 +16,6 @@ function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nb
 function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.style.display='none';warnBox.innerHTML='';var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }}
 </script>
 
-<style type='text/css'>
-.trDrag {background-color:#EEEEEE;} .pale {background-color:#F8F8F8;}
-.inputBox {border: 2px inset #CCCCCC;}
-.greenRoof {border-top: 3px groove #008800;}
-.greenBox {border: 5px outset #008800;}
-.blueBox {border: 4px inset #000088;}
-.hintCol {font-size:70%; line-height:80%; border-style: hidden; background-color:#FFF9D2;}
-.hintRow {font-size:70%; line-height:80%; border-style: hidden; background-color:#FFF9D2;}
-.inOutButton {height:24px; width:24px; border-style: outset;}
-.waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #fff; opacity: 0;}</style>
 <A NAME="TOP"></A>
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
@@ -68,11 +57,11 @@ function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.s
 <!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->
 <TR><TD COLSPAN=3>	
   	<!--outer table is for border purposes-->
-  	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
-    <TABLE BGCOLOR="#FFFEE8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
-	<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
+      <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>    
+    <TABLE BGCOLOR="#FFFEE8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>     
+      <TABLE BGCOLOR="#D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD class='windowSize'>
 		<FONT SIZE="4" id='sectTtl'><b>&nbsp;
-Track and Table Releases</b></FONT></TD></TR></TABLE>
+Track and Table Releases</b></FONT></TD><TD></TD></TR></TABLE>
 	<TABLE BGCOLOR="#FFFEE8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 	
@@ -92,7 +81,7 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 12 Oct 2010. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 06 Jan 2011. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -118,6 +107,37 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT></TD>
 </TR>
 <TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeHaibMethylRrbs" target=_blank>ENCODE HAIB Methyl RRBS</a></td>
+<td>hg19</td>
+<td>05 Jan 2011</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase" target=_blank>ENCODE UW DNaseI HS</a></td>
+<td>hg19</td>
+<td>16 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDgf" target=_blank>ENCODE UW DNaseI DGF</a></td>
+<td>hg19</td>
+<td>14 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hgs19&g=wgEncodeAffyRnaChip" target=_blank>ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array</a></td>
+<td>hg19</td>
+<td>03 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlShortRnaSeq" target=_blank>ENCODE CSHL Sm RNA-seq</a></td>
+<td>hg19</td>
+<td>17 Nov 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGisRnaSeq" target=_blank>ENCODE Genome Institute of Singapore RNA-seq
+</a></td>
+<td>hg19</td>
+<td>17 Nov 2010</td>
+</tr>
+<TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencode" target=_blank>ENCODE Gencode Gene Annotations (V4)</a></td>
 <td>hg19</td>
 <td>15 Sep 2010</td>
@@ -136,36 +156,6 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaRnaSeq" target=_blank>ENCODE HudsonAlpha RNA-seq</a></td>
 <td>hg18</td>
 <td>30 Jul 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeYaleRNAseq" target=_blank>ENCODE RNA-seq from Yale/UC-Davis/Harvard</a></td>
-<td>hg18</td>
-<td>09 Jul 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBuOrchid" target=_blank>ENCODE Boston Univ (Tullius Lab) ORChID Predicted DNA Cleavage Sites</a></td>
-<td>hg18</td>
-<td>29 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeBroadChipSeq" target=_blank>ENCODE Broad Histone (update to Release 3) - improved display of Signal subtracks when zoomed in to a range spanning less than 16,500 base pairs.</a></td>
-<td>hg18</td>
-<td>16 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaChipSeq" target=_blank>ENCODE HAIB TFBS (release 2)</a></td>
-<td>hg18</td>
-<td>11 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeCaltechRnaSeq" target=_blank>ENCODE Caltech RNA-seq (Release 2)</a></td>
-<td>hg18</td>
-<td>10 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeMapability" target=_blank>ENCODE Mapability or Uniqueness of Reference Genome</a></td>
-<td>hg19</td>
-<td>03 Jun 2010</td>
 </tr>
 </table>
 
@@ -190,6 +180,31 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
     <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
 </TD></TR>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeHaibMethylRrbs" target=_blank>ENCODE HAIB Methyl RRBS</a></td>
+<td>05 Jan 2011</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDnase" target=_blank>ENCODE UW DNaseI HS</a></td>
+<td>16 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeUwDgf" target=_blank>ENCODE UW DNaseI DGF</a></td>
+<td>14 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hgs19&g=wgEncodeAffyRnaChip" target=_blank>ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array</a></td>
+<td>03 Dec 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeCshlShortRnaSeq" target=_blank>ENCODE CSHL Sm RNA-seq</a></td>
+<td>17 Nov 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+<a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGisRnaSeq" target=_blank>ENCODE Genome Institute of Singapore RNA-seq
+</a></td>
+<td>17 Nov 2010</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg19&g=wgEncodeGencode" target=_blank>ENCODE Gencode Gene Annotations (V4)</a></td>
 <td>15 Sep 2010</td>

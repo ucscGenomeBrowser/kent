@@ -311,7 +311,13 @@ for (server = serverList; server != NULL; server = server->next)
 
 /* If no server for db, change db. */
 if (!gotDb)
+    {
+    if (differentString(db, orgServer->db))
+	printf("<HR><P><EM><B>Note:</B> In-Silico PCR is not available for %s %s; "
+	       "defaulting to %s %s</EM></P><HR>\n",
+	       hGenome(db), hFreezeDate(db), organism, hFreezeDate(orgServer->db));
     *pDb = db = orgServer->db;
+    }
 }
 
 void doGetPrimers(char *db, char *organism, struct pcrServer *serverList,

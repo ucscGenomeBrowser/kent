@@ -1,17 +1,15 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.ra,v 1.3 2010/06/11 21:12:02 katrina Exp $
-        release beta,public
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeHudsonalphaChipSeq.new.ra,v 1.8 2010/06/11 21:05:41 katrina Exp $
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
 
 track wgEncodeHudsonalphaChipSeq
-release beta,public
 compositeTrack on
 shortLabel HAIB TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
 #longLabelClip all
 group regulation
 subGroup1 view Views Peaks=Peaks zRaw=Raw_Signal
-subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i> 2H1=H1-hESC&nbsp;<i>Tier2</i> 2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 JURKAT=Jurkat PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC SKNSHRA=SK-N-SH&#95;RA U87=U87
+subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1H1=H1-hESC&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i>  2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> A549=A549 BE2C=BE2&#95;C GM12891=GM12891 GM12892=GM12892 HTB11=HTB-11 JURKAT=Jurkat PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC U87=U87
 subGroup3 factor Factor BATF=BATF BCL03=BCL3 BCL11A=BCL11A BHLHE40=BHLHE40 CTCF=CTCF EBF=EBF EGR1=Egr-1 FOSL2=FOSL2 FOXP2=FOXP2 GABP=GABP GR=GR HEY1=HEY1 JUND=JunD IRF4=IRF4 NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=Pbx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SRF=SRF SP1=SP1 TAF1=TAF1 TCF12=TCF12 USF1=USF-1 ZBTB33=ZBTB33 zCTRL=Input zCTRL2=Input_<i>(PCR2x)</i>
 subGroup4 rep Replicate rep1=1 rep2=2
 subGroup5 prot Protocol PCR1x=PCR_1x PCR2x=PCR_2x
@@ -38,7 +36,6 @@ wgEncode 1
 dataVersion through the ENCODE Jan 2010 Freeze
 
     track wgEncodeHudsonalphaChipSeqViewPeaks
-    release beta,public
     shortLabel Peaks
     view Peaks
     visibility pack
@@ -50,7 +47,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
     minScore 0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Batf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BATF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BATF in GM12878 cells)
@@ -59,7 +55,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Batf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BATF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (BATF in GM12878 cells)
@@ -68,7 +63,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Bcl11a
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BCL11 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BCL11A in GM12878 cells)
@@ -77,7 +71,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Bcl11a
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BCL11 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (BCL11A in GM12878 cells)
@@ -86,7 +79,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Ebf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 EBF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (EBF in GM12878 cells)
@@ -95,7 +87,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Ebf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 EBF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (EBF in GM12878 cells)
@@ -104,7 +95,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Egr-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Egr-1 in GM12878 cells, PCR2x)
@@ -113,7 +103,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Egr-1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Egr-1 in GM12878 cells, PCR2x)
@@ -122,7 +111,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 GABP P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GABP in GM12878 cells, PCR2x)
@@ -131,7 +119,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 GABP P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GABP in GM12878 cells, PCR2x)
@@ -140,7 +127,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Irf4
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 IRF4 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (IRF4 in GM12878 cells)
@@ -149,7 +135,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Irf4
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 IRF4 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (IRF4 in GM12878 cells)
@@ -158,7 +143,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel GM12878 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in GM12878 cells, PCR2x)
@@ -167,7 +151,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in GM12878 cells, PCR2x)
@@ -176,7 +159,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Oct2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 POU2F P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (POU2F2 in GM12878 cells)
@@ -185,7 +167,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Oct2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 POU2F P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (POU2F2 in GM12878 cells)
@@ -194,7 +175,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pax5c20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PAX5c P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PAX5-C20 in GM12878 cells)
@@ -203,7 +183,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pax5c20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PAX5c P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (PAX5-C20 in GM12878 cells)
@@ -212,7 +191,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pbx3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Pbx3 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pbx3 in GM12878 cells)
@@ -221,7 +199,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pbx3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Pbx3 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pbx3 in GM12878 cells)
@@ -230,7 +207,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel GM12878 Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in GM12878 cells, PCR2x)
@@ -239,7 +215,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in GM12878 cells, PCR2x)
@@ -248,7 +223,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PU.1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PU.1 in GM12878 cells)
@@ -257,7 +231,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PU.1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (PU.1 in GM12878 cells)
@@ -266,7 +239,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Sin3A P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Sin3Ak-20, GM12878 cells, PCR2x)
@@ -275,7 +247,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Sin3A P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Sin3Ak-20, GM12878 cells, PCR2x)
@@ -284,7 +255,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 SRF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SRF in GM12878 cells, PCR2x)
@@ -293,7 +263,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 SRF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (SRF in GM12878 cells, PCR2x)
@@ -302,7 +271,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel GM12878 TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in GM12878 cells)
@@ -311,7 +279,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in GM12878 cells)
@@ -320,7 +287,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Tcf12
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 TCF12 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TCF12 in GM12878 cells)
@@ -329,7 +295,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Tcf12
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 TCF12 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TCF12 in GM12878 cells)
@@ -338,7 +303,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 USF-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (USF-1 in GM12878 cells, PCR2x)
@@ -347,7 +311,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 USF-1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (USF-1 in GM12878 cells, PCR2x)
@@ -356,7 +319,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Zbtb33
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 ZBT33 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (ZBTB33 in GM12878 cells)
@@ -365,7 +327,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Zbtb33
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 ZBT33 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (ZBTB33 in GM12878 cells)
@@ -374,7 +335,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Egr-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Egr-1 in K562 cells, PCR2x)
@@ -383,7 +343,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Egr-1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Egr-1 in K562 cells, PCR2x)
@@ -392,7 +351,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 GABP P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GABP in K562 cells, PCR2x)
@@ -401,7 +359,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 GABP P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GABP in K562 cells, PCR2x)
@@ -410,7 +367,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Hey1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 HEY1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (HEY1 in K562 cells)
@@ -419,7 +375,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Hey1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 HEY1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (HEY1 in K562 cells)
@@ -428,7 +383,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel K562 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in K562 cells, PCR2x)
@@ -437,7 +391,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in K562 cells, PCR2x)
@@ -446,7 +399,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel K562 Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in K562 cells, PCR2x)
@@ -455,7 +407,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in K562 cells, PCR2x)
@@ -464,7 +415,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol24h8
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel K562 Pol2-4H8 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in K562 cells)
@@ -473,7 +423,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol24h8
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Pol2-4H8 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2-4H8 in K562 cells)
@@ -482,7 +431,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 PU.1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PU.1 in K562 cells)
@@ -491,7 +439,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 PU.1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (PU.1 in K562 cells)
@@ -500,7 +447,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Sin3Ak P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Sin3Ak-20 in K562 cells, PCR2x)
@@ -509,7 +455,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 Sin3Ak P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Sin3Ak-20 in K562 cells, PCR2x)
@@ -518,7 +463,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Six5
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 SIX5 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SIX5 in K562 cells)
@@ -527,7 +471,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Six5
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 SIX5 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (SIX5 in K562 cells)
@@ -536,7 +479,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 SRF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SRF in K562 cells, PCR2x)
@@ -545,7 +487,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 SRF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (SRF in K562 cells, PCR2x)
@@ -554,7 +495,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 USF-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (USF-1 in K562 cells, PCR2x)
@@ -563,7 +503,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 USF-1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (USF-1 in K562 cells, PCR2x)
@@ -572,7 +511,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Helas3Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HeLa-S3 Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in HeLa-S3 cells)
@@ -581,7 +519,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,102,136
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Helas3Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HeLa-S3 Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in HeLa-S3 cells)
@@ -590,7 +527,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,102,136
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 GABP P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GABP in HepG2 cells)
@@ -599,7 +535,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 GABP P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GABP in HepG2 cells)
@@ -608,7 +543,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Jund
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 JunD P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (JunD in HepG2 cells)
@@ -617,7 +551,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Jund
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 JunD P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (JunD in HepG2 cells)
@@ -626,25 +559,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in HepG2 cells)
-        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in HepG2 cells)
-        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=2HEP rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 p300 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (p300 in HepG2 cells)
@@ -653,7 +583,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 p300 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (p300 in HepG2 cells)
@@ -662,7 +591,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in HepG2 cells)
@@ -671,7 +599,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in HepG2 cells)
@@ -680,7 +607,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 Sin3Ak P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Sin3Ak-20 in HepG2 cells)
@@ -689,7 +615,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 Sin3Ak P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Sin3Ak-20 in HepG2 cells)
@@ -698,7 +623,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 SRF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SRF in HepG2 cells)
@@ -707,7 +631,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in HepG2 cells)
@@ -716,7 +639,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in HepG2 cells)
@@ -725,7 +647,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 USF-1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (USF-1 in HepG2 cells)
@@ -734,7 +655,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 USF-1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (USF-1 in HepG2 cells)
@@ -743,7 +663,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksA549Gr
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 GR P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GR in A549 cells)
@@ -751,7 +670,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex5nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 GR D5 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GR in A549/DEX_5nM cells)
@@ -759,7 +677,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex5nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 GR D5 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GR in A549/DEX_5nM cells)
@@ -767,7 +684,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex50nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 GR D50 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GR in A549/DEX_50nM cells)
@@ -775,7 +691,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex50nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 GR D50 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GR in A549/DEX_50nM cells)
@@ -783,7 +698,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549GrPcr1xDex500pm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 GR D500 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GR in A549/DEX_500pM cells)
@@ -791,7 +705,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549GrPcr1xDex500pm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 GR D500 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GR in A549/DEX_500pM cells)
@@ -799,39 +712,34 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Be2cNrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel BE2_C NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in BE2_C cells)
-        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Be2cNrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel BE2_C NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in BE2_C cells)
-        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=BE2C rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Panc1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PANC-1 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in PANC-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Panc1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PANC-1 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in PANC-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PANC1 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PFSK1 FOXP2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (FOXP2 in PFSK-1 cells)
@@ -840,7 +748,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 107,112,43
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PFSK1 FOXP2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (FOXP2 in PFSK-1 cells)
@@ -849,23 +756,20 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 107,112,43
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PFSK-1 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in PFSK-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel PFSK-1 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in PFSK-1 cells)
-        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel SKNMC FOXP2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (FOXP2 in SK-N-MC cells)
@@ -874,7 +778,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 107,112,43
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel SKNMC FOXP2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (FOXP2 in SK-N-MC cells)
@@ -882,40 +785,35 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type narrowPeak
         color 107,112,43
 
-        track wgEncodeHudsonalphaChipSeqPeaksRep1SknshraNrsf
-        release beta,public
+        track wgEncodeHudsonalphaChipSeqPeaksRep1Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel SK-N-SHr NRSF P1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in SK-N-SH_RA cells)
-        subGroups view=Peaks factor=NRSF cellType=SKNSHRA rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF P1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in HTB-11 cells)
+        subGroups view=Peaks factor=NRSF cellType=HTB11 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
-        track wgEncodeHudsonalphaChipSeqPeaksRep2SknshraNrsf
-        release beta,public
+        track wgEncodeHudsonalphaChipSeqPeaksRep2Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
-        shortLabel SK-N-SHr NRSF P2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in SK-N-SH_RA cells)
-        subGroups view=Peaks factor=NRSF cellType=SKNSHRA rep=rep2 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF P2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in HTB-11 cells)
+        subGroups view=Peaks factor=NRSF cellType=HTB11 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1U87Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel U87 NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in U87 cells)
-        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep1 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2U87Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel U87 NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in U87 cells)
-        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=Peaks factor=NRSF cellType=U87 rep=rep2 prot=PCR2x treat=aNONE
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Helas3Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HeLa-S3 GABP P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (GABP in HeLa-S3 cells)
@@ -924,7 +822,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Helas3Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HeLa-S3 GABP P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (GABP in HeLa-S3 cells)
@@ -933,7 +830,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Helas3Taf1Pcr1xTaf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HeLa-S3 TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in HeLa-S3 cells)
@@ -942,7 +838,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Helas3Taf1Pcr1xTaf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HeLa-S3 TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in HeLa-S3 cells)
@@ -951,7 +846,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 p300 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (p300 in GM12878 cells)
@@ -960,7 +854,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 p300 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (p300 in GM12878 cells)
@@ -969,7 +862,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pax5n19
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PAX5n P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (PAX5-N19 in GM12878 cells)
@@ -978,7 +870,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pax5n19
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 PAX5n P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PAX5-N19 in GM12878 cells)
@@ -987,7 +878,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2K562Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel K562 TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in K562 cells)
@@ -996,7 +886,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1K562Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel K562 TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in K562 cells)
@@ -1005,7 +894,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 Pol2 DEX P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in A549/DEX_100nM cells)
@@ -1013,7 +901,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 Pol2 DEX P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in A549/DEX_100nM cells)
@@ -1021,7 +908,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Bcl3Pcr1xBcl3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BCL3 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (BCL3 in GM12878 cells)
@@ -1030,7 +916,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Bcl3Pcr1xBcl3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 BCL3 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BCL3 in GM12878 cells)
@@ -1039,25 +924,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2H1hescNrsfPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC NRSF P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (NRSF in H1-hESC cells)
-        subGroups view=Peaks factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescNrsfPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC NRSF P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (NRSF in H1-hESC cells)
-        subGroups view=Peaks factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Sp1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 SP1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (SP1 in GM12878 cells)
@@ -1066,7 +948,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Sp1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 SP1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (SP1 in GM12878 cells)
@@ -1075,7 +956,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Zbtb33Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 ZBTB33 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (ZBTB33 in HepG2 cells)
@@ -1084,7 +964,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Zbtb33Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 ZBTB33 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (ZBTB33 in HepG2 cells)
@@ -1093,25 +972,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2H1hescTaf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in H1-hESC cells)
-        subGroups view=Peaks factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescTaf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in H1-hESC cells)
-        subGroups view=Peaks factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Fosl2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 FOSL2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (FOSL2 in HepG2 cells)
@@ -1120,7 +996,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Fosl2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 FOSL2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (FOSL2 in HepG2 cells)
@@ -1129,7 +1004,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Hey1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 HEY1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (HEY1 in HepG2 cells)
@@ -1138,7 +1012,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Hey1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 HEY1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (HEY1 in HepG2 cells)
@@ -1147,7 +1020,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2RxraPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 RXRA P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (RXRA in HepG2 cells)
@@ -1156,7 +1028,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2RxraPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 RXRA P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (RXRA in HepG2 cells)
@@ -1165,25 +1036,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2H1hescPol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in H1-hESC cells)
-        subGroups view=Peaks factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescPol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in H1-hESC cells)
-        subGroups view=Peaks factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 CTCF DEX P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (CTCF in A549/DEX_100nM cells)
@@ -1191,7 +1059,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 CTCF DEX P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (CTCF in A549/DEX_100nM cells)
@@ -1199,7 +1066,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549Usf1Pcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 USF1 DEX P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (USF-1 in A549/DEX_100nM cells)
@@ -1207,7 +1073,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549Usf1Pcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 USF1 DEX P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (USF-1 in A549/DEX_100nM cells)
@@ -1215,7 +1080,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12878 Pol2h P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2-4H8 in GM12878 cells)
@@ -1224,7 +1088,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel GM12878 Pol2h P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in GM12878 cells)
@@ -1233,25 +1096,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2H1hescPol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel H1-hESC Pol2h P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=Peaks factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=Peaks factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1H1hescPol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks
         shortLabel H1-hESC Pol2h P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=Peaks factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=Peaks factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type broadPeak
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pu1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 PU.1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (PU.1 in GM12891 cells)
@@ -1259,7 +1119,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pu1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 PU.1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (PU.1 in GM12891 cells)
@@ -1267,7 +1126,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549Pol2Pcr2xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 Pol2 Et P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in A549/EtOH_0.02pct cells)
@@ -1275,7 +1133,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549Pol2Pcr2xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 Pol2 Et P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in A549/EtOH_0.02pct cells)
@@ -1283,7 +1140,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549Usf1Pcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 USF-1 Et P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (USF-1 in A549/EtOH_0.02pct cells)
@@ -1291,7 +1147,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549Usf1Pcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 USF-1 Et P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (USF-1 in A549/EtOH_0.02pct cells)
@@ -1299,7 +1154,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 Pol2h P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2-4H8 in GM12891 cells)
@@ -1307,7 +1161,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 Pol2h P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in GM12891 cells)
@@ -1315,7 +1168,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in GM12891 cells)
@@ -1323,7 +1175,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in GM12891 cells)
@@ -1331,7 +1182,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Pou2f2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 POU2F P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (POU2F2 in GM12891 cells)
@@ -1339,7 +1189,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Pou2f2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 POU2F P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (POU2F2 in GM12891 cells)
@@ -1347,7 +1196,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12891Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in GM12891 cells)
@@ -1355,7 +1203,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12891Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12891 TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in GM12891 cells)
@@ -1363,7 +1210,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12892 Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in GM12892 cells)
@@ -1371,7 +1217,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12892 Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in GM12892 cells)
@@ -1379,7 +1224,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12892 Pol2h P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2-4H8 in GM12892 cells)
@@ -1387,7 +1231,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12892 Pol2h P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2-4H8 in GM12892 cells)
@@ -1395,7 +1238,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Gm12892Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12892 TAF1 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TAF1 in GM12892 cells)
@@ -1403,7 +1245,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Gm12892Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel GM12892 TAF1 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (TAF1 in GM12892 cells)
@@ -1411,7 +1252,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1A549CtcfPcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 CTCF Et P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (CTCF in A549/EtOH_0.02pct cells)
@@ -1419,7 +1259,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2A549CtcfPcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel A549 CTCF Et P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (CTCF in A549/EtOH_0.02pct cells)
@@ -1427,7 +1266,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2JurkatPol2Pcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel Jurkat Pol2 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (Pol2 in Jurkat cells)
@@ -1435,7 +1273,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1JurkatPol2Pcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel Jurkat Pol2 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (Pol2 in Jurkat cells)
@@ -1443,7 +1280,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type broadPeak
 
         track wgEncodeHudsonalphaChipSeqPeaksRep2Hepg2Bhlhe40Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 BHLHE40 P2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (BHLHE40 in HepG2 cells)
@@ -1452,7 +1288,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Bhlhe40Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewPeaks off
         shortLabel HepG2 BHLHE40 P1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 1 (BHLHE40 in HepG2 cells)
@@ -1461,7 +1296,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
     track wgEncodeHudsonalphaChipSeqViewzRaw
-    release beta,public
     shortLabel Raw Signal
     view zRaw
     parent wgEncodeHudsonalphaChipSeq
@@ -1474,7 +1308,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
     windowingFunction mean+whiskers
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Batf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BATF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (BATF in GM12878 cells)
@@ -1483,7 +1316,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Batf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BATF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (BATF in GM12878 cells)
@@ -1492,7 +1324,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl11a
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BCL11 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (BCL11A in GM12878 cells)
@@ -1501,7 +1332,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl11a
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BCL11 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (BCL11A in GM12878 cells)
@@ -1510,7 +1340,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 EBF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (EBF in GM12878 cells)
@@ -1519,7 +1348,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Ebf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 EBF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (EBF in GM12878 cells)
@@ -1528,7 +1356,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Egr-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Egr-1 in GM12878 cells, PCR2x)
@@ -1537,7 +1364,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Egr-1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Egr-1 in GM12878 cells, PCR2x)
@@ -1546,7 +1372,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 GABP R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GABP in GM12878 cells, PCR2x)
@@ -1556,7 +1381,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 GABP R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GABP in GM12878 cells, PCR2x)
@@ -1566,7 +1390,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 IRF4 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (IRF4 in GM12878 cells)
@@ -1575,7 +1398,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 IRF4 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (IRF4 in GM12878 cells)
@@ -1584,7 +1406,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel GM12878 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in GM12878 cells, PCR2x)
@@ -1594,7 +1415,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in GM12878 cells, PCR2x)
@@ -1604,7 +1424,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 POU2F R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (POU2F2 in GM12878 cells)
@@ -1613,7 +1432,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 POU2F R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (POU2F2 in GM12878 cells)
@@ -1622,7 +1440,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PAX5c R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PAX5-C20 in GM12878 cells)
@@ -1631,7 +1448,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5c20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PAX5c R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (PAX5-C20 in GM12878 cells)
@@ -1640,7 +1456,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Pbx3 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pbx3 in GM12878 cells)
@@ -1649,7 +1464,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Pbx3 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pbx3 in GM12878 cells)
@@ -1658,7 +1472,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel GM12878 Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in GM12878 cells, PCR2x)
@@ -1668,7 +1481,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in GM12878 cells, PCR2x)
@@ -1678,7 +1490,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PU.1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PU.1 in GM12878 cells)
@@ -1687,7 +1498,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PU.1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (PU.1 in GM12878 cells)
@@ -1696,7 +1506,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Sin3A R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSig Rep1 (Sin3Ak-20, GM12878 cells, PCR2x)
@@ -1705,7 +1514,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Sin3A R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSig Rep2 (Sin3Ak-20, GM12878 cells, PCR2x)
@@ -1714,7 +1522,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 SRF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SRF in GM12878 cells, PCR2x)
@@ -1724,7 +1531,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 SRF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (SRF in GM12878 cells, PCR2x)
@@ -1734,7 +1540,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel GM12878 TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in GM12878 cells)
@@ -1743,7 +1548,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in GM12878 cells)
@@ -1752,7 +1556,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 TCF12 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TCF12 in GM12878 cells)
@@ -1761,7 +1564,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tcf12
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 TCF12 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TCF12 in GM12878 cells)
@@ -1770,7 +1572,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 USF-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (USF-1 in GM12878 cells, PCR2x)
@@ -1779,7 +1580,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 USF-1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (USF-1 in GM12878 cells, PCR2x)
@@ -1788,7 +1588,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 ZBT33 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (ZBTB33 in GM12878 cells)
@@ -1797,7 +1596,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Zbtb33
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 ZBT33 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (ZBTB33 in GM12878 cells)
@@ -1806,7 +1604,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in GM12878 cells)
@@ -1815,7 +1612,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in GM12878 cells)
@@ -1824,7 +1620,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Inp 2x 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Input in GM12878 cells, PCR2x)
@@ -1833,7 +1628,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Inp 2x 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Input in GM12878 cells, PCR2x)
@@ -1842,7 +1636,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Egr-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Egr-1 in K562 cells, PCR2x)
@@ -1851,7 +1644,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Egr-1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Egr-1 in K562 cells, PCR2x)
@@ -1860,7 +1652,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 GABP R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GABP in K562 cells, PCR2x)
@@ -1870,7 +1661,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 GABP R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GABP in K562 cells, PCR2x)
@@ -1880,7 +1670,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 HEY1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (HEY1 in K562 cells)
@@ -1889,7 +1678,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Hey1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 HEY1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (HEY1 in K562 cells)
@@ -1898,7 +1686,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel K562 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in K562 cells, PCR2x)
@@ -1908,7 +1695,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in K562 cells, PCR2x)
@@ -1918,7 +1704,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel K562 Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in K562 cells, PCR2x)
@@ -1928,7 +1713,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in K562 cells, PCR2x)
@@ -1938,7 +1722,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel K562 Pol2-4H8 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in K562 cells)
@@ -1947,7 +1730,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol24h8
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Pol2-4H8 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2-4H8 in K562 cells)
@@ -1956,7 +1738,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 PU.1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PU.1 in K562 cells)
@@ -1965,7 +1746,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pu1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 PU.1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (PU.1 in K562 cells)
@@ -1974,7 +1754,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Sin3Ak R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Sin3Ak-20, K562 cells, PCR2x)
@@ -1983,7 +1762,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Sin3Ak R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Sin3Ak-20, K562 cells, PCR2x)
@@ -1992,7 +1770,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 SIX5 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SIX5 in K562 cells)
@@ -2001,7 +1778,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Six5
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 SIX5 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (SIX5 in K562 cells)
@@ -2010,7 +1786,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 SRF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SRF in K562 cells, PCR2x)
@@ -2020,7 +1795,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 SRF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (SRF in K562 cells, PCR2x)
@@ -2030,7 +1804,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 USF-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (USF-1 in K562 cells, PCR2x)
@@ -2039,7 +1812,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 USF-1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (USF-1 in K562 cells, PCR2x)
@@ -2048,7 +1820,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in K562 cells)
@@ -2057,7 +1828,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in K562 cells)
@@ -2066,7 +1836,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Inp PCR2x 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Input in K562 cells, PCR2x)
@@ -2075,7 +1844,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 Inp PCR2x 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Input in K562 cells, PCR2x)
@@ -2084,7 +1852,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in HeLa-S3 cells)
@@ -2093,7 +1860,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,102,136
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in HeLa-S3 cells)
@@ -2102,7 +1868,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,102,136
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in HeLa-S3 cells)
@@ -2111,7 +1876,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,102,136
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 GABP R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GABP in HepG2 cells)
@@ -2120,7 +1884,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 GABP R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GABP in HepG2 cells)
@@ -2129,7 +1892,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Jund
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 JunD R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (JunD in HepG2 cells)
@@ -2138,7 +1900,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Jund
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 JunD R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (JunD in HepG2 cells)
@@ -2147,25 +1908,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in HepG2 cells)
-        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 28336.00
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in HepG2 cells)
-        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=2HEP rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 40471.00
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 p300 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (p300 in HepG2 cells)
@@ -2174,7 +1932,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 p300 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (p300 in HepG2 cells)
@@ -2183,7 +1940,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in HepG2 cells)
@@ -2192,7 +1948,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in HepG2 cells)
@@ -2201,7 +1956,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Sin3Ak R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Sin3Ak-20 in HepG2 cells)
@@ -2210,7 +1964,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Sin3ak20
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Sin3Ak R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Sin3Ak-20 in HepG2 cells)
@@ -2219,7 +1972,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 SRF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SRF in HepG2 cells)
@@ -2228,7 +1980,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in HepG2 cells)
@@ -2237,7 +1988,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in HepG2 cells)
@@ -2246,7 +1996,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 USF-1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (USF-1 in HepG2 cells)
@@ -2255,7 +2004,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 USF-1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (USF-1 in HepG2 cells)
@@ -2264,7 +2012,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalA549Gr
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GR in A549 cells)
@@ -2272,7 +2019,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 6505.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR D5 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GR in A549/DEX_5nM cells)
@@ -2280,7 +2026,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 11649.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR D5 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GR in A549/DEX_5nM cells)
@@ -2288,7 +2033,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 10885.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex50nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR D50 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GR in A549/DEX_50nM cells)
@@ -2296,7 +2040,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 6646.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex50nm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR D50 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GR in A549/DEX_50nM cells)
@@ -2304,7 +2047,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8850.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR D500 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GR in A549/DEX_500pM cells)
@@ -2312,7 +2054,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 10304.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR D500 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GR in A549/DEX_500pM cells)
@@ -2320,7 +2061,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 7546.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalA549Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in A549 cells)
@@ -2328,71 +2068,62 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 5000.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cNrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in BE2_C cells)
-        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 8626.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cNrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in BE2_C cells)
-        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=BE2C rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 13242.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cControl
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in BE2_C cells)
-        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10057.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cControl
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in BE2_C cells)
-        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11125.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in PANC-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 15016.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in PANC-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PANC1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 17289.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in PANC-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 25110.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in PANC-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11542.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK1 FOXP2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (FOXP2 in PFSK-1 cells)
@@ -2402,7 +2133,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 107,112,43
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK1 FOXP2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (FOXP2 in PFSK-1 cells)
@@ -2412,39 +2142,34 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 107,112,43
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in PFSK-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 22008.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in PFSK-1 cells)
-        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 34029.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in PFSK-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 21708.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in PFSK-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11343.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel SKNMC FOXP2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (FOXP2 in SK-N-MC cells)
@@ -2454,7 +2179,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 107,112,43
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel SKNMC FOXP2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (FOXP2 in SK-N-MC cells)
@@ -2464,79 +2188,69 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 107,112,43
 
         track wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel SKNMC Input
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Input in SK-N-MC cells)
         subGroups view=zRaw factor=zCTRL cellType=SKNMC rep=rep1 prot=PCR1x treat=aNONE
         type wig 1.00 835.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraNrsf
-        release beta,public
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHr NRSF R1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=NRSF cellType=SKNSHRA rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF R1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in HTB-11 cells)
+        subGroups view=zRaw factor=NRSF cellType=HTB11 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10807.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraNrsf
-        release beta,public
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Nrsf
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHr NRSF R2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=NRSF cellType=SKNSHRA rep=rep2 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 NRSF R2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in HTB-11 cells)
+        subGroups view=zRaw factor=NRSF cellType=HTB11 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 12410.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep1SknshraControl
-        release beta,public
+        track wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHra Ctl R1
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=zCTRL cellType=SKNSHRA rep=rep1 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 Ctl R1
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in HTB-11 cells)
+        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10286.00
 
-        track wgEncodeHudsonalphaChipSeqRawSignalRep2SknshraControl
-        release beta,public
+        track wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Control
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
-        shortLabel SK-N-SHra Ctl R2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in SK-N-SH_RA cells)
-        subGroups view=zRaw factor=zCTRL cellType=SKNSHRA rep=rep2 prot=PCR1x treat=aNONE
+        shortLabel HTB-11 Ctl R2
+        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in HTB-11 cells)
+        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 2739.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in U87 cells)
-        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 17664.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in U87 cells)
-        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=NRSF cellType=U87 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 22370.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in U87 cells)
-        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 26957.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in U87 cells)
-        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 7552.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 GABP R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GABP in HeLa-S3 cells)
@@ -2545,7 +2259,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Control
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in HeLa-S3 cells)
@@ -2554,7 +2267,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Gabp
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 GABP R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GABP in HeLa-S3 cells)
@@ -2563,7 +2275,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Taf1Pcr1xTaf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in HeLa-S3 cells)
@@ -2572,7 +2283,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Taf1Pcr1xTaf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HeLa-S3 TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in HeLa-S3 cells)
@@ -2581,7 +2291,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 0,119,158
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 p300 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (p300 in GM12878 cells)
@@ -2590,7 +2299,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878P300
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 p300 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (p300 in GM12878 cells)
@@ -2599,7 +2307,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5n19
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PAX5n R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PAX5-N19 in GM12878 cells)
@@ -2608,7 +2315,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5n19
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 PAX5n R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (PAX5-N19 in GM12878 cells)
@@ -2617,7 +2323,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel K562 TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in K562 cells)
@@ -2626,7 +2331,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2K562Taf1
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel K562 TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in K562 cells)
@@ -2635,7 +2339,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 46,0,184
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 Pol2 DEX R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in A549/DEX_100nM cells)
@@ -2643,7 +2346,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 13193.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 Pol2 DEX R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in A549/DEX_100nM cells)
@@ -2651,7 +2353,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 25262.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl3Pcr1xBcl3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BCL3 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (BCL3 in GM12878 cells)
@@ -2660,7 +2361,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl3Pcr1xBcl3
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 BCL3 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (BCL3 in GM12878 cells)
@@ -2669,34 +2369,30 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescNrsfPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC NRSF R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (NRSF in H1-hESC cells)
-        subGroups view=zRaw factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 20892.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescNrsfPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC NRSF R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (NRSF in H1-hESC cells)
-        subGroups view=zRaw factor=NRSF cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=NRSF cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 16528.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescControlPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in H1-hESC cells)
-        subGroups view=zRaw factor=zCTRL cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=zCTRL cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 12593.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sp1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 SP1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (SP1 in GM12878 cells)
@@ -2705,7 +2401,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 SP1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (SP1 in GM12878 cells)
@@ -2714,7 +2409,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 ZBTB33 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (ZBTB33 in HepG2 cells)
@@ -2723,7 +2417,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 ZBTB33 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (ZBTB33 in HepG2 cells)
@@ -2732,25 +2425,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescTaf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in H1-hESC cells)
-        subGroups view=zRaw factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 6812.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescTaf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in H1-hESC cells)
-        subGroups view=zRaw factor=TAF1 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=TAF1 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 5364.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Fosl2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 FOSL2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (FOSL2 in HepG2 cells)
@@ -2759,7 +2449,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Fosl2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 FOSL2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (FOSL2 in HepG2 cells)
@@ -2768,7 +2457,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Hey1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 HEY1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (HEY1 in HepG2 cells)
@@ -2777,7 +2465,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Hey1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 HEY1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (HEY1 in HepG2 cells)
@@ -2786,7 +2473,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 RXRA R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (RXRA in HepG2 cells)
@@ -2795,25 +2481,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR2x treat=aNONE rep=rep2
         type wig 1.00 11467.00
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR2x treat=aNONE rep=rep1
         type wig 1.00 8979.00
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 RXRA R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (RXRA in HepG2 cells)
@@ -2822,25 +2505,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in H1-hESC cells)
-        subGroups view=zRaw factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 7790.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in H1-hESC cells)
-        subGroups view=zRaw factor=POL2 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=POL2 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 5888.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 DEX Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control, A549/DEX_100nM cells)
@@ -2848,7 +2528,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 5065.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 CTCF DEX R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (CTCF, A549/DEX_100nM cells)
@@ -2856,7 +2535,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 4824.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 CTCF DEX R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (CTCF, A549/DEX_100nM cells)
@@ -2864,7 +2542,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8266.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 USF1 DEX R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (USF-1 in A549/DEX_100nM cells)
@@ -2872,7 +2549,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8540.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xDexa
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 USF1 DEX R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (USF-1 in A549/DEX_100nM cells)
@@ -2880,7 +2556,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 4905.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel GM12878 Pol2h R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in GM12878 cells)
@@ -2889,7 +2564,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12878 Pol2h R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2-4H8 in GM12878 cells)
@@ -2898,25 +2572,22 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 153,38,0
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel H1-hESC Pol2h R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=zRaw factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep2
         type wig 1.00 8813.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw
         shortLabel H1-hESC Pol2h R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in H1-hESC cells)
-        subGroups view=zRaw factor=POL24H8 cellType=2H1 prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=POL24H8 cellType=1H1 prot=PCR1x treat=aNONE rep=rep1
         type wig 1.00 5649.00
         color 0,107,27
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pu1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 PU.1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (PU.1 in GM12891 cells)
@@ -2924,7 +2595,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 7251.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pu1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 PU.1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (PU.1 in GM12891 cells)
@@ -2932,7 +2602,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 7300.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891ControlPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in GM12891 cells)
@@ -2940,7 +2609,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 9347.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSig Rep1 (Control, A549/EtOH_0.02pct cells)
@@ -2948,7 +2616,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 2842.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2Pcr2xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 Pol2 Et R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2, A549/EtOH_0.02pct cells)
@@ -2956,7 +2623,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 14811.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2Pcr2xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 Pol2 Et R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2, A549/EtOH_0.02pct cells)
@@ -2964,7 +2630,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 19808.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 Et Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSig Rep1 (Control, A549/EtOH_0.02pct cells)
@@ -2972,7 +2637,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 3468.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 USF-1 Et R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSig Rep1 (USF-1, A549/EtOH_0.02pct cells)
@@ -2980,7 +2644,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 6156.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 USF-1 Et R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSig Rep2 (USF-1, A549/EtOH_0.02pct cells)
@@ -2988,7 +2651,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 7714.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 Pol2h R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2-4H8 in GM12891 cells)
@@ -2996,7 +2658,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8250.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 Pol2h R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in GM12891 cells)
@@ -3004,7 +2665,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 12824.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in GM12891 cells)
@@ -3012,7 +2672,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 19463.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in GM12891 cells)
@@ -3020,7 +2679,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 9104.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 POU2F R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (POU2F2 in GM12891 cells)
@@ -3028,7 +2686,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 6245.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 POU2F R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (POU2F2 in GM12891 cells)
@@ -3036,7 +2693,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 15201.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in GM12891 cells)
@@ -3044,7 +2700,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 7998.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12891 TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in GM12891 cells)
@@ -3052,7 +2707,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 12765.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12892 Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in GM12892 cells)
@@ -3060,7 +2714,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 9009.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12892 Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in GM12892 cells)
@@ -3068,7 +2721,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 17558.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12892 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in GM12892 cells)
@@ -3076,7 +2728,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8413.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12892 Pol2h R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2-4H8 in GM12892 cells)
@@ -3084,7 +2735,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 7827.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12892 Pol2h R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2-4H8 in GM12892 cells)
@@ -3092,7 +2742,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8396.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12892 TAF1 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (TAF1 in GM12892 cells)
@@ -3100,7 +2749,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 10018.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel GM12892 TAF1 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (TAF1 in GM12892 cells)
@@ -3108,7 +2756,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 11513.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 CTCF Et R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (CTCF, A549/EtOH_0.02pct cells)
@@ -3116,7 +2763,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 4963.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 CTCF Et R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (CTCF, A549/EtOH_0.02pct cells)
@@ -3124,7 +2770,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8537.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Pol2 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Pol2 in Jurkat cells)
@@ -3132,7 +2777,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 14367.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatControlPcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in Jurkat cells)
@@ -3140,7 +2784,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 4154.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Pol2 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Pol2 in Jurkat cells)
@@ -3148,7 +2791,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 8790.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel Jurkat Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in Jurkat cells)
@@ -3156,7 +2798,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 4154.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 BHLHE40 R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (BHLHE40 in HepG2 cells)
@@ -3165,7 +2806,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 BHLHE40 R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (BHLHE40 in HepG2 cells)
@@ -3174,7 +2814,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         color 189,0,157
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR Et R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (GR in A549/EtOH_0.02pct cells)
@@ -3182,7 +2821,6 @@ dataVersion through the ENCODE Jan 2010 Freeze
         type wig 1.00 12187.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
-        release beta,public
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel A549 GR Et R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (GR in A549/EtOH_0.02pct cells)

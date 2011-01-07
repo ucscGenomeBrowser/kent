@@ -27,14 +27,7 @@ ifeq (${USE_SSL},1)
     HG_DEFS+=-DUSE_SSL
 endif
 
-
-# autodetect if png is installed
-ifeq (${USE_PNG},)
-  ifneq ($(wildcard /usr/include/png.h),)
-    USE_PNG=1
-  endif
-endif
-
+# autodetect where png is installed
 ifeq (${PNGLIB},)
   ifneq ($(wildcard /usr/lib64/libpng.a),)
       PNGLIB=/usr/lib64/libpng.a
@@ -45,30 +38,16 @@ ifeq (${PNGLIB},)
       PNGLIB=/usr/lib/libpng.a
   endif
 endif
-ifneq (${PNGLIB},)
-  ifeq (${USE_PNG},)
-    USE_PNG=1
-  endif
-endif
-ifeq (${USE_PNG},)
-  ifneq (${PNGLIB},)
-    ifneq ($(wildcard ${PNGLIB}),)
-      USE_PNG=1
-    endif
-  endif
+ifeq (${PNGLIB},)
+  PNGLIB=-lpng
 endif
 
-# libpng: disabled by default
-#  for dynamic linking PNGLIB=-lpng
-ifeq (${USE_PNG},1)
-  L+=${PNGLIB}
-  HG_DEFS+=-DUSE_PNG
-  HG_INC+=${PNGINCL}
+L+=${PNGLIB}
+HG_INC+=${PNGINCL}
 
-  # 32-bit color enabled by default
-  ifneq (${COLOR32},0)
+# 32-bit color enabled by default
+ifneq (${COLOR32},0)
     HG_DEFS+=-DCOLOR32
-  endif
 endif
 
 # autodetect if bam is installed
@@ -102,7 +81,7 @@ endif
 
 ifeq (${HG_WARN},)
   ifeq (darwin,$(findstring darwin,${OSTYPE}))
-      HG_WARN = -Wall -Wno-unused-variable -Wno-long-double
+      HG_WARN = -Wall -Wno-unused-variable
       HG_WARN_UNINIT=
   else
     ifeq (solaris,$(findstring solaris,${OSTYPE}))

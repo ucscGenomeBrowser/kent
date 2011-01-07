@@ -1,5 +1,10 @@
 
-To build the source tree.
+Building the kent source tree.
+
+Note the scripts available in the ./scripts/ directory here
+that can run all of these steps for you with the
+script:  scripts/kentSrcUpdate.sh
+Following the instructions in scripts/README
 
 1. Check your shell environment.  It should
 	contain a MACHTYPE variable.  Typical values, for example:
@@ -12,6 +17,7 @@ To build the source tree.
 	such as: i686-pc-linux-gnu
 	since this is used as an argument on the command line to gcc
 	which will not work with the - signs in the strings.
+	Typical values: i386 i686 x86_64 sparc ppc
 
 	To determine the machine cpu type of your computer, try
 	one of these uname command options:
@@ -25,6 +31,10 @@ To build the source tree.
 	The browser code has not been tested by UCSC outside a
 	CentOS Linux on Intel or AMD Opteron environment.
 	Other users do report successful operation on other systems.
+
+	Other variables to be set: USE_BAM  USE_SSL
+	See also:
+	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 
 2.  Create a directory where binaries will be moved to during
 	the build of the source tree:
@@ -200,5 +210,19 @@ make: *** [aliType.o] Error 1
     src/inc/common.mk file.  We will fix this error as soon as we
     get our hands on a newer version of the gcc compiler.
 
+7.  Build fails at the point of building a CGI binary with the error:
+    Undefined symbols:
+	"_png_write_png", referenced from:
+	    _mgSaveToPng in jkweb.a(pngwrite.o)
+	... other png symbols ...
+
+    You need to find out where your libpng.a is located.  For example
+    it may be in /opt/local/lib/libpng.a  When found, use the PNGLIB
+    variable to specify it, for example:
+    export PNGLIB=/opt/local/lib/libpng.a
+    or equivalent:
+    export PNGLIB='-L/opt/local/lib -lpng'
+
 ====================================================================
-This file last updated: $Date: 2010/04/29 18:11:59 $
+This file last updated: 2010/10/27 12:28:59
+====================================================================

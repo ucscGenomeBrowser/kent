@@ -18,13 +18,30 @@ static boolean ctdExists(struct section *section,
 {
 char condStr[255];
 char *geneSymbol;
-if (sqlTableExists(conn, "kgXref") == FALSE) return FALSE;
+if (isRgdGene(conn))
+    {
+    if (sqlTableExists(conn, "rgdGene2Xref") == FALSE) return FALSE;
+    }
+else
+    {
+    if (sqlTableExists(conn, "kgXref") == FALSE) return FALSE;
+    }
 
 if (sqlTableExists(conn, "hgFixed.ctdSorted") == TRUE)
     {
-    safef(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
-    geneSymbol = sqlGetField(database, "kgXref x, hgFixed.ctdSorted c", 
-    			     "ChemicalId", condStr);
+    if (isRgdGene(conn))
+	{
+    	safef(condStr, sizeof(condStr), 
+	"x.info=c.GeneSymbol and infoType = 'Name' and rgdGeneId='%s' limit 1", geneId);
+    	geneSymbol = sqlGetField(database, "rgdGene2Xref x, hgFixed.ctdSorted c", 
+			"ChemicalId", condStr);
+	}
+    else
+        {
+    	safef(condStr, sizeof(condStr), "x.geneSymbol=c.GeneSymbol and kgId='%s' limit 1", geneId);
+        geneSymbol = sqlGetField(database, "kgXref x, hgFixed.ctdSorted c", "ChemicalId", condStr);
+	}
+
     if (geneSymbol != NULL) return(TRUE);
     }
 return(FALSE);
@@ -56,8 +73,18 @@ if (cgiOptionalString("showAllCtdRef") != NULL)
 currentCgiUrl = cgiUrlString();
     
 /* List chemicals related to this gene */
-safef(query, sizeof(query),
-     "select ChemicalId, ChemicalName from kgXref x, hgFixed.ctdSorted c where x.geneSymbol=c.GeneSymbol and kgId='%s'", geneId);
+if (isRgdGene(conn))
+    {
+    safef(query, sizeof(query),
+          "select ChemicalId, ChemicalName from rgdGene2Xref x, hgFixed.ctdSorted c where x.info=c.GeneSymbol and rgdGeneId='%s' and infoType='Name'", 
+	  geneId);
+    }
+else
+    {
+    safef(query, sizeof(query),
+          "select ChemicalId, ChemicalName from kgXref x, hgFixed.ctdSorted c where x.geneSymbol=c.GeneSymbol and kgId='%s'", 
+	  geneId);
+    }
 
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

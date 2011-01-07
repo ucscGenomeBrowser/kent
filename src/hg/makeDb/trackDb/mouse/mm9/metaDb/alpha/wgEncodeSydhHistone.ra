@@ -6,18 +6,18 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam.bai
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam
 grant Snyder
-lab Yale
-parentTable wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1
+lab Yale-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -31,18 +31,18 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam.bai
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam
 grant Snyder
-lab Yale
-parentTable wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2
+lab Yale-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -56,16 +56,17 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyalePk.narrowPeak.gz
 grant Snyder
-lab Yale
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 tableName wgEncodeSydhHistCh12H3k4me3IggyalePk
@@ -80,17 +81,17 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
-lab Yale
-parentTable wgEncodeSydhHistCh12H3k4me3IggyaleRawSignalRep1
+lab Yale-m
 project wgEncode
 replicate 1
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -104,17 +105,17 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
-lab Yale
-parentTable wgEncodeSydhHistCh12H3k4me3IggyaleRawSignalRep2
+lab Yale-m
 project wgEncode
 replicate 2
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 treatment None
@@ -128,16 +129,17 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig
 grant Snyder
-lab Yale
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1194
 tableName wgEncodeSydhHistCh12H3k4me3IggyaleSig
@@ -152,17 +154,17 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhHistCh12InputIggyaleAln.bam.bai
 fileName wgEncodeSydhHistCh12InputIggyaleAln.bam
 grant Snyder
-lab Yale
-parentTable wgEncodeSydhHistCh12InputIggyaleAln
+lab Yale-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 treatment None
@@ -176,16 +178,16 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12InputIggyaleRawData.fastq.gz
 grant Snyder
-lab Yale
-parentTable wgEncodeSydhHistCh12InputIggyaleRawSignal
+lab Yale-m
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 treatment None
@@ -199,166 +201,21 @@ cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12InputIggyaleSig.bigWig
 grant Snyder
-lab Yale
+lab Yale-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex F
 strain B10.H-2aH-4bp/Wts
 subId 1195
 tableName wgEncodeSydhHistCh12InputIggyaleSig
 treatment None
-view Signal
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam.bai
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam
-grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1
-project wgEncode
-replicate 1
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view Alignments
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam.bai
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam
-grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2
-project wgEncode
-replicate 2
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view Alignments
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
-objType table
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk.narrowPeak.gz
-grant Snyder
-lab Stanford
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-strain Unknown
-subId 1353
-tableName wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
-treatment DMSO_2.0pct
-view Peaks
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep1
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawSignalRep1
-project wgEncode
-replicate 1
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view RawData
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep2
-objType file
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawSignalRep2
-project wgEncode
-replicate 2
-setType exp
-strain Unknown
-subId 1353
-treatment DMSO_2.0pct
-view RawData
-
-metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
-objType table
-age immortalized
-antibody H3K4me3
-cell MEL
-composite wgEncodeSydhHist
-control IgG-Yale
-controlId MEL/DMSO-5D/Input/IgG-Yale
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-09
-dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig.bigWig
-grant Snyder
-lab Stanford
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-strain Unknown
-subId 1353
-tableName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
-treatment DMSO_2.0pct
 view Signal
 
 metaObject wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1
@@ -369,17 +226,17 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -393,17 +250,17 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -417,16 +274,17 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1166
 tableName wgEncodeSydhHistMelH3k4me3IggyalePk
@@ -441,17 +299,17 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3IggyaleRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -465,17 +323,17 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelH3k4me3IggyaleRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
+sex M
 strain Unknown
 subId 1166
 treatment None
@@ -489,16 +347,17 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+sex M
 strain Unknown
 subId 1166
 tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
@@ -513,16 +372,16 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhHistMelInputIggyaleAln.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelInputIggyaleAln
+lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -536,16 +395,16 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhHistMelInputIggyaleRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhHistMelInputIggyaleRawSignal
+lab Stanford-m
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 treatment None
@@ -559,20 +418,21 @@ cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+sex M
 strain Unknown
 subId 1168
 tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 895369415
+# MAGIC: -377783445

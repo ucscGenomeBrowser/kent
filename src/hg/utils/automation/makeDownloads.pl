@@ -643,7 +643,7 @@ $db.2bit - contains the complete $organism/$db genome sequence
     found at:
         http://hgdownload.cse.ucsc.edu/admin/exe/linux.x86_64/
     See also:
-        http://genome.ucsc.edu/admin/cvs.html
+        http://genome.ucsc.edu/admin/git.html
 	http://genome.ucsc.edu/admin/jk-install.html
 
 _EOF_

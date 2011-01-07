@@ -2295,7 +2295,6 @@ dataVersion ENCODE June 2005 Freeze
 # ENCODE Affy ChIP-chip
 
 #October freeze (strict) data
-release alpha
 track encodeAffyChIpHl60PvalStrict
 superTrack encodeAffyChipSuper dense
 shortLabel Affy Strict pVal

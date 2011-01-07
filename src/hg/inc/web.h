@@ -261,15 +261,19 @@ boolean validateGisaidUser(struct cart *cart);
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml);
 // Returns full path of timestamped link to the requested resource file (js, or css).
 // If wrapInHtml, then returns link embedded in style or script html. Free after use.
+// NOTE: png, jpg and gif should also be supported but are untested.
 
 char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml);
 // If this is the first call, will
 //   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
+// NOTE: png, jpg and gif should also be supported but are untested.
 
-boolean webIncludeResourceFile(char *fileName);
-// Converts fileName to web Resource link and hPrintfs the html reference
+boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName);
+// Converts fileName to web Resource link and prints the html reference
 // This only prints and returns TRUE on first call for this resource.
+// Passing in NULL as the file pointer results in hPrintf call
 // The reference will be to a link with timestamp.
+#define webIncludeResourceFile(fileName)  webIncludeResourcePrintToFile(NULL,fileName)
 
 #endif /* WEB_H */

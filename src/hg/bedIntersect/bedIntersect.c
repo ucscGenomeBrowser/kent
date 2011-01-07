@@ -81,9 +81,14 @@ while (lineFileNextRow(lf, row, expectedCols))
 	bed->score = lineFileNeedNum(lf, row, 4);
     if (bed->start > bed->end)
         errAbort("start after end line %d of %s", lf->lineIx, lf->fileName);
-    if (allowStartEqualEnd && bed->start == bed->end)
-	// Note we are tweaking binKeeper coords here, so use bed->start and bed->end.
-	binKeeperAdd(bk, max(0, bed->start-1), bed->end+1, bed);
+    if (bed->start == bed->end)
+	{
+	if (allowStartEqualEnd)
+	    // Note we are tweaking binKeeper coords here, so use bed->start and bed->end.
+	    binKeeperAdd(bk, max(0, bed->start-1), bed->end+1, bed);
+	else
+	    lineFileAbort(lf, "start==end (if this is legit, use -allowStartEqualEnd)");
+	}
     else
 	binKeeperAdd(bk, bed->start, bed->end, bed);
     }
@@ -138,6 +143,8 @@ while ((wordCount = (strictTab ? lineFileChopTab(lf, row) : lineFileChop(lf, row
     int end = lineFileNeedNum(lf, row, 2);
     if (start > end)
         errAbort("start after end line %d of %s", lf->lineIx, lf->fileName);
+    if (start == end && !allowStartEqualEnd)
+	lineFileAbort(lf, "start==end (if this is legit, use -allowStartEqualEnd)");
     struct binKeeper *bk = hashFindVal(bHash, chrom);
     if (bk != NULL)
 	{

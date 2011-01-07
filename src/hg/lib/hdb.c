@@ -3385,6 +3385,12 @@ static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 {
 if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->table) != NULL)
     slAddHead(tdbRetList, tdb);
+else if (sameWord(tdb->type,"downloadsOnly"))
+    {
+    if (sameString(tdb->table,tdb->track))
+        tdb->table = NULL;
+    slAddHead(tdbRetList, tdb);
+    }
 else
     trackDbFree(&tdb);
 }
@@ -3624,16 +3630,25 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
 hFreeConn(&conn);
 }
 
-struct trackDb *hTrackDbForTrack(char *db, char *track)
+struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
  * subtrack then inheritance will be handled.  (Unless a subtrack has
  * "noInherit on"...) This will die if the current database does not have
- * a trackDb, but will return NULL if track is not found. */
+ * a trackDb, but will return NULL if track is not found.
+ * MAY pass in prepopulated trackDb list, or may receive the trackDb list as an inout. */
 {
 /* Get track list .*/
-struct trackDb *tdbList = hTrackDb(db);
-return rFindTrack(0, tdbList, track);
+struct trackDb *theTdbs = NULL;
+if (tdbList == NULL || *tdbList == NULL)
+    {
+    theTdbs = hTrackDb(db);
+    if (tdbList != NULL)
+        *tdbList = theTdbs;
+    }
+else
+    theTdbs = *tdbList;
+return rFindTrack(0, theTdbs, track);
 }
 
 struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
@@ -4360,7 +4375,7 @@ struct sqlConnection *conn = hConnectCentral();
 boolean gotIx;
 char query[256];
 
-safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+safef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
 gotIx = sqlExists(conn, query);
 hDisconnectCentral(&conn);
 return gotIx;

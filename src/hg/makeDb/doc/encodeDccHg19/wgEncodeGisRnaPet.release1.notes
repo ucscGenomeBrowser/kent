@@ -1,0 +1,304 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release1 of the "ENCODE wgEncodeGisRnaPet"
+The composite track is wgEncodeGisRnaPet
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release1 (new+untouched):
+    Tables: 80
+    Files: 103
+    Gbdbs: 80
+
+A) Untouched Tables (0):
+
+A') Untouched Files (0 downloadables, 0 gbdbs):
+
+B) Deprecated tables (0):
+
+B') Deprecated files (0 downloadables, 0 gbdbs):
+
+C) New tables (80):
+wgEncodeGisRnaPetGm12878CytosolPapAlnRep1
+wgEncodeGisRnaPetGm12878CytosolPapAlnRep2
+wgEncodeGisRnaPetGm12878CytosolPapClustersRep1
+wgEncodeGisRnaPetGm12878CytosolPapClustersRep2
+wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
+wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2
+wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1
+wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2
+wgEncodeGisRnaPetGm12878NucleusPapAlnRep1
+wgEncodeGisRnaPetGm12878NucleusPapClustersRep1
+wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1
+wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1
+wgEncodeGisRnaPetH1hescCellPapAlnRep1
+wgEncodeGisRnaPetH1hescCellPapClustersRep1
+wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1
+wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1
+wgEncodeGisRnaPetHelas3CytosolPapAlnRep1
+wgEncodeGisRnaPetHelas3CytosolPapClustersRep1
+wgEncodeGisRnaPetHelas3CytosolPapMinusRawSigRep1
+wgEncodeGisRnaPetHelas3CytosolPapPlusRawSigRep1
+wgEncodeGisRnaPetHelas3NucleusPapAlnRep1
+wgEncodeGisRnaPetHelas3NucleusPapClustersRep1
+wgEncodeGisRnaPetHelas3NucleusPapMinusRawSigRep1
+wgEncodeGisRnaPetHelas3NucleusPapPlusRawSigRep1
+wgEncodeGisRnaPetHepg2CytosolPapAlnRep1
+wgEncodeGisRnaPetHepg2CytosolPapClustersRep1
+wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1
+wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1
+wgEncodeGisRnaPetHepg2NucleusPapAlnRep1
+wgEncodeGisRnaPetHepg2NucleusPapClustersRep1
+wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1
+wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1
+wgEncodeGisRnaPetHuvecCytosolPapAlnRep1
+wgEncodeGisRnaPetHuvecCytosolPapClustersRep1
+wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1
+wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1
+wgEncodeGisRnaPetHuvecNucleusPapAlnRep1
+wgEncodeGisRnaPetHuvecNucleusPapClustersRep1
+wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1
+wgEncodeGisRnaPetHuvecNucleusPapPlusRawSigRep1
+wgEncodeGisRnaPetK562ChromatinTotalAlnRep1
+wgEncodeGisRnaPetK562ChromatinTotalClustersRep1
+wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1
+wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1
+wgEncodeGisRnaPetK562CytosolPapAlnRep1
+wgEncodeGisRnaPetK562CytosolPapAlnRep2
+wgEncodeGisRnaPetK562CytosolPapClustersRep1
+wgEncodeGisRnaPetK562CytosolPapClustersRep2
+wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1
+wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2
+wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1
+wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2
+wgEncodeGisRnaPetK562NucleolusTotalAlnRep1
+wgEncodeGisRnaPetK562NucleolusTotalClustersRep1
+wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1
+wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1
+wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1
+wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1
+wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1
+wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1
+wgEncodeGisRnaPetK562NucleusPapAlnRep1
+wgEncodeGisRnaPetK562NucleusPapClustersRep1
+wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1
+wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1
+wgEncodeGisRnaPetK562PolysomePapAlnRep1
+wgEncodeGisRnaPetK562PolysomePapClustersRep1
+wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1
+wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1
+wgEncodeGisRnaPetNhekCytosolPapAlnRep1
+wgEncodeGisRnaPetNhekCytosolPapClustersRep1
+wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1
+wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1
+wgEncodeGisRnaPetNhekNucleusPapAlnRep1
+wgEncodeGisRnaPetNhekNucleusPapClustersRep1
+wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1
+wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1
+wgEncodeGisRnaPetProstateCellPapAlnRep1
+wgEncodeGisRnaPetProstateCellPapClustersRep1
+wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1
+wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
+
+C') New files (100 downloadables, 80 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapClustersRep2.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878NucleusPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetH1hescCellPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3CytosolPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3CytosolPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3CytosolPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3NucleusPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3NucleusPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHelas3NucleusPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2CytosolPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2NucleusPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecCytosolPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecNucleusPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetHuvecNucleusPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562ChromatinTotalClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapClustersRep2.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleolusTotalClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleusPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562PolysomePapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekCytosolPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekNucleusPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetProstateCellPapAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetProstateCellPapAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetProstateCellPapClustersRep1.bed12.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1.bigWig
+
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CytosolPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3CytosolPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3NucleusPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHelas3NucleusPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetHuvecNucleusPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapAlnRep2.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetProstateCellPapAlnRep1.bam
+/gbdb/hg19/bbi/wgEncodeGisRnaPetProstateCellPapAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/
+
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaPet/release1/md5sum.txt

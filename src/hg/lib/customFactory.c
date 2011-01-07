@@ -36,6 +36,8 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+/* for regular expressions */
+#include "hgFindSpec.h" 
 
 static char const rcsid[] = "$Id: customFactory.c,v 1.126 2010/06/01 20:38:07 galt Exp $";
 
@@ -691,6 +693,8 @@ static boolean bedDetailRecognizer(struct customFactory *fac,
 if (type != NULL && !sameType(type, fac->name) &&
     !sameString(type, "bedDetail") )
     return FALSE;
+if (type == NULL) 
+    return FALSE; /* just in case gets past bed etc. */
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
     return FALSE;
@@ -754,9 +758,13 @@ static struct bedDetail *customTrackBedDetail(char *db, char **row,
         struct hash *chromHash, struct lineFile *lf, int size)
 /* Convert a row of strings to a bed 4 + for bedDetail. */
 {
-struct bedDetail *item = bedDetailLoadWithGaps(row, size);
+struct bedDetail *item = bedDetailLineFileLoad(row, size, lf);
 hashStoreName(chromHash, item->chrom);
 customFactoryCheckChromNameDb(db, item->chrom, lf);
+int chromSize = hChromSize(db, item->chrom);
+if (item->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)",
+        item->chrom, item->chromEnd, chromSize);
 return item;
 }
 
@@ -838,30 +846,54 @@ static struct customFactory bedDetailFactory =
 
 /*** pgSnp Factory - allow pgSnp(personal genome SNP) custom tracks ***/
 
+static boolean rowIsPgSnp (char **row, char *db) 
+/* return TRUE if row looks like a pgSnp row */
+{
+boolean isPgSnp = rowIsBed(row, 3, db);
+if (!isPgSnp) 
+    return FALSE;
+if (!isdigit(row[4][0]))
+    return FALSE;
+int count = atoi(row[4]);
+if (count < 1) 
+    return FALSE;
+char pattern[128]; /* include count in pattern */
+safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
+if (! matchRegex(row[3], pattern))
+    return FALSE;
+safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
+if (! matchRegex(row[5], pattern))
+    return FALSE;
+safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", count - 1);
+if (! matchRegex(row[6], pattern))
+    return FALSE;
+/* if get here must be pgSnp format */
+return TRUE;
+}
+
 static boolean pgSnpRecognizer(struct customFactory *fac,
         struct customPp *cpp, char *type,
         struct customTrack *track)
 /* Return TRUE if looks like we're handling an pgSnp track */
 {
-if (type != NULL && !sameType(type, fac->name) &&
-    !sameString(type, "pgSnp") )
+if (type != NULL && !sameType(type, fac->name)) 
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
     return FALSE;
 char *dupe = cloneString(line);
 char *row[7+3];
-int wordCount = chopLine(dupe, row); //has bin at this point?
-if (wordCount > 7 || wordCount < 5)
-    return FALSE;
-track->fieldCount = wordCount;
-/* bed 4 + so is first 4 bed? */
-char *ctDb = ctGenomeOrCurrent(track);
-boolean isBed = rowIsBed(row, 4, ctDb);
-/* check col5 as int? or 4 as ACTG[/ACTG]? */
+int wordCount = chopLine(dupe, row); 
+boolean isPgSnp = FALSE;
+if (wordCount == 7)
+    {
+    track->fieldCount = wordCount;
+    char *ctDb = ctGenomeOrCurrent(track);
+    isPgSnp = rowIsPgSnp(row, ctDb);
+    }
 freeMem(dupe);
 customPpReuse(cpp, line);
-return (isBed);
+return (isPgSnp);
 }
 
 static struct pipeline *pgSnpLoaderPipe(struct customTrack *track)
@@ -907,13 +939,13 @@ static struct pgSnp *customTrackPgSnp(char *db, char **row,
         struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to pgSnp. */
 {
-struct pgSnp *item;
-if (startsWith("chr", row[0]))
-   item = pgSnpLoadNoBin(row);
-else 
-   item = pgSnpLoad(row);
+struct pgSnp *item = pgSnpLineFileLoad(row, lf);
 hashStoreName(chromHash, item->chrom);
 customFactoryCheckChromNameDb(db, item->chrom, lf);
+int chromSize = hChromSize(db, item->chrom);
+if (item->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)",
+        item->chrom, item->chromEnd, chromSize);
 return item;
 }
 
@@ -1285,7 +1317,7 @@ bed->chrom = hashStoreName(chromHash, psl->tName);
 
 bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
-strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+bed->strand[0] = psl->strand[0];
 bed->strand[1] = 0;
 bed->blockCount = blockCount = psl->blockCount;
 bed->blockSizes = blockSizes = (int *)psl->blockSizes;
@@ -1322,6 +1354,10 @@ if (psl->strand[1] == '-')
 	{
 	chromStarts[i] = chromSize - chromStarts[i] - blockSizes[i];
 	}
+    if (bed->strand[0] == '-')
+        bed->strand[0] = '+';
+    else
+        bed->strand[0] = '-';
     }
 
 bed->thickStart = bed->chromStart = chromStart = chromStarts[0];
@@ -2087,6 +2123,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gtfFactory);
     slAddTail(&factoryList, &gffFactory);
+    slAddTail(&factoryList, &pgSnpFactory);
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);
@@ -2094,7 +2131,6 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &coloredExonFactory);
     slAddTail(&factoryList, &encodePeakFactory);
     slAddTail(&factoryList, &bedDetailFactory);
-    slAddTail(&factoryList, &pgSnpFactory);
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM

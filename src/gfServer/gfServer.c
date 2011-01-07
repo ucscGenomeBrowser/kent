@@ -20,6 +20,7 @@
 #include "options.h"
 #include "trans3.h"
 #include "log.h"
+#include "internet.h"
 
 static char const rcsid[] = "$Id: gfServer.c,v 1.57 2009/10/09 19:36:03 kent Exp $";
 
@@ -36,6 +37,7 @@ static struct optionSpec optionSpecs[] = {
     {"minMatch", OPTION_INT},
     {"repMatch", OPTION_INT},
     {"seqLog", OPTION_BOOLEAN},
+    {"ipLog", OPTION_BOOLEAN},
     {"stepSize", OPTION_INT},
     {"tileSize", OPTION_INT},
     {"trans", OPTION_BOOLEAN},
@@ -57,6 +59,7 @@ int maxDnaHits = 100;   /* Can be overridden from command line. */
 int maxTransHits = 200; /* Can be overridden from command line. */
 int maxGap = gfMaxGap;
 boolean seqLog = FALSE;
+boolean ipLog = FALSE;
 boolean doMask = FALSE;
 boolean canStop = FALSE;
 
@@ -98,6 +101,7 @@ errAbort(
   "           to run this on RepeatMasked data in this case.\n"
   "   -log=logFile keep a log file that records server requests.\n"
   "   -seqLog    Include sequences in log file (not logged with -syslog)\n"
+  "   -ipLog     Include user's IP in log file (not logged with -syslog)\n"
   "   -syslog    Log to syslog\n"
   "   -logFacility=facility log to the specified syslog facility - default local0.\n"
   "   -mask      Use masking from nib file.\n"
@@ -486,6 +490,7 @@ struct genoFind *gf = NULL;
 static struct genoFind *transGf[2][3];
 char buf[256];
 char *line, *command;
+struct sockaddr_in fromAddr;
 socklen_t fromLen;
 int readSize;
 int socketHandle = 0, connectionHandle = 0;
@@ -521,17 +526,39 @@ logInfo("indexing complete");
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 100);
+if (socketHandle < 0)
+    errAbort("Fatal Error: Unable to open listening socket on port %d.", port);
 
 logInfo("Server ready for queries!");
 printf("Server ready for queries!\n");
+int connectFailCount = 0;
 for (;;)
     {
-    connectionHandle = accept(socketHandle, NULL, &fromLen);
+    ZeroVar(&fromAddr);
+    fromLen = sizeof(fromAddr);
+    connectionHandle = accept(socketHandle, (struct sockaddr*)&fromAddr, &fromLen);
     if (connectionHandle < 0)
         {
 	warn("Error accepting the connection");
 	++warnCount;
+        ++connectFailCount;
+        if (connectFailCount >= 100)
+	    errAbort("100 continuous connection failures, no point in filling up the log in an infinite loop.");
 	continue;
+	}
+    else
+	{
+	connectFailCount = 0;
+	}
+    if (ipLog)
+	{
+        if (fromAddr.sin_family == AF_INET)
+	    {
+	    char dottedQuad[17];
+	    internetIpToDottedQuad(ntohl(fromAddr.sin_addr.s_addr), dottedQuad);
+	    logInfo("gfServer version %s on host %s, port %s connection from %s", 
+		gfVersion, hostName, portName, dottedQuad);
+	    }
 	}
     readSize = read(connectionHandle, buf, sizeof(buf)-1);
     if (readSize < 0)
@@ -915,6 +942,7 @@ maxTransHits = optionInt("maxTransHits", maxTransHits);
 maxNtSize = optionInt("maxNtSize", maxNtSize);
 maxAaSize = optionInt("maxAaSize", maxAaSize);
 seqLog = optionExists("seqLog");
+ipLog = optionExists("ipLog");
 doMask = optionExists("mask");
 canStop = optionExists("canStop");
 if (argc < 2)

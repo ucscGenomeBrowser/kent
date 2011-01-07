@@ -48,9 +48,6 @@ export GOLD="${DOCUMENTROOT}/goldenPath"
 export TRASHDIR="${BROWSERHOME}/trash"
 # cgi-bin/ must be in the same directory as htdocs/ and trash/
 export CGI_BIN="${BROWSERHOME}/cgi-bin"
-# USE_PNG is not really an option, it is mandatory as of mid-year 2010
-#	The libpng development and run-time packages must be installed
-export USE_PNG=1
 # Adding these to your path will enable finding all the kent commands
 export PATH="$KENTBIN/$MACHTYPE:$KENTBIN/:$PATH"
 # where to find the hgsql command for database operations
@@ -65,11 +62,12 @@ export MYSQLINC="/usr/include/mysql"
 # BAM optional behavior for the genome browser, see also:
 #	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 # export USE_BAM=1
+# export KNETFILE_HOOKS=1
 # if you want to set USE_BAM, you will need the samtools.  See also:
 #	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 # export SAMDIR=${BROWSERHOME}/samtools-0.1.8
 # export SAMINC=${SAMDIR}
-# export SAMLIB=${BROWSERHOME}/samtools/lib/libbam.a
+# export SAMLIB=${SAMDIR}/libbam.a
 export ENCODE_PIPELINE_BIN="${BINDIR}"
 # protect these scripts by specifying the single machine on which they
 #	should run and the single user name which should be running them.

@@ -1,0 +1,271 @@
+# for emacs: -*- mode: sh; -*-
+
+#       $Id: nomLeu1.txt,v 1.6 2010/05/06 16:27:44 chinhli Exp $
+
+# Nomascus leucogenys (gibbon) --  GGSC Nleu1.0 (2010-01-29)
+
+
+# file template copied from susScr2.txt
+
+# Nomascus leucogenys (NCBI project 13974, accession GCA_000146795.1)
+#   by  Gibbon Genome Sequencing Consortium
+#    assembly] sequence: 
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.0/
+
+
+##########################################################################
+# Download sequence (DONE 2010-10-22 - Chin)
+    mkdir /hive/data/genomes/nomLeu1
+    cd /hive/data/genomes/nomLeu1
+    mkdir genbank
+    cd genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.0/"
+    # FINISHED --2010-10-27 16:14:02--
+    # Downloaded: 12 files, 1.1G in 2m 51s (6.49 MB/s)
+    # Read ASSEMBLY_INFO 
+
+    # stay at genbank directory
+    # Process the unplaced scaffolds, filter out the  
+    #   The ".1" at the end (i.e. ABQO010000034.1) of contig name, since
+    #   MySQL does not allow "." as part of the table name and 
+    #   will casue problems in genbank task step later
+
+    export S=Primary_Assembly/unplaced_scaffolds
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > nomLeu1.agp
+    # append the gap records
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
+            | sed  -e "s/\.1//"  >> nomLeu1.agp
+    gzip nomLeu1.agp &
+
+    zcat ${S}/FASTA/unplaced.scaf.fa.gz \
+            | sed -e "s#^>.*|gb|#>#; s#|.*##"  -e "s/\.1//"  \
+            | gzip > nomLeu1.fa.gz
+    zcat nomLeu1.fa.gz | grep "^>" | wc -l
+    #   17968
+
+   faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+2936035333 bases (179443556 N's 2756591777 real 2756591777 upper 0 lower) in 17968 sequences in 1 files
+
+   # 2034575300 bases (68155432 N's 1966419868 real 1966419868 upper
+   #   0 lower) in 11654 sequences in 1 files
+
+   # N50
+   mkdir N50
+   zcat  nomLeu1.fa.gz | faCount stdin | awk '/^(GL|ADFV)/ {print $1, $2}' > N50/chrom.sizes
+   n50.pl N50/chrom.sizes
+#       reading: N50/chrom.sizes
+#       contig count: 17968, total size: 2936035333, one half size: 1468017666
+# cumulative    N50 count       contig  contig size
+1461968777      40      GL397300        22842388
+1468017666 one half size
+1484660812      41      GL397301        22692035
+
+
+#########################################################################
+# Initial makeGenomeDb.pl (DONE - 2010-10-29 - Chin)
+    cd /hive/data/genomes/nomLeu1
+    cat << '_EOF_' > nomLeu1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db nomLeu1
+clade mammal
+genomeCladePriority 13
+scientificName Nomascus leucogenys
+commonName Gibbon
+assemblyDate Jan. 2010
+assemblyLabel GGSC (NCBI project 13974, accession GCA_000146795.1)
+assemblyShortLabel GGSC Nleu1.0
+orderKey 33
+mitoAcc none
+fastaFiles /hive/data/genomes/nomLeu1/genbank/nomLeu1.fa.gz
+agpFiles /hive/data/genomes/nomLeu1/genbank/nomLeu1.agp.gz
+# qualFiles none
+dbDbSpeciesDir gibbon
+taxId 61853
+'_EOF_'
+    # << happy emacs
+    time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev nomLeu1.config.ra \
+	> makeGenomeDb.log 2>&1 &
+    # real    23m53.122s
+    
+    # add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/nomLeu1.unmasked.2bit /gbdb/nomLeu1/nomLeu1.2bit
+    #  Per instructions in makeGenomeDb.log:
+    # cd ~/kent/src/hg/makeDb/trackDb
+    # edit makefile to add nomLeu1 to DBS.
+    # git add gibbon/nomLeu1/*.{ra,html}
+    # git commit -m "Added nomLeu1 to DBS." makefile
+    # git commit -m "Initial descriptions for nomLeu1." gibbon/nomLeu1/*.{ra,html}
+    #  git pull; git push
+    # Run make update DBS=nomLeu1 and make alpha when done.
+    # (optional) Clean up /cluster/data/nomLeu1/TemporaryTrackDbCheckout
+
+
+#########################################################################
+# RepeatMasker (DONE - 2010-10-30 - Chin)
+    mkdir /hive/data/genomes/nomLeu1/bed/repeatMasker
+    cd /hive/data/genomes/nomLeu1/bed/repeatMasker
+
+    time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
+	-workhorse=hgwdev -bigClusterHub=swarm -noSplit nomLeu1 > do.log 2>&1 &
+    #   real    429m4.089s
+    cat faSize.rmsk.txt
+    # 2936035333 bases (179443556 N's 2756591777 real 1356684256 upper 
+    # 1399907521 lower) in 17968 sequences in 1 files
+    # %47.68 masked total, %50.78 masked real
+
+#########################################################################
+# simpleRepeats ( DONE 2010-10-31 - Chin)
+    mkdir /hive/data/genomes/nomLeu1/bed/simpleRepeat
+    cd /hive/data/genomes/nomLeu1/bed/simpleRepeat
+
+    time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-bigClusterHub=swarm -smallClusterHub=swarm nomLeu1 > do.log 2>&1 &
+    # real    39m4.732s    
+    cat fb.simpleRepeat
+    # 122433828 bases of 2756591777 (4.441%) in intersection  
+    #	add to the repeatMasker
+    cd /hive/data/genomes/nomLeu1
+    twoBitMask nomLeu1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed nomLeu1.2bit
+    #	safe to ignore warnings about >=13 fields
+    twoBitToFa nomLeu1.2bit stdout | faSize stdin > nomLeu1.2bit.faSize.txt
+    cat nomLeu1.2bit.faSize.txt
+    # 2936035333 bases (179443556 N's 2756591777 real 1355629718 upper 
+    # 1400962059 lower) in 17968 sequences in 1 files
+    # %47.72 masked total, %50.82 masked real
+
+#########################################################################
+# Marking *all* gaps - they are all in the AGP file
+#	(DONE - 2010-10-31 - Chin)
+    mkdir /hive/data/genomes/nomLeu1/bed/allGaps
+    cd /hive/data/genomes/nomLeu1/bed/allGaps
+
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../nomLeu1.unmasked.2bit > findMotif.txt 2>&1
+    # real    0m47.822s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits nomLeu1 -not gap -bed=notGap.bed
+    # 0 bases of 2756591777 (0.000%) in intersection
+    
+    featureBits nomLeu1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   0 bases of 2756591777 (0.000%) in intersection
+    #   they are all in the AGP file 
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" nomLeu1 | sort -n | tail -1
+    #	8318
+
+
+########################################################################
+# Create kluster run files (working - 2010-11-01 - Chin)
+    # numerator is nomLeu1 gapless bases "real" as reported by: 
+    featureBits -noRandom -noHap nomLeu1 gap
+    # 179443556 bases of 2756591777 (6.510%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #	featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \(  2756591777  / 2861349177 \) \* 1024
+    # ( 2756591777 / 2861349177 ) * 1024 = 986.510141
+    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    #	and rounded down to nearest 50 (in this case, 900)
+    cd /hive/data/genomes/nomLeu1
+    blat nomLeu1.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/nomLeu1.11.ooc \
+	-repMatch=900 &
+    # Loading nomLeu1.2bit
+    # Counting nomLeu1.2bit
+    # Writing jkStuff/nomLeu1.11.ooc
+    # Wrote 36558 overused 11-mers to jkStuff/nomLeu1.11.ooc
+    # Done making jkStuff/nomLeu1.11.ooc
+
+    mkdir /hive/data/staging/data/nomLeu1
+    cp -p nomLeu1.2bit jkStuff/nomLeu1.11.ooc /hive/data/staging/data/nomLeu1
+    cp -p chrom.sizes /hive/data/staging/data/nomLeu1
+    #	check  for non-bridged gaps to see what the typical size is:
+    hgsql -e "select bridge from gap;" nomLeu1 | sort | uniq
+    #  bridge
+    #  yes
+    # all gap are bridged, done
+    
+    # ask cluster-admin to copy (evry time if any file chsnged)
+    #    /hive/data/staging/data/nomLeu1 directory to cluster nodes
+    #    /scratch/data/nomLeu1
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE 2010-11-01 - Chin)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+
+    # edit etc/genbank.conf to add nomLeu1 just after ponAbe2
+
+# nomLeu1 (Gibbon)
+nomLeu1.serverGenome = /hive/data/genomes/nomLeu1/nomLeu1.2bit
+nomLeu1.clusterGenome = /scratch/data/nomLeu1/nomLeu1.2bit
+nomLeu1.ooc = /scratch/data/nomLeu1/nomLeu1.11.ooc
+nomLeu1.lift = no
+nomLeu1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+nomLeu1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}  
+nomLeu1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+nomLeu1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+nomLeu1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+nomLeu1.downloadDir = nomLeu1
+nomLeu1.genbank.mrna.xeno.loadDesc = yes
+nomLeu1.refseq.mrna.native.load = no
+
+    git add etc/genbank.conf
+    git commit -m "Added nomLeu1" etc/genbank.conf
+    git pull
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  With these two lines:
+# static char *nomLeuNames[] = {"Nomascus leucogenys", NULL};
+#   ... later ...
+#    {"nomLeu", nomLeuNames},
+#  gbGenome.c is  in
+#  /cluster/home/chinhli/kent/src/hg/makeDb/genbank/src/lib
+# make and checkin
+
+    git add src/lib/gbGenome.c
+    git commit -m "adding nomLeu1 Gibbon" src/lib/gbGenome.c
+    git pull
+    git push
+    make install-server
+
+    ssh genbank
+    screen	#  control this business with a screen since it takes a while
+
+
+    cd /cluster/data/genbank
+     time nice -n +19 ./bin/gbAlignStep -initial nomLeu1 &
+    #   logFile: var/build/logs/2010.11.02-08:51:08.nomLeu1.initalign.log
+    #   real    181m41.973s
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/data/aligned/genbank.180.0/nomLeu1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad nomLeu1 &
+    #    logFile: var/dbload/hgwdev/logs/2010.11.02-14:50:29.dbload.log
+    #   real   24m49.454s
+
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add nomLeu1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added nomLeu1 - Gibbon" etc/align.dbs etc/hgwdev.dbs
+    git pull
+    git push
+    make etc-update
+
+
+############################################################################

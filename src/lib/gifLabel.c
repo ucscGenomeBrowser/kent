@@ -77,23 +77,10 @@ void gifLabelVerticalText(char *fileName, char **labels, int labelCount,
 struct memGfx *straight = altColorLabels(labels, labelCount, height);
 struct memGfx *rotated = mgRotate90(straight);
 struct memGfx *existing = NULL;
-#ifdef USE_PNG
 struct tempName tn;
 makeTempName(&tn, "gifLabelVertTemp", ".png");
 mgSavePng(rotated, tn.forCgi, FALSE); 
 rename(tn.forCgi, fileName);
-#else
-if (fileExists(fileName))
-    existing = mgLoadGif(fileName);
-/* the savings here is in the user's own browser cache - not updated if no change */
-if (!sameGifContents(rotated, existing))  
-    {
-    struct tempName tn;
-    makeTempName(&tn, "gifLabelVertTemp", ".gif");
-    mgSaveGif(rotated, tn.forCgi, FALSE); 
-    rename(tn.forCgi, fileName);
-    }
-#endif
 mgFree(&straight);
 mgFree(&rotated);
 if (existing)

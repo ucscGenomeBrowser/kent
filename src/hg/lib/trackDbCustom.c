@@ -95,6 +95,12 @@ if (val2 != NULL)
     }
 }
 
+static void trackDbAddRelease(struct trackDb *bt, char *releaseTag)
+/* Add release tag */
+{
+hashAdd(bt->settingsHash, "release", cloneString(releaseTag));
+}
+
 static void trackDbAddInfo(struct trackDb *bt,
 	char *var, char *value, struct lineFile *lf)
 /* Add info from a variable/value pair to browser table. */
@@ -240,7 +246,7 @@ if (bt->settings == NULL)
     bt->settings = cloneString("");
 }
 
-char *trackDbInclude(char *raFile, char *line)
+char *trackDbInclude(char *raFile, char *line, char **releaseTag)
 /* Get include filename from trackDb line.
    Return NULL if line doesn't contain include */
 {
@@ -253,14 +259,16 @@ if (startsWith("include", line))
     nextWord(&line);
     file = nextQuotedWord(&line);
     strcat(incFile, file);
+    *releaseTag = nextWord(&line);
     return cloneString(incFile);
     }
 else
     return NULL;
 }
 
-struct trackDb *trackDbFromOpenRa(struct lineFile *lf)
-/* Load track info from ra file already opened as a lineFile into list. */
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
+/* Load track info from ra file already opened as lineFile into list.  If releaseTag is 
+ * non-NULL then only load tracks that mesh with release. */
 {
 char *raFile = lf->fileName;
 char *line, *word;
@@ -273,6 +281,8 @@ for (;;)
     /* Seek to next line that starts with 'track' */
     for (;;)
 	{
+        char *subRelease;
+
 	if (!lineFileNext(lf, &line, NULL))
 	   {
 	   done = TRUE;
@@ -284,9 +294,13 @@ for (;;)
             lineFileReuse(lf);
             break;
             }
-        else if ((incFile = trackDbInclude(raFile, line)) != NULL)
+        else if ((incFile = trackDbInclude(raFile, line, &subRelease)) != NULL)
             {
-            struct trackDb *incTdb = trackDbFromRa(incFile);
+            if (subRelease)
+                trackDbCheckValidRelease(subRelease);
+            if (releaseTag && subRelease && !sameString(subRelease, releaseTag))
+                errAbort("Include with release %s inside include with release %s line %d of %s", subRelease, releaseTag, lf->lineIx, lf->fileName);
+            struct trackDb *incTdb = trackDbFromRa(incFile, subRelease);
             btList = slCat(btList, incTdb);
             }
 	}
@@ -315,18 +329,42 @@ for (;;)
 	    errAbort("No value for %s line %d of %s", word, lf->lineIx, lf->fileName);
 	line = trimSpaces(line);
 	trackDbUpdateOldTag(&word, &line);
+        if (releaseTag && sameString(word, "release"))
+            errAbort("Release tag %s in stanza with include override %s, line %d of %s",
+                line, releaseTag, lf->lineIx, lf->fileName);
 	trackDbAddInfo(bt, word, line, lf);
 	}
+    if (releaseTag)
+        trackDbAddRelease(bt, releaseTag);
     }
 slReverse(&btList);
 return btList;
 }
 
-struct trackDb *trackDbFromRa(char *raFile)
-/* Load track info from ra file into list. */
+boolean trackDbCheckValidRelease(char *tag)
+/* check to make sure release tag is valid */
+{
+char *words[5];
+
+int count = chopString(cloneString(tag), ",", words, ArraySize(words));
+if (count > 3)
+    return FALSE;
+
+int ii;
+for(ii=0; ii < count; ii++)
+    if (!sameString(words[ii], "alpha") && !sameString(words[ii], "beta") &&
+        !sameString(words[ii], "public"))
+            return FALSE;
+
+return TRUE;
+}
+
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
+/* Load track info from ra file into list.  If releaseTag is non-NULL
+ * then only load tracks that mesh with release. */
 {
 struct lineFile *lf = netLineFileOpen(raFile);
-struct trackDb *tdbList = trackDbFromOpenRa(lf);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
 lineFileClose(&lf);
 return tdbList;
 }

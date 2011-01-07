@@ -1671,23 +1671,29 @@ TMPDIR=/scratch/tmp
     cat fb.calJac3.chainHg19Link.txt 
     #	1916431926 bases of 2752505800 (69.625%) in intersection
 ############################################################################
-# refGenePred - RefSeq XM/XR at the request of Kim Pruit
-# <pruitt@ncbi.nlm.nih.gov> for use by the Rhesus community.
-# (2010-10-03 markd)
+# refSeqAnno - RefSeq genomic annotations at the request of
+# Kim Pruit <pruitt@ncbi.nlm.nih.gov> for use by the Rhesus community.
+# (2010-10-14 markd)
 
     checkout markds python's tools in some directory:
        svn+ssh://hgwdev.cse.ucsc.edu/projects/compbio/usr/markd/svn/code/pycbio/trunk
     and run make at top
 
-    mkdir -p /hive/data/genomes/rheMac2/bed/refGenePred
-    cd /hive/data/genomes/rheMac2/bed/refGenePred
+    mkdir /hive/data/genomes/rheMac2/bed/refSeqAnno
+    cd /hive/data/genomes/rheMac2/bed/refSeqAnno
 
     # get NCBI genome annotation:
     wget ftp://ftp.ncbi.nih.gov/genomes/Macaca_mulatta/README_CURRENT_BUILD
     wget -nv -r -A 'mmu_ref_*.gbs.gz' 'ftp://ftp.ncbi.nih.gov/genomes/Macaca_mulatta/CHR*'
     mkdir gbs
     mv ftp.ncbi.nih.gov/genomes/Macaca_mulatta/*/*.gbs.gz gbs/
-    zcat gbs/*.gz |~/compbio/code/pycbio/bin/gbffGenesToGenePred --ext --allGenes /dev/stdin all.contig.gp
+    rm -rf ftp.ncbi.nih.gov
+
+    # get mRNAs to create mRNA <-> protein mappings
+    wget ftp://ftp.ncbi.nih.gov/genomes/Macaca_mulatta/RNA/rna.gbk.gz
+    zcat rna.gbk.gz |awk '/^VERSION/{mrna=$2} /\/protein_id=/{print mrna"\t"gensub("^.*\"(.*)\"","\\1","g",$1)}'  >mrna2prot.tbl
+
+    zcat gbs/*.gz |~/compbio/code/pycbio/bin/gbffGenesToGenePred --mrnaProtMap=mrna2prot.tbl --refSeqOnly --ext --allGenes --other /dev/stdin refSeqAnno.contig.gp >&cnv.probs
 
     # no lift file was made, so must build one
     ftp://ftp.ncbi.nih.gov/genomes/Macaca_mulatta/seq_contig.md.gz
@@ -1698,14 +1704,15 @@ TMPDIR=/scratch/tmp
     #    - mappings to weird chome names like: chrX|NW_001219121.1
     tawk '$2~/\/start/ || $2~/\/end/ || $4 ~/chrUn/{next} {$4=gensub("[|].*", "", "g",$4); print $0}' ncbi.lft >ncbi.fix.lft 
 
-    # keep only XM/XRs and lift to chromosomes
-    tawk '$1~/^(XM_)|(XR_)/' all.contig.gp |  liftUp -type=.genepred -extGenePred refGenePred.gp ncbi.fix.lft warn stdin
-    genePredCheck -db=rheMac2 refGenePred.gp 
+    # lift to chromosomes
+    liftUp -type=.genepred -extGenePred refSeqAnno.gp ncbi.fix.lft warn refSeqAnno.contig.gp >&lift.probs
+    # 635 drop due to not having chrUn
 
-    hgLoadGenePred -genePredExt rheMac2 refGenePred refGenePred.gp 
+    genePredCheck -db=rheMac2 refSeqAnno.gp 
+    hgLoadGenePred -genePredExt rheMac2 refSeqAnno refSeqAnno.gp 
 
     # add to 
       trackDb/rhesus/trackDb.ra
       trackDb/rhesus/rheMac2/trackDb.ra 
     # create
-      trackDb/rhesus/refGenePred.html
+      trackDb/rhesus/refSeqAnno.html

@@ -1091,3 +1091,51 @@ chainOne $(path1)
     rm -rf blastOut
 
 #########################################################################
+## LASTZ priPac2 (DONE - 2010-10-19 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/cb3/bed/blastzPriPac2.2010-10-19
+    cd /hive/data/genomes/cb3/bed/blastzPriPac2.2010-10-19
+
+    cat << '_EOF_' > DEF
+# cb3 vs priPac2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: C. briggsae Cb3
+SEQ1_DIR=/scratch/data/cb3/cb3.2bit
+SEQ1_LEN=/hive/data/genomes/cb3/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: P. pacificus priPac2
+SEQ2_DIR=/scratch/data/priPac2/priPac2.2bit
+SEQ2_LEN=/scratch/data/priPac2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/cb3/bed/blastzPriPac2.2010-10-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -verbose=2 -bigClusterHub=swarm \
+	-qRepeats=windowmaskerSdust -smallClusterHub=memk > do.log 2>&1 &
+    #	real    10m1.422s
+    cat fb.cb3.chainPriPac2Link.txt 
+    #	5930453 bases of 108433446 (5.469%) in intersection
+
+    #	swap, this is also in priPac2.txt
+    mkdir /hive/data/genomes/priPac2/bed/blastz.cb3.swap
+    cd /hive/data/genomes/priPac2/bed/blastz.cb3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/cb3/bed/blastzPriPac2.2010-10-19/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=swarm \
+	-smallClusterHub=swarm -swap > swap.log 2>&1 &
+    #	real    1m9.241s
+    cat fb.priPac2.chainCb3Link.txt 
+    #	6286306 bases of 133634773 (4.704%) in intersection
+
+############################################################################

@@ -33,6 +33,7 @@ use vars qw/
     $opt_checksum
     $opt_noMdb
     $opt_mdb
+    $opt_sortable
     /;
 
 our $checksumFile = "md5sum.txt";
@@ -47,11 +48,12 @@ Creates an HTML page and README text file listing the downloads in the current d
 options:
     -help               Displays this usage info
     -checksum           Generate checksum file
-    -noMdb	        Don't use an 'mdb' metadata table.  Instead, use the old trackDb/fileDb.ra methods
-    -mdb=tableName      Use an explicit mdb table (e.g. 'mdb_braney') and don't fall back on trackDb/fileDb.ra methods
-    -preamble=file      File containing introductory information (written in HTML) that will be included in this file (default preamble.html)
     -db=hg18            Use a database other than the default hg18 (For aquiring releaseDate and metadata from trackDb)
-    -fileType=mask	    mask for file types included (default '*.gz')
+    -fileType=mask          mask for file types included (default '*.gz')
+    -mdb=tableName      Use an explicit mdb table (e.g. 'mdb_braney') and don't fall back on trackDb/fileDb.ra methods
+    -noMdb              Don't use an 'mdb' metadata table.  Instead, use the old trackDb/fileDb.ra methods
+    -preamble=file      File containing introductory information (written in HTML) that will be included in this file (default preamble.html)
+    -sortable           The HTML output will include jquery and utils.js javascript to allow sorting of the table (TESTING FEATURE)
     -verbose=num        Set verbose level to num (default 1).
 
 END
@@ -71,6 +73,8 @@ sub htmlStartPage {
     print OUT_FILE "<HTML>\n";
     print OUT_FILE " <HEAD>\n";
     print OUT_FILE "  <TITLE>Index of $dirs[-1]</TITLE>\n";
+    print OUT_FILE "    <META http-equiv='Content-Script-Type' content='text/javascript'>\n";
+    print OUT_FILE "    <LINK rel='STYLESHEET' href='http://hgwdev.cse.ucsc.edu/style/HGStyle.css' TYPE='text/css' />\n";
     print OUT_FILE " </HEAD>\n";
     print OUT_FILE " <BODY>\n";
 #   print OUT_FILE "<IMG SRC='http://<!--#echo var=\"BROWSER_HOST\" -->/icons/back.gif' ALT='[DIR]'> <A HREF='javascript:history.back();'>Parent Directory</A><BR>\n\n";
@@ -94,6 +98,26 @@ sub htmlStartPage {
         print OUT_FILE "<p>This directory contains data files available for download.</p>\n\n";
     }
     print OUT_FILE "<HR>\n\n";
+}
+
+sub htmlTrHeader {
+# prints tr header row for sortable table
+    my ($colListRef,,$tagsRef,$valsRef) = @_;
+    my @colList  = @{$colListRef};
+    my $sorColCount = scalar(@colList);
+
+    print OUT_FILE "<thead><TR valign='bottom'>\n";
+    print OUT_FILE "<TH class='sortable sort". ($sorColCount + 2) ."'>RESTRICTED<BR>until</th>\n";
+    print OUT_FILE "<TH class='sortable sort". ($sorColCount + 1) ."' align='left'>File</th>\n";
+    print OUT_FILE "<TH class='sortable sort". ($sorColCount + 4) ."' align='right'>Size</th>\n";
+    print OUT_FILE "<TH class='sortable sort". ($sorColCount + 3) ."'>Submitted</th>\n";
+    my $cix = 0; # keep order
+    while($colList[$cix]) {
+        print OUT_FILE "<TH class='sortable sort". ($cix + 1) ."'>" . $colList[$cix] . "</th>\n";
+        $cix++;
+    }
+    print OUT_FILE "<TH align='left'>&nbsp;&nbsp;Additional details</th>\n";
+    print OUT_FILE "</TR></thead><tbody style='display:none;'>\n";
 }
 
 sub htmlEndPage {
@@ -130,7 +154,7 @@ sub sortAndPrintHtmlTableRows {
     }
 }
 
-# prints a row closing of an html table
+# prints a row of the html table
 sub sortableHtmlRow {
 # returns a table row ready to print but prepended by sortable columns
     my ($sortablesRef,$file,$size,$date,$releaseDate,$metaData) = @_;
@@ -146,6 +170,39 @@ sub sortableHtmlRow {
     }
     $row .= "<TD><A type='application/zip' target='_blank' HREF=\"$file\">$file</A>";
     $row .= "<TD align='right'>&nbsp;&nbsp;$size<TD>&nbsp;&nbsp;$date&nbsp;&nbsp;";
+    if($metaData && length($metaData) > 0) {
+        $row .= "<TD nowrap>$metaData";
+        # Find cell,dataType,antibody,lab,type,subId
+        # Alternative would be to package up all of the javascript sort code and then make individual columns for sortable metadata
+    }
+    $row .= "</TR>\n";
+}
+
+sub sortableHtmlRowWithColumns {
+# returns a table row ready to print but prepended by sortable columns
+    my ($sortablesRef,$file,$size,$date,$releaseDate,$metaData,$colListValsRef) = @_;
+
+    my @sortables  = @{$sortablesRef};
+    my @colListVals  = @{$colListValsRef};
+    my $row =join(" ", @sortables);
+    $row .= "|";
+
+    if($releaseDate && length($releaseDate) > 0) {
+        $row .= "<TR valign='top'><TD align='left'>&nbsp;&nbsp;$releaseDate</TD>";
+    } else {
+        $row .= "<TR valign='top'><TD align='left'>&nbsp;</TD>";
+    }
+    $row .= "<TD><A type='application/zip' target='_blank' HREF=\"$file\">$file</A></TD>";
+    $row .= "<TD align='right'>&nbsp;&nbsp;$size<TD>&nbsp;&nbsp;$date&nbsp;&nbsp;</TD>";
+    my $cix = 0;
+    while($colListVals[$cix]) {
+        if($colListVals[$cix] ne "") {
+            $row .= "<TD nowrap>$colListVals[$cix]</TD>";
+        } else {
+            $row .= "<TD nowrap>&nbsp;</TD>";
+        }
+        $cix++;
+    }
     if($metaData && length($metaData) > 0) {
         $row .= "<TD nowrap>$metaData";
         # Find cell,dataType,antibody,lab,type,subId
@@ -225,7 +282,7 @@ sub metadataArraysMoveValuesToFront {
 }
 
 sub sortablesSet {
-# Joins metadata tags and vals arrays into single array of tag=val
+# Updates a sortable list of values in fieldsRef order
     my ($sortablesRef,$fieldsRef,$tag,$val) = @_;
     my @sortables  = @{$sortablesRef};
     my @sortFields = @{$fieldsRef};
@@ -243,8 +300,53 @@ sub sortablesSet {
     return @sortables;
 }
 
+sub colListCreateFromSortables {
+# Creates a list of columns from sortable sortable fiieds
+    my ($sortablesRef,$fieldsRef) = @_;
+    my @sortables  = @{$sortablesRef};
+    my @sortFields = @{$fieldsRef};
+    my @colList;
+    my $six = 0;
+    my $cix = 0; # keep order
+    while($sortables[$six]) {
+        if ($sortFields[$six] eq "dataVersion") {# Enough already... Should limit by list of sort approved columns
+            return @colList;
+        }
+        if($sortables[$six] ne "" && $sortables[$six] ne "~") {
+            $colList[$cix] = $sortFields[$six];
+            $cix++;
+        }
+        $six++;
+    }
+    return @colList;
+}
+
+sub colListValsCreateFromMetadataArrays {
+# Creates a list of columns from sortable sortable fiieds
+    my ($colListRef,,$tagsRef,$valsRef) = @_;
+    my @colList  = @{$colListRef};
+    my @tags = @{$tagsRef};
+    my @vals = @{$valsRef};
+    my @colListVals;
+    my $cix = 0; # keep order
+    while($colList[$cix]) {
+        my $mix = 0; # keep order
+        while($tags[$mix]) {
+            if($colList[$cix] eq $tags[$mix]) {
+                $colListVals[$cix] = $vals[$mix];
+            }
+            $mix++;
+        }
+        if (!$colListVals[$cix] || $colListVals[$cix] eq "") {
+            $colListVals[$cix] = "&nbsp;";
+        }
+        $cix++;
+    }
+    return @colListVals;
+}
+
 sub sortablesSetFromMetadataArrays {
-# Joins metadata tags and vals arrays into single array of tag=val
+# updates a sorables list from metadata arrays
     my ($sortablesRef,$fieldsRef,$tagsRef,$valsRef) = @_;
     my @sortables  = @{$sortablesRef};
     #my @sortFields = @{$fieldsRef};
@@ -281,13 +383,14 @@ sub metadataArraysJoin {
 
 my $now = time();
 
-my $ok = GetOptions("fileType=s",
-                    "preamble=s",
+my $ok = GetOptions("checksum",
+                    "fileType=s",
                     "db=s",
-                    "verbose=i",
-                    "checksum",
-                    "noMdb",
                     "mdb=s",
+                    "noMdb",
+                    "preamble=s",
+                    "sortable",
+                    "verbose=i",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
@@ -321,7 +424,9 @@ $opt_db = "hg18" if(!defined $opt_db);
 my $db = HgDb->new(DB => $opt_db);
 
 open( OUT_FILE, "> $downloadsDir/$indexHtml") || die "SYS ERROR: Can't write to \'$downloadsDir/$indexHtml\' file; error: $!\n";
-open( TEXT_FILE, "> $downloadsDir/$textFile") || die "SYS ERROR: Can't write to \'$downloadsDir/$textFile\' file; error: $!\n";
+if($indexHtml ne "index.html") {  # Only make this text file when making index.html
+    open( TEXT_FILE, "> $downloadsDir/$textFile") || die "SYS ERROR: Can't write to \'$downloadsDir/$textFile\' file; error: $!\n";
+}
 #print OUT_FILE @fileList;
 
 
@@ -337,9 +442,19 @@ htmlStartPage(*OUT_FILE,$downloadsDir,$indexHtml,$preamble);
 # NOTE: these two arrays should be collapsed, and HTML derived from plain text
 my @rows; #  Gather rows to be printed here
 my @textRows; #  Gather rows to be printed here (plain-text)
-
-print OUT_FILE "<TABLE cellspacing=0>\n";
-print OUT_FILE "<TR valign='bottom'><TH>RESTRICTED<BR>until<TH align='left'>&nbsp;&nbsp;File<TH align='right'>Size<TH>Submitted<TH align='left'>&nbsp;&nbsp;Details</TR>\n";
+my $headerDone = 0;
+if (defined $opt_sortable) {
+    #print OUT_FILE "<script type='text/javascript' SRC='../js/jquery-1291074736.js'></script>\n";  Can't have timestamped version on static page (NOT A CGI)
+    print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/jquery.js'></script>\n";
+    print OUT_FILE "<script type='text/javascript' SRC='http://hgwdev.cse.ucsc.edu/js/tdreszer/utils.js'></script>\n";
+    print OUT_FILE "<TABLE class='sortable' style='border: 2px outset #006600;'>\n";
+} else {
+    print OUT_FILE "<TABLE cellspacing=0>\n";
+    print OUT_FILE "<TR valign='bottom'><TH class'sortable'>RESTRICTED<BR>until<TH align='left' class'sortTh'>&nbsp;&nbsp;File<TH align='right' class'sortTh'>Size<TH class'sortTh'>Submitted<TH align='left' class'sortTh'>&nbsp;&nbsp;Details</TR>\n";
+    print OUT_FILE "</TR>\n";
+    $headerDone = 1;
+}
+my @colList; # Only one colList made off the first row and declaring which are the metadata values to be stand alone columns
 
 for my $line (@fileList) {
     chomp $line;
@@ -376,8 +491,9 @@ for my $line (@fileList) {
                       "ripTgtProtein","restrictionEnzyme","promoter","control","replicate","expId","labExpId","setType","controlId","submittedDataVersion","subId","dataVersion",
                       "dateSubmitted","dateResubmitted","dateReloaded","dateUnrestricted","project","grant","lab","labVersion","softwareVersion",
                       "mapAlgorithm","fragSize","fragLength","medianFragmentLength","fragmentLengthRange","chromStart","view","type","composite",
-                      "tableName","parentTable","fileName","accession");
+                      "tableName","parentTable","fileName","dccInternalNotes");
     my @sortables = map( "~", (1..scalar(@sortFields))); # just has to have a tilde for each field
+    my @colListVals;
     my $typePrefix = "";
 
     my $results = $db->quickQuery("select type from $database.trackDb where tableName = '$tableName'");
@@ -478,7 +594,8 @@ for my $line (@fileList) {
                     unshift @vals, $metaData{type};
                 }
                 my %remove; # Don't display these metadata values
-                $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = 1;
+                $remove{tableName} = $remove{fileIndex} = $remove{project} = $remove{composite} = $remove{fileName} = 1;
+                $remove{dccInternalNotes} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = 1;
                 $remove{antibody} = 1 if($input eq "removeAntiBodyDup");  # remove antibody if input=antibody
                 ( $tagRef, $valRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%remove );
                 ( $tagRef, $valRef ) = metadataArraysMoveValuesToFront($tagRef, $valRef,\@sortFields);
@@ -486,6 +603,22 @@ for my $line (@fileList) {
                 @vals = @{$valRef};
 
                 @sortables = sortablesSetFromMetadataArrays( \@sortables,\@sortFields,\@tags,\@vals );
+                if (defined $opt_sortable) {
+                    if (!$headerDone) {
+                        # Note this is done only on the first line.  So whatever unsorted line is first will determine the list of columns
+                        @colList = colListCreateFromSortables( \@sortables,\@sortFields );
+                        push @colList, "type"; # push values onto the front
+                    }
+                    # create colListValues values from meta arrays and @colList
+                    @colListVals = colListValsCreateFromMetadataArrays( \@colList,\@tags,\@vals );
+                    # remove colList values from meta arrays
+                    my %remove = map { $_ => 1 } @colList; # Create has of all colList members
+                    ( $tagRef, $valRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%remove );
+                    my @leftOverTags = @{$tagRef};
+                    my @leftOverVals = @{$valRef};
+                    my @leftOverMetas = metadataArraysJoin( \@leftOverTags,\@leftOverVals );
+                    $metaData{leftOver} = join("; ", @leftOverMetas);
+                }
                 my @metas = metadataArraysJoin( \@tags,\@vals );
 
                 $metaData{metadata} = join("; ", @metas);
@@ -560,15 +693,36 @@ for my $line (@fileList) {
 #    }
 
     #htmlTableRow(*OUT_FILE,$fileName,$file[2],$submitDate,$releaseDate,$details);
-    push @rows, sortableHtmlRow(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$details);
-    printf TEXT_FILE "%s\tsize=%s; dateSubmitted=%s; %s\n", $fileName, $file[2], $submitDate, $details;
+    if (defined $opt_sortable) {
+        if (!$headerDone) {
+            # Now we print col headers with @colList
+            htmlTrHeader(\@colList);
+            $headerDone = 1;
+        }
+        # And add @colListVals to the table rows
+        push @rows, sortableHtmlRowWithColumns(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$metaData{leftOver},\@colListVals);
+    } else {
+        push @rows, sortableHtmlRow(\@sortables,$fileName,$file[2],$submitDate,$releaseDate,$details);
+    }
+
+    if($indexHtml eq "index.html") {  # Only make this text file when making index.html
+        printf TEXT_FILE "%s\tsize=%s; dateSubmitted=%s; %s\n", $fileName, $file[2], $submitDate, $details;
+    }
 }
 sortAndPrintHtmlTableRows(*OUT_FILE,@rows);
-print OUT_FILE "</TABLE>\n";
+if (defined $opt_sortable) {
+    print OUT_FILE "</tbody></TABLE>\n";
+    print OUT_FILE "<script type='text/javascript'>{\$(document).ready(function() {sortTableInitialize(\$('table.sortable')[0],true,true);});}</script>\n";
+} else {
+    print OUT_FILE "</TABLE>\n";
+}
+
 my $conclusion = "<i>" . scalar(@rows) . " files</i>\n";
 
 htmlEndPage(*OUT_FILE,$conclusion);
-close TEXT_FILE;
+if($indexHtml ne "index.html") {  # Only make this text file when making index.html
+    close TEXT_FILE;
+}
 
 # create file of checksums
 if (defined $opt_checksum) {

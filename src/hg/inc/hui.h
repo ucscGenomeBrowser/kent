@@ -632,6 +632,7 @@ enum baseColorDrawOpt
 
 /* Drawing mode per-track cart variable suffix: */
 #define BASE_COLOR_VAR_SUFFIX "baseColorDrawOpt"
+#define CODON_NUMBERING_SUFFIX "codonNumbering"
 
 /* trackDb settings: */
 #define BASE_COLOR_USE_CDS "baseColorUseCds"
@@ -852,13 +853,11 @@ void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *
 	boolean leafOnly);
 /* Recursively add trackList to trackHash */
 
-struct hash *makeTrackHashWithComposites(char *database, char *chrom,
-                                        bool withComposites);
-/* Make hash of trackDb items for this chromosome, optionally includingc
-   omposites, not just the subtracks. */
-
-struct hash *makeTrackHash(char *database, char *chrom);
-/* Make hash of trackDb items for this chromosome. */
+struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **tdbList,bool withComposites);
+// Make hash of trackDb items for this chromosome, including composites, not just the subtracks.
+// May pass in prepopulated trackDb list, or may receive the trackDb list as an inout.
+#define makeTrackHashWithComposites(db,chrom,withComposites) trackHashMakeWithComposites(db,chrom,NULL,withComposites)
+#define makeTrackHash(db,chrom) trackHashMakeWithComposites(db,chrom,NULL,FALSE)
 
 char *genePredDropDown(struct cart *cart, struct hash *trackHash,
                                         char *formName, char *varName);
@@ -951,8 +950,16 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
 
-enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, boolean noSupers);
-/* returns visibility limited by ancestry (or subtrack vis override) */
+enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,boolean *subtrackOverride);
+// returns visibility NOT limited by ancestry.  Fills optional boolean if subtrack specific vis is found
+// If not NULL cart will be examined without ClosestToHome.  Folders/supertracks resolve to hide/full
+
+enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb *tdb, boolean checkBoxToo, boolean foldersToo);
+// returns visibility limited by ancestry.  This includes subtrack vis override and parents limit maximum.
+// cart may be null, in which case, only trackDb settings (default state) are examined
+// checkBoxToo means ensure subtrack checkbox state is visible
+// foldersToo means limit by folders (aka superTracks) as well.
+#define tdbVisLimitedByAncestry(cart,tdb,noFolders) tdbVisLimitedByAncestors(cart, tdb, TRUE, !(noFolders))
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 /* Returns a string with the composite view control name if one exists */
@@ -1163,5 +1170,12 @@ int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
 
 void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled);
 /* Sets the fourState Checked in the cart and updates cached state */
+
+boolean hPrintPennantIcon(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
+
+boolean printPennantIconNote(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" and note when found.
+//This is used by hgTrackUi and hgc before printing out trackDb "html"
 
 #endif /* HUI_H */

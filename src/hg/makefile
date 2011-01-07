@@ -8,8 +8,8 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
-	encode/hgEncodeVocab phyloGif hgCustom hgPal \
-	makeDb/hgCgiData js
+	encode/hgEncodeVocab phyloGif hgCustom hgPal hgFileUi \
+	makeDb/hgCgiData js htdocs/style
 
 ifdef LOWELAB
     BROWSER_BINS += archaeStuff/tooltip archaeStuff/chooseorg 
@@ -18,16 +18,16 @@ endif
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
 
 ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
-    ENCODE_FILES = encode/encodeValidate
+    ENCODE_FILES =
 endif
 
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToGtf \
 	    genePredToMafFrames gbGetEntries hgGetAnn liftAcross \
-            mrnaToGene overlapSelect pslCDnaFilter pslDiff pslHisto \
-            pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl \
-	    sqlToXml xmlToSql
+            mrnaToGene pslCDnaFilter pslDiff pslHisto \
+            pslPartition pslSelect pslStats pslSwap spideyToPsl \
+	    sqlToXml xmlToSql utils
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 
@@ -141,7 +141,6 @@ UTIL_DIRS = \
 	near/knownToHprd \
 	nci60 \
 	orthoMap \
-	overlapSelect \
 	patCount \
 	perf \
 	protein \
@@ -157,7 +156,6 @@ UTIL_DIRS = \
 	pslHisto \
 	pslHitPercent \
 	pslIntronsOnly \
-	pslMap \
 	pslPartition \
 	pslPairs \
 	pslPretty \

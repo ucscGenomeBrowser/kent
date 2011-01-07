@@ -2,10 +2,12 @@
 
 # Meloidogyne hapla
 # The Center for the Biology of Nematode Parasitism, N.C. State
+#	http://www.pngg.org/cbnp/index.php
 # "Sequence and genetic map of Meloidogyne hapla:
 #	A compact nematode genome for plant parasitism"
 #	http://www.pnas.org/content/105/39/14802.full
 #	PNAS  September 30, 2008   vol. 105  no. 39  14802-14807 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABLG01
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)
@@ -412,3 +414,33 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     rm -rf blastOut
 
 #########################################################################
+# verify all.joiner has everything (DONE - 2010-10-25 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=melHap1 ./all.joiner
+    joinerCheck -keys -database=melHap1 ./all.joiner
+    joinerCheck -times -database=melHap1 ./all.joiner
+    joinerCheck -all -database=melHap1 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#########################################################################
+# construct downloads files (DONE - 2010-10-25 - Hiram)
+    cd /hive/data/genomes/melHap1
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 melHap1 \
+	 > downloads.log 2>&1
+
+#########################################################################
+## Creating pushQ (DONE - 2010-10-25 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/melHap1/pushQ
+    cd /hive/data/genomes/melHap1/pushQ
+    makePushQSql.pl melHap1 > melHap1.sql 2> errorLog.out
+
+    ## check the errorLog.out for anything that needs to be fixed
+    ## copy melHap1.sql to hgwbeta:/tmp
+    ## then on hgwbeta:
+    hgsql qapushq < melHap1.sql
+
+#######################################################################

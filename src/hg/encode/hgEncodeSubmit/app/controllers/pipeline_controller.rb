@@ -13,8 +13,9 @@ class PipelineController < ApplicationController
 
   before_filter :login_required
   before_filter :check_user_is_owner, :except => 
-        [:new, :create, :list, :show_active, :show_user, :show, 
-        :valid_status, :load_status, :unload_status, :upload_status ]
+        [ :new, :create, :list, :show_active, :show_user, :show, 
+        :valid_status, :load_status, :unload_status, :upload_status, 
+        :show_tools, :mass_tools, :mass_ftp, :mass_url, :delete_archive ]
   
   layout 'main'
   
@@ -80,14 +81,16 @@ class PipelineController < ApplicationController
     end
     @errText = ""
     case @project.status
+      when "upload failed"
+	@errText = getUploadErrText(@project)
+      when "expand failed"
+	@errText = getExpandErrText(@project)
       when "validate failed"
         @errText = getValidateErrText(@project)
       when "load failed"
         @errText = getLoadErrText(@project)
       when "unload failed"
 	@errText = getUnloadErrText(@project)
-      when "upload failed"
-	@errText = getUploadErrText(@project)
       when "uploading"
 	# old wget method
 	#upText = getUploadErrText(@project)
@@ -120,8 +123,8 @@ class PipelineController < ApplicationController
         end
 
     end 
-    @dafText = getDafText(@project)
-    @ddfText = getDdfText(@project)
+    @dafName,@dafText = getDafText(@project)
+    @ddfName,@ddfText = getDdfText(@project)
 
     if @project.run_stat and @project.run_stat == "waiting"
       job = QueuedJob.find(:first, :conditions => ["project_id = ?", @project.id])
@@ -160,14 +163,33 @@ class PipelineController < ApplicationController
     @errText = getUploadErrText(@project)
   end
 
+  def expand_status
+    @project = Project.find(params[:id])
+    @errText = getExpandErrText(@project)
+  end
+
   def show_daf
     @project = Project.find(params[:id])
-    @dafText = getDafText(@project)
+    @dafName,@dafText = getDafText(@project)
+  end
+
+  def download_daf
+    @project = Project.find(params[:id])
+    @dafName,@dafText = getDafText(@project)
+    headers.merge!('Content-Disposition' => "attachment; filename=\"#{@dafName}\"")
+    render :text => @dafText, :content_type => 'text/plain'
   end
 
   def show_ddf
     @project = Project.find(params[:id])
-    @ddfText = getDdfText(@project)
+    @ddfName,@ddfText = getDdfText(@project)
+  end
+
+  def download_ddf
+    @project = Project.find(params[:id])
+    @ddfName,@ddfText = getDdfText(@project)
+    headers.merge!('Content-Disposition' => "attachment; filename=\"#{@ddfName}\"")
+    render :text => @ddfText, :content_type => 'text/plain'
   end
 
   def db_load
@@ -195,7 +217,7 @@ class PipelineController < ApplicationController
       redirect_to :action => 'show', :id => @project.id
       return
     end
-    if (@project.status == "uploaded") or (@project.status == "validate failed")
+    if (@project.status == "expanded") or (@project.status == "validate failed")
       new_status @project, "validate requested"
       unless queue_job @project.id, "validate_background(#{@project.id}, \"#{allowReloads}\")"
         flash[:error] = "System error - queued_jobs save failed."
@@ -244,7 +266,7 @@ class PipelineController < ApplicationController
         if @project.project_archives.length == 0
 	  @project.status = "new"
 	else
-	  @project.status = "uploaded"
+	  @project.status = "expanded"
 	end
         new_status @project, @project.status
       end
@@ -295,6 +317,163 @@ class PipelineController < ApplicationController
 
 
 
+  def mass_ftp
+    @user = current_user
+
+    get_ftp_list
+
+    return unless request.post?
+    if params[:commit] == "Cancel"
+      redirect_to :action => 'show_user'
+      return
+    end
+
+    # create submissions
+    @ftpList.each do |file|
+      #take project name from archive filename
+      project_name = file
+      #chop off archive file extension
+      @extensions.each do |ext|
+        if project_name.ends_with?("." + ext)
+          project_name = project_name[0..(project_name.length - 1 - (ext.length + 1))]
+        end    
+      end
+      #if a submission with that name exists already, tweak the name with (number) until unique.
+      base_name = project_name
+      suffix = ""
+      retryCount = 0
+      unique = false
+      while not unique
+        project_name = base_name + suffix
+        @existing = Project.find(:first, :conditions => {:name => project_name})
+        if @existing
+          retryCount += 1
+          suffix = " (" + retryCount.to_s + ")"
+        else
+          unique = true
+        end
+      end
+
+      @project = Project.new()
+      @project.name = project_name
+      @project.project_type_id = 5
+      @project.user_id = @current_user.id
+      @project.status = 'new'
+      @project.archives_active = ""
+
+      if @project.save
+        # queue it up to be uploaded etc.
+        @upurl = ""
+        @upload = ""
+        @upftp = file
+        @filename = sanitize_filename(@upftp)
+        upload_one
+      else
+        msg = ("Error creating submission for "+file+" as "+project_name+"<br>")
+        if flash[:error]
+          flash[:error] += msg
+        else
+          flash[:error] = msg
+       end
+      end
+
+    end
+
+    redirect_to :action => 'show_user'
+
+  end
+
+
+  def mass_url
+    @user = current_user
+
+    return unless request.post?
+    if params[:commit] == "Cancel"
+      redirect_to :action => 'show_user'
+      return
+    end
+
+    uplist = params[:url_list].split("\n")
+
+    
+    @extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
+    # check urls have correct extension
+    uplist.each do |url|
+      # get trim lead/trail whitespace
+      url.strip!
+      if url.blank? 
+        next
+      end
+      @filename = sanitize_filename(url)
+      # todo may need to move this up earlier?
+      unless @extensions.any? {|ext| @filename.ends_with?("." + ext) }
+        flash[:error] = "File name <strong>#{@filename}</strong> is invalid. " +
+          "Only a compressed archive file (tar.gz, tar.bz2, zip) is allowed."
+        return
+      end
+    end
+
+    # create submissions
+    uplist.each do |url|
+      # get trim lead/trail whitespace
+      url.strip!
+      if url.blank? 
+        next
+      end
+      #take project name from archive filename
+      project_name = url
+      #chop off archive file extension
+      @extensions.each do |ext|
+        if project_name.ends_with?("." + ext)
+          project_name = project_name[0..(project_name.length - 1 - (ext.length + 1))]
+        end    
+      end
+      #if a submission with that name exists already, tweak the name with (number) until unique.
+      base_name = project_name
+      suffix = ""
+      retryCount = 0
+      unique = false
+      while not unique
+        project_name = base_name + suffix
+        @existing = Project.find(:first, :conditions => {:name => project_name})
+        if @existing
+          retryCount += 1
+          suffix = " (" + retryCount.to_s + ")"
+        else
+          unique = true
+        end
+      end
+
+      @project = Project.new()
+      @project.name = project_name
+      @project.project_type_id = 5
+      @project.user_id = @current_user.id
+      @project.status = 'new'
+      @project.archives_active = ""
+
+      if @project.save
+        # queue it up to be uploaded etc.
+        @upurl = url
+        @upload = ""
+        @upftp = ""
+        @filename = sanitize_filename(@upurl)
+        upload_one
+      else
+        msg = ("Error creating submission for "+url+" as "+project_name+"<br>")
+        if flash[:error]
+          flash[:error] += msg
+        else
+          flash[:error] = msg
+       end
+      end
+
+    end
+
+    redirect_to :action => 'show_user'
+
+  end
+
+
   def upload
     @project = Project.find(params[:id])
     if @project.run_stat 
@@ -302,26 +481,10 @@ class PipelineController < ApplicationController
       redirect_to :action => 'show', :id => @project.id
       return
     end
-    @autoUploadLabel = AUTOUPLOADLABEL
-    # handle FTP stuff
     @user = current_user
-    @ftpUrl = "ftp://#{@user.login}@#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpServer']}"+
-           ":#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpPort']}"
-    @ftpList = []
-    @fullPath = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount']+'/'+@user.login
-    extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
-    if File.exists?(@fullPath)
-      Dir.entries(@fullPath).each do
-        |file|
-        fullName = File.join(@fullPath,file)
-        if File.ftype(fullName) == "file"
-          if extensions.any? {|ext| file.ends_with?("." + ext) }
-            @ftpList << file
-          end
-        end
-      end
-    end
-    @ftpList.sort!
+    @autoUploadLabel = AUTOUPLOADLABEL
+
+    get_ftp_list
 
     return unless request.post?
     if params[:commit] == "Cancel"
@@ -337,10 +500,6 @@ class PipelineController < ApplicationController
     unless @upftp
       @upftp = ""
     end
-    unless @upftp
-      @upftp = ""
-    end
-    bg_local_path = ""
 
     return if @upload.blank? && @upurl.blank? && @upftp.blank?
 
@@ -360,95 +519,21 @@ class PipelineController < ApplicationController
           "application/gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"],
           "application/x-gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"]
         }
-        extensions = extensionsByMIME[@upload.content_type.chomp]
-        unless extensions
+        @extensions = extensionsByMIME[@upload.content_type.chomp]
+        unless @extensions
           flash[:error] = "Invalid content_type=#{@upload.content_type.chomp}."
           return
         end
       end
     end
 
-    unless extensions.any? {|ext| @filename.ends_with?("." + ext) }
+    unless @extensions.any? {|ext| @filename.ends_with?("." + ext) }
       flash[:error] = "File name <strong>#{@filename}</strong> is invalid. " +
         "Only a compressed archive file (tar.gz, tar.bz2, zip) is allowed."
       return
     end
 
-    msg = ""
-
-    # make sure parent paths exist
-    projectDir = path_to_project_dir(@project.id)
-    Dir.mkdir(projectDir,0775) unless File.exists?(projectDir)
-
-    nextArchiveNo = @project.archive_count+1
-
-    plainName = @filename
-    @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
-
-    #debugging
-    #msg += "sanitized filename=#{@filename}<br>"
-    #msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
-    #msg += "upload path=#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}<br>"
-    #msg += "path_to_file=#{pf}<br>"
-    #msg += "nextArchiveNo=#{nextArchiveNo}<br>"
-
-    msg += "Uploading/expanding #{plainName}.<br>"
-
-    # local file upload by browser cannot be passed in bg job params
-    if @upurl.blank?
-      if @upftp.blank?
-        # should be local-file upload, Hmm... where does Mongrel put it during upload?
-        pf = path_to_file(@project.id, @filename)
-        if @upload.respond_to?(:local_path) and @upload.local_path and File.exists?(@upload.local_path)
-
-          logger.info "#DEBUG local_path=#{@upload.local_path} length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
-          bg_local_path = "#{@upload.local_path}_BG"
-          File.link(@upload.local_path, bg_local_path)  # we want the file to be preserved beyond cgi call for bg to use
-
-        elsif @upload.respond_to?(:read)
-
-          logger.info "#DEBUG length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
-          File.open(pf, "wb") { |f| f.write(@upload.read); f.close }
-
-        else
-
-          raise ArgumentError.new("Do not know how to handle #{@upload.inspect}?")
-
-       end 
-       @upload.close
-
-       # old way
-       #if defined? @upload.local_path
-       #   FileUtils.copy(@upload.local_path, pf)
-       # else
-       #   File.open(pf, "wb") { |f| f.write(@upload.read) }
-       # end
-
-      end
-    end
-    allowReloads = "";
-    if (defined? @params['allow_reloads']) and (@params['allow_reloads']['0'] == "1")
-       allowReloads = "-allowReloads"
-    end
-
-    # need to preserve the status for the archive NOW
-    if @project.project_archives.last
-      @project.project_archives.last.status = @project.status
-      @project.project_archives.last.archives_active = @project.archives_active
-      unless saver @project.project_archives.last
-        flash[:error] = "unable to save @project.project_archives.last" 
-      end
-    end
-
-    new_status @project, "upload requested"
-    upload_name = @upload.blank? ? "" : @upload.original_filename
-    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{allowReloads}\""
-    unless queue_job @project.id, "upload_background(#{param_string})"
-      flash[:error] = "System error - queued_jobs save failed."
-      return
-    end
-
-    flash[:notice] = msg
+    upload_one
     redirect_to :action => 'show', :id => @project
 
   end
@@ -528,6 +613,112 @@ private
       return false
     end
     return true
+  end
+
+  def get_ftp_list
+    @ftpUrl = "ftp://#{@user.login}@#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpServer']}"+
+           ":#{ActiveRecord::Base.configurations[RAILS_ENV]['ftpPort']}"
+    @ftpList = []
+    @fullPath = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount']+'/'+@user.login
+    @extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
+    if File.exists?(@fullPath)
+      Dir.entries(@fullPath).each do
+        |file|
+        fullName = File.join(@fullPath,file)
+        if File.ftype(fullName) == "file"
+          if @extensions.any? {|ext| file.ends_with?("." + ext) }
+            @ftpList << file
+          end
+        end
+      end
+    end
+    @ftpList.sort!
+  end
+
+  def upload_one
+
+    bg_local_path = ""
+
+    msg = ""
+
+    # make sure parent paths exist
+    projectDir = path_to_project_dir(@project.id)
+    Dir.mkdir(projectDir,0775) unless File.exists?(projectDir)
+
+    nextArchiveNo = @project.archive_count+1
+
+    plainName = @filename
+    @filename = "#{"%03d" % nextArchiveNo}_#{@filename}"
+
+    #debugging
+    #msg += "sanitized filename=#{@filename}<br>"
+    #msg += "RAILS_ROOT=#{RAILS_ROOT}<br>"
+    #msg += "upload path=#{ActiveRecord::Base.configurations[RAILS_ENV]['upload']}<br>"
+    #msg += "path_to_file=#{pf}<br>"
+    #msg += "nextArchiveNo=#{nextArchiveNo}<br>"
+
+    msg += "Uploading/expanding #{plainName}.<br>"
+
+    # local file upload by browser cannot be passed in bg job params
+    if @upurl.blank?
+      if @upftp.blank?
+        # should be local-file upload, Hmm... where does Mongrel put it during upload?
+        pf = path_to_file(@project.id, @filename)
+        if @upload.respond_to?(:local_path) and @upload.local_path and File.exists?(@upload.local_path)
+
+          logger.info "#DEBUG local_path=#{@upload.local_path} length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
+          bg_local_path = "#{@upload.local_path}_BG"
+          File.link(@upload.local_path, bg_local_path)  # we want the file to be preserved beyond cgi call for bg to use
+
+        elsif @upload.respond_to?(:read)
+
+          logger.info "#DEBUG length=#{@upload.length} original_filename=#{@upload.original_filename}"  #debug
+          File.open(pf, "wb") { |f| f.write(@upload.read); f.close }
+
+        else
+
+          raise ArgumentError.new("Do not know how to handle #{@upload.inspect}?")
+
+       end 
+       @upload.close
+
+       # old way
+       #if defined? @upload.local_path
+       #   FileUtils.copy(@upload.local_path, pf)
+       # else
+       #   File.open(pf, "wb") { |f| f.write(@upload.read) }
+       # end
+
+      end
+    end
+    allowReloads = "";
+    if (defined? @params['allow_reloads']) and (@params['allow_reloads']['0'] == "1")
+       allowReloads = "-allowReloads"
+    end
+
+    # need to preserve the status for the archive NOW
+    if @project.project_archives.last
+      @project.project_archives.last.status = @project.status
+      @project.project_archives.last.archives_active = @project.archives_active
+      unless saver @project.project_archives.last
+        flash[:error] = "unable to save @project.project_archives.last" 
+      end
+    end
+
+    new_status @project, "upload requested"
+    upload_name = @upload.blank? ? "" : @upload.original_filename
+    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{allowReloads}\""
+    unless queue_job @project.id, "upload_background(#{param_string})"
+      flash[:error] = "System error - queued_jobs save failed."
+      return
+    end
+
+    if flash[:notice]
+      flash[:notice] += msg
+    else
+      flash[:notice] = msg
+    end
+
   end
 
 end

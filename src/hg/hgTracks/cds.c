@@ -58,7 +58,7 @@ static void drawScaledBoxSampleWithText(struct hvGfx *hvg,
                                         double scale, int xOff, int y,
                                         int height, Color color, int score,
                                         MgFont *font, char *text, bool zoomed,
-                                        int winStart, int maxPixels, boolean isCoding)
+                                        int winStart, int maxPixels, boolean isCoding, boolean justifyString)
 /* Draw a box scaled from chromosome to window coordinates with
    a codon or set of 3 or less bases drawn in the box. */
 {
@@ -81,11 +81,19 @@ if (zoomed)
         w = 1;
 
     if (chromEnd - chromStart == 3 && isCoding)
-        spreadBasesString(hvg,x1,y,w,height,whiteIndex(),
-		     font,text,strlen(text), TRUE);
+        {
+        if (justifyString)
+            spreadBasesString(hvg, x1, y, w, height, whiteIndex(),  font, text, strlen(text),  TRUE);
+        else
+            hvGfxTextCentered(hvg, x1, y, w, height, whiteIndex(), font, text);
+        }
     else if (chromEnd - chromStart < 3 && isCoding)
-        spreadBasesString(hvg,x1,y,w,height,cdsColor[CDS_PARTIAL_CODON],font,
-		     text,strlen(text), TRUE);
+        {
+        if (justifyString)
+            spreadBasesString(hvg, x1, y, w, height, cdsColor[CDS_PARTIAL_CODON], font, text, strlen(text), TRUE);
+        else
+            hvGfxTextCentered(hvg, x1, y, w, height, cdsColor[CDS_PARTIAL_CODON], font, text);
+        }
     else
         {
         int thisX,thisX2;
@@ -363,6 +371,21 @@ Color lighterShade(struct hvGfx *hvg, Color color, double percentLess)
 }
 
 
+// We need an uppercase alpha character to represent the stop codon in
+// the alpha-offset grayIx scheme.  J is in neither dnautil.c's
+// codonTable nor axt.c's blosum62 peptide scoring matrix.  X was
+// formerly used to represent stop codon, but unfortunately it also is
+// the error return from dnautil.c's lookupCodon (and it is in
+// blosum62, so maybe it is a valid peptide in some contexts?).
+#define GRAYIX_STOP_CODON_ALPHA 'J'
+
+// In addition to the alpha-offset encoding of peptide and alternating
+// shade, grayIx can take on several negative values to represent colors
+// for special cases:
+#define GRAYIX_CDS_START -1
+#define GRAYIX_CDS_ERROR -2
+#define GRAYIX_CDS_STOP  -3
+#define GRAYIX_CDS_SYN_PROT -4
 
 static Color colorAndCodonFromGrayIx(struct hvGfx *hvg, char *codon, int grayIx, 
 			      Color ixColor)
@@ -370,22 +393,22 @@ static Color colorAndCodonFromGrayIx(struct hvGfx *hvg, char *codon, int grayIx,
  * are both encoded in the grayIx*/
 {
 Color color;
-if (grayIx == -2)
+if (grayIx == GRAYIX_CDS_ERROR)
     {
     color = cdsColor[CDS_ERROR];
     sprintf(codon,"X");
     }
-else if (grayIx == -1)
+else if (grayIx == GRAYIX_CDS_START)
     {
     color = cdsColor[CDS_START];
     sprintf(codon,"M");
     }
-else if (grayIx == -3)
+else if (grayIx == GRAYIX_CDS_STOP)
     {
       color = cdsColor[CDS_STOP];
     sprintf(codon,"*");
     }
-else if (grayIx == -4)
+else if (grayIx == GRAYIX_CDS_SYN_PROT)
     {
     color = cdsColor[CDS_SYN_PROT];
     sprintf(codon,"*");
@@ -406,14 +429,19 @@ else if (grayIx <= 26)
     {
     color = ixColor;
     sprintf(codon,"%c",grayIx + 'A' - 1);
+    if (codon[0] == GRAYIX_STOP_CODON_ALPHA)
+	codon[0] = '*';
     }
 else if (grayIx > 26)
     {
     color = lighterShade(hvg, ixColor,1.5);
     sprintf(codon,"%c",grayIx - 26 + 'A' - 1);
+    if (codon[0] == GRAYIX_STOP_CODON_ALPHA)
+	codon[0] = '*';
     }
 else
     {
+    errAbort("colorAndCodonFromGrayIx: invalid grayIx %d", grayIx);
     color = cdsColor[CDS_ERROR];
     sprintf(codon,"X");
     }
@@ -421,19 +449,38 @@ return color;
 }
 
 
-static int setColorByCds(DNA *dna, bool codonFirstColor, boolean *foundStart, 
-			 boolean reverse, boolean colorStopStart)
+static char baseColorLookupCodon(DNA *dna)
+/* Call dnautil's lookupCodon, but translate stop codon '\0' to '*' for display. */
 {
-char codonChar;
+char peptide;
+if (sameString(chromName, "chrM"))
+    peptide = lookupMitoCodon(dna);
+else
+    peptide = lookupCodon(dna);
+if (peptide == '\0')
+    peptide = '*';
+return peptide;
+}
 
+static int peptideToGrayIx(char peptide, boolean codonFirstColor)
+/* Encode peptide (a letter or '*') and alternating gray shade into our alpha-offset scheme. */
+{
+if (peptide == '*')
+    peptide = GRAYIX_STOP_CODON_ALPHA;
+if (codonFirstColor)
+    return(peptide - 'A' + 1);
+else
+    return(peptide - 'A' + 1 + 26);
+}
+
+static int codonToGrayIx(DNA *dna, bool codonFirstColor, boolean *foundStart, 
+			 boolean reverse, boolean colorStopStart)
+/* Return grayIx encoding the codon and color (or alternating shades). */
+{
 if (reverse)
     reverseComplement(dna,strlen(dna));
 
-if (sameString(chromName, "chrM"))
-    codonChar = lookupMitoCodon(dna);
-else
-    codonChar = lookupCodon(dna);
-
+char codonChar = baseColorLookupCodon(dna);
 if (codonChar == 'M' && foundStart != NULL && !(*foundStart))
     *foundStart = TRUE;
 
@@ -448,28 +495,19 @@ if(sameString(dna,"TTG"))
    }
 #endif
 
-if (codonChar == 0)
+if (codonChar == '*')
     {
     if (colorStopStart)
-	return(-3);    //stop codon
+	return(GRAYIX_CDS_STOP);
     else
-	{
-	if (codonFirstColor)
-	    return('X' - 'A' + 1);
-	else
-	    return('X' - 'A' + 1 + 26);
-	}
+	return peptideToGrayIx(codonChar, codonFirstColor);
     }
 else if (codonChar == 'X')
-    return(-2);     //bad input to lookupCodon
+    return(GRAYIX_CDS_ERROR);     // bad input to lookupCodon, e.g. 'n' base
 else if (colorStopStart && codonChar == 'M')
-    {
-    return(-1);     //start codon
-    }
-else if (codonFirstColor)
-    return(codonChar - 'A' + 1);
+    return(GRAYIX_CDS_START);
 else
-    return(codonChar - 'A' + 1 + 26);
+    return peptideToGrayIx(codonChar, codonFirstColor);
 }
 
 
@@ -477,9 +515,11 @@ static boolean protEquivalent(int aa1, int aa2)
 /* returns TRUE if amino acids have a positive blosum62 score
    i.e. I, V or R, K
    else FALSE
+   Note: X is a valid code in the default scheme (blosum62), so don't pass in
+   dnautil.c's X which is an error return...
    */
 {
-static struct axtScoreScheme *ss;
+static struct axtScoreScheme *ss = NULL;
 if (ss == NULL)
     ss = axtScoreSchemeProteinDefault();
 if ((ss->matrix[aa1][aa2]) > 0)
@@ -488,27 +528,20 @@ else
     return FALSE;
 }
 
-static int setColorByDiff(DNA *rna, char genomicCodon, bool codonFirstColor)
+static int mrnaCodonToGrayIx(DNA *rna, char genomicCodon, bool codonFirstColor)
 /* Difference ==> red, otherwise keep the alternating shades. */
 {
-char rnaCodon = lookupCodon(rna);
+char rnaCodon = baseColorLookupCodon(rna);
 
-/* Translate lookupCodon stop codon result into what genomicCodon would have 
- * for a stop codon: */
-if (rnaCodon == '\0')
-    rnaCodon = '*';
-
-if (genomicCodon != 'X' && genomicCodon != rnaCodon)
+if (genomicCodon != rnaCodon)
     {
-    if (protEquivalent(genomicCodon, rnaCodon))
-        return(-4);     // yellow, "synonymous" protein 
+    if (genomicCodon != 'X' && rnaCodon != 'X' && protEquivalent(genomicCodon, rnaCodon))
+        return(GRAYIX_CDS_SYN_PROT);     // yellow, "synonymous" protein 
     else
-        return(-3);    //red (reusing stop codon color)
+        return(GRAYIX_CDS_STOP);
     }
-else if (codonFirstColor)
-    return(genomicCodon - 'A' + 1);
 else
-    return(genomicCodon - 'A' + 1 + 26);
+    return peptideToGrayIx(genomicCodon, codonFirstColor);
 }
 
 
@@ -631,7 +664,7 @@ else
     lf->end = gp->txEnd;
     lf->tallStart = gp->cdsStart;
     lf->tallEnd = gp->cdsEnd;
-    sfList = baseColorCodonsFromGenePred(lf, gp, colorStopStart);
+    sfList = baseColorCodonsFromGenePred(lf, gp, colorStopStart, FALSE);
     genePredFree(&gp);
     }
 return(sfList);
@@ -975,7 +1008,9 @@ for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
         sf->start = winEnd - sf->start + winStart - 3;
         sf->end = sf->start + 3;
         }
-    sf->grayIx = setColorByCds(codon, sf->start % 6 < 3, NULL, FALSE, TRUE);
+    // Base offsets mod 6 for alternating colors: 0,1,2 --> first codon, 3,4,5 --> second codon.
+    bool codonFirstColor = (sf->start % 6 < 3);
+    sf->grayIx = codonToGrayIx(codon, codonFirstColor, NULL, FALSE, TRUE);
     zeroBytes(codon, 4);
     slAddHead(&sfList, sf);
     }
@@ -984,7 +1019,7 @@ return sfList;
 }
 
 struct simpleFeature *baseColorCodonsFromGenePred(struct linkedFeatures *lf, 
-	struct genePred *gp, boolean colorStopStart)
+        struct genePred *gp, boolean colorStopStart, boolean codonNumbering)
 /* Given an lf and the genePred from which the lf was constructed, 
  * return a list of simpleFeature elements, one per codon (or partial 
  * codon if the codon falls on a gap boundary. */
@@ -1022,6 +1057,9 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 
     bool altColor = FALSE;
     unsigned cds5Prime = posStrand ? cdsStart : cdsEnd;
+    int width = winEnd - winStart;
+    // width cutoff really should be based on (a) how many codons this gene has, (2) the current font and (3) image width.
+    int codonIndex = !codonNumbering || width > 60 ? 0 : 1;
     for (i=i0; (iInc*i)<(iInc*iN); i=i+iInc)
 	{
         int exonStart = starts[i];
@@ -1145,9 +1183,10 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		    sf->end = currentEnd;
 		    sf->grayIx = ((posStrand && currentEnd <= cdsEnd) || 
 				  (!posStrand && currentStart >= cdsStart)) ?
-			setColorByCds(tempCodonSeq, altColor, &foundStart, 
+			codonToGrayIx(tempCodonSeq, altColor, &foundStart, 
 				      !posStrand, colorStopStart) :
-			-2;
+			GRAYIX_CDS_ERROR;
+                    sf->codonIndex = codonIndex;
 		    slAddHead(&sfList, sf);
 		    }
                 break;
@@ -1167,11 +1206,11 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		    char *thisDna = getCachedDna(currentStart, currentEnd);
 		    memcpy(currentCodon, thisDna, 3);
 		    currentCodon[3] = '\0';
-		    sf->grayIx = setColorByCds(currentCodon, altColor, &foundStart, 
+		    sf->grayIx = codonToGrayIx(currentCodon, altColor, &foundStart, 
 					       !posStrand, colorStopStart);
 		    }
 		else
-		    sf->grayIx = -2;
+		    sf->grayIx = GRAYIX_CDS_ERROR;
 		}
             /*start of a coding block with less than 3 bases*/
             else if (currentSize < 3)
@@ -1181,10 +1220,10 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
 		sf->start = currentStart;
 		sf->end = currentEnd;
                 if (strlen(partialCodonSeq) == 3) 
-                    sf->grayIx = setColorByCds(partialCodonSeq, altColor,
+                    sf->grayIx = codonToGrayIx(partialCodonSeq, altColor,
                             &foundStart, !posStrand, colorStopStart);
                 else
-                    sf->grayIx = -2;
+                    sf->grayIx = GRAYIX_CDS_ERROR;
                 strcpy(partialCodonSeq,"" );
 
                 /*update frame based on bases appended*/
@@ -1194,6 +1233,8 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
                 errAbort("%s: Too much dna (%d - %d = %d)<br>\n", lf->name, 
 			 currentEnd, currentStart, currentSize);
 
+            if (codonIndex)
+                sf->codonIndex = codonIndex++;
             slAddHead(&sfList, sf);
             if(posStrand)
                 currentStart = currentEnd;
@@ -1329,7 +1370,7 @@ if(mrnaS >= 0)
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, dyMrnaSeq->string,
-				    zoomedToBaseLevel, winStart, maxPixels, isCoding);
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
 	}
     else if (drawOpt == baseColorDrawItemCodons)
 	{
@@ -1338,7 +1379,7 @@ if(mrnaS >= 0)
 	    boolean startColor = FALSE;
 	    /* re-set color of this block based on mrna codons rather than
 	     * genomic, but keep the odd/even cycle of dark/light shades. */
-	    int mrnaGrayIx = setColorByCds(mrnaBases, (grayIx > 26), NULL,
+	    int mrnaGrayIx = codonToGrayIx(mrnaBases, (grayIx > 26), NULL,
 					   FALSE, TRUE);
 	    if (color == cdsColor[CDS_START])
                 startColor = TRUE;
@@ -1349,7 +1390,7 @@ if(mrnaS >= 0)
 	    drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 					color, lf->score, font, mrnaCodon,
 					zoomedToCodonLevel, winStart,
-					maxPixels, isCoding);
+					maxPixels, isCoding, TRUE);
 	    }
 	else
 	    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1364,7 +1405,7 @@ if(mrnaS >= 0)
 	    complement(diffStr, strlen(diffStr));
 	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 
-				    zoomedToBaseLevel, winStart, maxPixels, isCoding);
+				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
 	freeMem(diffStr);
 	}
     else if (drawOpt == baseColorDrawDiffCodons)
@@ -1374,19 +1415,19 @@ if(mrnaS >= 0)
 	    /* Color codons red wherever mrna differs from genomic;
 	     * keep the odd/even cycle of dark/light shades. */
 	    colorAndCodonFromGrayIx(hvg, genomicCodon, grayIx, ixColor);
-	    int mrnaGrayIx = setColorByDiff(mrnaBases, genomicCodon[0],
-					    (grayIx > 26));
+	    int mrnaGrayIx = mrnaCodonToGrayIx(mrnaBases, genomicCodon[0],
+					       (grayIx > 26));
 	    color = colorAndCodonFromGrayIx(hvg, mrnaCodon, mrnaGrayIx,
 					    ixColor);
-	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", lookupCodon(mrnaBases));
-	    if (mrnaCodon[0] == '\0')
-		mrnaCodon[0] = '*';
-	    if (genomicCodon[0] != 'X' && mrnaCodon[0] != genomicCodon[0])
+	    // Look up mrnaCodon again because if mrnaGrayIx is GRAYIX_SYN_PROT,
+	    // codon value is lost:
+	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", baseColorLookupCodon(mrnaBases));
+	    if (mrnaCodon[0] != genomicCodon[0])
 		{
 		drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, 
 					    heightPer, color, lf->score, font,
 					    mrnaCodon, zoomedToCodonLevel,
-					    winStart, maxPixels, isCoding);
+					    winStart, maxPixels, isCoding, TRUE);
 		}
 	    else
 		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
@@ -1418,8 +1459,10 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
                        Color originalColor)
 /* Draw codon/base-colored item. */
 {
-char codon[2] = " ";
+char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
+if (sf->codonIndex)
+    safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)
  * so don't waste time drawing the differences here: */
@@ -1431,7 +1474,7 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
     {
     drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
                                 color, lf->score, font, codon, 
-                                zoomedToCodonLevel, winStart, maxPixels, TRUE);
+                                zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
     }
 else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProcessing &&
 	 drawOpt != baseColorDrawGenomicCodons && drawOpt != baseColorDrawOff)
@@ -1488,13 +1531,11 @@ for (sf = lf->codons; sf != NULL; sf = sf->next)
 			 mrnaBases, &queryInsertion);
 	    if (queryInsertion)
 		color = cdsColor[CDS_QUERY_INSERTION];
-	    mrnaCodon = lookupCodon(mrnaBases);
-	    if (mrnaCodon == '\0')
-		mrnaCodon = '*';
+	    mrnaCodon = baseColorLookupCodon(mrnaBases);
 	    colorAndCodonFromGrayIx(hvg, genomicCodon, sf->grayIx, dummyColor);
 	    if (queryInsertion)
 		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
-            if ((genomicCodon[0] != 'X' && mrnaCodon != genomicCodon[0])) 
+            if (mrnaCodon != genomicCodon[0])
                 {
                 if (mrnaCodon != genomicCodon[0] && protEquivalent(genomicCodon[0], mrnaCodon))
                     color = cdsColor[CDS_SYN_PROT];
@@ -1686,7 +1727,8 @@ if (initedTrack == NULL || differentString(tg->track, initedTrack))
     {
     int overallStart, overallEnd;
     boolean isSeries = FALSE;
-    if (tg->drawItems == linkedFeaturesSeriesDraw)
+    if ((tg->drawItems == linkedFeaturesSeriesDraw)
+        || (tg->drawItems == bamLinkedFeaturesSeriesDraw))
 	isSeries = TRUE;
     else if (!baseColorCanDraw(tg))
 	errAbort("baseColorInitTrack: track %s has a type not recognized by baseColorCanDraw.",
@@ -1793,7 +1835,7 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     if (zoomedToText)
         drawScaledBoxSampleWithText(hvg, sf->start, sf->end, scale, insideX, y,
 				    height, color, 1.0, font, codon, TRUE,
-				    winStart, maxPixels, TRUE);
+				    winStart, maxPixels, TRUE, TRUE);
     else
         /* zoomed in just enough to see colored boxes */
         drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y, height, color);

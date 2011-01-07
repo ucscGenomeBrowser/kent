@@ -5,6 +5,7 @@
 # "Draft genome of the filarial nematode parasite Brugia malayi.",
 # Science, 2007 Sep 21; 317(5845):1756-60
 # http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2613796/
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAQA01
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)
@@ -429,3 +430,36 @@ XXX - ready
     rm -rf blastOut
 
 #########################################################################
+# verify all.joiner has everything (DONE - 2010-10-25 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=bruMal1 ./all.joiner
+    joinerCheck -keys -database=bruMal1 ./all.joiner
+    joinerCheck -times -database=bruMal1 ./all.joiner
+    joinerCheck -all -database=bruMal1 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#########################################################################
+# construct downloads files (DONE - 2010-10-25 - Hiram)
+    cd /hive/data/genomes/bruMal1
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 bruMal1 \
+	 > downloads.log 2>&1
+
+#########################################################################
+## Creating pushQ (DONE - 2010-10-25 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bruMal1/pushQ
+    cd /hive/data/genomes/bruMal1/pushQ
+    makePushQSql.pl bruMal1 > bruMal1.sql 2> errorLog.out
+
+    ## check the errorLog.out for anything that needs to be fixed
+    ## copy bruMal1.sql to hgwbeta:/tmp
+    ## then on hgwbeta:
+    scp -p bruMal1.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < bruMal1.sql
+
+#######################################################################

@@ -1818,7 +1818,5 @@ fprintf(stderr, "%s\n", in->string);
 hgTables();
 
 textOutClose(&compressPipeline);
-// FIXME: temporary to track connection resources used
-sqlPrintStats(stderr);
 return 0;
 }

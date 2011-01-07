@@ -3,6 +3,7 @@
 #	Caenorhabditis remanei
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAGD02
 
 #  $Id: caeRem3.txt,v 1.6 2008/08/15 21:53:32 hiram Exp $
 

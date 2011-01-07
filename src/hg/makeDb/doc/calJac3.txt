@@ -2526,3 +2526,24 @@ qacAddGapIdx calJac3.agp calJac3.qual.qac calJac3.qac calJac3.qdx
     #	2914958544 bases of 2914958544 (100.000%) in intersection
 
 ############################################################################
+# BacEnd track (DONE - 2010-07-12 - Hiram)
+    # data obtained from Pat Minx (pminx at watson dot wustl dot edu)
+    # and Wes Warren (wwarren at watson dot wustl dot edu)
+    mkdir /hive/data/genomes/calJac3/bed/bacEnds
+    cd /hive/data/genomes/calJac3/bed/bacEnds
+    wget --timestamping \
+http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/marmoset_bac_ends.3.2.bed.gz
+    gunzip marmoset_bac_ends.3.2.bed.gz
+
+    egrep -v "^track|^browser" marmoset_bac_ends.3.2.bed \
+	| hgLoadBed calJac3 bacEnds stdin
+    checkTableCoords -verboseBlocks calJac3 bacEnds
+
+    wget --timestamping \
+http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/marmoset_singletons.3.2.bed.gz
+    gunzip marmoset_singletons.3.2.bed.gz
+    sort -k1,1 -k2,2n marmoset_singletons.3.2.bed \
+	| hgLoadBed calJac3 bacEndCalJac3Singles stdin
+    checkTableCoords -verboseBlocks calJac3 bacEndCalJac3Singles
+
+############################################################################

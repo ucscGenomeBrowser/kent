@@ -1,27 +1,26 @@
-# Affymetrix RNA-chip (wrangler: braney)
+# Affymetrix RNA-chip (wrangler: braney/cricket)
 
 track wgEncodeAffyRnaChip
 compositeTrack on
 shortLabel Affy RNA Loc
-longLabel ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array
+longLabel RNA Subcellular Localization by Tiling Microarray from ENCODE Affymetrix/CSHL
 group expression
-subGroup1 view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 NHEK=NHEK prostate=Prostate
-subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
+subGroup1 view Views FiltTransfrags=Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HepG2=HepG2  NHEK=NHEK prostate=Prostate
+subGroup3 localization Localization 0-cell=Whole_Cell 20-cytosol=Cytosol 25-polysome=Polysome 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 dimensionZchecked longNonPolyA,longPolyA,total
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+sortOrder cellType=+ localization=+ rnaExtract=+ 
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 noInherit on
 priority 0
 type bed 3
-dataVersion ENCODE Nov 2008, Feb 2009, and July 2009 Freezes
 wgEncode 1
 
     track wgEncodeAffyRnaChipViewFiltTransfrags
-    shortLabel Filtered Transfrags
+    shortLabel Transfrags
     view FiltTransfrags
     visibility pack
     subTrack wgEncodeAffyRnaChip
@@ -32,1075 +31,216 @@ wgEncode 1
 
         track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel pros cell pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in prostate whole cell)
+        shortLabel Prostate cell pA- 
+        longLabel Prostate whole cell polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
         type broadPeak
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel pros cell pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in prostate whole cell)
+        shortLabel Prostate cell pA+ 
+        longLabel Prostate whole cell polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
         type broadPeak
         color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 nucl pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 nucleus)
+        shortLabel K562 nucl pA- 
+        longLabel K562 nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CellTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 cell tot FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 whole cell)
+        shortLabel K562 cell tot 
+        longLabel K562 whole cell total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=0-cell rnaExtract=total
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562CellTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 nucl pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 nucleus)
+        shortLabel K562 nucl pA+ 
+        longLabel K562 nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 cyto pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 cytosol)
+        shortLabel K562 cyto pA- 
+        longLabel K562 cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 cyto pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in K562 cytosol)
+        shortLabel K562 cyto pA+ 
+        longLabel K562 cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 psom pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 polysome)
-        subGroups view=FiltTransfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
+        shortLabel K562 psom pA- 
+        longLabel K562 polysome polyA- Microarray Transfrags from ENCODE Affy/CSHL
+        subGroups view=FiltTransfrags cellType=K562 localization=25-polysome rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel GM12 nucl pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA- 
+        longLabel GM12878 nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel GM12 cyto pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA GM12878 cytosol)
+        shortLabel GM12878 cyto pA+ 
+        longLabel GM12878 cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel GM12 cyto pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA- 
+        longLabel GM12878 cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 chrm tot FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 chromatin)
+        shortLabel K562 chrm tot 
+        longLabel K562 chromatin total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=50-chromatin rnaExtract=total
         type broadPeak
         noInherit on
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 nlos tot FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleolus)
+        shortLabel K562 nlos tot 
+        longLabel K562 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=60-nucleolus rnaExtract=total
         type broadPeak
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel GM12 nucl pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA+ 
+        longLabel GM12878 nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         noInherit on
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel GM12 cell tot FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 whole cell)
+        shortLabel GM12878 cell tot 
+        longLabel GM12878 whole cell total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=GM12878 localization=0-cell rnaExtract=total
         type broadPeak
         noInherit on
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
-        shortLabel K562 nplm tot FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in K562 nucleoplasm)
+        shortLabel K562 nplm tot 
+        longLabel K562 nucleoplasm total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
         type broadPeak
         noInherit on
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltTransfrags dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel HepG cyto pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in HepG2 cytosol)
+        shortLabel HepG2 cyto pA- 
+        longLabel HepG2 cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         noInherit on
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel HepG cyto pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in HepG2 cytosol)
+        shortLabel HepG2 cyto pA+ 
+        longLabel HepG2 cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         noInherit on
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel NHEK cyto pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in NHEK cytosol)
+        shortLabel NHEK cyto pA- 
+        longLabel NHEK cytosol polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
         type broadPeak
         noInherit on
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel NHEK cyto pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in NHEK cytosol)
+        shortLabel NHEK cyto pA+ 
+        longLabel NHEK cytosol polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
         type broadPeak
         noInherit on
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel NHEK nucl pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in NHEK nucleus )
+        shortLabel NHEK nucl pA- 
+        longLabel NHEK nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel NHEK nucl pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in NHEK nucleus )
+        shortLabel NHEK nucl pA+ 
+        longLabel NHEK nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
-
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel HepG nucl pA- FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in HepG2 nucleus)
+        shortLabel HepG2 nucl pA- 
+        longLabel HepG2 nucleus polyA- Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
         type broadPeak
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel HepG nucl pA+ FT
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA+ RNA in HepG2 nucleus)
+        shortLabel HepG2 nucl pA+ 
+        longLabel HepG2 nucleus polyA+ Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
         type broadPeak
         color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=FiltTransfrags dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
-        shortLabel HepG nlos tot FT
+        shortLabel HepG2 nlos tot 
         color 189,0,157
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in HepG2 nucleolus)
+        longLabel HepG2 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=HepG2 localization=60-nucleolus rnaExtract=total
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal.broadPeak.gz
 
         track wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags on
-        shortLabel GM12 nlos tot FT
+        shortLabel GM12878 nlos tot 
         color 153,38,0
-        longLabel ENCODE Affy/CSHL Filtered Transfrags (Total RNA in GM12878 nucleolus)
+        longLabel GM12878 nucleolus total Microarray Transfrags from ENCODE Affy/CSHL
         subGroups view=FiltTransfrags cellType=GM12878 localization=60-nucleolus rnaExtract=total
         type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltTransfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal.broadPeak.gz
-
-    track wgEncodeAffyRnaChipViewTransfrags
-    shortLabel Raw Transfrags
-    view Transfrags
-    visibility hide
-    subTrack wgEncodeAffyRnaChip
-    scoreFilter 100
-    scoreFilterLimits 100:1000
-    scoreMin 100
-    minGrayLevel 4
-
-        track wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel pros cell pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in prostate whole cell)
-        subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
-        type broadPeak
-        color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel pros cell pA+ RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in prostate whole cell)
-        subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
-        type broadPeak
-        color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya fileName=wgEncodeAffyRnaChipTransfragsProstateCellLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 nucl pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 nucleus)
-        subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
-        type broadPeak
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562CellTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 cell tot RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 whole cell)
-        subGroups view=Transfrags cellType=K562 localization=0-cell rnaExtract=total
-        type broadPeak
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CellTotal fileName=wgEncodeAffyRnaChipTransfragsK562CellTotal.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 nucl pA+ RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 nucleus)
-        subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
-        type broadPeak
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 cyto pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 cytosol)
-        subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
-        type broadPeak
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 cyto pA+ RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 cytosol)
-        subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-        type broadPeak
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 psom pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 polysome)
-        subGroups view=Transfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
-        type broadPeak
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel GM12 nucl pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 nucleus)
-        subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
-        type broadPeak
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel GM12 cyto pA+ RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 cytosol)
-        subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
-        type broadPeak
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel GM12 cyto pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 cytosol)
-        subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
-        type broadPeak
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 chrm tot RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 chromatin)
-        subGroups view=Transfrags cellType=K562 localization=50-chromatin rnaExtract=total
-        type broadPeak
-        noInherit on
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal fileName=wgEncodeAffyRnaChipTransfragsK562ChromatinTotal.broadPeak.gz
-
-
-        track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 nlos tot RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleolus)
-        subGroups view=Transfrags cellType=K562 localization=60-nucleolus rnaExtract=total
-        type broadPeak
-        noInherit on
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleolusTotal.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel K562 nplm tot RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleoplasm)
-        subGroups view=Transfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
-        type broadPeak
-        noInherit on
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel GM12 nucl pA+ RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 in nucleus)
-        subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
-        type broadPeak
-        noInherit on
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
-        shortLabel GM12 cell tot RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 whole cell)
-        subGroups view=Transfrags cellType=GM12878 localization=0-cell rnaExtract=total
-        type broadPeak
-        noInherit on
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=Transfrags dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel HepG cyto pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in HepG2 cytosol)
-        subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
-        type broadPeak
-        noInherit on
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel HepG cyto pA+ RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in HepG2 cytosol)
-        subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
-        type broadPeak
-        noInherit on
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel NHEK cyto pA- RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in NHEK cytosol)
-        subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
-        type broadPeak
-        noInherit on
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel NHEK cyto pA+ RT
-        longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in NHEK cytosol)
-        subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
-        type broadPeak
-        noInherit on
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel NHEK nucl pA- RT
-        longLabel ENCODE Affy/CSHL Transfrags (PolyA- RNA in NHEK nucleus )
-        subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
-        type broadPeak
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel NHEK nucl pA+ RT
-        longLabel ENCODE Affy/CSHL Transfrags (PolyA+ RNA in NHEK nucleus )
-        subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
-        type broadPeak
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel HepG nucl pA- RT
-        longLabel ENCODE Affy/CSHL Transfrags (PolyA- RNA in HepG2 nucleus)
-        subGroups view=Transfrags cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
-        type broadPeak
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel HepG nucl pA+ RT
-        longLabel ENCODE Affy/CSHL Transfrags (PolyA+ RNA in HepG2 nucleus)
-        subGroups view=Transfrags cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
-        type broadPeak
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=Transfrags dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
-        shortLabel HepG nlos tot RT
-        color 189,0,157
-        longLabel ENCODE Affy/CSHL Transfrags (Total RNA in HepG2 nucleolus)
-        subGroups view=Transfrags cellType=HepG2 localization=60-nucleolus rnaExtract=total
-        type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal.broadPeak.gz
-
-        track wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags on
-        shortLabel GM12 nlos tot RT
-        color 153,38,0
-        longLabel ENCODE Affy/CSHL Transfrags (Total RNA in GM12878 nucleolus)
-        subGroups view=Transfrags cellType=GM12878 localization=60-nucleolus rnaExtract=total
-        type broadPeak
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=Transfrags dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal.broadPeak.gz
-
-    track wgEncodeAffyRnaChipViewFiltRawSignal
-    shortLabel Filtered Signal
-    view FiltRawSignal
-    visibility full
-    subTrack wgEncodeAffyRnaChip
-    viewLimits 0:1000
-    autoScale off
-    windowingFunction mean
-    maxHeightPixels 100:32:16
-
-        track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel pros cell pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in prostate whole cell)
-        subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
-        type wig -62124.00 545.00
-        spanList 1
-        color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel pros cell pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in prostate whole cell)
-        subGroups view=FiltRawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
-        type wig -62728.00 56449.00
-        spanList 1
-        color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 nucl pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 nucleus)
-        subGroups view=FiltRawSignal cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -56486.00 45415.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562CellTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 cell tot FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 whole cell)
-        subGroups view=FiltRawSignal cellType=K562 localization=0-cell rnaExtract=total
-        type wig -40989.00 59494.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562CellTotal.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 nucl pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 nucleus)
-        subGroups view=FiltRawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
-        type wig -49290.00 43018.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 cyto pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 cytosol)
-        subGroups view=FiltRawSignal cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -55473.00 56092.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 cyto pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in K562 cytosol)
-        subGroups view=FiltRawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-        type wig -42328.00 61956.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 psom pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 polysome)
-        subGroups view=FiltRawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
-        type wig -52880.00 48739.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel GM12 nucl pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 nucleus)
-        subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -52768.00 58546.00
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel GM12 cyto pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 cytosol)
-        subGroups view=FiltRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
-        type wig -61519.00 60470.00
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel GM12 cyto pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in GM12878 cytosol)
-        subGroups view=FiltRawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -58491.00 61097.00
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 chrm tot FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 chromatin)
-        subGroups view=FiltRawSignal cellType=K562 localization=50-chromatin rnaExtract=total
-        type wig -61688.00 49221.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 nlos tot FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (Total RNA in K562 nucleolus)
-        subGroups view=FiltRawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
-        type wig -46635.00 54187.00
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel GM12 nucl pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in GM12878 nucleus)
-        subGroups view=FiltRawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
-        type wig -56831.00 59145.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel GM12 cell tot FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 whole cell)
-        subGroups view=FiltRawSignal cellType=GM12878 localization=0-cell rnaExtract=total
-        type wig -48860.00 60644.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal
-        shortLabel K562 nplm tot FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in K562 nucleoplasm)
-        subGroups view=FiltRawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
-        type wig -54090.00 55745.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=FiltRawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=248 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel HepG cyto pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in HepG2 cytosol)
-        subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -51212.00 53928.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel HepG cyto pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in HepG2 cytosol)
-        subGroups view=FiltRawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
-        type wig -61267.00 58237.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel NHEK cyto pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in NHEK cytosol)
-        subGroups view=FiltRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -59096.00 56826.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel NHEK cyto pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in NHEK cytosol)
-        subGroups view=FiltRawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
-        type wig -57145.00 52544.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel NHEK nucl pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in NHEK nucleus )
-        subGroups view=FiltRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -56603.00 59926.00
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel NHEK nucl pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Signal (PolyA+ RNA in NHEK nucleus )
-        subGroups view=FiltRawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
-        type wig -58826.00 51082.00
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel HepG nucl pA- FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA- RNA in HepG2 nucleus)
-        subGroups view=FiltRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -50511.00 56743.00
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel HepG nucl pA+ FS
-        longLabel ENCODE Affy/CSHL Filtered Raw Signal (PolyA+ RNA in HepG2 nucleus)
-        subGroups view=FiltRawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
-        type wig -52210.00 51521.00
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=FiltRawSignal dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
-        shortLabel HepG nlos tot FS
-        color 189,0,157
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in HepG2 nucleolus)
-        subGroups view=FiltRawSignal cellType=HepG2 localization=60-nucleolus rnaExtract=total
-        type wig -57857.00 57814.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
-
-        track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal on
-        shortLabel GM12 nlos tot FS
-        color 153,38,0
-        longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 nucleolus)
-        subGroups view=FiltRawSignal cellType=GM12878 localization=60-nucleolus rnaExtract=total
-        type wig -47390.50 56660.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=FiltRawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal.wig.gz
-
-    track wgEncodeAffyRnaChipViewRawSignal
-    shortLabel Raw Signal
-    view RawSignal
-    visibility hide
-    subTrack wgEncodeAffyRnaChip
-    viewLimits 0:1000
-    autoScale off
-    windowingFunction mean
-    maxHeightPixels 100:16:16
-
-        track wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel pros cell pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in prostate whole cell)
-        subGroups view=RawSignal cellType=prostate localization=0-cell rnaExtract=longNonPolyA
-        type wig -62124.00 50627.00
-        spanList 1
-        color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longNonPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=89 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel pros cell pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in prostate whole cell)
-        subGroups view=RawSignal cellType=prostate localization=0-cell rnaExtract=longPolyA
-        type wig -62728.00 58726.00
-        spanList 1
-        color 0,102,136
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=prostate rnaExtract=longPolyA localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=88 dateSubmitted=2008-11-24 dateUnrestricted=2009-08-24 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya fileName=wgEncodeAffyRnaChipRawSignalProstateCellLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 nucl pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 nucleus)
-        subGroups view=RawSignal cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -56486.00 59077.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=81 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562CellTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 cell tot RS
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 whole cell)
-        subGroups view=RawSignal cellType=K562 localization=0-cell rnaExtract=total
-        type wig -43345.00 59494.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=cell view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=90 dateSubmitted=2008-11-25 dateUnrestricted=2009-08-25 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CellTotal fileName=wgEncodeAffyRnaChipRawSignalK562CellTotal.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 nucl pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 nucleus)
-        subGroups view=RawSignal cellType=K562 localization=30-nucleus rnaExtract=longPolyA
-        type wig -47465.00 52826.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=82 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 cyto pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 cytosol)
-        subGroups view=RawSignal cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -52894.00 56092.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=78 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 cyto pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in K562 cytosol)
-        subGroups view=RawSignal cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-        type wig -58407.00 60582.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=77 dateSubmitted=2008-11-22 dateUnrestricted=2009-08-22 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 psom pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 polysome)
-        subGroups view=RawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
-        type wig -50161.00 55400.00
-        spanList 1
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=longNonPolyA localization=polysome view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=76 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel GM12 nucl pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 nucleus)
-        subGroups view=RawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -59319.00 55161.00
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=75 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel GM12 cyto pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 cytosol)
-        subGroups view=RawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
-        type wig -61519.00 60416.00
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=73 dateSubmitted=2008-11-21 dateUnrestricted=2009-08-21 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel GM12 cyto pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in GM12878 cytosol)
-        subGroups view=RawSignal cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -58491.00 56453.00
-        spanList 1
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE Nov 2008 Freeze" subId=74 dateSubmitted=2008-12-09 dateUnrestricted=2009-09-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 chrm tot RS
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 chromatin)
-        subGroups view=RawSignal cellType=K562 localization=50-chromatin rnaExtract=total
-        type wig -61688.00 55955.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=chromatin view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=186 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal fileName=tableName=wgEncodeAffyRnaChipRawSignalK562ChromatinTotal.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 nlos tot RS
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleolus)
-        subGroups view=RawSignal cellType=K562 localization=60-nucleolus rnaExtract=total
-        type wig -63262.00 58632.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=187 dateSubmitted=2009-02-04 dateUnrestricted=2009-11-04 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalK562NucleolusTotal.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel K562 nplm tot RS
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in K562 nucleoplasm)
-        subGroups view=RawSignal cellType=K562 localization=40-nucleoplasm rnaExtract=total
-        type wig -52041.00 554.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=K562 rnaExtract=total localization=nucleoplasm view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=188 dateSubmitted=2009-01-09 dateUnrestricted=2009-10-09 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal fileName=wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel GM12 nucl pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in GM12878 nucleus)
-        subGroups view=RawSignal cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
-        type wig -53310.00 54732.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=246 dateSubmitted=2009-04-01 dateUnrestricted=2010-01-01 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalGm12878CellTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal
-        shortLabel GM12 cell tot RS
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 whole cell)
-        subGroups view=RawSignal cellType=GM12878 localization=0-cell rnaExtract=total
-        type wig -50917.00 62561.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=cell view=RawSignal dataVersion="ENCODE Feb 2009 Freeze" subId=247 dateSubmitted=2009-03-10 dateUnrestricted=2009-12-10 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878CellTotal fileName=wgEncodeAffyRnaChipRawSignalGm12878CellTotal.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel HepG cyto pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in HepG2 cytosol)
-        subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -50875.00 56171.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=339 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel HepG cyto pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Transfrags(PolyA+ RNA in HepG2 cytosol)
-        subGroups view=RawSignal cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
-        type wig -62864.00 52910.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=340 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel NHEK cyto pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in NHEK cytosol)
-        subGroups view=RawSignal cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
-        type wig -61219.00 57907.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=341 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel NHEK cyto pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in NHEK cytosol)
-        subGroups view=RawSignal cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
-        type wig -57145.00 52544.00
-        noInherit on
-        spanList first
-        windowingFunction mean
-        maxHeightPixels 100:16:16
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=cytosol view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=342 dateSubmitted=2009-05-27 dateUnrestricted=2010-02-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel NHEK nucl pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in NHEK nucleus )
-        subGroups view=RawSignal cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -56603.00 59926.00
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=375 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel NHEK nucl pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in NHEK nucleus )
-        subGroups view=RawSignal cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
-        type wig -58826.00 50541.50
-        color 179,0,134
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=NHEK rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=376 dateSubmitted=2009-06-12 dateUnrestricted=2010-03-12 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel HepG nucl pA- RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in HepG2 nucleus)
-        subGroups view=RawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
-        type wig -50466.00 50711.00
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longNonPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=430 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel HepG nucl pA+ RS
-        longLabel ENCODE Affy/CSHL Raw Signal (PolyA+ RNA in HepG2 nucleus)
-        subGroups view=RawSignal cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
-        type wig -48036.00 58899.00
-        color 189,0,157
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=longPolyA localization=nucleus view=RawSignal dataVersion="ENCODE July 2009 Freeze" subId=431 dateSubmitted=2009-07-17 dateUnrestricted=2010-04-17 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal off
-        shortLabel HepG nlos tot RS
-        color 189,0,157
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in HepG2 nucleolus)
-        subGroups view=RawSignal cellType=HepG2 localization=60-nucleolus rnaExtract=total
-        type wig -57857.00 57814.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=HepG2 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=451 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal.wig.gz
-
-        track wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal on
-        shortLabel GM12 nlos tot RS
-        color 153,38,0
-        longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 nucleolus)
-        subGroups view=RawSignal cellType=GM12878 localization=60-nucleolus rnaExtract=total
-        type wig -57050.00 56660.00
-        metadata project=wgEncode grant=Gingeras lab=Affy dataType=RnaChip cell=GM12878 rnaExtract=total localization=nucleolus view=RawSignal dataVersion="ENCODE Sep 2009 Freeze" subId=452 dateSubmitted=2009-08-27 dateUnrestricted=2010-05-27 composite=wgEncodeAffyRnaChip tableName=wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal fileName=wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal.wig.gz

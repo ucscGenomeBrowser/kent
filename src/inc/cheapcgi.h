@@ -22,6 +22,7 @@
 #define COLOR_BG_DEFAULT_DARKER "#FCECC0"
 #define COLOR_BG_GHOST          "#EEEEEE"
 #define COLOR_BG_PALE           "#F8F8F8"
+#define COLOR_BG_HEADER_LTBLUE  "#D9E4F8"
 #define COLOR_DARKGREEN         "#008800"
 #define COLOR_LTGREEN           "#CCFFCC"
 #define COLOR_DARKBLUE          "#000088"

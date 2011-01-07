@@ -1,6 +1,6 @@
 # Data Agreement File for PSU ChIP-seq (Histone) experiments for mm9
  
-#$Revision: 1.4 $
+#$Revision: 1.6 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -22,10 +22,10 @@
 #labVersion: Free text for the lab to keep track of any other data
 
 # Lab and general info
-grant             Haridson
-lab               PSU-Mouse
+grant             Hardison
+lab               PSU-m
 #Alternative lab: Caltech-Mouse; for (H3K27ac antibodies)
-dataType          ChipSeq 
+dataType          ChipSeq
 variables         cell, antibody,sex,age,strain,control
 compositeSuffix   PsuHistone
 assembly          mm9
@@ -35,19 +35,33 @@ validationSettings validateFiles.bam:mismatchTotalQuality=80,mismatches=2,matchF
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  PSU Histone Peaks
+longLabelPrefix  PSU TFBS Peaks
 type             broadPeak
 hasReplicates    no
 required         no
 
 view             Signal
-longLabelPrefix  PSU Histone Signal
+longLabelPrefix  PSU TFBS Signal
 type             bigWig
 hasReplicates    no
-required         yes
+required         no
+
+view             RepPeaks
+longLabelPrefix  PSU TFBS Peaks
+type             broadPeak
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+view             RepSignal
+longLabelPrefix  PSU TFBS Signal
+type             bigWig
+hasReplicates    yes
+required         no
+downloadOnly     yes
 
 view             Alignments
-longLabelPrefix  PSU Histone Alignments
+longLabelPrefix  PSU TFBS Alignments
 type             bam
 hasReplicates    yes
 required         yes
@@ -56,4 +70,5 @@ view             RawData
 type             fastq
 hasReplicates    yes
 required         yes
+
 

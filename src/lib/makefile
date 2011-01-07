@@ -20,8 +20,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     font/mgTimes24.o font/mgTimes34.o font/mgTimes8.o \
     fuzzyShow.o \
     gapCalc.o gdf.o gemfont.o genomeRangeTree.o \
-    gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o gifcomp.o \
-    gifdecomp.o gifread.o gifwrite.o \
+    gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
     https.o intExp.o intValTree.o internet.o itsa.o \
     jointalign.o jpegSize.o keys.o kxTok.o linefile.o localmem.o log.o \
@@ -37,7 +36,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
     splatAli.o sqlList.o sqlNum.o subText.o sufa.o sufx.o synQueue.o \
     tabRow.o textOut.o tokenizer.o trix.o twoBit.o \
-    udc.o vGfx.o vGif.o vPng.o verbose.o \
+    udc.o vGfx.o vPng.o verbose.o \
     wildcmp.o wormdna.o \
     xAli.o xa.o xap.o xenshow.o xmlEscape.o xp.o zlibFace.o
 

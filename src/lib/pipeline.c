@@ -601,7 +601,7 @@ struct plProc *proc;
 for (proc = pl->procs; proc != NULL; proc = proc->next)
     if (proc->pid == pid)
         return proc;
-errAbort("pid not found in pipeline: %d", pid);
+errAbort("pid not found in pipeline: %d", (int)pid);
 return 0; // never reached
 }
 

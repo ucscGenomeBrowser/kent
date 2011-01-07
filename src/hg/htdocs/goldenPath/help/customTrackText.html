@@ -50,8 +50,8 @@ for the Human Genome Project or UCSC Genome Browser, including
 <A HREF="bigWig.html">bigWig</A>, 
 <A HREF="bam.html">BAM</A>,
 <A HREF="maf.html">MAF</A>, 
-<A HREF="#beddetail">BED detail</A>,
-<A HREF="#pgsnp">pgSnp</A>,
+<A HREF="../../FAQ/FAQformat.html#format1.7">BED detail</A>,
+<A HREF="../../FAQ/FAQformat.html#format10">Personal Genome SNP</A>,
 and <A HREF="#microarray">microarray</A>
 (BED15). 
 GFF and GTF files <I>must</I> be tab-delimited rather than
@@ -1046,86 +1046,6 @@ TARGET=_blank>Genome Browser Wiki</A>.
 	</TD></TR></TABLE>
 
 	<BR>
-
-        <!--outer table is for border purposes-->
-        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
-        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-                <FONT SIZE="4"><a name="beddetail"></a><b>&nbsp; BED detail format</b></FONT>
-        </TD></TR></TABLE>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-        <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-<P>
-This is an extension to the BED custom tracks.
-BED detail format, is a BED 4 format with 2 additional fields that are used
-in the detail page display.  The first additional field is an ID, which can be
-used in place of the name for creating links from the detail page.  The second
-is a description of the item.  This can be a long description including html
-tables or lists to customize the display on the detail page.
-<P>Requirements for this type of custom track are it most be uploaded from a
-tab-separated file.  It must have "type=bedDetail" in the track line.  Also
-the name and position fields should uniquely describe an item so that the
-correct id and description will be displayed on the details page.
-</P>
-        </TD><TD WIDTH=15></TD></TR></TABLE>
-        <br></TD></TR></TABLE>
-        </TD></TR></TABLE>
-
-        <BR>
-
-        <!--outer table is for border purposes-->
-        <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>
-    <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>
-        <TABLE BGCOLOR="D9E4F8" BACKGROUND="/images/hr.gif" WIDTH=100%><TR><TD>
-                <FONT SIZE="4"><a name="pgsnp"></a><b>&nbsp; pgSnp format</b></FONT>
-        </TD></TR></TABLE>
-        <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
-        <TR><TD WIDTH=10>&nbsp;</TD><TD>
-
-<P>
-This format is for displaying SNPs from personal genomes.  It is the same as
-is used for the Genome Variants and Population Variants tracks.
-<PRE>
-table pgSnp
-"personal genome SNP"
-    (
-    ushort  bin;            "Computed on loading, used for indexing"
-    string  chrom;          "Chromosome"
-    uint    chromStart;     "Start position in chrom"
-    uint    chromEnd;       "End position in chrom"
-    string  name;           "alleles"
-    int     alleleCount;    "number of alleles"
-    string  alleleFreq;     "comma separated list of frequency of each allele"
-    string  alleleScores;   "comma separated list of quality scores"
-    )
-</PRE>
-<P>
-The alleles must be an A, C, T, or G, optionally followed by a '/' then another
-A, C, T, or G.  There can be more than 2 alleles (for example in the population variants).  The count should reflect the number of alleles listed and the
-frequency and scores should be listed in the same order as the alleles.  If
-either the frequency or scores is not known a 0(zero) or comma separated list
-(matching the alleleCount) of zeroes should be used.  The alleles are expected
-to be for the plus strand.
-In the genome browser, when viewing the forward strand of the
-reference genome (the normal case), the displayed alleles are relative
-to the forward strand.  When viewing the reverse strand of the
-reference genome (&quot;reverse&quot; button), the displayed alleles
-are reverse-complemented to match the reverse strand.
-If the frequency of the alleles are given the coloring of the box will
-reflect the frequency for each allele.
-<P>
-The detail page for this track will automatically compute amino acid changes
-for coding SNPs as well as give a chart of the amino acid properties.
-The Sift and PolyPhen predictions that are in some of the Genome Variants
-subtracks are not available.
-</P>
-
-        </TD><TD WIDTH=15></TD></TR></TABLE>
-        <br></TD></TR></TABLE>
-        </TD></TR></TABLE>
-
-        <BR>
 
   	<!--outer table is for border purposes-->
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	

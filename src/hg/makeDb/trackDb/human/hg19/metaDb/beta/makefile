@@ -5,6 +5,12 @@ wgEncodeGencode.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
+wgEncodeAffyRnaChip.ra \
+wgEncodeUwDnase.ra \
+wgEncodeUwDgf.ra \
+wgEncodeHaibMethylRrbs.ra \
+wgEncodeAffyRnaChip.ra \
+wgEncodeCaltechRnaSeq.ra \
 
 include ../../../../makefile.metaDb
 

@@ -4,6 +4,9 @@
 # Sanger Institute and WormBase
 #	http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=6289
 #	Barber Pole worm
+#	http://www.sanger.ac.uk/Projects/H_contortus/
+#	ftp://ftp.sanger.ac.uk/pub/pathogens/Haemonchus/contortus/genome/README
+#	http://www.nematode.net/Species.Summaries/Haemonchus.contortus/index.php
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-22 - Hiram)
@@ -247,7 +250,7 @@ haeCon1.perChromTables = no
 ############################################################################
 # reset default position to ZC101.2e protein blat result
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="Hcon_Contig0059139:30257-50430"
+    hgsql -e 'update dbDb set defaultPos="Hcon_Contig0059139:22,342-52,602"
 	where name="haeCon1";' hgcentraltest
 
 ############################################################################
@@ -430,3 +433,33 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     rm -rf blastOut
 
 #########################################################################
+# verify all.joiner has everything (DONE - 2010-10-21 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=haeCon1 ./all.joiner
+    joinerCheck -keys -database=haeCon1 ./all.joiner
+    joinerCheck -times -database=haeCon1 ./all.joiner
+    joinerCheck -all -database=haeCon1 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#########################################################################
+# construct downloads files (DONE - 2010-10-21 - Hiram)
+    cd /hive/data/genomes/haeCon1
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 haeCon1 \
+	 > downloads.log 2>&1
+
+#########################################################################
+## Creating pushQ (DONE - 2010-10-21 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/haeCon1/pushQ
+    cd /hive/data/genomes/haeCon1/pushQ
+    makePushQSql.pl haeCon1 > haeCon1.sql 2> errorLog.out
+
+    ## check the errorLog.out for anything that needs to be fixed
+    ## copy haeCon1.sql to hgwbeta:/tmp
+    ## then on hgwbeta:
+    hgsql qapushq < haeCon1.sql
+
+#######################################################################

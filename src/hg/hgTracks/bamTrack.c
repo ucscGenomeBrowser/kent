@@ -512,7 +512,11 @@ if (tg->visibility != tvDense)
     else
 	slSort(&(tg->items), linkedFeaturesCmpStart);
     if (slCount(tg->items) > MAX_ITEMS_FOR_MAPBOX)
+        {
+        // flag drawItems to make a mapBox for the whole track
+        tg->customInt = 1;
 	tg->mapItem = dontMapItem;
+        }
     }
 }
 
@@ -675,6 +679,43 @@ return;
 }
 
 
+void bamLinkedFeaturesSeriesDraw(struct track *tg,
+	int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw bam linked features items. */
+{
+linkedFeaturesSeriesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+        font, color, vis);
+
+if(tg->customInt)
+    {
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, 
+        tg->track, tg->track, 
+        "Too many items in display.  Zoom in to click on items");
+    // just do this once
+    tg->customInt = 0;
+    }
+}
+
+void bamLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw linked features items. */
+{
+linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
+        font, color, vis);
+
+if(tg->customInt)
+    {
+    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, 
+        tg->track, tg->track, 
+        "Too many items in display.  Zoom in to click on items");
+    // just do this once
+    tg->customInt = 0;
+    }
+}
+
 void bamMethods(struct track *track)
 /* Methods for BAM alignment files. */
 {
@@ -709,12 +750,14 @@ if (isPaired)
     {
     linkedFeaturesSeriesMethods(track);
     track->loadItems = bamPairedLoadItems;
+    track->drawItems = bamLinkedFeaturesSeriesDraw;
     track->drawItemAt = bamPairedDrawAt;
     }
 else
     {
     linkedFeaturesMethods(track);
-    track->loadItems = bamLoadItems;
+    track->loadItems = bamLoadItems; 
+    track->drawItems = bamLinkedFeaturesDraw;
     track->drawItemAt = bamDrawAt;
     }
 if (!showNames)
@@ -748,12 +791,6 @@ safef(message, sizeof(message),
 Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
 hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
 hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
-}
-
-static void dontLoadItems(struct track *tg)
-/* Don't load anything, just draw warning. */
-{
-return;
 }
 
 void bamMethods(struct track *track)

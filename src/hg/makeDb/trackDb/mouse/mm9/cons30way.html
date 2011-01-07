@@ -163,8 +163,8 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
     Feb 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=anoCar1"
     TARGET=_blank>anoCar1</A></TD></TR>
 <TR ALIGN=left><TD>Marmoset</TD><TD>Callithrix jacchus</TD><TD>June 2007</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/calJac1/"
-    TARGET=_blank>calJac1</A>*</TD></TR>
+    <TD><A HREF="../cgi-bin/hgGateway?db=calJac1"
+    TARGET=_blank>calJac1</A></TD></TR>
 <TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>
     Apr 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/oryLat1/"
     TARGET=_blank>oryLat1</A>*</TD></TR>
@@ -172,8 +172,8 @@ and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
     Jan 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=monDom4"
     TARGET=_blank>monDom4</A></TD></TR>
 <TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>
-    July 2007</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/ponAbe2/"
-    TARGET=_blank>ponAbe2</A>*</TD></TR>
+    July 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=ponAbe2"
+    TARGET=_blank>ponAbe2</A></TD></TR>
 <TR ALIGN=left><TD>Platypus</TD><TD>Ornithorhychus anatinus</TD><TD>
     Mar 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=ornAna1"
     TARGET=_blank>ornAna1</A></TD></TR>
@@ -223,7 +223,7 @@ Downloads for data in this track are available:
 <H2>Display Conventions and Configuration</H2>
 <P>
 In full and pack display modes, conservation scores are displayed as
-<EM>wiggle tracks</EM> (histogram) in which the height reflects the 
+<EM>wiggle tracks</EM> (histograms) in which the height reflects the 
 size of the score. 
 The conservation wiggles can be configured in a variety of ways to 
 highlight different aspects of the displayed information. 
@@ -401,15 +401,16 @@ generated using the <em>phyloFit</em> program from the PHAST package
 (msa_view).  The 4d sites were derived from the 
 <A HREF="http://www.sanger.ac.uk/PostGenomics/encode/" TARGET=_blank>Oct 2005 Gencode 
 Reference Gene set</A>,
-which was filtered to select single-coverage long transcripts.  A second, 
+which was filtered to select single-coverage long transcripts. The
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/placental.mod" 
-TARGET=_blank>mammalian tree model</A> including only placental mammals was
-used to generate
-the placental mammal conservation scoring. The phastCons parameters were
+TARGET=_blank>placental mammal tree model</A> and the
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/euarchontoglires.mod" 
+TARGET=_blank>euarchontoglire tree model</A> were extracted from the vertebrate model.
+The phastCons parameters were
 tuned to produce 5% conserved elements in the genome for the vertebrate
 conservation measurement.  This parameter set (expected-length=45, 
 target-coverage=.3, rho=.31) was then used to generate the placental
-mammal conservation scoring.</P>
+mammal and euarchontoglire conservation scoring.</P>
 <P>
 The phastCons program computes conservation scores based on a phylo-HMM, a
 type of probabilistic model that describes both the process of DNA
@@ -471,7 +472,7 @@ TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view
 and other programs in PHAST by 
 <A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" 
-TARGET=_blank>Adam Siepel</A> at Cornell University (originaly development
+TARGET=_blank>Adam Siepel</A> at Cornell University (original development
 done at the Haussler lab at UCSC).
 <LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC

@@ -6,6 +6,7 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "bed.h"
+#include "basicBed.h"
 #include "binRange.h"
 #include "hdb.h"
 #include "hgConfig.h"
@@ -73,6 +74,9 @@ static struct optionSpec options[] = {
 };
 
 
+
+
+
 int bedIntersectRange(struct bed *bed, int rStart, int rEnd)
 /* Return intersection of bed with range rStart-rEnd */
 {
@@ -137,22 +141,43 @@ else
 return overlap;
 }
 
+
+
 struct bed *mostOverlappingBed(struct binKeeper *bk, struct genePred *gp)
 /* Find bed in bk that overlaps most with gp.  Return NULL if no overlap. */
 {
 struct bed *bed, *bestBed = NULL;
 int overlap, bestOverlap = 0;
+
 struct binElement *el, *elList = binKeeperFind(bk, gp->txStart, gp->txEnd);
 
 for (el = elList; el != NULL; el = el->next)
     {
     bed = el->val;
-    overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
-    if (overlap > bestOverlap)
+    /* First, check if this gp is a compatible extension of the bed, meaning
+     * that any intron found in the bed is also found in the gp, and that for the
+     * range from the start to the end of the bed, the gp contains no introns
+     * not also found in the bed. */
+    if (bedCompatibleExtension(bedFromGenePred(gp), bed))
         {
-	bestOverlap = overlap;
-	bestBed = bed;
-	}
+        overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
+        if (overlap > bestOverlap)
+            {
+            bestOverlap = overlap;
+            bestBed = bed;
+            }
+        else if (overlap == bestOverlap)
+            {
+            /* If two beds have the same number of overlapping bases to
+             * the gene prediction, then take the bed with the greatest proportion of
+             * overlapping bases, i.e. the shorter one. */
+            if (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed))
+                {
+                bestOverlap = overlap;
+                bestBed = bed;
+                }
+            }
+        }
     }
 return bestBed;
 }

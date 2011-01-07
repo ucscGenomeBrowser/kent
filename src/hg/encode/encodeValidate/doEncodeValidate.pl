@@ -177,6 +177,7 @@ our %validators = (
     protocol => \&validateControlledVocabOrControl,
     phase => \&validateControlledVocabOrControl,
     restrictionEnzyme => \&validateControlledVocabOrControl,
+    obtainedBy => \&validateobtainedBy,
     default => \&validateControlledVocab,
     );
 
@@ -256,6 +257,7 @@ sub validateSetType {
     return ();
 }
 
+
 # project-specific validators
 
 sub validateControlledVocabOrControl {
@@ -272,6 +274,12 @@ sub validateControlledVocab {
     my ($val, $type) = @_;
     return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
+
+sub validateobtainedBy {
+    my($val,$type) = @_;
+    return defined($terms{'lab'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
+}
+
 
 ############################################################################
 # Format checkers - check file format for given types; extend when adding new
@@ -305,7 +313,9 @@ our %formatCheckers = (
     junction  => \&validateFreepass,
     fpkm1  => \&validateFreepass,
     fpkm2  => \&validateFreepass,
-    insDistrib  => \&validateFreepass,
+    fpkm => \&validateFreepass,
+    insDist  => \&validateFreepass,
+    peptideMapping  => \&validateFreepass,
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
@@ -646,28 +656,64 @@ sub validatePairedTagAlign
     return ();
 }
 
+sub getInfoFiles
+{
+    my ($cell,$sex) = @_;
+
+    if (not defined $terms{'Cell Line'}->{$cell}) {
+        print STDERR "ERROR: controlled Vocabulary \'Cell Line\' value \'$cell\' is not known\n";
+        return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
+    }
+    my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
+
+    # For category= Tissues change sex to one defined by the DFF
+    # The reason that I did not just pass sex is because I will be using the
+    # same DAF with required fields for mouse tissue and cell samples
+
+    # Category is defined in cv.ra for
+    # T= Tissue
+    # L= Cell Line
+    # P= Primary Cells
+    my $category = $terms{'Cell Line'}->{$cell}->{'category'};
+
+    # Can be a better design, but need to flesh out design more.
+    if (defined $category && $category eq "Tissue") {
+        $cellLineSex=$sex;
+    }
+
+    my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
+    my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
+    my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
+
+    if ($cellLineSex ne "F")  {
+        $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
+        $twoBitFile =  "$downloadDir/male.$assembly.2bit";
+    }
+    return ($infoFile, $twoBitFile);
+}
+
 sub validateNarrowPeak
 {
-    my ($path, $file, $type) = @_;
-    my @list = ({TYPE => "chrom", NAME => "chrom"},
-                {TYPE => "uint", NAME => "chromStart"},
-                {TYPE => "uint", NAME => "chromEnd"},
-                {TYPE => "string", NAME => "name"},
-                {TYPE => "uint", NAME => "score"},
-                {REGEX => "[+-\\.]", NAME => "strand"},
-                {TYPE => "float", NAME => "signalValue"},
-                {TYPE => "float", NAME => "pValue"},
-                {TYPE => "float", NAME => "qValue"},
-                {TYPE => "int", NAME => "peak"});
-    return validateWithList($path, $file, $type, $maxBedRows, "validateNarrowPeak", \@list);
+    my ($path, $file, $type, $cell,$sex) = @_;
+    # validate chroms, chromSize, etc.
+    my $paramList = validationSettings("validateFiles","narrowPeak",$assembly);
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $quickOpt $paramList -type=narrowPeak $file"]);
+    if(my $err = $safe->exec()) {
+	print STDERR  "ERROR: failed validateNarrowPeak : " . $safe->stderr() . "\n";
+	# don't show end-user pipe error(s)
+	return("failed validateNarrowPeak for '$file'");
+    }
+    return ();
 }
 
 sub validateBroadPeak
 {
-    my ($path, $file, $type) = @_;
+    my ($path, $file, $type, $cell,$sex) = @_;
     # validate chroms, chromSize, etc.
     my $paramList = validationSettings("validateFiles","broadPeak",$assembly);
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=broadPeak $file"]);
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
+    my $safe = SafePipe->new(CMDS => ["validateFiles -chromInfo=$infoFile $quickOpt $paramList -type=broadPeak $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBroadPeak : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -769,44 +815,13 @@ sub validateSAM
     return ();
 }
 
+
 sub validateBam
 {
-	# Venkat: Added $sex to validate tissue samples for mouse
     my ($path, $file, $type, $cell,$sex) = @_;
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
-    if (not defined $terms{'Cell Line'}->{$cell}) {
-	print STDERR "ERROR: controlled Vocabulary \'Cell Line\' value \'$cell\' is not known\n";
-	# don't show end-user pipe error(s)
-	return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
-    }
-	#Venkat: Changed $sex to $cellLineSex to accomadate the sex being passed from the DDF
-    my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
-
-	# Venkat: For category= Tissues change sex to one defined by the DFF
-	# The reason that I did not just pass sex is because I will be using the
-	# same DAF with required fields for mouse tissue and cell samples
-
-	#Venkat: Category is defined in cv.ra for
-	# T= Tissue
-	# L= Cell Line
-	# P= Primary Cells
-    my $category = $terms{'Cell Line'}->{$cell}->{'category'};
-
-	#Venkat: Can be a better design, but need to flesh out design more.
-	if (defined $category && $category eq "Tissue") {
-	$cellLineSex=$sex;
-    }
-
-    my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
-    my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
-    my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
-	# Venkat: Changed $sex to $cellLineSex to accomade the above changes to pass sex from ddf
-    if ($cellLineSex ne "F")  {
-        $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
-        $twoBitFile =  "$downloadDir/male.$assembly.2bit";
-    }
 
     # index the BAM file
     my $safe = SafePipe->new(CMDS => ["samtools index $file"]);
@@ -815,6 +830,8 @@ sub validateBam
 	# don't show end-user pipe error(s)
 	return("failed validateBam for '$file'");
     }
+
+    my ($infoFile, $twoBitFile ) = getInfoFiles($cell, $sex);
     $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=BAM -chromInfo=$infoFile -genome=$twoBitFile $file"]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateBam : " . $safe->stderr() . "\n";
@@ -1002,6 +1019,20 @@ sub validatePsl
 ############################################################################
 # Misc subroutines
 
+sub validateDafField {
+    # validate value for type of field
+        # Venkat: Added $sex to accomadate tissues for mouse
+    my ($type, $val, $daf) = @_;
+    $type =~ s/ /_/g;
+    HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
+    if($validators{$type}) {
+                # Venkat: Added the return $sex to accomadate tissues for mouse
+        return $validators{$type}->($val, $type, "", $daf);
+    } else {
+        return $validators{'default'}->($val, $type, "", $daf); # Considers the term controlled vocab
+    }
+}
+
 sub validateDdfField {
     # validate value for type of field
 	# Venkat: Added $sex to accomadate tissues for mouse
@@ -1152,6 +1183,7 @@ sub printCompositeTdbSettings {
                 }
                 $sortOrder = "$sortOrder$groupVar=+ ";
                 $controlledVocab = "$controlledVocab $groupVar";
+                # TODO: This template could you typeOfTerms from cv.ra and substitute "label" as subGroup2 cell Cell_Line term1=label1 term2=label2
                 $setting = "subGroup$grpNo $groupVar " . ucfirst($groupVar);
                 $setting = "subGroup$grpNo $groupVar " . "Cell_Line" if $variable eq "cell";
                 for my $key (keys %ddfSets) {
@@ -1166,7 +1198,10 @@ sub printCompositeTdbSettings {
                             } else {
                                 if (defined($terms{"control"}->{$term})) {
                                     $tag=$terms{"control"}->{$term}->{"tag"};
-                                } else {
+                                }
+			       	elsif (defined($terms{"lab"}->{$term})) {
+			    	    $tag=$terms{"lab"}->{$term}->{"tag"};
+				}	    else {
                                     die "'$term' is not a registered '$cvTypeVar' term\n";
                                 }
                             }
@@ -1237,6 +1272,7 @@ sub validationSettings {
             if ($paramList ne "") {
                 HgAutomate::verbose(2, "validationSettings $type $fileType params:$paramList\n");
             }
+            $paramList .= " -doReport";
             return $paramList;
         } else {
             for my $setting (@set) {
@@ -1258,6 +1294,10 @@ sub validationSettings {
 
 ############################################################################
 # Main
+
+# if you want to use a different path for executed binaries, this
+# is how you do it
+# $ENV{PATH} = "/cluster/home/braney/bin/x86_64:" . $ENV{PATH};
 
 my @ddfHeader;		# list of field names on the first line of DDF file
 my %ddfHeader = ();	# convenience hash version of @ddfHeader (maps name to field index)
@@ -1493,6 +1533,11 @@ if (defined($daf->{variables})) {
     # Hubbard Sanger Gencode project has no variables
     @variables = ();
 }
+
+# Now testing daf lab and dataType.
+pushError(\@errors, validateDafField("grant", $daf->{grant}, $daf));
+pushError(\@errors, validateDafField("lab", $daf->{lab}, $daf));
+pushError(\@errors, validateDafField("dataType", $daf->{dataType}, $daf));
 
 my %metadataHash;
 
@@ -1861,7 +1906,9 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "Antibody";
             } elsif ($var eq "cell") {
                 $cvTypeVar = "Cell Line";
-            }
+            } elsif ($var eq "obtainedBy") { 
+		$cvTypeVar = "lab";
+	     }
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
@@ -1936,7 +1983,12 @@ foreach my $ddfLine (@ddfLines) {
             } elsif ($var eq "cell") {
                 $groupVar = "cellType";
                 $cvTypeVar = "Cell Line";
-            }
+            } elsif ($var eq "obtainedBy") {
+              #Not sure why when we check for obtainedBy subGroups prints out and when when this is
+	      # not pressent the subGroups provides error of unitialized. 							
+     		$cvTypeVar = "lab";
+	    }
+
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
@@ -2040,12 +2092,7 @@ foreach my $ddfLine (@ddfLines) {
     $fileType =~ s/ //g;
     $metadata .= " composite=$compositeTrack";
 
-    if($downloadOnly) {
-        my $parentTable = $tableName;
-        $parentTable =~ s/RawData/RawSignal/    if $parentTable =~ /RawData/;
-        $parentTable =~ s/Alignments/RawSignal/ if $parentTable =~ /Alignments/;
-        $metadata .= " parentTable=$parentTable";
-    } else {
+    if(!$downloadOnly) {
         $metadata .= " tableName=$tableName";
     }
 
@@ -2170,6 +2217,39 @@ if($submitPath =~ /(\d+)$/) {
              $daf->{assembly}, $daf->{lab}, $daf->{dataType}, $compositeTrack, $id);
     }
 }
+
+my @cmds;
+# push @cmds, "docIdSubmitDir encpipeline_beta $submitPath  /hive/groups/encode/dcc/pipeline/downloads/betaDocId";
+push @cmds, "docIdSubmitDir encpipeline_prod $submitPath  /hive/groups/encode/dcc/pipeline/downloads/docId";
+my $safe = SafePipe->new(CMDS => \@cmds,  DEBUG => $opt_verbose - 1);
+if(my $err = $safe->exec()) {
+    my $err = $safe->stderr();
+    printf "Could not submit to docId system: " . $err;
+    exit 1;
+}
+
+# commenting this out until we decide to roll-out name changes
+
+# undef(@cmds);
+# push @cmds, "mv $submitPath/out/trackDb.ra  $submitPath/out/trackDb.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/trackDb.ra.preDocId" ;
+
+# $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/trackDb.ra",  DEBUG => $opt_verbose - 1);
+# if(my $err = $safe->exec()) {
+#    my $err = $safe->stderr();
+#    printf "Could not edit trackDb.ra " . $err;
+#    exit 1;
+#}
+
+#undef(@cmds);
+#push @cmds, "mv $submitPath/out/load.ra  $submitPath/out/load.ra.preDocId; sed -f $submitPath/out/edit.sed $submitPath/out/load.ra.preDocId";
+
+#$safe = SafePipe->new(CMDS => \@cmds, STDOUT => "$submitPath/out/load.ra",  DEBUG => $opt_verbose - 1);
+#if(my $err = $safe->exec()) {
+#    my $err = $safe->stderr();
+#    printf "Could not edit load.ra " . $err;
+#    exit 1;
+#}
+
 $time0=$timeStart;
 doTime("done. ") if $opt_timing;
 exit 0;

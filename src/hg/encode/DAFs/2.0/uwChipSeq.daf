@@ -18,7 +18,7 @@
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
 #labVersion: Free text for the lab to keep track of any other data
 
-on        2.0
+dafVersion        2.0
 
 # Lab and general info
 grant             Stam

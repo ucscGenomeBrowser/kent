@@ -1409,6 +1409,45 @@ if(raStyle) // NOTE: currently only supporting validation of RA files
     fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
 }
 
+char *mdbObjVarValPairsAsLine(struct mdbObj *mdbObj,boolean objTypeExclude)
+// returns NULL or a line for a single mdbObj as "var1=val1; var2=val2 ...".  Must be freed.
+{
+if (mdbObj!=NULL)
+    {
+    struct dyString *dyLine = dyStringNew(128);
+    struct mdbVar *mdbVar = NULL;
+
+    // If hash available, force objType to front
+    if (!objTypeExclude && mdbObj->varHash != NULL)
+        {
+        mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
+        dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+        }
+    for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+        {
+        if (!sameOk(MDB_OBJ_TYPE,mdbVar->var) || (!objTypeExclude && mdbObj->varHash == NULL))
+            {
+            if (mdbVar->varType == vtTxt)
+                dyStringPrintf(dyLine,"%s=%s; ",mdbVar->var,mdbVar->val);
+            }
+        }
+    char *line = dyStringCannibalize(&dyLine);
+    if (line)
+        {
+        int len = strlen(line);
+        if (len == 0)
+            {
+            freeMem(line);
+            return NULL;
+            }
+        if (line[len-1] == ' ')
+            line[len-1] = '\0';
+        return line;
+        }
+    }
+return NULL;
+}
+
 void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle)
 // prints objs and var=val pairs as formatted metadata lines or ra style
 {
@@ -1543,8 +1582,8 @@ return count;
 
 // ----------------- Utilities -----------------
 
-char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
-// Finds the val associated with the var or retruns NULL
+struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var)
+// Finds the mdbVar associated with the var or returns NULL
 {
 if (mdbObj == NULL)
     return NULL;
@@ -1560,6 +1599,17 @@ else
             break;
         }
     }
+if(mdbVar == NULL)
+    return NULL;
+
+return mdbVar;
+}
+
+char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
+// Finds the val associated with the var or retruns NULL
+{
+struct mdbVar *mdbVar = mdbObjFind(mdbObj, var);
+
 if(mdbVar == NULL)
     return NULL;
 
@@ -1785,6 +1835,32 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         freeMem(words);
 }
 
+char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var)
+// Removes var from set of mdbObjs but only if all that have it have a commmon val
+// Returns the val if removed, else NULL
+{
+char *val = NULL;
+struct mdbObj *mdb = NULL;
+for(mdb = mdbList; mdb; mdb=mdb->next)
+    {
+    char *thisVal = mdbObjFindValue(mdb,var);
+    if (thisVal == NULL) // If var isn't found in some, that is okay
+        continue;
+    if (val == NULL)
+        val = thisVal;
+    else if(differentWord(val,thisVal))
+        return NULL;
+    }
+
+if (val)
+    {
+    val = cloneString(val);
+    for(mdb = mdbList;mdb;mdb=mdb->next)
+        mdbObjRemoveVars(mdb,var);
+    }
+return val;
+}
+
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis)
 // Replaces objs' vars with var=vap pairs provided, preparing for DB update.
 {
@@ -1999,7 +2075,7 @@ return mdbObjFindValue(mdbObj,var);
 }
 
 struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files)
-// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+// Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 {  // TODO: Change this to use normal mdb struct routines?
 if (!tables && !files)
@@ -2017,7 +2093,9 @@ if (!tables || !files)
 
 if(var != NULL)
     dyStringPrintf(dyQuery,"l2.var = '%s' and l2.val ", var);
-if(sameString(op, "contains"))
+if(sameString(op, "in"))
+    dyStringPrintf(dyQuery,"in (%s)", val); // Note, must be a formatted string already: 'a','b','c' or  1,2,3
+else if(sameString(op, "contains") || sameString(op, "like"))
     dyStringPrintf(dyQuery,"like '%%%s%%'", val);
 else if (limit > 0 && strlen(val) == limit)
     dyStringPrintf(dyQuery,"like '%s%%'", val);
@@ -2073,8 +2151,8 @@ return filePath;
 }
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
-// Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
-// Can impose (non-zero) limit on returned string size of name.
+// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
+// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
 // Return is case insensitive sorted on name (label or else val).
 {  // TODO: Change this to use normal mdb struct routines?
 if (!tables && !files)
@@ -2100,27 +2178,30 @@ if (cvHash == NULL)
     cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
 
 struct slPair *pairs = NULL, *pair;
-struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&dyQuery));
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
+dyStringFree(&dyQuery);
 char **row;
 struct hash *ra = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(pair);
-    pair = slPairNew(row[0],cloneString(row[0]));  // defaults the label to the val
-    ra = hashFindVal(cvHash,row[0]);
-    if (ra == NULL && sameString(var,"lab"))  // ugly special case
+    char *name = cloneString(row[0]);
+    pair = slPairNew(name,name);  // defaults the label to the metaDb.val
+    ra = hashFindVal(cvHash,name);
+    if (ra == NULL && sameString(var,"lab"))  // FIXME: ugly special case to be removed when metaDb is cleaned up!
         {
-        char *val = cloneString(row[0]);
+        char *val = cloneString(name);
         ra = hashFindVal(cvHash,strUpper(val));
         if (ra == NULL)
             ra = hashFindVal(cvHash,strLower(val));
+        freeMem(val);
         }
     if (ra != NULL)
         {
         char *label = hashFindVal(ra,"label");
         if (label != NULL)
             {
-            freeMem(pair->name);
+            freeMem(pair->name); // Allocated when pair was created
             pair->name = strSwapChar(cloneString(label),'_',' ');  // vestigial _ meaning space
             if (limit > 0 && strlen(pair->name) > limit)
                 pair->name[limit] = '\0';
@@ -2132,4 +2213,104 @@ sqlFreeResult(&sr);
 slPairSortCase(&pairs);
 return pairs;
 }
+
+struct hash *mdbCvTermTypeHash()
+// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
+// Those terms should contain label,description,searchable,cvDefined,hidden
+{
+static struct hash *cvHashOfTermTypes = NULL;
+
+// Establish cv hash of Term Types if it doesn't already exist
+if (cvHashOfTermTypes == NULL)
+    {
+    cvHashOfTermTypes = raReadWithFilter(cv_file(), "term","type","typeOfTerm");
+    // Patch up an ugly inconsistency with 'cell'
+    struct hash *cellHash = hashRemove(cvHashOfTermTypes,"cellType");
+    if (cellHash)
+        {
+        hashAdd(cvHashOfTermTypes,"cell",cellHash);
+        hashReplace(cellHash, "term", cloneString("cell")); // spilling memory of 'cellType' val
+        }
+    struct hash *abHash = hashRemove(cvHashOfTermTypes,"Antibody");
+    if (abHash)
+        {
+        hashAdd(cvHashOfTermTypes,"antibody",abHash);
+        hashReplace(abHash, "term", cloneString("antibody")); // spilling memory of 'Antibody' val
+        }
+    }
+
+
+return cvHashOfTermTypes;
+}
+
+struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvDefined)
+// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
+// TODO: change to return struct that includes searchable!
+{
+struct slPair *whitePairs = NULL;
+
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hashCookie hc = hashFirst(termTypeHash);
+struct hashEl *hEl;
+while ((hEl = hashNext(&hc)) != NULL)
+    {
+    char *setting = NULL;
+    struct hash *typeHash = (struct hash *)hEl->val;
+    //if (!includeHidden)
+        {
+        setting = hashFindVal(typeHash,"hidden");
+        if(SETTING_IS_ON(setting))
+            continue;
+        }
+    if (searchTracks)
+        {
+        setting = hashFindVal(typeHash,"searchable");
+#ifdef CV_SEARCH_SUPPORTS_FREETEXT
+        if (setting == NULL
+        || (differentWord(setting,"select") && differentWord(setting,"freeText")))
+#else///ifndef CV_SEARCH_SUPPORTS_FREETEXT
+        if (setting == NULL || differentWord(setting,"select")) // TODO: Currently only 'select's are supported
+#endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
+           continue;
+        }
+    if (cvDefined)
+        {
+        setting = hashFindVal(typeHash,"cvDefined");
+        if(SETTING_NOT_ON(setting))
+            continue;
+        }
+    char *term  = hEl->name;
+    char *label = hashFindVal(typeHash,"label");
+    if (label == NULL)
+        label = term;
+    slPairAdd(&whitePairs, term, cloneString(label)); // Term gets cloned in slPairAdd
+    }
+if (whitePairs != NULL)
+    slPairValSortCase(&whitePairs);
+
+return whitePairs;
+}
+
+#ifdef CV_SEARCH_SUPPORTS_FREETEXT
+enum mdbCvSearchable mdbCvSearchMethod(char *term)
+// returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
+{
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *searchable = hashFindVal(termHash,"searchable");
+    if (searchable != NULL)
+        {
+        if (sameWord(searchable,"select"))
+            return cvsSearchBySingleSelect;
+        if (sameWord(searchable,"freeText"))
+            return cvsSearchByFreeText;
+        }
+    }
+return cvsNotSearchable;
+}
+#endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
 

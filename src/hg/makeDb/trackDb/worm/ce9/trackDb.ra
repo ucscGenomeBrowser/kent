@@ -67,7 +67,7 @@ priority 103.29
     track cons10wayViewalign
     shortLabel Multiz Alignments
     view align
-    visibility pack
+    visibility full
     viewUi on
     subTrack cons10way
 
@@ -79,7 +79,7 @@ priority 103.29
         noInherit on
         irows on
         summary multiz10waySummary
-#        frames multiz10wayFrames
+        frames multiz10wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
@@ -88,7 +88,7 @@ priority 103.29
         speciesGroups Caenorhabditis Nematode
         sGroup_Caenorhabditis caePb2 caeRem3 cb3 caeJap3
         sGroup_Nematode haeCon1 priPac2 melInc1 melHap1 bruMal1
-        speciesDefaultOff haeCon1 priPac2 melInc1 melHap1 bruMal1
+#        speciesDefaultOff haeCon1 priPac2 melInc1 melHap1 bruMal1
         itemFirstCharCase noChange
         treeImage phylo/ce9_10way.png
         priority 5
@@ -96,27 +96,27 @@ priority 103.29
     track cons10wayViewphyloP
     shortLabel Basewise Conservation (phyloP)
     view phyloP
-    visibility full
     subTrack cons10way
+    visibility full
     viewLimits -.3:2
     viewLimitsMax -15.41:7.13
 
         # PhyloP conservation
         track phyloP10wayCaenorhabditis
-        subTrack cons10wayViewphyloP off
+        subTrack cons10wayViewphyloP
         subGroups view=phyloP clade=caenor
         shortLabel Caenorhabditis Cons
         longLabel Caenorhabditis Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -1.08 1.88
+        type wig -1.03 1.95
         maxHeightPixels 100:50:11
-        viewLimits -1.08:1.88
+        viewLimits -1.03:1.95
         autoScale off
         spanList 1
         windowingFunction mean
-        color 10,10,70
-        altColor 70,10,10
+        color 40,40,120
+        altColor 120,40,40
         priority 1
 
         track phyloP10way
@@ -126,14 +126,14 @@ priority 103.29
         longLabel Nematode Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -1.82 3.71
+        type wig -1.7 4.36
         maxHeightPixels 100:50:11
-        viewLimits -1.82:3.715
+        viewLimits -1.7:4.36
         autoScale off
         spanList 1
         windowingFunction mean
-        color 40,40,120
-        altColor 120,40,40
+        color 10,10,70
+        altColor 70,10,10
         priority 2
 
     track cons10wayViewphastcons
@@ -178,12 +178,12 @@ priority 103.29
     track cons10wayViewelements
     shortLabel Conserved Elements
     view elements
-    visibility hide
+    visibility dense
     subTrack cons10way
 
         # Conserved Elements (Most Conserved)
         track phastConsElements10wayCaenorhabditis
-        subTrack cons10wayViewelements off
+        subTrack cons10wayViewelements
         subGroups view=elements clade=caenor
         shortLabel Caenorhabditis El
         longLabel Caenorhabditis Conserved Elements
@@ -201,3 +201,9 @@ priority 103.29
         color 170,100,50
         type bed 5 .
         priority 7
+
+track xenoRefGene override
+visibility hide
+
+track mrna override
+visibility hide

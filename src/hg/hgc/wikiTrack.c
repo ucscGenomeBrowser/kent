@@ -440,7 +440,7 @@ else
 	item->db, item->chrom, item->chromStart, item->chromEnd);
 
 prefixComments(item, comments, userName, seqName, winStart, winEnd,
-    database, NULL, "(deleted item)");
+    database, NULL, "(deleted item)", NEW_ITEM_CATEGORY);
 deleteItem(sqlSigned(wikiItemId));
 /*	this may be a multiple loci gene symbol annotation */
 if (slCount(itemList) > 0)
@@ -472,7 +472,7 @@ if (NULL == userName)
     errAbort("add wiki comments: user not logged in ?");
 
 addDescription(item, userName, seqName, winStart, winEnd, cart, database, NULL,
-	NULL);
+	NULL, NEW_ITEM_CATEGORY);
 updateLastModifiedDate(sqlSigned(wikiItemId));
 displayItem(item, userName);
 }
@@ -577,6 +577,6 @@ safef(wikiItemId,ArraySize(wikiItemId),"%d", id);
 struct wikiTrack *item = findWikiItemId(wikiItemId);
 
 addDescription(item, userName, seqName, winStart, winEnd, cart, database, NULL,
-	NULL);
+	NULL, NEW_ITEM_CATEGORY);
 displayItem(item, userName);
 }	/*	void doCreateWikiItem()	*/

@@ -28,6 +28,7 @@ char *geneModel;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
 float minDelta = -1;                   // minDelta == 0 means output all deltas
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
+char *motifTable;
 char *markovTable;
 static int maxNearestGene = 10000;
 boolean oneBased = FALSE;
@@ -82,6 +83,7 @@ static struct optionSpec optionSpecs[] = {
     {"minDelta", OPTION_FLOAT},
     {"markovTable", OPTION_STRING},
     {"maxNearestGene", OPTION_INT},
+    {"motifTable", OPTION_STRING},
     {"outputExtension", OPTION_STRING},
     {"skipGeneModel", OPTION_BOOLEAN},
     {"oneBased", OPTION_BOOLEAN},
@@ -122,13 +124,17 @@ errAbort(
   "usage:\n"
   "   mutationClassifier database snp.bed(s)\n"
   "options:\n"
+  "   -bindingSites\tPrint out only mutations in binding sites.\n"
+  "   -clusterTable\tUse this binding site table to look for mutations in binding sites.\n"
+  "   -geneModel=table\tGene model. Default model is knownCanonical. Table must be a valid gene prediction table;\n"
+  "   \t\t\te.g. ensGene or refGene.\n"
   "   -lazyLoading\t\tAvoid loading complete gene model (performance hack for when you are classifying only a few items).\n"
   "   -maxNearestGene\tMaximum distance used when computing nearest gene (default: %d).\n"
   "   -minDelta\t\tLook for regulatory sites with score(after) - score(before) < minDelta (default: %.1f).\n"
   "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > minDelta.)\n"
+  "   -oneBased\t\tUse one-based coordinates instead of zero-based.\n"
   "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
-  "   -oneBased     = Use one-based coordinates instead of zero-based.\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
@@ -302,8 +308,14 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
         {
         bed->strand = row[5][0];
         if (bed->strand == '-')
+            {
             // we support this so we can process dbSnp data (which has reverse strand SNPs).
-            complement(bed->name, strlen(bed->name)); 
+            int i, len = strlen(bed->name);
+            // complement doesn't work on some punctuation, so only complement the bases
+            for(i = 0; i < len; i++)
+                if(isalpha(bed->name[i]))
+                    complement(bed->name + i, 1);
+            }
         if (wordCount >= 7)
             bed->key = cloneString(row[6]);
         }
@@ -329,7 +341,26 @@ else
     fprintf(stream, "\t%s\n", key);
 }
 
-static void clipGenPred(char *database, struct genePred *gp)
+static struct dnaSeq *getChromSeq(struct nibTwoCache *ntc, char *seqName)
+{
+// We read whole chromosome sequences at a time in order to speedup loading of whole gene models.
+// This yields very large speedup compared to using nibTwoCacheSeqPartExt to load regions.
+// This speedup assumes that gene models have been sorted by chromosome!!
+
+static char *cachedSeqName = NULL;
+static struct dnaSeq *cachedSeq = NULL;
+if(cachedSeqName == NULL || !sameString(seqName, cachedSeqName))
+    {
+    freeDnaSeq(&cachedSeq);
+    freeMem(cachedSeqName);
+    cachedSeq = nibTwoCacheSeq(ntc, seqName);
+    cachedSeqName = cloneString(seqName);
+    }
+return cachedSeq;
+}
+
+
+static void clipGenPred(char *database, struct nibTwoCache *ntc, struct genePred *gp)
 {
 // Clip exonStarts/exonEnds to cdsStart/cdsEnd and then read in the whole DNA for this gene in preparation for a SNP check.
 // After this call, exonStarts/exonEnds contain only the exons used for CDS (i.e. some may be removed).
@@ -340,17 +371,20 @@ static void clipGenPred(char *database, struct genePred *gp)
     unsigned *newEnds = needMem(gp->exonCount * sizeof(unsigned));
     int newCount = 0;
     gp->name2 = cloneString("");
+    struct dnaSeq *seq = getChromSeq(ntc, gp->chrom);
     for (i=0;i<gp->exonCount;i++)
         {
         if (gp->exonEnds[i] >= gp->cdsStart && gp->exonStarts[i] <= gp->cdsEnd)
             {
-            char retNibName[HDB_MAX_PATH_STRING];
             newStarts[newCount] = max(gp->exonStarts[i], gp->cdsStart);
             newEnds[newCount] = min(gp->exonEnds[i], gp->cdsEnd);
-            hNibForChrom(database, gp->chrom, retNibName);
-            struct dnaSeq *dna = hFetchSeqMixed(retNibName, gp->chrom, newStarts[newCount], newEnds[newCount]);
-            char *newName = needMem(strlen(gp->name2) + strlen(dna->dna) + 1);
-            sprintf(newName, "%s%s", gp->name2, dna->dna);
+            int oldLen = strlen(gp->name2);
+            int newLen = newEnds[newCount] - newStarts[newCount];
+            char *newName = needMem(oldLen + newLen + 1);
+            strcpy(newName, gp->name2);
+            memcpy(newName + oldLen, seq->dna + newStarts[newCount], newLen);
+            newName[oldLen + newLen] = 0;
+            touppers(newName + oldLen);
             freeMem(gp->name2);
             gp->name2 = newName;
             newCount++;
@@ -366,11 +400,11 @@ static void clipGenPred(char *database, struct genePred *gp)
         reverseComplement(gp->name2, strlen(gp->name2));
         }
     gp->score = strlen(gp->name2);
-    if (debug)
-        printf("%s - %d: %s\n", gp->name2, (int) strlen(gp->name2), gp->name2);
+    verbose(2, "read gene %s %s:%d-%d (%d)\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->score);
+    verbose(3, "%s - %d: %s\n", gp->name2, (int) strlen(gp->name2), gp->name2);
 }
 
-static int transformPos(char *database, struct genePred *gp, unsigned pos, boolean *lastExon)
+static int transformPos(char *database, struct nibTwoCache *ntc, struct genePred *gp, unsigned pos, boolean *lastExon)
 {
 // transformPos chrom:chromStart coordinates to relative CDS coordinates
 // returns -1 if pos is NOT within the CDS
@@ -380,7 +414,7 @@ boolean reverse = gp->strand[0] == '-';
 
 if (gp->name2 == NULL)
     {
-    clipGenPred(database, gp);
+    clipGenPred(database, ntc, gp);
     }
 for (i=0;i<gp->exonCount;i++)
     {
@@ -402,7 +436,7 @@ for (i=0;i<gp->exonCount;i++)
 return -1;
 }
 
-static struct genePred *readGenes(char *database, struct sqlConnection *conn)
+static struct genePred *readGenes(char *database, struct sqlConnection *conn, struct nibTwoCache *ntc)
 {
 struct genePred *el, *retVal = NULL;
 char query[256];
@@ -437,21 +471,9 @@ if(sameString(geneModel, "knownCanonical"))
         }
     sqlFreeResult(&sr);
     }
-else if(sameString(geneModel, "refGene"))
+else if(sqlTableExists(conn, geneModel))
     {
-    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from refGene where cdsStart != cdsEnd");
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        struct genePred *gp = genePredLoad(row);
-        gp->name2 = NULL;
-        slAddHead(&retVal, gp);
-        }
-    sqlFreeResult(&sr);
-    }
-else if(sameString(geneModel, "ensGene"))
-    {
-    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from ensGene where cdsStart != cdsEnd");
+    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where cdsStart != cdsEnd", geneModel);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -468,15 +490,16 @@ if(!lazyLoading)
     {
     for(el = retVal; el != NULL; el = el->next)
         {
-        clipGenPred(database, el);
+        clipGenPred(database, ntc, el);
         }
     }
 freeHash(&geneHash);
 return(retVal);
 }
 
-static DNA parseSnp(char *name, DNA *before, DNA *refCall)
+static DNA parseSnp(char *name, DNA *before, DNA *ref)
 {
+// If before != NULL and *before != 0, then before is the reference call.
 int len = strlen(name);
 if(len == 1)
     {
@@ -486,15 +509,31 @@ if(len == 1)
     }
 else if(strlen(name) == 3)
     {
-    // N>N
-    if(before != NULL)
-        *before = name[0];
-    return name[2];
+    // N>N (dbSnp format). dbSnp sorts the bases alphabetically (i.e. reference call is not necessarily first, so we can infer
+    // before only if the caller supplies a reference call).
+    DNA after = name[2];
+    if(ref != NULL && *ref)
+        {
+        if(*ref == name[0])
+            *before = name[0];
+        else if(*ref == name[2])
+            {
+            // watch out for sorted SNP calls (where reference is listed second).
+            after = name[0];
+            *before = name[2];
+            }
+        else
+            // reference matches neither SNP call so just randomly pick the first one.
+            *before = name[0];
+        }
+    else
+        ; // caller isn't telling us the reference call, so we cannot set before
+    return after;
     }
 else if(strlen(name) == 7)
     {
-    if(refCall)
-        *refCall = name[0];
+    if(ref)
+        *ref = name[0];
     if(name[2] == name[3])
         {
         // homo -> ...
@@ -594,27 +633,93 @@ for(; genes != NULL; genes = genes->next)
     return retVal;
 }
 
+struct hit
+{
+    struct hit *next;
+    float delta;
+    float absDelta;
+    float before;
+    float after;
+    int start;
+    char strand;
+    float maxScore;
+};
+
+static void addHit(struct hit **hit, float before, float after, int start, char strand)
+{
+double delta = after - before;
+double absDelta = delta < 0 ? -delta : delta;
+double maxScore = max(before, after);
+boolean add = FALSE;
+if((before > 0 || after > 0) && absDelta >= 1)
+    {
+    if(*hit == NULL)
+        {
+        add = TRUE;
+        *hit = needMem(sizeof(**hit));
+        }
+    if(add || absDelta > (*hit)->absDelta || (absDelta == (*hit)->absDelta && maxScore > (*hit)->maxScore))
+        {
+        (*hit)->delta = delta;
+        (*hit)->absDelta = absDelta;
+        (*hit)->start = start;
+        (*hit)->before = before;
+        (*hit)->after = after;
+        (*hit)->strand = strand;
+        (*hit)->maxScore = maxScore;
+        }
+    }
+}
+
 static void mutationClassifier(char *database, char **files, int fileCount)
 {
 int i, fileIndex = 0;
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn2 = sqlConnect(database);
 boolean done = FALSE;
-boolean motifTableExists = sqlTableExists(conn, clusterTable);
+boolean clusterTableExists = sqlTableExists(conn, clusterTable);
 boolean markovTableExists = markovTable != NULL && sqlTableExists(conn, markovTable);
 long time;
 struct genePred *genes = NULL;
 char pathName[2056];
 struct nibTwoCache *ntc;
+struct dnaMotif *motifs = NULL;
+int maxMotifLen = 0;
 
 safef(pathName, sizeof(pathName), "/gbdb/%s/%s.2bit", database, database);
 ntc = nibTwoCacheNew(pathName);
 if(!skipGeneModel || bindingSites)
     {
     time = clock1000();
-    genes = readGenes(database, conn);
-    verbose(2, "readGenes took: %ld ms\n", clock1000() - time);
-    verbose(2, "%d canonical known genes\n", slCount(genes));
+    genes = readGenes(database, conn, ntc);
+    verbose(1, "readGenes took: %ld ms\n", clock1000() - time);
+    verbose(1, "%d canonical known genes\n", slCount(genes));
+    }
+
+if(motifTable)
+    {
+    // look for de novo mutations.
+    struct dnaMotif *motif = NULL;
+    struct slName *motifName, *motifNames = NULL;
+    char query[256];
+    char where[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), "select name from %s", motifTable);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        slAddHead(&motifNames, slNameNew(row[0]));
+    sqlFreeResult(&sr);
+    for(motifName = motifNames; motifName != NULL; motifName = motifName->next)
+        {
+        safef(where, sizeof(where), "name = '%s'", motifName->name);
+        motif = dnaMotifLoadWhere(conn, motifTable, where);
+        if(motif == NULL)
+            errAbort("couldn't find motif '%s'", motifName->name);
+        maxMotifLen = max(maxMotifLen, motif->columnCount);
+        slAddHead(&motifs, motif);
+        }
+    slReverse(&motifs);
     }
 
 while(!done)
@@ -677,7 +782,7 @@ while(!done)
         // boolean reverse = !strcmp(overlapA->strand, "-");
         boolean lastExon;
 
-        int pos = transformPos(database, gp, overlapA->chromStart, &lastExon);
+        int pos = transformPos(database, ntc, gp, overlapA->chromStart, &lastExon);
         if (pos >= 0)
             {
             int len = strlen(overlapA->name);
@@ -795,21 +900,80 @@ while(!done)
             }
         }
 
-    verbose(2, "gene model took: %ld ms\n", clock1000() - time);
+    verbose(1, "gene model took: %ld ms\n", clock1000() - time);
     
-    used = newHash(0);
-    time = clock1000();
-    struct genomeRangeTree *tree = genomeRangeTreeNew();
-    for(bed = unusedA; bed != NULL; bed = bed->next)
-        genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
-    verbose(2, "cluster genomeRangeTreeAddVal took: %ld ms\n", clock1000() - time);
-
-    if(motifTableExists)
+    if(motifs)
+        {
+        for(bed = unusedA; bed != NULL; bed = bed->next)
+            {
+            DNA ref, beforeSnp, snp;
+            int start = max(0, bed->chromStart - maxMotifLen + 1);
+            int end = bed->chromStart + maxMotifLen;
+            struct dnaSeq *beforeSeq = nibTwoCacheSeqPartExt(ntc, bed->chrom, start, end - start, TRUE, NULL);
+            // XXXX watch out for end of chrom
+            touppers(beforeSeq->dna);
+            ref = beforeSeq->dna[bed->chromStart - start];
+            verbose(3, "ref: %c; snp: %s\n", ref, bed->name);
+            snp = parseSnp(bed->name, &beforeSnp, &ref);
+            verbose(3, "beforeSnp: %c; snp: %c\n", beforeSnp, snp);
+            if(beforeSnp && snp && beforeSnp != snp)
+                {
+                struct dnaMotif *motif;
+                struct dnaSeq *beforeSeq, *afterSeq;
+                double mark0[5];
+                mark0[0] = 1;
+                mark0[1] = mark0[2] = mark0[3] = mark0[4] = 0.25;
+                // XXXX stick in beforeSnp
+                beforeSeq = nibTwoCacheSeqPartExt(ntc, bed->chrom, start, end - start, TRUE, NULL);
+                touppers(beforeSeq->dna);
+                afterSeq = nibTwoCacheSeqPartExt(ntc, bed->chrom, start, end - start, TRUE, NULL);
+                touppers(afterSeq->dna);
+                afterSeq->dna[bed->chromStart - start] = snp;
+                for (motif = motifs; motif != NULL; motif = motif->next)
+                    {
+                    int looper;
+                    struct hit *hit = NULL;
+                    for (looper = 0; looper < 2; looper++)
+                        {
+                        int i = max(start, bed->chromStart - motif->columnCount + 1);
+                        char strand = looper == 0 ? '+' : '-';
+                        for (; i <= bed->chromStart; i++)
+                            {
+                            char buf[128];
+                            safencpy(buf, sizeof(buf), beforeSeq->dna + (i - start), motif->columnCount);
+                            if(looper == 1)
+                                reverseComplement(buf, motif->columnCount);
+                            double before = dnaMotifBitScoreWithMark0Bg(motif, buf, mark0);
+                            safencpy(buf, sizeof(buf), afterSeq->dna + (i - start), motif->columnCount);
+                            if(looper == 1)
+                                reverseComplement(buf, motif->columnCount);
+                            double after = dnaMotifBitScoreWithMark0Bg(motif, buf, mark0);
+                            verbose(4, "%s: %s: %f => %f\n", motif->name, buf, before, after);
+                            addHit(&hit, before, after, i, strand);
+                            }
+                        }
+                    if(hit)
+                        {
+                        fprintf(output, "%s\t%d\t%d\t%s\t%.2f\t%.2f\t%.2f\t%c\n", 
+                                bed->chrom, hit->start, hit->start + motif->columnCount, motif->name, hit->absDelta, hit->before, hit->after, hit->strand);
+                        }
+                    }
+                }
+            }
+        }
+    else if(clusterTableExists)
         {
         char **row;
         char query[256];
         struct sqlResult *sr;
         struct bed6FloatScore *site, *sites = NULL;
+
+        used = newHash(0);
+        time = clock1000();
+        struct genomeRangeTree *tree = genomeRangeTreeNew();
+        for(bed = unusedA; bed != NULL; bed = bed->next)
+            genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
+        verbose(2, "cluster genomeRangeTreeAddVal took: %ld ms\n", clock1000() - time);
 
         safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s", clusterTable);
         sr = sqlGetResult(conn, query);
@@ -897,7 +1061,7 @@ while(!done)
                     struct bed7 *bed = (struct bed7 *) range->val;
                     snp = parseSnp(bed->name, NULL, &refCall);
             
-                    // XXXX && motifTableExists)
+                    // XXXX && clusterTableExists)
                     if(snp)
                         {
                         struct dnaSeq *seq = NULL;
@@ -1000,7 +1164,6 @@ while(!done)
             {
             char key[256];
             safef(key, sizeof(key), "%s:%d:%d", bed->chrom, bed->chromStart, bed->chromEnd);
-            genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
             if (hashLookup(used, key) == NULL)
                 {
                 if(bed->code == NULL)
@@ -1035,14 +1198,13 @@ geneModel = optionVal("geneModel", "knownCanonical");
 lazyLoading = optionExists("lazyLoading");
 markovTable = optionVal("markovTable", NULL);
 maxNearestGene = optionInt("maxNearestGene", maxNearestGene);
+motifTable = optionVal("motifTable", NULL);
 minDelta = optionFloat("minDelta", minDelta);
 outputExtension = optionVal("outputExtension", NULL);
 skipGeneModel = optionExists("skipGeneModel");
 oneBased = optionExists("oneBased");
 if(bindingSites)
-    {
     lazyLoading = TRUE;
-    }
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);

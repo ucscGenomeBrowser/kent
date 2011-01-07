@@ -143,8 +143,8 @@ sub getInfrastructureEntry {
   # Look for the usual set of files on $dbHost:
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
   my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
-    ("$db.2bit", 'html/description.html', "wib/gc5Base.wib",
-     "liftOver/${db}To$SameSpecies*");
+    ("$db.2bit", 'html/description.html', "wib/gc5Base.wib", "wib/quality.wib",
+     "bbi/gc5Base.bw", "bbi/quality.bw", "liftOver/${db}To$SameSpecies*");
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
     (qw( bigZips/* database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");
@@ -186,19 +186,20 @@ sub getGenbankEntry {
   # to the user will help diagnose.  Mark has been maintaining a list of
   # regexes in kent/src/hg/makeDb/genbank/etc/genbank.tbls .
   my @genbankTrackTables = qw(
-    refGene xenoRefGene mgcGenes all_mrna chr*_mrna chr*_intronEst
-    intronEst chr*_est all_est xenoMrna
-    mgcFullMrna mgcFullStatus orfeomeGenes
-    refFlat refLink refSeqAli refSeqStatus refSeqSummary
-    xenoRefFlat xenoRefSeqAli
+    all_est all_mrna ccdsGene ccdsInfo ccdsKgMap ccdsNotes
+    chr*_est chr*_intronEst chr*_mrna intronEst mgcFailedEst mgcFullMrna
+    mgcFullStatus mgcGenes mgcIncompleteMrna mgcPickedEst mgcStatus
+    mgcUnpickedEst orfeomeGenes orfeomeMrna
+    refFlat refGene refLink refSeqAli refSeqStatus refSeqSummary
+    xenoEst xenoMrna xenoRefFlat xenoRefGene xenoRefSeqAli
     );
   my @genbankRequiredTables = qw(
     author cds cell description development gbCdnaInfo
     gbExtFile gbLoaded gbSeq gbStatus geneName imageClone keyword
-    library mrnaClone mrnaOrientInfo organism productName sex source tissue
+    library mrnaClone organism productName sex source tissue
     );
   my @genbankHelpfulTables = qw(
-    estOrientInfo gbMiscDiff gbWarn
+    estOrientInfo gbMiscDiff gbWarn mrnaOrientInfo
     );
   my @genbankTablesInDb = ();
   foreach my $t (@genbankTrackTables) {
@@ -383,11 +384,14 @@ sub getTrackEntries {
       } elsif ($type =~ /^wigMaf/) {
 	if ($table =~ /^multiz(\d+way)/) {
 	  my $gif = "$HgAutomate::images/phylo/${db}_$1.gif";
+	  my $png = "$HgAutomate::images/phylo/${db}_$1.png";
 	  if (&HgAutomate::machineHasFile($dbHost, $gif)) {
 	    $entry{'files'} .= $gif . '\r\n';
+	  } elsif (&HgAutomate::machineHasFile($dbHost, $png)) {
+	    $entry{'files'} .= $png . '\r\n';
 	  } else {
 	    &HgAutomate::verbose(0, "WARNING: $dbHost does not have phyloGif-" .
-				    "generated $gif for $table.\n");
+				    "generated $gif (or png) for $table.\n");
 	  }
 	}
       }
@@ -559,8 +563,14 @@ sub printSwaps($) {
     $entry{'tables'} = $tableList;
     $entry{'files'} = "";
     my $over = "${oDb}To$Db.over.chain.gz";
+    my $axtNet = "$HgAutomate::goldenPath/$oDb/vs$Db/axtNet/*";
+    if (! &HgAutomate::machineHasFile($dbHost, $axtNet)) {
+	$axtNet = "$HgAutomate::goldenPath/$oDb/vs$Db/$oDb.$db.net.axt.gz";
+    }
     foreach my $downloads
-      ("$HgAutomate::goldenPath/$oDb/vs$Db/*",
+      ("$HgAutomate::goldenPath/$oDb/vs$Db/*.txt",
+       "$HgAutomate::goldenPath/$oDb/vs$Db/*.gz",
+       $axtNet,
        "$HgAutomate::goldenPath/$oDb/liftOver/$over",
        "$HgAutomate::gbdb/$oDb/liftOver/$over") {
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {

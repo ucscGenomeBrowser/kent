@@ -180,6 +180,25 @@ taxId 54126
 
     ln -s `pwd`/priPac2.2bit /gbdb/priPac2/priPac2.2bit
 
+#########################################################################
+# Check for *all* gaps - if they are not all in the AGP file
+#       (DONE - 2010-10-20 - Hiram)
+    mkdir /hive/data/genomes/priPac2/bed/allGaps
+    cd /hive/data/genomes/priPac2/bed/allGaps
+
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+        -strand=+ ../../priPac2.2bit > findMotif.txt 2>&1
+    #   real    0m2.078s
+
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits priPac2 -not gap -bed=notGap.bed
+    #  133634773 bases of 133634773 (100.000%) in intersection
+
+    featureBits priPac2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	0 bases of 133634773 (0.000%) in intersection
+    ### - there are no extra gaps
+    #	(see felCat4.txt for remainder of procedure if there are gaps)
+
 ########################################################################
 # MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2010-09-29 - Hiram)
     # numerator is priPac2 gapless bases "real" as reported by faSize 
@@ -215,7 +234,7 @@ taxId 54126
 ############################################################################
 # reset default position to ZC101.2e protein blat result
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="ABKE01000932:1-22252"
+    hgsql -e 'update dbDb set defaultPos="ABKE01000932:1-29163"
 	where name="priPac2";' hgcentraltest
 
 ############################################################################
@@ -398,3 +417,107 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     rm -rf blastOut
 
 #########################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-10-20 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add priPac2 just before priPac1
+
+# priPac2 (P. pacificus)
+priPac2.serverGenome = /hive/data/genomes/priPac2/priPac2.2bit
+priPac2.clusterGenome = /scratch/data/priPac2/priPac2.2bit
+priPac2.ooc = /scratch/data/priPac2/priPac2.11.ooc
+priPac2.lift = no
+priPac2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+priPac2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+priPac2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+priPac2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+priPac2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+priPac2.refseq.mrna.native.load = yes
+priPac2.refseq.mrna.xeno.load  = yes
+priPac2.refseq.mrna.xeno.loadDesc = yes
+priPac2.genbank.mrna.xeno.load = yes
+priPac2.genbank.est.native.load = yes
+priPac2.genbank.est.native.loadDesc = no
+priPac2.downloadDir = priPac2
+priPac2.perChromTables = no
+
+    git commit -m "Added priPac2." etc/genbank.conf
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial priPac2 &
+    #	logFile: var/build/logs/2010.10.20-11:29:48.priPac2.initalign.log
+    #	real    179m55.957s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad priPac2
+    #	logFile:  var/dbload/hgwdev/logs/2010.10.20-15:03:44.dbload.log
+    #	real    24m11.438s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add priPac2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added priPac2 - P. pacificus" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+# WS210 WormBase genes loading (DONE - 2010-10-14 - Hiram)
+    mkdir /hive/data/genomes/priPac2/bed/ws210Gene
+    cd /hive/data/genomes/priPac2/bed/ws210Gene
+    ln -s  /hive/data/genomes/priPac1/bed/blat.priPac2.2010-10-14/priPac1ToPriPac2.over.chain.gz .
+    ln -s /hive/data/genomes/priPac1/bed/ws210Gene/priPac1.ws210Gene.gp .
+    export DB=priPac2
+    liftOver -genePred priPac1.ws210Gene.gp priPac1ToPriPac2.over.chain.gz \
+        ${DB}.ws210Gene.gp ws210gene.unmapped.gp
+
+    genePredCheck -db=${DB} ${DB}.ws210Gene.gp
+    #	checked: 24319 failed: 0
+
+    hgLoadGenePred ${DB} ws210Gene ${DB}.ws210Gene.gp
+
+#########################################################################
+# set this as the defaultDb (DONE - 2010-10-20 - Hiram)
+    hgsql -e 'update defaultDb set name="priPac2" where name="priPac1";' \
+	hgcentraltest
+
+#########################################################################
+# verify all.joiner has everything (DONE - 2010-10-20 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=priPac2 ./all.joiner
+    joinerCheck -keys -database=priPac2 ./all.joiner
+    joinerCheck -times -database=priPac2 ./all.joiner
+    joinerCheck -all -database=priPac2 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#########################################################################
+# construct downloads files (DONE - 2010-10-20 - Hiram)
+    cd /hive/data/genomes/priPac2
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 priPac2 \
+	 > downloads.log 2>&1
+
+#########################################################################
+## Creating pushQ (DONE - 2010-10-20 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/priPac2/pushQ
+    cd /hive/data/genomes/priPac2/pushQ
+    makePushQSql.pl priPac2 > priPac2.sql 2> errorLog.out
+
+    ## check the errorLog.out for anything that needs to be fixed
+    ## copy priPac2.sql to hgwbeta:/tmp
+    ## then on hgwbeta:
+    hgsql qapushq < priPac2.sql
+
+#######################################################################

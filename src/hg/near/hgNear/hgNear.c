@@ -1193,8 +1193,26 @@ hPrintf("</TD></TR>\n<TR><TD>");
 /* Do items to display drop-down */
     {
     static char *menu[] = {"25", "50", "100", "200", "500", "1000", "all"};
+    int i = 0;
+
     hPrintf(" display ");
-    cgiMakeDropList(countVarName, menu, ArraySize(menu), displayCountString);
+    hPrintf("<SELECT NAME=\"%s\"", countVarName);
+    hPrintf(" onchange=\""
+	"document.orgForm.%s.value = document.mainForm.%s.options[document.mainForm.%s.selectedIndex].value;"
+      	"document.orgForm.submit();"
+	"\"", 
+	countVarName,
+	countVarName,
+	countVarName);
+    hPrintf(">\n");
+    for (i = 0; i < ArraySize(menu); ++i)
+      {
+	hPrintf("<OPTION VALUE=\"%s\"", menu[i]);
+	if (sameString(displayCountString, menu[i]))
+	    hPrintf(" SELECTED");
+	hPrintf(">%s\n", menu[i]);
+	}
+    hPrintf("</SELECT>\n");
     }
 
 
@@ -1656,6 +1674,8 @@ hPrintf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", genome);
 hPrintf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", database);
 hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", orderVarName,
 	cartUsualString(cart, orderVarName, ""));
+hPrintf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", countVarName,
+	cartUsualString(cart, countVarName, ""));
 cartSaveSession(cart);
 puts("</FORM>");
 }

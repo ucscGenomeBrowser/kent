@@ -883,4 +883,18 @@ chainOne $(path1)
     cat fb.priPac1.chainCe9Link.txt
     #	6799226 bases of 145948246 (4.659%) in intersection
 
-#########################################################################
+############################################################################
+# LIFTOVER TO priPac2 (DONE - 2010-02-11 - Hiram )
+    mkdir /hive/data/genomes/priPac1/bed/blat.priPac2.2010-10-14
+    cd /hive/data/genomes/priPac1/bed/blat.priPac2.2010-10-14
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+	-ooc=/hive/data/genomes/priPac1/jkStuff/11.ooc -debug priPac1 priPac2
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/priPac1/jkStuff/11.ooc \
+	priPac1 priPac2 > do.log 2>&1
+    #	real    4m16.827s
+
+#############################################################################

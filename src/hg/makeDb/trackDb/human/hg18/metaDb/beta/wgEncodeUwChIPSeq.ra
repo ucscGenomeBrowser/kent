@@ -11,9 +11,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsBjInput.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalBjInput
 project wgEncode
 setType input
 subId 1107
@@ -32,9 +31,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsCaco2Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalCaco2Input
 project wgEncode
 setType input
 subId 1107
@@ -53,9 +51,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm06990Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm06990Input
 project wgEncode
 setType input
 subId 1107
@@ -74,9 +71,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12801Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12801Input
 project wgEncode
 setType input
 subId 1107
@@ -95,9 +91,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12864Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12864Input
 project wgEncode
 setType input
 subId 1107
@@ -116,9 +111,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12865Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12865Input
 project wgEncode
 setType input
 subId 1107
@@ -137,9 +131,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12872Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12872Input
 project wgEncode
 setType input
 subId 1107
@@ -158,9 +151,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12873Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12873Input
 project wgEncode
 setType input
 subId 1107
@@ -179,9 +171,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12874Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12874Input
 project wgEncode
 setType input
 subId 1107
@@ -200,9 +191,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12875Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12875Input
 project wgEncode
 setType input
 subId 1107
@@ -221,9 +211,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsGm12878Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalGm12878Input
 project wgEncode
 setType input
 subId 1107
@@ -242,9 +231,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHek293Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalHek293Input
 project wgEncode
 setType input
 subId 1107
@@ -263,9 +251,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHelas3Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalHelas3Input
 project wgEncode
 setType input
 subId 1107
@@ -284,9 +271,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHepg2Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalHepg2Input
 project wgEncode
 setType input
 subId 1107
@@ -305,9 +291,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHl60Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalHl60Input
 project wgEncode
 setType input
 subId 1107
@@ -326,9 +311,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHmecInput.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalHmecInput
 project wgEncode
 setType input
 subId 1107
@@ -347,9 +331,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHreInput.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalHreInput
 project wgEncode
 setType input
 subId 1107
@@ -368,9 +351,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsHuvecInput.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalHuvecInput
 project wgEncode
 setType input
 subId 1107
@@ -389,9 +371,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsK562Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalK562Input
 project wgEncode
 setType input
 subId 1107
@@ -410,9 +391,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsNhekInput.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalNhekInput
 project wgEncode
 setType input
 subId 1107
@@ -431,9 +411,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -454,9 +433,8 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -477,9 +455,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -500,9 +477,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1BjtertCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
 project wgEncode
 rank 1st
 replicate 1
@@ -523,9 +499,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -546,9 +521,8 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -569,9 +543,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -592,9 +565,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me1.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me1
 project wgEncode
 rank 1st
 replicate 1
@@ -615,9 +587,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Caco2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -639,9 +610,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -662,9 +632,8 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -685,9 +654,8 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -708,9 +676,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -731,9 +698,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12801Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -754,9 +720,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12864Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -777,9 +742,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12865Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -800,9 +764,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12872Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -823,9 +786,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12873Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -846,9 +808,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12874Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -869,9 +830,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12875Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -893,9 +853,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -916,9 +875,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -939,9 +897,8 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -963,9 +920,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -987,9 +943,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hek293Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1010,9 +965,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1033,9 +987,8 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1056,9 +1009,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1079,9 +1031,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me1.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me1
 project wgEncode
 rank 1st
 replicate 1
@@ -1102,9 +1053,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep1Helas3H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1125,9 +1075,8 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1148,9 +1097,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1171,9 +1119,8 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1194,9 +1141,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hepg2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1217,9 +1163,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hl60Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.0.1)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1240,9 +1185,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1Hl60H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1263,9 +1207,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1HmecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HmecCtcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1287,9 +1230,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HmecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1310,9 +1252,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreCtcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1333,9 +1274,8 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1356,9 +1296,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1379,9 +1318,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me1.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me1
 project wgEncode
 rank 1st
 replicate 1
@@ -1402,9 +1340,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HreH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1426,9 +1363,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1450,9 +1386,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1473,9 +1408,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1496,9 +1430,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1HuvecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1520,9 +1453,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1543,9 +1475,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1566,9 +1497,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1590,9 +1520,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1K562H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1614,9 +1543,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekCtcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1637,9 +1565,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1660,9 +1587,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1683,9 +1609,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1NhekH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1706,9 +1631,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecCtcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1729,9 +1653,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1752,9 +1675,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1775,9 +1697,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1SaecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1798,9 +1719,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1821,9 +1741,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1844,9 +1763,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1867,9 +1785,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep1SknshraH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3
 project wgEncode
 rank 1st
 replicate 1
@@ -1890,9 +1807,8 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep1Werirb1Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -1913,9 +1829,8 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -1936,9 +1851,8 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -1959,9 +1873,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -1982,9 +1895,8 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2BjtertCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2005,9 +1917,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2028,9 +1939,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2051,9 +1961,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2074,9 +1983,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2Caco2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2097,9 +2005,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2120,9 +2027,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2143,9 +2049,8 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2166,9 +2071,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm06990H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2189,9 +2093,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12864Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2212,9 +2115,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12865Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2235,9 +2137,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12872Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2258,9 +2159,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12873Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2281,9 +2181,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12874Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2304,9 +2203,8 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12875Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2327,9 +2225,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2350,9 +2247,8 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2373,9 +2269,8 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2396,9 +2291,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Gm12878H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2419,9 +2313,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hek293Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2442,9 +2335,8 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2465,9 +2357,8 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2488,9 +2379,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2511,9 +2401,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2Helas3H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2535,9 +2424,8 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2558,9 +2446,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2581,9 +2468,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hepg2H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2604,9 +2490,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2Hl60H3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2627,9 +2512,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreCtcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2650,9 +2534,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2673,9 +2556,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2696,9 +2578,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2HreH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2719,9 +2600,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2742,9 +2622,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2765,9 +2644,8 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2788,9 +2666,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2HuvecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2811,9 +2688,8 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2K562Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2834,9 +2710,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562H3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2857,9 +2732,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2K562H3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2880,9 +2754,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekCtcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2903,9 +2776,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2927,9 +2799,8 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2950,9 +2821,8 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -2973,9 +2843,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecCtcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -2996,9 +2865,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -3019,9 +2887,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -3042,9 +2909,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2SaecH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -3065,9 +2931,8 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraCtcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -3088,9 +2953,8 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k27me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -3111,9 +2975,8 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k36me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -3134,9 +2997,8 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqAlignmentsRep2SknshraH3k4me3.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3
 project wgEncode
 rank 2nd
 replicate 2
@@ -3157,9 +3019,8 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqAlignmentsRep2Werirb1Ctcf.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.3.2)
-parentTable wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -3180,9 +3041,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsSaecInput.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalSaecInput
 project wgEncode
 setType input
 subId 1107
@@ -3201,9 +3061,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsSknshraInput.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalSknshraInput
 project wgEncode
 setType input
 subId 1107
@@ -3222,9 +3081,8 @@ dateUnrestricted 2010-11-18
 fileName wgEncodeUwChIPSeqAlignmentsWerirb1Input.tagAlign.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.5)
-parentTable wgEncodeUwChIPSeqRawSignalWerirb1Input
 project wgEncode
 setType input
 subId 1107
@@ -3243,7 +3101,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3266,7 +3124,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3289,7 +3147,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep1BjH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3312,7 +3170,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1BjtertCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3335,7 +3193,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3358,7 +3216,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3381,7 +3239,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3404,7 +3262,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Caco2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3428,7 +3286,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3451,7 +3309,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3474,7 +3332,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3497,7 +3355,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm06990H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3520,7 +3378,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12801Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
@@ -3543,7 +3401,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12864Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3566,7 +3424,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12865Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3589,7 +3447,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12872Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3612,7 +3470,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12873Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3635,7 +3493,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12874Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3658,7 +3516,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12875Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3682,7 +3540,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3705,7 +3563,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3728,7 +3586,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3752,7 +3610,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3776,7 +3634,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Hek293Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3800,7 +3658,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3823,7 +3681,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3846,7 +3704,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3869,7 +3727,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep1Helas3H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3892,7 +3750,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3915,7 +3773,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3938,7 +3796,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3961,7 +3819,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Hepg2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -3984,7 +3842,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1Hl60Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.0
 project wgEncode
 rank 1st
@@ -4007,7 +3865,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1Hl60H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4030,7 +3888,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1HmecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4054,7 +3912,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HmecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4077,7 +3935,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1HreCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4101,7 +3959,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4124,7 +3982,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4147,7 +4005,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HreH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4171,7 +4029,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4195,7 +4053,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4218,7 +4076,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4241,7 +4099,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1HuvecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4265,7 +4123,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1K562Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4288,7 +4146,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4311,7 +4169,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4335,7 +4193,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqHotspotsRep1K562H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4359,7 +4217,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4382,7 +4240,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4405,7 +4263,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4428,7 +4286,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep1NhekH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4451,7 +4309,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4474,7 +4332,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4497,7 +4355,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4520,7 +4378,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1SaecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4543,7 +4401,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4566,7 +4424,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4589,7 +4447,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4612,7 +4470,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep1SknshraH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4635,7 +4493,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep1Werirb1Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
@@ -4658,7 +4516,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4681,7 +4539,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4704,7 +4562,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2BjH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4727,7 +4585,7 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqHotspotsRep2BjtertCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4750,7 +4608,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4773,7 +4631,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4796,7 +4654,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4819,7 +4677,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2Caco2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4842,7 +4700,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4865,7 +4723,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4888,7 +4746,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4911,7 +4769,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm06990H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4934,7 +4792,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12864Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4957,7 +4815,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12865Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -4980,7 +4838,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12872Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5003,7 +4861,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12873Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5026,7 +4884,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12874Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5049,7 +4907,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12875Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5072,7 +4930,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5095,7 +4953,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5118,7 +4976,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5141,7 +4999,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Gm12878H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5164,7 +5022,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2Hek293Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5187,7 +5045,7 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5210,7 +5068,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5233,7 +5091,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5256,7 +5114,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2Helas3H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5280,7 +5138,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5303,7 +5161,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5326,7 +5184,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2Hepg2H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5349,7 +5207,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2Hl60H3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5372,7 +5230,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2HreCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5395,7 +5253,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5418,7 +5276,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5441,7 +5299,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2HreH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5464,7 +5322,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5487,7 +5345,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5510,7 +5368,7 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5533,7 +5391,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2HuvecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5556,7 +5414,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqHotspotsRep2K562Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5579,7 +5437,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2K562H3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5602,7 +5460,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2K562H3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5625,7 +5483,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5648,7 +5506,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5672,7 +5530,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5695,7 +5553,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqHotspotsRep2NhekH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5718,7 +5576,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5741,7 +5599,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5764,7 +5622,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5787,7 +5645,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2SaecH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5810,7 +5668,7 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraCtcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5833,7 +5691,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k27me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5856,7 +5714,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k36me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5879,7 +5737,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqHotspotsRep2SknshraH3k4me3.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
@@ -5902,7 +5760,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqHotspotsRep2Werirb1Ctcf.broadPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion Hotspot-v5.0
 project wgEncode
 rank 2nd
@@ -5925,7 +5783,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm06990Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -5947,7 +5805,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm12801Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -5969,7 +5827,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm12878Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -5991,7 +5849,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksGm12878H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6013,7 +5871,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksHek293Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6035,7 +5893,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksHelas3Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6057,7 +5915,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqPeaksHepg2Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6079,7 +5937,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksHl60Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6101,7 +5959,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksHreCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 setType exp
@@ -6122,7 +5980,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksK562Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6144,7 +6002,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksK562H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6166,7 +6024,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6189,7 +6047,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6212,7 +6070,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqPeaksRep1BjH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6235,7 +6093,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksRep1BjtertCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6258,7 +6116,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6281,7 +6139,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6304,7 +6162,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6327,7 +6185,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1Caco2H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6351,7 +6209,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6374,7 +6232,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6397,7 +6255,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6420,7 +6278,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqPeaksRep1Gm06990H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6443,7 +6301,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12864Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6466,7 +6324,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12865Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6489,7 +6347,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12872Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6512,7 +6370,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12873Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6535,7 +6393,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12874Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6558,7 +6416,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12875Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6582,7 +6440,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6605,7 +6463,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6628,7 +6486,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6652,7 +6510,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Gm12878H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6676,7 +6534,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Hek293Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6700,7 +6558,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6723,7 +6581,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6746,7 +6604,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6769,7 +6627,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqPeaksRep1Helas3H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6792,7 +6650,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6815,7 +6673,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6838,7 +6696,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1Hepg2H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6861,7 +6719,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1Hl60H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6884,7 +6742,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1HmecCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6908,7 +6766,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HmecH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6932,7 +6790,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6955,7 +6813,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -6978,7 +6836,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HreH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7002,7 +6860,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7026,7 +6884,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7049,7 +6907,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7072,7 +6930,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1HuvecH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7096,7 +6954,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1K562Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7119,7 +6977,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7142,7 +7000,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7166,7 +7024,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqPeaksRep1K562H3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7190,7 +7048,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqPeaksRep1NhekCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7213,7 +7071,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7236,7 +7094,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7259,7 +7117,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqPeaksRep1NhekH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7282,7 +7140,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SaecCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7305,7 +7163,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7328,7 +7186,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7351,7 +7209,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1SaecH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7374,7 +7232,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraCtcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7397,7 +7255,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k27me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7420,7 +7278,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k36me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7443,7 +7301,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqPeaksRep1SknshraH3k4me3.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7466,7 +7324,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqPeaksWerirb1Ctcf.narrowPeak.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion lmax-v1.0, FDR 0.5%
 project wgEncode
 rank 1st
@@ -7488,8 +7346,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7510,8 +7367,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7532,8 +7388,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep1BjH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7554,8 +7409,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1BjtertCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7576,8 +7430,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7598,8 +7451,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7620,8 +7472,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7642,8 +7493,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me1.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me1
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7664,8 +7514,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Caco2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7687,8 +7536,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7709,8 +7557,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7731,8 +7578,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7753,8 +7599,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7775,9 +7620,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12801Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion 1
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -7798,8 +7642,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12864Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7820,8 +7663,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12865Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7842,8 +7684,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12872Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7864,8 +7705,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12873Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7886,8 +7726,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12874Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7908,8 +7747,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12875Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7931,8 +7769,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7953,8 +7790,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7975,8 +7811,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -7998,8 +7833,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8021,8 +7855,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Hek293Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8043,8 +7876,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8065,8 +7897,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8087,8 +7918,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8109,8 +7939,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me1.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me1
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8131,8 +7960,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep1Helas3H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8153,9 +7981,8 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion 1
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -8176,8 +8003,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8198,8 +8024,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8220,8 +8045,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1Hepg2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8242,9 +8066,8 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Hl60Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion 1
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -8265,8 +8088,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1Hl60H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8287,8 +8109,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1HmecCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HmecCtcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8310,8 +8131,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HmecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8332,8 +8152,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1HreCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreCtcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8354,8 +8173,7 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8376,8 +8194,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8398,8 +8215,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k4me1.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me1
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8420,8 +8236,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HreH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8443,8 +8258,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8466,8 +8280,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8488,8 +8301,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8510,8 +8322,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1HuvecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8533,8 +8344,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1K562Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562Ctcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8555,8 +8365,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8577,8 +8386,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8600,8 +8408,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1K562H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8623,8 +8430,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep1NhekCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekCtcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8645,8 +8451,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8667,8 +8472,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8689,8 +8493,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep1NhekH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8711,8 +8514,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SaecCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecCtcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8733,8 +8535,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8755,8 +8556,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8777,8 +8577,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1SaecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8799,8 +8598,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8821,8 +8619,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8843,8 +8640,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8865,8 +8661,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep1SknshraH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3
+lab UW
 project wgEncode
 rank 1st
 replicate 1
@@ -8887,9 +8682,8 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep1Werirb1Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion 1
-parentTable wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf
 project wgEncode
 rank 1st
 replicate 1
@@ -8910,8 +8704,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -8932,8 +8725,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -8954,8 +8746,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2BjH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -8976,8 +8767,7 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqRawDataRep2BjtertCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -8998,8 +8788,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9020,8 +8809,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9042,8 +8830,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9064,8 +8851,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2Caco2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9086,8 +8872,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9108,8 +8893,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9130,8 +8914,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9152,8 +8935,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm06990H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9174,8 +8956,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12864Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9196,8 +8977,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12865Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9218,8 +8998,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12872Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9240,8 +9019,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12873Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9262,8 +9040,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12874Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9284,8 +9061,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12875Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9306,8 +9082,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9328,8 +9103,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9350,8 +9124,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9372,8 +9145,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2Gm12878H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9394,8 +9166,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2Hek293Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9416,8 +9187,7 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9438,8 +9208,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9460,8 +9229,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9482,8 +9250,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2Helas3H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9505,8 +9272,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9527,8 +9293,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9549,8 +9314,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2Hepg2H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9571,8 +9335,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2Hl60H3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9593,8 +9356,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2HreCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreCtcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9615,8 +9377,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9637,8 +9398,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9659,8 +9419,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2HreH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9681,8 +9440,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9703,8 +9461,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9725,8 +9482,7 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9747,8 +9503,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2HuvecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9769,8 +9524,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawDataRep2K562Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2K562Ctcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9791,8 +9545,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2K562H3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9813,8 +9566,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2K562H3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9835,8 +9587,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2NhekCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekCtcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9857,8 +9608,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9880,8 +9630,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9902,8 +9651,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9924,8 +9672,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SaecCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecCtcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9946,8 +9693,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9968,8 +9714,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -9990,8 +9735,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2SaecH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -10012,8 +9756,7 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraCtcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -10034,8 +9777,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k27me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -10056,8 +9798,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k36me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -10078,8 +9819,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawDataRep2SknshraH3k4me3.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
-parentTable wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3
+lab UW
 project wgEncode
 rank 2nd
 replicate 2
@@ -10100,9 +9840,8 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawDataRep2Werirb1Ctcf.fastq.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion 1
-parentTable wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -10123,7 +9862,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10146,7 +9885,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10169,7 +9908,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep1BjH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10192,7 +9931,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1BjtertCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10215,7 +9954,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10238,7 +9977,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10261,7 +10000,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10284,7 +10023,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Caco2H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10308,7 +10047,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10331,7 +10070,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10354,7 +10093,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10377,7 +10116,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm06990H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10400,7 +10139,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12801Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10423,7 +10162,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12864Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10446,7 +10185,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12865Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10469,7 +10208,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12872Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10492,7 +10231,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12873Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10515,7 +10254,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12874Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10538,7 +10277,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12875Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10562,7 +10301,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10585,7 +10324,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10608,7 +10347,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10632,7 +10371,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10656,7 +10395,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10680,7 +10419,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10703,7 +10442,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10726,7 +10465,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10749,7 +10488,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep1Helas3H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10772,7 +10511,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10795,7 +10534,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10818,7 +10557,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10841,7 +10580,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Hepg2H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10864,7 +10603,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1Hl60Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10887,7 +10626,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1Hl60H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10910,7 +10649,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1HmecCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10934,7 +10673,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HmecH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10957,7 +10696,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1HreCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -10981,7 +10720,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11004,7 +10743,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11027,7 +10766,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HreH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11051,7 +10790,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11075,7 +10814,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11098,7 +10837,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11121,7 +10860,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1HuvecH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11145,7 +10884,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1K562Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11168,7 +10907,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11191,7 +10930,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11215,7 +10954,7 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11239,7 +10978,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11262,7 +11001,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11285,7 +11024,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11308,7 +11047,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep1NhekH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11331,7 +11070,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11354,7 +11093,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11377,7 +11116,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11400,7 +11139,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1SaecH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11423,7 +11162,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11446,7 +11185,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11469,7 +11208,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11492,7 +11231,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep1SknshraH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11515,7 +11254,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep1Werirb1Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 1st
@@ -11538,7 +11277,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11561,7 +11300,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11584,7 +11323,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2BjH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11607,7 +11346,7 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwChIPSeqRawSignalRep2BjtertCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11630,7 +11369,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11653,7 +11392,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11676,7 +11415,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11699,7 +11438,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2Caco2H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11722,7 +11461,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11745,7 +11484,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11768,7 +11507,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11791,7 +11530,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm06990H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11814,7 +11553,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12864Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11837,7 +11576,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12865Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11860,7 +11599,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12872Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11883,7 +11622,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12873Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11906,7 +11645,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12874Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11929,7 +11668,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12875Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11952,7 +11691,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11975,7 +11714,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -11998,7 +11737,7 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12021,7 +11760,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Gm12878H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12044,7 +11783,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2Hek293Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12067,7 +11806,7 @@ dateUnrestricted 2010-06-21
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12090,7 +11829,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12113,7 +11852,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12136,7 +11875,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2Helas3H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12160,7 +11899,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12183,7 +11922,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12206,7 +11945,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2Hepg2H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12229,7 +11968,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2Hl60H3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12252,7 +11991,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2HreCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12275,7 +12014,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12298,7 +12037,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12321,7 +12060,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2HreH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12344,7 +12083,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12367,7 +12106,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12390,7 +12129,7 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12413,7 +12152,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2HuvecH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12436,7 +12175,7 @@ dateUnrestricted 2010-06-20
 fileName wgEncodeUwChIPSeqRawSignalRep2K562Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12459,7 +12198,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2K562H3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12482,7 +12221,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2K562H3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12505,7 +12244,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12528,7 +12267,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12552,7 +12291,7 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12575,7 +12314,7 @@ dateUnrestricted 2010-07-12
 fileName wgEncodeUwChIPSeqRawSignalRep2NhekH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12598,7 +12337,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12621,7 +12360,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12644,7 +12383,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12667,7 +12406,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2SaecH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12690,7 +12429,7 @@ dateUnrestricted 2010-07-22
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraCtcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12713,7 +12452,7 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k27me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12736,7 +12475,7 @@ dateUnrestricted 2010-07-19
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k36me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12759,7 +12498,7 @@ dateUnrestricted 2010-07-11
 fileName wgEncodeUwChIPSeqRawSignalRep2SknshraH3k4me3.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
@@ -12782,7 +12521,7 @@ dateUnrestricted 2010-04-02
 fileName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf.wig.gz
 fragLength 350
 grant Stam
-lab Uw
+lab UW
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 rank 2nd
