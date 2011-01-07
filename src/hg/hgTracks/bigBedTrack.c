@@ -25,7 +25,8 @@ if (fileName == NULL)
     {
     char query[256];
     safef(query, sizeof(query), "select fileName from %s", table);
-    char *fileName = sqlQuickString(conn, query);
+    fileName = sqlQuickString(conn, query);
+    uglyf("query=%s, fileName=%s<BR>\n", query, fileName);
     if (fileName == NULL)
 	errAbort("Missing fileName in %s table", table);
     }
