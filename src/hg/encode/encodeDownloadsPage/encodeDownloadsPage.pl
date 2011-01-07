@@ -424,7 +424,7 @@ $opt_db = "hg18" if(!defined $opt_db);
 my $db = HgDb->new(DB => $opt_db);
 
 open( OUT_FILE, "> $downloadsDir/$indexHtml") || die "SYS ERROR: Can't write to \'$downloadsDir/$indexHtml\' file; error: $!\n";
-if($indexHtml ne "index.html") {  # Only make this text file when making index.html
+if($indexHtml eq "index.html") {  # Only make this text file when making index.html
     open( TEXT_FILE, "> $downloadsDir/$textFile") || die "SYS ERROR: Can't write to \'$downloadsDir/$textFile\' file; error: $!\n";
 }
 #print OUT_FILE @fileList;
@@ -720,7 +720,7 @@ if (defined $opt_sortable) {
 my $conclusion = "<i>" . scalar(@rows) . " files</i>\n";
 
 htmlEndPage(*OUT_FILE,$conclusion);
-if($indexHtml ne "index.html") {  # Only make this text file when making index.html
+if($indexHtml eq "index.html") {  # Only make this text file when making index.html
     close TEXT_FILE;
 }
 

@@ -16,7 +16,7 @@
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that define the tier and that they are distinct 
 #		- [cell] (Tier ?)
 
-
+track wgEncodeOpenChromChip
 compositeTrack on
 superTrack wgEncodeTfBindingSuper full
 shortLabel UTA TFBS
