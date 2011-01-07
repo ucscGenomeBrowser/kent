@@ -2576,11 +2576,7 @@ else if (drawOpt > baseColorDrawOff)
     if (startsWith("genePred", tg->tdb->type))
 	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
-        {
-        char var[256];
-        safef(var, sizeof(var), "%s.%s", tg->tdb->track, CODON_NUMBERING_SUFFIX);
-        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBoolean(cart, var, FALSE));
-        }
+        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE));
     }
 if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
     baseColorSetCdsBounds(lf, psl, tg);

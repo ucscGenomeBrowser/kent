@@ -8,11 +8,10 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = genePredHisto
 O = ${A}.o
 
-genePredHisto: $O ${MYLIBS}
+${DESTDIR}${BINDIR}/${A}${EXE}: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 
-compile:
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} $L
+compile: ${DESTDIR}${BINDIR}/${A}${EXE}
 
 test: compile
 	(cd tests && ${MAKE} test)

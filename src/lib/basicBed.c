@@ -1118,6 +1118,18 @@ for (oldIx=0; oldIx < oldLastBlock; ++oldIx, ++newIx)
     if (iStartOld != iStartNew || iEndOld != iEndNew)
         return FALSE;
     }
+
+/* Finally, make sure that the new bed doesn't contain any introns that overlap with the
+ * last exon of the old bed */
+for(; newIx < newLastBlock; ++newIx)
+    {
+    int iStartNew = newBed->chromStart + newBed->chromStarts[newIx] + newBed->blockSizes[newIx];
+    if (iStartNew < oldBed->chromEnd)
+        return FALSE;
+    else if (iStartNew >= oldBed->chromEnd)
+        break;
+    }
+
 return TRUE;
 }
 

@@ -16,5 +16,5 @@ CREATE TABLE peptideMapping (
     peptideRank int unsigned not null,	# Rank of this hit, for peptides with multiple genomic hits
     peptideRepeatCount int unsigned not null,	# Indicates how many times this same hit was observed
               #Indices
-    PRIMARY KEY(chrom, chromStart, precursorMz)
+    KEY(chrom, chromStart, score, precursorMz)
 );

@@ -67,10 +67,12 @@ void docIdSubOutput(struct docIdSub *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#define  DEFAULT_DOCID_TABLE "docIdSub"
+
 char *docIdDecorate(char *composite, int num);
 
-char *docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
-    char *docIdDir, char *type);
+char *docIdSubmit(struct sqlConnection *conn, char *docIdTable, 
+    struct docIdSub *docIdSub, char *docIdDir, char *type);
 
 char *docIdGetPath(char *docId, char *docIdDir, char *suffix, char *submitPath);
 

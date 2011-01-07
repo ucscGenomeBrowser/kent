@@ -9,7 +9,7 @@
 #include "docId.h"
 #include "portable.h"
 
-char *docIdTable = "docIdSub";
+//char *docIdTable = "docIdSub";
 
 void docIdSubStaticLoad(char **row, struct docIdSub *ret)
 /* Load a row from docIdSub table into ret.  The contents of ret will
@@ -214,9 +214,17 @@ if (sameString(type, "bam") ||
     sameString(type, "bigWig"))
         return type;
 
+char *ptr;
+
+if ((ptr = strchr(type, ' ')) != NULL)
+    *ptr = 0;
+
 char buffer[10 * 1024];
 
 safef(buffer, sizeof buffer, "%s.gz", type);
+
+if (ptr)
+    *ptr = ' ';
 
 return cloneString(buffer);
 }
@@ -246,7 +254,7 @@ if (*val == NULL)
     *val = nullString;
 }
 
-char *docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
+char *docIdSubmit(struct sqlConnection *conn, char *docIdTable, struct docIdSub *docIdSub, 
     char *docIdDir, char *type)
 {
 

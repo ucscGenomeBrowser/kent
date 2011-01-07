@@ -1,19 +1,34 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeChromatinMap.ra,v 1.1 2010/05/27 21:34:43 tdreszer Exp $
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/UT-Austin (Open Chromatin)
+#       - Track Short Label: UTA TFBS
+#       - View Long Labels: [cell] [factor] TFBS [view] from ENCODE/UTA 
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier
+#       - Short Labels: 
+#               Template: [cell] [factor] [view]
+#               - Views: For consistency sake view will be two letters
+#                       - Peaks = Pk
+#                       - Raw Base Overlap Signal = Sig
+#                       - F-seq Density Signal = F-Seq 
+#       - Default Tracks on: Peaks,F-Seq Density and Raw Base Overlap Signal for  tier 1 cells and Inputs.
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that define the tier and that they are distinct 
+#		- [cell] (Tier ?)
 
-track wgEncodeOpenChromChip
+
 compositeTrack on
 superTrack wgEncodeTfBindingSuper full
 shortLabel UTA TFBS
 longLabel ENCODE Trascription Factor Binding Site by  ChIP-seq from UT-Austin (Open Chromatin)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Raw_Base_Overlap_Signal
-subGroup2 cellType Cell_Line AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier1</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;<i>Tier1</i> H1=H1-hESC&nbsp;<i>Tier1</i> K562=K562&nbsp;<i>Tier1</i> HELA=HeLa-S3&nbsp;<i>Tier2</i> HEPG2=HepG2&nbsp;<i>Tier2</i> HUVEC=HUVEC&nbsp;<i>Tier2</i> AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
 subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
 subGroup4 treatment Treatment NONE=None VEH=vehicle ESTRO=Estradiol;(estrogen)
 sortOrder cellType=+ factor=+ treatment=+ view=+
-dimensions dimensionY=cellType dimensionX=factor 
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+dimensions dimensionY=cellType dimensionX=factor
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
 noInherit on
@@ -22,6 +37,7 @@ useScore 0
 priority 0
 type bed 3
 wgEncode 1
+dataVersion through the ENCODE Jan 2011 Freeze
 
     track wgEncodeOpenChromChipViewPeaks
     shortLabel Peaks
@@ -328,7 +344,7 @@ wgEncode 1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel Fibrobl CTCF Pk
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (CTCF in Fibrobl cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=FIBRO 
+        subGroups treatment=NONE view=Peaks factor=CTCF cellType=FIBRO
         type narrowPeak
         # subId=2480 dateSubmitted=2010-10-13
 
@@ -337,25 +353,25 @@ wgEncode 1
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 Pol2 Pk
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (Pol2 in MCF-7 cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=MCF7 
+        subGroups treatment=NONE view=Peaks factor=POL2 cellType=MCF7
         type narrowPeak
         # subId=2495 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromChipMcf7CtcfEstroPkRep1
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 CTCF Pk 
+        shortLabel MCF-7 CTCF Pk
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (CTCF in MCF-7 cells)
-        subGroups treatment=ESTRO view=Peaks factor=CTCF cellType=MCF7 
+        subGroups treatment=ESTRO view=Peaks factor=CTCF cellType=MCF7
         type narrowPeak
         # subId=2502 dateSubmitted=2010-10-16
 
         track wgEncodeOpenChromChipMcf7CmycVehPkRep1
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 c-Myc Pk 
+        shortLabel MCF-7 c-Myc Pk
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (c-Myc in MCF-7 cells)
-        subGroups treatment=VEH view=Peaks factor=CMYC cellType=MCF7 
+        subGroups treatment=VEH view=Peaks factor=CMYC cellType=MCF7
         type narrowPeak
         # subId=2504 dateSubmitted=2010-10-16
 
@@ -380,7 +396,7 @@ wgEncode 1
         track wgEncodeOpenChromChipMcf7CmycEstroPkRep1
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 c-Myc Pk 
+        shortLabel MCF-7 c-Myc Pk
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (c-Myc in MCF-7 cells)
         subGroups view=Peaks factor=CMYC cellType=MCF7 treatment=ESTRO
         type narrowPeak
@@ -804,7 +820,7 @@ wgEncode 1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 CTCF Sig
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (CTCF in MCF-7 cells)
-        subGroups treatment=ESTRO view=SIG factor=CTCF cellType=MCF7 
+        subGroups treatment=ESTRO view=SIG factor=CTCF cellType=MCF7
         type bigWig 0.000000 4.305300
         # subId=2502 dateSubmitted=2010-10-16
 
@@ -813,7 +829,7 @@ wgEncode 1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 c-Myc Sig
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (c-Myc in MCF-7 cells)
-        subGroups treatment=VEH view=SIG factor=CMYC cellType=MCF7 
+        subGroups treatment=VEH view=SIG factor=CMYC cellType=MCF7
         type bigWig 0.000000 3.484600
         # subId=2504 dateSubmitted=2010-10-16
 
@@ -822,7 +838,7 @@ wgEncode 1
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 CTCF Sig
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (CTCF in MCF-7 cells)
-        subGroups treatment=VEH view=SIG factor=CTCF cellType=MCF7 
+        subGroups treatment=VEH view=SIG factor=CTCF cellType=MCF7
         type bigWig 0.000000 6.029000
         # subId=2505 dateSubmitted=2010-10-16
 
@@ -1169,7 +1185,7 @@ wgEncode 1
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 CTCF
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (CTCF in MCF-7 cells)
-        subGroups treatment=ESTRO view=SIGBO factor=CTCF cellType=MCF7 
+        subGroups treatment=ESTRO view=SIGBO factor=CTCF cellType=MCF7
         type bigWig 0.000000 4381.000000
         # subId=2502 dateSubmitted=2010-10-16
 
@@ -1187,7 +1203,7 @@ wgEncode 1
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 CTCF
         longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (CTCF in MCF-7 cells)
-        subGroups treatment=VEH view=SIGBO factor=CTCF cellType=MCF7 
+        subGroups treatment=VEH view=SIGBO factor=CTCF cellType=MCF7
         type bigWig 0.000000 5010.000000
         # subId=2505 dateSubmitted=2010-10-16
 

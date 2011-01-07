@@ -423,7 +423,7 @@ this.each(function(){
         else {
             hiliteSetup();
 
-            $('.cytoBand').mousedown( function(e)
+            $('area.cytoBand').mousedown( function(e)
             {   // mousedown on chrom portion of image only (map items)
                 updateImgOffsets();
                 pxDown = e.clientX - img.scrolledLeft;
@@ -524,7 +524,7 @@ this.each(function(){
                     //    dontAsk = true;
                     if(dontAsk || confirm("Jump to new position:\n\n"+chr.name+":"+commify(selRange.beg)+"-"+commify(selRange.end)+" size:"+commify(selRange.width)) ) {
                         setPositionByCoordinates(chr.name, selRange.beg, selRange.end)
-                        $('.cytoBand').mousedown( function(e) { return false; }); // Stop the presses :0)
+                        $('area.cytoBand').mousedown( function(e) { return false; }); // Stop the presses :0)
                         document.TrackHeaderForm.submit();
                         return true; // Make sure the setTimeout below is not called.
                     }
@@ -560,7 +560,7 @@ this.each(function(){
     function findDimensions()
     {   // Called at init: determine the dimensions of chrom from 'cytoband' map items
         var lastX = -1;
-        $('.cytoBand').each(function(ix) {
+        $('area.cytoBand').each(function(ix) {
             var loc = this.coords.split(",");
             if(loc.length == 4) {
                 var myLeft  = parseInt(loc[0]);
@@ -598,8 +598,8 @@ this.each(function(){
                         chr.reverse = true;      // end is not advancing, but X is, so reverse
 
                 }
-            $(this).css( 'cursor', 'text');
-            $(this).attr("href","");
+                $(this).css( 'cursor', 'text');
+                $(this).attr("href","");
             }
         });
         chr.size  = (chr.end   - chr.beg );
@@ -609,7 +609,7 @@ this.each(function(){
     function findCytoBand(pxDown,pxUp)
     {   // Called when mouseup and ctrl: Find the bounding cytoband dimensions, both in pix and bases
         var cyto = { left: -1, right: -1, beg: -1, end: -1 };
-        $('.cytoBand').each(function(ix) {
+        $('area.cytoBand').each(function(ix) {
             var loc = this.coords.split(",");
             if(loc.length == 4) {
                 var myLeft  = parseInt(loc[0]);
@@ -1312,7 +1312,7 @@ $(document).ready(function()
         }
     }
     if($('img#chrom').length == 1) {
-        if($('.cytoBand').length > 1) {
+        if($('area.cytoBand').length > 1) {
             $('img#chrom').chromDrag();
         }
     }
@@ -1630,20 +1630,23 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    cmd: cmd,
                    cache: false
                });
-    } else if (cmd == 'openLink') {
-        // Remove hgsid to force a new session (see redmine ticket 1333).
-        var href = removeHgsid(selectedMenuItem.href);
+    } else if (cmd == 'openLink' || cmd == 'followLink') {
+        var href = selectedMenuItem.href;
         var chrom = $("input[name=chromName]").val();
         if(chrom && href.indexOf("c=" + chrom) == -1) {
             // make sure the link contains chrom info (necessary b/c we are stripping hgsid)
             href = href + "&c=" + chrom;
         }
-        if(window.open(href) == null) {
-            windowOpenFailedMsg();
+        if(cmd == 'followLink') {
+            // XXXX This is blocked by Safari's popup blocker (without any warning message).
+            location.assign(href);
+        } else {
+            // Remove hgsid to force a new session (see redmine ticket 1333).
+            href = removeHgsid(href);
+            if(window.open(href) == null) {
+                windowOpenFailedMsg();
+            }
         }
-    } else if (cmd == 'followLink') {
-        // XXXX This is blocked by Safari's popup blocker (without any warning message).
-        location.assign(selectedMenuItem.href);
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
@@ -1657,8 +1660,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         {
             // Hide local display of this track and update server side cart.
             // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
-            if(rec.parentTrack != undefined)
-                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
+            if(tdbIsSubtrack(rec))
+                setCartVars( [ id, id+"_sel" ], [ '[]', 0 ] ); // Remove subtrack level vis and explicitly uncheck.
+            else if(tdbIsFolderContent(rec))
+                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
