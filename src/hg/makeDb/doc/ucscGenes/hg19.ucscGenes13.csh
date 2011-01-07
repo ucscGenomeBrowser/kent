@@ -146,12 +146,7 @@ endif # BRACKET
 
 # Get the blocks in this genome that are syntenic to the $xdb genome
 netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
-netChainSubset ${db}.{$xdb}.syn.net ${xdbNetDir}/${db}.${xdb}.over.chain.gz \
-    ${db}.${xdb}.syn.chain
-chainToPsl ${db}.${xdb}.syn.chain ${genomes}/${db}/chrom.sizes \
-    ${genomes}/${xdb}/chrom.sizes ${genomes}/${db}/${db}.2bit \
-    ${genomes}/${xdb}/${xdb}.2bit ${db}.${xdb}.syn.psl
-pslToBed ${db}.${xdb}.syn.psl ${db}.${xdb}.syn.bed
+netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
 
 # Get the Rfams that overlap with blocks that are syntenic to $Xdb
