@@ -3,7 +3,7 @@ release alpha,beta
 superTrack wgEncodeRnaSeqSuper dense
 compositeTrack on
 shortLabel Caltech RNA-seq
-longLabel ENCODE Caltech Wold RNA-seq
+longLabel RNA-seq from ENCODE/Wold 
 group expression
 subGroup1 view Views GeneModel=Gene_Model Signal=Raw_Signal PlusSignal=Plus_Raw_Signal MinusSignal=Minus_Raw_Signal  Splices=Splice_Sites Aligns=Alignments 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HSMM=HSMM HUVEC=HUVEC HeLaS3=HeLaS3 HepG2=HepG2 MCF7=MCF7 NHEK=NHEK NHLF=NHLF
@@ -267,7 +267,7 @@ wgEncode 1
 	release alpha,beta
 	view Splices
 	shortLabel Splices
-	visibility squish
+	visibility dense 
 	subTrack wgEncodeCaltechRnaSeq
         type bam
 	showNames on
@@ -1002,7 +1002,7 @@ wgEncode 1
 
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1
 		release alpha,beta
-		subTrack wgEncodeCaltechRnaSeqViewAligns
+		subTrack wgEncodeCaltechRnaSeqViewAligns off
                 longLabel K562 single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel K562 1x75D Al 1
 		subGroups view=Aligns cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
@@ -1044,7 +1044,7 @@ wgEncode 1
 
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2
 		release alpha,beta
-		subTrack wgEncodeCaltechRnaSeqViewAligns
+		subTrack wgEncodeCaltechRnaSeqViewAligns off
                 longLabel K562 single read RNA-seq Alignments rep 2 from ENCODE/Caltech
 		shortLabel K562 1x75D Al 2
 		subGroups view=Aligns cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
@@ -1343,7 +1343,7 @@ wgEncode 1
 	release alpha,beta
 	shortLabel Signal
 	view Signal
-	visibility full
+	visibility full 
 	subTrack wgEncodeCaltechRnaSeq
 	maxHeightPixels 100:24:16
 	viewLimits 1:10
