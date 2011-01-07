@@ -7402,7 +7402,7 @@ description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
 term B6D2F1/J
 tag B6D2F1J
 type strain
-description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1
+description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1. (Provisional)
 
 term C3H
 tag C3H
@@ -7417,7 +7417,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term RIII
 tag RIII
 type strain
-description High mammary tumour incidence in unfostered substrains.
+description High mammary tumour incidence in unfostered substrains. (Provisional)
 
 term 129
 tag S129
