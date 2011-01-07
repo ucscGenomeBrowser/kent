@@ -258,7 +258,7 @@ struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGen
  * types.  Do a few other quick checks to catch errors early. */
 {
 struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 16*1024*1024);
-struct trackDb *tdbList = trackDbFromOpenRa(lf);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, NULL);
 lineFileClose(&lf);
 
 /* Make bigDataUrls more absolute rather than relative to genome.ra dir */
