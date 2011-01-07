@@ -681,6 +681,38 @@ shortCircuit 1
 termRegex [0-9]+[[:alnum:]_]*_at
 searchPriority 16
 
+searchName agilentCgh1x1m
+searchTable agilentCgh1x1m
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(53|67)_P[0-9]+
+searchPriority 17.1
+
+searchName agilentCgh244a
+searchTable agilentCgh244a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(53|67)_P[0-9]+
+searchPriority 17.2
+
+searchName agilentCgh4x180k
+searchTable agilentCgh4x180k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(53|67)_P[0-9]+
+searchPriority 17.3
+
+searchName agilentCgh105a
+searchTable agilentCgh105a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(53|67)_P[0-9]+
+searchPriority 17.4
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix
