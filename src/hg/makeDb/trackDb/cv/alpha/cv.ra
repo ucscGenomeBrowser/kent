@@ -8317,6 +8317,14 @@ searchable date
 cvDefined no
 validation date nine months more than dateSubmitted
 
+term dccInternalNotes
+type typeOfTerm
+label Internal DCC Notes
+description Notes about tracks that are internal to the DCC. (Provisional)
+searchable no
+cvDefined no
+hidden yes
+
 # term expVars
 # type typeOfTerm
 # label Experimental variables
@@ -8476,6 +8484,14 @@ searchable select
 cvDefined yes
 validate cv
 # This is Caltech only and possibly should be retired.  (11/3/10)
+
+term obtainedBy 
+type typeOfTerm
+label obtainedBy
+description The production group that grew the cells and isolated genomic DNA. (Provisional)
+searchable select
+cvDefined no #(Defined by lab)
+validate cv
 
 term origAssembly
 type typeOfTerm

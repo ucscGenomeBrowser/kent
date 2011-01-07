@@ -1844,7 +1844,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewpsl
     shortLabel Alignment
     view psl
-    visibility pack
+    visibility hide
     parent altSeqComposite
     type psl
     indelDoubleInsert on
@@ -1868,7 +1868,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewchain
     shortLabel Chain
     view chain
-    visibility pack
+    visibility hide
     parent altSeqComposite
     spectrum on
 
@@ -1884,7 +1884,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewnet
     shortLabel Net
     view net
-    visibility full
+    visibility hide
     parent altSeqComposite
 
         track netHg19Patch2
@@ -1915,10 +1915,6 @@ scoreFilterMax 100
 type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
-
-track ntSeqReads override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track ntHumChimpCodingDiff override
 origAssembly hg18
@@ -1972,3 +1968,38 @@ searchMethod exact
 shortCircuit 1
 termRegex IGS.+
 searchPriority 50
+
+track polyA
+compositeTrack on
+shortLabel Poly(A)
+longLabel Poly(A) Sites, Both Reported and Predicted
+group rna
+priority 79
+visibility hide
+noInherit on
+type bed 3 .
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+    track polyaDb
+    parent polyA
+    shortLabel PolyA_DB
+    longLabel Reported Poly(A) Sites from PolyA_DB
+    color 51,153,51
+    priority 1
+    type bed 4 .
+    origAssembly hg18
+    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+    track polyaPredict
+    parent polyA
+    longLabel Predicted Poly(A) Sites Using an SVM
+    color 102,0,153
+    priority 2
+    type bed 8 .
+    origAssembly hg18
+    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
