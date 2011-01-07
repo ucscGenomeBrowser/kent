@@ -71,11 +71,17 @@ if (cartVarExists(cart, hgHubConnectRemakeTrackHub))
     int prefixLength = strlen(hgHubConnectHubVarPrefix);
     struct dyString *trackHubs = dyStringNew(0);
     struct slPair *hubVar;
+    boolean firstOne = TRUE;
     for (hubVar = hubVarList; hubVar != NULL; hubVar = hubVar->next)
         {
-	if (hubVar != hubVarList)
-	    dyStringAppendC(trackHubs, ' ');
-	dyStringAppend(trackHubs, hubVar->name + prefixLength);
+	if (cartBoolean(cart, hubVar->name))
+	    {
+	    if (firstOne)
+		firstOne = FALSE;
+	    else
+		dyStringAppendC(trackHubs, ' ');
+	    dyStringAppend(trackHubs, hubVar->name + prefixLength);
+	    }
 	}
     slPairFreeList(&hubVarList);
     cartSetString(cart, hubConnectTrackHubsVarName, trackHubs->string);
