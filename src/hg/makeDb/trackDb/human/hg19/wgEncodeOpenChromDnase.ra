@@ -2,24 +2,37 @@
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
 # Notes:
-#       - Short Labels: Cell Line, Name of View
-#       - Views: For consistency the following names for Views in Short labels will be used:
-#               - Peaks = Peaks
-#               - F-Seq Density Signal = F-Seq
-#               - Raw Base Overlap Signal = Raw
-#       - cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
-#       - Default Tracks on:
-#       - Display matrix: Tier 1 (GM12878, K562, H1-hESC)
-#       - Track Long Label:ENCODE DNaseI Hypersensitivity by DNase-seq from Duke (Open Chromatin)
-#       - View Long Labels: [Track Short Label] $view (in $cell, with $treatment)
+#       - Track Long Label:  DNaseI Hypersensitivity by DNase-seq from ENCODE/Duke (Open Chromatin)
+#       - Track Short Label: Duke DNaseI HS
+#       - View Long Labels: [cell] [treatment] DNaseI HS [view] from ENCODE/Duke (Open Chromatin) 
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier
+#       - Default Tracks on: Peaks,Raw Base Overlap Signal and F-Seq Desnsity Signals for the following Cells
+#               - GM12878
+#               - H1-hESC
+#               - K562
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
+#       - Default View selections
+#               - Peaks = dense
+#		- F-Seq Density Signal = full
+#		- Raw Base Overlap Signal = full
 #       - View Displays: Deafult view filters:
 #               - Peaks: ?
 #               - F-Seq Density Signal: Range: 0-> 0.1
 #               - Raw Base Overlap Signal: Range: 0 -> 50
+#       - Short Labels: 
+#               Template: [cell][treatment] [view]
+#               - Views: For consistency sake view will be
+#                       - Peaks = Pk
+#                       - Raw Base Overlap Signal = Sig
+#                       - F-seq Density Signal = F-Seq 
+
+
+
+
 
 track wgEncodeOpenChromDnase
 compositeTrack on
-superTrack wgEncodeDNAseSuper full
+superTrack wgEncodeDNAseSuper dense
 shortLabel Duke DNaseI HS
 longLabel ENCODE DNaseI Hypersensitivity by DNase-seq from Duke (Open Chromatin)
 group regulation
