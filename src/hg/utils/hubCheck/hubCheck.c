@@ -82,7 +82,7 @@ verbose(1, "%d tracks in %s\n", slCount(tdbList), genome->name);
 void hubCheck(char *hubUrl)
 /* hubCheck - Check a track data hub for integrity. */
 {
-struct trackHub *hub = trackHubOpen(hubUrl);
+struct trackHub *hub = trackHubOpen(hubUrl, "");
 verbose(1, "hub %s\nshortLabel %s\nlongLabel %s\n", hubUrl, hub->shortLabel, hub->longLabel);
 verbose(1, "%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
 struct trackHubGenome *genome;
