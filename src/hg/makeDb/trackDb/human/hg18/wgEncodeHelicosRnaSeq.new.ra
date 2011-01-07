@@ -1,4 +1,5 @@
 track wgEncodeHelicosRnaSeq
+release alpha
 compositeTrack on
 shortLabel Helicos RNA-seq
 longLabel ENCODE Helicos RNA-seq

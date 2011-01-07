@@ -13,10 +13,13 @@ visibility hide
 track gap override
 visibility hide
 
+track clonePos override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 track fishClones override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
-release alpha
 
 track gad override
 origAssembly hg18
@@ -39,7 +42,27 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track rgdRatQtl override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
-release alpha
+
+track jaxQtlMapped override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track HInvGeneMrna override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track sibTxGraph
+shortLabel SIB Alt-Splicing
+longLabel Alternative Splicing Graph from Swiss Institute of Bioinformatics 
+group rna
+priority 74.5
+visibility hide
+type altGraphX
+url http://www.isrec.isb-sib.ch/cgi-bin/tromer/tromergraph2draw.pl?species=H.+sapiens&tromer=$$
+urlLabel SIB link:
+idInUrlSql select name from sibTxGraph where id=%s
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track gwasCatalog override
 snpTable snp131
@@ -108,6 +131,26 @@ color 0,20,150
 type bed 6 +
 nextItemButton on
 noScoreFilter .
+
+track illuminaProbes override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track eioJcviNAS override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track oreganno override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track laminB1Super override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track ucsfBrainMethyl override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track hapChainNet
 compositeTrack on
@@ -1801,7 +1844,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewpsl
     shortLabel Alignment
     view psl
-    visibility pack
+    visibility hide
     parent altSeqComposite
     type psl
     indelDoubleInsert on
@@ -1825,7 +1868,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewchain
     shortLabel Chain
     view chain
-    visibility pack
+    visibility hide
     parent altSeqComposite
     spectrum on
 
@@ -1841,7 +1884,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewnet
     shortLabel Net
     view net
-    visibility full
+    visibility hide
     parent altSeqComposite
 
         track netHg19Patch2
@@ -1873,10 +1916,6 @@ type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
 
-track ntSeqReads override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
-
 track ntHumChimpCodingDiff override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
@@ -1905,3 +1944,62 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 track cgapSage override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track snpArray override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+track consIndelsHgMmCanFam
+shortLabel Cons Indels MmCf
+longLabel Indel-based Conservation for human hg19, mouse mm8 and dog canFam2
+group compGeno
+priority 105
+visibility hide
+useScore 1
+color 0, 60, 120
+type bed 5 .
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+searchTable consIndelsHgMmCanFam
+searchType bed
+searchMethod exact
+shortCircuit 1
+termRegex IGS.+
+searchPriority 50
+
+track polyA
+compositeTrack on
+shortLabel Poly(A)
+longLabel Poly(A) Sites, Both Reported and Predicted
+group rna
+priority 79
+visibility hide
+noInherit on
+type bed 3 .
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+    track polyaDb
+    parent polyA
+    shortLabel PolyA_DB
+    longLabel Reported Poly(A) Sites from PolyA_DB
+    color 51,153,51
+    priority 1
+    type bed 4 .
+    origAssembly hg18
+    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+
+    track polyaPredict
+    parent polyA
+    longLabel Predicted Poly(A) Sites Using an SVM
+    color 102,0,153
+    priority 2
+    type bed 8 .
+    origAssembly hg18
+    pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+

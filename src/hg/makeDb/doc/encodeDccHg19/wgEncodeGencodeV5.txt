@@ -30,14 +30,14 @@ hgLoadGenePred -genePredExt hg19 wgEncodeGencodePolyaV5 gencode.v5.polyAs.gp
 
 cd metadata
 cat > map << _EOF_
-gencode_Exon_supporting_feature gencodeExonSupport.sql wgEncodeGencodeMetaExonV5
-gencode_HGNC gencodeGeneSymbol.sql wgEncodeGencodeMetaSymbolV5
-gencode_PDB gencodePdb.sql wgEncodeGencodeMetaPdbV5
-gencode_Pubmed_id gencodePubMed.sql wgEncodeGencodeMetaPubmedV5
-gencode_RefSeq gencodeRefSeq.sql wgEncodeGencodeMetaRefSeqV5
-gencode_Source gencodeSource.sql wgEncodeGencodeMetaSourceV5
-gencode_SwissProt gencodeUniProt.sql wgEncodeGencodeMetaUniProtV5
-gencode_Transcript_supporting_feature gencodeTranscriptSupport.sql wgEncodeGencodeMetaTranscriptV5
+gencode_Exon_supporting_feature gencodeExonSupport.sql wgEncodeGencodeExonSupportV5
+gencode_HGNC gencodeGeneSymbol.sql wgEncodeGencodeGeneSymbolV5
+gencode_PDB gencodePdb.sql wgEncodeGencodePdbV5
+gencode_Pubmed_id gencodePubMed.sql wgEncodeGencodePubmedV5
+gencode_RefSeq gencodeRefSeq.sql wgEncodeGencodeRefSeqV5
+gencode_Source gencodeSource.sql wgEncodeGencodeSourceV5
+gencode_SwissProt gencodeUniProt.sql wgEncodeGencodeUniProtV5
+gencode_Transcript_supporting_feature gencodeTranscriptSupport.sql wgEncodeGencodeTranscriptSupportV5
 _EOF_
 
 for i in gencode*; 
@@ -45,6 +45,12 @@ do
 set `grep $i map`;  
 echo "hgLoadSqlTab hg19 $3 /hive/groups/encode/dcc/data/gencodeV5/sql/$2 $1"
 done > loadMetaJobs.txt
+
+for i in gencode*; 
+do 
+set `grep $i map`;  
+echo "drop table $3;"
+done > dropMetaTableCommands.txt
 
 sh -x  loadMetaJobs.txt
 

@@ -135,7 +135,7 @@ return ok;
 static char *remapRange(struct hash *chainHash, double minRatio, 
                         int minSizeT, int minSizeQ, 
                         int minChainSizeT, int minChainSizeQ, 
-                        char *chrom, int s, int e, char strand,
+                        char *chrom, int s, int e, char qStrand,
 			int thickStart, int thickEnd, bool useThick,
 			double minMatch,
                         char *regionName, char *db, char *chainTableName,
@@ -153,6 +153,7 @@ struct chain *chainsHit = NULL,
                 *chainsMissed = NULL, *chain;
 struct bed *bedList = NULL, *unmappedBedList = NULL;
 struct bed *bed = NULL;
+char strand = qStrand;
 /* initialize for single region case */
 int start = s, end = e;
 double minMatchSize = minMatch * (end - start);
@@ -238,7 +239,7 @@ for (chain = chainsHit; chain != NULL; chain = next)
     if (!mapThroughChain(chain, minRatio, &start, &end, &subChain, &toFree))
         errAbort("Chain mapping error: %s:%d-%d\n", chain->qName, start, end);
     if (chain->qStrand == '-')
-	strand = otherStrand(strand);
+	strand = otherStrand(qStrand);
     if (useThick)
 	{
 	struct chain *subChain2 = NULL;

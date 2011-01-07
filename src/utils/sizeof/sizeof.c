@@ -6,6 +6,9 @@
 
 int main()
 {
+unsigned int byteOrder = 0x12345678;
+unsigned char *cp = (unsigned char *) &byteOrder;
+
 printf("     type   bytes    bits\n");
 printf("     char\t%d\t%d\n", (int)sizeof(char), 8*(int)sizeof(char));
 printf("unsigned char\t%d\t%d\n", (int)sizeof(unsigned char),
@@ -27,5 +30,13 @@ printf("    float\t%d\t%d\n", (int)sizeof(float), 8*(int)sizeof(float));
 printf("   double\t%d\t%d\n", (int)sizeof(double), 8*(int)sizeof(double));
 printf("long double\t%d\t%d\n", (int)sizeof(long double),
 	8*(int)sizeof(long double));
+printf("byte order: normal order: 0x12345678 in memory: 0x");
+int i;
+for (i = 0; i < sizeof(byteOrder); ++i)
+    {
+    printf("%02x", *cp);
+    ++cp;
+    }
+printf("\n");
 return(0);
 }

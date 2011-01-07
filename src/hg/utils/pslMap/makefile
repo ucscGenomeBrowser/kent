@@ -1,6 +1,6 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
-MYLIBDIR = ../../lib/$(MACHTYPE)
+MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 L += -lm
 
@@ -10,7 +10,7 @@ O = pslMap.o
 all: ${BINDIR}/pslMap
 
 
-${BINDIR}/pslMap: ${O} ${MYLIBS}
+${BINDIR}/${A}${EXE}: ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
@@ -22,12 +22,10 @@ usage.msg: usage.txt
 	${STRINGIFY} $< >> $@.tmp
 	mv -f $@.tmp $@
 
-compile:: ${O} usage.msg
-	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
+compile:: ${BINDIR}/${A}${EXE}
 
 test:: compile
 	(cd tests && ${MAKE} test)
-	rm -f ${A}${EXE}
 
 clean::
 	rm -f ${A} ${O} usage.msg

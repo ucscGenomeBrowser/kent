@@ -384,11 +384,14 @@ sub getTrackEntries {
       } elsif ($type =~ /^wigMaf/) {
 	if ($table =~ /^multiz(\d+way)/) {
 	  my $gif = "$HgAutomate::images/phylo/${db}_$1.gif";
+	  my $png = "$HgAutomate::images/phylo/${db}_$1.png";
 	  if (&HgAutomate::machineHasFile($dbHost, $gif)) {
 	    $entry{'files'} .= $gif . '\r\n';
+	  } elsif (&HgAutomate::machineHasFile($dbHost, $png)) {
+	    $entry{'files'} .= $png . '\r\n';
 	  } else {
 	    &HgAutomate::verbose(0, "WARNING: $dbHost does not have phyloGif-" .
-				    "generated $gif for $table.\n");
+				    "generated $gif (or png) for $table.\n");
 	  }
 	}
       }
@@ -560,10 +563,14 @@ sub printSwaps($) {
     $entry{'tables'} = $tableList;
     $entry{'files'} = "";
     my $over = "${oDb}To$Db.over.chain.gz";
+    my $axtNet = "$HgAutomate::goldenPath/$oDb/vs$Db/axtNet/*";
+    if (! &HgAutomate::machineHasFile($dbHost, $axtNet)) {
+	$axtNet = "$HgAutomate::goldenPath/$oDb/vs$Db/$oDb.$db.net.axt.gz";
+    }
     foreach my $downloads
       ("$HgAutomate::goldenPath/$oDb/vs$Db/*.txt",
        "$HgAutomate::goldenPath/$oDb/vs$Db/*.gz",
-       "$HgAutomate::goldenPath/$oDb/vs$Db/axtNet/*",
+       $axtNet,
        "$HgAutomate::goldenPath/$oDb/liftOver/$over",
        "$HgAutomate::gbdb/$oDb/liftOver/$over") {
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {

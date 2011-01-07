@@ -27,10 +27,7 @@ static char extFileCreate[] =
   "index (name))";
 
 static char historyCreate[] =	
-/* This contains a row for each update made to database.
- * (The idea is that this is just updated in batch.)
- * It keeps track of which id global ids are used
- * as well as providing a record of updates. */
+/* This contains a row for each update made to database. */
 "create table history ("
   "ix int not null auto_increment primary key,"  /* Update number. */
   "startId int unsigned not null,"              /* Start this session's ids. */
