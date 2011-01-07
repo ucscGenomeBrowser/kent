@@ -1007,6 +1007,11 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
 
+void bamLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw linked features items. */
+
 void bamLinkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
 			      MgFont *font, Color color, enum trackVisibility vis);
