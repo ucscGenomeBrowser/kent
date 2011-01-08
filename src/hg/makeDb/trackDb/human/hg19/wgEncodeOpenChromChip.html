@@ -1,212 +1,205 @@
 <H2>Description</H2>
-
-<P>
-These tracks display the locations of active regulatory elements identified as 
+<DIV style='max-width: 900px;'>
+<P>These tracks display the locations of active regulatory elements identified as
 open chromatin in  <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
 from the Duke, UNC-Chapel Hill, UT-Austin, and EBI ENCODE group.
-Within this project, open chromatin was identified using two 
-independent and complementary methods: DNaseI hypersensitivity (HS) 
-and Formaldehyde-Assisted Isolation of Regulatory Elements (FAIRE), 
-combined with chromatin immunoprecipitation (ChIP) for select 
-regulatory factors. DNaseI HS and FAIRE provide assay 
-cross-validation with commonly identified regions delineating the 
-highest confidence areas of open chromatin.  ChIP assays provide 
-functional validation and preliminary annotation of a subset of 
-open chromatin sites. Each method employed Illumina (formerly Solexa) 
-sequencing by synthesis as the detection platform.  
+Within this project, open chromatin was identified using two
+independent and complementary methods: DNaseI hypersensitivity (HS)
+and Formaldehyde-Assisted Isolation of Regulatory Elements (FAIRE),
+combined with chromatin immunoprecipitation (ChIP) for select
+regulatory factors. DNaseI HS and FAIRE provide assay
+cross-validation with commonly identified regions delineating the
+highest confidence areas of open chromatin.  ChIP assays provide
+functional validation and preliminary annotation of a subset of
+open chromatin sites. Each method employed Illumina (formerly Solexa)
+sequencing by synthesis as the detection platform.
 The Tier 1 and Tier 2 cell types were additional verified by a
-second platform, high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen. 
+second platform, high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 </P>
-<P>
-The particular tracks described in this page detail results from the FAIRE experiments. 
-Data for the DNaseI HS experiments can be found in the <B>ENC DNase/FAIRE Super-track</B> 
-in the <A TARGET=_BLANK HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">
-Duke DNaseI HS track</A>.  Data for the FAIRE experiments can be found 
-<B>ENC DNase/FAIRE Super-track</B> in the <A TARGET=_BLANK
-HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">
-UNC FAIRE track</A>. 
+<P>The particular tracks described in this <B>UTA TFBS</B> page detail results
+from the ChIP experiments. Data for the DNaseI HS experiments can be found
+in the <B>ENC DNase/FAIRE Super-track</B> in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>.
+Data for the FAIRE experiments can also be found in the
+<B>ENC DNase/FAIRE Super-track</B>, but in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>.
 </P>
-<P>
-<B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map general
+<P><B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map general
 chromatin accessibility, and DNaseI "hypersensitivity" is a feature of active
-cis-regulatory sequences.The use of this method has led to the discovery of 
-functional regulatory elements that include promoters, enhancers, silencers, 
-insulators, locus control regions, and novel elements. DNaseI hypersensitivity 
-signifies chromatin accessibility following binding of trans-acting factors in 
-place of a canonical nucleosome.</P>
-<P>
-<B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory
+cis-regulatory sequences.The use of this method has led to the discovery of
+functional regulatory elements that include promoters, enhancers, silencers,
+insulators, locus control regions, and novel elements. DNaseI hypersensitivity
+signifies chromatin accessibility following binding of trans-acting factors in
+place of a canonical nucleosome.
+</P>
+<P><B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory
 Elements) is a method to isolate and identify nucleosome-depleted regions of
 the genome.  FAIRE was initially discovered in yeast and subsequently shown to
 identify active regulatory elements in human cells (Giresi <em>et al.</em>,
-2007).Similar to DNaseI HS, FAIRE appears to identify functional regulatory 
-elements that include promoters, enhancers, silencers, insulators, locus 
-control regions and novel elements.</P>
-<P>
-<B> ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to 
-identify the specific location of proteins that are directly or indirectly 
-bound to genomic DNA. By identifying the binding location of sequence-specific 
-transcription factors, general transcription machinery components, and 
-chromatin factors, ChIP can help in the functional annotation of the open 
-chromatin regions identified by DNaseI HS mapping and FAIRE.</P>
-<P>
-<B>Input data</B>: As a background control experiment, we sequenced 
-the input genomic DNA sample that was used for ChIP. Crosslinked chromatin 
-is sheared and the crosslinks are reversed without carrying out the 
-immunoprecipitation step. This sample is otherwise processed in a manner 
-identical to the ChIP sample as described below. The input track is 
-useful in revealing potential artifacts arising from the sequence 
-alignment process such as copy number differences between the 
-reference genome and the sequenced samples, as well as regions of 
-poor sequence alignability.</P> 
-    
+2007). Similar to DNaseI HS, FAIRE appears to identify functional regulatory
+elements that include promoters, enhancers, silencers, insulators, locus
+control regions and novel elements.
+</P>
+<P><B> ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to
+identify the specific location of proteins that are directly or indirectly
+bound to genomic DNA. By identifying the binding location of sequence-specific
+transcription factors, general transcription machinery components, and
+chromatin factors, ChIP can help in the functional annotation of the open
+chromatin regions identified by DNaseI HS mapping and FAIRE.
+</P>
+<P><B>Input data</B>: As a background control experiment, we sequenced
+the input genomic DNA sample that was used for ChIP. Crosslinked chromatin
+is sheared and the crosslinks are reversed without carrying out the
+immunoprecipitation step. This sample is otherwise processed in a manner
+identical to the ChIP sample as described below. The input track is
+useful in revealing potential artifacts arising from the sequence
+alignment process such as copy number differences between the
+reference genome and the sequenced samples, as well as regions of
+poor sequence alignability.
+</P>
 
 <H2> Display Conventions and Configuration </H2>
-<P>
-This track is a multi-view composite track that contains a single data type 
-with multiple levels of annotation (views). For each view, there are 
-multiple subtracks representing different cell types that display individually on the browser. 
-Instructions for configuring multi-view tracks
-are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
-ChIP data displayed here represents a continuum of signal intensities. 
+<P>This track is a multi-view composite track that contains a single data type
+with multiple levels of annotation (views). For each view, there are
+multiple subtracks representing different cell types that display individually
+on the browser. Instructions for configuring multi-view tracks are
+<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+ChIP data displayed here represents a continuum of signal intensities.
 The Iyer lab recommends setting the &quot;Data view scaling: <EM>auto-scale</EM>&quot;
-option when viewing signal data in full mode to see the <EM>full</EM> dynamic range of the data. 
-Note that in regions that do not have open chromatin sites, autoscale will rescale the data 
-and inflate the background signal, making the regions appear noisy.  Changing back to fixed 
-scale will alleviate this issue. In general, for each experiment in each of the cell types, 
-the UTA  TFBS tracks contain the following views: 
-<p><DT><I>Peaks</I></DT><DD>Regions of enriched signal in FAIRE experiments. 
-Peaks were called based on signals created using F-Seq, a software program developed 
-at Duke (Boyle <em>et al.</em>, 2008b). Significant regions were determined 
-by fitting the data to a gamma distribution to calculate p-values.  
-Contiguous regions where p-values were below a 0.05/0.01 threshold were 
-considered significant.  The solid vertical line in the peak represents the 
-point with highest signal.</DD> 
+option when viewing signal data in full mode to see the <EM>full</EM> dynamic
+range of the data. Note that in regions that do not have open chromatin sites,
+autoscale will rescale the data and inflate the background signal, making the
+regions appear noisy. Changing back to fixed scale will alleviate this issue.
+In general, for each experiment in each of the cell types, the
+<B>UTA TFBS</B> tracks contain the following views:
 </P>
-<P><DT><I>Peaks (Zinba)</I></DT><DD> Enriched regions for FAIRE data were called
-using ZINBA (Zero Inflated Negative Binomial Algorithm). ZINBA is a flexible
-statistical method that uses a generalized linear model to select genomic
-windows with enriched sequence counts after adjusting for relevant confounding
-factors such as mapability, GC content, and copy number alterations.
-Significant regions are selected using the set of standardized residuals
-below a false discovery rate (qvalue) threshold. Peaks were further refined
-using a shape detection algorithm to identify local maxima and boundaries of
-the Signal (Base Overlap) data within each significant region.</DD>
+<P><DT><I>Peaks</I></DT>
+<DD>Regions of enriched signal in ChIP experiments.
+Peaks were called based on signals created using F-Seq, a software program
+developed at Duke (Boyle <em>et al.</em>, 2008b). Significant regions were
+determined by fitting the data to a gamma distribution to calculate p-values.
+Contiguous regions where p-values were below a 0.05/0.01 threshold were
+considered significant.  The solid vertical line in the peak represents the
+point with highest signal.</DD>
 </P>
-<P><DT><I>F-Seq Density Signal</I></DT><DD> Density graph (wiggle) of signal
+<P><DT><I>F-Seq Density Signal</I></DT>
+<DD>Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
 replicates. F-Seq employs Parzen kernel density estimation to create base pair
 scores (Boyle <em>et al.</em>, 2008b). This method does not look at fixed-length
 windows but rather weights contributions of nearby sequences in proportion to
 their distance from that base.  It only considers sequences aligned 4 or less
 times in the genome, and uses an alignability background model to try to correct
-for regions where sequences cannot be aligned. For each cell type, especially 
-important for those with an abnormal karyotype, a model to try to correct for 
-amplifications and deletions that is based on control input data was also used. </DD>
+for regions where sequences cannot be aligned. For each cell type, especially
+important for those with an abnormal karyotype, a model to try to correct for
+amplifications and deletions that is based on control input data was also used.</DD>
 </P>
-<P><DT><I>Raw Base Overlap Signal</I></DT><DD> An alternative version of the
+<P><DT><I>Raw Base Overlap Signal</I></DT>
+<DD>An alternative version of the
 <I>F-Seq Density Signal</I> track annotation that provides a higher resolution
 view of the raw sequence data. This track also includes the combined set of
-sequences from all replicates.  For each sequence, the aligned read is extended 
-to a fragment length of 134 bp from the 5' aligned end
-representing the approximate average fragment length.  The score at each base
-pair represents the number of extended fragments that overlap the base pair.
-</DD>
+sequences from all replicates.  For each sequence, the aligned read is
+extended 5 bp in both directions from its 5' aligned end where DNase cut
+the DNA.  The score at each base pair represents the number of
+extended fragments that overlap the base pair.</DD>
 </P>
-<P><DT><I>Uniqueness</I></DT><DD>
-The <EM>Duke uniqueness</EM> tracks were used in
-the background models for use with F-seq.  These tracks identify regions of 
-sequence that appear one, two, three, four, or more than four times within the 
-genome for different tag lengths. The tracks help identify regions where 
-high-throughput sequence tags cannot be mapped.
-</DD>
+<P><DT><I>Uniqueness</I></DT>
+<DD>The <EM>Duke uniqueness</EM> tracks were used in
+the background models for use with F-seq.  These tracks identify regions of
+sequence that appear one, two, three, four, or more than four times within the
+genome for different tag lengths. The tracks help identify regions where
+high-throughput sequence tags cannot be mapped.</DD>
 </P>
-<P><DT><I>Excluded Regions</I></DT><DD>The <EM>Duke excluded regions</EM> track
+<P><DT><I>Excluded Regions</I></DT>
+<DD>The <EM>Duke excluded regions</EM> track
 was used to identify problematic regions for short sequence tag signal
 detection (such as satellites and rRNA genes). These regions of the genome were
-excluded from the Open Chromatin FAIRE Peaks tracks.</DD>
+excluded from the UTA TFBS Peaks tracks.</DD>
 </DD></P>
 </P>
 
 <H2>Methods</H2>
-<P>
-Cells were grown according to the approved <A HREF="../../ENCODE/protocols/cell"
-TARGET=_BLANK>ENCODE cell culture protocols</A>.
+<P>Cells were grown according to the approved
+<A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 </P>
-<P>
-To perform <em>ChIP</em>, proteins were cross-linked to DNA <em>in vivo</em> 
-using 1% formaldehyde solution (Bhinge <em>et al.</em>, 2007, ENCODE 
-Project Consortium, 2007). Cross-linked chromatin was sheared by sonication 
-and immunoprecipitated using a specific antibody against the protein of 
-interest. After reversal of the cross-links, the immunoprecipitated DNA was 
-used to identify the genomic location of transcription factor binding. This 
-was accomplished by sequencing of the ends of the immunoprecipitated DNA 
-(ChIP-seq) using the Illumina (Solexa) sequencing system. ChIP data for 
-Tier 1 and Tier 2 cell lines were verified by comparing multiple independent 
-growths (replicates) and determining the reproducibility of the data. For 
+<P>To perform <em>ChIP</em>, proteins were cross-linked to DNA <em>in vivo</em>
+using 1&#37; formaldehyde solution (Bhinge <em>et al.</em>, 2007, ENCODE
+Project Consortium, 2007). Cross-linked chromatin was sheared by sonication
+and immunoprecipitated using a specific antibody against the protein of
+interest. After reversal of the cross-links, the immunoprecipitated DNA was
+used to identify the genomic location of transcription factor binding. This
+was accomplished by sequencing of the ends of the immunoprecipitated DNA
+(ChIP-seq) using the Illumina (Solexa) sequencing system. ChIP data for
+Tier 1 and Tier 2 cell lines were verified by comparing multiple independent
+growths (replicates) and determining the reproducibility of the data. For
 some cell types, additional verification was performed using the same the
-immunoprecipitated DNA by labeling and hybridizing to NimbleGen Human 
-ENCODE tiling arrays (1% of the genome) along with the input DNA as reference
-(ChIP-chip).A more detailed protocol is available
+immunoprecipitated DNA by labeling and hybridizing to NimbleGen Human
+ENCODE tiling arrays (1&#37; of the genome) along with the input DNA as reference
+(ChIP-chip). A more detailed protocol is available
 <A HREF="../../ENCODE/protocols/general/UTA_ChIPseq_protocol.pdf">here</A>.
 </P>
-<p>
-DNA fragments isolated by ChIP are 100-200 bp in length, with the average
-length being 134 bp.  Sequences from each experiment were aligned to the 
+<P>DNA fragments isolated by ChIP are 100-200 bp in length, with the average
+length being 134 bp.  Sequences from each experiment were aligned to the
 genome using BWA (Li <em>et al.</em>, 2010) for the NCBI 36 (hg19) assembly.
-The command used for these alignments was:
-<BR><DT> > bwa aln -t 8 genome.fa s_1.sequence.txt.bfq > s_1.sequence.txt.sai</DT>
-<BR>Where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
-of sequences convert into the required bfq format.  Sequences from multiple lanes 
-are combined for a single replicate using the bwa samse command, and converted 
+<DIV style='position:relative; left:25px;'><DT>The command used for these alignments was:</DT>
+<DD><code>&gt; bwa aln -t 8 genome.fa s_1.sequence.txt.bfq &gt; s_1.sequence.txt.sai</code></DD>
+Where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
+of sequences convert into the required bfq format.</DIV>
+</P>
+<P>Sequences from multiple lanes
+are combined for a single replicate using the bwa samse command, and converted
 in the sam/bam format using samtools.
-</p>
-<P>
-Only those that aligned to 4 or fewer locations were retained. Other sequences 
-were also filtered based on their alignment to problematic regions 
-(such as satellites and rRNA genes - see The <em>Duke excluded regions</em> track). 
+</P>
+<P>Only those that aligned to 4 or fewer locations were retained. Other sequences
+were also filtered based on their alignment to problematic regions
+(such as satellites and rRNA genes - see The <em>Duke excluded regions</em> track).
 The mappings of these short reads to the genome are available for
-<A HREF="http://hgdownload.cse.:ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/"
-TARGET=_BLANK>download</A>.</P>
-<P>
-The resulting digital signal was converted to a continuous wiggle track using 
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/"
+TARGET=_BLANK>download</A>.
+</P>
+<P>The resulting digital signal was converted to a continuous wiggle track using
 F-Seq that employs Parzen kernel density estimation to create base pair scores
-(Boyle <em>et al.</em>, 2008b).  Input data has been generated for several 
-cell lines. These are used directly to create a control/background model used 
+(Boyle <em>et al.</em>, 2008b).  Input data has been generated for several
+cell lines. These are used directly to create a control/background model used
 for F-Seq when generating signal annotations for these cell lines.
-These models are meant to correct for sequencing biases, alignment artifacts, 
-and copy number changes in these cell lines. Input data is not being generated 
-directly for other cell lines. Instead, a general background model was derived 
-from the available Input data sets. This should provide corrections for 
-sequencing biases and alignment artifacts, but will not correct for cell 
-type specific copy number changes.  The exact command used for this step is:
-<DT>CTCF:
-> fseq -l 300 -v -b (bff files) -p (iff files) aligments.bed</DT>
-<BR>
-<DT>c-Myc:
-> fseq -l 600 -v -b (bff files) -p (iff files) aligments.bed</DT>
-<BR>
-<DT>PolIII:
-> fseq -l 800 -v -b (bff files) -p (iff files) aligments.bed</DT>
-<BR>
-Where the (bff files) are the background files based on alignability, the 
-(iff files) are the background files based on the Input experiments, 
-and alignments.bed are a bed file of filtered sequence alignments.</P>
-<P>Discrete ChIP sites sites (peaks) were identified from ChIP-seq F-seq 
-density signal.  Significant regions were determined by fitting the 
-data to a gamma distribution to calculate p-values.  Contiguous regions
-where p-values were below a 0.05/0.01 threshold were considered significant.</P>
-<P>
-ENCODE Array data were normalized using the Tukey biweight normalization, and
+These models are meant to correct for sequencing biases, alignment artifacts,
+and copy number changes in these cell lines. Input data is not being generated
+directly for other cell lines. Instead, a general background model was derived
+from the available Input data sets. This should provide corrections for
+sequencing biases and alignment artifacts, but will not correct for cell
+type specific copy number changes.
+<DIV style='position:relative; left:25px;'><DT>The exact command used for this step is:</DT>
+<DT>CTCF:</DT>
+<DD><code>&gt; fseq -l 300 -v -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</code></DD>
+<DT>c-Myc:</DT>
+<DD><code>&gt; fseq -l 600 -v -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</code></DD>
+<DT>PolII:</DT>
+<DD><code>&gt; fseq -l 800 -v -b &lt;bff files&gt; -p &lt;iff files&gt; aligments.bed</code></DD>
+Where the (bff files) are the background files based on alignability, the
+(iff files) are the background files based on the Input experiments,
+and alignments.bed are a bed file of filtered sequence alignments.</DIV>
+</P>
+<P>Discrete ChIP sites (peaks) were identified from ChIP-seq F-seq
+density signal.  Significant regions were determined by fitting the
+data to a gamma distribution to calculate p-values. Contiguous regions
+where p-values were below a 0.05/0.01 threshold were considered significant.
+</P>
+<P>Discrete DNaseI HS sites (peaks) were identified from DNase-seq F-seq density signal.
+Significant regions were determined by fitting the data to a gamma distribution to
+calculate p-values. Contiguous regions where p-values were below a 0.05/0.01
+threshold were considered significant.
+</P>
+<P>ENCODE Array data were normalized using the Tukey biweight normalization, and
 peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
 levels of significance.  Regions matched on size to these peaks that were
 devoid of any significant signal were also created to allow for ROC analysis.
 </P>
+
 <h2>Release Notes</h2>
 <P>
-This is Release ? (date) of this track,which primarily consists of the 
-re-mapping and re-annotation of existing cell line or cell/treatment 
-experiments to the new NCBI36/hg19 assembly.  Also included is a 
+Release 4 (Jan 2011) of these tracks, which primarily consists of the
+re-mapping and re-annotation of existing cell line or cell/treatment
+experiments to the new NCBI36/hg19 assembly.  Also included is a
 reconfiguration of how this track is displayed in relation to other
 tracks from the Duke/UNC/UT-Austin/EBI group. A couple new experiments
 were added to existing cell lines. The version for these data all
@@ -214,8 +207,16 @@ considered 1.0 for the new assembly.
 Previous versions of these files are available for download from the
 <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/"
  TARGET=_BLANK>FTP site</A>.
+<P>
+<B>Enhancer and Insulator Functional assays:</B>  A subset of DNase and FAIRE
+regions were cloned into functional tissue culture reporter assays to test for
+enhancer and insulator activity.  Coordinates and results from these
+experiments can be found
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/supplemental/"
+ TARGET=ucscDownloads>here</a>.  <!-- WARNING: Change to hgdownload.cse.ucsc.edu on release -->
 
- <H2>Credits</H2>
+
+<H2>Credits</H2>
 <P>
 These data and annotations were created by a collaboration of multiple
 institutions (contact:
@@ -318,19 +319,20 @@ Li H, Ruan J, and Durbin R.
 <A HREF="http://genome.cshlp.org/content/early/2008/09/25/gr.078212.108.short"
 TARGET=_blank>Mapping short DNA sequencing reads and calling variants using
 mapping quality scores</A>. <EM>Genome Res.</EM> 2008 Nov;18(11):1851-8.
-</P><P>
 
 Song L and Crawfor GE.
 <A HREF="http://cshprotocols.cshlp.org/cgi/content/full/2010/2/pdb.prot5384"
-TARGET=_BLANK>DNase-seq: a high-resolution technique for mapping active 
+TARGET=_BLANK>DNase-seq: a high-resolution technique for mapping active
 gene regulatory elements across the genome from mammalian cells.</A>
 <Em>Cold Spring Harb. Protoc.</EM>; 2010;Issue 2.
 
-<H2> Data Release Policy </H2>
+</P>
 
-<P>Data users may freely use ENCODE data, but may not, without prior consent,
+<H2> Data Release Policy </H2>
+Data users may freely use ENCODE data, but may not, without prior consent,
 submit publications that use an unpublished ENCODE dataset until nine months
 following the release of the dataset.  This date is listed in the <EM>Restricted
 Until</EM> column on the track configuration page and the download page.  The
 full data release policy for ENCODE is available <A HREF="../ENCODE/terms.html"
-TARGET=_BLANK>here</A>.</P>
+TARGET=_BLANK>here</A>.
+</DIV>

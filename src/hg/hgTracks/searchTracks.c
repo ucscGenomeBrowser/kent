@@ -517,6 +517,8 @@ struct slRef *tracks = NULL;
                 else
                     metaTracks = slNameIntersection(metaTracks, tmp);
             #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
+                if (metaTracks == NULL)
+                    break; // If there are no results in a round, then successive intersections will be empty too
                 }
             }
         for (el = metaTracks; el != NULL; el = el->next)
