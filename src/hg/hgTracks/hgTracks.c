@@ -2617,8 +2617,6 @@ else
     }
 }
 
-boolean uglyOne = FALSE;
-
 void addTdbListToTrackList(struct trackDb *tdbList, char *trackNameFilter,
 	struct track **pTrackList)
 /* Convert a list of trackDb's to tracks, and append these to trackList. */
@@ -2647,7 +2645,6 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         }
     else
         {
-	if (uglyOne) uglyf("tdb->shortLabel=%s, tdb->track=%s<BR>\n", tdb->shortLabel, tdb->track);
         handler = lookupTrackHandler(tdb->table);
         if (handler != NULL)
             handler(track);
@@ -3311,11 +3308,8 @@ if (hub != NULL)
     if (hubGenome != NULL)
 	{
 	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
-	uglyf("Got %d tracks from %s@%s<BR>\n", slCount(tdbList), hubName, hubUrl);
 
 	trackDbLinkUpGenerations(tdbList);
-	uglyf("About to addTdbListToTrackList<BR>\n");
-	uglyOne = TRUE;
 	addTdbListToTrackList(tdbList, NULL, pTrackList);
 	if (tdbList != NULL)
 	    slAddHead(pHubList, hub);
@@ -3328,7 +3322,6 @@ void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusFromCart(cart);
-uglyf("Got %d hubs<BR>\n", slCount(hubList));
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
     addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
@@ -3771,7 +3764,6 @@ grpFreeList(&grps);
 
 /* build group objects from hub */
     {
-    uglyf("Got %d hubs, making groups from them<BR>\n", slCount(hubList));
     struct trackHub *hub;
     for (hub = hubList; hub != NULL; hub = hub->next)
         {
@@ -3782,7 +3774,6 @@ grpFreeList(&grps);
 	maxPriority += 1;
 	slAddHead(&list, group);
 	hashAdd(hash, group->name, group);
-	uglyf("group name %s, label %s, priority %f<BR>\n", group->name, group->label, group->priority);
 	}
     }
 
@@ -3848,7 +3839,6 @@ for (track = *pTrackList; track != NULL; track = track->next)
 	group = hashFindVal(hash, track->groupName);
     if (group == NULL)
         {
-	uglyf("missing group for %s %s<BR>\n", track->track, track->tdb->grp);
 	if (unknown == NULL)
 	    {
 	    AllocVar(unknown);
@@ -4077,6 +4067,7 @@ for (track = trackList; track != NULL; track = track->next)
     }
 if (measureTiming)
     uglyTime("getTrackList");
+
 return trackList;
 }
 

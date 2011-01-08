@@ -64,8 +64,8 @@ static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
 int totalHeight =  0;
-if (overlay)
-    totalHeight =  wigTotalHeight(tg, vis);
+if (overlay)                                                                                       
+    totalHeight =  wigTotalHeight(tg, vis);                                                        
 struct track *subtrack;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
