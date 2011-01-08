@@ -3158,6 +3158,86 @@ searchMethod fuzzy
 searchType bed
 searchPriority 10
 
+searchName agilentCgh1x1m
+searchTable agilentCgh1x1m
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.1
+
+searchName agilentHrd1x1m
+searchTable agilentHrd1x1m
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.2
+
+searchName agilentCghSnp2x400k
+searchTable agilentCghSnp2x400k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(14|16|18|20)_P[0-9]+
+searchPriority 17.3
+
+searchName agilentCgh2x400k
+searchTable agilentCgh2x400k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.4
+
+searchName agilentCghSnp4x180k
+searchTable agilentCghSnp4x180k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(14|16|18|20)_P[0-9]+
+searchPriority 17.5
+
+searchName agilentCgh4x180k
+searchTable agilentCgh4x180k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.6
+
+searchName agilentCgh8x60k
+searchTable agilentCgh8x60k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.7
+
+searchName agilentCgh244a
+searchTable agilentCgh244a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6)_P[0-9]+
+searchPriority 17.8
+
+searchName agilentCgh105a
+searchTable agilentCgh105a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6)_P[0-9]+
+searchPriority 17.9
+
+searchName agilentCgh44k
+searchTable agilentCgh44k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_14_P[0-9]+
+searchPriority 17.91
+
 searchName wgRnaExact
 searchTable wgRna
 searchMethod exact
