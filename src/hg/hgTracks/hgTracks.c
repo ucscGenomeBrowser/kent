@@ -4355,10 +4355,6 @@ if (measureTiming)
     uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList, defaultTracks ? -1 : -2);
 makeGlobalTrackHash(trackList);
-#ifdef SOON
-if (measureTiming)
-    uglyTime("getTrackList");
-#endif /* SOON */
 
 // honor defaultImgOrder
 if(cgiVarExists("hgt.defaultImgOrder"))
