@@ -304,10 +304,6 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     trackDbFieldsFromSettings(tdb);
     trackDbPolish(tdb);
     }
-uglyf("polished tracks<BR>\n");
-
-uglyf("added hub_%s_ prefix to track list<BR>\n", hub->name);
-
 return tdbList;
 }
 

@@ -85,7 +85,6 @@ if (cartVarExists(cart, hgHubConnectRemakeTrackHub))
 	}
     slPairFreeList(&hubVarList);
     cartSetString(cart, hubConnectTrackHubsVarName, trackHubs->string);
-    uglyf("<BR>Got %s, made %s<BR>", hgHubConnectRemakeTrackHub, trackHubs->string);
     dyStringFree(&trackHubs);
     cartRemove(cart, hgHubConnectRemakeTrackHub);
     }
