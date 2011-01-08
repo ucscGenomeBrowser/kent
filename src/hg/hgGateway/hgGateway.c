@@ -198,7 +198,6 @@ if (!hIsGsidServer() && !hIsCgbServer())
     }
 puts("</TD>");
 
-#ifdef SOON
 if (hubConnectTableExists())
     {
     puts("<TD VALIGN=\"TOP\">");
@@ -206,7 +205,6 @@ if (hubConnectTableExists())
         "../cgi-bin/hgHubConnect", "import tracks", "Import tracks");
     puts("</TD>");
     }
-#endif /* SOON */
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");
