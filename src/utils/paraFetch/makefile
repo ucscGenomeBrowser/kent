@@ -16,6 +16,3 @@ $(A): ${O} ${MYLIBS}
 clean::
 	rm -f ${O}
 
-install:
-	${MAKE} BINDIR=/cluster/bin/${MACHTYPE}
-
