@@ -239,6 +239,7 @@ struct track
     enum enumBool remoteDataSource; /* The data for this track is from a remote source */
                    /* Slow retrieval means image can be rendered via an AJAX callback. */
     boolean customTrack; /* Need to explicitly declare this is a custom track */
+    boolean syncChildVisToSelf;	/* If TRUE sync visibility to of children to self. */
     };
 
 

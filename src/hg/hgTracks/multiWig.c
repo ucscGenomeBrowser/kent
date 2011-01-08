@@ -156,6 +156,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 void multiWigContainerMethods(struct track *track)
 /* Override general container methods for multiWig. */
 {
+track->syncChildVisToSelf = TRUE;
 track->loadItems = multiWigLoadItems;
 track->totalHeight = multiWigTotalHeight;
 track->drawItems = multiWigDraw;
