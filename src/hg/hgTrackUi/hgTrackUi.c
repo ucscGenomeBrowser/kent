@@ -2751,6 +2751,7 @@ else if (isHubTrack(track))
     struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
     struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
     tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, database);
     rAddTrackListToHash(trackHash, tdbList, chromosome, FALSE);
     tdb = hashFindVal(trackHash, track);
     if (tdb == NULL)
