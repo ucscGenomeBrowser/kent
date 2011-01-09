@@ -3657,7 +3657,6 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
-uglyf("hTrackDbForTrackAndAncestors(%s,%s)\n", db, track);
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
 struct trackDb *ancestor = tdb;
@@ -3677,7 +3676,6 @@ for (;;)
 	}
 
     /* If no parent we're done. */
-    uglyf("parentTrack = %s\n", parentTrack);
     if (parentTrack == NULL)
         break;
 

@@ -733,6 +733,9 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
         hVarSubstTrackDb(td, database);
         char *hold = td->html;
         td->html = "";
+	subChar(td->type, '\t', ' ');	/* Tabs confuse things. */
+	subChar(td->shortLabel, '\t', ' ');	/* Tabs confuse things. */
+	subChar(td->longLabel, '\t', ' ');	/* Tabs confuse things. */
 	trackDbTabOut(td, f);
         td->html = hold;
         }

@@ -68,6 +68,10 @@ return start;
 char *expandRelativePath(char *baseDir, char *relPath)
 /* Expand relative path to more absolute one. */
 {
+if (relPath[0] == '/')
+   // hey, it's absolute actually... 
+   return cloneString(relPath);
+
 char *e = baseDir + strlen(baseDir);
 int slashCount;
 char *rel = relPath;
@@ -108,3 +112,20 @@ else
 return result;
 }
 
+char *pathRelativeToFile(char *baseFile, char *relPath)
+/* Given a base file name and a path relative to that, return
+ * relative path interpreted as if it were seen from the
+ * same directory holding the baseFile.  
+ *   An example of using this would be in processing include
+ * files.  In this case the baseFile would be the current
+ * source file, and the relPath would be from the include
+ * statement.  The returned result could then be used to
+ * open the include file. */
+{
+char dir[PATH_LEN];
+splitPath(baseFile, dir, NULL, NULL);
+int dirLen = strlen(dir);
+if (dirLen > 0 && dir[dirLen-1] == '/')
+     dir[dirLen-1] = 0;
+return expandRelativePath(dir, relPath);
+}

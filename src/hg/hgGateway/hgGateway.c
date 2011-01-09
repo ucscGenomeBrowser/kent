@@ -13,6 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 #include "customTrack.h"
+#include "hubConnect.h"
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "hPrint.h"
@@ -196,6 +197,16 @@ if (!hIsGsidServer() && !hIsCgbServer())
         hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
     }
 puts("</TD>");
+
+#ifdef SOON
+if (hubConnectTableExists())
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
+        "../cgi-bin/hgHubConnect", "import tracks", "Import tracks");
+    puts("</TD>");
+    }
+#endif /* SOON */
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");

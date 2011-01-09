@@ -266,10 +266,11 @@ else
     return NULL;
 }
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
-/* Load track info from ra file into list. */
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
+/* Load track info from ra file already opened as lineFile into list.  If releaseTag is 
+ * non-NULL then only load tracks that mesh with release. */
 {
-struct lineFile *lf = lineFileOpen(raFile, TRUE);
+char *raFile = lf->fileName;
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
@@ -336,8 +337,6 @@ for (;;)
     if (releaseTag)
         trackDbAddRelease(bt, releaseTag);
     }
-lineFileClose(&lf);
-
 slReverse(&btList);
 return btList;
 }
@@ -360,6 +359,15 @@ for(ii=0; ii < count; ii++)
 return TRUE;
 }
 
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
+/* Load track info from ra file into list.  If releaseTag is non-NULL
+ * then only load tracks that mesh with release. */
+{
+struct lineFile *lf = netLineFileOpen(raFile);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
+lineFileClose(&lf);
+return tdbList;
+}
 
 struct hash *trackDbHashSettings(struct trackDb *tdb)
 /* Force trackDb to hash up it's settings.  Usually this is just
