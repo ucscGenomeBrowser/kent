@@ -3559,6 +3559,17 @@ else
 }
 #endif /* DEBUG */
 
+struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
+/* Do various massaging that can only be done after parent/child
+ * relationships are established. */
+{
+tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
+trackDbContainerMarkup(NULL, tdbList);
+rInheritFields(tdbList);
+slSort(&tdbList, trackDbCmp);
+return tdbList;
+}
+
 struct trackDb *hTrackDb(char *db)
 /* Load tracks associated with current db.
  * Supertracks are loaded as a trackDb, but are not in the returned list,
@@ -3576,12 +3587,9 @@ struct trackDb *tdbList = NULL;
 //    {
     tdbList = loadTrackDb(db, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, db);
 //    freeMem(existingDb);
 //    existingDb = cloneString(db);
-    tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
-    trackDbContainerMarkup(NULL, tdbList);
-    rInheritFields(tdbList);
-    slSort(&tdbList, trackDbCmp);
 //    }
 return tdbList;
 }
@@ -3657,7 +3665,6 @@ struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
 {
-uglyf("hTrackDbForTrackAndAncestors(%s,%s)\n", db, track);
 struct sqlConnection *conn = hAllocConn(db);
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
 struct trackDb *ancestor = tdb;
@@ -3677,7 +3684,6 @@ for (;;)
 	}
 
     /* If no parent we're done. */
-    uglyf("parentTrack = %s\n", parentTrack);
     if (parentTrack == NULL)
         break;
 

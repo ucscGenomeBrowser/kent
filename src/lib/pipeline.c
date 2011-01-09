@@ -88,7 +88,7 @@ return dyStringCannibalize(&str);
 }
 
 static char* joinCmds(char ***cmds)
-/* join an cmds vetor into a space and pipe seperated string */
+/* join an cmds vetor into a space and pipe separated string */
 {
 struct dyString *str = dyStringNew(512);
 int i, j;
@@ -294,8 +294,9 @@ static void execProcChild(struct pipeline* pl, struct plProc *proc,
 if (signal(SIGPIPE, SIG_IGN) == SIG_ERR)
     errnoAbort("error ignoring SIGPIPE");
 // set process group to first subprocess id, which might be us
-if (setpgid(getpid(), ((pl->pgid < 0) ? getpid() : pl->pgid)))
-    errnoAbort("error from setpgid");
+pid_t pgid = (pl->pgid < 0) ? getpid() : pl->pgid;
+if (setpgid(getpid(), pgid) != 0)
+    errnoAbort("error from setpgid(%d, %d)", getpid(), pgid);
 
 if (otherEndBuf != NULL)
     plProcMemWrite(proc, procStdoutFd, stderrFd, otherEndBuf, otherEndBufSize);
@@ -601,7 +602,7 @@ struct plProc *proc;
 for (proc = pl->procs; proc != NULL; proc = proc->next)
     if (proc->pid == pid)
         return proc;
-errAbort("pid not found in pipeline: %d", pid);
+errAbort("pid not found in pipeline: %d", (int)pid);
 return 0; // never reached
 }
 

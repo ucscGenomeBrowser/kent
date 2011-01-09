@@ -2576,11 +2576,7 @@ else if (drawOpt > baseColorDrawOff)
     if (startsWith("genePred", tg->tdb->type))
 	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
-        {
-        char var[256];
-        safef(var, sizeof(var), "%s.%s", tg->tdb->track, CODON_NUMBERING_SUFFIX);
-        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBoolean(cart, var, FALSE));
-        }
+        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE));
     }
 if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
     baseColorSetCdsBounds(lf, psl, tg);
@@ -9207,6 +9203,8 @@ enum trackVisibility limitVisibility(struct track *tg)
 {
 if (!tg->limitedVisSet)
     {
+    if (sameString(tg->track, "jkDnaseRep1a")) uglyf("Got you %s with %d subtracks. Ajax %d<BR>\n", tg->track, slCount(tg->subtracks), trackShouldUseAjaxRetrieval(tg));
+    if (sameString(tg->track, "jkDnaseAll")) uglyf("Got you %s with %d subtracks. Ajax %d<BR>\n", tg->track, slCount(tg->subtracks), trackShouldUseAjaxRetrieval(tg));
     tg->limitedVisSet = TRUE;
     if (trackShouldUseAjaxRetrieval(tg))
         {
@@ -9230,8 +9228,11 @@ if (!tg->limitedVisSet)
             struct track *subtrack;
             int subCnt = subtrackCount(tg->subtracks);
             maxHeight = maxHeight * max(subCnt,1);
-            for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-                limitVisibility(subtrack);
+	    if (!tg->syncChildVisToSelf)
+		{
+		for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+		    limitVisibility(subtrack);
+		}
             }
         while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
             {
@@ -9245,6 +9246,16 @@ if (!tg->limitedVisSet)
         tg->height = h;
         tg->limitedVis = vis;
         }
+    if (tg->syncChildVisToSelf)
+        {
+	struct track *subtrack;
+	for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+	    {
+	    subtrack->visibility = tg->visibility;
+	    subtrack->limitedVis = tg->limitedVis;
+	    subtrack->limitedVisSet = tg->limitedVisSet;
+	    }
+	}
     }
 return tg->limitedVis;
 }
