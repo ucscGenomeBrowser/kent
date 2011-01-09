@@ -2584,25 +2584,26 @@ tableName wgEncodeHaibMethylRrbsHsmmSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHsmmSitesRep3
-objType table
-cell HSMM
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-29
-dateUnrestricted 2011-06-29
-fileName wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy Duke
-origAssembly hg19
-project wgEncode
-replicate 3
-subId 2471
-tableName wgEncodeHaibMethylRrbsHsmmSitesRep3
-treatment None
-view Sites
+# Preti asked to have this removed 2011-01-07
+#metaObject wgEncodeHaibMethylRrbsHsmmSitesRep3
+#objType table
+#cell HSMM
+#composite wgEncodeHaibMethylRrbs
+#dataType MethylRrbs
+#dataVersion post ENCODE June 2010 Freeze
+#dateSubmitted 2010-09-29
+#dateUnrestricted 2011-06-29
+#fileName wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
+#grant Myers
+#lab HudsonAlpha
+#obtainedBy Duke
+#origAssembly hg19
+#project wgEncode
+#replicate 3
+#subId 2471
+#tableName wgEncodeHaibMethylRrbsHsmmSitesRep3
+#treatment None
+#view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
 objType table
@@ -2994,6 +2995,25 @@ tableName wgEncodeHaibMethylRrbsLncapUwSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-08
+fileName wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3.bed9.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Yale
+project wgEncode
+replicate 3
+subId 3190
+tableName wgEncodeHaibMethylRrbsMcf10aesTamYaleSitesRep3
+treatment TAM_1uM_36hr
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1
 objType table
 cell MCF10A-Er-Src
@@ -3032,6 +3052,25 @@ replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2
 treatment TAM_1uM_36hr
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-08
+dateUnrestricted 2011-10-08
+fileName wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3.bed9.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Yale
+project wgEncode
+replicate 3
+subId 3190
+tableName wgEncodeHaibMethylRrbsMcf10aesYaleSitesRep3
+treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
@@ -4132,4 +4171,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -974339793
+# MAGIC: 997284024
