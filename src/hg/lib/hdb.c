@@ -3559,6 +3559,17 @@ else
 }
 #endif /* DEBUG */
 
+struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
+/* Do various massaging that can only be done after parent/child
+ * relationships are established. */
+{
+tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
+trackDbContainerMarkup(NULL, tdbList);
+rInheritFields(tdbList);
+slSort(&tdbList, trackDbCmp);
+return tdbList;
+}
+
 struct trackDb *hTrackDb(char *db)
 /* Load tracks associated with current db.
  * Supertracks are loaded as a trackDb, but are not in the returned list,
@@ -3576,12 +3587,9 @@ struct trackDb *tdbList = NULL;
 //    {
     tdbList = loadTrackDb(db, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
+    tdbList = trackDbPolishAfterLinkup(tdbList, db);
 //    freeMem(existingDb);
 //    existingDb = cloneString(db);
-    tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
-    trackDbContainerMarkup(NULL, tdbList);
-    rInheritFields(tdbList);
-    slSort(&tdbList, trackDbCmp);
 //    }
 return tdbList;
 }
