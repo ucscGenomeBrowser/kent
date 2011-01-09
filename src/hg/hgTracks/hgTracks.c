@@ -3308,13 +3308,12 @@ if (hub != NULL)
     if (hubGenome != NULL)
 	{
 	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
-
 	trackDbLinkUpGenerations(tdbList);
+	tdbList = trackDbPolishAfterLinkup(tdbList, database);
 	addTdbListToTrackList(tdbList, NULL, pTrackList);
 	if (tdbList != NULL)
 	    slAddHead(pHubList, hub);
 	}
-
     }
 }
 
