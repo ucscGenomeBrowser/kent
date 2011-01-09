@@ -2,7 +2,7 @@
 track wgEncodeBuOrchid
 compositeTrack on
 shortLabel BU ORChID
-longLabel ENCODE Boston Univ (Tullius Lab) ORChID Predicted DNA Cleavage Sites
+longLabel ORChID Predicted DNA Cleavage Sites from ENCODE/Boston Univ (Tullius lab)
 group map
 subGroup1 view Views Signal=Signal
 sortOrder view=+
@@ -19,31 +19,29 @@ noInherit on
     view Signal
     visibility full
     subTrack wgEncodeBuOrchid
-    maxHeightPixels 100:24:16
-    windowingFunction maximum
+    maxHeightPixels 100:50:16
+    viewLimits 0:0.4
+    autoScale on
+    transformFunc NONE
+    windowingFunction mean 
+    smoothingWindow 7
     type bigWig -1 2 
 
-        track wgEncodeBuOrchidGm12878SigRep1
+        track wgEncodeBuOrchidV1
         release alpha
         parent wgEncodeBuOrchidSignalView
         shortLabel ORChID V1
-        longLabel ENCODE Boston Univ. OH Radical Cleavage Intensity Database (ORChID) V1 
+        longLabel OH Radical Cleavage Intensity Database (ORChID) V1 from ENCODE/Boston Univ
         subGroups view=Signal 
         type bigWig -0.790750 1.644750
-        #type bigWig -1 2
-        configurable on
-        origAssembly hg18
-        #color 153,38,0
         # subId=3118 dateSubmitted=2011-01-03
 
-        track wgEncodeBuOrchidGm12878SigRep2
+        track wgEncodeBuOrchidV2
         release alpha
         parent wgEncodeBuOrchidSignalView
         shortLabel ORChID V2
-        longLabel ENCODE Boston Univ. OH Radical Cleavage Intensity Database (ORChID) V2 
+        longLabel OH Radical Cleavage Intensity Database (ORChID) V2 from ENCODE/Boston Univ
         subGroups view=Signal 
         type bigWig -0.666250 1.584000
-        origAssembly hg18
-        #color 153,38,0
         # subId=3118 dateSubmitted=2011-01-03
 
