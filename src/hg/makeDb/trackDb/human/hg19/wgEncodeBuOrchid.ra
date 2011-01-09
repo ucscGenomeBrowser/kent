@@ -20,10 +20,11 @@ noInherit on
     visibility full
     subTrack wgEncodeBuOrchid
     maxHeightPixels 100:50:16
-    viewLimits 1.4:1.6
+    viewLimits 0:0.4
     autoScale on
     transformFunc NONE
-    windowingFunction maximum
+    windowingFunction mean 
+    smoothingWindow 7
     type bigWig -1 2 
 
         track wgEncodeBuOrchidV1
@@ -33,10 +34,6 @@ noInherit on
         longLabel OH Radical Cleavage Intensity Database (ORChID) V1 from ENCODE/Boston Univ
         subGroups view=Signal 
         type bigWig -0.790750 1.644750
-        #type bigWig -1 2
-        configurable on
-        origAssembly hg18
-        #color 153,38,0
         # subId=3118 dateSubmitted=2011-01-03
 
         track wgEncodeBuOrchidV2
@@ -46,7 +43,5 @@ noInherit on
         longLabel OH Radical Cleavage Intensity Database (ORChID) V2 from ENCODE/Boston Univ
         subGroups view=Signal 
         type bigWig -0.666250 1.584000
-        origAssembly hg18
-        #color 153,38,0
         # subId=3118 dateSubmitted=2011-01-03
 
