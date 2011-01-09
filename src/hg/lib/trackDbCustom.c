@@ -915,6 +915,68 @@ hashFree(&trackHash);
 return forest;
 }
 
+void trackDbPrioritizeContainerItems(struct trackDb *tdbList)
+/* Set priorities in containers if they have no priorities already set
+   priorities are based upon 'sortOrder' setting or else shortLabel */
+{
+int countOfSortedContainers = 0;
+
+// Walk through tdbs looking for containers
+struct trackDb *tdbContainer;
+for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->next)
+    {
+    if (tdbContainer->subtracks == NULL)
+        continue;
+
+    sortOrder_t *sortOrder = sortOrderGet(NULL,tdbContainer);
+    boolean needsSorting = TRUE; // default
+    float firstPriority = -1.0;
+    sortableTdbItem *item,*itemsToSort = NULL;
+
+    struct slRef *child, *childList = trackDbListGetRefsToDescendantLeaves(tdbContainer->subtracks);
+    // Walk through tdbs looking for items contained
+    for (child = childList; child != NULL; child = child->next)
+        {
+	struct trackDb *tdbItem = child->val;
+	if( needsSorting && sortOrder == NULL )  // do we?
+	    {
+	    if( firstPriority == -1.0)    // all 0 or all the same value
+		firstPriority = tdbItem->priority;
+	    if(firstPriority != tdbItem->priority && (int)(tdbItem->priority + 0.9) > 0)
+		{
+		needsSorting = FALSE;
+		break;
+		}
+	    }
+	// create an Item
+	item = sortableTdbItemCreate(tdbItem,sortOrder);
+	if(item != NULL)
+	    slAddHead(&itemsToSort, item);
+	else
+	    {
+	    verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->track);
+	    needsSorting = FALSE;
+	    sortableTdbItemCreate(tdbItem,sortOrder);
+	    break;
+	    }
+        }
+
+    // Does this container need to be sorted?
+    if(needsSorting && slCount(itemsToSort))
+        {
+        verbose(2,"Sorting '%s' with %d items\n",tdbContainer->track,slCount(itemsToSort));
+        sortTdbItemsAndUpdatePriorities(&itemsToSort);
+        countOfSortedContainers++;
+        }
+
+    // cleanup
+    sortOrderFree(&sortOrder);
+    sortableTdbItemsFree(&itemsToSort);
+    }
+if(countOfSortedContainers > 0)
+    verbose(1,"Sorted %d containers\n",countOfSortedContainers);
+}
+
 void trackDbAddTableField(struct trackDb *tdbList)
 /* Add table field by looking it up in settings.  */
 {

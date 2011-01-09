@@ -462,6 +462,10 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
  * field of their children.  The parents of supertracks have no subtracks
  * after this call currently. */
 
+void trackDbPrioritizeContainerItems(struct trackDb *tdbList);
+/* Set priorities in containers if they have no priorities already set
+   priorities are based upon 'sortOrder' setting or else shortLabel */
+
 void trackDbAddTableField(struct trackDb *tdbList);
 /* Add table field by looking it up in settings.  */
 

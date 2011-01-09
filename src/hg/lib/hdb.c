@@ -3378,12 +3378,19 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
+static boolean trackDataAccessible(char *database, struct trackDb *tdb)
+/* Return TRUE if data accessible - meaning either it has a bigDataUrl, or the
+ * table exists. */
+{
+return trackDbSetting(tdb, "bigDataUrl") != NULL || hTableForTrack(database, tdb->table) != NULL;
+}
+
 static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
 	       boolean privateHost, struct trackDb **tdbRetList)
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-if ((!tdb->private || privateHost) && hTableForTrack(database, tdb->table) != NULL)
+if ((!tdb->private || privateHost) && trackDataAccessible(database, tdb))
     slAddHead(tdbRetList, tdb);
 else if (sameWord(tdb->type,"downloadsOnly"))
     {
