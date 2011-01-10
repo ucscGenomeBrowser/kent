@@ -1076,32 +1076,13 @@ metaObject wgEncodeOpenChromDnaseGm12878RawDataRep1
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
-dataType DnaseSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-16
-dateSubmitted 2009-03-20
-dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878RawDataRep1.fastq.gz
-grant Crawford
-lab Duke
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 1494
-treatment None
-view RawData
-
-metaObject wgEncodeOpenChromDnaseGm12878RawDataRep1V2
-objType file
-cell GM12878
-composite wgEncodeOpenChromDnase
 controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878RawDataRep1V2.fastq.gz
+fileName wgEncodeOpenChromDnaseGm12878RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS
@@ -1109,39 +1090,19 @@ origAssembly hg18
 project wgEncode
 replicate 1
 subId 461
-submittedDataVersion V2 - new sequences generated
 view RawData
 
 metaObject wgEncodeOpenChromDnaseGm12878RawDataRep2
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
-dataType DnaseSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-16
-dateSubmitted 2009-03-20
-dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878RawDataRep2.fastq.gz
-grant Crawford
-lab Duke
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 1494
-treatment None
-view RawData
-
-metaObject wgEncodeOpenChromDnaseGm12878RawDataRep2V2
-objType file
-cell GM12878
-composite wgEncodeOpenChromDnase
 controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878RawDataRep2V2.fastq.gz
+fileName wgEncodeOpenChromDnaseGm12878RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS
@@ -1149,10 +1110,9 @@ origAssembly hg18
 project wgEncode
 replicate 2
 subId 461
-submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeOpenChromDnaseGm12878RawDataRep3V2
+metaObject wgEncodeOpenChromDnaseGm12878RawDataRep3
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
@@ -1162,14 +1122,13 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878RawDataRep3V2.fastq.gz
+fileName wgEncodeOpenChromDnaseGm12878RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS
 origAssembly hg18
 project wgEncode
 replicate 3
-submittedDataVersion V2 - new sequences generated
 view RawData
 
 metaObject wgEncodeOpenChromDnaseGm12878Sig
@@ -2578,7 +2537,7 @@ tableName wgEncodeOpenChromDnaseHelas3Pk
 treatment None
 view Peaks
 
-metaObject wgEncodeOpenChromDnaseHelas3RawDataRep1V2
+metaObject wgEncodeOpenChromDnaseHelas3RawDataRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
@@ -2588,17 +2547,16 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3RawDataRep1V2.fastq.gz
+fileName wgEncodeOpenChromDnaseHelas3RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 1
 subId 495
-submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeOpenChromDnaseHelas3RawDataRep2V2
+metaObject wgEncodeOpenChromDnaseHelas3RawDataRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
@@ -2608,17 +2566,16 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3RawDataRep2V2.fastq.gz
+fileName wgEncodeOpenChromDnaseHelas3RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 2
 subId 495
-submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeOpenChromDnaseHelas3RawDataRep3V2
+metaObject wgEncodeOpenChromDnaseHelas3RawDataRep3
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
@@ -2628,14 +2585,13 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3RawDataRep3V2.fastq.gz
+fileName wgEncodeOpenChromDnaseHelas3RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 3
 subId 495
-submittedDataVersion V2 - new sequences generated
 view RawData
 
 metaObject wgEncodeOpenChromDnaseHelas3Sig
@@ -2878,7 +2834,7 @@ tableName wgEncodeOpenChromDnaseHepg2Pk
 treatment None
 view Peaks
 
-metaObject wgEncodeOpenChromDnaseHepg2RawDataRep1V2
+metaObject wgEncodeOpenChromDnaseHepg2RawDataRep1
 objType file
 cell HepG2
 composite wgEncodeOpenChromDnase
@@ -2888,17 +2844,16 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileName wgEncodeOpenChromDnaseHepg2RawDataRep1V2.fastq.gz
+fileName wgEncodeOpenChromDnaseHepg2RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 1
 subId 556
-submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeOpenChromDnaseHepg2RawDataRep2V2
+metaObject wgEncodeOpenChromDnaseHepg2RawDataRep2
 objType file
 cell HepG2
 composite wgEncodeOpenChromDnase
@@ -2908,17 +2863,16 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileName wgEncodeOpenChromDnaseHepg2RawDataRep2V2.fastq.gz
+fileName wgEncodeOpenChromDnaseHepg2RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 2
 subId 556
-submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeOpenChromDnaseHepg2RawDataRep3V2
+metaObject wgEncodeOpenChromDnaseHepg2RawDataRep3
 objType file
 cell HepG2
 composite wgEncodeOpenChromDnase
@@ -2928,14 +2882,13 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileName wgEncodeOpenChromDnaseHepg2RawDataRep3V2.fastq.gz
+fileName wgEncodeOpenChromDnaseHepg2RawDataRep3.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 3
 subId 556
-submittedDataVersion V2 - new sequences generated
 view RawData
 
 metaObject wgEncodeOpenChromDnaseHepg2Sig
@@ -4085,7 +4038,7 @@ tableName wgEncodeOpenChromDnaseK562Pk
 treatment None
 view Peaks
 
-metaObject wgEncodeOpenChromDnaseK562RawDataRep1V2
+metaObject wgEncodeOpenChromDnaseK562RawDataRep1
 objType file
 cell K562
 composite wgEncodeOpenChromDnase
@@ -4095,17 +4048,16 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseK562RawDataRep1V2.fastq.gz
+fileName wgEncodeOpenChromDnaseK562RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 1
 subId 480
-submittedDataVersion V2 - new sequences generated
 view RawData
 
-metaObject wgEncodeOpenChromDnaseK562RawDataRep2V2
+metaObject wgEncodeOpenChromDnaseK562RawDataRep2
 objType file
 cell K562
 composite wgEncodeOpenChromDnase
@@ -4115,14 +4067,13 @@ dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseK562RawDataRep2V2.fastq.gz
+fileName wgEncodeOpenChromDnaseK562RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
 project wgEncode
 replicate 2
 subId 480
-submittedDataVersion V2 - new sequences generated
 view RawData
 
 metaObject wgEncodeOpenChromDnaseK562Sig
@@ -5871,4 +5822,4 @@ subId 3078
 tableName wgEncodeOpenChromDnaseT47dSig
 view Signal
 
-# MAGIC: -1798796566
+# MAGIC: 57684119
