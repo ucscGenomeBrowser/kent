@@ -6768,7 +6768,7 @@ label Total_RNA
 #tag short
 #type rnaExtract
 #description RNA shorter than 200 nt
-#label PROVISIONAL   (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
+#label (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
 
 term shortTotal
 tag shortTotal
@@ -6780,7 +6780,7 @@ label short_Total_RNA
 #tag shortDeplRrna
 #type rnaExtract
 #description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
-#Provisional Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake
+#Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake
 
 term longPolyA
 tag pAP
@@ -7402,7 +7402,7 @@ description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
 term B6D2F1/J
 tag B6D2F1J
 type strain
-description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1. (Provisional)
+description Derived by cross between C57BL/6J Female x DBA/2J Male (C57BL/6xDBA/2)F1. 
 
 term C3H
 tag C3H
@@ -7417,7 +7417,7 @@ description C57 black 6, the most common inbred strain of laboratory mouse
 term RIII
 tag RIII
 type strain
-description High mammary tumour incidence in unfostered substrains. (Provisional)
+description High mammary tumour incidence in unfostered substrains. 
 
 term 129
 tag S129
@@ -7934,7 +7934,7 @@ term UChicago
 tag UChicago
 type lab
 label White - University of Chicago
-description White - University of Chicago PROVISIONAL
+description White - University of Chicago 
 labInst University of Chicago
 labPi White
 labPiFull Kevin White
@@ -8330,7 +8330,7 @@ validation date nine months more than dateSubmitted
 term dccInternalNotes
 type typeOfTerm
 label Internal DCC Notes
-description Notes about tracks that are internal to the DCC. (Provisional)
+description Notes about tracks that are internal to the DCC. 
 searchable no
 cvDefined no
 hidden yes
@@ -8498,7 +8498,7 @@ validate cv
 term obtainedBy 
 type typeOfTerm
 label obtainedBy
-description The production group that grew the cells and isolated genomic DNA. (Provisional)
+description The production group that grew the cells and isolated genomic DNA. (Provis
 searchable select
 cvDefined no #(Defined by lab)
 validate cv
