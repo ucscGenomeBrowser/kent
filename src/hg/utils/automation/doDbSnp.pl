@@ -1009,7 +1009,7 @@ working directory to $runDir.";
 #*** add output to endNotes:
     head ${snpBase}Errors.bed
 #*** add output to endNotes:
-    wc -l snp*
+    wc -l ${snpBase}*
 
     # Make one big fasta file.
 #*** It's a monster: 23G for hg19 snp132!  Can we split by hashing rsId?
