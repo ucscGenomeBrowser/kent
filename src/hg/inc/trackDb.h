@@ -6,8 +6,13 @@
 #define TRACKDB_H
 
 #include "common.h"
+
 #ifndef JKSQL_H
 #include "jksql.h"
+#endif
+
+#ifndef LINEFILE_H
+#include "linefile.h"
 #endif
 
 #define TRACKDB_NUM_COLS 21
@@ -294,7 +299,12 @@ void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
 
 struct trackDb *trackDbFromRa(char *raFile, char *releaseTag);
-/* Load track info from ra file into list. */
+/* Load track info from ra file into list.  If releaseTag is non-NULL
+ * then only load tracks that mesh with release. */
+
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag);
+/* Load track info from ra file already opened as lineFile into list.  If releaseTag is 
+ * non-NULL then only load tracks that mesh with release. */
 
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
@@ -451,6 +461,10 @@ struct trackDb *trackDbLinkUpGenerations(struct trackDb *tdbList);
  * reference to them in the returned forest is that they are in the parent
  * field of their children.  The parents of supertracks have no subtracks
  * after this call currently. */
+
+void trackDbPrioritizeContainerItems(struct trackDb *tdbList);
+/* Set priorities in containers if they have no priorities already set
+   priorities are based upon 'sortOrder' setting or else shortLabel */
 
 void trackDbAddTableField(struct trackDb *tdbList);
 /* Add table field by looking it up in settings.  */

@@ -17,14 +17,18 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-char *bbiNameFromTable(struct sqlConnection *conn, char *table)
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table)
 /* Return file name from little table. */
 {
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", table);
-char *fileName = sqlQuickString(conn, query);
+char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
-    errAbort("Missing fileName in %s table", table);
+    {
+    char query[256];
+    safef(query, sizeof(query), "select fileName from %s", table);
+    fileName = sqlQuickString(conn, query);
+    if (fileName == NULL)
+	errAbort("Missing fileName in %s table", table);
+    }
 return fileName;
 }
 
@@ -35,7 +39,7 @@ struct bbiFile *bbi = track->bbiFile;
 if (bbi == NULL)
     {
     struct sqlConnection *conn = hAllocConnTrack(database, track->tdb);
-    char *fileName = bbiNameFromTable(conn, track->table);
+    char *fileName = bbiNameFromSettingOrTable(track->tdb, conn, track->table);
     hFreeConn(&conn);
     bbi = track->bbiFile = bigBedFileOpen(fileName);
     }

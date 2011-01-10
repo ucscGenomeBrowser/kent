@@ -266,10 +266,11 @@ else
     return NULL;
 }
 
-struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
-/* Load track info from ra file into list. */
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
+/* Load track info from ra file already opened as lineFile into list.  If releaseTag is 
+ * non-NULL then only load tracks that mesh with release. */
 {
-struct lineFile *lf = lineFileOpen(raFile, TRUE);
+char *raFile = lf->fileName;
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
@@ -336,8 +337,6 @@ for (;;)
     if (releaseTag)
         trackDbAddRelease(bt, releaseTag);
     }
-lineFileClose(&lf);
-
 slReverse(&btList);
 return btList;
 }
@@ -360,6 +359,15 @@ for(ii=0; ii < count; ii++)
 return TRUE;
 }
 
+struct trackDb *trackDbFromRa(char *raFile, char *releaseTag)
+/* Load track info from ra file into list.  If releaseTag is non-NULL
+ * then only load tracks that mesh with release. */
+{
+struct lineFile *lf = netLineFileOpen(raFile);
+struct trackDb *tdbList = trackDbFromOpenRa(lf, releaseTag);
+lineFileClose(&lf);
+return tdbList;
+}
 
 struct hash *trackDbHashSettings(struct trackDb *tdb)
 /* Force trackDb to hash up it's settings.  Usually this is just
@@ -905,6 +913,68 @@ for (tdb = superlessList; tdb != NULL; tdb = next)
 
 hashFree(&trackHash);
 return forest;
+}
+
+void trackDbPrioritizeContainerItems(struct trackDb *tdbList)
+/* Set priorities in containers if they have no priorities already set
+   priorities are based upon 'sortOrder' setting or else shortLabel */
+{
+int countOfSortedContainers = 0;
+
+// Walk through tdbs looking for containers
+struct trackDb *tdbContainer;
+for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->next)
+    {
+    if (tdbContainer->subtracks == NULL)
+        continue;
+
+    sortOrder_t *sortOrder = sortOrderGet(NULL,tdbContainer);
+    boolean needsSorting = TRUE; // default
+    float firstPriority = -1.0;
+    sortableTdbItem *item,*itemsToSort = NULL;
+
+    struct slRef *child, *childList = trackDbListGetRefsToDescendantLeaves(tdbContainer->subtracks);
+    // Walk through tdbs looking for items contained
+    for (child = childList; child != NULL; child = child->next)
+        {
+	struct trackDb *tdbItem = child->val;
+	if( needsSorting && sortOrder == NULL )  // do we?
+	    {
+	    if( firstPriority == -1.0)    // all 0 or all the same value
+		firstPriority = tdbItem->priority;
+	    if(firstPriority != tdbItem->priority && (int)(tdbItem->priority + 0.9) > 0)
+		{
+		needsSorting = FALSE;
+		break;
+		}
+	    }
+	// create an Item
+	item = sortableTdbItemCreate(tdbItem,sortOrder);
+	if(item != NULL)
+	    slAddHead(&itemsToSort, item);
+	else
+	    {
+	    verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->track);
+	    needsSorting = FALSE;
+	    sortableTdbItemCreate(tdbItem,sortOrder);
+	    break;
+	    }
+        }
+
+    // Does this container need to be sorted?
+    if(needsSorting && slCount(itemsToSort))
+        {
+        verbose(2,"Sorting '%s' with %d items\n",tdbContainer->track,slCount(itemsToSort));
+        sortTdbItemsAndUpdatePriorities(&itemsToSort);
+        countOfSortedContainers++;
+        }
+
+    // cleanup
+    sortOrderFree(&sortOrder);
+    sortableTdbItemsFree(&itemsToSort);
+    }
+if(countOfSortedContainers > 0)
+    verbose(1,"Sorted %d containers\n",countOfSortedContainers);
 }
 
 void trackDbAddTableField(struct trackDb *tdbList)

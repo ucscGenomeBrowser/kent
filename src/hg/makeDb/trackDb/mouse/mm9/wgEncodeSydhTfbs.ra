@@ -24,7 +24,6 @@
 #               Z - Treatment
 
 track wgEncodeSydhTfbs
-release beta
 compositeTrack on
 shortLabel Stan/Yale TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale
@@ -49,7 +48,6 @@ wgEncode 1
 
 	#####Peak Tracks###########
 	track wgEncodeSydhTfbsViewPeaks
-	release beta
 	shortLabel Peaks
 	view Peaks
 	visibility dense
@@ -65,7 +63,6 @@ wgEncode 1
 
 
 	        track wgEncodeSydhTfbsMelMaxIggrabPk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Max Pk
                 longLabel MEL Max Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -75,7 +72,6 @@ wgEncode 1
 	        # subId=1863 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelP300IggrabPk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL p300 Pk
                 longLabel MEL p300 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -85,7 +81,6 @@ wgEncode 1
 	        # subId=1864 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusPk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL USF2 Pk
                 longLabel MEL USF2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -95,7 +90,6 @@ wgEncode 1
 	        # subId=1865 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -105,7 +99,6 @@ wgEncode 1
 	        # subId=1857 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 D Pk
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -115,7 +108,6 @@ wgEncode 1
 	        # subId=2539 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelRad21IggrabPk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 Pk
                 longLabel MEL Rad21 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -125,7 +117,6 @@ wgEncode 1
 	        # subId=2541 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelNelfeIggrabPk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL NELFe Pk
                 longLabel MEL NELFe Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -135,7 +126,6 @@ wgEncode 1
 	        # subId=2543 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelCmybh141IggrabPk
-	        release beta
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL c-Myb Pk
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -147,7 +137,6 @@ wgEncode 1
 
 	#####Signal Tracks###########
 	track wgEncodeSydhTfbsViewSig
-	release beta
 	shortLabel Signal
 	view Signal
 	visibility full
@@ -161,7 +150,6 @@ wgEncode 1
 
 
 	        track wgEncodeSydhTfbsMelMaxIggrabSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Max Sg
                 longLabel MEL Max Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -171,7 +159,6 @@ wgEncode 1
 	        # subId=1863 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelP300IggrabSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel MEL p300 Sg
                 longLabel MEL p300 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -181,7 +168,6 @@ wgEncode 1
 	        # subId=1864 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL USF2 Sg
                 longLabel MEL USF2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -191,7 +177,6 @@ wgEncode 1
 	        # subId=1865 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -201,7 +186,6 @@ wgEncode 1
 	        # subId=1857 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelInputDmso20IggyaleSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL IgGYale D Sg
                 longLabel MEL IgG-Yale Input 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -211,7 +195,6 @@ wgEncode 1
 	        # subId=1862 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 D Sg
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -221,7 +204,6 @@ wgEncode 1
 	        # subId=2539 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelRad21IggrabSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 Sg
                 longLabel MEL Rad21 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -231,7 +213,6 @@ wgEncode 1
 	        # subId=2541 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelNelfeIggrabSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL NELFe Sg
                 longLabel MEL NELFe Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -241,7 +222,6 @@ wgEncode 1
 	        # subId=2543 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelCmybh141IggrabSig
-	        release beta
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL c-Myb Sg
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Signal from ENCODE/Stanford/Yale

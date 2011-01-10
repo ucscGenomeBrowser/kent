@@ -2301,7 +2301,8 @@ cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-23
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipHelas3Pol2RawDataRep2.fastq.gz
@@ -2311,7 +2312,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
-subId 885
+subId 3141
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3Pol2Sig
@@ -2838,7 +2839,8 @@ cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/Input
 dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-23
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipHepg2Pol2RawDataRep1.fastq.gz
@@ -2848,7 +2850,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
-subId 589
+subId 3141
 view RawData
 
 metaObject wgEncodeOpenChromChipHepg2Pol2RawDataRep2
@@ -3947,7 +3949,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
 project wgEncode
@@ -3967,7 +3969,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep2
 project wgEncode
@@ -3987,7 +3989,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2503
@@ -4006,7 +4008,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 replicate 1
@@ -4026,7 +4028,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep1
 project wgEncode
 replicate 1
@@ -4045,7 +4047,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep2
 project wgEncode
 replicate 2
@@ -4064,7 +4066,7 @@ dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
 grant Crawford
-lab UT-A(Iyer)
+lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
 subId 2503
@@ -4079,7 +4081,8 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-23
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep1.fastq.gz
@@ -4089,7 +4092,7 @@ origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
-subId 883
+subId 3141
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CmycRawDataRep2
@@ -4099,7 +4102,8 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-23
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
 fileName wgEncodeOpenChromChipMcf7CmycRawDataRep2.fastq.gz
@@ -4109,7 +4113,7 @@ origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
-subId 883
+subId 3141
 view RawData
 
 metaObject wgEncodeOpenChromChipMcf7CmycVehAlnRep1
@@ -5226,4 +5230,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -257062899
+# MAGIC: -1142811715
