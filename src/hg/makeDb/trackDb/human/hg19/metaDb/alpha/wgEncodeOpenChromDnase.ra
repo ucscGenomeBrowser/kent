@@ -2669,7 +2669,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHepatocytesAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3063
@@ -2686,7 +2686,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHepatocytesAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3063
@@ -3056,7 +3056,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3064
@@ -3073,7 +3073,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHpde6e6e7AlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3064
@@ -3540,7 +3540,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh75AlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3076
@@ -3557,7 +3557,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh75AlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3076
@@ -3657,7 +3657,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh7AlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3075
@@ -3674,7 +3674,7 @@ dateUnrestricted 2011-09-07
 fileName wgEncodeOpenChromDnaseHuh7AlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3075
@@ -3912,7 +3912,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseIpsAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3065
@@ -3929,7 +3929,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseIpsAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3065
@@ -3946,7 +3946,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseIpsAlnRep3.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 3
 subId 3065
@@ -5648,7 +5648,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseStellateAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3077
@@ -5665,7 +5665,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseStellateAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3077
@@ -5765,7 +5765,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseT47dAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3078
@@ -5782,7 +5782,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseT47dAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3078
@@ -5871,4 +5871,4 @@ subId 3078
 tableName wgEncodeOpenChromDnaseT47dSig
 view Signal
 
-# MAGIC: -1798796086
+# MAGIC: -1798796566

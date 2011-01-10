@@ -363,6 +363,25 @@ subId 1480
 tableName wgEncodeOpenChromFaireGm12878Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireGm12878RawDataRep1
+objType file
+cell GM12878
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-04-20
+dateUnrestricted 2010-01-20
+fileName wgEncodeOpenChromFaireGm12878RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFaireGm12878RawDataRep1V2
 objType file
 cell GM12878
@@ -381,6 +400,25 @@ project wgEncode
 replicate 1
 subId 471
 submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireGm12878RawDataRep2
+objType file
+cell GM12878
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-04-20
+dateUnrestricted 2010-01-20
+fileName wgEncodeOpenChromFaireGm12878RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm12878RawDataRep2V2
@@ -760,7 +798,8 @@ cell GM18507
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromFaireGm18507RawDataRep1.fastq.gz
@@ -769,7 +808,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 852
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm18507RawDataRep2
@@ -778,7 +818,8 @@ cell GM18507
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromFaireGm18507RawDataRep2.fastq.gz
@@ -787,7 +828,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 852
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm18507Sig
@@ -893,7 +935,8 @@ cell GM19239
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromFaireGm19239RawDataRep1.fastq.gz
@@ -902,7 +945,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 847
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm19239RawDataRep2
@@ -911,7 +955,8 @@ cell GM19239
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromFaireGm19239RawDataRep2.fastq.gz
@@ -920,7 +965,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 847
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireGm19239Sig
@@ -1026,7 +1072,8 @@ cell H1-hESC
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireH1hescRawDataRep1.fastq.gz
@@ -1035,7 +1082,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 629
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireH1hescRawDataRep2
@@ -1044,7 +1092,8 @@ cell H1-hESC
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireH1hescRawDataRep2.fastq.gz
@@ -1053,7 +1102,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 629
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireH1hescSig
@@ -1222,7 +1272,8 @@ cell HeLa-S3
 composite wgEncodeOpenChromFaire
 controlId HeLa-S3/Input
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep1.fastq.gz
@@ -1231,7 +1282,7 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 858
+subId 3153
 treatment IFNa4h
 view RawData
 
@@ -1241,7 +1292,8 @@ cell HeLa-S3
 composite wgEncodeOpenChromFaire
 controlId HeLa-S3/Input
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep2.fastq.gz
@@ -1250,7 +1302,7 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 858
+subId 3153
 treatment IFNa4h
 view RawData
 
@@ -1362,7 +1414,8 @@ cell HeLa-S3
 composite wgEncodeOpenChromFaire
 controlId HeLa-S3/Input
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep1.fastq.gz
@@ -1371,7 +1424,7 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 859
+subId 3153
 treatment IFNg4h
 view RawData
 
@@ -1381,7 +1434,8 @@ cell HeLa-S3
 composite wgEncodeOpenChromFaire
 controlId HeLa-S3/Input
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep2.fastq.gz
@@ -1390,7 +1444,7 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 859
+subId 3153
 treatment IFNg4h
 view RawData
 
@@ -1433,6 +1487,25 @@ subId 1497
 tableName wgEncodeOpenChromFaireHelas3Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireHelas3RawDataRep1
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromFaireHelas3RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFaireHelas3RawDataRep1V2
 objType file
 cell HeLa-S3
@@ -1453,6 +1526,25 @@ subId 639
 submittedDataVersion V2 - new sequences generated
 view RawData
 
+metaObject wgEncodeOpenChromFaireHelas3RawDataRep2
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromFaireHelas3RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFaireHelas3RawDataRep2V2
 objType file
 cell HeLa-S3
@@ -1471,6 +1563,25 @@ project wgEncode
 replicate 2
 subId 639
 submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireHelas3RawDataRep3
+objType file
+cell HeLa-S3
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-03-22
+dateUnrestricted 2009-12-22
+fileName wgEncodeOpenChromFaireHelas3RawDataRep3.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 3
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireHelas3RawDataRep3V2
@@ -1610,6 +1721,25 @@ subId 1515
 tableName wgEncodeOpenChromFaireHepg2Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireHepg2RawDataRep1
+objType file
+cell HepG2
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeOpenChromFaireHepg2RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFaireHepg2RawDataRep1V2
 objType file
 cell HepG2
@@ -1630,6 +1760,25 @@ subId 557
 submittedDataVersion V2 - new sequences generated
 view RawData
 
+metaObject wgEncodeOpenChromFaireHepg2RawDataRep2
+objType file
+cell HepG2
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeOpenChromFaireHepg2RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFaireHepg2RawDataRep2V2
 objType file
 cell HepG2
@@ -1648,6 +1797,25 @@ project wgEncode
 replicate 2
 subId 557
 submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireHepg2RawDataRep3
+objType file
+cell HepG2
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeOpenChromFaireHepg2RawDataRep3.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 3
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireHepg2RawDataRep3V2
@@ -1773,7 +1941,8 @@ cell HUVEC
 composite wgEncodeOpenChromFaire
 controlId HUVEC/Input
 dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromFaireHuvecRawDataRep1.fastq.gz
@@ -1782,7 +1951,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 546
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireHuvecRawDataRep2
@@ -1791,7 +1961,8 @@ cell HUVEC
 composite wgEncodeOpenChromFaire
 controlId HUVEC/Input
 dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromFaireHuvecRawDataRep2.fastq.gz
@@ -1800,7 +1971,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 546
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireHuvecSig
@@ -1891,8 +2063,8 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562NabutAlnRep1
 project wgEncode
 replicate 1
@@ -1910,8 +2082,8 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562NabutAlnRep2
 project wgEncode
 replicate 2
@@ -1929,7 +2101,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2771
@@ -1947,7 +2119,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.1
 project wgEncode
 subId 2771
@@ -1965,7 +2137,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep1.fastq.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep1
 project wgEncode
 replicate 1
@@ -1983,7 +2155,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep2.fastq.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep2
 project wgEncode
 replicate 2
@@ -2001,7 +2173,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_K562
 project wgEncode
 subId 2771
@@ -2019,8 +2191,8 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562OhureaAlnRep1
 project wgEncode
 replicate 1
@@ -2038,8 +2210,8 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562OhureaAlnRep2
 project wgEncode
 replicate 2
@@ -2057,7 +2229,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 2772
@@ -2075,7 +2247,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaPk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.1
 project wgEncode
 subId 2772
@@ -2093,7 +2265,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep1.fastq.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep1
 project wgEncode
 replicate 1
@@ -2111,7 +2283,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep2.fastq.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep2
 project wgEncode
 replicate 2
@@ -2129,7 +2301,7 @@ dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaSig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_K562
 project wgEncode
 subId 2772
@@ -2156,6 +2328,25 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Pk
 view Peaks
 
+metaObject wgEncodeOpenChromFaireK562RawDataRep1
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-08-09
+fileName wgEncodeOpenChromFaireK562RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFaireK562RawDataRep1V2
 objType file
 cell K562
@@ -2176,6 +2367,25 @@ subId 640
 submittedDataVersion V2 - new sequences generated
 view RawData
 
+metaObject wgEncodeOpenChromFaireK562RawDataRep2
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-08-09
+fileName wgEncodeOpenChromFaireK562RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFaireK562RawDataRep2V2
 objType file
 cell K562
@@ -2194,6 +2404,25 @@ project wgEncode
 replicate 2
 subId 640
 submittedDataVersion V2 - new sequences generated
+view RawData
+
+metaObject wgEncodeOpenChromFaireK562RawDataRep3
+objType file
+cell K562
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-04-20
+dateUnrestricted 2010-01-20
+fileName wgEncodeOpenChromFaireK562RawDataRep3.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 3
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireK562RawDataRep3V2
@@ -2234,6 +2463,82 @@ project wgEncode
 subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
+
+metaObject wgEncodeOpenChromFaireLhsrAndroRawDataRep1
+objType file
+cell LHSR
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-12-23
+dateUnrestricted 2010-09-23
+fileName wgEncodeOpenChromFaireLhsrAndroRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3153
+treatment androgen
+view RawData
+
+metaObject wgEncodeOpenChromFaireLhsrAndroRawDataRep2
+objType file
+cell LHSR
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-12-23
+dateUnrestricted 2010-09-23
+fileName wgEncodeOpenChromFaireLhsrAndroRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3153
+treatment androgen
+view RawData
+
+metaObject wgEncodeOpenChromFaireLhsrRawDataRep1
+objType file
+cell LHSR
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-12-23
+dateUnrestricted 2010-09-23
+fileName wgEncodeOpenChromFaireLhsrRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3153
+treatment None
+view RawData
+
+metaObject wgEncodeOpenChromFaireLhsrRawDataRep2
+objType file
+cell LHSR
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-12-23
+dateUnrestricted 2010-09-23
+fileName wgEncodeOpenChromFaireLhsrRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3153
+treatment None
+view RawData
 
 metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
@@ -2436,7 +2741,8 @@ cell NHBE
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
@@ -2445,7 +2751,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 955
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhbeRawDataRep2
@@ -2454,7 +2761,8 @@ cell NHBE
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Jan 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
@@ -2463,7 +2771,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 955
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhbeSig
@@ -2569,7 +2878,8 @@ cell NHEK
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireNhekRawDataRep1.fastq.gz
@@ -2578,7 +2888,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 1
-subId 630
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhekRawDataRep2
@@ -2587,7 +2898,8 @@ cell NHEK
 composite wgEncodeOpenChromFaire
 controlId modelled
 dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireNhekRawDataRep2.fastq.gz
@@ -2596,7 +2908,8 @@ lab UNC
 origAssembly hg18
 project wgEncode
 replicate 2
-subId 630
+subId 3153
+treatment None
 view RawData
 
 metaObject wgEncodeOpenChromFaireNhekSig
@@ -2693,6 +3006,25 @@ project wgEncode
 subId 686
 view RawData
 
+metaObject wgEncodeOpenChromFairePanisletsRawDataRep1
+objType file
+cell PanIslets
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-12-31
+dateSubmitted 2009-10-14
+dateUnrestricted 2010-07-14
+fileName wgEncodeOpenChromFairePanisletsRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3153
+treatment None
+view RawData
+
 metaObject wgEncodeOpenChromFairePanisletsSig
 objType table
 cell PanIslets
@@ -2712,4 +3044,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -1791628584
+# MAGIC: -1742679644
