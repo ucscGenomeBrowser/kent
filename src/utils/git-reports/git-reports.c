@@ -637,7 +637,7 @@ for(cf = comFiles; cf; cf = cf->next)
     if (u)
 	safef(path, sizeof(path), "%s/%s%s", "full", f->path, c->commitId);
     else
-	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "context", f->path, c->commitId);
+	safef(path, sizeof(path), "../user/%s/%s/%s%s", c->author, "full", f->path, c->commitId);
     relativePath = cloneString(path);
     safef(path, sizeof(path), "%s.html", relativePath);
     fHtml = cloneString(path);
