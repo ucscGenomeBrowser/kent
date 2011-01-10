@@ -2610,6 +2610,7 @@ function updateVisibility(track, visibility)
     var rec = trackDbJson[track];
     var selectUpdated = false;
     $("select[name=" + track + "]").each(function(t) {
+                                          $(this).attr('class', visibility == 'hide' ? 'hiddenText' : 'normalText');
                                           $(this).val(visibility);
                                           selectUpdated = true;
                                       });
