@@ -62,7 +62,7 @@ cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 printf(
    "<P>Track hubs are collections of tracks from outside of UCSC that can be imported into the "
    "Genome Browser.  To import a hub check the box in the list below. "
-   "After import the hub will show up as a group of tracks with it's own blue "
+   "After import the hub will show up as a group of tracks with its own blue "
    "bar and label underneath the main browser graphic, and in the configure page. To arrange "
    "for your own track hub to appear in this list, please contact genome@soe.ucsc.edu.</P>\n"
    );

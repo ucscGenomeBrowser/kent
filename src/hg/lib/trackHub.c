@@ -276,15 +276,17 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     hashAdd(hash, tdb->track, tdb);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    char *parentName = trackDbLocalSetting(tdb, "parent");
-    if (parentName != NULL)
+    char *parentLine = trackDbLocalSetting(tdb, "parent");
+    if (parentLine != NULL)
          {
+	 char *parentName = cloneFirstWord(parentLine);
 	 struct trackDb *parent = hashFindVal(hash, parentName);
 	 if (parent == NULL)
 	    errAbort("Parent %s of track %s doesn't exist in hub %s genome %s", parentName,
 		tdb->track, hub->url, genome->name);
 	 tdb->parent = parent;
 	 parent->subtracks = tdb;
+	 freeMem(parentName);
 	 }
     }
 hashFree(&hash);

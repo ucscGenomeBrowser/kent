@@ -9203,8 +9203,6 @@ enum trackVisibility limitVisibility(struct track *tg)
 {
 if (!tg->limitedVisSet)
     {
-    if (sameString(tg->track, "jkDnaseRep1a")) uglyf("Got you %s with %d subtracks. Ajax %d<BR>\n", tg->track, slCount(tg->subtracks), trackShouldUseAjaxRetrieval(tg));
-    if (sameString(tg->track, "jkDnaseAll")) uglyf("Got you %s with %d subtracks. Ajax %d<BR>\n", tg->track, slCount(tg->subtracks), trackShouldUseAjaxRetrieval(tg));
     tg->limitedVisSet = TRUE;
     if (trackShouldUseAjaxRetrieval(tg))
         {

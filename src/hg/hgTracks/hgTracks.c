@@ -112,7 +112,6 @@ boolean ideogramToo =  FALSE;           /* caller wants the ideoGram (when reque
  * position string */
 struct hgPositions *hgp = NULL;
 
-
 /* Other global variables. */
 struct trackHub *hubList = NULL;	/* List of all relevant hubs. */
 struct group *groupList = NULL;    /* List of all tracks. */
@@ -120,6 +119,21 @@ char *browserName;              /* Test or public browser */
 char *organization;             /* UCSC */
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
+
+void uglySnoopTrackList(int depth, struct track *trackList)
+/* Print out some info on track list. */
+{
+struct track *track;
+for (track = trackList; track != NULL; track = track->next)
+    {
+    if (stringIn("FaireH1h", track->track))
+	{
+	repeatCharOut(uglyOut, '+', depth);
+        uglyf("%s pri=%g defPri=%g<BR>\n", track->track, track->priority, track->defaultPriority);
+	}
+    uglySnoopTrackList(depth+1, track->subtracks);
+    }
+}
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -3308,13 +3322,13 @@ if (hub != NULL)
     if (hubGenome != NULL)
 	{
 	struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
-
-	trackDbLinkUpGenerations(tdbList);
+	tdbList = trackDbLinkUpGenerations(tdbList);
+	tdbList = trackDbPolishAfterLinkup(tdbList, database);
+	trackDbPrioritizeContainerItems(tdbList);
 	addTdbListToTrackList(tdbList, NULL, pTrackList);
 	if (tdbList != NULL)
 	    slAddHead(pHubList, hub);
 	}
-
     }
 }
 
