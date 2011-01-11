@@ -1925,7 +1925,7 @@ sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
 vendorId
-orderUrl
+orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
 protocol UW_Stam:HFF_Stam_protocol.pdf
@@ -1942,7 +1942,7 @@ sex M
 tissue foreskin
 vendorName Dr. Torok-Storb, FHCRC
 vendorId
-orderUrl
+orderUrl http://myprofile.cos.com/torokstorb
 termId BTO:0002245
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
 protocol UW_Stam:HFFMyc_Stam_protocol.pdf
@@ -3252,7 +3252,7 @@ sex F
 tissue embryonic lung
 vendorName Dr. Carl Mann, SBIGeM
 vendorId
-orderUrl
+orderUrl http://www.ggc.u-psud.fr/equipe_accueil_doc/equipes_institut.html
 termId BTO:0001958
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001958
 protocol UW_Stam:WI38_Stam_protocol.pdf
