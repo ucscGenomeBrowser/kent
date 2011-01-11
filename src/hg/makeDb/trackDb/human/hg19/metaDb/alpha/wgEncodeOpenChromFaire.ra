@@ -1892,7 +1892,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562NabutAlnRep1
 project wgEncode
 replicate 1
@@ -1911,7 +1911,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562NabutAlnRep2
 project wgEncode
 replicate 2
@@ -2020,7 +2020,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562OhureaAlnRep1
 project wgEncode
 replicate 1
@@ -2039,7 +2039,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireK562OhureaAlnRep2
 project wgEncode
 replicate 2
@@ -2676,7 +2676,7 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsPk
 view Peaks
 
-metaObject wgEncodeOpenChromFairePanisletsRawData
+metaObject wgEncodeOpenChromFairePanisletsRawDataRep1
 objType file
 cell PanIslets
 composite wgEncodeOpenChromFaire
@@ -2685,7 +2685,7 @@ dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsRawData.fastq.gz
+fileName wgEncodeOpenChromFairePanisletsRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
 origAssembly hg18
@@ -2712,4 +2712,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -1791628584
+# MAGIC: -1870768504
