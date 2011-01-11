@@ -1673,6 +1673,23 @@ orderUrl http://www.wicell.org/index.php
 sex F
 protocol HudsonAlpha:BG02ES_and_H9ES_Myers_protocols.pdf
 
+term HAc 
+tag HAc 
+type Cell Line
+tier 3
+organism human
+description Human Astrocytes-cerebellar (Provisional)
+lineage Astrocytic
+karyotype Normal
+sex U
+tissue cerebellar
+vendorName Sciencell
+vendorId 1810
+orderUrl http://www.sciencellonline.com/site/products/1810.php
+termId BTO:0000099
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
+protocol UW_Stam:HAc_Stam_protocol.pdf
+
 term HAEpiC
 tag HAE
 type Cell Line
@@ -1685,6 +1702,23 @@ orderUrl http://www.sciencellonline.com/site/products/7100.php
 tier 3
 sex U
 protocol UW_Stam:HAEpiC_Stam_protocol.pdf
+
+term HA-h 
+tag HAh 
+type Cell Line
+tier 3
+organism human
+description Human Astrocytes-hippocampal (Provisional)
+lineage Astrocytic
+karyotype Normal
+sex U
+tissue brain hippocampus
+vendorName 
+vendorId Sciencell
+orderUrl http://www.sciencellonline.com/site/products/1830.php
+termId BTO:0000099
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
+protocol UW_Stam:HAh_Stam_protocol.pdf
 
 term HAL
 tag HAL
@@ -1878,6 +1912,40 @@ orderUrl http://www.zen-bio.com/
 termId BTO:0000575
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000575
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Hepatocytes_Crawford_protocol.pdf
+
+term HFF 
+tag HFF 
+type Cell Line
+tier 3
+organism human
+description Human Foreskin Fibroblast (Provisional)
+lineage Fibroblast
+karyotype Normal
+sex M
+tissue foreskin
+vendorName Dr. Torok-Storb, FHCRC
+vendorId
+orderUrl
+termId BTO:0002245
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
+protocol UW_Stam:HFF_Stam_protocol.pdf
+
+term HFF-Myc 
+tag HFFMyc 
+type Cell Line
+tier 3
+organism human
+description Human Foreskin Fibroblast Cells Expressing Canine cMyc (Provisional)
+lineage Fibroblast
+karyotype Normal (cMyc)
+sex M
+tissue foreskin
+vendorName Dr. Torok-Storb, FHCRC
+vendorId
+orderUrl
+termId BTO:0002245
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002245
+protocol UW_Stam:HFFMyc_Stam_protocol.pdf
 
 term HFL11W
 tag HFL11W
@@ -2202,6 +2270,23 @@ sex U
 tier 3
 protocol UW_Stam:HRE_Stam_protocol.pdf
 
+term HRGEC 
+tag HRGEC 
+type Cell Line
+tier 3
+organism human
+description Human Renal Glomerular Endothelial Cells (Provisional)
+lineage Endothelial
+karyotype Normal
+sex U
+tissue kidney
+vendorName 
+vendorId Sciencell
+orderUrl http://www.sciencellonline.com/site/products/4000.php
+termId BTO:0001176
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001176
+protocol UW_Stam:HRGEC_Stam_protocol.pdf
+
 term HRPEpiC
 tag HRPE
 type Cell Line
@@ -2524,6 +2609,23 @@ sex U
 tier 3
 termId BTO:0000847
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Melano_Crawford_protocol.pdf
+
+term Monocytes-CD14+ 
+tag MonoCD14 
+type Cell Line
+tier 3
+organism human
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product (Provisional)
+lineage Monocytic
+karyotype Normal
+sex F
+tissue monocytes
+vendorName S. Heimfeld Laboratory, FHCRC
+vendorId
+orderUrl http://labs.fhcrc.org/heimfeld/contact.html
+termId BTO:0000876
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000876
+protocol UW_Stam:MonoCD14_Stam_protocol.pdf
 
 term Myometr
 tag MYOMETR
@@ -3137,6 +3239,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
+
+term WI-38
+tag WI38
+type Cell Line
+tier 3
+organism human
+description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct (Provisional)
+lineage Fibroblast
+karyotype Normal (RAF)
+sex F
+tissue embryonic lung
+vendorName Dr. Carl Mann, SBIGeM
+vendorId
+orderUrl
+termId BTO:0001958
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001958
+protocol UW_Stam:WI38_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
