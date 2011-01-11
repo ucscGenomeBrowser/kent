@@ -75,11 +75,11 @@ if (extTableString != NULL)
     {
     // if there's an extra table, read this one in too
     struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    char *fileName = bbiNameFromTable(conn, tg->table);
+    char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
     struct bbiFile *bbiFile = bigWigFileOpen(fileName);
     slAddHead(&tg->bbiFile, bbiFile);
 
-    fileName = bbiNameFromTable(conn, extTableString);
+    fileName = bbiNameFromSettingOrTable(tg->tdb, conn, extTableString);
     bbiFile = bigWigFileOpen(fileName);
     slAddHead(&tg->bbiFile, bbiFile);
 
@@ -91,7 +91,7 @@ else
 	{
 	/* Figure out bigWig file name. */
 	struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-	char *fileName = bbiNameFromTable(conn, tg->table);
+	char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
 	tg->bbiFile = bigWigFileOpen(fileName);
 	hFreeConn(&conn);
 	}

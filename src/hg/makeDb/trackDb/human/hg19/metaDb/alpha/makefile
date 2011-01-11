@@ -2,6 +2,7 @@
 LIST=\
 wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
+wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \

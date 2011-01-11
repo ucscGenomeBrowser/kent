@@ -849,6 +849,10 @@ struct trackNameAndLabel
 int trackNameAndLabelCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
+void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
+	boolean leafOnly);
+/* Recursively add trackList to trackHash */
+
 struct hash *trackHashMakeWithComposites(char *db,char *chrom,struct trackDb **tdbList,bool withComposites);
 // Make hash of trackDb items for this chromosome, including composites, not just the subtracks.
 // May pass in prepopulated trackDb list, or may receive the trackDb list as an inout.

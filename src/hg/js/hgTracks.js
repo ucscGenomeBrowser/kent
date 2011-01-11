@@ -1608,20 +1608,23 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    cmd: cmd,
                    cache: false
                });
-    } else if (cmd == 'openLink') {
-        // Remove hgsid to force a new session (see redmine ticket 1333).
-        var href = removeHgsid(selectedMenuItem.href);
+    } else if (cmd == 'openLink' || cmd == 'followLink') {
+        var href = selectedMenuItem.href;
         var chrom = $("input[name=chromName]").val();
         if(chrom && href.indexOf("c=" + chrom) == -1) {
             // make sure the link contains chrom info (necessary b/c we are stripping hgsid)
             href = href + "&c=" + chrom;
         }
-        if(window.open(href) == null) {
-            windowOpenFailedMsg();
+        if(cmd == 'followLink') {
+            // XXXX This is blocked by Safari's popup blocker (without any warning message).
+            location.assign(href);
+        } else {
+            // Remove hgsid to force a new session (see redmine ticket 1333).
+            href = removeHgsid(href);
+            if(window.open(href) == null) {
+                windowOpenFailedMsg();
+            }
         }
-    } else if (cmd == 'followLink') {
-        // XXXX This is blocked by Safari's popup blocker (without any warning message).
-        location.assign(selectedMenuItem.href);
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
@@ -1635,8 +1638,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         {
             // Hide local display of this track and update server side cart.
             // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
-            if(rec.parentTrack != undefined)
-                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
+            if(tdbIsSubtrack(rec))
+                setCartVars( [ id, id+"_sel" ], [ '[]', 0 ] ); // Remove subtrack level vis and explicitly uncheck.
+            else if(tdbIsFolderContent(rec))
+                setCartVars( [ id, id+"_sel" ], [ 'hide', 0 ] ); // supertrack children need to have _sel set to trigger superttrack reshaping
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
@@ -2583,6 +2588,7 @@ function updateVisibility(track, visibility)
     var rec = trackDbJson[track];
     var selectUpdated = false;
     $("select[name=" + track + "]").each(function(t) {
+                                          $(this).attr('class', visibility == 'hide' ? 'hiddenText' : 'normalText');
                                           $(this).val(visibility);
                                           selectUpdated = true;
                                       });

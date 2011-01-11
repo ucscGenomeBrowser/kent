@@ -689,7 +689,7 @@ if (featDna && end > start)
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
     printf("<A HREF=\"%s&o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%s&table=%s\">"
-	   "View DNA for this feature</A> (%s/%s)<BR>\n",  hgcPathAndSettings(),
+	   "View DNA for this feature</A>  (%s/%s)<BR>\n",  hgcPathAndSettings(),
 	   start, (item != NULL ? cgiEncode(item) : ""),
 	   chrom, start, end, strand, tbl, database, hGenome(database));
     }
@@ -8356,6 +8356,9 @@ char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
 boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+/* assume nothing found */
+versionString[0] = 0;
+dateReference[0] = 0;
 
 if (trackVersionExists)
     {
@@ -8375,12 +8378,6 @@ if (trackVersionExists)
 	}
     sqlFreeResult(&sr);
     }
-else
-    {
-    versionString[0] = 0;
-    dateReference[0] = 0;
-    }
-
 
 if (itemForUrl == NULL)
     itemForUrl = item;
@@ -10992,6 +10989,9 @@ char headerTitle[512];
 
 /* see if hgFixed.trackVersion exists */
 boolean trackVersionExists = hTableExists("hgFixed", "trackVersion");
+/* assume nothing found */
+versionString[0] = 0;
+dateReference[0] = 0;
 
 if (trackVersionExists)
     {
@@ -11012,11 +11012,6 @@ if (trackVersionExists)
 	}
     sqlFreeResult(&sr);
     hFreeConn(&conn);
-    }
-else
-    {
-    versionString[0] = 0;
-    dateReference[0] = 0;
     }
 
 if (itemForUrl == NULL)
