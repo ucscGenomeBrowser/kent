@@ -1514,46 +1514,6 @@ tableName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep1
-objType table
-cell HCM
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1220
-tableName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep2
-objType table
-cell HCM
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1220
-tableName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep2
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1
 objType table
 cell HCPEpiC
@@ -1674,46 +1634,6 @@ tableName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep1
-objType table
-cell HEEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1220
-tableName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep2
-objType table
-cell HEEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1220
-tableName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep2
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
 objType table
 cell HEK293
@@ -1749,46 +1669,6 @@ origAssembly hg19
 project wgEncode
 replicate 2
 subId 1220
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep1
-objType table
-cell HEK293
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy Stanford
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1220
-tableName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep2
-objType table
-cell HEK293
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy Stanford
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1220
-tableName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep2
 treatment None
 view Sites
 
@@ -1948,46 +1828,6 @@ subId 1152
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep1
-objType table
-cell HepG2
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy HudsonAlpha
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1220
-tableName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep2
-objType table
-cell HepG2
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy HudsonAlpha
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1220
-tableName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep2
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
 objType table
 cell HepG2
@@ -2068,46 +1908,6 @@ tableName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep1
-objType table
-cell HIPEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1221
-tableName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep2
-objType table
-cell HIPEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1221
-tableName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep2
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1
 objType table
 cell HMEC
@@ -2148,46 +1948,6 @@ tableName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep1
-objType table
-cell HMEC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1221
-tableName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep2
-objType table
-cell HMEC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1221
-tableName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep2
-treatment None
-view Sites
-
 metaObject wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1
 objType table
 cell HNPCEpiC
@@ -2225,46 +1985,6 @@ project wgEncode
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep1
-objType table
-cell HNPCEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1221
-tableName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep2
-objType table
-cell HNPCEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1221
-tableName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep2
 treatment None
 view Sites
 
@@ -2345,46 +2065,6 @@ project wgEncode
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep1
-objType table
-cell HRCEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1221
-tableName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep1
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep2
-objType table
-cell HRCEpiC
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep2.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy UW
-origAssembly hg19
-project wgEncode
-replicate 2
-subId 1221
-tableName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep2
 treatment None
 view Sites
 
@@ -2583,27 +2263,6 @@ subId 2471
 tableName wgEncodeHaibMethylRrbsHsmmSitesRep2
 treatment None
 view Sites
-
-# Preti asked to have this removed 2011-01-07
-#metaObject wgEncodeHaibMethylRrbsHsmmSitesRep3
-#objType table
-#cell HSMM
-#composite wgEncodeHaibMethylRrbs
-#dataType MethylRrbs
-#dataVersion post ENCODE June 2010 Freeze
-#dateSubmitted 2010-09-29
-#dateUnrestricted 2011-06-29
-#fileName wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
-#grant Myers
-#lab HudsonAlpha
-#obtainedBy Duke
-#origAssembly hg19
-#project wgEncode
-#replicate 3
-#subId 2471
-#tableName wgEncodeHaibMethylRrbsHsmmSitesRep3
-#treatment None
-#view Sites
 
 metaObject wgEncodeHaibMethylRrbsHsmmtDukeSitesRep3
 objType table
@@ -4171,4 +3830,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 997284024
+# MAGIC: -168252950
