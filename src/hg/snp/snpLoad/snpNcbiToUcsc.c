@@ -1739,17 +1739,23 @@ if (bytes[0] < 0)
     }
 else
     {
-    safecpy(bitfieldsStr, size, "");
+    static struct dyString *dy = NULL;
+    if (dy == NULL)
+	dy = dyStringNew(0);
+    dyStringClear(dy);
     int i;
     for (i = 1;  i < MAX_BITFIELDS+1;  i++)
 	{
 	struct byteBitOffsets off = bitfieldsOffsets[i];
 	if (bytes[off.byte] & (1 << off.bit))
 	    {
-	    safecpy(bitfieldsStr, size, bitfieldsStrings[i]);
+	    if (dy->stringSize > 0)
+		dyStringAppend(dy, ",");
+	    dyStringAppend(dy, bitfieldsStrings[i]);
 	    bitfieldsStringsUsed[i] = TRUE;
 	    }
 	}
+    safecpy(bitfieldsStr, size, dy->string);
     int qualCheck = bytes[BITFIELDS_QUAL_CHECK_BYTE];
     if (qualCheck & (1 << BITFIELDS_GENOTYPE_CONFLICT))
 	writeException(GenotypeConflict);

@@ -15,15 +15,18 @@ errAbort(
   "options:\n"
   "   -outMdb=file.ra     output cruft-free metaDb ra file\n"
   "   -onlyCompTdb        only check trackDb entries that start with composite\n"
+  "   -release            set release state, default alpha\n"
   );
 }
 
 char *outMdb = NULL;
 boolean onlyCompTdb = FALSE;
+char *release = "alpha";
 
 static struct optionSpec options[] = {
    {"outMdb", OPTION_STRING},
    {"onlyCompTdb", OPTION_BOOLEAN},
+   {"release", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -129,9 +132,9 @@ for(mdbObj = mdbObjs; mdbObj; mdbObj = mdbObj->next)
 return hash;
 }
 
-struct hash *getTrackDbHash(char *trackDb, struct trackDb **head)
+struct hash *getTrackDbHash(char *trackDb, struct trackDb **head, char *release)
 {
-struct trackDb *trackObjs = trackDbFromRa(trackDb), *trackObj;
+struct trackDb *trackObjs = trackDbFromRa(trackDb, release), *trackObj;
 struct hash *hash = newHash(10);
 
 for(trackObj = trackObjs; trackObj; trackObj = trackObj->next)
@@ -166,6 +169,11 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
         continue;
 
     mdbVar = hashFindVal(mdbObj->varHash, "tableName");
+    if (mdbVar == NULL)
+        {
+        warn("tableName not found in object %s", mdbObj->obj);
+        continue;
+        }
 
     char *tableName = mdbVar->val;
 
@@ -316,7 +324,7 @@ void metaCheck(char *database, char *composite, char *metaDb, char *trackDb,
 struct mdbObj *mdbObjs = NULL;
 struct hash *mdbHash = getMetaDbHash(metaDb, &mdbObjs);
 struct trackDb *trackDbObjs = NULL;
-struct hash *trackHash = getTrackDbHash(trackDb, &trackDbObjs);
+struct hash *trackHash = getTrackDbHash(trackDb, &trackDbObjs, release);
 
 checkMetaTables(mdbObjs, database);
 checkMetaFiles(mdbObjs, downDir);
@@ -341,6 +349,7 @@ if (argc != 6)
     usage();
 outMdb = optionVal("outMdb", outMdb);
 onlyCompTdb = optionExists("onlyCompTdb");
+release = optionVal("release", release);
 
 metaCheck(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;

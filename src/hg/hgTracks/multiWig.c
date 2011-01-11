@@ -11,6 +11,13 @@
 #include "wigCommon.h"
 #include "hui.h"
 
+
+static char *aggregateFromCartOrDefault(struct cart *cart, struct track *tg)
+/* Return aggregate value for track. */
+{
+return cartOrTdbString(cart, tg->tdb, "aggregate", WIG_AGGREGATE_TRANSPARENT);
+}
+
 static boolean isOverlayTypeAggregate(char *aggregate)
 /* Return TRUE if aggregater type is one of the overlay ones. */
 {
@@ -26,7 +33,7 @@ static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
 /* Draw items in multiWig container. */
 {
 struct track *subtrack;
-char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
 int y = yOff;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -54,11 +61,11 @@ mapBoxHgcOrHgGene(hvg, seqStart, seqEnd, xOff, y, width, tg->height, tg->track, 
 static int multiWigTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height of multiWigcontainer. */
 {
-char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
 int totalHeight =  0;
-if (overlay)
-    totalHeight =  wigTotalHeight(tg, vis);
+if (overlay)                                                                                       
+    totalHeight =  wigTotalHeight(tg, vis);                                                        
 struct track *subtrack;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
@@ -104,7 +111,7 @@ static void multiWigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /* Draw left labels - by deferring to first subtrack. */
 {
-char *aggregate = cartOrTdbString(cart, tg->tdb, "aggregate", NULL);
+char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
 if (overlay)
     {
@@ -149,6 +156,7 @@ for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 void multiWigContainerMethods(struct track *track)
 /* Override general container methods for multiWig. */
 {
+track->syncChildVisToSelf = TRUE;
 track->loadItems = multiWigLoadItems;
 track->totalHeight = multiWigTotalHeight;
 track->drawItems = multiWigDraw;

@@ -137,6 +137,7 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track eioJcviNAS override
+shortLabel CD34 DnaseI
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
@@ -1844,7 +1845,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewpsl
     shortLabel Alignment
     view psl
-    visibility pack
+    visibility hide
     parent altSeqComposite
     type psl
     indelDoubleInsert on
@@ -1868,7 +1869,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewchain
     shortLabel Chain
     view chain
-    visibility pack
+    visibility hide
     parent altSeqComposite
     spectrum on
 
@@ -1884,7 +1885,7 @@ dataVersion GRCh37 Patch 2 update, August 2010
     track altSeqCompositeViewnet
     shortLabel Net
     view net
-    visibility full
+    visibility hide
     parent altSeqComposite
 
         track netHg19Patch2
@@ -1915,10 +1916,6 @@ scoreFilterMax 100
 type bed 6 .
 urlLabel TargetScan link:
 url http://www.targetscan.org/cgi-bin/targetscan/vert_50/view_gene.cgi?gs=$P&taxid=9606&members=$p&showcnc=1
-
-track ntSeqReads override
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 track ntHumChimpCodingDiff override
 origAssembly hg18
@@ -2006,4 +2003,5 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
     origAssembly hg18
     pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+#include jkExperiments.ra
 
