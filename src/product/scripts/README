@@ -59,6 +59,20 @@ rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/${TBL}.${EXT} \
   done
 done
 
+A database such as hg18 with individual tables for each chromosome would
+have an extra rsync to help pick up those tables:
+
+for TBL in cytoBand cytoBandIdeo chromInfo gold gap grp trackDb hgFindSpec
+do
+  for EXT in frm MYD MYI
+  do
+rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/${TBL}.${EXT} \
+	/var/mysql/hg19/
+rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/chr*_${TBL}.${EXT} \
+	/var/mysql/hg19/
+  done
+done
+
 If you instead need to fetch the goldenPath database text
 dumps and load them, please note the following discussion.
 
