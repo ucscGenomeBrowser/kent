@@ -5,16 +5,12 @@
 #include "options.h"
 #include "hash.h"
 #include "cheapcgi.h"
-//#include "hdb.h"  // DEBUG REMOVE
 #include "customTrack.h"
 #include "customFactory.h"
 #include "hui.h"
-
-// DEBUG REMOVE:
-//#include "jksql.h"
-
 #include "hgConfig.h"
 #include <sys/wait.h>
+#include "errCatch.h"
 
 static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/01/13 17:27:35 angie Exp $";
 
@@ -121,7 +117,6 @@ void scanSettingsForCT(char *userName, char *sessionName, // char *contents,
  * the update here because that messes up the caller's query. */
 {
 
-//struct sqlConnection *conn = hConnectCentral();  DEBUG REMOVE
 struct sqlConnection *conn = unCachedCentralConn();
 
 char query[512];
@@ -176,9 +171,7 @@ while (isNotEmpty(namePt))
 	    dyStringAppend(newContents, oneSetting->string);
 	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
 
-	    //hDisconnectCentral(&conn); // DEBUG REMOVE
 	    customFactoryTestExistenceCall(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
-	    //conn = hConnectCentral();  // DEBUG REMOVE
 
             //verbose(1,"called CFTE, got live=%d expired=%d\n", thisGotLiveCT, thisGotExpiredCT);  // DEBUG REMOVE
 	    ++CFTEcalls;  // DEBUG REMOVE
@@ -204,7 +197,7 @@ while (isNotEmpty(namePt))
     }
 if (newContents->stringSize != contentLength) 
     ++numUpdates;
-if (optionExists("hardcore") && newContents->stringSize != contentLength) 
+if (optionExists("hardcore") && newContents->stringSize != contentLength)  // almost never used
     {
     struct sqlConnection *conn = unCachedCentralConn();
     struct dyString *update = dyStringNew(contentLength*2);
@@ -228,7 +221,6 @@ dyStringFree(&oneSetting);
 dyStringFree(&newContents);
 freeMem(contentsToChop);
 freeMem(contents);
-//hDisconnectCentral(&conn);
 return;
 
 }
@@ -246,7 +238,6 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
  * tracks that are referenced by saved sessions. */
 {
 
-//struct sqlConnection *conn = hConnectCentral();  DEBUG REMOVE
 struct sqlConnection *conn = unCachedCentralConn();
 char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
@@ -300,19 +291,23 @@ if (sqlTableExists(conn, savedSessionTable))
     sqlFreeResult(&sr);
     }
 
-//hDisconnectCentral(&conn);  // DEBUG REMOVE
 sqlDisconnect(&conn);
 
 for (si = sessionList;  si != NULL;  si = si->next)
     {
-    scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount);
+    /* put some error catching in so it won't just abort */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount);
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	warn("%s", errCatch->message->string);
+    errCatchFree(&errCatch);
     }
 
 //DEBUG REMOVE
 verbose(1, "# of updates found: %d\n", numUpdates);
 verbose(1, "# of CustomFactoryTextExistence calls done: %d\n", CFTEcalls);
-//for (update = updateList;  update != NULL;  update = update->next)
- //   verbose(1, "%s\n", update->name);
 
 verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 	liveCount, expiredCount, centralDbName);
