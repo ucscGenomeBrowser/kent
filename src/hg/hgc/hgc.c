@@ -72,6 +72,7 @@
 #include "knownMore.h"
 #include "snp125.h"
 #include "snp125Ui.h"
+#include "snp132Ext.h"
 #include "snp.h"
 #include "snpMap.h"
 #include "snpExceptions.h"
@@ -912,6 +913,35 @@ void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, 
  to be set in trackDb. */
 {
 printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode);
+}
+
+void beginCollapsibleSection(char *track, char *section, char *sectionTitle, boolean isOpenDefault)
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for
+* hgTracks.js's setTableRowVisibility().  Caller needs to have already creates a <TABLE>. */
+{
+char collapseGroupVar[512];
+safef(collapseGroupVar, sizeof(collapseGroupVar), "%s.section_%s_close", track, section);
+boolean isOpen = !cartUsualBoolean(cart, collapseGroupVar, !isOpenDefault);
+
+printf("<TR><TD><input type='hidden' name=\"%s\" id=\"%s\" value=\"%s\">\n",
+       collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
+printf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'>\n",
+       cgiScriptName(), cartSidUrlString(cart), collapseGroupVar, (isOpen ? "1" : "0"), section);
+char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
+printf("<IMG height='18' width='18' "
+       "onclick=\"return setTableRowVisibility(this, '%s', '%s.section', 'section', true);\" "
+       "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this section' class='bigBlue'>"
+       "</A></TD>\n",
+       section, track,
+       section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
+printf("<TD><FONT SIZE=4><B>&nbsp;%s</B></FONT></TD></TR>\n", sectionTitle);
+printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
+}
+
+void endCollapsibleSection()
+/* End the collapsible <TR id=...>. */
+{
+puts("</TD></TR>");
 }
 
 void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
@@ -14350,9 +14380,10 @@ safef(betterName, sizeof(betterName), "%s %s:%d-%d",
       database, seqName, start+1, end);
 seqNib->name = cloneString(betterName);
 
-printf("\n<H3>Re-alignment of the SNP's flanking sequences to the "
-       "genomic sequence</H3>\n"
-       "Note: this alignment was computed by UCSC and may not be identical to "
+beginCollapsibleSection(tdb->track, "realignment",
+			"Re-alignment of the SNP's flanking sequences to the genomic sequence",
+			FALSE);
+printf("Note: this alignment was computed by UCSC and may not be identical to "
        "NCBI's alignment used to map the SNP.\n");
 
 printf("<PRE><B>Genomic sequence around %s (%s:%d-%d, %s strand):</B>\n",
@@ -14405,6 +14436,7 @@ seqDbSnp->size = strlen(seqDbSnp->dna);
 
 generateAlignment(seqNib, seqDbSnp, lineWidth, start, skipCount,
 		  genoLen5, genoLen5 + snpWidth, isRc);
+endCollapsibleSection();
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -15194,7 +15226,7 @@ if (!sameString(orthoAllele, "?"))
 	linkToOtherBrowser(orthoDb, orthoChrom,
 			   orthoStart-TINYPADDING, orthoEnd+TINYPADDING);
     printf("%s:%d-%d\n", orthoChrom, orthoStart+1, orthoEnd);
-    printf("%s&nbsp;&nbsp;&nbsp;</TD>\n",
+    printf("%s</TD>\n",
 	   isNotEmpty(orthoDb) ? "</A>" : "");
     }
 else
@@ -15373,7 +15405,7 @@ else
 return dyStringCannibalize(&dy);
 }
 
-#define firstTwoColumnsPctS "<TR><TD>%s</TD><TD>%s</TD><TD>"
+#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
 
 void getSnp125RefCodonAndSnpPos(struct snp125 *snp, struct genePred *gene, int exonIx,
 				int *pSnpCodonPos, char refCodon[4], char *pRefAA)
@@ -15627,7 +15659,7 @@ void printSnp125Function(struct trackDb *tdb, struct snp125 *snp)
 char varName[512];
 safef(varName, sizeof(varName), "%s_geneTrack", tdb->track);
 struct slName *geneTracks = cartOptionalSlNameList(cart, varName);
-if (geneTracks == NULL)
+if (geneTracks == NULL && !cartListVarExists(cart, varName))
     {
     char *defaultGeneTracks = trackDbSetting(tdb, "defaultGeneTracks");
     if (isNotEmpty(defaultGeneTracks))
@@ -15639,12 +15671,12 @@ struct sqlConnection *conn = hAllocConn(database);
 struct slName *gt;
 boolean first = TRUE;
 for (gt = geneTracks;  gt != NULL;  gt = gt->next)
-    if (!sameString(gt->name, "persistentShadow") && sqlTableExists(conn, gt->name))
+    if (sqlTableExists(conn, gt->name))
 	{
 	if (first)
 	    {
 	    printf("<BR><B>UCSC's predicted function relative to selected gene tracks:</B>\n");
-	    printf("<TABLE BORDERWIDTH=0>\n");
+	    printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
 	    }
 	struct genePred *geneList = getGPsWithFrames(conn, gt->name, snp->chrom,
 						     snp->chromStart, snp->chromEnd);
@@ -15662,7 +15694,7 @@ for (gt = geneTracks;  gt != NULL;  gt = gt->next)
 	first = FALSE;
 	}
 if (! first)
-    printf("</TABLE>\n");
+    printf("</TABLE><BR>\n");
 hFreeConn(&conn);
 }
 
@@ -15755,30 +15787,153 @@ for (tbl = tableList;  tbl != NULL;  tbl = tbl->next)
 hFreeConn(&conn);
 }
 
-void printSnp125Info(struct trackDb *tdb, struct snp125 snp, int version)
-/* print info on a snp125 */
+void printSnp132ExtraColumns(struct trackDb *tdb, struct snp132Ext *snp)
+/* Print columns new in snp132 */
 {
-printSnpOrthoSummary(tdb, snp.name, snp.observed);
-if (differentString(snp.strand,"?"))
-    printf("<B>Strand: </B>%s<BR>\n", snp.strand);
-printf("<B>Observed: </B>%s<BR>\n", snp.observed);
-printSnpAlleleAndOrthos(tdb, &snp, version);
-if (version <= 127)
-    printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",
-	   snp.locType);
-printf("<BR><B><A HREF=\"#Class\">Class</A>: </B>%s\n",     snp.class);
-printf("<BR><B><A HREF=\"#Valid\">Validation</A>: </B>%s\n", snp.valid);
-printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",         snp.func);
-printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n", snp.molType);
-if (snp.avHet>0)
-    printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",           snp.weight);
-printf("<BR>\n");
-printSnp125CodingAnnotations(tdb, &snp);
-printSnp125Function(tdb, &snp);
+// Skip exceptions column; handled below in writeSnpExceptionWithVersion
+printf("<TR><TD><B><A HREF=\"#Submitters\">Submitter Handles</A>&nbsp;&nbsp;</TD><TD></B>");
+int i;
+for (i=0;  i < snp->submitterCount;  i++)
+    printf("%s<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_viewTable.cgi?h=%s\" TARGET=_BLANK>"
+	   "%s</A>", (i > 0 ? ", " : ""), snp->submitters[i], snp->submitters[i]);
+printf("</TD></TR>\n");
+if (snp->alleleFreqCount > 0)
+    {
+    boolean gotNonIntN = FALSE;
+    int total2N = 0;
+    printf("<TR><TD><B><A HREF=\"#AlleleFreq\">Allele Frequencies</A>&nbsp;&nbsp;</B></TD><TD>");
+    for (i = 0;  i < snp->alleleFreqCount;  i++)
+	{
+	printf("%s%s: %.3f%% ", (i > 0 ? "; " : ""), snp->alleles[i], (snp->alleleFreqs[i]*100.0));
+	// alleleNs should be integers (counts of chromosomes in which allele was observed)
+	// but dbSNP extrapolates them from reported frequency and reported sample count,
+	// so sometimes they are not integers.  Present them as integers when we can, warn
+	// when we can't.
+	double f = snp->alleleFreqs[i], n = snp->alleleNs[i];
+	if (f > 0)
+	    {
+	    total2N = round(n / f);
+	    int roundedN = round(n);
+	    if (fabs(n - roundedN) < 0.01)
+		printf("(%d / %d)", roundedN, total2N);
+	    else
+		{
+		gotNonIntN = TRUE;
+		printf("(%.3f / %d)", n, total2N);
+		}
+	    }
+	}
+    printf("</TR></TABLE>\n");
+    if (gotNonIntN)
+	printf(" <em>Note: dbSNP extrapolates allele counts from reported frequencies and "
+	       "reported 2N sample sizes (total %d); non-integer allele count may imply "
+	       "a problem with one of the reported numbers.</em>\n", total2N);
+    }
+else
+    puts("</TABLE>");
+if (isNotEmpty(snp->bitfields) && differentString(snp->bitfields, "unknown"))
+    {
+    printf("<BR><B><A HREF=\"#Bitfields\">Miscellaneous properties annotated by dbSNP</A>:"
+	   "</B>\n\n");
+    struct slName *bitfields = slNameListFromComma(snp->bitfields);
+    if (slNameInList(bitfields, "clinically-assoc"))
+	printf("<BR> <B>***clinically associated***</B> "
+	       "(SNP is in OMIM/OMIA and/or "
+	       "at least one submitter is a Locus-Specific Database)\n");
+    if (slNameInList(bitfields, "has-omim-omia"))
+	printf("<BR> SNP is in OMIM/OMIA\n");
+    if (slNameInList(bitfields, "microattr-tpa"))
+	printf("<BR> SNP has a microattribution or third-party annotation\n");
+    if (slNameInList(bitfields, "submitted-by-lsdb"))
+	printf("<BR> SNP was submitted by LSDB\n");
+    if (slNameInList(bitfields, "maf-5-all-pops"))
+	printf("<BR> Minor Allele Frequency is at least 5%% in all "
+	       "populations assayed\n");
+    else if (slNameInList(bitfields, "maf-5-some-pop"))
+	printf("<BR> Minor Allele Frequency is at least 5%% in at least one "
+	       "population assayed\n");
+    if (slNameInList(bitfields, "genotype-conflict"))
+	printf("<BR> Quality check: Different genotypes have been submitted "
+	       "for the same individual\n");
+    if (slNameInList(bitfields, "rs-cluster-nonoverlapping-alleles"))
+	printf("<BR> Quality check: The reference SNP cluster contains "
+	       "submitted SNPs with non-overlapping alleles\n");
+    if (slNameInList(bitfields, "observed-mismatch"))
+	printf("<BR> Quality check: The reference sequence allele at the "
+	       "mapped position is not present in the SNP allele list\n");
+    puts("<BR>");
+    }
 }
 
-void writeSnpExceptionWithVersion(struct trackDb *tdb, char *itemName, int version)
+// Defined below -- call has since moved up from doSnpWithVersion to printSnp125Info
+// so exceptions appear before our coding annotations.
+void writeSnpExceptionWithVersion(struct trackDb *tdb, struct snp132Ext *snp, int version);
+/* Print out descriptions of exceptions, if any, for this snp. */
+
+void printSnp125Info(struct trackDb *tdb, struct snp132Ext *snp, int version)
+/* print info on a snp125 */
+{
+struct snp125 *snp125 = (struct snp125 *)snp;
+printSnpOrthoSummary(tdb, snp->name, snp->observed);
+if (differentString(snp->strand,"?"))
+    printf("<B>Strand: </B>%s<BR>\n", snp->strand);
+printf("<B>Observed: </B>%s<BR>\n", snp->observed);
+printSnpAlleleAndOrthos(tdb, snp125, version);
+puts("<BR><TABLE border=0 cellspacing=0 cellpadding=0>");
+if (version <= 127)
+    printf("<TR><TD><B><A HREF=\"#LocType\">Location Type</A></B></TD><TD>%s</TD></TR>\n",
+	   snp->locType);
+printf("<TR><TD><B><A HREF=\"#Class\">Class</A></B></TD><TD>%s</TD></TR>\n", snp->class);
+printf("<TR><TD><B><A HREF=\"#Valid\">Validation</A></B></TD><TD>%s</TD></TR>\n", snp->valid);
+printf("<TR><TD><B><A HREF=\"#Func\">Function</A></B></TD><TD>%s</TD></TR>\n", snp->func);
+printf("<TR><TD><B><A HREF=\"#MolType\">Molecule Type</A>&nbsp;&nbsp;</B></TD><TD>%s</TD></TR>\n",
+       snp->molType);
+if (snp->avHet>0)
+    printf("<TR><TD><B><A HREF=\"#AvHet\">Average Heterozygosity</A>&nbsp;&nbsp;</TD>"
+	   "<TD></B>%.3f +/- %.3f</TD></TR>\n", snp->avHet, snp->avHetSE);
+printf("<TR><TD><B><A HREF=\"#Weight\">Weight</A></B></TD><TD>%d</TD></TR>\n", snp->weight);
+if (version >= 132)
+    printSnp132ExtraColumns(tdb, snp);
+else
+    printf("</TABLE>\n");
+printSnp125CodingAnnotations(tdb, snp125);
+writeSnpExceptionWithVersion(tdb, snp, version);
+printSnp125Function(tdb, snp125);
+}
+
+static char *getExcDescTable(struct trackDb *tdb)
+/* Look up snpExceptionDesc in tdb and provide default if not found.  Don't free return value! */
+{
+static char excDescTable[128];
+char *excDescTableSetting = trackDbSetting(tdb, "snpExceptionDesc");
+if (excDescTableSetting)
+    safecpy(excDescTable, sizeof(excDescTable), excDescTableSetting);
+else
+    safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", tdb->table);
+return excDescTable;
+}
+
+static boolean writeOneSnpException(char *exc, char *desc, boolean alreadyFound)
+/* Print out the description of exc, unless exc is already displayed elsewhere. */
+{
+// Don't bother reporting MultipleAlignments here -- right after this,
+// we have a whole section about the other mappings.
+if (differentString(exc, "MultipleAlignments") &&
+    // Also exclude a couple that are from dbSNP not UCSC, and noted above (bitfields).
+    differentString(exc, "GenotypeConflict") &&
+    differentString(exc, "ClusterNonOverlappingAlleles"))
+    {
+    if (isEmpty(desc))
+	desc = exc;
+    if (!alreadyFound)
+	printf("<BR><B>UCSC Annotations:</B><BR>\n");
+    printf("%s<BR>\n", desc);
+    return TRUE;
+    }
+return FALSE;
+}
+
+void writeSnpExceptionFromTable(struct trackDb *tdb, char *itemName)
 /* Print out exceptions, if any, for this snp. */
 {
 char *exceptionsTableSetting = trackDbSetting(tdb, "snpExceptions");
@@ -15787,12 +15942,7 @@ if (exceptionsTableSetting)
     safecpy(exceptionsTable, sizeof(exceptionsTable), exceptionsTableSetting);
 else
     safef(exceptionsTable, sizeof(exceptionsTable), "%sExceptions", tdb->table);
-char *excDescTableSetting = trackDbSetting(tdb, "snpExceptionDesc");
-char excDescTable[128];
-if (excDescTableSetting)
-    safecpy(excDescTable, sizeof(excDescTable), excDescTableSetting);
-else
-    safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", tdb->table);
+char *excDescTable = getExcDescTable(tdb);
 if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTable))
     {
     struct sqlConnection *conn = hAllocConn(database);
@@ -15800,7 +15950,6 @@ if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTab
     char **row;
     char   query[1024];
     int    start = cartInt(cart, "o");
-    int count = 0;
     safef(query, sizeof(query),
 	  "select description, %s.exception from %s, %s "
 	  "where chrom = \"%s\" and chromStart = %d and name = \"%s\" "
@@ -15808,20 +15957,52 @@ if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTab
 	  excDescTable, excDescTable, exceptionsTable,
 	  seqName, start, itemName, excDescTable, exceptionsTable);
     sr = sqlGetResult(conn, query);
+    boolean gotExc = FALSE;
     while ((row = sqlNextRow(sr))!=NULL)
-	{
-	/* Don't bother reporting MultipleAlignments here -- right after
-	 * this, we have a whole section about the other mappings. */
-	if (sameString(row[1], "MultipleAlignments"))
-	    continue;
-	if (count == 0)
-	    printf("<BR><B>Annotations:</B><BR>\n");
-	printf("%s<BR>\n", row[0]);
-	count++;
-	}
+	gotExc |= writeOneSnpException(row[1], row[0], gotExc);
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }
+}
+
+static void writeSnpExceptionFromColumn(struct trackDb *tdb, struct snp132Ext *snp)
+/* Hash the contents of exception description table, and for each exception listed
+ * in snp->exceptions, print out its description. */
+{
+char *excDescTable = getExcDescTable(tdb);
+if (hTableExists(database, excDescTable))
+    {
+    static struct hash *excDesc = NULL;
+    if (excDesc == NULL)
+	{
+	excDesc = hashNew(0);
+	struct sqlConnection *conn = hAllocConn(database);
+	char query[512];
+	safef(query, sizeof(query), "select exception,description from %s", excDescTable);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	char **row;
+	while ((row = sqlNextRow(sr))!=NULL)
+	    hashAdd(excDesc, row[0], cloneString(row[1]));
+	sqlFreeResult(&sr);
+	hFreeConn(&conn);
+	}
+    struct slName *excList = slNameListFromComma(snp->exceptions), *exc;
+    boolean gotExc = FALSE;
+    for (exc = excList;  exc != NULL;  exc = exc->next)
+	{
+	char *desc = hashFindVal(excDesc, exc->name);
+	gotExc |= writeOneSnpException(exc->name, desc, gotExc);
+	}
+    }
+}
+
+void writeSnpExceptionWithVersion(struct trackDb *tdb, struct snp132Ext *snp, int version)
+/* Print out descriptions of exceptions, if any, for this snp. */
+{
+if (version >= 132)
+    writeSnpExceptionFromColumn(tdb, snp);
+else
+    writeSnpExceptionFromTable(tdb, snp->name);
 }
 
 struct snp *snp125ToSnp(struct snp125 *snp125)
@@ -15861,7 +16042,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgdpGeo geo;
     hgdpGeoStaticLoad(row+1, &geo);
-    printf("<BR><B>Human Genome Diversity Project SNP</B><BR>\n");
+    beginCollapsibleSection(tdb->track, "hgdpGeo", "Human Genome Diversity Project SNP", FALSE);
     printf("Note: These annotations are taken directly from the "
 	   "<A HREF=\"http://hgdp.uchicago.edu/\" TARGET=_BLANK>HGDP Selection Browser</A>, "
 	   "and may indicate the allele on the opposite strand from that given above.<BR>\n");
@@ -15872,6 +16053,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("</TD><TD valign=top>\n");
     hgdpGeoImg(&geo);
     printf("</TD></TR></TABLE>\n");
+    endCollapsibleSection();
     }
 sqlFreeResult(&sr);
 }
@@ -15910,12 +16092,12 @@ else
 struct trackDb *hsTdb = hashFindVal(trackHash, "hapmapSnps");
 if (gotHapMap && hsTdb != NULL)
     {
-    printf("<BR><B><A HREF=\"%s", hgTracksPathAndSettings());
+    printf("<TR><TD colspan=2><B><A HREF=\"%s", hgTracksPathAndSettings());
     // If hapmapSnps is hidden, make it dense; if it's pack etc., leave it alone.
     if (sameString("hide", cartUsualString(cart, "hapmapSnps",
 					   trackDbSettingOrDefault(hsTdb, "visibility", "hide"))))
 	printf("&hapmapSnps=dense");
-    printf("\"> HapMap SNP</A> </B><BR>\n");
+    printf("\"> HapMap SNP</A> </B></TD></TR>\n");
     }
 }
 
@@ -15932,13 +16114,13 @@ if (sqlTableExists(conn, gcTable))
 	struct trackDb *gcTdb = hashFindVal(trackHash, gcTable);
 	if (gcTdb != NULL)
 	    {
-	    printf("<B><A HREF=\"%s", hgTracksPathAndSettings());
+	    printf("<TR><TD colspan=2>><B><A HREF=\"%s", hgTracksPathAndSettings());
 	    // If gcTable is hidden, make it dense; otherwise, leave it alone.
 	    if (sameString("hide",
 			   cartUsualString(cart, gcTable,
 					   trackDbSettingOrDefault(gcTdb, "visibility", "hide"))))
 		printf("&%s=dense", gcTable);
-	    printf("\">%s SNP</A> </B><BR>\n", gcTdb->shortLabel);
+	    printf("\">%s SNP</A> </B></TD></TR>\n", gcTdb->shortLabel);
 	    }
 	}
     }
@@ -15956,10 +16138,11 @@ printf("<TD>%s<TD>%s<TD><A HREF=\"%s\" target=_blank>LS-SNP</A><td class=\"hgcLs
 freeMem(lsSnpUrl);
 }
 
-static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds, char *snpId)
+static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds,
+			       char *snpTrack, char *snpId)
 /* Print lsSnp mappings. */
 {
-printf("<H3>Mappings to PDB protein structures</H3>\n");
+beginCollapsibleSection(snpTrack, "lsSnp", "Mappings to PDB protein structures", FALSE);
 printf("<TABLE class=\"hgcLsSnp\">\n");
 printf("<TBODY>\n");
 int numPdbs = slCount(pdbIds);
@@ -15989,16 +16172,17 @@ if (iCol != 0)
 printf("</TBODY>\n");
 printf("</TABLE>\n");
 printf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
+endCollapsibleSection();
 }
 
-static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpId)
+static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpTrack, char *snpId)
 /* check if this SNP is mapped to any protein by LS-SNP, and if so print
 * the information. */
 {
 struct slName *pdbIds = lsSnpPdbChimeraGetSnpPdbs(conn, snpId);
 if (pdbIds != NULL)
     {
-    printLsSnpMappings(conn, pdbIds, snpId);
+    printLsSnpMappings(conn, pdbIds, snpTrack, snpId);
     slFreeList(&pdbIds);
     }
 }
@@ -16007,7 +16191,7 @@ void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Process SNP details. */
 {
 char   *table = tdb->table;
-struct snp125 snp;
+struct snp132Ext *snp;
 struct snp *snpAlign = NULL;
 int    start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
@@ -16024,10 +16208,13 @@ safef(query, sizeof(query), "select * from %s where chrom='%s' and "
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    snp125StaticLoad(row+rowOffset, &snp);
+    if (version >= 132)
+	snp = snp132ExtLoad(row+rowOffset);
+    else
+	snp = (struct snp132Ext *)snp125Load(row+rowOffset);
     printCustomUrl(tdb, itemName, FALSE);
-    bedPrintPos((struct bed *)&snp, 3, tdb);
-    snpAlign = snp125ToSnp(&snp);
+    bedPrintPos((struct bed *)snp, 3, tdb);
+    snpAlign = snp125ToSnp((struct snp125 *)snp);
     printf("<BR>\n");
     printSnp125Info(tdb, snp, version);
     doSnpEntrezGeneLink(tdb, itemName);
@@ -16036,15 +16223,16 @@ else
     errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
-writeSnpExceptionWithVersion(tdb, itemName, version);
-
 safef(query, sizeof(query), "select * from %s where name='%s'",
       table, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    snp125StaticLoad(row+rowOffset, &snp);
-    if (snp.chromStart != start || differentString(snp.chrom, seqName))
+    if (version >= 132)
+	snp = snp132ExtLoad(row+rowOffset);
+    else
+	snp = (struct snp132Ext *)snp125Load(row+rowOffset);
+    if (snp->chromStart != start || differentString(snp->chrom, seqName))
 	{
 	if (snpCount==0)
 	    printf("<BR><B>This SNP maps to these additional locations:"
@@ -16055,11 +16243,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
+// Make table for collapsible sections:
+puts("<TABLE>");
 checkForGwasCatalog(conn, tdb, itemName);
 checkForHgdpGeo(conn, tdb, itemName, start);
 checkForHapmap(conn, tdb, itemName);
-checkForLsSnpMappings(conn, itemName);
+checkForLsSnpMappings(conn, tdb->track, itemName);
 printSnpAlignment(tdb, snpAlign);
+puts("</TABLE>");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
