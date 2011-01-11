@@ -455,3 +455,34 @@ if(!alreadyLookedForadvancedJs)
 //    warn("already looked up advancedJsEnabled");  // got msg 41 times in one page!
 return advancedJsEnabled;
 }
+
+void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
+			       boolean isOpenDefault)
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's 
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
+{
+char collapseGroupVar[512];
+safef(collapseGroupVar, sizeof(collapseGroupVar), "%s.section_%s_close", track, section);
+boolean isOpen = !cartUsualBoolean(cart, collapseGroupVar, !isOpenDefault);
+
+printf("<TR><TD><input type='hidden' name=\"%s\" id=\"%s\" value=\"%s\">\n",
+       collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
+printf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'>\n",
+       cgiScriptName(), cartSidUrlString(cart), collapseGroupVar, (isOpen ? "1" : "0"), section);
+char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
+printf("<IMG height='18' width='18' "
+       "onclick=\"return setTableRowVisibility(this, '%s', '%s.section', 'section', true);\" "
+       "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this section' class='bigBlue'>"
+       "</A></TD>\n",
+       section, track,
+       section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
+printf("<TD><FONT SIZE=4><B>&nbsp;%s</B></FONT></TD></TR>\n", sectionTitle);
+printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
+}
+
+void jsEndCollapsibleSection()
+/* End the collapsible <TR id=...>. */
+{
+puts("</TD></TR>");
+}
+
