@@ -437,6 +437,40 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
     return false;
 }
 
+function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
+{
+// Show or hide one or more table rows whose id's begin with prefix followed by "-".
+// This code also modifies the corresponding hidden field (cart variable) and the
+// src of the +/- img button.
+    var retval = true;
+    var hidden = $("input[name='"+hiddenPrefix+"_"+prefix+"_close']");
+    if($(button) != undefined && $(hidden) != undefined && $(hidden).length > 0) {
+        var oldSrc = $(button).attr("src");
+	var newVal;
+        if(arguments.length > 5)
+            newVal = arguments[5] ? 0 : 1;
+        else
+            newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
+        var newSrc;
+        if(newVal == 1) {
+            newSrc = oldSrc.replace("/remove", "/add");
+            $(button).attr('title', 'Expand this '+titleDesc);
+            $("tr[id^='"+prefix+"-']").hide();
+        } else {
+            newSrc = oldSrc.replace("/add", "/remove");
+            $(button).attr('title', 'Collapse this '+titleDesc);
+            $("tr[id^='"+prefix+"-']").show();
+        }
+        $(button).attr("src", newSrc);
+        $(hidden).val(newVal);
+	if (doAjax) {
+	    setCartVar(hiddenPrefix+"_"+prefix+"_close", newVal);
+	}
+        retval = false;
+    }
+    return retval;
+}
+
 function warnBoxJsSetup()
 {   // Sets up warnBox if not already established.  This is duplicated from htmshell.c
     var html = "";
@@ -1588,3 +1622,11 @@ function sortTableInitialize(table,addSuperscript,altColors)
     $(tbody).show();
 }
 
+function setCheckboxList(list, value)
+{
+// set value of all checkboxes in semicolon delimited list
+    var names = list.split(";");
+    for(var i=0;i<names.length;i++) {
+        $("input[name='" + names[i] + "']").attr('checked', value);
+    }
+}

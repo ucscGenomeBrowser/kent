@@ -1603,7 +1603,6 @@ void cgiMakeCheckboxGroupWithVals(char *name, char *menu[], char *values[], int 
  * values (same behavior as a multi-select input), with nice labels in menu[]. */
 {
 int i;
-if (checked == NULL) checked = slNameNew(menu[0]);
 if (values == NULL) values = menu;
 if (menu == NULL) menu = values;
 puts("<TABLE BORDERWIDTH=0><TR>");

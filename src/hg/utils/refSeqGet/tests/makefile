@@ -10,13 +10,19 @@ test:: basicListTest  versionedListTest
 
 basicListTest: mkout
 	${refSeqGet} -aligns=output/$@.psl -geneAnns=output/$@.gp -rnaSeqs=output/$@.rna.fa -protSeqs=output/$@.prot.fa -accList=input/basic.acc -metaData=output/$@.meta ${db}
-	for ext in ${outExts} ; do diff -u expected/$@.$$ext output/$@.$$ext ; done
+	${MAKE} doDiffs id=$@
 
 versionedListTest: mkout
 	${refSeqGet} -aligns=output/$@.psl -geneAnns=output/$@.gp -rnaSeqs=output/$@.rna.fa -protSeqs=output/$@.prot.fa -accList=input/versioned.acc -metaData=output/$@.meta ${db}
-	for ext in ${outExts} ; do diff -u expected/$@.$$ext output/$@.$$ext ; done
+	${MAKE} doDiffs id=$@
 
-# big tests to run by hand, not expected results to diff
+# recursive target to do diffs for ${id}
+doDiffs: ${outExts:%=%.doDiff}
+
+%.doDiff:
+	diff -u expected/${id}.$* output/${id}.$*
+
+# big tests to run by hand, no expected results to diff
 bigTest: bigTestNM bigTestNR bigTestBoth
 
 bigTestNM: mkout

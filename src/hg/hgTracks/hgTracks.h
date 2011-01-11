@@ -239,6 +239,7 @@ struct track
     enum enumBool remoteDataSource; /* The data for this track is from a remote source */
                    /* Slow retrieval means image can be rendered via an AJAX callback. */
     boolean customTrack; /* Need to explicitly declare this is a custom track */
+    boolean syncChildVisToSelf;	/* If TRUE sync visibility to of children to self. */
     };
 
 
@@ -850,6 +851,7 @@ void wigLoadItems(struct track *tg);
 /*	load wiggle track data from database	*/
 void wigMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
+/* Set up wig pointers and do some other precalculations on a wig type track. */
 void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 void bigWigMethods(struct track *track, struct trackDb *tdb,
@@ -1006,6 +1008,11 @@ void lfDrawSpecialGaps(struct linkedFeatures *lf,
  * length is at least intronGap.
  * If chainLines, draw a double-line gap if both target and query have a gap
  * (mismatching sequence). */
+
+void bamLinkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis);
+/* Draw linked features items. */
 
 void bamLinkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
 			      struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -1241,8 +1248,8 @@ char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColu
 
 #define SMALLBUF 128
 
-char *bbiNameFromTable(struct sqlConnection *conn, char *table);
-/* Return file name from little track table. */
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
+/* Return file name from little table. */
 
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */

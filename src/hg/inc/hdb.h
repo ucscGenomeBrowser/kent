@@ -420,6 +420,10 @@ boolean hIsPrivateHost(void);
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */
 
+struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db);
+/* Do various massaging that can only be done after parent/child
+ * relationships are established. */
+
 struct trackDb *hTrackDb(char *db);
 /* Load tracks associated with current db.
  * Supertracks are loaded as a trackDb, but are not in the returned list,

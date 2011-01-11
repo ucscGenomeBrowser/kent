@@ -1009,7 +1009,7 @@ working directory to $runDir.";
 #*** add output to endNotes:
     head ${snpBase}Errors.bed
 #*** add output to endNotes:
-    wc -l snp*
+    wc -l ${snpBase}*
 
     # Make one big fasta file.
 #*** It's a monster: 23G for hg19 snp132!  Can we split by hashing rsId?
@@ -1072,11 +1072,6 @@ sub loadTables {
     hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd \\
       $db $snpBase -sqlTable=$snpBase.sql $snpBase.bed.gz
 
-    hgLoadBed -tab -onServer -tmpDir=\$TMPDIR -allowStartEqualEnd \\
-      $db ${snpBase}Exceptions -sqlTable=\$HOME/kent/src/hg/lib/snp125Exceptions.sql \\
-      -renameSqlTable \\
-      ${snpBase}Exceptions.bed.gz
-
     zcat ${snpBase}ExceptionDesc.tab.gz \\
     | hgLoadSqlTab $db ${snpBase}ExceptionDesc \$HOME/kent/src/hg/lib/snp125ExceptionDesc.sql stdin
 
@@ -1096,7 +1091,7 @@ sub loadTables {
     ln -s $runDir $HgAutomate::clusterData/$db/bed/$snpBase
 
     # Look at the breakdown of exception categories:
-    zcat ${snpBase}Exceptions.bed.gz | cut -f 5 | sort | uniq -c | sort -nr
+    zcat ${snpBase}.bed.gz | cut -f 18 | sed -re 's/,/\\n/g' | sort | uniq -c | sort -nr
 _EOF_
     );
 

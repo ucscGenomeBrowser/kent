@@ -177,6 +177,7 @@ our %validators = (
     protocol => \&validateControlledVocabOrControl,
     phase => \&validateControlledVocabOrControl,
     restrictionEnzyme => \&validateControlledVocabOrControl,
+    obtainedBy => \&validateobtainedBy,
     default => \&validateControlledVocab,
     );
 
@@ -256,6 +257,7 @@ sub validateSetType {
     return ();
 }
 
+
 # project-specific validators
 
 sub validateControlledVocabOrControl {
@@ -272,6 +274,12 @@ sub validateControlledVocab {
     my ($val, $type) = @_;
     return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
+
+sub validateobtainedBy {
+    my($val,$type) = @_;
+    return defined($terms{'lab'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
+}
+
 
 ############################################################################
 # Format checkers - check file format for given types; extend when adding new
@@ -1190,7 +1198,10 @@ sub printCompositeTdbSettings {
                             } else {
                                 if (defined($terms{"control"}->{$term})) {
                                     $tag=$terms{"control"}->{$term}->{"tag"};
-                                } else {
+                                }
+			       	elsif (defined($terms{"lab"}->{$term})) {
+			    	    $tag=$terms{"lab"}->{$term}->{"tag"};
+				}	    else {
                                     die "'$term' is not a registered '$cvTypeVar' term\n";
                                 }
                             }
@@ -1895,7 +1906,9 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "Antibody";
             } elsif ($var eq "cell") {
                 $cvTypeVar = "Cell Line";
-            }
+            } elsif ($var eq "obtainedBy") { 
+		$cvTypeVar = "lab";
+	     }
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }
@@ -1970,7 +1983,12 @@ foreach my $ddfLine (@ddfLines) {
             } elsif ($var eq "cell") {
                 $groupVar = "cellType";
                 $cvTypeVar = "Cell Line";
-            }
+            } elsif ($var eq "obtainedBy") {
+              #Not sure why when we check for obtainedBy subGroups prints out and when when this is
+	      # not pressent the subGroups provides error of unitialized. 							
+     		$cvTypeVar = "lab";
+	    }
+
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
                 $cvTypeVar = "control";
             }

@@ -53,6 +53,17 @@ size_t size = strlen(s);
 return cloneMem(s, size+1);
 }
 
+char *catTwoStrings(char *a, char *b)
+/* Allocate new string that is a concatenation of two strings. */
+{
+int aLen = strlen(a), bLen = strlen(b);
+int len = aLen + bLen;
+char *newBuf = needLargeMem(len+1);
+memcpy(newBuf, a, aLen);
+memcpy(newBuf+aLen, b, bLen);
+newBuf[len] = 0;
+return newBuf;
+}
 
 /* fill a specified area of memory with zeroes */
 void zeroBytes(void *vpt, int count)
@@ -956,7 +967,8 @@ return el->val;
 struct slPair *slPairFromString(char *s)
 /* Return slPair list parsed from list in string s
  * name1=val1 name2=val2 ...
- * Returns NULL if parse error */
+ * Returns NULL if parse error.  Free this up with
+ * slPairFreeValsAndList. */
 {
 struct slPair *list = NULL;
 char *name;
