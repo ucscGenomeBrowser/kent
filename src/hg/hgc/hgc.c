@@ -15660,7 +15660,7 @@ for (gt = geneTracks;  gt != NULL;  gt = gt->next)
 	first = FALSE;
 	}
 if (! first)
-    printf("</TABLE><BR>\n");
+    printf("</TABLE>\n");
 hFreeConn(&conn);
 }
 
@@ -15793,7 +15793,7 @@ if (snp->alleleFreqCount > 0)
     if (gotNonIntN)
 	printf(" <em>Note: dbSNP extrapolates allele counts from reported frequencies and "
 	       "reported 2N sample sizes (total %d); non-integer allele count may imply "
-	       "a problem with one of the reported numbers.</em>\n", total2N);
+	       "an inaccuracy in one of the reported numbers.</em><BR>\n", total2N);
     }
 else
     puts("</TABLE>");
@@ -16202,7 +16202,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (snp->chromStart != start || differentString(snp->chrom, seqName))
 	{
 	if (snpCount==0)
-	    printf("<B>This SNP maps to these additional locations:"
+	    printf("<BR><B>This SNP maps to these additional locations:"
 		   "</B><BR><BR>");
 	snpCount++;
 	bedPrintPos((struct bed *)snp, 3, tdb);
@@ -16210,6 +16210,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
+puts("<BR>");
 // Make table for collapsible sections:
 puts("<TABLE>");
 checkForGwasCatalog(conn, tdb, itemName);
