@@ -1599,7 +1599,7 @@ subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycPk
 view Peaks
 
-metaObject wgEncodeOpenChromChipH1hescCmycRawData
+metaObject wgEncodeOpenChromChipH1hescCmycRawDataRep1
 objType file
 antibody c-Myc
 cell H1-hESC
@@ -1609,7 +1609,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromChipH1hescCmycRawData.fastq.gz
+fileName wgEncodeOpenChromChipH1hescCmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
 origAssembly hg18
@@ -1699,7 +1699,7 @@ subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfPk
 view Peaks
 
-metaObject wgEncodeOpenChromChipH1hescCtcfRawData
+metaObject wgEncodeOpenChromChipH1hescCtcfRawDataRep1
 objType file
 antibody CTCF
 cell H1-hESC
@@ -1709,7 +1709,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipH1hescCtcfRawData.fastq.gz
+fileName wgEncodeOpenChromChipH1hescCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
 origAssembly hg18
@@ -1799,7 +1799,7 @@ subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Pk
 view Peaks
 
-metaObject wgEncodeOpenChromChipH1hescPol2RawData
+metaObject wgEncodeOpenChromChipH1hescPol2RawDataRep1
 objType file
 antibody Pol2
 cell H1-hESC
@@ -1809,7 +1809,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipH1hescPol2RawData.fastq.gz
+fileName wgEncodeOpenChromChipH1hescPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
 origAssembly hg18
@@ -2972,7 +2972,7 @@ subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
 view Peaks
 
-metaObject wgEncodeOpenChromChipHuvecCmycRawData
+metaObject wgEncodeOpenChromChipHuvecCmycRawDataRep1
 objType file
 antibody c-Myc
 cell HUVEC
@@ -2982,7 +2982,7 @@ dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz
+fileName wgEncodeOpenChromChipHuvecCmycRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
 origAssembly hg18
@@ -5226,4 +5226,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -257062899
+# MAGIC: -498747187
