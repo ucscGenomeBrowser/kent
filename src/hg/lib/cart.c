@@ -376,13 +376,11 @@ for (cv = cvList; cv != NULL; cv = cv->next)
 /* Handle non-boolean vars. */
 for (cv = cgiVarList(); cv != NULL; cv = cv->next)
     {
-    if (! (startsWith(booShadow, cv->name) || hashLookup(booHash, cv->name) ||
-	   startsWith(multShadow, cv->name)) )
-
+    if (! (startsWith(booShadow, cv->name) || hashLookup(booHash, cv->name)))
 	{
 	storeInOldVars(cart, oldVars, cv->name);
 	cartRemove(cart, cv->name);
-        if (differentString(cv->val, CART_VAR_EMPTY))  // NOTE: CART_VAR_EMPTY logic not implemented for boolShad or multiShad
+        if (differentString(cv->val, CART_VAR_EMPTY))  // NOTE: CART_VAR_EMPTY logic not implemented for boolShad
             hashAdd(cgiHash, cv->name, cv->val);
 	}
     }
@@ -888,6 +886,22 @@ boolean cartVarExists(struct cart *cart, char *var)
 /* Return TRUE if variable is in cart. */
 {
 return hashFindVal(cart->hash, var) != NULL;
+}
+
+boolean cartListVarExists(struct cart *cart, char *var)
+/* Return TRUE if a list variable is in cart (list may still be empty). */
+{
+static int bufSize = 0;
+static char *buf = NULL;
+char *multShadow = cgiMultListShadowPrefix();
+int len = strlen(multShadow) + strlen(var) + 1;
+if (bufSize < len)
+    {
+    buf = needMoreMem(buf, 0, len*2);
+    bufSize = len*2;
+    }
+safef(buf, bufSize, "%s%s", multShadow, var);
+return cartVarExists(cart, buf);
 }
 
 char *cartString(struct cart *cart, char *var)
