@@ -7285,6 +7285,12 @@ tag TAM
 description 36h, 1uM tamoxifen (Myers)
 type treatment
 
+term 4OHTAM_20nM_72hr
+tag OHTAM
+description 72 hours with 20nM 4-hydroxytamoxifen (Stam) (PROVISIONAL)
+type treatment
+label 4-OHTAM_20nM_72hr
+
 term TGFb
 tag TGFb
 description 1 ng/mL transforming growth factor beta for 24 hours (Crawford)

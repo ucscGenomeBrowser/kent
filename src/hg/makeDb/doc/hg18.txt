@@ -31174,7 +31174,9 @@ TMPDIR=/scratch/tmp
     cp hg18.calJac3.over.chain.gz ../../liftOver/.
     cd /hive/data/genomes/hg18/bed/liftOver
     mv hg18.calJac3.over.chain.gz  hg18ToCalJac3.over.chain.gz
-
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/hg18/liftOver
+    ln -s /hive/data/genomes/hg18/bed/liftOver/hg18ToCalJac3.over.chain.gz .
+    md5sum *.gz > md5sum.txt
 
 #########################################################################
 

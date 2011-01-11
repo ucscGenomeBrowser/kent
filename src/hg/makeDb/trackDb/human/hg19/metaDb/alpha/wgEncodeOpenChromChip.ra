@@ -11,6 +11,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+privacy noSequence
 project wgEncode
 replicate 1
 subId 2480
@@ -29,6 +30,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+privacy noSequence
 project wgEncode
 replicate 2
 subId 2480
@@ -47,6 +49,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+privacy noSequence
 project wgEncode
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
@@ -65,6 +68,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+privacy noSequence
 project wgEncode
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfPkRep1
@@ -83,6 +87,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB8470
+privacy noSequence
 project wgEncode
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfSig
@@ -102,6 +107,7 @@ fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+privacy noSequence
 project wgEncode
 setType input
 subId 2487
@@ -121,6 +127,7 @@ fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+privacy noSequence
 project wgEncode
 setType input
 subId 2487
@@ -5077,6 +5084,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1657
@@ -5098,6 +5106,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 2
 subId 1657
@@ -5118,6 +5127,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
@@ -5138,6 +5148,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1657
@@ -5159,6 +5170,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfSig
@@ -5181,6 +5193,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 setType input
 subId 1832
@@ -5202,6 +5215,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
+privacy noSequence
 project wgEncode
 setType input
 subId 1832
@@ -5224,6 +5238,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1652
@@ -5245,6 +5260,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 2
 subId 1652
@@ -5265,6 +5281,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
@@ -5285,6 +5302,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1652
@@ -5306,9 +5324,10 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -181742070
+# MAGIC: 552647640

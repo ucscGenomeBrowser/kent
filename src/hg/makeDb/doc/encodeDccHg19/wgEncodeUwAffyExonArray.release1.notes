@@ -11,8 +11,8 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 112
-    Files: 115
+    Tables: 135
+    Files: 138
     Gbdbs: 0
 
 A) Untouched Tables (0):
@@ -23,7 +23,9 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (112):
+C) New tables (135):
+wgEncodeUwAffyExonArrayA549SimpleSignalRep1
+wgEncodeUwAffyExonArrayA549SimpleSignalRep2
 wgEncodeUwAffyExonArrayAg04449SimpleSignalRep1
 wgEncodeUwAffyExonArrayAg04449SimpleSignalRep2
 wgEncodeUwAffyExonArrayAg04450SimpleSignalRep1
@@ -36,6 +38,8 @@ wgEncodeUwAffyExonArrayAg10803SimpleSignalRep1
 wgEncodeUwAffyExonArrayAg10803SimpleSignalRep2
 wgEncodeUwAffyExonArrayAoafSimpleSignalRep1
 wgEncodeUwAffyExonArrayAoafSimpleSignalRep2
+wgEncodeUwAffyExonArrayBe2cSimpleSignalRep1
+wgEncodeUwAffyExonArrayBe2cSimpleSignalRep2
 wgEncodeUwAffyExonArrayBjSimpleSignalRep1
 wgEncodeUwAffyExonArrayBjSimpleSignalRep2
 wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1
@@ -46,9 +50,14 @@ wgEncodeUwAffyExonArrayGm06990SimpleSignalRep2
 wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1
 wgEncodeUwAffyExonArrayH7esSimpleSignalRep1
 wgEncodeUwAffyExonArrayH7esSimpleSignalRep2
+wgEncodeUwAffyExonArrayHacSimpleSignalRep1
+wgEncodeUwAffyExonArrayHacSimpleSignalRep2
 wgEncodeUwAffyExonArrayHaeSimpleSignalRep1
 wgEncodeUwAffyExonArrayHaeSimpleSignalRep2
+wgEncodeUwAffyExonArrayHaspSimpleSignalRep1
+wgEncodeUwAffyExonArrayHaspSimpleSignalRep2
 wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1
+wgEncodeUwAffyExonArrayHbmecSimpleSignalRep2
 wgEncodeUwAffyExonArrayHcfSimpleSignalRep1
 wgEncodeUwAffyExonArrayHcfSimpleSignalRep2
 wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1
@@ -105,15 +114,23 @@ wgEncodeUwAffyExonArrayHrceSimpleSignalRep1
 wgEncodeUwAffyExonArrayHrceSimpleSignalRep2
 wgEncodeUwAffyExonArrayHreSimpleSignalRep1
 wgEncodeUwAffyExonArrayHreSimpleSignalRep2
+wgEncodeUwAffyExonArrayHrgecSimpleSignalRep1
+wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2
 wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1
 wgEncodeUwAffyExonArrayHrpeSimpleSignalRep2
+wgEncodeUwAffyExonArrayHsmmSimpleSignalRep1
+wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2
+wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1
 wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1
+wgEncodeUwAffyExonArrayHuvecSimpleSignalRep2
 wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1
 wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2
 wgEncodeUwAffyExonArrayJurkatSimpleSignalRep1
 wgEncodeUwAffyExonArrayJurkatSimpleSignalRep2
 wgEncodeUwAffyExonArrayK562SimpleSignalRep1
 wgEncodeUwAffyExonArrayK562SimpleSignalRep2
+wgEncodeUwAffyExonArrayLncapSimpleSignalRep1
+wgEncodeUwAffyExonArrayLncapSimpleSignalRep2
 wgEncodeUwAffyExonArrayMcf7SimpleSignalRep1
 wgEncodeUwAffyExonArrayMcf7SimpleSignalRep2
 wgEncodeUwAffyExonArrayNb4SimpleSignalRep1
@@ -129,6 +146,8 @@ wgEncodeUwAffyExonArrayNhlfSimpleSignalRep1
 wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2
 wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1
 wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2
+wgEncodeUwAffyExonArrayRptecSimpleSignalRep1
+wgEncodeUwAffyExonArrayRptecSimpleSignalRep2
 wgEncodeUwAffyExonArraySaecSimpleSignalRep1
 wgEncodeUwAffyExonArraySaecSimpleSignalRep2
 wgEncodeUwAffyExonArraySkmcSimpleSignalRep1
@@ -136,13 +155,19 @@ wgEncodeUwAffyExonArraySkmcSimpleSignalRep2
 wgEncodeUwAffyExonArraySknshraSimpleSignalRep1
 wgEncodeUwAffyExonArraySknshraSimpleSignalRep2
 wgEncodeUwAffyExonArrayTh1SimpleSignalRep1
+wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1
+wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep2
+wgEncodeUwAffyExonArrayWi38SimpleSignalRep1
+wgEncodeUwAffyExonArrayWi38SimpleSignalRep2
 
-C') New files (112 downloadables, 0 gbdbs):
+C') New files (135 downloadables, 0 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/
     NOT on RR but must be placed in:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/
 
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayA549SimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayA549SimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayAg04449SimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayAg04449SimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayAg04450SimpleSignalRep1.broadPeak.gz
@@ -155,6 +180,8 @@ C') New files (112 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayAg10803SimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayAoafSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayAoafSimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayBe2cSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayBe2cSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayBjSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayBjSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1.broadPeak.gz
@@ -165,9 +192,14 @@ C') New files (112 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayH7esSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayH7esSimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHacSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHacSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHaeSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHaeSimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHaspSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHaspSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHbmecSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHcfSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHcfSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1.broadPeak.gz
@@ -224,15 +256,23 @@ C') New files (112 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHrceSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHreSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHreSimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHrgecSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHrgecSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHrpeSimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHsmmSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHsmmSimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHsmmtSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHuvecSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayJurkatSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayJurkatSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayK562SimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayK562SimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayLncapSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayLncapSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayMcf7SimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayMcf7SimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayNb4SimpleSignalRep1.broadPeak.gz
@@ -248,6 +288,8 @@ C') New files (112 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayRptecSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayRptecSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArraySaecSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArraySaecSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArraySkmcSimpleSignalRep1.broadPeak.gz
@@ -255,6 +297,10 @@ C') New files (112 downloadables, 0 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArraySknshraSimpleSignalRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArraySknshraSimpleSignalRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayTh1SimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayWi38OhtamSimpleSignalRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayWi38SimpleSignalRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwAffyExonArray/release1/wgEncodeUwAffyExonArrayWi38SimpleSignalRep2.broadPeak.gz
 
 
 D) Additional items:
