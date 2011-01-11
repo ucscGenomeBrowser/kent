@@ -1366,4 +1366,10 @@ enum enumBool
 #define IS_TRUE           IS_YES
 #define IS_FALSE          IS_NO
 
+time_t dateToSeconds(const char *date,const char*format);
+// Convert a string date to time_t
+
+boolean dateIsOld(const char *date,const char*format);
+// Is this string date older than now?
+
 #endif /* COMMON_H */

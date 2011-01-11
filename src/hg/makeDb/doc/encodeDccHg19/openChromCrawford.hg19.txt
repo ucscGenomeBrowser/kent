@@ -967,3 +967,632 @@ wl openChromUpd2.txt
 grep -v composite openChromUpd2.txt | wl
 1
         update tmpMdb set varType = 'txt', val = 'Crawford' where obj = 'wgEncodeUtaChIPseqPeaksHelas3CtcfV3' and var = 'grant';
+
+2011-01-10 Fastq's added
+========================
+select id,name,status,user_id from projects where status = "loaded" and user_id = 17; 
++------+---------------------------+--------+---------+
+| id   | name                      | status | user_id |
++------+---------------------------+--------+---------+
+| 3141 | DNCT UTA Fastq's 20101221 | loaded |      17 | 
+| 3153 | DNCT UNC Fastq's 20101221 | loaded |      17 | 
++------+---------------------------+--------+---------+
+cd ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+cp /hive/groups/encode/dcc/pipeline/encpipeline_prod/3141/out/mdb.txt .
+cat /hive/groups/encode/dcc/pipeline/encpipeline_prod/3153/out/mdb.txt >> mdb.txt
+e mdb.txt # dateSubmitted to dateResubmitted  dateUnrestricted/submitted toprevious
+metadata project=wgEncode grant=Crawford lab=UT-A(Iyer) dataType=ChipSeq cell=HepG2 antibody=Pol2 setType=exp controlId=HepG2/Input view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3141 dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 dateResubmitted=2010-12-23 composite=wgEncodeOpenChromChip  fileName=wgEncodeOpenChromChipHepg2Pol2RawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UT-A(Iyer) dataType=ChipSeq cell=MCF-7 antibody=c-Myc setType=exp controlId=MCF-7/Input view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3141 dateSubmitted=2009-12-28 dateUnrestricted=2010-09-28 dateResubmitted=2010-12-23 composite=wgEncodeOpenChromChip  fileName=wgEncodeOpenChromChipMcf7CmycRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UT-A(Iyer) dataType=ChipSeq cell=HeLa-S3 antibody=Pol2 setType=exp controlId=HeLa-S3/Input view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3141 dateSubmitted=2009-12-28 dateUnrestricted=2010-09-28 dateResubmitted=2010-12-23 composite=wgEncodeOpenChromChip  fileName=wgEncodeOpenChromChipHelas3Pol2RawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UT-A(Iyer) dataType=ChipSeq cell=MCF-7 antibody=c-Myc setType=exp controlId=MCF-7/Input view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3141 dateResubmitted=2010-12-23 composite=wgEncodeOpenChromChip  fileName=wgEncodeOpenChromChipMcf7CmycRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=PanIslets treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFairePanisletsRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=GM12878 treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireGm12878RawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=GM18507 treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireGm18507RawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=GM19239 treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireGm19239RawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=H1-hESC treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireH1hescRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HeLa-S3 treatment=IFNa4h view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HeLa-S3 treatment=IFNg4h view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HeLa-S3 treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHelas3RawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HepG2 treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHepg2RawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HUVEC treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHuvecRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=K562 treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireK562RawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=LHSR treatment=androgen view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireLhsrAndroRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=LHSR treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireLhsrRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=NHBE treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=NHEK treatment=None view=RawData replicate=1 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireNhekRawDataRep1.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=GM12878 treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireGm12878RawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=GM18507 treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireGm18507RawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=GM19239 treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireGm19239RawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=H1-hESC treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireH1hescRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HeLa-S3 treatment=IFNa4h view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHelas3Ifna4hRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HeLa-S3 treatment=IFNg4h view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHelas3Ifng4hRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HeLa-S3 treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHelas3RawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HepG2 treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHepg2RawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HUVEC treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHuvecRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=K562 treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireK562RawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=LHSR treatment=androgen view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireLhsrAndroRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=LHSR treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireLhsrRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=NHBE treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=NHEK treatment=None view=RawData replicate=2 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireNhekRawDataRep2.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HeLa-S3 treatment=None view=RawData replicate=3 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHelas3RawDataRep3.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=HepG2 treatment=None view=RawData replicate=3 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireHepg2RawDataRep3.fastq.gz
+metadata project=wgEncode grant=Crawford lab=UNC(Lieb) dataType=FaireSeq cell=K562 treatment=None view=RawData replicate=3 origAssembly=hg18 dataVersion="ENCODE Jan 2011 Freeze" subId=3153 dateResubmitted=2010-12-31 composite=wgEncodeOpenChromFaire  fileName=wgEncodeOpenChromFaireK562RawDataRep3.fastq.gz
+
+# use mdbPrint -upd to get dates from hg18:
+mdbPrint hg18 -vars="grant=Crawford dataType=ChipSeq cell=HepG2 antibody=Pol2 view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,antibody,setType,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford dataType=ChipSeq cell=MCF-7 antibody=c-Myc setType=exp view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,antibody,setType,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford dataType=ChipSeq cell=HeLa-S3 antibody=Pol2 setType=exp view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,antibody,setType,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford dataType=ChipSeq cell=MCF-7 antibody=c-Myc setType=exp view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,antibody,setType,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=PanIslets  view=RawData" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=GM12878  view=RawData replicate=1 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=GM18507  view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=GM19239  view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=H1-hESC  view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HeLa-S3 treatment=IFNa4h view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,treatment,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HeLa-S3 treatment=IFNg4h view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,treatment,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HeLa-S3  view=RawData replicate=1 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HepG2  view=RawData replicate=1 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HUVEC  view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=K562  view=RawData replicate=1 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=LHSR treatment=androgen view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,treatment,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=LHSR treatment!=  view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=NHBE  view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=NHEK  view=RawData replicate=1" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=GM12878  view=RawData replicate=2 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=GM18507  view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=GM19239  view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=H1-hESC  view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HeLa-S3 treatment=IFNa4h view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,treatment,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HeLa-S3 treatment=IFNg4h view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,treatment,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HeLa-S3  view=RawData replicate=2 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt 
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HepG2  view=RawData replicate=2 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt 
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HUVEC  view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=K562  view=RawData replicate=2 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=LHSR treatment=androgen view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,treatment,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=LHSR treatment!=  view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=NHBE  view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=NHEK  view=RawData replicate=2" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HeLa-S3  view=RawData replicate=3 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=HepG2  view=RawData replicate=3 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+mdbPrint hg18 -vars="grant=Crawford  dataType=FaireSeq cell=K562  view=RawData replicate=3 submittedDataVersion=V2%" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect=grant,dataType,cell,view,replicate -updVars=dateSubmitted,dateUnrestricted >> crawford.txt
+
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=ChipSeq cell=HepG2 antibody=Pol2 setType=exp view=RawData replicate=1 " -setVars="dateSubmitted=2009-09-29 dateUnrestricted=2010-06-29 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=ChipSeq cell=MCF-7 antibody=c-Myc setType=exp view=RawData replicate=1 " -setVars="dateSubmitted=2009-12-28 dateUnrestricted=2010-09-28 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=ChipSeq cell=HeLa-S3 antibody=Pol2 setType=exp view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-28 dateUnrestricted=2010-09-28 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=ChipSeq cell=MCF-7 antibody=c-Myc setType=exp view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-28 dateUnrestricted=2010-09-28 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=PanIslets treatment=None view=RawData replicate=1" -setVars="dateSubmitted=2009-10-14 dateUnrestricted=2010-07-14"
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=GM12878 treatment=None view=RawData replicate=1" -setVars="dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20"
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=GM18507 treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-12-20 dateUnrestricted=2010-09-19 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=GM19239 treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-12-18 dateUnrestricted=2010-09-18 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=H1-hESC treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HeLa-S3 treatment=IFNa4h view=RawData replicate=1 " -setVars="dateSubmitted=2009-12-20 dateUnrestricted=2010-09-20 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HeLa-S3 treatment=IFNg4h view=RawData replicate=1 " -setVars="dateSubmitted=2009-12-20 dateUnrestricted=2010-09-20 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HeLa-S3 treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HepG2 treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 " 
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HUVEC treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=K562 treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=LHSR treatment=androgen view=RawData replicate=1 " -setVars="dateSubmitted=2009-12-23 dateUnrestricted=2010-09-23 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=LHSR treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-12-23 dateUnrestricted=2010-09-23 " 
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=NHBE treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 " -test 
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=NHEK treatment=None view=RawData replicate=1 " -setVars="dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=GM12878 treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=GM18507 treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-20 dateUnrestricted=2010-09-19 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=GM19239 treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-18 dateUnrestricted=2010-09-18 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=H1-hESC treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HeLa-S3 treatment=IFNa4h view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-20 dateUnrestricted=2010-09-20 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HeLa-S3 treatment=IFNg4h view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-20 dateUnrestricted=2010-09-20 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HeLa-S3 treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HepG2 treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HUVEC treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=K562 treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2008-12-09 dateUnrestricted=2009-08-09 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=LHSR treatment=androgen view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-23 dateUnrestricted=2010-09-23 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=LHSR treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-12-23 dateUnrestricted=2010-09-23 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=NHBE treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2010-01-09 dateUnrestricted=2010-10-09 " -test
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=NHEK treatment=None view=RawData replicate=2 " -setVars="dateSubmitted=2009-09-30 dateUnrestricted=2010-06-30 " -test 
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HeLa-S3 treatment=None view=RawData replicate=3 " -setVars="dateSubmitted=2009-03-22 dateUnrestricted=2009-12-22 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=HepG2 treatment=None view=RawData replicate=3 " -setVars="dateSubmitted=2009-04-17 dateUnrestricted=2010-01-17 "
+ mdbUpdate hg19 table=metaDb_tdreszer -vars="grant=Crawford dataType=FaireSeq cell=K562 treatment=None view=RawData replicate=3 " -setVars="dateSubmitted=2009-04-20 dateUnrestricted=2010-01-20 "
+
+# Check in changes:
+cd .. {mdb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+e wgEncodeOpenChromChip.ra # standardize lab to UT-A
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+e wgEncodeOpenChromFaire.ra # standardize lab to UNC
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+grep "lab Duke" wgEncodeOpenChromDnase.ra | sort | uniq -c # Nothing actually changes
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd  {hg19 downloads}
+cd wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+cd ../wgEncodeOpenChromChip/
+encodeDownloadsPage.pl -db=hg19 index.html
+cd ../wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+
+### TODO mdb5sum, check file counts, release1, pushQ
+
+### File counts
+cd ../wgEncodeOpenChromChip/
+# Experiments
+ls -1 *BaseOverlapSignal.bigWig | wl  34
+ls -1 *Sig.bigWig | wl                43 - ls -1 *InputSig.bigWig | wl 9
+ls -1 *.narrowPeak.gz | wl            34
+# Peaks and Sigs as expected.  34 experiments
+# Replicated things:
+ls -1 *.bam | wl           78
+ls -1 *.bam.bai | wl       78
+ls -1 *.fastq.gz | wl      72  ### Where are 6?
+ls -1 | grep -v \.bai | grep -v \.bigWig | grep -v \.narrowPeak | wl
+
+ls -1 wgEncodeOpenChromChipGm12878Ctcf*Rep1*.fastq*
+ls -1 wgEncodeOpenChromChipGm12878Ctcf*Rep2*.fastq*
+ls -1 wgEncodeOpenChromChipGm12878Ctcf*Rep3*.fastq*
+# All are with V2!
+ls -1 wgEncodeOpenChromChipGm12878Ctcf*Rep?V2.fastq*
+# Should rename!!! update mdb
+
+ls -1 wgEncodeOpenChromChipHelas3Cmyc*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipHelas3Cmyc*Rep2.fastq*
+ls -1 wgEncodeOpenChromChipHelas3Ctcf*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipHelas3Ctcf*Rep2.fastq*
+# V2s
+# Should rename!!! update mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=GM12878 antibody=CTCF view=RawData" -count
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HeLa-S3 antibody=c-Myc view=RawData" -count
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HeLa-S3 antibody=CTCF view=RawData" -count
+
+ls -1 wgEncodeOpenChromChipHepg2Cmyc*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipHepg2Cmyc*Rep2.fastq*
+ls -1 wgEncodeOpenChromChipHepg2Cmyc*Rep3.fastq*
+ls -1 wgEncodeOpenChromChipHepg2Ctcf*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipHepg2Ctcf*Rep2.fastq*
+# V2s
+# Should rename!!! update mdb
+
+ls -1 wgEncodeOpenChromChipK562Cmyc*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipK562Cmyc*Rep2.fastq*
+ls -1 wgEncodeOpenChromChipK562Cmyc*Rep3.fastq*
+ls -1 wgEncodeOpenChromChipK562Ctcf*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipK562Ctcf*Rep2.fastq*
+ls -1 wgEncodeOpenChromChipK562Ctcf*Rep3.fastq*
+# V2s
+# Should rename!!! update mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=GM12878 antibody=CTCF view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HeLa-S3 antibody=c-Myc view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HeLa-S3 antibody=CTCF view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HepG2 antibody=c-Myc view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HepG2 antibody=CTCF view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=K562 antibody=c-Myc view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=K562 antibody=CTCF view=RawData" >> tmp.mdb
+
+mv wgEncodeOpenChromChipGm12878CtcfRawDataRep1V2.fastq.gz wgEncodeOpenChromChipGm12878CtcfRawDataRep1.fastq.gz
+mv wgEncodeOpenChromChipGm12878CtcfRawDataRep2V2.fastq.gz wgEncodeOpenChromChipGm12878CtcfRawDataRep2.fastq.gz
+mv wgEncodeOpenChromChipGm12878CtcfRawDataRep3V2.fastq.gz wgEncodeOpenChromChipGm12878CtcfRawDataRep3.fastq.gz
+mv wgEncodeOpenChromChipHelas3CmycRawDataRep1V2.fastq.gz  wgEncodeOpenChromChipHelas3CmycRawDataRep1.fastq.gz
+mv wgEncodeOpenChromChipHelas3CmycRawDataRep2V2.fastq.gz  wgEncodeOpenChromChipHelas3CmycRawDataRep2.fastq.gz
+mv wgEncodeOpenChromChipHelas3CtcfRawDataRep1V2.fastq.gz  wgEncodeOpenChromChipHelas3CtcfRawDataRep1.fastq.gz
+mv wgEncodeOpenChromChipHelas3CtcfRawDataRep2V2.fastq.gz  wgEncodeOpenChromChipHelas3CtcfRawDataRep2.fastq.gz
+mv wgEncodeOpenChromChipHepg2CmycRawDataRep1V2.fastq.gz   wgEncodeOpenChromChipHepg2CmycRawDataRep1.fastq.gz
+mv wgEncodeOpenChromChipHepg2CmycRawDataRep2V2.fastq.gz   wgEncodeOpenChromChipHepg2CmycRawDataRep2.fastq.gz
+mv wgEncodeOpenChromChipHepg2CmycRawDataRep3V2.fastq.gz   wgEncodeOpenChromChipHepg2CmycRawDataRep3.fastq.gz
+mv wgEncodeOpenChromChipHepg2CtcfRawDataRep1V2.fastq.gz   wgEncodeOpenChromChipHepg2CtcfRawDataRep1.fastq.gz
+mv wgEncodeOpenChromChipHepg2CtcfRawDataRep2V2.fastq.gz   wgEncodeOpenChromChipHepg2CtcfRawDataRep2.fastq.gz
+mv wgEncodeOpenChromChipK562CmycRawDataRep1V2.fastq.gz    wgEncodeOpenChromChipK562CmycRawDataRep1.fastq.gz
+mv wgEncodeOpenChromChipK562CmycRawDataRep2V2.fastq.gz    wgEncodeOpenChromChipK562CmycRawDataRep2.fastq.gz
+mv wgEncodeOpenChromChipK562CmycRawDataRep3V2.fastq.gz    wgEncodeOpenChromChipK562CmycRawDataRep3.fastq.gz
+mv wgEncodeOpenChromChipK562CtcfRawDataRep1V2.fastq.gz    wgEncodeOpenChromChipK562CtcfRawDataRep1.fastq.gz
+mv wgEncodeOpenChromChipK562CtcfRawDataRep2V2.fastq.gz    wgEncodeOpenChromChipK562CtcfRawDataRep2.fastq.gz
+mv wgEncodeOpenChromChipK562CtcfRawDataRep3V2.fastq.gz    wgEncodeOpenChromChipK562CtcfRawDataRep3.fastq.gz
+
+rm tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=GM12878 antibody=CTCF view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HeLa-S3 antibody=c-Myc view=RawData" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HeLa-S3 antibody=CTCF view=RawData" >> tmp.mdb
+
+ls -1 wgEncodeOpenChromChipHuvecCmyc*Rep1.fastq*
+# No "Rep"
+wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz
+# Should rename, update mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip cell=HUVEC antibody=c-Myc view=RawData" > tmp.mdb
+mv wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz wgEncodeOpenChromChipHuvecCmycRawDataRep1.fastq.gz
+######## Missing!
+ls -1 wgEncodeOpenChromChipFibroblCtcf*Rep1*.fastq*
+ls -1 wgEncodeOpenChromChipFibroblCtcf*Rep2*.fastq*
+ls -1 wgEncodeOpenChromChipFibroblInput*.fastq*
+ls -1 wgEncodeOpenChromChipProgfibCtcf*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipProgfibCtcf*Rep2.fastq*
+ls -1 wgEncodeOpenChromChipProgfibInput*.fastq*
+ls -1 wgEncodeOpenChromChipProgfibPol2*Rep1.fastq*
+ls -1 wgEncodeOpenChromChipProgfibPol2*Rep2.fastq*
+######## Missing!
+
+### More file counts
+cd ../wgEncodeOpenChromDnase/
+# Experiments
+ls -1 *BaseOverlapSignal.bigWig | wl  45
+ls -1 *Sig.bigWig | wl                45
+ls -1 *.narrowPeak.gz | wl            45
+# Peaks and Sigs as expected.         45 experiments
+# Replicated things:
+ls -1 *.bam | wl           105
+ls -1 *.bam.bai | wl       105
+ls -1 *.fastq.gz | wl      70  ### Where are 35?
+
+rm tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep1V2 >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep2V2 >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep3V2 >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep1V2  >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep2V2  >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep3V2  >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep1V2   >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep2V2   >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep3V2   >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseK562RawDataRep1V2    >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromDnaseK562RawDataRep2V2    >> tmp.mdb
+e tmp.mdb
+
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep1 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep3 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep1  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep2  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep3  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep1   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep3   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseK562RawDataRep1    -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseK562RawDataRep2    -delete 
+
+mdbUpdate hg19 tmp.mdb
+
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep1V2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep2V2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseGm12878RawDataRep3V2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep1V2  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep2V2  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHelas3RawDataRep3V2  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep1V2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep2V2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseHepg2RawDataRep3V2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseK562RawDataRep1V2    -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromDnaseK562RawDataRep2V2    -delete 
+
+######## Missing!
+ls -1 wgEncodeOpenChromDnaseAosmcSerumfree*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseAosmcSerumfree*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseCll*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseCll*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseCll*Rep3.fastq.*
+ls -1 wgEncodeOpenChromDnaseFibrobl*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseFibrobl*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseFibrop*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseFibrop*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseFibrop*Rep3.fastq.*
+ls -1 wgEncodeOpenChromDnaseGm12878*Rep4.fastq.*
+ls -1 wgEncodeOpenChromDnaseGm12878*Rep5.fastq.*
+ls -1 wgEncodeOpenChromDnaseHmec*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseHmec*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseHsmm*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseHsmm*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseHsmm*Rep3.fastq.*
+ls -1 wgEncodeOpenChromDnaseHsmmt*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseHsmmt*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseHsmmt*Rep3.fastq.*
+ls -1 wgEncodeOpenChromDnaseIps*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseIps*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseIps*Rep3.fastq.*
+ls -1 wgEncodeOpenChromDnaseMyometr*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseMyometr*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnasePanisd*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnasePanisd*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnasePanisd*Rep3.fastq.*
+ls -1 wgEncodeOpenChromDnasePanislets*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnasePanislets*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnasePanislets*Rep3.fastq.*
+ls -1 wgEncodeOpenChromDnasePhte*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnasePhte*Rep2.fastq.*
+ls -1 wgEncodeOpenChromDnaseProgfib*Rep1.fastq.*
+ls -1 wgEncodeOpenChromDnaseProgfib*Rep2.fastq.*
+######## Missing!
+
+### More file counts
+cd ../wgEncodeOpenChromFaire/
+# Experiments
+ls -1 *BaseOverlapSignal.bigWig | wl  20
+ls -1 *Sig.bigWig | wl                20
+ls -1 *.narrowPeak.gz | wl            20
+# Peaks and Sigs as expected.         20 experiments
+# Replicated things:
+ls -1 *.bam | wl           42
+ls -1 *.bam.bai | wl       42
+ls -1 *.fastq.gz | wl      48  ### Extra 6 ?
+
+ls -1 *V2*
+wgEncodeOpenChromFaireGm12878RawDataRep1V2.fastq.gz
+wgEncodeOpenChromFaireGm12878RawDataRep2V2.fastq.gz
+wgEncodeOpenChromFaireGm12878RawDataRep3V2.fastq.gz
+wgEncodeOpenChromFaireHelas3RawDataRep1V2.fastq.gz
+wgEncodeOpenChromFaireHelas3RawDataRep2V2.fastq.gz
+wgEncodeOpenChromFaireHepg2RawDataRep1V2.fastq.gz
+wgEncodeOpenChromFaireHepg2RawDataRep2V2.fastq.gz
+wgEncodeOpenChromFaireHepg2RawDataRep3V2.fastq.gz
+wgEncodeOpenChromFaireK562RawDataRep1V2.fastq.gz
+wgEncodeOpenChromFaireK562RawDataRep2V2.fastq.gz
+
+mkdir ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireGm12878RawDataRep1.fastq.gz ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireGm12878RawDataRep2.fastq.gz ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireGm12878RawDataRep3.fastq.gz ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireHelas3RawDataRep1.fastq.gz  ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireHelas3RawDataRep2.fastq.gz  ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireHepg2RawDataRep1.fastq.gz   ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireHepg2RawDataRep2.fastq.gz   ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireHepg2RawDataRep3.fastq.gz   ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireK562RawDataRep1.fastq.gz    ../obsolete/wgEncodeOpenChromatinFaire
+mv wgEncodeOpenChromFaireK562RawDataRep2.fastq.gz    ../obsolete/wgEncodeOpenChromatinFaire
+
+mv wgEncodeOpenChromFaireGm12878RawDataRep1V2.fastq.gz wgEncodeOpenChromFaireGm12878RawDataRep1.fastq.gz
+mv wgEncodeOpenChromFaireGm12878RawDataRep2V2.fastq.gz wgEncodeOpenChromFaireGm12878RawDataRep2.fastq.gz
+mv wgEncodeOpenChromFaireGm12878RawDataRep3V2.fastq.gz wgEncodeOpenChromFaireGm12878RawDataRep3.fastq.gz
+mv wgEncodeOpenChromFaireHelas3RawDataRep1V2.fastq.gz  wgEncodeOpenChromFaireHelas3RawDataRep1.fastq.gz
+mv wgEncodeOpenChromFaireHelas3RawDataRep2V2.fastq.gz  wgEncodeOpenChromFaireHelas3RawDataRep2.fastq.gz
+mv wgEncodeOpenChromFaireHepg2RawDataRep1V2.fastq.gz   wgEncodeOpenChromFaireHepg2RawDataRep1.fastq.gz
+mv wgEncodeOpenChromFaireHepg2RawDataRep2V2.fastq.gz   wgEncodeOpenChromFaireHepg2RawDataRep2.fastq.gz
+mv wgEncodeOpenChromFaireHepg2RawDataRep3V2.fastq.gz   wgEncodeOpenChromFaireHepg2RawDataRep3.fastq.gz
+mv wgEncodeOpenChromFaireK562RawDataRep1V2.fastq.gz    wgEncodeOpenChromFaireK562RawDataRep1.fastq.gz
+mv wgEncodeOpenChromFaireK562RawDataRep2V2.fastq.gz    wgEncodeOpenChromFaireK562RawDataRep2.fastq.gz
+
+rm tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep1V2 >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep2V2 >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep3V2 >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireHelas3RawDataRep1V2  >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireHelas3RawDataRep2V2  >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep1V2   >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep2V2   >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep3V2   >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireK562RawDataRep1V2    >> tmp.mdb
+mdbPrint hg19 obj=wgEncodeOpenChromFaireK562RawDataRep2V2    >> tmp.mdb
+e tmp.mdb
+
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep1 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep3 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHelas3RawDataRep1  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHelas3RawDataRep2  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep1   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep3   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireK562RawDataRep1    -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireK562RawDataRep2    -delete
+
+mdbUpdate hg19 tmp.mdb
+
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep1V2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep2V2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireGm12878RawDataRep3V2 -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHelas3RawDataRep1V2  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHelas3RawDataRep2V2  -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep1V2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep2V2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireHepg2RawDataRep3V2   -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireK562RawDataRep1V2    -delete
+mdbUpdate hg19 obj=wgEncodeOpenChromFaireK562RawDataRep2V2    -delete
+
+######## Extras
+ls -1 wgEncodeOpenChromFaireHelas3*Rep3.bam
+ls -1 wgEncodeOpenChromFaireK562*Rep3.bam
+ls -1 wgEncodeOpenChromFaireLhsrAndro*Rep1.bam
+ls -1 wgEncodeOpenChromFaireLhsrAndro*Rep2.bam
+ls -1 wgEncodeOpenChromFaireLhsr*Rep1.bam
+ls -1 wgEncodeOpenChromFaireLhsr*Rep2.bam
+######## Extras
+
+# Check in changes:
+cd .. {hg19/metaDb.alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+e wgEncodeOpenChromChip.ra # standardize lab to UT-A
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+e wgEncodeOpenChromFaire.ra # standardize lab to UNC
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+grep "lab Duke" wgEncodeOpenChromDnase.ra | sort | uniq -c # Nothing actually changes
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd  {hg19 downloads}
+cd ../wgEncodeOpenChromChip/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 339 file. No Missing metadata
+
+cd ../wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 415 files. No Missing metadata
+
+cd ../wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 192 files. No Missing metadata
+
+## TODO: mdb5sum, Contact Terry about missing fastqs
+
+## Fastqs missing:
+DNase/AoSMC/SerumFree Rep1,Rep2
+DNase/CLL Rep1,Rep2,Rep3
+DNase/Fibrobl Rep1,Rep2
+DNase/FibroP Rep1,Rep2,Rep3
+DNase/GM12878 Rep4,Rep5
+DNase/HMEC Rep1,Rep2
+DNase/HSMM Rep1,Rep2,Rep3
+DNase/HSMMtube Rep1,Rep2,Rep3
+DNase/iPS Rep1,Rep2,Rep3
+DNase/Myometr Rep1,Rep2
+DNase/PanIsletD Rep1,Rep2,Rep3
+DNase/PanIslets Rep1,Rep2,Rep3
+DNase/pHTE Rep1,Rep2
+DNase/ProgFib Rep1,Rep2
+ChIPseq/Fibrobl/CTCF Rep1,Rep2
+ChIPseq/Fibrobl/Input Rep1
+ChIPseq/ProgFib/CTCF Rep1,Rep2
+ChIPseq/ProgFib/Input Rep1
+ChIPseq/ProgFib/Pol2 Rep1,Rep2
+
+### Extras
+FAIRE/HeLa-S3 Rep3
+FAIRE/K562 Rep3
+FAIRE/LHSR Rep1,Rep2
+FAIRE/LHSR/androgen Rep1,Rep2
+
+### Extras
+FAIRE/HeLa-S3 Rep3
+FAIRE/K562 Rep3
+FAIRE/LHSR Rep1,Rep2
+FAIRE/LHSR/androgen Rep1,Rep2
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3141 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3153 displayed
+
+# Extras are abandoned/revoked data and should be moved:
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=HeLa-S3 replicate=3" -delete
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 35 row(s) in hg19.metaDb_tdreszer
+mv wgEncodeOpenChromFaireHelas3*Rep3.* ../obsolete/wgEncodeOpenChromFaire/
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=K562 replicate=3" -delete
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 35 row(s) in hg19.metaDb_tdreszer
+mv wgEncodeOpenChromFaireK562*Rep3.* ../obsolete/wgEncodeOpenChromFaire/
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=LHSR" -delete
+Using table named 'hg19.metaDb_tdreszer'.
+Affected 68 row(s) in hg19.metaDb_tdreszer
+mv wgEncodeOpenChromFaireLhsr* ../obsolete/wgEncodeOpenChromFaire/
+
+# Check in changes:
+cd .. {hg19/metaDb.alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra # standardize lab to UNC
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 186 files.  No Missing metadata  ### 171 in hgFileUi (Where are missing 15?)
+
+# Private data should be marked in mdb:
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=AoSMC" -setVars="privacy=noSequence"
+Affected 5 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=CLL" -setVars="privacy=noSequence"
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Fibrobl" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=FibroP" -setVars="privacy=noSequence"      
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HMEC" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMM" -setVars="privacy=noSequence"
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMMtube" -setVars="privacy=noSequence"
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=iPS" -setVars="privacy=noSequence"      
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Myometr" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=PanIsletD" -setVars="privacy=noSequence"      
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=PanIslets" -setVars="privacy=noSequence"      
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=pHTE" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=ProgFib" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip cell=Fibrobl antibody=CTCF" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip cell=Fibrobl antibody=Input" -setVars="privacy=noSequence"      
+Affected 2 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip cell=ProgFib antibody=CTCF" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip cell=ProgFib antibody=Input" -setVars="privacy=noSequence"      
+Affected 2 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip cell=ProgFib antibody=Pol2" -setVars="privacy=noSequence"      
+Affected 5 row(s) in hg19.metaDb_tdreszer
+
+# Check in changes:
+cd .. {hg19/metaDb.alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra 
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra 
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 415 files.  No Missing metadata  ### 372 found in hgFileUi ?? (where are missing 43??)
+
+cd ../wgEncodeOpenChromChip/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 339 files.  No Missing metadata  ### 320 found in hgFileUi ?? (where are missing 19??)
+### Probably bai
+
+mdbPrint hg19 -count -vars="composite=wgEncodeOpenChromChip fileIndex=?"Using table named 'hg19.metaDb_tdreszer'.
+59 objects
+mdbPrint hg19 -count -vars="composite=wgEncodeOpenChromChip fileName=%bam"
+Using table named 'hg19.metaDb_tdreszer'.
+78 objects
+# diff 19 !
+mdbPrint hg19 -count -vars="composite=wgEncodeOpenChromDnase fileName=%bam"
+105 objects
+mdbPrint hg19 -count -vars="composite=wgEncodeOpenChromDnase fileIndex=?"
+62 objects
+# diff 43 !
+mdbPrint hg19 -count -vars="composite=wgEncodeOpenChromFaire fileName=%bam"
+42 objects
+mdbPrint hg19 -count -vars="composite=wgEncodeOpenChromFaire fileIndex=?"
+27 objects
+# diff 15 !
+## Need to update bai for a lot of objects 
+
+rm tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase fileName=%bam fileIndex!=" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect="composite,fileName,fileIndex" -updVars="fileName" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire fileName=%bam fileIndex!=" -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect="composite,fileName,fileIndex" -updVars="fileName" >> tmp.mdb
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip fileName=%bam fileIndex!="  -updDb=hg19 -updMdb=metaDb_tdreszer -updSelect="composite,fileName,fileIndex" -updVars="fileName" >> tmp.mdb
+e tmp.mdb # edit to add fileIndex
+chmod tmp.mdb
+./tmp.mdb
+Affected 1 row(s) in hg19.metaDb_tdreszer
+...
+rm tmp.mdb
+
+# Check in changes:
+cd .. {hg19/metaDb.alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra 
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra 
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra 
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 415 files.  No Missing metadata  # 415 found in hgFileUi
+
+cd ../wgEncodeOpenChromChip/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 339 files.  No Missing metadata  # 339 found in hgFileUi
+### Probably bai
+
+cd ../wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 186 files.  No Missing metadata  ### 186 found in hgFileUi
+

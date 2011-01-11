@@ -7,6 +7,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
+fileIndex wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -26,6 +27,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
+fileIndex wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -103,6 +105,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
+fileIndex wgEncodeOpenChromChipFibroblInputAln.bam.bai
 fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
 lab UT-A
@@ -143,6 +146,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -161,6 +165,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -268,6 +273,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromChipGlioblaInputAln.bam.bai
 fileName wgEncodeOpenChromChipGlioblaInputAln.bam
 grant Crawford
 lab UT-A
@@ -466,6 +472,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
+fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -485,6 +492,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
+fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -504,6 +512,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
+fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
 grant Crawford
 lab UT-A
@@ -4016,6 +4025,7 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4036,6 +4046,7 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4194,6 +4205,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4213,6 +4225,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4387,6 +4400,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4406,6 +4420,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4598,6 +4613,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4617,6 +4633,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4792,6 +4809,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4810,6 +4828,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
@@ -5330,4 +5349,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 552647640
+# MAGIC: -1815507301
