@@ -323,6 +323,7 @@ our %formatCheckers = (
     bigWig => \&validateBigWig,
     bam => \&validateBam,
     shortFrags => \&validateBed,
+    bedLogR => \&validateBed,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
