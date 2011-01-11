@@ -46,7 +46,18 @@ The update race condition ==========================================
 This problem can be avoided if you rsync the MySQL binary data
 files directly into your MySQL database.  There isn't a script
 provided here to do this since it is just a periodic rsync.
-That can be a simple several line shell script.
+That can be a simple several line shell script.  For example, to
+fetch a minimal set of tables for the hg19 browser directly
+into the MySQL database:
+
+for TBL in cytoBand cytoBandIdeo chromInfo gold gap grp trackDb hgFindSpec
+do
+  for EXT in frm MYD MYI
+  do
+rsync -a -P rsync://hgdownload.cse.ucsc.edu/mysql/hg19/${TBL}.${EXT} \
+	/var/mysql/hg19/
+  done
+done
 
 If you instead need to fetch the goldenPath database text
 dumps and load them, please note the following discussion.
