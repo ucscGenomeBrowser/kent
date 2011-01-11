@@ -355,32 +355,10 @@ function toggleTrackGroupVisibility(button, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
-    var retval = true;
-    var hidden = $("input[name='hgtgroup_"+prefix+"_close']");
-    var newVal=1; // we're going - => +
-    if($(button) != undefined && $(hidden) != undefined && $(hidden).length > 0) {
-        var oldSrc = $(button).attr("src");
-        if(arguments.length > 2)
-            newVal = arguments[2] ? 0 : 1;
-        else
-            newVal = oldSrc.indexOf("/remove") > 0 ? 1 : 0;
-
-        var newSrc;
-        if(newVal == 1) {
-            newSrc = oldSrc.replace("/remove", "/add");
-            $(button).attr('title','Expand this group');
-            $("tr[id^='"+prefix+"-']").hide();
-        } else {
-            newSrc = oldSrc.replace("/add", "/remove");
-            $(button).attr('title','Collapse this group');
-            $("tr[id^='"+prefix+"-']").show();
-        }
-        $(button).attr("src",newSrc);
-        $(hidden).val(newVal);
-        // setCartVar("hgtgroup_" + prefix + "_close", newVal);
-        retval = false;
-    }
-    return retval;
+    if(arguments.length > 2)
+	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
+    else
+	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
 }
 
 function setAllTrackGroupVisibility(newState)

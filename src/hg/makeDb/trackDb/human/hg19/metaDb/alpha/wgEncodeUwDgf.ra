@@ -1,3 +1,8 @@
+metaObject wgEncodeUwDgf
+objType composite
+composite wgEncodeUwDgf
+geoSeriesAccession GSE26328
+
 metaObject wgEncodeUwDgfGm06990Aln
 objType file
 cell GM06990
@@ -9,6 +14,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeUwDgfGm06990Aln.bam.bai
 fileName wgEncodeUwDgfGm06990Aln.bam
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -27,6 +33,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Hotspots.broadPeak.gz
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -46,6 +53,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Pk.narrowPeak.gz
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -65,6 +73,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Raw.bigWig
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -83,6 +92,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
 fileName wgEncodeUwDgfGm06990RawData.fastq.gz
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 origAssembly hg18
@@ -100,6 +110,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Sig.bigWig
+geoSampleAccession GSM646568
 grant Stam
 lab UW
 origAssembly hg18
@@ -117,6 +128,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esAln.bam
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -134,6 +146,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esHotspots.broadPeak.gz
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -152,6 +165,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esPk.narrowPeak.gz
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -170,6 +184,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esRaw.bigWig
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -188,6 +203,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esRawData.fastq.gz
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 origAssembly hg19
@@ -204,6 +220,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esSig.bigWig
+geoSampleAccession GSM646563
 grant Stam
 lab UW
 origAssembly hg19
@@ -221,6 +238,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeAln.bam
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -238,6 +256,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeHotspots.broadPeak.gz
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -256,6 +275,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaePk.narrowPeak.gz
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -274,6 +294,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeRaw.bigWig
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -292,6 +313,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeRawData.fastq.gz
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 origAssembly hg19
@@ -308,6 +330,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeSig.bigWig
+geoSampleAccession GSM646560
 grant Stam
 lab UW
 origAssembly hg19
@@ -325,6 +348,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeAln.bam
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -342,6 +366,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeHotspots.broadPeak.gz
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -360,6 +385,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpePk.narrowPeak.gz
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -378,6 +404,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeRaw.bigWig
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -396,6 +423,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeRawData.fastq.gz
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 origAssembly hg19
@@ -412,6 +440,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeSig.bigWig
+geoSampleAccession GSM646565
 grant Stam
 lab UW
 origAssembly hg19
@@ -431,6 +460,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileIndex wgEncodeUwDgfHepg2Aln.bam.bai
 fileName wgEncodeUwDgfHepg2Aln.bam
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -449,6 +479,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Hotspots.broadPeak.gz
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -468,6 +499,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Pk.narrowPeak.gz
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -487,6 +519,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Raw.bigWig
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -505,6 +538,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2RawData.fastq.gz
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 origAssembly hg18
@@ -522,6 +556,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Sig.bigWig
+geoSampleAccession GSM646559
 grant Stam
 lab UW
 origAssembly hg18
@@ -539,6 +574,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfAln.bam
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -556,6 +592,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfHotspots.broadPeak.gz
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -574,6 +611,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfPk.narrowPeak.gz
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -592,6 +630,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfRaw.bigWig
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -610,6 +649,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfRawData.fastq.gz
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 origAssembly hg19
@@ -626,6 +666,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfSig.bigWig
+geoSampleAccession GSM646561
 grant Stam
 lab UW
 origAssembly hg19
@@ -643,6 +684,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladAln.bam
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -660,6 +702,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladHotspots.broadPeak.gz
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -678,6 +721,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladPk.narrowPeak.gz
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -696,6 +740,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladRaw.bigWig
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -714,6 +759,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladRawData.fastq.gz
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 origAssembly hg19
@@ -730,6 +776,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladSig.bigWig
+geoSampleAccession GSM646570
 grant Stam
 lab UW
 origAssembly hg19
@@ -749,6 +796,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeUwDgfK562Aln.bam.bai
 fileName wgEncodeUwDgfK562Aln.bam
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -767,6 +815,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Hotspots.broadPeak.gz
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -786,6 +835,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Pk.narrowPeak.gz
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -805,6 +855,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Raw.bigWig
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -823,6 +874,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-21
 dateUnrestricted 2011-09-21
 fileName wgEncodeUwDgfK562RawData.fastq.gz
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 origAssembly hg18
@@ -840,6 +892,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Sig.bigWig
+geoSampleAccession GSM646567
 grant Stam
 lab UW
 origAssembly hg18
@@ -857,6 +910,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadAln.bam
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -874,6 +928,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadHotspots.broadPeak.gz
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -892,6 +947,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadPk.narrowPeak.gz
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -910,6 +966,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadRaw.bigWig
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -928,6 +985,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadRawData.fastq.gz
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 origAssembly hg19
@@ -944,6 +1002,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadSig.bigWig
+geoSampleAccession GSM646564
 grant Stam
 lab UW
 origAssembly hg19
@@ -961,6 +1020,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcAln.bam
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -978,6 +1038,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcHotspots.broadPeak.gz
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -996,6 +1057,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcPk.narrowPeak.gz
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -1014,6 +1076,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcRaw.bigWig
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -1032,6 +1095,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcRawData.fastq.gz
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 origAssembly hg19
@@ -1048,6 +1112,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcSig.bigWig
+geoSampleAccession GSM646562
 grant Stam
 lab UW
 origAssembly hg19
@@ -1067,6 +1132,7 @@ dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileIndex wgEncodeUwDgfSknshraAln.bam.bai
 fileName wgEncodeUwDgfSknshraAln.bam
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -1085,6 +1151,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraHotspots.broadPeak.gz
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -1104,6 +1171,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraPk.narrowPeak.gz
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -1123,6 +1191,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraRaw.bigWig
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -1141,6 +1210,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraRawData.fastq.gz
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 origAssembly hg18
@@ -1158,6 +1228,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraSig.bigWig
+geoSampleAccession GSM646566
 grant Stam
 lab UW
 origAssembly hg18
@@ -1177,6 +1248,7 @@ dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileIndex wgEncodeUwDgfTh1Aln.bam.bai
 fileName wgEncodeUwDgfTh1Aln.bam
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -1195,6 +1267,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Hotspots.broadPeak.gz
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion Hotspot-v5.1
@@ -1214,6 +1287,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Pk.narrowPeak.gz
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion lmax-v1.0
@@ -1233,6 +1307,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Raw.bigWig
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -1251,6 +1326,7 @@ dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1RawData.fastq.gz
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 origAssembly hg18
@@ -1268,6 +1344,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Sig.bigWig
+geoSampleAccession GSM646569
 grant Stam
 lab UW
 origAssembly hg18
@@ -1276,4 +1353,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 209599754
+# MAGIC: 197078206
