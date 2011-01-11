@@ -1,6 +1,20 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeChromatinMap.ra,v 1.1 2010/05/27 21:34:43 tdreszer Exp $
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/UT-Austin (Open Chromatin)
+#       - Track Short Label: UTA TFBS
+#       - View Long Labels: [cell] [factor] TFBS [view] from ENCODE/UTA 
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier
+#       - Short Labels: 
+#               Template: [cell] [factor] [view]
+#               - Views: For consistency sake view will be two letters
+#                       - Peaks = Pk
+#                       - Raw Base Overlap Signal = Sig
+#                       - F-seq Density Signal = F-Seq 
+#       - Default Tracks on: Peaks,F-Seq Density and Raw Base Overlap Signal for  tier 1 cells and Inputs.
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that define the tier and that they are distinct 
+#		- [cell] (Tier ?)
 
 track wgEncodeOpenChromChip
 compositeTrack on

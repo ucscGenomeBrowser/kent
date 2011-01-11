@@ -8,7 +8,7 @@ table peptideMapping
     uint   score;      "Log e-value scaled to a score of 0 (worst) to 1000 (best)
     char[1] strand;    "+ or -"
     float  rawScore;   "Raw score for this hit, as estimated through HMM analysis"
-    float  precursorMz; "Precursor Mz"
+    string spectrumId; 	"Non-unique identifier for the spectrum file"
     uint   peptideRank; "Rank of this hit, for peptides with multiple genomic hits"
     uint   peptideRepeatCount;    "Indicates how many times this same hit was observed"
     )

@@ -768,27 +768,30 @@ $hg.knownCanonToDecipher.value
 
 identifier agilentHumanProbeId external=agilent fuzzy
 "Agilent Human CGH/CNV array probe ID"
-    $hg.agilentCgh105a.name
     $hg.agilentCgh1x1m.name
-    $hg.agilentCgh244a.name
+    $hg.agilentHrd1x1m.name
+    $hg.agilentCghSnp2x400k.name
     $hg.agilentCgh2x400k.name
-    $hg.agilentCgh44k.name
+    $hg.agilentCghSnp4x180k.name
     $hg.agilentCgh4x180k.name
     $hg.agilentCgh8x60k.name
-    $hg.agilentCnv2x400k.name
-    $hg.agilentCnv2x105k.name
-    $hg.agilentHrd1x1m.name
+    $hg.agilentCgh244a.name
+    $hg.agilentCgh105a.name
+    $hg.agilentCgh44k.name
 
 identifier agilentMouseProbeId external=agilent fuzzy
 "Agilent Mouse CGH/CNV array probe ID"
-    $mm.agilentCgh105a.name
+    $mm.agilentCgh1x1m.name
+    $mm.agilentCgh4x180k.name
     $mm.agilentCgh244a.name
-    $mm.agilentCgh44k.name
+    $mm.agilentCgh105a.name
 
 identifier agilentRatProbeId external=agilent fuzzy
 "Agilent Rat CGH/CNV array probe ID"
-    $rn.agilentCgh105a.name
+    $rn.agilentCgh1x1m.name
+    $rn.agilentCgh4x180k.name
     $rn.agilentCgh244a.name
+    $rn.agilentCgh105a.name
 
 identifier sestanBrainAtlasId
 "Sample IDs for the Sestan brain atlas array."

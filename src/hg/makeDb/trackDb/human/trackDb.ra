@@ -3158,6 +3158,86 @@ searchMethod fuzzy
 searchType bed
 searchPriority 10
 
+searchName agilentCgh1x1m
+searchTable agilentCgh1x1m
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.1
+
+searchName agilentHrd1x1m
+searchTable agilentHrd1x1m
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.2
+
+searchName agilentCghSnp2x400k
+searchTable agilentCghSnp2x400k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(14|16|18|20)_P[0-9]+
+searchPriority 17.3
+
+searchName agilentCgh2x400k
+searchTable agilentCgh2x400k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.4
+
+searchName agilentCghSnp4x180k
+searchTable agilentCghSnp4x180k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_(14|16|18|20)_P[0-9]+
+searchPriority 17.5
+
+searchName agilentCgh4x180k
+searchTable agilentCgh4x180k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.6
+
+searchName agilentCgh8x60k
+searchTable agilentCgh8x60k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6|8)_P[0-9]+
+searchPriority 17.7
+
+searchName agilentCgh244a
+searchTable agilentCgh244a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6)_P[0-9]+
+searchPriority 17.8
+
+searchName agilentCgh105a
+searchTable agilentCgh105a
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_1(4|6)_P[0-9]+
+searchPriority 17.9
+
+searchName agilentCgh44k
+searchTable agilentCgh44k
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex A_14_P[0-9]+
+searchPriority 17.91
+
 searchName wgRnaExact
 searchTable wgRna
 searchMethod exact
@@ -3915,93 +3995,19 @@ compositeTrack on
 shortLabel UCSF Brain Methyl
 longLabel UCSF Brain DNA Methylation
 group regulation
-subGroup1 view Views ALN=Alignments COV=Raw_Signal CG=CpG_score
+subGroup1 view Views COV=Raw_Signal CG=CpG_score
 subGroup2 sampleType Sample_Type Brain=Brain
 subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
 dimensions 
 sortOrder assayType=+ view=+
 #dimensions dimensionX=sampleType dimensionY=assayType
 dividers assayType 
-#hierachy view ALN=2 COV=3 CG=4
+#hierachy view COV=2 CG=3
 dragAndDrop subTracks
 priority 1999
 visibility hide
 #itemRgb on
 type bed 3
-
-    track ucsfBrainMethylViewALN
-    shortLabel Alignments
-    view ALN
-    parent ucsfBrainMethyl
-    visibility hide
-
-        track ucsfMedipSeqBrainReads
-        shortLabel MeDIP Reads
-        longLabel MeDIP-seq Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=MeDIP1
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        type bed 9
-        noInherit on
-        itemRgb on
-        configurable on
-        spectrum on
-        priority 1
-
-        track ucsfMreSeqBrainReads
-        shortLabel MRE Reads
-        longLabel MRE-seq Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=MRE1
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        type bed 9
-        noInherit on
-        itemRgb on
-        configurable on
-        spectrum on
-        priority 2
-
-        track ucsfRnaSeqBrainSmartReads
-        shortLabel Smart Reads
-        longLabel RNA-seq Smart-Tagged Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=RNA2
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        type bed 9
-        noInherit on
-        itemRgb on
-        configurable on
-        spectrum on
-        priority 3
-
-        track ucsfRnaSeqBrainAllReads
-        shortLabel RNA-seq Reads
-        longLabel RNA-seq Reads
-        parent ucsfBrainMethylViewALN
-        subGroups view=ALN sampleType=Brain assayType=RNA1
-        type bed 9
-        noInherit on
-        configurable on
-        baseColorDefault diffBases
-        baseColorUseSequence nameIsSequence
-        baseColorTickColor lighterShade
-        showDiffBasesAllScales .
-        showDiffBasesMaxZoom 10000.0
-        itemRgb on
-        spectrum on
-        priority 4
 
     track ucsfBrainMethylViewCOV
     shortLabel Raw Signal
