@@ -20,7 +20,8 @@ include wgEncodeDukeAffyExon.ra
 include wgEncodeUwHistone.ra
 
 #UW DNase DGF (wrangler: Venkat)
-include wgEncodeUwDgf.ra
+include wgEncodeUwDgf.ra beta,public
+include wgEncodeUwDgf.new.ra alpha
 
 #Uw Dnase-Seq (wrangler: Venkat
 include wgEncodeUwDnase.ra beta,public
