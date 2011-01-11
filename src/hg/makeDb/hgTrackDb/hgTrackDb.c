@@ -527,70 +527,6 @@ struct hash *compositeHash = buildCompositeHash(tdbList);
 verifySubTracks(tdbList, compositeHash);
 }
 
-
-static void prioritizeContainerItems(struct trackDb *tdbList)
-/* Set priorities in containers if they have no priorities already set
-   priorities are based upon 'sortOrder' setting or else shortLabel */
-{
-int countOfSortedContainers = 0;
-
-// Walk through tdbs looking for containers
-struct trackDb *tdbContainer;
-for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->next)
-    {
-    if (tdbContainer->subtracks == NULL)
-        continue;
-
-    sortOrder_t *sortOrder = sortOrderGet(NULL,tdbContainer);
-    boolean needsSorting = TRUE; // default
-    float firstPriority = -1.0;
-    sortableTdbItem *item,*itemsToSort = NULL;
-
-    struct slRef *child, *childList = trackDbListGetRefsToDescendantLeaves(tdbContainer->subtracks);
-    // Walk through tdbs looking for items contained
-    for (child = childList; child != NULL; child = child->next)
-        {
-	struct trackDb *tdbItem = child->val;
-	if( needsSorting && sortOrder == NULL )  // do we?
-	    {
-	    if( firstPriority == -1.0)    // all 0 or all the same value
-		firstPriority = tdbItem->priority;
-	    if(firstPriority != tdbItem->priority && (int)(tdbItem->priority + 0.9) > 0)
-		{
-		needsSorting = FALSE;
-		break;
-		}
-	    }
-	// create an Item
-	item = sortableTdbItemCreate(tdbItem,sortOrder);
-	if(item != NULL)
-	    slAddHead(&itemsToSort, item);
-	else
-	    {
-	    verbose(1,"Error: '%s' missing shortLabels or sortOrder setting is inconsistent.\n",tdbContainer->track);
-	    needsSorting = FALSE;
-	    sortableTdbItemCreate(tdbItem,sortOrder);
-	    break;
-	    }
-        }
-
-    // Does this container need to be sorted?
-    if(needsSorting && slCount(itemsToSort))
-        {
-        verbose(2,"Sorting '%s' with %d items\n",tdbContainer->track,slCount(itemsToSort));
-        sortTdbItemsAndUpdatePriorities(&itemsToSort);
-        countOfSortedContainers++;
-        }
-
-    // cleanup
-    sortOrderFree(&sortOrder);
-    sortableTdbItemsFree(&itemsToSort);
-    }
-if(countOfSortedContainers > 0)
-    verbose(1,"Sorted %d containers\n",countOfSortedContainers);
-}
-
-
 static void rSetTrackDbFields(struct trackDb *tdbList)
 /* Recursively fill in non-settings fields from settings. */
 {
@@ -601,6 +537,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     rSetTrackDbFields(tdb->subtracks);
     }
 }
+
 
 static void rPolish(struct trackDb *tdbList)
 /* Call polisher on list and all children of list. */
@@ -677,7 +614,7 @@ if (strict)
 
 tdbList = pruneEmptyContainers(tdbList);
 checkSubGroups(tdbList);
-prioritizeContainerItems(tdbList);
+trackDbPrioritizeContainerItems(tdbList);
 return tdbList;
 }
 
@@ -733,6 +670,9 @@ verbose(1, "Loaded %d track descriptions total\n", slCount(tdbList));
         hVarSubstTrackDb(td, database);
         char *hold = td->html;
         td->html = "";
+	subChar(td->type, '\t', ' ');	/* Tabs confuse things. */
+	subChar(td->shortLabel, '\t', ' ');	/* Tabs confuse things. */
+	subChar(td->longLabel, '\t', ' ');	/* Tabs confuse things. */
 	trackDbTabOut(td, f);
         td->html = hold;
         }

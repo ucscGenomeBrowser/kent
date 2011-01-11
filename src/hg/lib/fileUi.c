@@ -72,7 +72,7 @@ if (foundFiles == NULL
         if (!endsWith(buf,".md5sum")) // Just ignore these
             {
             int count = chopLine(buf, words);
-            if (count == 6 && sameString(server,"hgdownload-test.cse.ucsc.edu")) // genome-test is different
+            if (count >= 6 && sameString(server,"hgdownload-test.cse.ucsc.edu")) // genome-test is different
                 {
                 //-rw-rw-r-- 5  502826550 2010-10-22 16:51 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdRawDataRep1.fastq.gz
                 AllocVar(oneFile);
@@ -268,10 +268,17 @@ static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 {
 puts("<p><B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
 puts("in publication  until the restriction date noted for the given data file.</B></p");
+
+struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
+if (oneFile != NULL)
+    {
+    printf("<p>\n<B>Supplemental materials</b> may be found <A HREF='http://%s/goldenPath/%s/%s/%s/supplemental/' TARGET=ucscDownloads>here</A>.</p>\n",
+          hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
+    }
 puts("<p>\nThere are two files within this directory that contain information about the downloads:");
-printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/files.txt'>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
+printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/files.txt' TARGET=ucscDownloads>files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>\n",
                 hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
-printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/md5sum.txt'>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
+printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
                 hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
 puts("<P>");
 }

@@ -21,7 +21,7 @@ static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
 char *database = "encpipeline_prod";
-extern char *docIdTable;
+char *docIdTable = DEFAULT_DOCID_TABLE;
 //char *docIdDir = "/hive/groups/encode/dcc/pipeline/downloads/docId";
 char *docIdDir = "http://hgdownload-test.cse.ucsc.edu/goldenPath/docId";
 char *docIdDirBeta = "http://hgdownload-test.cse.ucsc.edu/goldenPath/betaDocId";

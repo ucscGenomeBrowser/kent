@@ -24,7 +24,7 @@ dafVersion      2.0
 # Lab info
 grant           Myers
 lab             HudsonAlpha
-dataType        MethylArray
+dataType        Methyl27
 compositeSuffix HaibMethylArray
 variables       cell,treatment
 assembly        hg19
@@ -35,7 +35,7 @@ validationSettings none
 # Track/view definition
 # Is this view name OK with Flo
 view             Sites
-longLabelPrefix  HudsonAlpha Methylation by Illumina Bead Arrays
+longLabelPrefix  HudsonAlpha Methylation (27K) by Illumina Bead Arrays
 type             bed9
 hasReplicates    yes
 required         yes 

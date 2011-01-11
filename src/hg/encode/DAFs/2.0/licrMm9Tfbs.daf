@@ -1,6 +1,6 @@
 # Data Agreement File for LICR ChIP-seq (Transciption Factor Binding Sites) experiments for mm9
 
-#$Revision: 1.12 $
+#$Revision: 1.13 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -39,13 +39,13 @@ validationSettings validateFiles.bam:mismatches=2,matchFirst=25,nMatch;validateF
 view             Peaks
 longLabelPrefix  LICR TFBS Peaks
 type             broadPeak
-hasReplicates    yes
+hasReplicates    no
 required         no
 
 view             Signal
 longLabelPrefix  LICR TFBS Signal
 type             bigWig
-hasReplicates    yes
+hasReplicates    no
 required         no
 
 view             Alignments

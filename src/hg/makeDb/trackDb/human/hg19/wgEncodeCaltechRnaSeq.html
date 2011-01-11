@@ -14,12 +14,12 @@ which was done here on an Illumina Genome Analyzer (GAI or GAIIx) (Mortazavi et 
 
 <P>PolyA-selected RNA was fragmented by magnesium-catalyzed hydrolysis and then converted into cDNA by random priming and amplified. Data have been produced in two formats: 
 single reads, each of which comes from one end of a cDNA molecule, and paired-end reads, which are obtained as pairs from both ends of cDNAs. This RNA-seq protocol does not 
-specify the coding strand. As a result, there will be ambiguity at loci where both strands are transcribed. The "randomly primed" reverse transcription is, apparently, not 
+specify the coding strand. As a result, there will be ambiguity at loci where both strands are transcribed. The &#34;randomly primed&#34; reverse transcription is, apparently, not 
 fully random. This is inferred from a sequence bias in the first residues of the read population, and this likely contributes to observed unevenness in sequence coverage 
 across transcripts.</P>
 <H3>Strand specific protocol (1x75 bp reads):</H3>
-<P>PolyA-selected RNA was fragmented by magnesium-catalyzed hydrolysis. 3' adapters were ligated to the 3' end of fragments, then  5' adapters were ligated to the the 5'end. 
-The resulting RNA molecules were converted to cDNA and amplified. This RNA-seq protocol does specify the coding strand as each read is in the same 5'-3' orientation as the 
+<P>PolyA-selected RNA was fragmented by magnesium-catalyzed hydrolysis. 3&#8242; adapters were ligated to the 3&#8242; end of fragments, then  5&#8242; adapters were ligated to the the 5&#8242; end. 
+The resulting RNA molecules were converted to cDNA and amplified. This RNA-seq protocol does specify the coding strand as each read is in the same 5&#8242;-3&#8242; orientation as the 
 original RNA strand. As a result, loci where both strands are transcribed can be disambiguated. However, RNA ligation is an inherently biased process and as a result greater 
 unevenness in sequence coverage across transcripts is observed compared to the non-strand-specific data, and quantification is less accurate.
 </P>
@@ -69,7 +69,7 @@ the SAM/BAM file format.</DD>
 Cells were grown according to the approved <A href="http://genome.ucsc.edu/ENCODE/protocols/cell" target="_BLANK">ENCODE cell culture protocols</A> 
 except for H1-hESC for which frozen cell pellets were purchased from Cellular Dynamics.
 Cells were lysed in RLT buffer (Qiagen RNEasy kit) and processed on RNEasy midi columns 
-according to the manufacturer's protocol, with the inclusion of the "on-column" DNAse digestion step to remove residual genomic DNA.</P>  
+according to the manufacturer's protocol, with the inclusion of the &#34;on-column&#34; DNAse digestion step to remove residual genomic DNA.</P>  
 
 <P>75 &micro;gs of total RNA was selected twice with oligo-dT beads (Dynal) according to the manufacturer's 
 protocol to isolate mRNA from each of the preparations.  For 2x75 bp non-stranded RNA-seq, 100 ngs of mRNA was 
@@ -102,7 +102,7 @@ second, Cufflinks was run in de novo transcript assembly and quantificaiton mode
 <H3>Raw Reads, Alignments and Library Characteristics:</H3>
 <dl>
 <DD><b>.fastq</b> - raw sequence files in fastq format with phred33 quality scores.<br></DD>
-<DD><b>.bigWig</b> - read density files (<I>RawSignal</I> view, BigWig format; "plus" and "minus" versions provided for stranded data).<br></DD>
+<DD><b>.bigWig</b> - read density files (<I>RawSignal</I> view, BigWig format; &#34;plus&#34; and &#34;minus&#34; versions provided for stranded data).<br></DD>
 <DD><b>Aligns.bam</b> - all alignments in <A target="_BLANK" href="http://samtools.sourceforge.net/SAM1.pdf">SAM/BAM format</A> (<I>Alignments</I> view).<br></DD>
 <DD><b>Splices.bam</b> - subset of alignments that cross splice junctions (<I>Spliced Alignments</I> view).<br></DT></DD>
 <DD><b>.insDist</b> - a file containing information about the distribution of fragment lengths in the library based on the alignments of paired reads.<br></DT></DD>

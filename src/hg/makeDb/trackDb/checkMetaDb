@@ -49,7 +49,7 @@ checkMetaDb() {
     cd $metaDir 
     make DB=$db TABLE=$metaDb
     cd ../../../..
-    rm $metaDir/metaDb
+    rm -f $metaDir/metaDb
 }
 
 # load for all specified databases

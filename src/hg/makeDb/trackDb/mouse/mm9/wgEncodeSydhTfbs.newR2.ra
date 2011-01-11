@@ -1,18 +1,31 @@
 # Stanford/Yale ChIP-seq wrangler:vsmalladi assited by tdreszer, cricket)
+
 # Notes:
-#	- Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human 
-#		p300 - Signals and Peaks
-#		Pol2 - Signals and Peaks
-#		CTCF = Signals and Peaks
-#	- Dimensions:
+#       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale
+#       - Track Short Label: Stan/Yale TFBS
+#       - View Long Labels: [cell] [factor] Transcription Factor Binding [view] from ENCODE/Stanford/Yale 
+#       - cellType Order: Ordering is alphabetical
+#       - Default View selections
+#               - Peaks = dense
+#               - Signal = full
+#       - Short Labels: 
+#               Template: [cell] {factor] [view]
+#               - Views: For consistency sake view will be
+#                       - Peaks = Pk
+#                       - Signal = Sg
+#               - Treatment
+#                       - DMSO20 = D
+#       - Tracks On: Since CH12 and MEL are analogous to Tier 1 cell lines for Human 
+#               p300 - Signals and Peaks
+#               Pol2 - Signals and Peaks
+#               CTCF = Signals and Peaks
+#       - Matrix Dimensions:
 #               X - Cell Line
 #               Y - Factor
 #               Z - Treatment
-#	- Short Labels
-#		Peaks - Pk
-#		Signal - Sg 
+
+
 track wgEncodeSydhTfbs
-release alpha
 compositeTrack on
 shortLabel Stan/Yale TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale
@@ -37,7 +50,6 @@ wgEncode 1
 
 	#####Peak Tracks###########
 	track wgEncodeSydhTfbsViewPeaks
-	release alpha
 	shortLabel Peaks
 	view Peaks
 	visibility dense
@@ -52,7 +64,6 @@ wgEncode 1
 
 
     		track wgEncodeSydhTfbsCh12JundIggrabPk
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewPeaks off
     		shortLabel CH12 JunD Pk
                 longLabel CH12 JunD Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -61,7 +72,6 @@ wgEncode 1
     		color 153,38,0
 
 	        track wgEncodeSydhTfbsCh12P300IggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel CH12 p300 Pk
                 longLabel CH12 p300 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -71,7 +81,6 @@ wgEncode 1
 	        # subId=1855 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12CtcfIggyalePk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel CH12 CTCF Pk
                 longLabel CH12 CTCF Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -81,7 +90,6 @@ wgEncode 1
 	        # subId=1858 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12MaxIggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel CH12 Max Pk
                 longLabel CH12 Max Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -91,7 +99,6 @@ wgEncode 1
 	        # subId=1859 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12Rad21IggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel CH12 Rad21 Pk
                 longLabel CH12 Rad21 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -101,7 +108,6 @@ wgEncode 1
 	        # subId=1860 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12Usf2IggmusPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel CH12 USF2 Pk
                 longLabel CH12 USF2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -111,7 +117,6 @@ wgEncode 1
 	        # subId=1861 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelMaxIggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Max Pk
                 longLabel MEL Max Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -121,7 +126,6 @@ wgEncode 1
 	        # subId=1863 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelP300IggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL p300 Pk
                 longLabel MEL p300 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -131,7 +135,6 @@ wgEncode 1
 	        # subId=1864 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL USF2 Pk
                 longLabel MEL USF2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -141,7 +144,6 @@ wgEncode 1
 	        # subId=1865 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -151,7 +153,6 @@ wgEncode 1
 	        # subId=1857 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 D Pk
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -161,7 +162,6 @@ wgEncode 1
 	        # subId=2539 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelRad21IggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 Pk
                 longLabel MEL Rad21 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -171,7 +171,6 @@ wgEncode 1
 	        # subId=2541 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelNelfeIggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL NELFe Pk
                 longLabel MEL NELFe Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -181,7 +180,6 @@ wgEncode 1
 	        # subId=2543 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelCmybh141IggrabPk
-	        release alpha
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL c-Myb Pk
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -191,7 +189,6 @@ wgEncode 1
 	        # subId=2542 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsMelP300StdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MEL p300 Pk
         longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (p300 in MEL cells)
@@ -201,7 +198,6 @@ wgEncode 1
         # subId=3089 dateSubmitted=2010-12-10
 
         track wgEncodeSydhTfbsMelCtcfStdPk
-        release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MEL CTCF Pk
         longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (CTCF in MEL cells)
@@ -213,7 +209,6 @@ wgEncode 1
 
 		#### Submission 1153 ####
 		track wgEncodeSydhTfbsCh12E2f4IggrabPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel CH12 E2F4 Pk
                 longLabel CH12 E2F4 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -223,7 +218,6 @@ wgEncode 1
 
 		#### Submission 1155 ####
 		track wgEncodeSydhTfbsCh12Pol2IggmusPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs
     		shortLabel CH12 Pol2 Pk
                 longLabel CH12 Pol2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -233,7 +227,6 @@ wgEncode 1
 
 		#### Submission 1156 ####
 		track wgEncodeSydhTfbsCh12TbpIggmusPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel CH12 TBP Pk
                 longLabel CH12 TBP Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -243,7 +236,6 @@ wgEncode 1
 
 		#### Submission 1157 ####
 		track wgEncodeSydhTfbsCh12CjunIggrabPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel CH12 c-Jun Pk
                 longLabel CH12 c-Jun Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -253,7 +245,6 @@ wgEncode 1
 
 		#### Submission 1159 ####
 		track wgEncodeSydhTfbsCh12CmycIggrabPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel CH12 c-Myc Pk
                 longLabel CH12 c-Myc Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -263,7 +254,6 @@ wgEncode 1
 		
 		#### Submission 1160 ####
     		track wgEncodeSydhTfbsMelTbpIggmusPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL TBP Pk
                 longLabel MEL TBP Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -273,7 +263,6 @@ wgEncode 1
 	
 		#### Submission 1161 ####
     		track wgEncodeSydhTfbsMelPol2IggmusPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs 
     		shortLabel MEL Pol2 Pk
                 longLabel MEL Pol2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -284,7 +273,6 @@ wgEncode 1
 
 		#### Submission 1163 ####
     		track wgEncodeSydhTfbsMelCmycIggrabPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL c-Myc Pk
                 longLabel MEL c-Myc Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -295,7 +283,6 @@ wgEncode 1
 
 		#### Submission 1165 ####
     		track wgEncodeSydhTfbsMelGata1IggratPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL GATA-1 Pk
                 longLabel MEL GATA-1 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -307,7 +294,6 @@ wgEncode 1
 
 		#### Submission 1192 ####
     		track wgEncodeSydhTfbsMelJundIggrabPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
 		shortLabel MEL JunD Pk
                 longLabel MEL JunD Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -317,7 +303,6 @@ wgEncode 1
 
 		#### Submission 1193 ####
     		track wgEncodeSydhTfbsMelE2f4IggrabPk
-    		release alpha
     		subTrack wgEncodeSydhTfbs off
     		shortLabel MEL E2F4 Pk
                 longLabel MEL E2F4 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
@@ -327,7 +312,6 @@ wgEncode 1
 
 	#####Signal Tracks###########
 	track wgEncodeSydhTfbsViewSig
-	release alpha
 	shortLabel Signal
 	view Signal
 	visibility full
@@ -340,7 +324,6 @@ wgEncode 1
 	
 		#### Submission 1125 ####
 		track wgEncodeSydhTfbsCh12InputIggrabSig
-		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
 		shortLabel CH12 IgGrab Sg
                 longLabel CH12 IgG-rab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -350,7 +333,6 @@ wgEncode 1
 
 		#### Submission 1126 ####
 		track wgEncodeSydhTfbsCh12JundIggrabSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off 
     		shortLabel CH12 JunD Sg
                 longLabel CH12 JunD Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -360,7 +342,6 @@ wgEncode 1
 		
 		#### Submission 1153 ####
 		track wgEncodeSydhTfbsCh12E2f4IggrabSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 E2F4 Sg
                 longLabel CH12 E2F4 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -370,7 +351,6 @@ wgEncode 1
 		
 		#### Sumission 1154 ####
 		track wgEncodeSydhTfbsCh12InputIggmusSig
-    		release alpha
 		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 IgGmus Sg
                 longLabel CH12 IgG-mus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -380,7 +360,6 @@ wgEncode 1
 
 		#### Submission 1155 ####		
 		track wgEncodeSydhTfbsCh12Pol2IggmusSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig 
     		shortLabel CH12 Pol2 Sg
                 longLabel CH12 Pol2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -390,7 +369,6 @@ wgEncode 1
 
 		#### Submission 1156 ####
 		track wgEncodeSydhTfbsCh12TbpIggmusSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 TBP Sg
                 longLabel CH12 TBP Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -400,7 +378,6 @@ wgEncode 1
 
 		#### Submission 1157 ####
    		track wgEncodeSydhTfbsCh12CjunIggrabSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 c-Jun Sg
                 longLabel CH12 c-Jun Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -410,7 +387,6 @@ wgEncode 1
 		
 		#### Submission 1159 ####	
 		track wgEncodeSydhTfbsCh12CmycIggrabSig
-		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel CH12 c-Myc Sg
                 longLabel CH12 c-Myc Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -420,7 +396,6 @@ wgEncode 1
 
 		#### Submission 1160 ####
     		track wgEncodeSydhTfbsMelTbpIggmusSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL TBP Sg
                 longLabel MEL TBP Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -430,7 +405,6 @@ wgEncode 1
 
 		#### Submission 1161 ####
     		track wgEncodeSydhTfbsMelPol2IggmusSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig 
     		shortLabel MEL Pol2 Sg
                 longLabel MEL Pol2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -440,7 +414,6 @@ wgEncode 1
 
 		#### Submission 1162 ####
   		track wgEncodeSydhTfbsMelInputIggmusSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off 
     		shortLabel MEL IgGmus Sg
                 longLabel MEL IgG-mus Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -450,7 +423,6 @@ wgEncode 1
 
 		#### Submission 1163 ####
   		track wgEncodeSydhTfbsMelCmycIggrabSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL c-Myc Sg
                 longLabel MEL c-Myc Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -461,7 +433,6 @@ wgEncode 1
 
 		#### Submission 1164 ####
     		track wgEncodeSydhTfbsMelInputIggrabSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL IgGrab Sg
                 longLabel MEL IgG-rab Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -471,7 +442,6 @@ wgEncode 1
 
 		#### Submission 1165 ####
    		track wgEncodeSydhTfbsMelGata1IggratSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL GATA-1 Sg
                 longLabel MEL GATA-1 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -481,7 +451,6 @@ wgEncode 1
 
 		#### Submission 1167 ####
     		track wgEncodeSydhTfbsMelInputIggratSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL IgGrat Sg
                 longLabel MEL IgG-rat Input Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -492,7 +461,6 @@ wgEncode 1
 
 		##### Submission 1192 #####
     		track wgEncodeSydhTfbsMelJundIggrabSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL JunD Sg
                 longLabel MEL JunD Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -502,7 +470,6 @@ wgEncode 1
 
 		#### Submission 1193 #####
     		track wgEncodeSydhTfbsMelE2f4IggrabSig
-    		release alpha
     		subTrack wgEncodeSydhTfbsViewSig off
     		shortLabel MEL E2F4 Sg
                 longLabel MEL E2F4 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -511,7 +478,6 @@ wgEncode 1
     		color 46,0,184
 
 	        track wgEncodeSydhTfbsCh12P300IggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel CH12 p300 Sg
                 longLabel CH12 p300 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -521,7 +487,6 @@ wgEncode 1
 	        # subId=1855 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12CtcfIggyaleSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel CH12 CTCF Sg
                 longLabel CH12 CTCF Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -531,7 +496,6 @@ wgEncode 1
 	        # subId=1858 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12MaxIggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel CH12 Max Sg
                 longLabel CH12 Max Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -541,7 +505,6 @@ wgEncode 1
 	        # subId=1859 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12Rad21IggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel CH12 Rad21 Sg
                 longLabel CH12 Rad21 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -551,7 +514,6 @@ wgEncode 1
 	        # subId=1860 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsCh12Usf2IggmusSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel CH12 USF2 Sg
                 longLabel CH12 USF2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -561,7 +523,6 @@ wgEncode 1
 	        # subId=1861 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelMaxIggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Max Sg
                 longLabel MEL Max Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -571,7 +532,6 @@ wgEncode 1
 	        # subId=1863 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelP300IggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel MEL p300 Sg
                 longLabel MEL p300 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -581,7 +541,6 @@ wgEncode 1
 	        # subId=1864 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelUsf2IggmusSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL USF2 Sg
                 longLabel MEL USF2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -591,7 +550,6 @@ wgEncode 1
 	        # subId=1865 dateSubmitted=2010-07-08
 
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
                 longLabel MEL CTCF 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -601,7 +559,6 @@ wgEncode 1
 	        # subId=1857 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelInputDmso20IggyaleSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL IgGYale D Sg
                 longLabel MEL IgG-Yale Input 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -611,7 +568,6 @@ wgEncode 1
 	        # subId=1862 dateSubmitted=2010-07-09
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 D Sg
                 longLabel MEL Rad21 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -621,7 +577,6 @@ wgEncode 1
 	        # subId=2539 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelRad21IggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 Sg
                 longLabel MEL Rad21 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -631,7 +586,6 @@ wgEncode 1
 	        # subId=2541 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelNelfeIggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL NELFe Sg
                 longLabel MEL NELFe Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -641,7 +595,6 @@ wgEncode 1
 	        # subId=2543 dateSubmitted=2010-10-20
 
 	        track wgEncodeSydhTfbsMelCmybh141IggrabSig
-	        release alpha
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL c-Myb Sg
                 longLabel MEL c-Myb_(H-141) Transcription Factor Binding Signal from ENCODE/Stanford/Yale
@@ -651,7 +604,6 @@ wgEncode 1
 	        # subId=2542 dateSubmitted=2010-10-27
 
         track wgEncodeSydhTfbsMelP300StdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL p300 Sig
         longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (p300 in MEL cells)
@@ -661,7 +613,6 @@ wgEncode 1
         # subId=3089 dateSubmitted=2010-12-10
 
         track wgEncodeSydhTfbsMelCtcfStdSig
-        release alpha
         parent wgEncodeSydhTfbsViewSig off
         shortLabel MEL CTCF Sig
         longLabel ENCODE ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (CTCF in MEL cells)

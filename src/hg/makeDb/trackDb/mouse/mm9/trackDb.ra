@@ -79,6 +79,29 @@ visibility hide
     color 120,0,0
     priority 5
 
+track pseudoYale60
+shortLabel Yale Pseudo60
+longLabel Yale Pseudogenes based on Ensembl Release 60
+group genes
+priority 53
+visibility hide
+spectrum on
+type genePred
+autoTranslate 0
+geneClasses Processed Duplicated Ambiguous
+gClass_Processed 180,0,0
+gClass_Duplicated 100,50,0
+gClass_Ambiguous 100,91,191
+itemClassTbl pseudoYale60Class
+dataVersion December 2010
+urlLabel Yale pseudogene.org link:
+url http://tables.pseudogene.org/human55/$$
+
+searchTable pseudoYale60
+searchType genePred
+termRegex PGOMOU[0-9]+
+searchPriority 50
+
 track tRNAs
 shortLabel tRNA Genes
 longLabel Transfer RNA genes identified with tRNAscan-SE

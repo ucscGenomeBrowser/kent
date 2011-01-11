@@ -183,7 +183,7 @@ if(showShortLabel)
 struct hash *cvTermTypes = mdbCvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
-mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
+mdbObjRemoveVars(mdbObj,"composite project objType dccInternalNotes"); // Don't bother showing these (suggest: "composite project dataType view tableName")
 mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
 mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
 struct mdbVar *mdbVar;
@@ -1078,7 +1078,7 @@ else if (gotCds)
     puts("<br /><b>Show codon numbering</b>:\n");
     if(curOpt == baseColorDrawOff)
         disabled = "disabled";
-    cgiMakeCheckBoxJS(buf, cartUsualBoolean(cart, buf, FALSE), disabled);
+    cgiMakeCheckBoxJS(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE), disabled);
     }
 else if (gotSeq)
     {
@@ -1972,7 +1972,7 @@ slFreeList(&trackList);
 return trackName;
 }
 
-static void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
+void rAddTrackListToHash(struct hash *trackHash, struct trackDb *tdbList, char *chrom,
 	boolean leafOnly)
 /* Recursively add trackList to trackHash */
 {
@@ -3527,6 +3527,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
         }
     }
     printf("</SELECT>\n");
+
     // The following is needed to make msie scroll to selected option.
     printf("<script type='text/javascript'>onload=function(){ if( $.browser.msie ) { $(\"select[name^='%s.filterBy.']\").children('option[selected]').each( function(i) { $(this).attr('selected',true); }); }}</script>\n",tdb->track);
 puts("</TR></TABLE>");
@@ -5223,11 +5224,14 @@ if(!sameString(tdb->track, "tigrGeneIndex")
 && !sameString(tdb->track, "encodeGencodeRaceFrags"))
     baseColorDropLists(cart, tdb, name);
 
-filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
-if(filterBySet != NULL)
+if (cartOptionalString(cart, "ajax") == NULL)
     {
-    filterBySetCfgUi(tdb,filterBySet);
-    filterBySetFree(&filterBySet);
+    filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+    if(filterBySet != NULL)
+        {
+        filterBySetCfgUi(tdb,filterBySet);
+        filterBySetFree(&filterBySet);
+        }
     }
 cfgEndBox(boxed);
 }

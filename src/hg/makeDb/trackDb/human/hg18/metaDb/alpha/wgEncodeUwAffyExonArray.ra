@@ -1172,7 +1172,7 @@ dataType AffyExonArray
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
-dccNotes GEO accession provided by lab: GSM472911
+dccInternalNotes GEO accession provided by lab: GSM472911
 fileName wgEncodeUwAffyExonArraySimpleSignalRep2Skmc.broadPeak.gz
 grant Stam
 lab UW
@@ -1198,4 +1198,4 @@ replicate 2
 subId 403
 tableName wgEncodeUwAffyExonArraySimpleSignalRep2Sknshra
 
-# MAGIC: 1057896847
+# MAGIC: 1758904524

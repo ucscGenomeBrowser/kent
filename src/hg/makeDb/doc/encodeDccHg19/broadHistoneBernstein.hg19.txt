@@ -3464,4 +3464,82 @@ select id,name,status, user_id from projects where name like "BI_%" and status =
 update projects set name = "Broad 2010-12-06 NH-Osteoblast_WCE" where id = 3073;
 update projects set name = "Broad 2010-12-06 NHDF_WCE" where id = 3074;
 
+2011-01-03 Set up pushQ entry for Broad Histone hg19 release1
+=============================================================
+cd {downloadsDir}
+mkdir release1
+cd release1
+ln ../*.gz .
+ln ../*.bam .
+ln ../*.bai .
+ln ../*.bigWig .
+cp ../index.html .
+cp ../files.txt .
+cp ../md5sum.txt .
+cd ..
+ll *.bam | wl
+321
+ll release1/*.bam | wl
+321
+ll *.bai | wl
+321
+ll release1/*.bai | wl
+321
+ll *.gz | wl
+458
+ll release1/*.gz | wl
+458
+ll *.bigWig | wl
+151
+ll release1/*.bigWig | wl
+151
+ll *.broadPeak* | wl
+137
+ll release1/*.broadPeak* | wl
+137
+ll | grep -v fastq | grep -v ".bam" | grep -v bigWig | grep -v Peak
+-rw-rw-r--  1 tdreszer   protein       6948 Nov  8 14:43 bai.txt
+-rw-rw-r--  1 tdreszer   protein       6891 Nov  8 14:40 bai.txt~
+-rw-rw-r--  1 tdreszer   protein       6948 Nov  8 14:41 bai2.txt
+-rw-rw-r--  1 tdreszer   protein       6448 Nov  8 14:41 bai2.txt~
+-rw-r--r--  1 braney     protein      37570 Aug  2 15:44 fileList.txt
+-rw-rw-r--  1 braney     protein     464475 Dec 20 15:44 files.txt
+-rw-rw-r--  1 braney     protein     119704 Jul 26 12:52 files.txt.00
+-rwxrwxr-x  1 braney     protein     786519 Dec 19 21:45 index.html
+-rw-rw-r--  1 braney     protein     105548 Dec 20 00:38 md5sum.txt
+-rw-rw-r--  1 cricket    protein        829 Nov 30 14:05 preamble.html
+drwxrwxr-x  2 tdreszer   protein     131072 Jan  3 12:13 release1
+-rwxrwxr-x  1 tdreszer   protein     827975 Dec 20 15:44 sort.html
+-rw-rw-r--  1 tdreszer   protein      10786 Oct 22 16:04 tmp.txt
+-rw-rw-r--  1 tdreszer   protein     256749 Jan  3 12:15 wgEncodeBroadHistone.notes.hg19.release1.txt
+ls -1 | wl
+1936
+ls -1 release1/ | wl
+1254
+## What is missing?
+*.md5sum
+ls -1 | grep -v md5sum | wl
+1264
+ls -l | grep -v md5sum | grep -v fastq | grep -v ".bam" | grep -v bigWig | grep -v Peak | grep -v "index.html" | grep -v "files.txt"
+-rw-rw-r-- 1 tdreszer   protein       6948 Nov  8 14:43 bai.txt
+-rw-rw-r-- 1 tdreszer   protein       6891 Nov  8 14:40 bai.txt~
+-rw-rw-r-- 1 tdreszer   protein       6948 Nov  8 14:41 bai2.txt
+-rw-rw-r-- 1 tdreszer   protein       6448 Nov  8 14:41 bai2.txt~
+-rw-r--r-- 1 braney     protein      37570 Aug  2 15:44 fileList.txt
+-rw-rw-r-- 1 braney     protein     464475 Dec 20 15:44 files.txt
+-rw-rw-r-- 1 braney     protein     119704 Jul 26 12:52 files.txt.00
+-rwxrwxr-x 1 braney     protein     786519 Dec 19 21:45 index.html
+-rw-rw-r-- 1 cricket    protein        829 Nov 30 14:05 preamble.html
+drwxrwxr-x 2 tdreszer   protein     131072 Jan  3 12:13 release1
+-rwxrwxr-x 1 tdreszer   protein     827975 Dec 20 15:44 sort.html
+-rw-rw-r-- 1 tdreszer   protein     100093 Jan  3 12:34 tmp.txt
+-rw-rw-r-- 1 tdreszer   protein      63046 Jan  3 12:34 tmp2.txt
+# A Okay
+
+~/bin/scripts/encodeMkChangeNotes hg19 release1 - >  wgEncodeBroadHistone.release1.notes
+# lots of bam warnings: For ChipSeq bams are not tables
+e  wgEncodeBroadHistone.release1.notes # remove bam errors
+mv  wgEncodeBroadHistone.release1.notes ~/kent/src/hg/makeDb/doc/encodeDccHg19/
+git add, ci, push
+# make a pushQ entry: encodePushQ.56
 
