@@ -2569,5 +2569,7 @@ http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/m
     cd /hive/data/genomes/calJac3/bed/liftOver
     mv calJac3.hg18.over.chain.gz calJac3ToHg18.over.chain.gz
     md5sum *.gz > md5sum.txt
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/calJac3/liftOver
+    ln -s /hive/data/genomes/calJac3/bed/liftOver/calJac3ToHg18.over.chain.gz .
 
 ############################################################################
