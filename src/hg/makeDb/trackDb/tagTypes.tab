@@ -285,7 +285,7 @@ showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak broadPeak
 signalFilterLimits bed narrowPeak broadPeak
-smoothingWindow wig bed5FloatScore bedGraph
+smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed
 snpSeq bed

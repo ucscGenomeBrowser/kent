@@ -30,19 +30,19 @@ noAutoCreate     yes
 
 # Track/view definition
 view             Peaks     
-longLabelPrefix  SUNY RNA-seq Analysis 
+longLabelPrefix  SUNY RIP-seq Analysis 
 type             bed6+    
 hasReplicates    no
 required         yes
 
 view             Alignments   
-longLabelPrefix  SUNY RNA-seq Alignments
+longLabelPrefix  SUNY RIP-seq Alignments
 type             bam
 hasReplicates    yes
 required         yes
 
 view             Signal
-longLabelPrefix  SUNY RNA-seq Signal
+longLabelPrefix  SUNY RIP-seq Signal
 type             bigWig
 hasReplicates    yes
 required         yes
