@@ -16230,10 +16230,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (snp->chromStart != start || differentString(snp->chrom, seqName))
 	{
 	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these additional locations:"
+	    printf("<B>This SNP maps to these additional locations:"
 		   "</B><BR><BR>");
 	snpCount++;
-	bedPrintPos((struct bed *)&snp, 3, tdb);
+	bedPrintPos((struct bed *)snp, 3, tdb);
 	printf("<BR>");
 	}
     }
