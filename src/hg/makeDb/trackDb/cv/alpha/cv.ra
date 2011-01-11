@@ -5083,6 +5083,23 @@ targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
 validation MEF2A(Immunoblot):human_MEF2A_validation_Myers.pdf
 
+term NANOG_(SC-33759)
+tag NANOGSC33759
+type Antibody
+target NANOG
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 151-305 mapping at the C-terminus of Nanog of human origin. 
+targetDescription Transcription regulator involved in inner cell mass and embryonic stem (ES) cells proliferation and self-renewal.  Imposes pluripotency on ES cells and prevents their differentiation towards extraembryonic endoderm and trophectoderm lineages.  Blocks bone morphogenetic protein-induced mesoderm differentiation of ES cells by physically interacting with SMAD1 and interfering with the recruitment of coactivators to the active SMAD transcriptional complexes (By similarity).  Acts as a transcriptional activator or repressor (By similarity).  Binds optimally to the DNA consensus sequence 5'-TAAT[GT][GT]-3' or 5'-[CG][GA][CG]C[GC]ATTAN[GC]-3' (By similarity).  When overexpressed, promotes cells to enter into S phase and proliferation (By similarity) (provided by RefSeq). 
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-33759
+orderUrl http://www.scbt.com/datasheet-33759-nanog-h-155-antibody.html
+lab Myers 
+lots C0909 
+targetId GeneCards:NANOG
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
+validation NANOG_(SC-33759)(Immunoblot,MassSpec)_Myers:human_NANOG_SC-33759_validation_Myers.pdf
+
+
+
 term NELFe
 tag NELFE
 type Antibody
@@ -5409,6 +5426,21 @@ lab Snyder
 targetId
 targetUrl
 validation missing
+
+term POU5F1_(SC-9081)
+tag POU5F1SC9081
+type Antibody
+target POU5F1
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 1-134 of Oct3/4 of human origin. 
+targetDescription This gene encodes a transcription factor containing a POU homeodomain.  This transcription factor plays a role in embryonic development, especially during early embryogenesis, and it is necessary for embryonic stem cell pluripotency.  A translocation of this gene with the Ewing's sarcoma gene, t(6;22)(p21;q12), has been linked to tumor formation.  Alternative splicing, as well as usage of alternative translation initiation codons, results in multiple isoforms, one of which initiates at a non-AUG (CUG) start codon.  Related pseudogenes have been identified on chromosomes 1, 3, 8, 10, and 12 (provided by RefSeq). 
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-9081
+orderUrl http://www.scbt.com/datasheet-9081-oct-3-4-h-134-antibody.html
+lab Myers 
+lots F2609 
+targetId GeneCards:POU5F1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
+validation POU5F1_(SC-9081)(immunoblot+massspec)_Myers:human_POU5F1_SC-9081_validation_Myers.pdf
 
 term POU2F2
 tag POU2F2
