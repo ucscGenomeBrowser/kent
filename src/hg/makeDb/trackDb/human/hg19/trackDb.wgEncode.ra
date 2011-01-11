@@ -18,8 +18,14 @@ include wgEncodeOpenChromDnase.ra
 include wgEncodeOpenChromFaire.ra
 include wgEncodeDukeAffyExon.ra
 include wgEncodeUwHistone.ra
+
+#UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.ra
-include wgEncodeUwDnase.ra
+
+#Uw Dnase-Seq (wrangler: Venkat
+include wgEncodeUwDnase.ra beta,public
+include wgEncodeUwDnase.new.ra alpha
+
 include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethylArray.ra
 include wgEncodeGisRnaSeq.ra
