@@ -2547,3 +2547,27 @@ http://genome.wustl.edu/pub/organism/Primates/Callithrix_jacchus/end_sequences/m
     checkTableCoords -verboseBlocks calJac3 bacEndCalJac3Singles
 
 ############################################################################
+# Create liftOver files to and from: calJac3 <-> hg18 (DONE 2011-01-10 - Chin)
+
+    #   original alignment on hg19:
+    cd /hive/data/genomes/hg18/bed/lastzCalJac3.2010-12-20
+
+    #   and for this swap
+    mkdir /hive/data/genomes/calJac3/bed/blastz.hg18.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.hg18.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg18/bed/lastzCalJac3.2010-12-20/DEF \
+        -swap -syntenicNet \
+        -stop net \
+        -workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    48m54s
+    cd /hive/data/genomes/calJac3/bed/
+    ln -s blastz.hg18.swap lastz.hg18
+    cd /hive/data/genomes/calJac3/bed/lastz.hg18/axtChain
+    cp calJac3.hg18.over.chain.gz ../../liftOver/.
+    cd /hive/data/genomes/calJac3/bed/liftOver
+    mv calJac3.hg18.over.chain.gz calJac3ToHg18.over.chain.gz
+    md5sum *.gz > md5sum.txt
+
+############################################################################
