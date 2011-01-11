@@ -163,6 +163,8 @@ if (genePredTables != NULL)
 	    }
 	}
     slSort(&geneTdbList, trackDbCmp);
+    jsBeginCollapsibleSection(cart, tdb->track, "geneTracks",
+			      "Use Gene Tracks for Functional Annotation", FALSE);
     printf("<BR><B>On details page, show function and coding differences relative to: </B> ");
     char cartVar[256];
     safef(cartVar, sizeof(cartVar), "%s_geneTrack", tdb->track);
@@ -185,6 +187,7 @@ if (genePredTables != NULL)
 	labels[i] = gTdb->shortLabel;
 	}
     cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedGeneTracks, numCols);
+    jsEndCollapsibleSection();
     }
 hFreeConn(&conn);
 }
@@ -261,25 +264,30 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     printf("<BR><B>Include Chimp state and observed human alleles in name: </B>&nbsp;");
     cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
     printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
-    printf("<BR>\n");
+    printf("<BR><BR>\n");
     }
+
+// Make wrapper table for collapsible sections:
+puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
 
 snp125OfferGeneTracksForFunction(tdb);
 
 //#*** Need snp125Ui funcs for backwards compat with old cart vars when these have track-specific
 //#*** settings as they should:
 double snp125AvHetCutoff = cartUsualDouble(cart, "snp125AvHetCutoff", SNP125_DEFAULT_MIN_AVHET);
-printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
+printf("<TR><TD colspan=2><BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
 cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
+printf("</TD></TR>\n");
 
 int snp125WeightCutoff = cartUsualInt(cart, "snp125WeightCutoff", SNP125_DEFAULT_MAX_WEIGHT);
-printf("<BR><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
+printf("<TR><TD colspan=2><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
 cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
-printf("&nbsp;<I>SNPs with higher weights are less reliable</I><BR><BR>\n");
+printf("&nbsp;<EM>Range: 1, 2 or 3; SNPs with higher weights are less reliable</EM><BR><BR>\n");
+printf("</TD></TR>\n");
 
-printf("<A name=\"filterControls\"><HR>\n"
-       "<B>Filter by Attribute</B><BR>\n"
-       "Check the boxes below to include SNPs with those attributes.  "
+printf("<TR><TD colspan=2><A name=\"filterControls\"></TD></TR>\n");
+jsBeginCollapsibleSection(cart, tdb->track, "filterByAttribute", "Filter by Attribute", FALSE);
+printf("Check the boxes below to include SNPs with those attributes.  "
        "In order to be displayed, a SNP must pass the filter for each "
        "category.  \n"
        "Some assemblies may not contain any SNPs that have some of the "
@@ -299,7 +307,9 @@ snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
 			  snp125FuncDataName, funcArraySize);
 snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
 			  snp125MolTypeDataName, snp125MolTypeArraySize);
-printf("</TABLE><BR>\n");
+printf("</TABLE>\n");
+jsEndCollapsibleSection();
+puts("<TR><TD colspan=2><BR></TD></TR>");
 
 safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
       "document."MAIN_FORM".action = '%s'; %s"
@@ -322,8 +332,9 @@ if (defaultColoring)
     cartRemoveStringArray(cart, snp125FuncStrings, funcArraySize);
     cartRemoveStringArray(cart, snp125MolTypeStrings, snp125MolTypeArraySize);
     }
-printf("<A name=\"colorSpec\"><HR>\n");
-printf("<B>SNP Feature for Color Specification:</B>\n");
+printf("<TR><TD colspan=2><A name=\"colorSpec\"></TD></TR>\n");
+jsBeginCollapsibleSection(cart, tdb->track, "colorByAttribute", "Color by Attribute", FALSE);
+printf("<BR><B>SNP Feature for Color Specification:</B>\n");
 char *snp125ColorSourceCart = cartUsualString(cart, snp125ColorSourceVarName,
 					      snp125ColorSourceDefault);
 if (version <= 127)
@@ -373,7 +384,9 @@ else if (sameString(snp125ColorSourceCart, "Function"))
 else if (sameString(snp125ColorSourceCart, "Molecule Type"))
     snp125PrintColorSpec(snp125MolTypeStrings, snp125MolTypeLabels, snp125MolTypeDefault,
 			 snp125MolTypeArraySize);
-printf("<HR>\n");
+jsEndCollapsibleSection();
+// End wrapper table for collapsible sections:
+puts("</TABLE>");
 }
 
 void snpUi(struct trackDb *tdb)
