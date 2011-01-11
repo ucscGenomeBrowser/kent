@@ -12,9 +12,10 @@ CREATE TABLE peptideMapping (
     score int unsigned not null,	# Log e-value scaled to a score of 0 (worst) to 1000 (best)
     strand char(1) not null,	# + or -
     rawScore float not null,	# Raw score for this hit, as estimated through HMM analysis
-    precursorMz float not null,	# Precursor Mz
+    precursorMz varchar(255) not null,	# Precursor Mz
     peptideRank int unsigned not null,	# Rank of this hit, for peptides with multiple genomic hits
     peptideRepeatCount int unsigned not null,	# Indicates how many times this same hit was observed
               #Indices
-    KEY(chrom, chromStart, score, precursorMz)
+    KEY(name),
+    PRIMARY KEY(chrom, chromStart, chromEnd, precursorMz)
 );

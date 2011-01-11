@@ -736,7 +736,10 @@ if (logOp == NULL)
     logOp = "";
 if (valMenuSize-1 > 2)
     {
-    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, cartOptionalSlNameList(cart, name), 5);
+    struct slName *defaults = cartOptionalSlNameList(cart, name);
+    if (defaults == NULL)
+	defaults = slNameNew("*");
+    cgiMakeCheckboxGroup(name, valMenu, valMenuSize, defaults, 5);
     hPrintf("</TD><TD>%s </TD></TR>\n", logOp);
     }
 else
