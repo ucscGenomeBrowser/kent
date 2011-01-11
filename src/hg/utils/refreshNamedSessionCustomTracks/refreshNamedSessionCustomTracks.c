@@ -5,14 +5,21 @@
 #include "options.h"
 #include "hash.h"
 #include "cheapcgi.h"
-#include "hdb.h"
+//#include "hdb.h"  // DEBUG REMOVE
 #include "customTrack.h"
 #include "customFactory.h"
 #include "hui.h"
 
+// DEBUG REMOVE:
+//#include "jksql.h"
+
+#include "hgConfig.h"
+#include <sys/wait.h>
+
 static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/01/13 17:27:35 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
+
 
 void usage()
 /* Explain usage and exit. */
@@ -42,52 +49,65 @@ static struct optionSpec options[] = {
     {"atime",    OPTION_INT},
     {"workDir",  OPTION_STRING},
     {"hardcore", OPTION_BOOLEAN}, /* Intentionally omitted from usage(). */
-    {"db",       OPTION_STRING},  /* Intentionally omitted from usage(). */
-    {"dataPt",   OPTION_STRING},  /* Intentionally omitted from usage(). */
     {NULL, 0},
 };
 
 int CFTEcalls = 0;  // DEBUG REMOVE
 int numUpdates = 0;  // DEBUG REMOVE
 
-struct dyString *saveCmdLine = NULL;
-
-int doCFTE(char *db, char *dataPt)
-/* Call this function and then exit 
- * in order to avoid accumulation of gigabytes of leaked memory */
+struct sqlConnection *unCachedCentralConn()
+/* do not want a cached connection because we will close and fork */
 {
-boolean thisGotLiveCT = FALSE, thisGotExpiredCT = FALSE;
-customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
-int retCode = 0;
-if (thisGotLiveCT)
-    retCode |= 1;
-if (thisGotExpiredCT)
-    retCode |= 2;
-//verbose(1,"doCFTE:: live=%d expired=%d retCode = %d\n", thisGotLiveCT, thisGotExpiredCT, retCode);  // DEBUG REMOVE
-return retCode;
+return sqlConnectRemote( 
+ cfgOption("central.host"),
+ cfgOption("central.user"    ),
+ cfgOption("central.password"),
+ cfgOption("central.db")
+);
 }
 
 void customFactoryTestExistenceCall(char *genomeDb, char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Shell out and run it to avoid gigabytes of leaked memory */
 {
-char cmdLine[256];
-safef(cmdLine, sizeof(cmdLine), "%s -db=%s -dataPt=%s", saveCmdLine->string, genomeDb, fileName);
 
-//verbose(1, "cmdLine=[%s]\n", cmdLine);  // DEBUG REMOVE
+int pid = 0;
+pid = fork();
+if (pid < 0)
+    errnoAbort("refreshNamedSessionCustomTracks can't fork");
+if (pid == 0)
+    {
+    customFactoryTestExistence(genomeDb, fileName, retGotLive, retGotExpired);
+    int retCode = 0;
+    if (*retGotLive)
+    	retCode |= 1;
+    if (*retGotExpired)
+    	retCode |= 2;
+    exit(retCode);
+    }
+else
+    {
+    int wstat;
+    if (waitpid(pid, &wstat, 0) < 0)
+	{
+	perror("waitpid failed");
+	return;
+	}
 
-int exitCode = system(cmdLine);
-//int exitCode = wstat;
-//verbose(1,"CFTECall:: exitCode = %d\n", exitCode);  // DEBUG REMOVE
+    //int exitCode = wstat;
+    //verbose(1,"CFTECall:: exitCode = %d\n", exitCode);  // DEBUG REMOVE
 
-int retCode = exitCode/256;
-//int retCode = WEXITSTATUS(wstat);
-//verbose(1,"CFTECall:: retCode = %d\n", retCode);  // DEBUG REMOVE
+    //int retCode = exitCode/256;
+    int retCode = WEXITSTATUS(wstat);
+    //verbose(1,"CFTECall:: retCode = %d\n", retCode);  // DEBUG REMOVE
 
-if (retCode & 1)
-    *retGotLive = TRUE;
-if (retCode & 2)
-    *retGotExpired = TRUE;
+    if (retCode & 1)
+	*retGotLive = TRUE;
+    if (retCode & 2)
+	*retGotExpired = TRUE;
+
+    }
+
 }
 
 
@@ -101,7 +121,8 @@ void scanSettingsForCT(char *userName, char *sessionName, // char *contents,
  * the update here because that messes up the caller's query. */
 {
 
-struct sqlConnection *conn = hConnectCentral();
+//struct sqlConnection *conn = hConnectCentral();  DEBUG REMOVE
+struct sqlConnection *conn = unCachedCentralConn();
 
 char query[512];
 
@@ -109,6 +130,7 @@ safef(query, sizeof(query),
 	  "select contents from %s "
 	  "where userName='%s' and sessionName = '%s'", savedSessionTable, userName, sessionName);
 char *contents = sqlQuickString(conn, query);
+sqlDisconnect(&conn);
 if (!contents)
     return;
 
@@ -152,10 +174,12 @@ while (isNotEmpty(namePt))
 	else
 	    {
 	    dyStringAppend(newContents, oneSetting->string);
-	    //DEBUG RESTORE: 
 	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
-	    //verbose(1, "db=%s dataPt=%s\n", db, dataPt);  // DEBUG REMOVE
+
+	    //hDisconnectCentral(&conn); // DEBUG REMOVE
 	    customFactoryTestExistenceCall(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
+	    //conn = hConnectCentral();  // DEBUG REMOVE
+
             //verbose(1,"called CFTE, got live=%d expired=%d\n", thisGotLiveCT, thisGotExpiredCT);  // DEBUG REMOVE
 	    ++CFTEcalls;  // DEBUG REMOVE
 	    }
@@ -182,6 +206,7 @@ if (newContents->stringSize != contentLength)
     ++numUpdates;
 if (optionExists("hardcore") && newContents->stringSize != contentLength) 
     {
+    struct sqlConnection *conn = unCachedCentralConn();
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
 	errAbort("Uh, why is newContents (%d) longer than original (%d)??",
@@ -197,12 +222,13 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)
 	    contentLength, newContents->stringSize);
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
+    sqlDisconnect(&conn);
     }
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
 freeMem(contentsToChop);
 freeMem(contents);
-hDisconnectCentral(&conn);
+//hDisconnectCentral(&conn);
 return;
 
 }
@@ -220,7 +246,8 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
  * tracks that are referenced by saved sessions. */
 {
 
-struct sqlConnection *conn = hConnectCentral();
+//struct sqlConnection *conn = hConnectCentral();  DEBUG REMOVE
+struct sqlConnection *conn = unCachedCentralConn();
 char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
 
@@ -268,17 +295,17 @@ if (sqlTableExists(conn, savedSessionTable))
 	AllocVar(si);
 	safecpy(si->userName, sizeof(si->userName), row[0]);
 	safecpy(si->sessionName, sizeof(si->sessionName), row[1]);
-	//si->contents = cloneString(row[3]);
 	slAddHead(&sessionList, si);
 	}
     sqlFreeResult(&sr);
     }
-hDisconnectCentral(&conn);
+
+//hDisconnectCentral(&conn);  // DEBUG REMOVE
+sqlDisconnect(&conn);
 
 for (si = sessionList;  si != NULL;  si = si->next)
     {
-    scanSettingsForCT(si->userName, si->sessionName, // si->contents,
-					  &liveCount, &expiredCount);
+    scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount);
     }
 
 //DEBUG REMOVE
@@ -295,23 +322,12 @@ verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int i;
-saveCmdLine = dyStringNew(256);
-for(i=0;i<argc;++i)
-    dyStringPrintf(saveCmdLine, "%s ", argv[i]);
-//verbose(1, "%s\n", saveCmdLine->string);
 
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 char *workDir = optionVal("workDir", CGI_BIN);
 setCurrentDir(workDir);
-
-if (optionExists("db") && optionExists("dataPt"))
-    {
-    int retCode = doCFTE(optionVal("db", NULL), optionVal("dataPt", NULL));
-    exit(retCode);
-    }
 
 refreshNamedSessionCustomTracks(argv[1]);
 
