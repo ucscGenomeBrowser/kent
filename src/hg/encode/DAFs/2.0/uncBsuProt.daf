@@ -24,7 +24,7 @@ dafVersion        2.0
 grant             Giddings
 lab               UNC/BSU
 dataType          Proteogenomics
-compositeSuffix   uncBsuProtgeno
+compositeSuffix   uncBsuProt
 group             expression
 variables         cell, localization
 assembly          hg19

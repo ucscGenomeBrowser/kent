@@ -18,7 +18,7 @@ struct peptideMapping
     unsigned score;	/* Log e-value scaled to a score of 0 (worst) to 1000 (best) */
     char strand[2];	/* + or - */
     float rawScore;	/* Raw score for this hit, as estimated through HMM analysis */
-    char *precursorMz;	/* Precursor Mz */
+    char *spectrumId;	/* Non-unique identifier for the spectrum file */
     unsigned peptideRank;	/* Rank of this hit, for peptides with multiple genomic hits */
     unsigned peptideRepeatCount;	/* Indicates how many times this same hit was observed */
     };
