@@ -6,6 +6,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireAstrocyAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
 grant Crawford
 lab UNC
@@ -23,6 +24,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireAstrocyAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
 grant Crawford
 lab UNC
@@ -123,6 +125,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromFaireGlioblaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
 grant Crawford
 lab UNC
@@ -140,6 +143,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromFaireGlioblaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
 grant Crawford
 lab UNC
@@ -157,6 +161,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromFaireGlioblaAlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
 grant Crawford
 lab UNC
@@ -447,6 +452,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12891AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
 grant Crawford
 lab UNC
@@ -464,6 +470,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12891AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
 grant Crawford
 lab UNC
@@ -564,6 +571,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12892AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
 grant Crawford
 lab UNC
@@ -581,6 +589,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12892AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
 grant Crawford
 lab UNC
@@ -1484,45 +1493,6 @@ replicate 2
 subId 639
 view RawData
 
-metaObject wgEncodeOpenChromFaireHelas3RawDataRep3
-objType file
-cell HeLa-S3
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-31
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3RawDataRep3.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 3
-subId 3153
-treatment None
-view RawData
-
-metaObject wgEncodeOpenChromFaireHelas3RawDataRep3V2
-objType file
-cell HeLa-S3
-composite wgEncodeOpenChromFaire
-controlId HeLa-S3/Input
-dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateResubmitted 2009-09-10
-dateSubmitted 2009-03-22
-dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3RawDataRep3V2.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 3
-subId 494
-submittedDataVersion V2 - new sequences generated
-view RawData
-
 metaObject wgEncodeOpenChromFaireHelas3Sig
 objType table
 cell HeLa-S3
@@ -1920,6 +1890,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562NabutAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
 grant Crawford
 lab UNC
@@ -1939,6 +1910,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562NabutAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2048,6 +2020,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2067,6 +2040,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2225,45 +2199,6 @@ replicate 2
 subId 640
 view RawData
 
-metaObject wgEncodeOpenChromFaireK562RawDataRep3
-objType file
-cell K562
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-31
-dateSubmitted 2009-04-20
-dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireK562RawDataRep3.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 3
-subId 3153
-treatment None
-view RawData
-
-metaObject wgEncodeOpenChromFaireK562RawDataRep3V2
-objType file
-cell K562
-composite wgEncodeOpenChromFaire
-controlId K562/Input
-dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateResubmitted 2009-09-08
-dateSubmitted 2009-04-20
-dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireK562RawDataRep3V2.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 3
-subId 483
-submittedDataVersion V2 - new sequences generated
-view RawData
-
 metaObject wgEncodeOpenChromFaireK562Sig
 objType table
 cell K562
@@ -2283,82 +2218,6 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
 
-metaObject wgEncodeOpenChromFaireLhsrAndroRawDataRep1
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-31
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroRawDataRep1.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 3153
-treatment androgen
-view RawData
-
-metaObject wgEncodeOpenChromFaireLhsrAndroRawDataRep2
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-31
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroRawDataRep2.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 3153
-treatment androgen
-view RawData
-
-metaObject wgEncodeOpenChromFaireLhsrRawDataRep1
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-31
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrRawDataRep1.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 1
-subId 3153
-treatment None
-view RawData
-
-metaObject wgEncodeOpenChromFaireLhsrRawDataRep2
-objType file
-cell LHSR
-composite wgEncodeOpenChromFaire
-dataType FaireSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-31
-dateSubmitted 2009-12-23
-dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrRawDataRep2.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-replicate 2
-subId 3153
-treatment None
-view RawData
-
 metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
 cell Medullo
@@ -2367,6 +2226,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromFaireMedulloAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2384,6 +2244,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromFaireMedulloAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2863,4 +2724,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -2027592335
+# MAGIC: -348256989
