@@ -465,7 +465,7 @@ char collapseGroupVar[512];
 safef(collapseGroupVar, sizeof(collapseGroupVar), "%s.section_%s_close", track, section);
 boolean isOpen = !cartUsualBoolean(cart, collapseGroupVar, !isOpenDefault);
 
-printf("<TR><TD><input type='hidden' name=\"%s\" id=\"%s\" value=\"%s\">\n",
+printf("<TR><TD width='20'><input type='hidden' name=\"%s\" id=\"%s\" value=\"%s\">\n",
        collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
 printf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'>\n",
        cgiScriptName(), cartSidUrlString(cart), collapseGroupVar, (isOpen ? "1" : "0"), section);
