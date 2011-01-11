@@ -274,6 +274,10 @@ void mdbObjsSortOnVars(struct mdbObj **mdbObjs, char *vars);
 // Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
 // Optionally give list of vars "cell antibody treatment" to sort on (bringing to front of vars lists).
 
+void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs);
+// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
+// This method will use mdbObjsSortOnVars()
+
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars);
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 
@@ -284,11 +288,25 @@ char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var);
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis);
 // Replaces objs' vars with var=vap pairs provided, preparing for DB update.
 
+struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,boolean exclude);
+// Filters mdb objects to only those that include/exclude vars.  Optionally checks val too.  Frees removed objects
+
+struct mdbObj *mdbObjsFilterTablesOrFiles(struct mdbObj **pMdbObjs,boolean table, boolean files);
+// Filters mdb objects to only those that have associated tables or files. Returns removed non-table/file objects
+// Note: Since table/file objects overlap, there are 3 possibilites: tables, files, table && files
+
+struct mdbObj *mdbObjIntersection(struct mdbObj **a, struct mdbObj *b);
+// return duplicate objs from an intersection of two mdbObj lists.
+// List b is untouched but pA will contain the resulting intersection
+
 void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *varType,char *val,boolean deleteThis);
 // Turns one or more mdbObjs into the stucture needed to add/update or delete.
 
 struct mdbObj *mdbObjClone(const struct mdbObj *mdbObj);
 // Clones a single mdbObj, including hash and maintining order
+
+struct slName *mdbObjToSlName(struct mdbObj *mdbObjs);
+// Creates slNames list of mdbObjs->obj.  mdbObjs remains untouched
 
 int mdbVarCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
@@ -312,7 +330,15 @@ const char *metadataFindValue(struct trackDb *tdb, char *var);
 
 
 #define MDB_VAL_STD_TRUNCATION 64
-struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files);
+struct mdbObj *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit);
+// Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
+// Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
+
+struct mdbObj *mdbObjRepeatedSearch(struct sqlConnection *conn,struct slPair *varValPairs,boolean tables,boolean files);
+// Search the metaDb table for objs by var,val pairs.  Uses mdbCvSearchMethod() if available.
+// This method will use mdbObjsQueryByVars()
+
+struct slName *mdbObjNameSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files);
 // Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
 

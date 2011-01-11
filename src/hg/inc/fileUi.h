@@ -21,7 +21,8 @@ struct fileDb
     {
     struct fileDb *next;     // single link list
     char *fileName;          // File Name
-    unsigned long  fileSize; // File size
+    char *fileType;          // File Type, taken directly from .* suffix, but with .gz removed
+    unsigned long fileSize;  // File size
     char *fileDate;          // File Modified? date and time
     struct mdbObj *mdb;      // The files are not trackDb entries but are found in the metaDb only
     char **sortFields;       // Array of strings to sort on in sort Order
@@ -40,5 +41,8 @@ void filesDownloadUi(char *db, struct cart *cart, struct trackDb *tdb);
 // a single trackDb entry (composite or of type "downloadsOnly". The list of files
 // will have links to their download and have metadata information associated.
 // The list will be a sortable table and there may be filtering controls.
+
+int fileSearchResults(char *db, struct sqlConnection *conn, struct slPair *varValPairs, char *fileType);
+// Prints list of files in downloads directories matching mdb search terms. Returns count
 
 #endif /* FILEUI_H */
