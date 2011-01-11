@@ -6,8 +6,28 @@
 
 static char const rcsid[] = "$Id: variation.c,v 1.148 2010/06/07 16:54:21 angie Exp $";
 
-struct hash *snp125FuncCartColorHash = NULL;
-struct hash *snp125FuncCartNameHash = NULL;
+static double snp125AvHetCutoff = SNP125_DEFAULT_MIN_AVHET;
+static int snp125WeightCutoff = SNP125_DEFAULT_MAX_WEIGHT;
+
+// Globals for caching cart coloring and filtering settings for snp125+ tracks:
+static char **snp125LocTypeCart = NULL;
+static char **snp125ClassCart = NULL;
+static char **snp125MolTypeCart = NULL;
+static char **snp125ValidCart = NULL;
+static struct hash *snp125FuncCartColorHash = NULL;
+static struct hash *snp125FuncCartNameHash = NULL;
+
+static boolean snp125LocTypeFilterOn = FALSE;
+static boolean snp125ClassFilterOn = FALSE;
+static boolean snp125MolTypeFilterOn = FALSE;
+static boolean snp125ValidFilterOn = FALSE;
+static boolean snp125FuncFilterOn = FALSE;
+
+static struct slName *snp125LocTypeFilter = NULL;
+static struct slName *snp125ClassFilter = NULL;
+static struct slName *snp125MolTypeFilter = NULL;
+static struct slName *snp125ValidFilter = NULL;
+static struct slName *snp125FuncFilter = NULL;
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -73,7 +93,7 @@ boolean snp125AvHetFilterItem(void *item)
 {
 struct snp125 *el = item;
 
-if (el->avHet < atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0")))
+if (el->avHet < snp125AvHetCutoff)
     return FALSE;
 return TRUE;
 }
@@ -83,7 +103,7 @@ boolean snp125WeightFilterItem(void *item)
 {
 struct snp125 *el = item;
 
-if (el->weight > atoi(cartUsualString(cart, "snp125WeightCutoff", "3")))
+if (el->weight > snp125WeightCutoff)
     return FALSE;
 return TRUE;
 }
@@ -114,20 +134,14 @@ for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
 return TRUE;
 }
 
-boolean snp125MolTypeFilterItem(void *item)
+static boolean snp125MolTypeFilterItem(void *item)
 /* Return TRUE if item passes filter, i.e. has an included property. */
 {
-struct snp125 *el = item;
-int i;
-
-for (i=0; i<snp125MolTypeLabelsSize; i++)
-    {
-    if (!sameString(snp125MolTypeDataName[i], el->molType))
-	continue;
-    if (snp125MolTypeIncludeCart[i])
-	return TRUE;
-    }
-return FALSE;
+struct snp125 *el = (struct snp125 *)item;
+if (! snp125MolTypeFilterOn)
+    return TRUE;
+else
+    return slNameInList(snp125MolTypeFilter, el->molType);
 }
 
 boolean snpClassFilterItem(struct track *tg, void *item)
@@ -143,20 +157,14 @@ for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
 return TRUE;
 }
 
-boolean snp125ClassFilterItem(void *item)
+static boolean snp125ClassFilterItem(void *item)
 /* Return TRUE if item passes filter, i.e. has an included property. */
 {
-struct snp125 *el = item;
-int i;
-
-for (i=0; i<snp125ClassLabelsSize; i++)
-    {
-    if (!sameString(snp125ClassDataName[i], el->class))
-	continue;
-    if (snp125ClassIncludeCart[i])
-	return TRUE;
-    }
-return FALSE;
+struct snp125 *el = (struct snp125 *)item;
+if (! snp125ClassFilterOn)
+    return TRUE;
+else
+    return slNameInList(snp125ClassFilter, el->class);
 }
 
 boolean snpValidFilterItem(struct track *tg, void *item)
@@ -172,20 +180,32 @@ for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
 return TRUE;
 }
 
-boolean snp125ValidFilterItem(void *item)
+static boolean snp125ValidFilterItem(void *item)
 /* Return TRUE if item passes filter, i.e. has an included property. */
 {
-struct snp125 *el = item;
-int i;
-
-for (i=0; i<snp125ValidLabelsSize; i++)
+struct snp125 *el = (struct snp125 *)item;
+if (! snp125ValidFilterOn)
+    return TRUE;
+else
     {
-    if (!containsStringNoCase(el->valid, snp125ValidDataName[i]))
-	continue;
-    if (snp125ValidIncludeCart[i])
-	return TRUE;
+    char *s = el->valid, *e;
+    char val[256]; // Longest validation code is much shorter than this
+    while (s != NULL && s[0] != 0)
+	{
+	e = strchr(s, ',');
+	if (e == NULL && slNameInList(snp125ValidFilter, s))
+	    return TRUE;
+	else
+	    {
+	    safencpy(val, sizeof(val), s, e-s);
+	    if (slNameInList(snp125ValidFilter, val))
+		return TRUE;
+	    e += 1;
+	    }
+	s = e;
+	}
+    return FALSE;
     }
-return FALSE;
 }
 
 boolean snpFuncFilterItem(struct track *tg, void *item)
@@ -201,10 +221,12 @@ for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
 return TRUE;
 }
 
-boolean snp125FuncFilterItem(void *item)
+static boolean snp125FuncFilterItem(void *item)
 /* Return TRUE if item passes filter, i.e. has an included property. */
 {
-struct snp125 *el = item;
+struct snp125 *el = (struct snp125 *)item;
+if (!snp125FuncFilterOn)
+    return TRUE;
 char *words[128];
 int wordCount, i;
 char funcString[4096];
@@ -214,11 +236,7 @@ for (i = 0;  i < wordCount;  i++)
     {
     char *simpleFunc = (char *)hashMustFindVal(snp125FuncCartNameHash,
 					       words[i]);
-    int snpFunc = stringArrayIx(simpleFunc,
-				snp125FuncDataName, snp125FuncDataNameSize);
-    if (snpFunc < 0)
-	errAbort("Unrecognized function %s", simpleFunc);
-    if (snp125FuncIncludeCart[snpFunc])
+    if (slNameInList(snp125FuncFilter, simpleFunc))
 	return TRUE;
     }
 return FALSE;
@@ -237,20 +255,14 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
 return TRUE;
 }
 
-boolean snp125LocTypeFilterItem(void *item)
+static boolean snp125LocTypeFilterItem(void *item)
 /* Return TRUE if item passes filter, i.e. has an included property. */
 {
-struct snp125 *el = item;
-int i;
-
-for (i=0; i<snp125LocTypeLabelsSize; i++)
-    {
-    if (!sameString(snp125LocTypeDataName[i], el->locType))
-	continue;
-    if (snp125LocTypeIncludeCart[i])
-	return TRUE;
-    }
-return FALSE;
+struct snp125 *el = (struct snp125 *)item;
+if (! snp125LocTypeFilterOn)
+    return TRUE;
+else
+    return slNameInList(snp125LocTypeFilter, el->locType);
 }
 
 void filterSnp125Items(struct track *tg, int version)
@@ -452,42 +464,45 @@ enum   trackVisibility  visLim    = limitVisibility(tg);
 int                     version   = snpVersion(tg->table);
 int                     i         = 0;
 
-snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
-snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
+snp125AvHetCutoff = cartUsualDouble(cart, "snp125AvHetCutoff", SNP125_DEFAULT_MIN_AVHET);
+snp125WeightCutoff = cartUsualInt(cart, "snp125WeightCutoff", SNP125_DEFAULT_MAX_WEIGHT);
 snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
 
-for (i=0; i < snp125MolTypeCartSize; i++)
-    {
+char *track = tg->tdb->track;
+snp125MolTypeFilter = snp125FilterFromCart(cart, track, "molType", &snp125MolTypeFilterOn);
+snp125ClassFilter = snp125FilterFromCart(cart, track, "class", &snp125ClassFilterOn);
+snp125ValidFilter = snp125FilterFromCart(cart, track, "valid", &snp125ValidFilterOn);
+snp125FuncFilter = snp125FilterFromCart(cart, track, "func", &snp125FuncFilterOn);
+snp125LocTypeFilter = snp125FilterFromCart(cart, track, "locType", &snp125LocTypeFilterOn);
+
+AllocArray(snp125MolTypeCart, snp125MolTypeArraySize);
+for (i=0; i < snp125MolTypeArraySize; i++)
     snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
-    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
-    }
-for (i=0; i < snp125ClassCartSize; i++)
-    {
+AllocArray(snp125ClassCart, snp125ClassArraySize);
+for (i=0; i < snp125ClassArraySize; i++)
     snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
-    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
-    }
-for (i=0; i < snp125ValidCartSize; i++)
-    {
+AllocArray(snp125ValidCart, snp125ValidArraySize);
+for (i=0; i < snp125ValidArraySize; i++)
     snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
-    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
-    }
+AllocArray(snp125LocTypeCart, snp125LocTypeArraySize);
+for (i=0; i < snp125LocTypeArraySize; i++)
+    snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
+
 snp125FuncCartColorHash = hashNew(0);
 snp125FuncCartNameHash = hashNew(0);
-for (i=0; i < snp125FuncCartSize; i++)
+for (i=0; i < snp125FuncArraySize; i++)
     {
-    snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
+    char *cartVal = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
     /* There are many function types, some of which are mapped onto
      * simpler types in snp125Ui.c.  First store the indexes of
      * selected colors of simpler types that we present as coloring
      * choices; then (below) map the more detailed function types'
      * indexes onto the simpler types' indexes. */
     hashAddInt(snp125FuncCartColorHash, snp125FuncDataName[i],
-	       stringArrayIx(snp125FuncCart[i],
-			     snp125ColorLabel, snp125ColorLabelSize));
+	       stringArrayIx(cartVal, snp125ColorLabel, snp125ColorArraySize));
     /* Similarly, map names.  Self-mapping here, synonyms below. */
     hashAdd(snp125FuncCartNameHash, snp125FuncDataName[i],
 	    snp125FuncDataName[i]);
-    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
     }
 int j, k;
 for (j = 0;  snp125FuncDataSynonyms[j] != NULL;  j++)
@@ -500,11 +515,6 @@ for (j = 0;  snp125FuncDataSynonyms[j] != NULL;  j++)
 	hashAdd(snp125FuncCartNameHash, snp125FuncDataSynonyms[j][k],
 		snp125FuncDataSynonyms[j][0]);
 	}
-    }
-for (i=0; i < snp125LocTypeCartSize; i++)
-    {
-    snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
-    snp125LocTypeIncludeCart[i] = cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
     }
 
 /* load SNPs */
@@ -682,32 +692,34 @@ Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct snp125 *el = item;
 enum   snp125ColorEnum thisSnpColor = snp125ColorBlack;
-char  *snpColorSource = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
+char  *snpColorSource = cartUsualString(cart, snp125ColorSourceVarName, snp125ColorSourceDefault);
 int    snpValid = 0;
 int    index1 = 0;
 int    index2 = 0;
 
 index1 = stringArrayIx(snpColorSource,
-		       snp125ColorSourceLabels, snp125ColorSourceLabelsSize);
+		       snp125ColorSourceLabels, snp125ColorSourceArraySize);
 switch (index1)
     {
     case snp125ColorSourceMolType:
-	index2 = stringArrayIx(el->molType,snp125MolTypeDataName,snp125MolTypeDataNameSize);
+//*** seems like we should precompute a mapping directly from el->molType to color 
+//*** (the second stringArrayIx into snp125MolTypeCart shouldn't be necessary)
+	index2 = stringArrayIx(el->molType,snp125MolTypeDataName,snp125MolTypeArraySize);
 	if (index2 < 0)
 	    index2 = 0;
-	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125MolTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125MolTypeCart[index2],snp125ColorLabel,snp125ColorArraySize);
 	break;
     case snp125ColorSourceClass:
-	index2 = stringArrayIx(el->class,snp125ClassDataName,snp125ClassDataNameSize);
+	index2 = stringArrayIx(el->class,snp125ClassDataName,snp125ClassArraySize);
 	if (index2 < 0)
 	    index2 = 0;
-	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125ClassCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125ClassCart[index2],snp125ColorLabel,snp125ColorArraySize);
 	break;
 	/* valid is a set */
     case snp125ColorSourceValid:
-	for (snpValid=0; snpValid<snp125ValidCartSize; snpValid++)
+	for (snpValid=0; snpValid<snp125ValidArraySize; snpValid++)
 	    if (containsStringNoCase(el->valid, snp125ValidDataName[snpValid]))
-		thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125ValidCart[snpValid],snp125ColorLabel,snp125ColorLabelSize);
+		thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125ValidCart[snpValid],snp125ColorLabel,snp125ColorArraySize);
 	break;
 	/* func is a set */
     case snp125ColorSourceFunc:
@@ -730,10 +742,10 @@ switch (index1)
 	}
 	break;
     case snp125ColorSourceLocType:
-	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeDataNameSize);
+	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeArraySize);
 	if (index2 < 0)
 	    index2 = 0;
-	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorArraySize);
 	break;
     default:
 	thisSnpColor = snp125ColorBlack;
