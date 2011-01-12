@@ -64,4 +64,10 @@ struct slName  *hubConnectHubsInCart(struct cart *cart);
 int hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
 
+struct trackDb *hubConnectAddHubForTrackAndFindTdb(char *database, char *trackName,
+	struct trackDb **pTdbList, struct hash *trackHash);
+/* Go find hub for trackName (which will begin with hub_), and load the tracks
+ * for it, appending to end of list and adding to trackHash.  Return the
+ * trackDb associated with trackName. */
+
 #endif /* HUBCONNECT_H */

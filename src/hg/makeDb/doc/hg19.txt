@@ -7806,6 +7806,9 @@ done
     # trim unwanted chip-prefix to be backwards compatible with hg17 and hg18
     hgsql hg19 -e 'update knownToU133 set value=substring(value,7)'
 
+    # remove the trailing ";" from the value field (redmine #1685)
+    hgsql hg19 -e 'update knownToU133 set value=trim(trailing ";" from value);'
+
 ##########################################################################
 # GNF ATLAS 2 (Done - 2009-09-30 - Jim)
     # Align probes from GNF1H chip.
