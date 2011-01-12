@@ -96,6 +96,8 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "sage.h"
 #include "sageExp.h"
 #include "pslWScore.h"
@@ -22738,6 +22740,10 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
 	    sameString(ct->dbTrackType, "maf")))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
+    if (isHubTrack(track))
+	{
+	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
+	}
     if (parentWigMaf)
         {
         int wordCount, i;
