@@ -16,7 +16,6 @@ static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/
 
 #define savedSessionTable "namedSessionDb"
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -62,41 +61,136 @@ return sqlConnectRemote(
 );
 }
 
+
+// due to bug in OS, won't work without a handler
+static void handle_SIGCHLD(int sig)
+{
+}
+
+
 void customFactoryTestExistenceCall(char *genomeDb, char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
-/* Shell out and run it to avoid gigabytes of leaked memory */
+/* Fork and run it to avoid gigabytes of leaked memory */
 {
 
-int pid = 0;
+sigset_t mask;
+sigset_t orig_mask;  
+struct timespec timeout;
+
+// due to bug we have to set up a sigchld handler
+// even though we don't use it.
+struct sigaction act;
+(void)memset (&act, 0, sizeof(act));
+act.sa_handler = handle_SIGCHLD;
+if (sigaction(SIGCHLD, &act, 0)) {
+    perror("sigaction err");
+    return;
+}
+
+sigemptyset (&mask);
+sigaddset (&mask, SIGCHLD);
+
+/* BLOCK to prevent a race condition that loses SIGCHLD events */
+if (sigprocmask(SIG_BLOCK, &mask, &orig_mask) < 0) 
+    {
+    perror ("sigprocmask");
+    return;
+    }
+
+/* This is critical because we are about to fork, 
+ * otherwise your output is a mess with weird duplicates */
+fflush(stdout); fflush(stderr);
+
+
+pid_t pid = 0;
 pid = fork();
 if (pid < 0)
     errnoAbort("refreshNamedSessionCustomTracks can't fork");
 if (pid == 0)
     {
-    customFactoryTestExistence(genomeDb, fileName, retGotLive, retGotExpired);
-    int retCode = 0;
-    if (*retGotLive)
-    	retCode |= 1;
-    if (*retGotExpired)
-    	retCode |= 2;
-    exit(retCode);
+
+    /* Put some error catching in so it won't just abort
+     *  and also we don't want to get thrown out to any higher-level catcher */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+        if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD in child.
+	    {
+	    perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
+	    }
+	customFactoryTestExistence(genomeDb, fileName, retGotLive, retGotExpired);
+	int retCode = 0;
+	if (*retGotLive)
+	    retCode |= 1;
+	if (*retGotExpired)
+	    retCode |= 2;
+
+	exit(retCode);
+	}
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+	{
+	verbose(1, "%s", errCatch->message->string);
+	}
+    errCatchFree(&errCatch);
+    exit(4);   
+
     }
 else
     {
     int wstat;
+
+    timeout.tv_sec = 10;
+    timeout.tv_nsec = 0;
+
+    while (1)
+	{
+	int sig = sigtimedwait(&mask, NULL, &timeout);
+	int savedErrno = errno;
+
+	if (sig < 0) 
+	    {
+	    if (savedErrno == EINTR) 
+		{
+		/* Interrupted by a signal other than SIGCHLD. */
+                /* An minor improvement would be to subtract the time already consumed before continuing. */
+                verbose(1, "EINTR received, ignoring");
+		fflush(stdout); fflush(stderr);
+		continue;
+		}
+	    else if (savedErrno == EAGAIN) 
+		{
+		verbose(1,"Timed out, killing child pid %d\n", pid);
+		fflush(stdout); fflush(stderr);
+		kill (pid, SIGKILL);
+		//continue;  /* to catch the resulting SIGCHLD ?*/
+		}
+	    else 
+		{
+		perror ("sigtimedwait");
+		fflush(stdout); fflush(stderr);
+		return;
+		}
+	    }
+
+	break;  /* received SIGCHLD */
+	}
+
+    if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD
+	{
+	perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
+	}
     if (waitpid(pid, &wstat, 0) < 0)
 	{
 	perror("waitpid failed");
+	fflush(stdout); fflush(stderr);
 	return;
 	}
 
-    //int exitCode = wstat;
-    //verbose(1,"CFTECall:: exitCode = %d\n", exitCode);  // DEBUG REMOVE
-
-    //int retCode = exitCode/256;
     int retCode = WEXITSTATUS(wstat);
-    //verbose(1,"CFTECall:: retCode = %d\n", retCode);  // DEBUG REMOVE
 
+    if (retCode == 4)
+	return;
     if (retCode & 1)
 	*retGotLive = TRUE;
     if (retCode & 2)
@@ -301,7 +395,7 @@ for (si = sessionList;  si != NULL;  si = si->next)
 	scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount);
     errCatchEnd(errCatch);
     if (errCatch->gotError)
-	warn("%s", errCatch->message->string);
+	warn("sessionList errCatch: %s", errCatch->message->string);
     errCatchFree(&errCatch);
     }
 
