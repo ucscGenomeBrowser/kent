@@ -2997,3 +2997,22 @@ char *splitOffNumber(char *db)
 {
 return cloneString(skipToNumeric(db));
 }
+
+time_t dateToSeconds(const char *date,const char*format)
+// Convert a string date to time_t
+{
+    struct tm storage={0,0,0,0,0,0,0,0,0};
+    if(strptime(date,format,&storage)==NULL)
+        return 0;
+    else
+        return mktime(&storage);
+}
+
+boolean dateIsOld(const char *date,const char*format)
+// Is this string date older than now?
+{
+time_t test = dateToSeconds(date,format);
+time_t now = clock1();
+return (test < now);
+}
+

@@ -6907,6 +6907,13 @@ description The dense fibrillar network lying on the inner side of the nuclear m
 termId GO:0016363
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
 
+term membraneFraction
+tag membraneFraction
+type localization
+description That fraction of cells, prepared by disruptive biochemical methods, that includes the plasma and other membranes.
+termId GO:0005624
+termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005624
+
 ### RNA extracts
 term total
 tag total
