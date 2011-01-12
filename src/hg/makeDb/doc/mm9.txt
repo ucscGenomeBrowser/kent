@@ -11541,3 +11541,14 @@ hgsql -e 'select distinct(class) from pseudoYale60Class;' mm9
 # Added the classes to:
 # ~/kentJuly2010/kent/src/hg/makeDb/trackDb/tagTypes.tab
 # e.g. gClass_Processed genePred
+
+#########################################################################
+# Refresh mm9.knownToVisiGene
+#
+# After we fixed another issue on hgwdev and rebuilt knownToVisiGene
+# it picked up the new mm9 ucsc genes.  Because that has not
+# yet been released to RR, I remade it on hgwbeta.
+ssh hgwbeta
+knownToVisiGene mm9
+
+#########################################################################

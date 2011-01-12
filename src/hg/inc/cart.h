@@ -101,6 +101,9 @@ void cartRemovePrefix(struct cart *cart, char *prefix);
 boolean cartVarExists(struct cart *cart, char *var);
 /* Return TRUE if variable is in cart. */
 
+boolean cartListVarExists(struct cart *cart, char *var);
+/* Return TRUE if a list variable is in cart (list may still be empty). */
+
 INLINE boolean cartVarExistsDb(struct cart *cart, char *db, char *var)
 /* Return TRUE if variable_$db is in cart. */
 {

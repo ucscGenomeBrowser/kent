@@ -7806,6 +7806,9 @@ done
     # trim unwanted chip-prefix to be backwards compatible with hg17 and hg18
     hgsql hg19 -e 'update knownToU133 set value=substring(value,7)'
 
+    # remove the trailing ";" from the value field (redmine #1685)
+    hgsql hg19 -e 'update knownToU133 set value=trim(trailing ";" from value);'
+
 ##########################################################################
 # GNF ATLAS 2 (Done - 2009-09-30 - Jim)
     # Align probes from GNF1H chip.
@@ -13024,10 +13027,11 @@ hgLoadBed hg19 darned allChroms.bed
     # once this has been QAed, will auto-update from genbank scripts
 
 #############################################################################
-# NEW SNP132 (DONE 12/17/10 angie)
-
-    mkdir -p /hive/data/outside/dbSNP/132test/human
-    cd /hive/data/outside/dbSNP/132test/human
+# NEW SNP132 (DONE 1/5/11 angie)
+    # New table type snp132Ext, with same columns as snp125 plus exceptions,
+    # allele freqs, and submitter handles, using new script doDbSnp.pl.
+    mkdir -p /hive/data/outside/dbSNP/132/human
+    cd /hive/data/outside/dbSNP/132/human
     # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
     # to find the subdir name to use as orgDir below (human_9606 in this case).
     # Then click into that directory and look for file names like 
@@ -13041,8 +13045,7 @@ build 132
 buildAssembly 37_1
 liftUp /hive/data/genomes/hg19/jkStuff/liftContigs.lft
 EOF
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test >& do.log & tail -f do.log
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
 # *** This release contains more than one assembly label.
 # *** Please examine this list in case we need to exclude any of these:
 #
@@ -13062,20 +13065,7 @@ EOF
 
     # Try again with updated config:
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test \
       -continue=loadDbSnp >>& do.log &
-    tail -f do.log
-
-    # Needed to tweak hg19-specific liftOver awk; run again from bigJoin but don't load:
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test \
-      -continue bigJoin -stop translate >>& do.log &
-    tail -f do.log
-
-    # Load it up with new columns!
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra \
-      -buildDir /hive/data/outside/dbSNP/132test \
-      -continue bigJoin >>& do.log &
     tail -f do.log
 
 
