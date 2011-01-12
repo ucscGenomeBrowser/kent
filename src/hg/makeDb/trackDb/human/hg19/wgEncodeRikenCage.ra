@@ -1,5 +1,5 @@
 track wgEncodeRikenCage
-release alpha
+release alpha,beta
 compositeTrack on
 shortLabel RIKEN CAGE Loc
 longLabel RNA Subcellular CAGE Alignments Localization from ENCODE/RIKEN
@@ -22,7 +22,7 @@ wgEncode 1
 superTrack wgEncodeRnaSeqSuper
 
     track wgEncodeRikenCageViewPlusClusters
-    release alpha
+    release alpha,beta
     shortLabel Plus Clusters
     view PlusClusters
     visibility full
@@ -36,7 +36,7 @@ superTrack wgEncodeRnaSeqSuper
     windowingFunction mean
 
         track wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         subTrack wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cyto pA- + 0
         longLabel NHEK cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -46,7 +46,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1811 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 cyto pA- + 0
         longLabel GM12878 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -57,7 +57,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cyto pA- + 0
         longLabel HUVEC cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -67,7 +67,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1800 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cyto pA- + 0
         longLabel HepG2 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -77,7 +77,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1801 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nucl pA- + 0
         longLabel HepG2 nucleus polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -87,7 +87,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1802 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageHuvecCellPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cell pA+ + 2
         longLabel HUVEC whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -98,7 +98,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2388 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3NucleusPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa nucl pA+ + 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -109,7 +109,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2386 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3NucleusPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa nucl pA+ + 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -120,7 +120,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2384 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekNucleusPapPlusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK nucl pA+ + 3
         longLabel NHEK nucleus polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -131,7 +131,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2382 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cell pA+ + 1
         longLabel HepG2 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -142,7 +142,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2381 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cell pA+ + 1
         longLabel H1-hESC whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -153,7 +153,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2380 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCytosolPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cyto pA+ + 2
         longLabel H1-hESC cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -164,7 +164,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2379 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CellPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cell pA+ + 2
         longLabel HepG2 whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -175,7 +175,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2378 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecNucleusPapPlusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE nucl pA+ + 3
         longLabel HUVEC nucleus polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -186,7 +186,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2377 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cell pA+ + 1
         longLabel HUVEC whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -197,7 +197,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2376 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2NucleusPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nucl pA+ + 1
         longLabel HepG2 nucleus polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -208,7 +208,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2375 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CellPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cell pA+ + 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -219,7 +219,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2374 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCytosolPapPlusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cyto pA+ + 3
         longLabel NHEK cytosol polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -230,7 +230,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2373 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cell pA+ + 1
         longLabel NHEK whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -241,7 +241,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2372 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cyto pA+ + 1
         longLabel K562 cytosol polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -252,7 +252,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2371 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cell pA+ + 2
         longLabel H1-hESC whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -263,7 +263,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2370 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CytosolPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cyto pA+ + 2
         longLabel HepG2 cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -274,7 +274,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2369 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCytosolPapPlusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cyto pA+ + 3
         longLabel HUVEC cytosol polyA+ CAGE Plus strand start sites rep 3 from ENCODE/RIKEN
@@ -285,7 +285,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2368 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nucl pA+ + 1
         longLabel K562 nucleus polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -296,7 +296,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2367 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2NucleusPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nucl pA+ + 2
         longLabel HepG2 nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -307,7 +307,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2366 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CytosolPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cyto pA+ + 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -318,7 +318,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2364 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cell pA+ + 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -329,7 +329,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2363 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cell pA+ + 2
         longLabel K562 whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -340,7 +340,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2362 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCellPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cell pA+ + 2
         longLabel NHEK whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -351,7 +351,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2361 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescNucleusPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES nucl pA+ + 2
         longLabel H1-hESC nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -362,7 +362,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2360 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cell pA+ + 1
         longLabel K562 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -373,7 +373,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2359 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nucl pA+ + 2
         longLabel K562 nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -384,7 +384,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2358 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CytosolPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG cyto pA+ + 1
         longLabel HepG2 cytosol polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -395,7 +395,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2357 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecNucleusPapPlusClustersRep4
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE nucl pA+ + 4
         longLabel HUVEC nucleus polyA+ CAGE Plus strand start sites rep 4 from ENCODE/RIKEN
@@ -406,7 +406,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2356 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CytosolPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cyto pA+ + 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -417,7 +417,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2355 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCytosolPapPlusClustersRep4
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVE cyto pA+ + 4
         longLabel HUVEC cytosol polyA+ CAGE Plus strand start sites rep 4 from ENCODE/RIKEN
@@ -428,7 +428,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2354 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 nucl pA- + 1
         longLabel GM12878 nucleus polyA- CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -439,7 +439,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2350 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageMcf7CellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel MCF7 cell pA+ + 1
         longLabel MCF-7 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -449,7 +449,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2365 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CellPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 cell pA+ + 2
         longLabel GM12878 whole cell polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -460,7 +460,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2394 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 cyto pA+ + 1
         longLabel GM12878 cytosol polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -471,7 +471,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2393 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 nucl pA+ + 2
         longLabel GM12878 nucleus polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -482,7 +482,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2392 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 cyto pA+ + 2
         longLabel GM12878 cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -493,7 +493,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2391 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 nucl pA+ + 1
         longLabel GM12878 nucleus polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -504,7 +504,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2390 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CellPapPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel GM12 cell pA+ + 1
         longLabel GM12878 whole cell polyA+ CAGE Plus strand start sites rep 1 from ENCODE/RIKEN
@@ -515,7 +515,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2389 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapPlusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cyto pA+ + 2
         longLabel K562 cytosol polyA+ CAGE Plus strand start sites rep 2 from ENCODE/RIKEN
@@ -526,7 +526,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2383 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel Pros cell pA- + 0
         longLabel Prostate whole cell polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -536,7 +536,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1813 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cyto pA- + 0
         longLabel K562 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -547,7 +547,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1805 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel H1ES cell pA- + 0
         longLabel H1-hESC whole cell polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -558,7 +558,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1799 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageK562ChromatinTotalPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 chrm tot + 0
         longLabel K562 chromatin Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -568,7 +568,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1804 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562CytosolPapPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 cyto pA+ + 0
         longLabel K562 cytosol polyA+ CAGE Plus strand start sites from ENCODE/RIKEN
@@ -578,7 +578,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1806 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleolusTotalPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nlos tot + 0
         longLabel K562 nucleolus Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -588,7 +588,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1807 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nplm tot + 0
         longLabel K562 nucleoplasm Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -598,7 +598,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1808 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 psom pA- + 0
         longLabel K562 polysome polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -608,7 +608,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1810 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK nucl pA- + 0
         longLabel NHEK nucleus polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -618,7 +618,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1812 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nucl pA- + 0
         longLabel K562 nucleus polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -628,7 +628,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2127 dateSubmitted=2010-08-26
 
         track wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG nlos tot + 0
         longLabel HepG2 nucleolus Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -638,7 +638,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2124 dateSubmitted=2010-08-23
 
         track wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on 
         shortLabel GM12 nlos tot + 0
         longLabel GM12878 nucleolus Total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -648,7 +648,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2125 dateSubmitted=2010-08-23
 
         track wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa cyto pA- +
         longLabel HeLa-S3 cytosol polyA- CAGE Plus strand start sites from ENCODE/RIKEN
@@ -659,7 +659,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2784 dateSubmitted=2010-10-29
 
         track wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa nlos tot +
         longLabel Hela-S3 nucleolus total CAGE Plus strand start sites from ENCODE/RIKEN
@@ -670,7 +670,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2783 dateSubmitted=2010-10-29
 
         track wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewPlusClusters on
         shortLabel K562 nlos tot 1
         longLabel K562 nucleolus total CAGE Plus strand start sites replicate 1 from ENCODE/RIKEN
@@ -682,7 +682,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
     track wgEncodeRikenCageViewMinusClusters
-    release alpha
+    release alpha,beta
     shortLabel Minus Clusters
     view MinusClusters
     visibility full
@@ -697,7 +697,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         subTrack wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cyto pA- - 0
         longLabel NHEK cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -707,7 +707,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1811 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 cyto pA- - 0
         longLabel GM12878 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -718,7 +718,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cyto pA- - 0
         longLabel HUVEC cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -728,7 +728,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1800 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cyto pA- - 0
         longLabel HepG2 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -738,7 +738,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1801 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nucl pA- - 0
         longLabel HepG2 nucleus polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -749,7 +749,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageK562ChromatinTotalMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 chrm tot - 0
         longLabel K562 chromatin Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -759,7 +759,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1804 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562CytosolPapMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cyto pA+ - 0
         longLabel K562 cytosol polyA+ CAGE Minus strand start sites from ENCODE/RIKEN
@@ -769,7 +769,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1806 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleolusTotalMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nlos tot - 0
         longLabel K562 nucleolus Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -779,7 +779,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1807 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleoplasmTotalMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nplm tot - 0
         longLabel K562 nucleoplasm Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -789,7 +789,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1808 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 psom pA- - 0
         longLabel K562 polysome polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -799,7 +799,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1810 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK nucl pA- - 0
         longLabel NHEK nucleus polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -809,7 +809,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1812 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nucl pA- - 0
         longLabel K562 nucleus polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -819,7 +819,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2127 dateSubmitted=2010-08-26
 
         track wgEncodeRikenCageHepg2NucleolusTotalMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nlos tot - 0
         longLabel HepG2 nucleolus Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -829,7 +829,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2124 dateSubmitted=2010-08-23
 
         track wgEncodeRikenCageGm12878NucleolusTotalMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 nlos tot - 0
         longLabel GM12878 nucleolus Total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -839,7 +839,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2125 dateSubmitted=2010-08-23
 
         track wgEncodeRikenCageHuvecCellPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cell pA+ - 2
         longLabel HUVEC whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -850,7 +850,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2388 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3NucleusPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa nucl pA+ - 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -861,7 +861,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2386 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3NucleusPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa nucl pA+ - 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -872,7 +872,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2384 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekNucleusPapMinusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK nucl pA+ - 3
         longLabel NHEK nucleus polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -883,7 +883,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2382 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cell pA+ - 1
         longLabel HepG2 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -894,7 +894,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2381 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cell pA+ - 1
         longLabel H1-hESC whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -905,7 +905,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2380 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCytosolPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cyto pA+ - 2
         longLabel H1-hESC cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -916,7 +916,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2379 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CellPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cell pA+ - 2
         longLabel HepG2 whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -927,7 +927,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2378 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecNucleusPapMinusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE nucl pA+ - 3
         longLabel HUVEC nucleus polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -938,7 +938,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2377 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cell pA+ - 1
         longLabel HUVEC whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -949,7 +949,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2376 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2NucleusPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nucl pA+ - 1
         longLabel HepG2 nucleus polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -960,7 +960,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2375 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CellPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cell pA+ - 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -971,7 +971,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2374 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCytosolPapMinusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cyto pA+ - 3
         longLabel NHEK cytosol polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -982,7 +982,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2373 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cell pA+ - 1
         longLabel NHEK whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -993,7 +993,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2372 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cyto pA+ - 1
         longLabel K562 cytosol polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1004,7 +1004,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2371 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cell pA+ - 2
         longLabel H1-hESC whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1015,7 +1015,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2370 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CytosolPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cyto pA+ - 2
         longLabel HepG2 cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1026,7 +1026,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2369 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCytosolPapMinusClustersRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cyto pA+ - 3
         longLabel HUVEC cytosol polyA+ CAGE Minus strand start sites rep 3 from ENCODE/RIKEN
@@ -1037,7 +1037,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2368 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nucl pA+ - 1
         longLabel K562 nucleus polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1048,7 +1048,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2367 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2NucleusPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG nucl pA+ - 2
         longLabel HepG2 nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1059,7 +1059,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2366 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CytosolPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cyto pA+ - 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1070,7 +1070,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2364 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cell pA+ - 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1081,7 +1081,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2363 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cell pA+ - 2
         longLabel K562 whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1092,7 +1092,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2362 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCellPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cell pA+ - 2
         longLabel NHEK whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1103,7 +1103,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2361 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescNucleusPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES nucl pA+ - 2
         longLabel H1-hESC nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1114,7 +1114,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2360 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cell pA+ - 1
         longLabel K562 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1125,7 +1125,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2359 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nucl pA+ - 2
         longLabel K562 nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1136,7 +1136,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2358 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CytosolPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG cyto pA+ - 1
         longLabel HepG2 cytosol polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1147,7 +1147,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2357 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecNucleusPapMinusClustersRep4
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE nucl pA+ - 4
         longLabel HUVEC nucleus polyA+ CAGE Minus strand start sites rep 4 from ENCODE/RIKEN
@@ -1158,7 +1158,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2356 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CytosolPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cyto pA+ - 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1169,7 +1169,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2355 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCytosolPapMinusClustersRep4
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVE cyto pA+ - 4
         longLabel HUVEC cytosol polyA+ CAGE Minus strand start sites rep 4 from ENCODE/RIKEN
@@ -1180,7 +1180,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2354 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on 
         shortLabel GM12 nucl pA- - 1
         longLabel GM12878 nucleus polyA- CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1191,7 +1191,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2350 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageMcf7CellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel MCF7 cell pA+ - 1
         longLabel MCF-7 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1201,7 +1201,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2365 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CellPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 cell pA+ - 2
         longLabel GM12878 whole cell polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1212,7 +1212,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2394 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 cyto pA+ - 1
         longLabel GM12878 cytosol polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1223,7 +1223,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2393 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 nucl pA+ - 2
         longLabel GM12878 nucleus polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1234,7 +1234,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2392 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 cyto pA+ - 2
         longLabel GM12878 cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1245,7 +1245,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2391 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 nucl pA+ - 1
         longLabel GM12878 nucleus polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1256,7 +1256,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2390 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CellPapMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel GM12 cell pA+ - 1
         longLabel GM12878 whole cell polyA+ CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1267,7 +1267,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2389 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapMinusClustersRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cyto pA+ - 2
         longLabel K562 cytosol polyA+ CAGE Minus strand start sites rep 2 from ENCODE/RIKEN
@@ -1278,7 +1278,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2383 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel Pros cell pA- - 0
         longLabel Prostate whole cell polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1288,7 +1288,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1813 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 cyto pA- - 0
         longLabel K562 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1299,7 +1299,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1805 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel H1ES cell pA- - 0
         longLabel H1-hESC whole cell polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1310,7 +1310,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1799 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa cyto pA- -
         longLabel HeLa-S3 cytosol polyA- CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1321,7 +1321,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2784 dateSubmitted=2010-10-29
 
         track wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa nlos tot -
         longLabel Hela-S3 nucleolus total CAGE Minus strand start sites from ENCODE/RIKEN
@@ -1332,7 +1332,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2783 dateSubmitted=2010-10-29
 
         track wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewMinusClusters on
         shortLabel K562 nlos tot 1
         longLabel K562 nucleolus total CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
@@ -1344,7 +1344,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
     track wgEncodeRikenCageViewAlignments
-    release alpha
+    release alpha,beta
     shortLabel Alignments
     view Alignments
     visibility hide 
@@ -1364,7 +1364,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageNhekCytosolLongnonpolyaAln
-        release alpha
+        release alpha,beta
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cyto pA- A 0
         longLabel NHEK cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1374,7 +1374,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1811 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageGm12878CytosolLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 cyto pA- A 0
         longLabel GM12878 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1385,7 +1385,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageHuvecCytosolLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cyto pA- A 0
         longLabel HUVEC cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1396,7 +1396,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG cyto pA- A 0
         longLabel HepG2 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1407,7 +1407,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageHepg2NucleusLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG nucl pA- A 0
         longLabel HepG2 nucleus polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1418,7 +1418,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageK562ChromatinTotalAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 chrm tot A 0
         longLabel K562 chromatin Total CAGE Alignments from ENCODE/RIKEN
@@ -1429,7 +1429,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageK562CytosolPapAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ A 0
         longLabel K562 cytosol polyA+ CAGE Alignments from ENCODE/RIKEN
@@ -1440,7 +1440,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageK562NucleolusTotalAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nlos tot A 0
         longLabel K562 nucleolus Total CAGE Alignments from ENCODE/RIKEN
@@ -1451,7 +1451,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeRikenCageK562NucleoplasmTotalAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nplm tot A 0
         longLabel K562 nucleoplasm Total CAGE Alignments from ENCODE/RIKEN
@@ -1461,7 +1461,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1808 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562PolysomeLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 psom pA- A 0
         longLabel K562 polysome polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1471,7 +1471,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1810 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageNhekNucleusLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK nucl pA- A 0
         longLabel NHEK nucleus polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1481,7 +1481,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1812 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleusLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA- A 0
         longLabel K562 nucleus polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1491,7 +1491,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2127 dateSubmitted=2010-08-26
 
         track wgEncodeRikenCageHepg2NucleolusTotalAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG nlos tot A 0
         longLabel HepG2 nucleolus Total CAGE Alignments from ENCODE/RIKEN
@@ -1501,7 +1501,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2124 dateSubmitted=2010-08-23
 
         track wgEncodeRikenCageGm12878NucleolusTotalAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 nlos tot A 0
         longLabel GM12878 nucleolus Total CAGE Alignments from ENCODE/RIKEN
@@ -1511,7 +1511,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2125 dateSubmitted=2010-08-23
 
         track wgEncodeRikenCageHuvecCellPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cell pA+ A 2
         longLabel HUVEC whole cell polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1522,7 +1522,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2388 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3NucleusPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa nucl pA+ A 1
         longLabel HeLa-S3 nucleus polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1533,7 +1533,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2386 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3NucleusPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa nucl pA+ A 2
         longLabel HeLa-S3 nucleus polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1544,7 +1544,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2384 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekNucleusPapAlnRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK nucl pA+ A 3
         longLabel NHEK nucleus polyA+ CAGE Alignments rep 3 from ENCODE/RIKEN
@@ -1555,7 +1555,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2382 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG cell pA+ A 1
         longLabel HepG2 whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1566,7 +1566,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2381 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA+ A 1
         longLabel H1-hESC whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1577,7 +1577,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2380 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCytosolPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cyto pA+ A 2
         longLabel H1-hESC cytosol polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1588,7 +1588,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2379 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CellPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG cell pA+ A 2
         longLabel HepG2 whole cell polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1599,7 +1599,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2378 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecNucleusPapAlnRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE nucl pA+ A 3
         longLabel HUVEC nucleus polyA+ CAGE Alignments rep 3 from ENCODE/RIKEN
@@ -1610,7 +1610,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2377 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cell pA+ A 1
         longLabel HUVEC whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1621,7 +1621,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2376 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2NucleusPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG nucl pA+ A 1
         longLabel HepG2 nucleus polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1632,7 +1632,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2375 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CellPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cell pA+ A 2
         longLabel HeLa-S3 whole cell polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1643,7 +1643,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2374 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCytosolPapAlnRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cyto pA+ A 3
         longLabel NHEK cytosol polyA+ CAGE Alignments rep 3 from ENCODE/RIKEN
@@ -1654,7 +1654,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2373 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cell pA+ A 1
         longLabel NHEK whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1665,7 +1665,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2372 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ A 1
         longLabel K562 cytosol polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1676,7 +1676,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2371 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescCellPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA+ A 2
         longLabel H1-hESC whole cell polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1687,7 +1687,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2370 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CytosolPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG cyto pA+ A 2
         longLabel HepG2 cytosol polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1698,7 +1698,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2369 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCytosolPapAlnRep3
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cyto pA+ A 3
         longLabel HUVEC cytosol polyA+ CAGE Alignments rep 3 from ENCODE/RIKEN
@@ -1709,7 +1709,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2368 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA+ A 1
         longLabel K562 nucleus polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1720,7 +1720,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2367 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2NucleusPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG nucl pA+ A 2
         longLabel HepG2 nucleus polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1731,7 +1731,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2366 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CytosolPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cyto pA+ A 1
         longLabel HeLa-S3 cytosol polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1742,7 +1742,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2364 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cell pA+ A 1
         longLabel HeLa-S3 whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1753,7 +1753,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2363 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ A 2
         longLabel K562 whole cell polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1764,7 +1764,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2362 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageNhekCellPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cell pA+ A 2
         longLabel NHEK whole cell polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1775,7 +1775,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2361 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageH1hescNucleusPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1ES nucl pA+ A 2
         longLabel H1-hESC nucleus polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1786,7 +1786,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2360 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ A 1
         longLabel K562 whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1797,7 +1797,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2359 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562NucleusPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA+ A 2
         longLabel K562 nucleus polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1808,7 +1808,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2358 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHepg2CytosolPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG cyto pA+ A 1
         longLabel HepG2 cytosol polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1819,7 +1819,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2357 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecNucleusPapAlnRep4
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE nucl pA+ A 4
         longLabel HUVEC nucleus polyA+ CAGE Alignments rep 4 from ENCODE/RIKEN
@@ -1830,7 +1830,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2356 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHelas3CytosolPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cyto pA+ A 2
         longLabel HeLa-S3 cytosol polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1841,7 +1841,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2355 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageHuvecCytosolPapAlnRep4
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVE cyto pA+ A 4
         longLabel HUVEC cytosol polyA+ CAGE Alignments rep 4 from ENCODE/RIKEN
@@ -1852,7 +1852,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2354 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 nucl pA- A 1
         longLabel GM12878 nucleus polyA- CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1863,7 +1863,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2350 dateSubmitted=2010-09-21  THIS ONE SHOWS
 
         track wgEncodeRikenCageMcf7CellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel MCF7 cell pA+ A 1
         longLabel MCF-7 whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1873,7 +1873,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2365 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CellPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 cell pA+ A 2
         longLabel GM12878 whole cell polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1884,7 +1884,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2394 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CytosolPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 cyto pA+ A 1
         longLabel GM12878 cytosol polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1895,7 +1895,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2393 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 nucl pA+ A 2
         longLabel GM12878 nucleus polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1906,7 +1906,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2392 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CytosolPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 cyto pA+ A 2
         longLabel GM12878 cytosol polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1917,7 +1917,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2391 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878NucleusPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 nucl pA+ A 1
         longLabel GM12878 nucleus polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1928,7 +1928,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2390 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageGm12878CellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12 cell pA+ A 1
         longLabel GM12878 whole cell polyA+ CAGE Alignments rep 1 from ENCODE/RIKEN
@@ -1939,7 +1939,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2389 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageK562CytosolPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ A 2
         longLabel K562 cytosol polyA+ CAGE Alignments rep 2 from ENCODE/RIKEN
@@ -1950,7 +1950,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2383 dateSubmitted=2010-09-21
 
         track wgEncodeRikenCageProstateCellLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel Pros cell pA- A 0
         longLabel Prostate whole cell polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1960,7 +1960,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1813 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageK562CytosolLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA- A 0
         longLabel K562 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1971,7 +1971,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1805 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageH1hescCellLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1ES cell pA- A 0
         longLabel H1-hESC whole cell polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1982,7 +1982,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1799 dateSubmitted=2010-09-22
 
         track wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa cyto pA- A
         longLabel HeLa-S3 cytosol polyA- CAGE Alignments from ENCODE/RIKEN
@@ -1993,7 +1993,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2784 dateSubmitted=2010-10-29
 
         track wgEncodeRikenCageHelas3NucleolusTotalAln
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa nlos tot A
         longLabel HeLa-S3 nucleolus total CAGE Alignments from ENCODE/RIKEN
@@ -2004,7 +2004,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=2783 dateSubmitted=2010-10-29
 
         track wgEncodeRikenCageK562NucleolusTotalAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nlos tot Aln 1
         longLabel K562 nucleolus total CAGE Alignments rep 1 from ENCODE/RIKEN
