@@ -1160,6 +1160,41 @@ labVersion DNaseHS
 origAssembly hg18
 project wgEncode
 replicate 3
+subId 461
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm12878RawDataRep4
+objType file
+cell GM12878
+composite wgEncodeOpenChromDnase
+dataType DNase-seq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-16
+dateUnrestricted 2011-03-16
+fileName wgEncodeOpenChromDnaseGm12878RawDataRep4.fastq.gz
+grant Crawford
+lab Duke
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1494
+view RawData
+
+metaObject wgEncodeOpenChromDnaseGm12878RawDataRep5
+objType file
+cell GM12878
+composite wgEncodeOpenChromDnase
+dataType DNase-seq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-16
+dateUnrestricted 2011-03-16
+fileName wgEncodeOpenChromDnaseGm12878RawDataRep5.fastq.gz
+grant Crawford
+lab Duke
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1494
 view RawData
 
 metaObject wgEncodeOpenChromDnaseGm12878Sig
@@ -5937,4 +5972,4 @@ subId 3078
 tableName wgEncodeOpenChromDnaseT47dSig
 view Signal
 
-# MAGIC: 304852996
+# MAGIC: 2083145268
