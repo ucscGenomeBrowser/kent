@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = genePredToGtf.o
 
 genePredToGtf: $O $(MYLIBS) makefile
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredToGtf $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/genePredToGtf${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/genePredToGtf $O $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/genePredToGtf${EXE}
 
 test:
 	cd tests && ${MAKE} test
