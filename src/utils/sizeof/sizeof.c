@@ -30,6 +30,12 @@ printf("    float\t%d\t%d\n", (int)sizeof(float), 8*(int)sizeof(float));
 printf("   double\t%d\t%d\n", (int)sizeof(double), 8*(int)sizeof(double));
 printf("long double\t%d\t%d\n", (int)sizeof(long double),
 	8*(int)sizeof(long double));
+if (*cp == (char) 0x12)
+    printf ("BIG ENDIAN machine detected\n");
+else if (*cp == (char) 0x78)
+    printf ("LITTLE ENDIAN machine detected\n");
+else
+    printf ("WARNING: can not determine BIG or LITTLE ENDIAN machine\n");
 printf("byte order: normal order: 0x12345678 in memory: 0x");
 int i;
 for (i = 0; i < sizeof(byteOrder); ++i)
