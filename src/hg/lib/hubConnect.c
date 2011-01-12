@@ -127,7 +127,7 @@ sqlFreeResult(&sr);
 return hub;
 }
 
-struct hubConnectStatus *hubConnectStatusFromCart(struct cart *cart)
+struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart)
 /* Return list of track hubs that are turned on by user in cart. */
 {
 struct hubConnectStatus *hubList = NULL, *hub;

@@ -18,6 +18,7 @@
 #include "correlate.h"
 #include "bbiFile.h"
 #include "bigWig.h"
+#include "hubConnect.h"
 #include "hgTables.h"
 
 static char const rcsid[] = "$Id: bigWig.c,v 1.7 2010/06/03 18:53:59 kent Exp $";
@@ -25,7 +26,13 @@ static char const rcsid[] = "$Id: bigWig.c,v 1.7 2010/06/03 18:53:59 kent Exp $"
 boolean isBigWigTable(char *table)
 /* Return TRUE if table corresponds to a bigWig file. */
 {
-return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
+if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashFindVal(fullTrackHash, table);
+    return startsWithWord("bigWig", tdb->type);
+    }
+else
+    return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
 }
 
 char *bigWigFileName(char *table, struct sqlConnection *conn)
@@ -38,6 +45,13 @@ if (isCustomTrack(table))
     struct customTrack *ct = ctLookupName(table);
     if (ct != NULL)
         fileName = cloneString(trackDbSetting(ct->tdb, "bigDataUrl"));
+    }
+else if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashFindVal(fullTrackHash, table);
+    assert(tdb != NULL);
+    fileName = trackDbSetting(tdb, "bigDataUrl");
+    assert(fileName != NULL);
     }
 else
     {
