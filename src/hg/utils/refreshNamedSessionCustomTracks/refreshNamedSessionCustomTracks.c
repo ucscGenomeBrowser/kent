@@ -140,7 +140,7 @@ else
     {
     int wstat;
 
-    timeout.tv_sec = 30;
+    timeout.tv_sec = 180;
     timeout.tv_nsec = 0;
 
     while (1)
