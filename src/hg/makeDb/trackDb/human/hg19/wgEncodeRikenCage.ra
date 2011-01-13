@@ -2006,7 +2006,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleolusTotalAlnRep1
         release alpha,beta
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 nlos tot Aln 1
+        shortLabel K562 nlos tot A 1
         longLabel K562 nucleolus total CAGE Alignments rep 1 from ENCODE/RIKEN
         subGroups view=Alignments cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
         type bam
