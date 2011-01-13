@@ -643,7 +643,8 @@ void *slPairFindVal(struct slPair *list, char *name);
 struct slPair *slPairFromString(char *s);
 /* Return slPair list parsed from list in string s
  * name1=val1 name2=val2 ...
- * Returns NULL if parse error */
+ * Returns NULL if parse error.  Free this up with
+ * slPairFreeValsAndList. */
 
 int slPairCmpCase(const void *va, const void *vb);
 /* Compare two slPairs, ignore case. */
@@ -680,6 +681,9 @@ char *cloneString(const char *s);
 
 char *cloneLongString(char *s);
 /* Make clone of long string. */
+
+char *catTwoStrings(char *a, char *b);
+/* Allocate new string that is a concatenation of two strings. */
 
 int differentWord(char *s1, char *s2);
 /* strcmp ignoring case - returns zero if strings are
@@ -1361,5 +1365,11 @@ enum enumBool
 #define IS_KNOWN(ebool)   (IS_YES(ebool) || IS_NO(ebool))
 #define IS_TRUE           IS_YES
 #define IS_FALSE          IS_NO
+
+time_t dateToSeconds(const char *date,const char*format);
+// Convert a string date to time_t
+
+boolean dateIsOld(const char *date,const char*format);
+// Is this string date older than now?
 
 #endif /* COMMON_H */

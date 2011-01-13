@@ -2,13 +2,13 @@
 
 <TABLE style='max-width: 800px;'><TR><TD>
 <P>This track shows probable binding sites of the specified transcription 
-factors (TFs)in the given cell types as determined by chromatin 
-immunoprecipitation followed by high throughput sequencing (ChIP-Seq). 
+factors (TFs) in the given cell types as determined by chromatin 
+immunoprecipitation followed by high throughput sequencing (ChIP-seq). 
 Each experiment is associated with an input signal, which represents the 
 control condition where immunoprecipitation with non-specific immunoglobulin 
 was performed in the same cell type. For each experiment (cell type vs. 
-antibody) this track shows a graph of enrichment for TF binding (<I>Signal</I>)
-, along with sites that have the greatest evidence of transcription factor 
+antibody) this track shows a graph of enrichment for TF binding (<I>Signal</I>),
+along with sites that have the greatest evidence of transcription factor 
 binding, as identified by the PeakSeq algorithm (<I>Peaks</I>).
 <P>
 The sequence reads, quality scores, and alignment coordinates from
@@ -44,20 +44,20 @@ and Auerbach <EM>et. al.</EM> (2009).
 DNA recovered from the precipitated chromatin was sequenced on the Illumina (Solexa)
 sequencing platform and mapped to the genome using the Eland alignment program.
 ChIP-seq data was scored based on sequence reads (length ~30 bps) that align uniquely
-to the human genome. From the mapped tags a signal map of ChIP DNA fragments
+to the human genome. From the mapped tags, a signal map of ChIP DNA fragments
 (average fragment length ~ 200 bp) was constructed where the signal height is the number of
 overlapping fragments at each nucleotide position in the genome.
 </P>
 <P>
-For each 1 Mb segment of each chromosome a peak height threshold was determined
- by requiring a false discovery rate &lt;= 0.01 when comparing the number of peaks
- above threshold as compared the number obtained from multiple simulations of a
- random null background with the same number of mapped reads (also accounting 
+For each 1 Mb segment of each chromosome, a peak height threshold was determined
+by requiring a false discovery rate &le; 0.01 when comparing the number of peaks
+above threshold as compared to the number obtained from multiple simulations of a
+random null background with the same number of mapped reads (also accounting 
 for the fraction of mapable bases for sequence tags in that 1 Mb segment). The
- number of mapped tags in a putative binding region is compared to the normalized
- (normalized by correlating tag counts in genomic 10 kb windows) number of 
+number of mapped tags in a putative binding region is compared to the normalized
+(normalized by correlating tag counts in genomic 10 kb windows) number of 
 mapped tags in the same region from an input DNA control. Using a binomial test,
- only regions that have a p-value &lt;= 0.01 are considered to be significantly 
+only regions that have a p-value &le; 0.01 are considered to be significantly 
 enriched compared to the input DNA control.
 </P>
 

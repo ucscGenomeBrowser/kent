@@ -323,6 +323,7 @@ our %formatCheckers = (
     bigWig => \&validateBigWig,
     bam => \&validateBam,
     shortFrags => \&validateBed,
+    bedLogR => \&validateBed,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
@@ -1906,7 +1907,7 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "Antibody";
             } elsif ($var eq "cell") {
                 $cvTypeVar = "Cell Line";
-            } elsif ($var eq "obtainedBy") { 
+            } elsif ($var eq "obtainedBy") {
 		$cvTypeVar = "lab";
 	     }
             if(!defined($terms{$cvTypeVar}->{$hash{$var}})) {
@@ -1985,7 +1986,7 @@ foreach my $ddfLine (@ddfLines) {
                 $cvTypeVar = "Cell Line";
             } elsif ($var eq "obtainedBy") {
               #Not sure why when we check for obtainedBy subGroups prints out and when when this is
-	      # not pressent the subGroups provides error of unitialized. 							
+	      # not pressent the subGroups provides error of unitialized.
      		$cvTypeVar = "lab";
 	    }
 
@@ -2125,6 +2126,7 @@ foreach my $ddfLine (@ddfLines) {
         my $metaextra = " fileName=$tableName.$fileType";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     } else {
+        $fileType = "bed" if ($type =~ /^bed /);
         my $metaextra = " fileName=$tableName.$fileType.gz";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     }
