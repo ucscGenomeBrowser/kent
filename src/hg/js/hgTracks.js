@@ -355,9 +355,9 @@ function toggleTrackGroupVisibility(button, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
-    if(arguments.length > 2)
+        if(arguments.length > 2)
 	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
-    else
+        else
 	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
 }
 
@@ -1306,6 +1306,18 @@ $(document).ready(function()
                             select: function(event, ui) {
                                 if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
                                     setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
+                                }
+                                if( $('div#filesFound').length == 1) {
+                                    if( ui.panel.id == 'filesTab')
+                                        $('div#filesFound').show();
+                                    else
+                                        $('div#filesFound').hide();
+                                }
+                                if( $('div#found').length == 1) {
+                                    if( ui.panel.id != 'filesTab')
+                                        $('div#found').show();
+                                    else
+                                        $('div#found').hide();
                                 }
                             }
                         });

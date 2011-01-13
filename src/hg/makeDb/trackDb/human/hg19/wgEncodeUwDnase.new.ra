@@ -1199,7 +1199,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewHot off
         shortLabel HUVEC 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HUVEC cells)
-        subGroups view=Hot cellType=HUVEC treatment=None rep=2
+        subGroups view=Hot cellType=2HUVEC treatment=None rep=2
         type broadPeak
         origAssembly hg19
         color 224,75,0
@@ -2584,7 +2584,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HUVEC Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HUVEC cells)
-        subGroups view=Peaks cellType=HUVEC treatment=None rep=2
+        subGroups view=Peaks cellType=2HUVEC treatment=None rep=2
         type narrowPeak
         origAssembly hg19
         color 224,75,0
@@ -3971,7 +3971,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HUVEC Raw 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HUVEC cells)
-        subGroups view=zRSig cellType=HUVEC treatment=None rep=2
+        subGroups view=zRSig cellType=2HUVEC treatment=None rep=2
         type bigWig 1.000000 33364.000000
         origAssembly hg19
         color 224,75,0

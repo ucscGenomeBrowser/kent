@@ -97,6 +97,8 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "sage.h"
 #include "sageExp.h"
 #include "pslWScore.h"
@@ -16230,10 +16232,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (snp->chromStart != start || differentString(snp->chrom, seqName))
 	{
 	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these additional locations:"
+	    printf("<B>This SNP maps to these additional locations:"
 		   "</B><BR><BR>");
 	snpCount++;
-	bedPrintPos((struct bed *)&snp, 3, tdb);
+	bedPrintPos((struct bed *)snp, 3, tdb);
 	printf("<BR>");
 	}
     }
@@ -22929,6 +22931,10 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
 	    sameString(ct->dbTrackType, "maf")))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
+    if (isHubTrack(track))
+	{
+	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
+	}
     if (parentWigMaf)
         {
         int wordCount, i;
