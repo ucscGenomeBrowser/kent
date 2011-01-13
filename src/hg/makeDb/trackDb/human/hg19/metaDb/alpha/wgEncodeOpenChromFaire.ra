@@ -6,6 +6,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireAstrocyAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
 grant Crawford
 lab UNC
@@ -23,6 +24,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireAstrocyAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
 grant Crawford
 lab UNC
@@ -123,6 +125,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromFaireGlioblaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
 grant Crawford
 lab UNC
@@ -140,6 +143,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromFaireGlioblaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
 grant Crawford
 lab UNC
@@ -157,6 +161,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromFaireGlioblaAlnRep3.bam.bai
 fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
 grant Crawford
 lab UNC
@@ -447,6 +452,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12891AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
 grant Crawford
 lab UNC
@@ -464,6 +470,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12891AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
 grant Crawford
 lab UNC
@@ -564,6 +571,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12892AlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
 grant Crawford
 lab UNC
@@ -581,6 +589,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromFaireGm12892AlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
 grant Crawford
 lab UNC
@@ -1881,6 +1890,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562NabutAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
 grant Crawford
 lab UNC
@@ -1900,6 +1910,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562NabutAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2009,6 +2020,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2028,6 +2040,7 @@ dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
+fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2213,6 +2226,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromFaireMedulloAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
 grant Crawford
 lab UNC
@@ -2230,6 +2244,7 @@ dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromFaireMedulloAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
 grant Crawford
 lab UNC
@@ -2709,4 +2724,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -1061738154
+# MAGIC: -348256989

@@ -30,6 +30,10 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     encode/encodeRegionInfo.o encode/encodeRegionInfoCustom.o encode/encodeRna.o \
     encode/encodeStanfordPromoters.o encode/encodeStanfordPromotersAverage.o \
     encode/pairedTagAlign.o encode/peptideMapping.o encode/tagAlign.o  \
+    encode/wgEncodeGencodeExonSupport.o encode/wgEncodeGencodeGeneSymbol.o \
+    encode/wgEncodeGencodePdb.o encode/wgEncodeGencodePubmed.o \
+    encode/wgEncodeGencodeRefSeq.o encode/wgEncodeGencodeSource.o \
+    encode/wgEncodeGencodeTranscriptSupport.o encode/wgEncodeGencodeUniProt.o \
     ensFace.o ensInfo.o ensPhusionBlast.o ensXRefZfish.o \
     est3.o estOrientInfo.o \
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \

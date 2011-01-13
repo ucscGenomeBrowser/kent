@@ -898,16 +898,11 @@ identifier affyU95
     $hg.affyRatio.name
     $hg.knownToU95.value
 
-identifier affyU133hg18
+identifier affyU133
 # chopBefore and chopAfter needed for hg16, 17 and 18.
 "Affymetrix Human U133 chip identifiers"
-     hg18,hg17,hg16.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
-     hg18,hg17,hg16.knownToU133.value
-
-identifier affyU133
-"Affymetrix Human U133 chip identifiers"
-    $hg,!hg18,!hg17,!hg16.affyU133.qName dupeOk
-    $hg,!hg18,!hg17,!hg16.knownToU133.value
+     $hg.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
+     $hg.knownToU133.value
 
 identifier affyU133Plus2
 "Affymetrix Human U133 chip identifiers"

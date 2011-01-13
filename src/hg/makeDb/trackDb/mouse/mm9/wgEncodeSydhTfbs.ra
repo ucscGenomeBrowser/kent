@@ -2,7 +2,7 @@
 # Notes:
 #       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/Stanford/Yale
 #       - Track Short Label: Stan/Yale TFBS
-#       - View Long Labels: [cell] [factor] Transcription Factor Binding [view] from ENCODE/Stanford/Yale 
+#       - View Long Labels: [cell] [factor] [Input][treatment] TFBS ChIP-seq [view] from ENCODE/Stanford/Yale 
 #       - cellType Order: Ordering is alphabetical
 #       - Default View selections
 #               - Peaks = dense
@@ -65,7 +65,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelMaxIggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Max Pk
-                longLabel MEL Max Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL Max TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=MAX cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
@@ -74,7 +74,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelP300IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL p300 Pk
-                longLabel MEL p300 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL p300 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=P300N15 cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
@@ -83,7 +83,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelUsf2IggmusPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL USF2 Pk
-                longLabel MEL USF2 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL USF2 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=USF2 cellType=MEL control=IGGmus treatment=None
 	        type narrowPeak
 	        color 46,0,184
@@ -92,7 +92,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
 	        parent wgEncodeSydhTfbsViewPeaks 
 	        shortLabel MEL CTCF D Pk
-                longLabel MEL CTCF 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL CTCF 2% DMSO TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
@@ -101,7 +101,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 D Pk
-                longLabel MEL Rad21 2% DMSO Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL Rad21 2% DMSO TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
@@ -110,7 +110,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelRad21IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL Rad21 Pk
-                longLabel MEL Rad21 Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL Rad21 TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
@@ -119,7 +119,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelNelfeIggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL NELFe Pk
-                longLabel MEL NELFe Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL NELFe TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=NELFE cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
@@ -128,7 +128,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelCmybh141IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
 	        shortLabel MEL c-Myb Pk
-                longLabel MEL c-Myb_(H-141) Transcription Factor Binding Peaks from ENCODE/Stanford/Yale
+                longLabel MEL c-Myb_(H-141) TFBS ChIP-seq Peaks from ENCODE/Stanford/Yale
 	        subGroups view=Peaks factor=cMYBH141 cellType=MEL control=IGGrab treatment=None
 	        type narrowPeak
 	        color 46,0,184
@@ -152,7 +152,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelMaxIggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Max Sg
-                longLabel MEL Max Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL Max TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=MAX cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 120749.000000
 	        color 46,0,184
@@ -161,7 +161,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelP300IggrabSig
 	        parent wgEncodeSydhTfbsViewSig 
 	        shortLabel MEL p300 Sg
-                longLabel MEL p300 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL p300 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=P300N15 cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 93877.000000
 	        color 46,0,184
@@ -170,7 +170,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelUsf2IggmusSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL USF2 Sg
-                longLabel MEL USF2 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL USF2 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=USF2 cellType=MEL control=IGGmus treatment=None
 	        type bigWig 1.000000 99544.000000
 	        color 46,0,184
@@ -179,7 +179,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelCtcfDmso20IggyaleSig
 	        parent wgEncodeSydhTfbsViewSig
 	        shortLabel MEL CTCF D Sg
-                longLabel MEL CTCF 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL CTCF 2% DMSO TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type bigWig 1.000000 93856.000000
 	        color 46,0,184
@@ -188,7 +188,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelInputDmso20IggyaleSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL IgGYale D Sg
-                longLabel MEL IgG-Yale Input 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL IgG-Yale Input 2% DMSO TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=zInputIGGYALE cellType=MEL control=IGGYale treatment=DMSO20
 	        type bigWig 1.000000 78459.000000
 	        color 46,0,184
@@ -197,7 +197,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 D Sg
-                longLabel MEL Rad21 2% DMSO Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL Rad21 2% DMSO TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=RAD21 cellType=MEL control=IGGrab treatment=DMSO20
 	        type bigWig 1.000000 64232.000000
 	        color 46,0,184
@@ -206,7 +206,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelRad21IggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL Rad21 Sg
-                longLabel MEL Rad21 Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL Rad21 TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=RAD21 cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 79946.000000
 	        color 46,0,184
@@ -215,7 +215,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelNelfeIggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL NELFe Sg
-                longLabel MEL NELFe Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL NELFe TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=NELFE cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 114421.000000
 	        color 46,0,184
@@ -224,7 +224,7 @@ wgEncode 1
 	        track wgEncodeSydhTfbsMelCmybh141IggrabSig
 	        parent wgEncodeSydhTfbsViewSig off
 	        shortLabel MEL c-Myb Sg
-                longLabel MEL c-Myb_(H-141) Transcription Factor Binding Signal from ENCODE/Stanford/Yale
+                longLabel MEL c-Myb_(H-141) TFBS ChIP-seq Signal from ENCODE/Stanford/Yale
 	        subGroups view=Signal factor=cMYBH141 cellType=MEL control=IGGrab treatment=None
 	        type bigWig 1.000000 106720.000000
 	        color 46,0,184
