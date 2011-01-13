@@ -5972,4 +5972,249 @@ subId 3078
 tableName wgEncodeOpenChromDnaseT47dSig
 view Signal
 
-# MAGIC: 2083145268
+metaObject wgEncodeOpenChromDnaseUrotsaAlnRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileIndex wgEncodeOpenChromDnaseUrotsaAlnRep1.bam.bai
+fileName wgEncodeOpenChromDnaseUrotsaAlnRep1.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 3217
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrotsaAlnRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileIndex wgEncodeOpenChromDnaseUrotsaAlnRep2.bam.bai
+fileName wgEncodeOpenChromDnaseUrotsaAlnRep2.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 3217
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 3217
+tableName wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseUrotsaPk
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 3217
+tableName wgEncodeOpenChromDnaseUrotsaPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseUrotsaRawDataRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 3217
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrotsaRawDataRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 3217
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrotsaSig
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 3217
+tableName wgEncodeOpenChromDnaseUrotsaSig
+view Signal
+
+metaObject wgEncodeOpenChromDnaseUrotsaUt189AlnRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileIndex wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam.bai
+fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep1.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 3218
+treatment UT189
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrotsaUt189AlnRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileIndex wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam.bai
+fileName wgEncodeOpenChromDnaseUrotsaUt189AlnRep2.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 3218
+treatment UT189
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 3218
+tableName wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
+treatment UT189
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseUrotsaUt189Pk
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaUt189Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 3218
+tableName wgEncodeOpenChromDnaseUrotsaUt189Pk
+treatment UT189
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseUrotsaUt189RawDataRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 3218
+treatment UT189
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrotsaUt189RawDataRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaUt189RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 3218
+treatment UT189
+view RawData
+
+metaObject wgEncodeOpenChromDnaseUrotsaUt189Sig
+objType table
+cell Urothelia
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-11
+dateUnrestricted 2011-10-11
+fileName wgEncodeOpenChromDnaseUrotsaUt189Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 3218
+tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
+treatment UT189
+view Signal
+
+# MAGIC: -418982649
