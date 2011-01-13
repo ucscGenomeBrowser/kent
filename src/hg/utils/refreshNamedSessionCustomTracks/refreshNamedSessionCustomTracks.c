@@ -13,6 +13,7 @@
 static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/01/13 17:27:35 angie Exp $";
 
 #define savedSessionTable "namedSessionDb"
+boolean hardcore = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -116,7 +117,8 @@ while (isNotEmpty(namePt))
 	dyStringAppend(newContents, oneSetting->string);
     namePt = nextNamePt;
     }
-if (newContents->stringSize != contentLength)
+/* only if hardcore do we need to go through all this rigamarole */
+if (hardcore && (newContents->stringSize != contentLength))
     {
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
@@ -204,6 +206,8 @@ if (sqlTableExists(conn, savedSessionTable))
 	slAddHead(&sessionList, si);
 	}
     sqlFreeResult(&sr);
+    if (!hardcore)  /* done with this in the case of not hardcore */
+	hDisconnectCentral(&conn);
     siNext = NULL;
     for (si = sessionList;  si != NULL;  si = siNext)
 	{
@@ -212,22 +216,17 @@ if (sqlTableExists(conn, savedSessionTable))
 	siNext = si->next;
 	freeMem(si->contents);
 	freeMem(si);
-	if (updateIfAny)
+	if (updateIfAny)  /* can only happen on hardcore */
 	    {
-	    if (optionExists("hardcore"))
-		{
-		AllocVar(update);
-		update->name = updateIfAny;
-		slAddHead(&updateList, update);
-		}
-	    else
-		freeMem(updateIfAny);
+	    AllocVar(update);
+	    update->name = updateIfAny;
+	    slAddHead(&updateList, update);
 	    }
 	}
     }
 
 /* Now that we're done reading from savedSessionTable, we can modify it: */
-if (optionExists("hardcore"))
+if (hardcore)
     {
     struct slPair *nextUpdate = NULL;
     for (update = updateList;  update != NULL; update = nextUpdate)
@@ -237,8 +236,8 @@ if (optionExists("hardcore"))
 	freeMem(update->name);
 	freez(update);
 	}
+    hDisconnectCentral(&conn);
     }
-hDisconnectCentral(&conn);
 verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 	liveCount, expiredCount, centralDbName);
 }
@@ -251,8 +250,8 @@ optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
 char *workDir = optionVal("workDir", CGI_BIN);
+hardcore = optionExists("hardcore");
 setCurrentDir(workDir);
 refreshNamedSessionCustomTracks(argv[1]);
 return 0;
 }
-
