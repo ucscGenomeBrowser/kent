@@ -64,9 +64,11 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
 	textHistogram twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
 
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
-	 gtfToGenePred ratStuff/mafsInRegion ratStuff/mafSpeciesSubset pslCDnaFilter
+	 ratStuff/mafsInRegion ratStuff/mafSpeciesSubset \
+	 pslCDnaFilter genePredToGtf
 
-HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred overlapSelect
+
+HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred overlapSelect
 
 userApps: topLibs hgLib
 	@for P in ${UTILS_APPLIST}; do \
