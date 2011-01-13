@@ -175,7 +175,7 @@ if (atime > 0)
 
 if (sqlTableExists(conn, savedSessionTable))
     {
-    struct sessionInfo *sessionList = NULL, *si;
+    struct sessionInfo *sessionList = NULL, *si, *siNext;
     struct sqlResult *sr = NULL;
     char **row = NULL;
     char query[512];
@@ -204,15 +204,24 @@ if (sqlTableExists(conn, savedSessionTable))
 	slAddHead(&sessionList, si);
 	}
     sqlFreeResult(&sr);
-    for (si = sessionList;  si != NULL;  si = si->next)
+    siNext = NULL;
+    for (si = sessionList;  si != NULL;  si = siNext)
 	{
-	char *updateIfAny = scanSettingsForCT(si->userName, si->sessionName, si->contents,
-					      &liveCount, &expiredCount);
+	char *updateIfAny = scanSettingsForCT(si->userName, si->sessionName,
+	    si->contents, &liveCount, &expiredCount);
+	siNext = si->next;
+	freeMem(si->contents);
+	freeMem(si);
 	if (updateIfAny)
 	    {
-	    AllocVar(update);
-	    update->name = updateIfAny;
-	    slAddHead(&updateList, update);
+	    if (optionExists("hardcore"))
+		{
+		AllocVar(update);
+		update->name = updateIfAny;
+		slAddHead(&updateList, update);
+		}
+	    else
+		freeMem(updateIfAny);
 	    }
 	}
     }
@@ -220,8 +229,14 @@ if (sqlTableExists(conn, savedSessionTable))
 /* Now that we're done reading from savedSessionTable, we can modify it: */
 if (optionExists("hardcore"))
     {
-    for (update = updateList;  update != NULL;  update = update->next)
+    struct slPair *nextUpdate = NULL;
+    for (update = updateList;  update != NULL; update = nextUpdate)
+	{
 	sqlUpdate(conn, update->name);
+	nextUpdate = update->next;
+	freeMem(update->name);
+	freez(update);
+	}
     }
 hDisconnectCentral(&conn);
 verbose(1, "Found %d live and %d expired custom tracks in %s.\n",

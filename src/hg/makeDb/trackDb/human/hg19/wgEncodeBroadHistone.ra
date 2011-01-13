@@ -42,7 +42,6 @@
 
 # track wgEncodeHistoneDownloads
 # table wgEncodeBroadHistone
-# release alpha
 # #compositeTrack on
 # #type bed 3
 # type downloadsOnly
@@ -100,7 +99,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
     minGrayLevel 3
 
         track wgEncodeBroadHistoneH1hescH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, H1-hESC cells)
@@ -112,7 +110,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2796 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878CtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, GM12878 cells)
@@ -123,7 +120,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2800 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, GM12878 cells)
@@ -134,7 +130,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2801 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, GM12878 cells)
@@ -146,7 +141,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2802 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, GM12878 cells)
@@ -158,7 +152,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2803 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, GM12878 cells)
@@ -170,7 +163,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2804 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, GM12878 cells)
@@ -182,7 +174,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2805 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, GM12878 cells)
@@ -194,7 +185,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2806 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, GM12878 cells)
@@ -205,7 +195,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2807 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, GM12878 cells)
@@ -217,7 +206,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2808 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, H1-hESC cells)
@@ -228,7 +216,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2810 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, H1-hESC cells)
@@ -239,7 +226,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2811 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, H1-hESC cells)
@@ -251,7 +237,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2812 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, H1-hESC cells)
@@ -263,7 +248,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2813 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1hES H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, H1-hESC cells)
@@ -275,7 +259,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2814 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, H1-hESC cells)
@@ -287,7 +270,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2815 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1hES H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, H1-hESC cells)
@@ -298,7 +280,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2816 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneH1hescH4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1hES H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, H1-hESC cells)
@@ -310,7 +291,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2817 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HMEC cells)
@@ -320,7 +300,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2819 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HMEC cells)
@@ -330,7 +309,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2820 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HMEC cells)
@@ -341,7 +319,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2821 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HMEC cells)
@@ -352,7 +329,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2822 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HMEC cells)
@@ -363,7 +339,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2823 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HMEC cells)
@@ -374,7 +349,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2824 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HMEC cells)
@@ -385,7 +359,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2825 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HMEC cells)
@@ -395,7 +368,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2826 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHmecH4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HMEC cells)
@@ -406,7 +378,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2827 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HSMMtube cells)
@@ -416,7 +387,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2829 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH2azStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H2A.Z Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, HSMMtube cells)
@@ -427,7 +397,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2830 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HSMMtube cells)
@@ -437,7 +406,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2831 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HSMMtube cells)
@@ -448,7 +416,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2832 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HSMMtube cells)
@@ -459,7 +426,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2833 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HSMMtube cells)
@@ -470,7 +436,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2834 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HSMMtube cells)
@@ -481,7 +446,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2835 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k79me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K79me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HSMMtube cells)
@@ -491,7 +455,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2836 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HSMMtube cells)
@@ -501,7 +464,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2837 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmtH4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HSMMtube cells)
@@ -512,7 +474,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2838 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HSMM cells)
@@ -522,7 +483,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2840 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HSMM cells)
@@ -532,7 +492,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2841 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HSMM cells)
@@ -543,7 +502,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2842 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HSMM cells)
@@ -554,7 +512,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2843 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HSMM cells)
@@ -565,7 +522,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2844 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HSMM cells)
@@ -576,7 +532,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2845 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HSMM cells)
@@ -587,7 +542,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2846 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k79me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K79me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HSMM cells)
@@ -597,7 +551,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2847 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HSMM cells)
@@ -607,7 +560,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2848 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH3k9me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K9me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, HSMM cells)
@@ -618,7 +570,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2849 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHsmmH4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HSMM cells)
@@ -629,7 +580,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2850 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3CtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HeLa-S3 cells)
@@ -640,7 +590,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2852 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HeLa-S3 cells)
@@ -651,7 +600,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2853 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HeLa-S3 cells)
@@ -663,7 +611,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2854 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HeLa-S3 cells)
@@ -675,7 +622,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2855 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HeLa-S3 cells)
@@ -687,7 +633,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2856 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k79me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K79me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HeLa-S3 cells)
@@ -698,7 +643,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2857 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HeLa-S3 cells)
@@ -709,7 +653,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2858 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3H4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HeLa-S3 cells)
@@ -721,7 +664,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2859 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHelas3Pol2bStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS Pol2(b) Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), HeLa-S3 cells)
@@ -733,7 +675,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2860 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2CtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HepG2 cells)
@@ -744,7 +685,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2862 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H2azStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H2A.Z Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, HepG2 cells)
@@ -756,7 +696,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2863 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HepG2 cells)
@@ -767,7 +706,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2864 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HepG2 cells)
@@ -779,7 +717,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2865 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HepG2 cells)
@@ -791,7 +728,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2866 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HepG2 cells)
@@ -803,7 +739,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2867 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HepG2 cells)
@@ -815,7 +750,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2868 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k79me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K79me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HepG2 cells)
@@ -826,7 +760,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2869 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HepG2 cells)
@@ -837,7 +770,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2870 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHepg2H4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HepG2 cells)
@@ -849,7 +781,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2871 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HUVEC cells)
@@ -860,7 +791,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2873 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HUVEC cells)
@@ -871,7 +801,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2874 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HUVEC cells)
@@ -883,7 +812,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2875 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HUVEC cells)
@@ -895,7 +823,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2876 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HUVEC cells)
@@ -907,7 +834,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2877 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HUVEC cells)
@@ -919,7 +845,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2878 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HUVEC cells)
@@ -930,7 +855,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2879 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH3k9me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K9me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1, HUVEC cells)
@@ -942,7 +866,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2880 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecH4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HUVEC cells)
@@ -954,7 +877,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2881 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneHuvecPol2bStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC Pol2(b) Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), HUVEC cells)
@@ -966,7 +888,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2882 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562CtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, K562 cells)
@@ -977,7 +898,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2884 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, K562 cells)
@@ -988,7 +908,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2885 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, K562 cells)
@@ -1000,7 +919,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2886 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, K562 cells)
@@ -1012,7 +930,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2887 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, K562 cells)
@@ -1024,7 +941,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2888 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, K562 cells)
@@ -1036,7 +952,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2889 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, K562 cells)
@@ -1048,7 +963,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2890 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, K562 cells)
@@ -1059,7 +973,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2891 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H3k9me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1, K562 cells)
@@ -1071,7 +984,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2892 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562H4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, K562 cells)
@@ -1083,7 +995,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2893 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneK562Pol2bStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 Pol2(b) Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), K562 cells)
@@ -1095,7 +1006,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2894 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NH-A cells)
@@ -1105,7 +1015,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2896 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NH-A cells)
@@ -1115,7 +1024,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2897 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NH-A cells)
@@ -1126,7 +1034,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2898 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NH-A cells)
@@ -1137,7 +1044,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2899 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, NH-A cells)
@@ -1148,7 +1054,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2900 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhaH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NH-A cells)
@@ -1159,7 +1064,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2901 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NHEK cells)
@@ -1170,7 +1074,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2903 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NHEK cells)
@@ -1181,7 +1084,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2904 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NHEK cells)
@@ -1193,7 +1095,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2905 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NHEK cells)
@@ -1205,7 +1106,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2906 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, NHEK cells)
@@ -1217,7 +1117,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2907 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, NHEK cells)
@@ -1229,7 +1128,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2908 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NHEK cells)
@@ -1241,7 +1139,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2909 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, NHEK cells)
@@ -1252,7 +1149,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2910 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH3k9me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K9me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1, NHEK cells)
@@ -1264,7 +1160,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2911 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekH4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, NHEK cells)
@@ -1276,7 +1171,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2912 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhekPol2bStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK Pol2(b) Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), NHEK cells)
@@ -1288,7 +1182,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2913 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NHLF cells)
@@ -1298,7 +1191,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2915 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NHLF cells)
@@ -1308,7 +1200,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2916 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NHLF cells)
@@ -1319,7 +1210,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2917 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NHLF cells)
@@ -1330,7 +1220,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2918 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, NHLF cells)
@@ -1341,7 +1230,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2919 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, NHLF cells)
@@ -1352,7 +1240,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2920 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NHLF cells)
@@ -1363,7 +1250,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2921 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, NHLF cells)
@@ -1373,7 +1259,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2922 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneNhlfH4k20me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H4K20me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, NHLF cells)
@@ -1384,7 +1269,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2923 dateSubmitted=2010-11-05
 
         track wgEncodeBroadHistoneGm12878H2azStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H2A.Z Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, GM12878 cells)
@@ -1396,7 +1280,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2978 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneGm12878H3k79me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K79me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, GM12878 cells)
@@ -1407,7 +1290,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2979 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneGm12878H3k9me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K9me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, GM12878 cells)
@@ -1419,7 +1301,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2980 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHelas3H3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HeLa-S3 cells)
@@ -1431,7 +1312,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2982 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHsmmH2azStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H2A.Z Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, HSMM cells)
@@ -1442,7 +1322,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2981 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHuvecH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HUVEC cells)
@@ -1454,7 +1333,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2970 dateSubmitted=2010-11-12
 
         track wgEncodeBroadHistoneK562H2azStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H2A.Z Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, K562 cells)
@@ -1466,7 +1344,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2983 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H3k79me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K79me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, K562 cells)
@@ -1477,7 +1354,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2984 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H3k9me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, K562 cells)
@@ -1489,7 +1365,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2985 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, Osteobl cells)
@@ -1499,7 +1374,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2986 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH2azStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H2A.Z Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, Osteobl cells)
@@ -1510,7 +1384,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2987 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, Osteobl cells)
@@ -1520,7 +1393,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2988 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, Osteobl cells)
@@ -1531,7 +1403,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2989 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me1StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K4me1 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, Osteobl cells)
@@ -1542,7 +1413,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2990 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, Osteobl cells)
@@ -1553,7 +1423,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2991 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k9me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K9me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, Osteobl cells)
@@ -1564,7 +1433,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2992 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneNhdfadCtcfStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa CTCF Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NHDF-Ad cells)
@@ -1574,7 +1442,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3006 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k27acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K27ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NHDF-Ad cells)
@@ -1584,7 +1451,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3007 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k27me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K27me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NHDF-Ad cells)
@@ -1595,7 +1461,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3008 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k36me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K36me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NHDF-Ad cells)
@@ -1606,7 +1471,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3009 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me2StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K4me2 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, NHDF-Ad cells)
@@ -1617,7 +1481,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3010 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me3StdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K4me3 Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NHDF-Ad cells)
@@ -1628,7 +1491,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3011 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k9acStdPk
-        release alpha
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K9ac Pk
         longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, NHDF-Ad cells)
@@ -1660,7 +1522,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         #color 153,38,0
 
         track wgEncodeBroadHistoneNhekCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NHEK cells)
@@ -1671,7 +1532,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1680 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HSMMtube cells)
@@ -1682,7 +1542,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1683 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HepG2 cells)
@@ -1694,7 +1553,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1684 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NHLF cells)
@@ -1705,7 +1563,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1685 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HSMMtube cells)
@@ -1716,7 +1573,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1686 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HSMM cells)
@@ -1727,7 +1583,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1687 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k9me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K9me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1, NHEK cells)
@@ -1739,7 +1594,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1688 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HUVEC cells)
@@ -1751,7 +1605,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1689 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HMEC cells)
@@ -1762,7 +1615,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1690 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HSMM cells)
@@ -1773,7 +1625,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1691 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HUVEC cells)
@@ -1784,7 +1635,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1692 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HSMM cells)
@@ -1794,7 +1644,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1693 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HeLa-S3 cells)
@@ -1805,7 +1654,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1694 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HUVEC cells)
@@ -1817,7 +1665,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1695 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, K562 cells)
@@ -1829,7 +1676,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1696 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, NHEK cells)
@@ -1841,7 +1687,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1697 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HUVEC cells)
@@ -1853,7 +1698,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1698 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, NHLF cells)
@@ -1864,7 +1708,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1699 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, K562 cells)
@@ -1876,7 +1719,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1700 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, K562 cells)
@@ -1887,7 +1729,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1701 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HMEC cells)
@@ -1897,7 +1738,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1702 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, NHLF cells)
@@ -1908,7 +1748,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1703 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH2azStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H2A.Z Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, HSMMtube cells)
@@ -1919,7 +1758,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1704 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, H1-hESC cells)
@@ -1930,7 +1768,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1705 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HepG2 cells)
@@ -1942,7 +1779,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1706 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NHLF cells)
@@ -1952,7 +1788,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1707 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, NHLF cells)
@@ -1962,7 +1797,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1708 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3CtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HeLa-S3 cells)
@@ -1973,7 +1807,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1709 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NHLF cells)
@@ -1984,7 +1817,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1710 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HeLa-S3 cells)
@@ -1996,7 +1828,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1711 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, K562 cells)
@@ -2008,7 +1839,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1712 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HSMM cells)
@@ -2019,7 +1849,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1713 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, K562 cells)
@@ -2031,7 +1860,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1714 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HSMM cells)
@@ -2042,7 +1870,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1715 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HSMMtube cells)
@@ -2053,7 +1880,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1716 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k9me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K9me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, HSMM cells)
@@ -2064,7 +1890,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1717 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HSMM cells)
@@ -2074,7 +1899,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1718 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2ControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HepG2 cells)
@@ -2086,7 +1910,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1719 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k9me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1, K562 cells)
@@ -2098,7 +1921,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1720 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, H1-hESC cells)
@@ -2110,7 +1932,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1721 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HUVEC cells)
@@ -2122,7 +1943,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1722 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NHEK cells)
@@ -2134,7 +1954,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1723 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k79me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K79me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HSMMtube cells)
@@ -2144,7 +1963,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1724 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, NHEK cells)
@@ -2156,7 +1974,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1725 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, K562 cells)
@@ -2168,7 +1985,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1726 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecPol2bStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC Pol2(b) Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), HUVEC cells)
@@ -2180,7 +1996,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1727 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HSMMtube cells)
@@ -2191,7 +2006,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1728 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k9me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K9me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1, HUVEC cells)
@@ -2203,7 +2017,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1729 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k79me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K79me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HSMM cells)
@@ -2213,7 +2026,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1730 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HUVEC cells)
@@ -2224,7 +2036,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1731 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HUVEC cells)
@@ -2236,7 +2047,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1732 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NHEK cells)
@@ -2248,7 +2058,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1733 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, H1-hESC cells)
@@ -2260,7 +2069,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1734 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, K562 cells)
@@ -2272,7 +2080,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1735 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekPol2bStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK Pol2(b) Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), NHEK cells)
@@ -2284,7 +2091,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1737 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NHLF cells)
@@ -2294,7 +2100,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1738 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, NHLF cells)
@@ -2305,7 +2110,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1739 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HepG2 cells)
@@ -2316,7 +2120,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1741 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HMEC cells)
@@ -2326,7 +2129,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1742 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3Pol2bStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS Pol2(b) Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), HeLa-S3 cells)
@@ -2338,7 +2140,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1743 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k79me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K79me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HeLa-S3 cells)
@@ -2349,7 +2150,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1744 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, H1-hESC cells)
@@ -2361,7 +2161,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1745 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HSMMtube cells)
@@ -2371,7 +2170,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1746 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k79me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K79me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HepG2 cells)
@@ -2382,7 +2180,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1747 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562H3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, K562 cells)
@@ -2393,7 +2190,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1748 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HSMMtube cells)
@@ -2403,7 +2199,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1749 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NHLF cells)
@@ -2414,7 +2209,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1750 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HeLa-S3 cells)
@@ -2426,7 +2220,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1751 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562ControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, K562 cells)
@@ -2438,7 +2231,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1752 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, H1-hESC cells)
@@ -2449,7 +2241,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1753 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NHEK cells)
@@ -2461,7 +2252,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1754 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HeLa-S3 cells)
@@ -2473,7 +2263,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1755 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HSMM cells)
@@ -2484,7 +2273,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1756 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HMEC cells)
@@ -2495,7 +2283,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1757 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HepG2 cells)
@@ -2507,7 +2294,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1758 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HMEC cells)
@@ -2518,7 +2304,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1759 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, H1-hESC cells)
@@ -2530,7 +2315,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1760 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HepG2 cells)
@@ -2542,7 +2326,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1761 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HSMM cells)
@@ -2553,7 +2336,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1762 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HUVEC cells)
@@ -2565,7 +2347,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1763 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HSMMtube cells)
@@ -2576,7 +2357,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1764 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HepG2 cells)
@@ -2587,7 +2367,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1765 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HSMMtube cells)
@@ -2598,7 +2377,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1766 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmtCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HSMMtube cells)
@@ -2608,7 +2386,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1767 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562CtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, K562 cells)
@@ -2619,7 +2396,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1769 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HMEC cells)
@@ -2630,7 +2406,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1770 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3ControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HeLa-S3 cells)
@@ -2642,7 +2417,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1771 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NHEK cells)
@@ -2653,7 +2427,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1772 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HSMM cells)
@@ -2664,7 +2437,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1773 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, H1-hESC cells)
@@ -2676,7 +2448,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1774 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NHEK cells)
@@ -2688,7 +2459,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1775 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HMEC cells)
@@ -2698,7 +2468,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1776 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, H1-hESC cells)
@@ -2710,7 +2479,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1777 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HUVEC cells)
@@ -2722,7 +2490,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1778 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhlfH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NHLF cells)
@@ -2733,7 +2500,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1779 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HeLa-S3 cells)
@@ -2745,7 +2511,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1780 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, H1-hESC cells)
@@ -2756,7 +2521,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1781 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHsmmH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HSMM cells)
@@ -2766,7 +2530,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1782 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneH1hescH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, H1-hESC cells)
@@ -2778,7 +2541,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1783 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, NHEK cells)
@@ -2790,7 +2552,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1784 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HMEC cells)
@@ -2801,7 +2562,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1785 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HMEC cells)
@@ -2812,7 +2572,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1786 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2CtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HepG2 cells)
@@ -2823,7 +2582,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1787 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HepG2 cells)
@@ -2835,7 +2593,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1788 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneK562Pol2bStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 Pol2(b) Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), K562 cells)
@@ -2847,7 +2604,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1789 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHuvecCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HUVEC cells)
@@ -2858,7 +2614,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1790 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHelas3H3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HeLa-S3 cells)
@@ -2869,7 +2624,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1791 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHepg2H2azStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H2A.Z Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, HepG2 cells)
@@ -2881,7 +2635,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1792 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneHmecH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HMEC cells)
@@ -2892,7 +2645,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1793 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneNhekH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, NHEK cells)
@@ -2903,7 +2655,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1794 dateSubmitted=2010-06-21
 
         track wgEncodeBroadHistoneGm12878CtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, GM12878 cells)
@@ -2914,7 +2665,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1878 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878ControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, GM12878 cells)
@@ -2926,7 +2676,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1879 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, GM12878 cells)
@@ -2937,7 +2686,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1880 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, GM12878 cells)
@@ -2949,7 +2697,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1881 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, GM12878 cells)
@@ -2961,7 +2708,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1882 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, GM12878 cells)
@@ -2973,7 +2719,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1883 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, GM12878 cells)
@@ -2985,7 +2730,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1884 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, GM12878 cells)
@@ -2997,7 +2741,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1885 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, GM12878 cells)
@@ -3008,7 +2751,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1886 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H4k20me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H4K20me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, GM12878 cells)
@@ -3020,7 +2762,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1887 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NH-A cells)
@@ -3030,7 +2771,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1888 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NH-A cells)
@@ -3041,7 +2781,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1889 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NH-A cells)
@@ -3051,7 +2790,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1890 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NH-A cells)
@@ -3062,7 +2800,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1891 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NH-A cells)
@@ -3073,7 +2810,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1892 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, NH-A cells)
@@ -3084,7 +2820,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1893 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneNhaH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NH-A cells)
@@ -3095,7 +2830,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=1894 dateSubmitted=2010-07-12
 
         track wgEncodeBroadHistoneGm12878H2azStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H2A.Z Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, GM12878 cells)
@@ -3107,7 +2841,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2978 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneGm12878H3k79me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K79me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, GM12878 cells)
@@ -3118,7 +2851,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2979 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneGm12878H3k9me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K9me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, GM12878 cells)
@@ -3130,7 +2862,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2980 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHelas3H3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HeLa-S3 cells)
@@ -3142,7 +2873,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2982 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneHsmmH2azStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H2A.Z Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, HSMM cells)
@@ -3153,7 +2883,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2981 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H2azStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H2A.Z Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, K562 cells)
@@ -3165,7 +2894,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2983 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H3k79me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K79me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, K562 cells)
@@ -3176,7 +2904,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2984 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneK562H3k9me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, K562 cells)
@@ -3188,7 +2915,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2985 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, Osteobl cells)
@@ -3198,7 +2924,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2986 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH2azStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H2A.Z Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, Osteobl cells)
@@ -3209,7 +2934,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2987 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, Osteobl cells)
@@ -3219,7 +2943,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2988 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, Osteobl cells)
@@ -3230,7 +2953,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2989 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me1StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K4me1 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, Osteobl cells)
@@ -3241,7 +2963,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2990 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, Osteobl cells)
@@ -3252,7 +2973,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2991 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneOsteoblH3k9me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K9me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, Osteobl cells)
@@ -3263,7 +2983,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=2992 dateSubmitted=2010-11-16
 
         track wgEncodeBroadHistoneNhdfadCtcfStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa CTCF Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NHDF-Ad cells)
@@ -3273,7 +2992,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3006 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k27acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K27ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NHDF-Ad cells)
@@ -3283,7 +3001,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3007 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k27me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K27me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NHDF-Ad cells)
@@ -3294,7 +3011,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3008 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k36me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K36me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NHDF-Ad cells)
@@ -3305,7 +3021,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3009 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me2StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K4me2 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, NHDF-Ad cells)
@@ -3316,7 +3031,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3010 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k4me3StdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K4me3 Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NHDF-Ad cells)
@@ -3327,7 +3041,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3011 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneNhdfadH3k9acStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K9ac Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, NHDF-Ad cells)
@@ -3337,7 +3050,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3012 dateSubmitted=2010-11-19
 
         track wgEncodeBroadHistoneOsteoblControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, Osteobl cells)
@@ -3347,7 +3059,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         # subId=3073 dateSubmitted=2010-12-06
 
         track wgEncodeBroadHistoneNhdfadControlStdSig
-        release alpha
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa Control Sg
         longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NHDF-Ad cells)
