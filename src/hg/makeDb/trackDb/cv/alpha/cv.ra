@@ -7153,7 +7153,7 @@ tag DEXd
 description 1h,500pM DEX (Myers)
 type treatment
 
-term DEX100pM
+term DEX_100pM
 tag DEXe
 description 1h,100pM DEX (Myers) (Provisional)
 type treatment
