@@ -3797,7 +3797,7 @@ cell K562
 composite wgEncodeOpenChromChip
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
+dateResubmitted 2011-01-12
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeOpenChromChipK562CtcfSig.bigWig
@@ -3943,7 +3943,7 @@ cell K562
 composite wgEncodeOpenChromChip
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
+dateResubmitted 2011-01-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipK562Pol2Pk.narrowPeak.gz
@@ -4003,7 +4003,7 @@ cell K562
 composite wgEncodeOpenChromChip
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
+dateResubmitted 2011-01-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig
@@ -5349,4 +5349,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1815507301
+# MAGIC: -1815496015
