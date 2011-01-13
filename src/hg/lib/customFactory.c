@@ -2212,19 +2212,24 @@ if (hash == NULL) // make sure we have a settings hash
 char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
+    freeMem(tdb->shortLabel);  // already set by customTrackTdbDefault()
     if (*val)  /* limit shortLabel to 128 characters to avoid problems */
         tdb->shortLabel = cloneStringZ(val,128);
     else
         tdb->shortLabel = cloneString("My Track");
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
+    freeMem(tdb->table);  // already set by customTrackTdbDefault()
     tdb->table = customTrackTableFromLabel(tdb->shortLabel);
+    freeMem(tdb->track);  // already set by customTrackTdbDefault()
     tdb->track = cloneString(tdb->table);
+    freeMem(tdb->longLabel);  // already set by customTrackTdbDefault()
     /* also use name for description, if not specified */
     tdb->longLabel = cloneString(tdb->shortLabel);
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     {
+    freeMem(tdb->longLabel);  // already set by customTrackTdbDefault() or name
     if (*val)
         tdb->longLabel = cloneString(val);
     else
@@ -2255,6 +2260,7 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
         {
 	readInGulp(val, &track->tdb->html, NULL);
         track->htmlFile = cloneString(val);
+	freeMem(val);
         }
     }
 if ((val = hashFindVal(hash, "chromosomes")) != NULL)
@@ -2314,11 +2320,17 @@ if ((val = hashFindVal(hash, "useScore")) != NULL)
 if ((val = hashFindVal(hash, "priority")) != NULL)
     tdb->priority = atof(val);
 if ((val = hashFindVal(hash, "color")) != NULL)
-    parseRgb(cloneString(val), lineIx, 
-            &tdb->colorR, &tdb->colorG, &tdb->colorB);
+    {
+    char *c = cloneString(val);
+    parseRgb(c, lineIx, &tdb->colorR, &tdb->colorG, &tdb->colorB);
+    freeMem(c);
+    }
 if ((val = hashFindVal(hash, "altColor")) != NULL)
-    parseRgb(cloneString(val), lineIx, 
-            &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+    {
+    char *c = cloneString(val);
+    parseRgb(c, lineIx, &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+    freeMem(c);
+    }
 else
     {
     /* If they don't explicitly set the alt color make it a lighter version
@@ -2821,6 +2833,11 @@ freeMem(tdb->track);
 freeMem(tdb->grp);
 freeMem(tdb->type);
 freeMem(tdb->settings);
+if (tdb->restrictList)
+    {
+    freeMem(tdb->restrictList[0]);
+    freeMem(tdb->restrictList);
+    }
 hashFree(&tdb->settingsHash);
 hashFree(&tdb->overrides);
 hashFree(&tdb->extras);
@@ -2957,6 +2974,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
     trackNotFound = FALSE;
     }
 customPpFree(&cpp);
+freez(&cpp);
 hFreeConn(&ctConn);
 }
 
