@@ -4,9 +4,9 @@
 # Notes:
 #       - Track Long Label:  Formaldehyde Assisted Isolation of Regulatory Elements by FAIRE-seq from ENCODE/Duke (Open Chromatin)
 #       - Track Short Label: UNC FAIRE HS
-#       - View Long Labels: [cell] [treatment] FAIRE [view] from ENCODE/UNC (Open Chromatin) 
+#       - View Long Labels: [cell] [treatment] FAIRE [view] from ENCODE/UNC (Open Chromatin)
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
-#       - Default Tracks on: Peaks,Raw Base Overlap Signal and F-Seq Desnsity Signals for the following Cells
+#       - Default Tracks on: Peaks,Base Overlap Signal and F-Seq Desnsity Signals for the following Cells
 #               - GM12878
 #               - H1-hESC
 #               - K562
@@ -14,17 +14,17 @@
 #       - Default View selections
 #               - Peaks = dense
 #               - F-Seq Density Signal = full
-#               - Raw Base Overlap Signal = full
+#               - Base Overlap Signal = full
 #       - View Displays: Deafult view filters:
 #               - Peaks: ?
 #               - F-Seq Density Signal: Range: 0-> 0.3
-#               - Raw Base Overlap Signal: Range: 0 -> 50
-#       - Short Labels: 
+#               - Base Overlap Signal: Range: 0 -> 50
+#       - Short Labels:
 #               Template: [cell][treatment] [view]
 #               - Views: For consistency sake view will be
 #                       - Peaks = Pk
-#                       - Raw Base Overlap Signal = Sig
-#                       - F-seq Density Signal = F-Seq 
+#                       - F-seq Density Signal = FD
+#                       - Base Overlap Signal = BO
 
 
 track wgEncodeOpenChromFaire
@@ -64,8 +64,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12878Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks
-        shortLabel GM12878 Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in GM12878 cells)
+        shortLabel FAIRE GM12878 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in GM12878 cells)
         subGroups view=Peaks cellType=GM12878 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -75,8 +75,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireH1hescPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks
-        shortLabel H1-hESC Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in H1-hESC cells)
+        shortLabel FAIRE H1-hESC Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in H1-hESC cells)
         subGroups view=Peaks cellType=H1 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -86,8 +86,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel HeLa-S3 Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in HeLa-S3 cells)
+        shortLabel FAIRE HeLa-S3 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in HeLa-S3 cells)
         subGroups view=Peaks cellType=HELA treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -97,8 +97,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm19239Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel GM19239 Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in GM19239 cells)
+        shortLabel FAIRE GM19239 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in GM19239 cells)
         subGroups view=Peaks cellType=GM19239 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -107,8 +107,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm18507Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel GM18507 Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in GM18507 cells)
+        shortLabel FAIRE GM18507 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in GM18507 cells)
         subGroups view=Peaks cellType=GM18507 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -117,8 +117,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHepg2Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel HepG2 Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in HepG2 cells)
+        shortLabel FAIRE HepG2 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in HepG2 cells)
         subGroups view=Peaks cellType=HEPG2 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -128,8 +128,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHuvecPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel HUVEC Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in HUVEC cells)
+        shortLabel FAIRE HUVEC Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in HUVEC cells)
         subGroups view=Peaks cellType=HUVEC treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -139,8 +139,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireNhekPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel NHEK Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in NHEK cells)
+        shortLabel FAIRE NHEK Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in NHEK cells)
         subGroups view=Peaks cellType=NHEK treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -150,8 +150,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks
-        shortLabel K562 Peaksn
-        longLabel ENCODE UNC FAIRE Peaks (in K562 cells)
+        shortLabel FAIRE K562 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in K562 cells)
         subGroups view=Peaks cellType=K562 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -161,8 +161,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFairePanisletsPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel PanIslets Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in PanIslets cells)
+        shortLabel FAIRE PanIslet Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in PanIslets cells)
         subGroups view=Peaks cellType=PANI treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -171,8 +171,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireNhbePk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel NHBE Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in NHBE cells)
+        shortLabel FAIRE NHBE Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in NHBE cells)
         subGroups view=Peaks cellType=NHBE treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -182,8 +182,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Ifna4hPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel HeLa-S3 Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in HeLa-S3 cells, with IFNa 4hrs treatment)
+        shortLabel FAIRE HeLa IFa Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in HeLa-S3 cells, IFNa 4hrs)
         subGroups view=Peaks cellType=HELA treatment=IFNa4h
         type narrowPeak
         origAssembly hg18
@@ -193,8 +193,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Ifng4hPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel HeLa-S3 Peaks
-        longLabel ENCODE UNC FAIRE Peaks (in HeLa-S3 cells, with IFNg 4hrs treatment)
+        shortLabel FAIRE HeLa IFg Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in HeLa-S3 cells, IFNg 4hrs)
         subGroups view=Peaks cellType=HELA treatment=IFNg4h
         type narrowPeak
         origAssembly hg18
@@ -204,8 +204,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireMedulloPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Medullo Pk
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in Medullo cells)
+        shortLabel FAIRE Medullo Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in Medullo cells)
         subGroups view=Peaks cellType=MEDULLO treatment=AANONE
         type narrowPeak
         # subId=2501 dateSubmitted=2010-10-16
@@ -213,8 +213,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12892Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel GM12892 Pk
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12892 cells)
+        shortLabel FAIRE GM12892 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in GM12892 cells)
         subGroups view=Peaks cellType=GM12892 treatment=AANONE
         type narrowPeak
         # subId=2488 dateSubmitted=2010-10-15
@@ -222,8 +222,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12891Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel GM12891 Pk
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12891 cells)
+        shortLabel FAIRE GM12891 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in GM12891 cells)
         subGroups view=Peaks cellType=GM12891 treatment=AANONE
         type narrowPeak
         # subId=2494 dateSubmitted=2010-10-15
@@ -231,8 +231,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireAstrocyPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Astrocy Pk
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in Astrocy cells)
+        shortLabel FAIRE Astrocy Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in Astrocy cells)
         subGroups view=Peaks cellType=Astrocy treatment=AANONE
         type narrowPeak
         # subId=2481 dateSubmitted=2010-10-15
@@ -240,8 +240,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGlioblaPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel Gliobla Pk
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in Gliobla cells)
+        shortLabel FAIRE Gliobla Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in Gliobla cells)
         subGroups view=Peaks cellType=Gliobla treatment=AANONE
         type narrowPeak
         # subId=2515 dateSubmitted=2010-10-20
@@ -249,8 +249,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562OhureaPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks
-        shortLabel K562 Pk
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
+        shortLabel FAIRE K562 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in K562 cells)
         subGroups view=Peaks cellType=K562 treatment=OHUrea
         type narrowPeak
         color 46,0,184
@@ -259,8 +259,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562NabutPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks
-        shortLabel K562 Pk
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in K562 cells)
+        shortLabel FAIRE K562 Pk
+        longLabel ENCODE Open Chromatin, UNC FAIRE Peaks (in K562 cells)
         subGroups view=Peaks cellType=K562 treatment=NaBut
         type narrowPeak
         color 46,0,184
@@ -268,7 +268,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
     track wgEncodeOpenChromFaireViewSignal
-    shortLabel F-Seq Density Signal
+    shortLabel F-Seq Signal
     view SIG
     visibility full
     subTrack wgEncodeOpenChromFaire
@@ -282,8 +282,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12878Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel GM12878 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in GM12878 cells)
+        shortLabel FAIRE GM12878 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in GM12878 cells)
         subGroups view=SIG cellType=GM12878 treatment=AANONE
         type bigWig 0.000000 0.559800
         origAssembly hg18
@@ -293,8 +293,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireH1hescSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel H1-hESC F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in H1-hESC cells)
+        shortLabel FAIRE H1-hESC FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in H1-hESC cells)
         subGroups view=SIG cellType=H1 treatment=AANONE
         type bigWig 0.000000 0.304500
         origAssembly hg18
@@ -304,8 +304,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HeLa-S3 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in HeLa-S3 cells)
+        shortLabel FAIRE HeLa-S3 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in HeLa-S3 cells)
         subGroups view=SIG cellType=HELA treatment=AANONE
         type bigWig 0.000000 0.549300
         origAssembly hg18
@@ -315,8 +315,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm19239Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM19239 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in GM19239 cells)
+        shortLabel FAIRE GM19239 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in GM19239 cells)
         subGroups view=SIG cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 1.023000
         origAssembly hg18
@@ -325,8 +325,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm18507Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM18507 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in GM18507 cells)
+        shortLabel FAIRE GM18507 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in GM18507 cells)
         subGroups view=SIG cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 0.867300
         origAssembly hg18
@@ -335,8 +335,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHepg2Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HepG2 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in HepG2 cells)
+        shortLabel FAIRE HepG2 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in HepG2 cells)
         subGroups view=SIG cellType=HEPG2 treatment=AANONE
         type bigWig 0.000000 0.832300
         origAssembly hg18
@@ -346,8 +346,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHuvecSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HUVEC F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in HUVEC cells)
+        shortLabel FAIRE HUVEC FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in HUVEC cells)
         subGroups view=SIG cellType=HUVEC treatment=AANONE
         type bigWig 0.000000 1.260500
         origAssembly hg18
@@ -357,8 +357,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireNhekSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel NHEK F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in NHEK cells)
+        shortLabel FAIRE NHEK FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in NHEK cells)
         subGroups view=SIG cellType=NHEK treatment=AANONE
         type bigWig 0.000000 0.643100
         origAssembly hg18
@@ -368,8 +368,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel K562 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in K562 cells)
+        shortLabel FAIRE K562 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in K562 cells)
         subGroups view=SIG cellType=K562 treatment=AANONE
         type bigWig 0.000000 0.392200
         origAssembly hg18
@@ -379,8 +379,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFairePanisletsSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel PanIslets F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in PanIslets cells)
+        shortLabel FAIRE PanIslet FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in PanIslets cells)
         subGroups view=SIG cellType=PANI treatment=AANONE
         type bigWig 0.000000 0.373200
         origAssembly hg18
@@ -389,8 +389,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireNhbeSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel NHBE F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in NHBE cells)
+        shortLabel FAIRE NHBE FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in NHBE cells)
         subGroups view=SIG cellType=NHBE treatment=AANONE
         type bigWig 0.000000 0.523100
         origAssembly hg18
@@ -400,8 +400,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Ifna4hSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HeLa-S3 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in HeLa-S3 cells, with IFNa 4hrs treatment)
+        shortLabel FAIRE HeLa IFa FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in HeLa-S3, IFNa 4hrs)
         subGroups view=SIG cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 0.670000
         origAssembly hg18
@@ -411,8 +411,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Ifng4hSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel HeLa-S3 F-seq
-        longLabel ENCODE UNC FAIRE F-Seq Density Signal (in HeLa-S3 cells, with IFNg 4hrs treatment)
+        shortLabel FAIRE HeLa IFg FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in HeLa-S3, IFNg 4hrs)
         subGroups view=SIG cellType=HELA treatment=IFNg4h
         type bigWig 0.000000 0.697800
         origAssembly hg18
@@ -422,8 +422,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireMedulloSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Medullo Sig
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in Medullo cells)
+        shortLabel FAIRE Medullo FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in Medullo cells)
         subGroups view=SIG cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 0.433400
         # subId=2501 dateSubmitted=2010-10-16
@@ -431,8 +431,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12892Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM12892 Sig
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in GM12892 cells)
+        shortLabel FAIRE GM12892 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in GM12892 cells)
         subGroups view=SIG cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 0.395000
         # subId=2488 dateSubmitted=2010-10-15
@@ -440,8 +440,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12891Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel GM12891 Sig
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in GM12891 cells)
+        shortLabel FAIRE GM12891 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in GM12891 cells)
         subGroups view=SIG cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 0.636800
         # subId=2494 dateSubmitted=2010-10-15
@@ -449,8 +449,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireAstrocySig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Astrocy Sig
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in Astrocy cells)
+        shortLabel FAIRE Astrocy FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in Astrocy cells)
         subGroups view=SIG cellType=Astrocy treatment=AANONE
         type bigWig 0.000000 0.459700
         # subId=2481 dateSubmitted=2010-10-15
@@ -458,8 +458,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGlioblaSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel Gliobla Sig
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in Gliobla cells)
+        shortLabel FAIRE Gliobla FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in Gliobla cells)
         subGroups view=SIG cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 0.367200
         # subId=2515 dateSubmitted=2010-10-20
@@ -467,8 +467,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562OhureaSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel K562 Sig
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in K562 cells)
+        shortLabel FAIRE K562 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in K562 cells)
         subGroups view=SIG cellType=K562 treatment=OHUrea
         type bigWig 0.000000 0.142500
         color 46,0,184
@@ -477,8 +477,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562NabutSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal
-        shortLabel K562 Sig
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in K562 cells)
+        shortLabel FAIRE K562 FD
+        longLabel ENCODE Open Chromatin, UNC FAIRE F-Seq Signal (in K562 cells)
         subGroups view=SIG cellType=K562 treatment=NaBut
         type bigWig 0.000000 0.145600
         color 46,0,184
@@ -486,7 +486,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
     track wgEncodeOpenChromFaireViewSigBo
-    shortLabel Raw Base Overlap Signal
+    shortLabel Overlap Signal
     view SIGBO
     visibility full
     subTrack wgEncodeOpenChromFaire
@@ -500,8 +500,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12878BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel GM12878 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in GM12878 cells)
+        shortLabel FAIRE GM12878 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in GM12878 cells)
         subGroups view=SIGBO cellType=GM12878 treatment=AANONE
         type bigWig 0.000000 2739.000000
         origAssembly hg18
@@ -511,8 +511,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireH1hescBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel H1-hESC Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in H1-hESC cells)
+        shortLabel FAIRE H1-hESC BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in H1-hESC cells)
         subGroups view=SIGBO cellType=H1 treatment=AANONE
         type bigWig 0.000000 1584.000000
         origAssembly hg18
@@ -522,8 +522,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HeLa-S3 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in HeLa-S3 cells)
+        shortLabel FAIRE HeLa-S3 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in HeLa-S3 cells)
         subGroups view=SIGBO cellType=HELA treatment=AANONE
         type bigWig 0.000000 2532.000000
         origAssembly hg18
@@ -533,8 +533,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm19239BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM19239 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in GM19239 cells)
+        shortLabel FAIRE GM19239 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in GM19239 cells)
         subGroups view=SIGBO cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 1562.000000
         origAssembly hg18
@@ -543,8 +543,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm18507BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM18507 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in GM18507 cells)
+        shortLabel FAIRE GM18507 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in GM18507 cells)
         subGroups view=SIGBO cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 2552.000000
         origAssembly hg18
@@ -553,8 +553,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHepg2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HepG2 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in HepG2 cells)
+        shortLabel FAIRE HepG2 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in HepG2 cells)
         subGroups view=SIGBO cellType=HEPG2 treatment=AANONE
         type bigWig 0.000000 4481.000000
         origAssembly hg18
@@ -564,8 +564,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHuvecBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HUVEC Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in HUVEC cells)
+        shortLabel FAIRE HUVEC BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in HUVEC cells)
         subGroups view=SIGBO cellType=HUVEC treatment=AANONE
         type bigWig 0.000000 2531.000000
         origAssembly hg18
@@ -575,8 +575,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireNhekBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel NHEK Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in NHEK cells)
+        shortLabel FAIRE NHEK BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in NHEK cells)
         subGroups view=SIGBO cellType=NHEK treatment=AANONE
         type bigWig 0.000000 3137.000000
         origAssembly hg18
@@ -586,8 +586,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel K562 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in K562 cells)
+        shortLabel FAIRE K562 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in K562 cells)
         subGroups view=SIGBO cellType=K562 treatment=AANONE
         type bigWig 0.000000 3174.000000
         origAssembly hg18
@@ -597,8 +597,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFairePanisletsBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel PanIslets Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in PanIslets cells)
+        shortLabel FAIRE PanIslet BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in PanIslets cells)
         subGroups view=SIGBO cellType=PANI treatment=AANONE
         type bigWig 0.000000 984.000000
         origAssembly hg18
@@ -608,8 +608,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireNhbeBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel NHBE Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in NHBE cells)
+        shortLabel FAIRE NHBE BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in NHBE cells)
         subGroups view=SIGBO cellType=NHBE treatment=AANONE
         type bigWig 0.000000 1465.000000
         origAssembly hg18
@@ -618,8 +618,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HeLa-S3 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in HeLa-S3 cells, with IFNa 4hrs treatment)
+        shortLabel FAIRE HeLa IFa BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (HeLa-S3, IFNa 4hrs)
         subGroups view=SIGBO cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 1431.000000
         origAssembly hg18
@@ -629,8 +629,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel HeLa-S3 Raw
-        longLabel ENCODE UNC FAIRE Raw Base Overlap Signal (in HeLa-S3 cells, with IFNg 4hrs treatment)
+        shortLabel FAIRE HeLa IFg BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (HeLa-S3, IFNg 4hrs)
         subGroups view=SIGBO cellType=HELA treatment=IFNg4h
         type bigWig 0.000000 1430.000000
         origAssembly hg18
@@ -640,8 +640,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireMedulloBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Medullo
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in Medullo cells)
+        shortLabel FAIRE Medullo BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in Medullo cells)
         subGroups view=SIGBO cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 3221.000000
         # subId=2501 dateSubmitted=2010-10-16
@@ -649,8 +649,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12892BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM12892
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12892 cells)
+        shortLabel FAIRE GM12892 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in GM12892 cells)
         subGroups view=SIGBO cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 1267.000000
         # subId=2488 dateSubmitted=2010-10-15
@@ -658,8 +658,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGm12891BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel GM12891
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12891 cells)
+        shortLabel FAIRE GM12891 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in GM12891 cells)
         subGroups view=SIGBO cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 1602.000000
         # subId=2494 dateSubmitted=2010-10-15
@@ -667,8 +667,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireAstrocyBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Astrocy
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in Astrocy cells)
+        shortLabel FAIRE Astrocy BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in Astrocy cells)
         subGroups view=SIGBO cellType=Astrocy treatment=AANONE
         type bigWig 0.000000 1226.000000
         # subId=2481 dateSubmitted=2010-10-15
@@ -676,8 +676,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel Gliobla
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in Gliobla cells)
+        shortLabel FAIRE Gliobla BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in Gliobla cells)
         subGroups view=SIGBO cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 2386.000000
         # subId=2515 dateSubmitted=2010-10-20
@@ -685,8 +685,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel K562
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+        shortLabel FAIRE K562 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in K562 cells)
         subGroups view=SIGBO cellType=K562 treatment=OHUrea
         type bigWig 0.000000 1562.000000
         color 46,0,184
@@ -695,8 +695,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo
-        shortLabel K562
-        longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in K562 cells)
+        shortLabel FAIRE K562 BO
+        longLabel ENCODE Open Chromatin, UNC FAIRE Overlap Signal (in K562 cells)
         subGroups view=SIGBO cellType=K562 treatment=NaBut
         type bigWig 0.000000 1560.000000
         color 46,0,184

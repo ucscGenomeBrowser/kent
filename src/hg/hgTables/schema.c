@@ -23,6 +23,7 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+#include "hubConnect.h"
 
 static char const rcsid[] = "$Id: schema.c,v 1.66 2010/06/07 16:53:10 angie Exp $";
 
@@ -579,6 +580,16 @@ else
     errAbort("Unrecognized customTrack type %s", type);
 }
 
+static void showSchemaHub(char *db, char *table)
+/* Show schema on a hub track. */
+{
+struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+char *type = cloneFirstWord(tdb->type);
+hPrintf("Binary file of type %s stored at %s<BR>\n",
+	type, trackDbSetting(tdb, "bigDataUrl"));
+if (sameString(type, "bigBed"))
+    showSchemaBigBed(table);
+}
 
 static void showSchemaWiki(struct trackDb *tdb, char *table)
 /* Show schema for the wikiTrack. */
@@ -594,6 +605,8 @@ if (hIsBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
+else if (isHubTrack(table))
+    showSchemaHub(db, table);
 else if (sameWord(table, WIKI_TRACK_TABLE))
     showSchemaWiki(tdb, table);
 else

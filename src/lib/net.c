@@ -733,7 +733,8 @@ if (npu.byteRangeStart != -1)
 	}
     }
 
-safef(cmd,sizeof(cmd),"RETR %s\r\n", npu.file);
+/* RETR for files, LIST for directories ending in / */
+safef(cmd,sizeof(cmd),"%s %s\r\n",((npu.file[strlen(npu.file)-1]) == '/') ? "LIST" : "RETR", npu.file);
 sendFtpCommandOnly(sd, cmd);
 
 int sdata = netConnect(npu.host, parsePasvPort(rs->string));

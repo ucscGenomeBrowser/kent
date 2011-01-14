@@ -40,7 +40,7 @@ void hubConnectStatusFreeList(struct hubConnectStatus **pList);
 struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id);
 /* Given a hub ID return associated status. */
 
-struct hubConnectStatus *hubConnectStatusFromCart(struct cart *cart);
+struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart);
 /* Return list of track hubs that are turned on by user in cart. */
 
 #define hubConnectTrackHubsVarName "trackHubs"

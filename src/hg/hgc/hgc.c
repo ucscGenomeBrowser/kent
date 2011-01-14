@@ -6793,7 +6793,6 @@ if (startsWith("user", aliTable))
 else
     {
     /* Look up alignments in database */
-    // struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);	// ugly
     hFindSplitTable(database, seqName, aliTable, table, &hasBin);
     safef(query, sizeof(query),
 	  "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
