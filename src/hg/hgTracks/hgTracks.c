@@ -3335,7 +3335,7 @@ if (hub != NULL)
 void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 /* Load up stuff from data hubs and append to lists. */
 {
-struct hubConnectStatus *hub, *hubList =  hubConnectStatusFromCart(cart);
+struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
     addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
