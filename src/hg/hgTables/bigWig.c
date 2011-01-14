@@ -28,7 +28,7 @@ boolean isBigWigTable(char *table)
 {
 if (isHubTrack(table))
     {
-    struct trackDb *tdb = hashFindVal(fullTrackHash, table);
+    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
     return startsWithWord("bigWig", tdb->type);
     }
 else
@@ -48,7 +48,7 @@ if (isCustomTrack(table))
     }
 else if (isHubTrack(table))
     {
-    struct trackDb *tdb = hashFindVal(fullTrackHash, table);
+    struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
     assert(tdb != NULL);
     fileName = trackDbSetting(tdb, "bigDataUrl");
     assert(fileName != NULL);
