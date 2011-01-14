@@ -72,9 +72,13 @@ struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn)
 /* Get fields of bigBed into hti structure. */
 {
 /* Get columns in asObject format. */
+uglyf("ok 5.1.1.1<BR>\n");
 char *fileName = bigBedFileName(table, conn);
+uglyf("ok 5.1.1.2 fileName=%s<BR>\n", fileName);
 struct bbiFile *bbi = bigBedFileOpen(fileName);
+uglyf("ok 5.1.1.3<BR>\n");
 struct asObject *as = bigBedAsOrDefault(bbi);
+uglyf("ok 5.1.1.4<BR>\n");
 
 /* Allocate hTableInfo structure and fill in info about bed fields. */
 struct hash *colHash = asColumnHash(as);
@@ -99,10 +103,12 @@ char type[256];
 safef(type, sizeof(type), "bed %d %c", bbi->definedFieldCount,
 	(bbi->definedFieldCount == bbi->fieldCount ? '.' : '+'));
 hti->type = cloneString(type);
+uglyf("ok 5.1.1.5<BR>\n");
 
 freeMem(fileName);
 hashFree(&colHash);
 bbiFileClose(&bbi);
+uglyf("ok 5.1.1.6<BR>\n");
 return hti;
 }
 

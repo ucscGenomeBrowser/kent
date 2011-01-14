@@ -33,9 +33,7 @@ struct trackHub
     char *longLabel;	/* Hub long label. Not allocated here. */
     char *genomesFile;	/* URL to genome.ra file. Not allocated here. */
 
-    /* The name field below is set by client! It is used by genome browser for the symbolic
-     * name of hub in cart. */
-    char *name;
+    char *name;	/* Symbolic name of hub in cart, etc.  From trackHubOpen hubName parameter. */
     };
 
 struct trackHubGenome

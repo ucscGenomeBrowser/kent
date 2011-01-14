@@ -14,17 +14,17 @@
 #       - Default View selections
 #               - Peaks = dense
 #		- F-Seq Density Signal = full
-#		- Raw Base Overlap Signal = full
+#		- Base Overlap Signal = full
 #       - View Displays: Deafult view filters:
 #               - Peaks: ?
 #               - F-Seq Density Signal: Range: 0-> 0.1
-#               - Raw Base Overlap Signal: Range: 0 -> 50
+#               - Base Overlap Signal: Range: 0 -> 50
 #       - Short Labels:
 #               Template: [cell][treatment] [view]
 #               - Views: For consistency sake view will be
 #                       - Peaks = Pk
-#                       - Raw Base Overlap Signal = Sig
-#                       - F-seq Density Signal = F-Seq
+#                       - F-seq Density Signal = FD
+#                       - Base Overlap Signal = BO
 
 
 
@@ -542,7 +542,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseChorionSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Chorion Fs
+        shortLabel DNase Chorion FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Chorion cells)
         subGroups view=SIG cellType=CHORN treatment=AANONE
         type bigWig 0.000000 1.413200
@@ -552,7 +552,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseMedulloSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Medullo Fs
+        shortLabel DNase Medullo FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Medullo cells)
         subGroups view=SIG cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 1.186600
@@ -562,8 +562,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGm12891Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase GM12891 Fs
-        longLabel ENCODE  Duke DNaseI HS F-Seq Signal (in GM12891 cells)
+        shortLabel DNase GM12891 FD
+        longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in GM12891 cells)
         subGroups view=SIG cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 1.893100
         origAssembly hg18
@@ -572,7 +572,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGm12892Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase GM12892 Fs
+        shortLabel DNase GM12892 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in GM12892 cells)
         subGroups view=SIG cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 1.880000
@@ -582,7 +582,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGm19238Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase GM19238 Fs
+        shortLabel DNase GM19238 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in GM19238 cells)
         subGroups view=SIG cellType=GM19238 treatment=AANONE
         type bigWig 0.000000 2.042500
@@ -592,7 +592,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGm12878Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
-        shortLabel DNase GM12878 Fs
+        shortLabel DNase GM12878 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in GM12878 cells)
         subGroups view=SIG cellType=GM12878 treatment=AANONE
         type bigWig 0.000000 1.097700
@@ -603,7 +603,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseH1hescSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
-        shortLabel DNase H1-hESC Fs
+        shortLabel DNase H1-hESC FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in H1-hESC cells)
         subGroups view=SIG cellType=H1 treatment=AANONE
         type bigWig 0.000000 2.243700
@@ -614,7 +614,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHelas3Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HeLa-S3 Fs
+        shortLabel DNase HeLa-S3 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in HeLa-S3 cells)
         subGroups view=SIG cellType=HELA treatment=AANONE
         type bigWig 0.000000 2.024200
@@ -625,7 +625,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGm19239Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase GM19239 Fs
+        shortLabel DNase GM19239 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in GM19239 cells)
         subGroups view=SIG cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 1.811800
@@ -635,7 +635,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGm18507Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase GM18507 Fs
+        shortLabel DNase GM18507 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in GM18507 cells)
         subGroups view=SIG cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 1.676800
@@ -645,7 +645,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGm19240Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase GM19240 Fs
+        shortLabel DNase GM19240 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in GM19240 cells)
         subGroups view=SIG cellType=GM19240 treatment=AANONE
         type bigWig 0.000000 1.867200
@@ -655,7 +655,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseH9esSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase H9-hESC Fs
+        shortLabel DNase H9-hESC FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in H9ES cells)
         subGroups view=SIG cellType=H9 treatment=AANONE
         type bigWig 0.000000 1.603000
@@ -665,7 +665,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHepg2Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HepG2 Fs
+        shortLabel DNase HepG2 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in HepG2 cells)
         subGroups view=SIG cellType=HEPG2 treatment=AANONE
         type bigWig 0.000000 2.203900
@@ -676,7 +676,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHuvecSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HUVEC Fs
+        shortLabel DNase HUVEC FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in HUVEC cells)
         subGroups view=SIG cellType=HUVEC treatment=AANONE
         type bigWig 0.000000 2.605700
@@ -687,7 +687,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseNhekSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase NHEK Fs
+        shortLabel DNase NHEK FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in NHEK cells)
         subGroups view=SIG cellType=NHEK treatment=AANONE
         type bigWig 0.000000 1.748600
@@ -698,7 +698,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseK562Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
-        shortLabel DNase K562 Fs
+        shortLabel DNase K562 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in K562 cells)
         subGroups view=SIG cellType=K562 treatment=AANONE
         type bigWig 0.000000 3.111200
@@ -710,7 +710,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNse HeLa IFNa Fs
+        shortLabel DNse HeLa IFNa FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (HeLa-S3, IFNa)
         subGroups view=SIG cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 0.761900
@@ -721,7 +721,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseMcf7Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase MCF-7 Fs
+        shortLabel DNase MCF-7 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in MCF-7 cells)
         subGroups view=SIG cellType=MCF7 treatment=AANONE
         type bigWig 0.000000 0.624200
@@ -732,7 +732,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseProgfibSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase ProgFib Fs
+        shortLabel DNase ProgFib FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in ProgFib cells)
         subGroups view=SIG cellType=PROG treatment=AANONE
         type bigWig 0.000000 1.924100
@@ -742,7 +742,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseFibropSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase FibroP Fs
+        shortLabel DNase FibroP FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in FibroP cells)
         subGroups view=SIG cellType=FIBROP treatment=AANONE
         type bigWig 0.000000 1.562600
@@ -752,7 +752,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseFibroblSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Fibrobl Fs
+        shortLabel DNase Fibrobl FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Fibrobl cells)
         subGroups view=SIG cellType=FIBRO treatment=AANONE
         type bigWig 0.000000 1.250700
@@ -762,7 +762,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHsmmSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HSMM Fs
+        shortLabel DNase HSMM FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in HSMM cells)
         subGroups view=SIG cellType=HSMM treatment=AANONE
         type bigWig 0.000000 2.424300
@@ -772,7 +772,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseMyometrSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Myometr Fs
+        shortLabel DNase Myometr FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Myometr cells)
         subGroups view=SIG cellType=MYOMETR treatment=AANONE
         type bigWig 0.000000 1.229800
@@ -782,7 +782,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnasePanisletsSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase PanIsle Fs
+        shortLabel DNase PanIsle FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (PanIslets cells)
         subGroups view=SIG cellType=PANI treatment=AANONE
         type bigWig 0.000000 1.691300
@@ -792,7 +792,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseAosmcSerumfreeSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase AoSMC sf Fs
+        shortLabel DNase AoSMC sf FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (AoSMC, Serum Free)
         subGroups view=SIG cellType=AOSMC treatment=SERUMFREE
         type bigWig 0.000000 0.726900
@@ -802,7 +802,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHsmmtSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HSMMtube Fs
+        shortLabel DNase HSMMtube FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in HSMMtube cells)
         subGroups view=SIG cellType=HSMMt treatment=AANONE
         type bigWig 0.000000 1.594200
@@ -812,7 +812,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseMelanoSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Melano Fs
+        shortLabel DNase Melano FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Melano cells)
         subGroups view=SIG cellType=MELANO treatment=AANONE
         type bigWig 0.000000 1.470500
@@ -822,7 +822,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnasePhteSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase pHTE Fs
+        shortLabel DNase pHTE FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in pHTE cells)
         subGroups view=SIG cellType=pHTE treatment=AANONE
         type bigWig 0.000000 2.165800
@@ -831,7 +831,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseOsteoblSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Osteobl Fs
+        shortLabel DNase Osteobl FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Osteobl cells)
         subGroups view=SIG cellType=Osteobl treatment=AANONE
         type bigWig 0.000000 3.150400
@@ -840,7 +840,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseLncapAndroSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNse LNCaP and Fs
+        shortLabel DNse LNCaP and FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (LNCaP, androgen)
         subGroups view=SIG cellType=LNCaP treatment=ANDRO
         type bigWig 0.000000 1.231700
@@ -850,7 +850,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseLncapSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase LNCaP Fs
+        shortLabel DNase LNCaP FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in LNCaP cells)
         subGroups view=SIG cellType=LNCaP treatment=AANONE
         type bigWig 0.000000 2.732500
@@ -860,7 +860,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseA549Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase A549 Fs
+        shortLabel DNase A549 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in A549 cells)
         subGroups view=SIG cellType=A549 treatment=AANONE
         type bigWig 0.000000 0.892200
@@ -869,7 +869,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHtr8Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HTR8svn Fs
+        shortLabel DNase HTR8svn FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in HTR8svn cells)
         subGroups view=SIG cellType=HTR8 treatment=AANONE
         type bigWig 0.000000 0.930700
@@ -878,7 +878,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnase8988tSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase 8988T Fs
+        shortLabel DNase 8988T FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in 8988T cells)
         subGroups view=SIG cellType=8988T treatment=AANONE
         type bigWig 0.000000 1.842900
@@ -887,7 +887,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnasePanisdSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNse PanIsletD Fs
+        shortLabel DNse PanIsletD FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (PanIsletD cells)
         subGroups view=SIG cellType=PanIsD treatment=AANONE
         type bigWig 0.000000 1.462100
@@ -897,7 +897,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHmecSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HMEC Fs
+        shortLabel DNase HMEC FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in HMEC cells)
         subGroups view=SIG cellType=HMEC treatment=AANONE
         type bigWig 0.000000 2.710200
@@ -906,7 +906,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseGlioblaSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Gliobla Fs
+        shortLabel DNase Gliobla FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Gliobla cells)
         subGroups view=SIG cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 1.195300
@@ -915,7 +915,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseCllSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase CLL Fs
+        shortLabel DNase CLL FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in CLL cells)
         subGroups view=SIG cellType=CLL treatment=AANONE
         type bigWig 0.000000 0.697500
@@ -924,7 +924,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHepatocytesSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Hepato Fs
+        shortLabel DNase Hepato FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (Hepatocytes)
         subGroups view=SIG cellType=Hepatocytes treatment=AANONE
         type bigWig 0.000000 1.185800
@@ -933,7 +933,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHpde6e6e7Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase HPDE6 Fs
+        shortLabel DNase HPDE6 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (HPDE6-E6E7)
         subGroups view=SIG cellType=HPDE6E6E7 treatment=AANONE
         type bigWig 0.000000 0.568300
@@ -942,7 +942,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseIpsSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase iPS Fs
+        shortLabel DNase iPS FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in iPS cells)
         subGroups view=SIG cellType=iPS treatment=AANONE
         type bigWig 0.000000 2.048100
@@ -951,7 +951,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHuh7Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Huh-7 Fs
+        shortLabel DNase Huh-7 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Huh-7 cells)
         subGroups view=SIG cellType=Huh7 treatment=AANONE
         type bigWig 0.000000 2.031400
@@ -960,7 +960,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHuh75Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Huh-7.5 Fs
+        shortLabel DNase Huh-7.5 FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Huh-7.5 cells)
         subGroups view=SIG cellType=Huh7.5 treatment=AANONE
         type bigWig 0.000000 2.919900
@@ -969,7 +969,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseStellateSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase Stellate Fs
+        shortLabel DNase Stellate FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in Stellate cells)
         subGroups view=SIG cellType=Stellate treatment=AANONE
         type bigWig 0.000000 1.116200
@@ -978,7 +978,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseT47dSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNase T-47D Fs
+        shortLabel DNase T-47D FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (in T-47D cells)
         subGroups view=SIG cellType=T47D treatment=AANONE
         type bigWig 0.000000 1.376400
@@ -987,7 +987,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseUrotsaSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNse Urothelia Fs
+        shortLabel DNse Urothelia FD
         longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (Urothelia cells)
         subGroups view=SIG cellType=UROtsa treatment=AANONE
         type bigWig 0.000000 0.851700
@@ -996,8 +996,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseUrotsaUt189Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNse Urothl ec Fs
-        longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Sig (Urothelia, UT189)
+        shortLabel DNse Urothl ec FD
+        longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (Urothelia, UT189)
         subGroups view=SIG cellType=UROtsa treatment=UT189
         type bigWig 0.000000 0.981900
         # subId=3218 dateSubmitted=2011-01-11
