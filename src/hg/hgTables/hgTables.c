@@ -585,10 +585,17 @@ struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
 /* Given trackDb entry for a hub track, wrap table info around it. */
 {
 struct hTableInfo *hti;
-AllocVar(hti);
-hti->rootName = cloneString(tdb->track);
-hti->isPos = TRUE;
-hti->type = cloneString(tdb->type);
+if (startsWithWord("bigBed", tdb->type))
+    {
+    hti = bigBedToHti(tdb->track, NULL);
+    }
+else
+    {
+    AllocVar(hti);
+    hti->rootName = cloneString(tdb->track);
+    hti->isPos = TRUE;
+    hti->type = cloneString(tdb->type);
+    }
 return hti;
 }
 
@@ -597,7 +604,12 @@ struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn
 {
 struct hTableInfo *hti = NULL;
 
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+    hti = hubTrackTableInfo(tdb);
+    }
+else if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     hti = bigBedToHti(table, conn);
     }
@@ -605,11 +617,6 @@ else if (isCustomTrack(table))
     {
     struct customTrack *ct = ctLookupName(table);
     hti = ctToHti(ct);
-    }
-else if (isHubTrack(table))
-    {
-    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
-    hti = hubTrackTableInfo(tdb);
     }
 else if (sameWord(table, WIKI_TRACK_TABLE))
     {
