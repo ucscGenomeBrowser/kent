@@ -179,12 +179,12 @@ else
         // Problem with making common fieds as sorable is that it REQUIRES a fixed sort order
         char *sortables[] = {"grant","lab","dataType","cell","strain","age","rnaExtract","localization","phase","treatment","antibody","protocol",
                       "labProtocolId","restrictionEnzyme","control","replicate","expId","labExpId","setType","view","submittedDataVersion","subId",
-                      "dataVersion","dateSubmitted","dateResubmitted","dateUnrestricted",//"labVersion","softwareVersion",
-                      "mapAlgorithm","fragSize","fragLength"};
+                      "dateSubmitted","dateResubmitted","dateUnrestricted","dataVersion"};//"labVersion","softwareVersion",
         // Not included:    no:not searchable
-        // accession no, annotation no, bioRep no,       composite no, controlId no,    dccInternalNotes no, fileIndex no,  fileName no, freezeDate no
-        // geoSample,    geoSeries,     insertLength no, labVersion,   level no,        obtainedBy,          origAssembly,  privacy no,  rank no
-        // readType,     seqPlatform,   sex,             size no,      softwareVersion, tableName no,        uniqueness no
+        // accession no, annotation no,   bioRep no,     composite no, controlId no, dccInternalNotes no, fileIndex no,  fileName no,
+        // fragSize no,  fragLength no,   freezeDate no, geoSample,    geoSeries,    insertLength no,     labVersion,    level no,
+        // mapAlgorithm, obtainedBy,      origAssembly,  privacy no,   rank no,      readType,            seqPlatform,   sex,
+        // size no,      softwareVersion, tableName no,   uniqueness no
 
         int ix = 0, count = sizeof(sortables)/sizeof(char *);
         for (ix=0;ix<count;ix++)
