@@ -8,8 +8,8 @@
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier.
 #       - Default Tracks on: Peaks,Hotspots,Signals for 1 and 2 replicates for K562 and GM12878 Cell Lines. 
 #	- Default View selections
-#		- Hotspots = pack
-#		- Peaks = pack
+#		- Hotspots = hide
+#		- Peaks = hide
 #		- Signal = full
 #		- Raw Signal = hide
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
@@ -43,7 +43,7 @@ wgEncode 1
     track wgEncodeUwDgfViewHotspots
     shortLabel Hotspots
     view Hotspots
-    visibility pack
+    visibility hide
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -217,7 +217,7 @@ wgEncode 1
     track wgEncodeUwDgfViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack
+    visibility hide
     parent wgEncodeUwDgf
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -393,12 +393,12 @@ wgEncode 1
     view Signal
     visibility full
     parent wgEncodeUwDgf
-    viewLimits 2:30
+    viewLimits 2:20
     minLimit 1
     maxLimit 70530
     autoScale off
     maxHeightPixels 100:32:16
-    windowingFunction maximum
+    windowingFunction mean+whiskers
 
         track wgEncodeUwDgfGm06990Sig
         parent wgEncodeUwDgfViewSignal off

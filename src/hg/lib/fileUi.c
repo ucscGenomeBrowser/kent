@@ -505,9 +505,10 @@ for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
             else
                 {
                 field = oneFile->sortFields[sortOrder->order[ix] - 1];
-                if (sameString("dateUnrestricted",sortOrder->column[ix]) && dateIsOld(field,"%F"))
-                    field = NULL;
-                printf("<TD align='center' nowrap>%s</td>",field?field:" &nbsp;");
+                if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
+                    printf("<TD align='center' nowrap style='color: #BBBBBB;'>%s</td>",field);
+                else
+                    printf("<TD align='center' nowrap>%s</td>",field?field:" &nbsp;");
                 if (!sameString("fileType",sortOrder->column[ix]))
                     mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
                 }
@@ -698,18 +699,23 @@ for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
     printf("<TR valign='top'>");   // TODO: BUILD IN THE CLASSES TO ALLOW FILTERBOXES TO WORK!!!
 
     // Download button
-    printf("<TD>");
+    printf("<TD align='left' nowrap>");
     field = mdbObjFindValue(oneFile->mdb,"composite");
     assert(field != NULL);
     printf("<A HREF='http://%s/goldenPath/%s/%s/%s/%s' title='Download %s ...' TARGET=ucscDownloads>",
                 hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, field?field:" &nbsp;", oneFile->fileName, oneFile->fileName);
     printf("<input type='button' value='Download'>");
     printf("</a>");
+//#define SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+#ifdef SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
     field = mdbObjFindValue(oneFile->mdb,"composite");
     if (field)
         {
         // TODO Look up trackDb.fileSortOrder.  If found, then offer "folder" icon with link to page
+            // Instead, always offer hgFileUi link and have hgFileUi figure out what to do
+        printf("&nbsp;<A href='../cgi-bin/hgFileUi?db=%s&g=%s' title='Navigate to downloads page for %s set...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;", db,field,field);
         }
+#endif///def SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
     puts("</TD>");
 
     // Each of the pulled out mdb vars
@@ -726,7 +732,11 @@ for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
     field = mdbObjFindValue(oneFile->mdb,"dateSubmitted");
     printf("<TD align='center' nowrap>%s</td>",field?field:" &nbsp;");
     field = mdbObjFindValue(oneFile->mdb,"dateUnrestricted");
-    printf("<TD align='center' nowrap>%s</td>",field?dateIsOld(field,"%F")?" &nbsp;":field:" &nbsp;");
+    //printf("<TD align='center' nowrap>%s</td>",field?dateIsOld(field,"%F")?" &nbsp;":field:" &nbsp;");
+    if(field)
+        printf("<TD align='center' nowrap%s>%s</td>",dateIsOld(field,"%F")?" style='color: #BBBBBB;'":"",field);
+    else
+        printf("<TD align='center' nowrap> &nbsp;</td>");
 #ifdef INCLUDE_FILENAMES
     printf("<TD align='left' nowrap>%s</td>",oneFile->fileName);
 #endif///def INCLUDE_FILENAMES

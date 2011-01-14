@@ -26,7 +26,10 @@ errAbort(
   "   -source=src set source name to uses\n"
   "   -addComments - Add comments before each set of transcript records.\n"
   "    allows for easier visual inspection\n"
-  "Note: use refFlat or extended genePred table to include geneName\n"
+  "Note: use refFlat (tables only) or extended genePred file/table to include\n"
+  "geneName.  If you are using genePred with starts with a numeric bin number,\n"
+  "drop it using the UNIX cut command:\n"
+  "    cut -f 2- in.gp |  genePredToGtf file stdin out.gp\n"
   );
 }
 
