@@ -12,6 +12,7 @@ subGroup4 rnaExtract RNA_Extract longNonPolyA=PolyA- longPolyA=PolyA+ total=Tota
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract dimensionA=rep
 sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
+fileSortOrder cell=Cell_Line labProtocolId=<i>Protocol<BR>ID</i>  localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 dimensionZchecked longNonPolyA,longPolyA,total
@@ -1311,6 +1312,28 @@ noInherit on
         color 153,38,0
         # subId=3230 dateSubmitted=2011-01-11
 
+        track wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel GM12878 nucleus longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Replicate 2 (longNonPolyA in GM12878 nucleus)
+        subGroups view=PlusRawSig cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 1589847.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3236 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel HepG2 nucleus longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Replicate 2 (longNonPolyA in HepG2 nucleus)
+        subGroups view=PlusRawSig cellType=HepG2 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 7826750.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3237 dateSubmitted=2011-01-12
+
 
 
 
@@ -2602,6 +2625,28 @@ noInherit on
         color 153,38,0
         # subId=3230 dateSubmitted=2011-01-11
 
+        track wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel GM12878 nucleus longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Replicate 2 (longNonPolyA in GM12878 nucleus)
+        subGroups view=MinusRawSig cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 1823306.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3236 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel HepG2 nucleus longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Replicate 2 (longNonPolyA in HepG2 nucleus)
+        subGroups view=MinusRawSig cellType=HepG2 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 8530886.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3237 dateSubmitted=2011-01-12
+
     	track wgEncodeCshlLongRnaSeqViewAllRawSig
     	shortLabel All Raw Sig
     	view AllRawSig
@@ -3888,6 +3933,28 @@ noInherit on
         origAssembly hg19
         color 153,38,0
         # subId=3230 dateSubmitted=2011-01-11
+
+        track wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        shortLabel GM12878 nucleus longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Replicate 2 (longNonPolyA in GM12878 nucleus)
+        subGroups view=AllRawSig cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 1823386.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3236 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        shortLabel HepG2 nucleus longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Replicate 2 (longNonPolyA in HepG2 nucleus)
+        subGroups view=AllRawSig cellType=HepG2 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 8534443.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3237 dateSubmitted=2011-01-12
    		
 
     	track wgEncodeCshlLongRnaSeqViewAlignments
@@ -5172,6 +5239,28 @@ noInherit on
         origAssembly hg19
         color 153,38,0
         # subId=3230 dateSubmitted=2011-01-11
+
+        track wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel GM12878 nucleus longNonPolyA Aln 2
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 2 (longNonPolyA in GM12878 nucleus)
+        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=3236 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel HepG2 nucleus longNonPolyA Aln 2
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 2 (longNonPolyA in HepG2 nucleus)
+        subGroups view=Alignments cellType=HepG2 localization=nucleus rnaExtract=longNonPolyA rep=rep2
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3237 dateSubmitted=2011-01-12
 
 
  
