@@ -2900,6 +2900,28 @@ subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep1
 view AllRawSig
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2
+view AllRawSig
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
 objType table
 cell GM12878
@@ -2920,6 +2942,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2.bam
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep1
@@ -2943,6 +2987,27 @@ rnaExtract longNonPolyA
 subId 3133
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep2
+objType file
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep1
 objType file
 cell GM12878
@@ -2962,6 +3027,27 @@ project wgEncode
 replicate 1
 rnaExtract longNonPolyA
 subId 3133
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep2
+objType file
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep1
@@ -2986,6 +3072,28 @@ subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSig
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
+view MinusRawSig
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
 objType table
 cell GM12878
@@ -3006,6 +3114,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
+view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapAllRawSigRep1
@@ -6914,6 +7044,28 @@ subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep1
 view AllRawSig
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2
+view AllRawSig
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
 objType table
 cell HepG2
@@ -6934,6 +7086,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2.bam
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep1
@@ -6957,6 +7131,27 @@ rnaExtract longNonPolyA
 subId 3143
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep2
+objType file
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep1
 objType file
 cell HepG2
@@ -6976,6 +7171,27 @@ project wgEncode
 replicate 1
 rnaExtract longNonPolyA
 subId 3143
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep2
+objType file
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep1
@@ -7000,6 +7216,28 @@ subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSig
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
+view MinusRawSig
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
 objType table
 cell HepG2
@@ -7020,6 +7258,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
+view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapAllRawSigRep1
@@ -15857,4 +16117,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: -2129537626
+# MAGIC: -160713996
