@@ -270,7 +270,7 @@ for (hubStatus = hubList; hubStatus != NULL; hubStatus = hubStatus->next)
     {
     /* Load trackDb.ra file and make it into proper trackDb tree */
     char hubName[8];
-    safef(hubName, sizeof(hubName), "%d", hubStatus->id);
+    safef(hubName, sizeof(hubName), "hub_%d", hubStatus->id);
     struct trackHub *hub = trackHubOpen(hubStatus->hubUrl, hubName);
     if (hub != NULL)
 	{

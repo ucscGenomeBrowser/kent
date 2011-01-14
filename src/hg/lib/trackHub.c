@@ -342,10 +342,10 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 }
 
 void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList)
-/* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. */
+/* For a hub named "hub_1" add the prefix "hub_1_" to each track and parent field. */
 {
 char namePrefix[PATH_LEN];
-safef(namePrefix, sizeof(namePrefix), "hub_%s_", hubName);
+safef(namePrefix, sizeof(namePrefix), "%s_", hubName);
 trackDbListAddNamePrefix(tdbList, namePrefix);
 }
 
@@ -353,11 +353,9 @@ void trackHubAddGroupName(char *hubName, struct trackDb *tdbList)
 /* Add group tag that references the hubs symbolic name. */
 {
 struct trackDb *tdb;
-char grpName[16];
-safef(grpName, sizeof(grpName), "hub_%s", hubName);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
-    tdb->grp = cloneString(grpName);
+    tdb->grp = cloneString(hubName);
     hashReplace(tdb->settingsHash, "group", tdb->grp);
     }
 }

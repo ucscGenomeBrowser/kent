@@ -120,6 +120,7 @@ char *organization;             /* UCSC */
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
+#ifdef DEBUG
 void uglySnoopTrackList(int depth, struct track *trackList)
 /* Print out some info on track list. */
 {
@@ -134,6 +135,7 @@ for (track = trackList; track != NULL; track = track->next)
     uglySnoopTrackList(depth+1, track->subtracks);
     }
 }
+#endif /* DEBUG */
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -3314,7 +3316,7 @@ static void addTracksFromTrackHub(int id, char *hubUrl, struct track **pTrackLis
 {
 /* Load trackDb.ra file and make it into proper trackDb tree */
 char hubName[8];
-safef(hubName, sizeof(hubName), "%d",id);
+safef(hubName, sizeof(hubName), "hub_%d",id);
 struct trackHub *hub = trackHubOpen(hubUrl, hubName);
 if (hub != NULL)
     {

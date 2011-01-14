@@ -171,7 +171,7 @@ if (!isEmpty(hubStatus->errorMessage))
     errAbort("Hub %s at %s has the error: %s", hubStatus->shortLabel, 
 	    hubStatus->hubUrl, hubStatus->errorMessage);
 char hubName[16];
-safef(hubName, sizeof(hubName), "%d", hubId);
+safef(hubName, sizeof(hubName), "hub_%d", hubId);
 struct trackHub *hub = trackHubOpen(hubStatus->hubUrl, hubName);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
