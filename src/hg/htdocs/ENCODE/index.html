@@ -42,37 +42,39 @@
           </tr>
           <tr height="100%">
             <td height="100%"><!--outer table is for black border-->
-            <table bgcolor="#000000" border="0" cellpadding="1"
- cellspacing="0" width="100%">
+            <table bgcolor="#000000" border="0" cellpadding="1" cellspacing="0" width="100%">
+
               <tbody>
                 <tr>
                   <td>
-                  <table border="0" cellpadding="10" cellspacing="0"
- width="100%">
+                  <table border="0" cellpadding="10" cellspacing="0" width="100%">
                     <tbody>
                       <tr height="100%">
                         <td bgcolor="#738ed3" height="100%" valign="top">
-			<font color="#FFFFAA"><b><em>Human</em></b></font><br>
+                       <font color="#FFFFAA"><b><em>Human</em></b></font><br>
                         <img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-			<a class="leftbar" href="/cgi-bin/hgTracks?db=hg18">Genome Browser (hg18)</a>
-			<hr> <a class="leftbar" href="/cgi-bin/hgTracks?db=hg19">Genome Browser (hg19)</a>
-                        <hr> <a class="leftbar" href="cellTypes.html">Cell Types</a>
+			<a class="leftbar" href="/ENCODE/dataSummary.html">Data Summary</a>
                         <hr> <a class="leftbar" href="downloads.html">Downloads</a>
+			<hr> <a class="leftbar" href="/cgi-bin/hgTracks?db=hg18">Genome Browser (hg18)</a>
+			<hr> <a class="leftbar" href="/cgi-bin/hgTracks?db=hg19">Genome Browser (hg19)</a>
+			<hr> <a class="leftbar" href="http://genome-preview.ucsc.edu/cgi-bin/hgTracks?db=hg19">Preview Browser (hg19)</a>
 			<hr> <a class="leftbar" href="http://genomewiki.cse.ucsc.edu/index.php/Genome_Browser_Session_Gallery"
 			TARGET=_blank>Session Gallery</a>
+                        <hr> <a class="leftbar" href="cellTypes.html">Cell Types</a>
                         <hr>
 			<img src="../images/DOT.gif" alt="" height="5" width="0"><br>
-			<font color="#FFFFAA"><b><em>Mouse</em></b></font><br>
+			<font color="#fffee8"><b><em>Mouse</em></b></font><br>
 			<img src="../images/DOT.gif" alt="" height="8" width="0"><br>
-			<!-- <a class="leftbar" href="/cgi-bin/hgTracks?db=mm9">Genome Browser</a> -->
-			<!-- <hr> --><a class="leftbar" href="cellTypesMouse.html">Cell Types</a>
+			<a class="leftbar" href="/ENCODE/dataSummaryMouse.html">Data Summary</a>
+			<hr><a class="leftbar" href="/cgi-bin/hgTracks?db=mm9">Preview Browser (mm9)</a>
+			<hr><a class="leftbar" href="cellTypesMouse.html">Cell Types</a>
                         <!-- <hr> <a class="leftbar" href="downloadsMouse.html">Downloads</a> -->
 			<hr>
                         <img src="../images/DOT.gif" alt="" height="5" width="0"><br>
 			<font color="FFFFAA"><b><em>General</em></b></font><br>
                         <img src="../images/DOT.gif" alt="" height="8"><br>
-			<a class="leftbar" href="antibodies.html">Antibodies</a>
-			<hr> <a class="leftbar" href="otherTerms.html">Registered Variables</a>
+			<a class="leftbar" href="otherTerms.html">Registered Variables</a>
+			<hr><a class="leftbar" href="antibodies.html">Antibodies</a>
 			<hr> <a class="leftbar" href="releaseLog.html">Release Log</a>
                         <hr> <a class="leftbar" href="terms.html">Data Policy</a>
 			<hr> <a class="leftbar" href="dataStandards.html">Data Standards</a>
@@ -115,10 +117,7 @@
                           <tbody>
                             <tr>
                               <td><a name="About"></a><font size="4"><b>&nbsp;
-About
-the
-ENCODE
-Data Coordination Center (DCC)</b></font> </td>
+About ENCODE Data at UCSC</b></font> </td>
                             </tr>
                           </tbody>
                         </table>
@@ -137,61 +136,49 @@ Data Coordination Center (DCC)</b></font> </td>
                               <td width="10"><br>
                               </td>
                               <td>
-                              <p>The <a
- href="http://www.genome.gov/10005107" target="_blank">Encyclopedia of
-DNA Elements</a> (ENCODE) Consortium is an international collaboration
+<p>The <a href="http://www.genome.gov/10005107" target="_blank">Encyclopedia of DNA Elements</a> 
+(ENCODE) Consortium is an international collaboration
 of research groups funded by the National Human Genome Research
 Institute (<a href="http://www.genome.gov/" target="_blank">NHGRI</a>).
-The goal of the consortium is to build a comprehensive parts list of
-the functional elements of the human genome, including elements that
-act at the protein level (coding genes) and RNA level (non-coding
-genes), and regulatory elements that control the cells and
-circumstances in which a gene is active. The discovery and annotation
-of gene elements is accomplished primarily by sequencing RNA from a
-diverse range of sources, comparative genomics, integrative
-bioinformatic methods, and human curation. Regulatory elements are
-typically investigated through DNA hypersensitivity assays, assays of
-DNA methylation, and chromatin immunoprecipitation (ChIP) of proteins
-that interact with DNA, including modified histones and transcription
-factors, followed by sequencing (ChIP-Seq). The results of ENCODE
-experiments, collected in the ENCODE DCC database, are displayed on the
-UCSC Genome Browser. The data can also be downloaded from the ENCODE
-DCC website in text format. </p>
-                              <p>ENCODE data is now available for the
-entire human genome.&nbsp; <b>Mouse ENCODE experiments are currently
-underway, and data on the mouse genome from such experiments will be
-made available as soon as possible.</b> To access the human ENCODE data, open the
-<a href="../cgi-bin/hgGateway?org=human">Genome Browser</a>, select the
-March 2006 assembly of the human genome, and go to your region of
-interest. ENCODE tracks will be marked with the NHGRI logo <img
- src="../images/nhgri.gif" alt="" height="16" width="16">. The bulk of
-the ENCODE data can be found in the <em>Expression</em> and <em>Regulation</em>
-track groups, with a few in the <em>Mapping</em>, <em>Genes</em>, and
-                              <em>Variation</em> groups. Although most
-participating research groups have provided several tracks, generally
-only selected data from each research group are displayed by default.
-Click the hyperlinked name of a particular track to display a page
-containing configuration options and details about the methods used to
-generate the data. See the Genome Browser <a
- href="../goldenPath/help/hgTracksHelp.html">User's Guide</a> for
-further information about displaying tracks and navigating in the
-Genome Browser. To receive notifications of ENCODE data releases and
-related news by email, subscribe to the <a
- href="https://lists.soe.ucsc.edu/mailman/listinfo/encode-announce"
- target="_blank">encode-announce</a> mailing list.</p>
-                              <p>Data from the earlier ENCODE project
-pilot phase, which covered approximately 1% of the genome,&nbsp; are
-available on the May 2004 and March 2006 human
-assemblies. The <a href="pilot.html">ENCODE Pilot Project</a> web
-pages provide convenient browser access to these regions. </p>
-                              <p>Before publishing research that uses
-ENCODE data, please read the <a href="terms.html">data release policy</a>,
-which
-places
-some
-restrictions on publication use of data for nine
-months following the data release.<br>
-                              </p>
+The goal of ENCODE is to build a comprehensive parts list of
+functional elements in the human genome, including elements that
+act at the protein level and RNA level,
+and regulatory elements that control cells and
+circumstances in which a gene is active.</p>
+<p>
+ENCODE data are now available for the entire human genome.
+<b><em>All ENCODE data are free and available for immediate use, via </em></b>:
+<ul class="simple">
+<li><a href="/ENCODE/downloads.html" target="_blank">Download</a> of data files</li>
+<li><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doOtherUser=submit&hgS_otherUserName=Kate&hgS_otherUserSessionName=encodePortalSession" target="_blank">Visualization</a> in the UCSC Genome Browser (data marked with the 
+<img src="../images/nhgri.gif" alt="" height="16" width="16"> NHGRI logo).</li>
+<li><a href="http://hgwdev-kate.cse.ucsc.edu/cgi-bin/hgTables?db=hg19&hgta_group=regulation&hgta_track=knownGene&hgta_table=0&hgta_regionType=genome&position=chr21:32812169-33260998&hgta_outputType=primaryTable" target="_blank">Data mining</a> with the UCSC Table Browser and other <a href="http://genome.ucsc.edu">
+UCSC Genome Bioinformatics tools</a></li>
+</ul></p>
+<p>
+To find ENCODE data related to your area of interest and set up a browser view, use the UCSC
+<a href="/cgi-bin/hgTracks?hgt_tSearch=1" target="_blank">Track Search tool</a> (<em>Advanced</em> features).
+The <a href="dataSummary.html" target="_blank">Data Summary</a> shows a comprehensive listing of 
+ENCODE data that is released or in preparation.
+Early access to pre-release ENCODE data is provided at 
+<a href="http://genome-preview.ucsc.edu" target="_blank">http://genome-preview.ucsc.edu</a>.
+If you would like to receive notifications of ENCODE data releases and related news by email,
+subscribe to the 
+<a href="https://lists.soe.ucsc.edu/mailman/listinfo/encode-announce" target="_blank">encode-announce mailing list</a>.
+For more information about how to access this data, see the free on-line 
+<a target=="_blank" href="http://www.openhelix.com/ENCODE/" target="_blank">OpenHelix ENCODE tutorial</a>.
+<p>
+To complement the human ENCODE data, Mouse ENCODE experiments are currently underway.
+This data will be made available as soon as possible.
+The <a href="/encode/dataSummaryMouse.html" target="_blank">Mouse ENCODE Data Summary</a> lists planned and in progress experiments.
+</p>
+<p>
+Before publishing research that uses
+ENCODE data, please read the <a href="terms.html" target="_blank">ENCODE Data Release Policy</a>,
+which places some restrictions on publication use of data for nine
+months following data release. &nbsp;&nbsp;
+<a href="/ENCODE/aboutScaleup.html">Read more</a> about ENCODE data at UCSC.</p>
+
                               </td>
                               <td width="15"><br>
                               </td>
@@ -352,7 +339,7 @@ to teach users how to access the ENCODE data in the UCSC Genome Browser.
 displayed in the Genome Browser are freely available for academic,
 nonprofit, and personal use with the following conditions: </p>
                               <ul>
-                                <li>ENCODE data is covered by the <a
+                                <li>ENCODE data are covered by the <a
  href="terms.html">ENCODE Consortium Data Release Policy</a>. </li>
                                 <li>The general <a
  href="http://genome.ucsc.edu/#Conditions">Conditions of Use</a> for
