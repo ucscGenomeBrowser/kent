@@ -1987,6 +1987,7 @@ foreach my $ddfLine (@ddfLines) {
             } elsif ($var eq "obtainedBy") {
               #Not sure why when we check for obtainedBy subGroups prints out and when when this is
 	      # not pressent the subGroups provides error of unitialized.
+	      # The behavior is odd since there is no $var of obtainedBy in the cv.ra
      		$cvTypeVar = "lab";
 	    }
 
