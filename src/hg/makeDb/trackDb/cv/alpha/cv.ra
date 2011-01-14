@@ -7153,6 +7153,11 @@ tag DEXd
 description 1h,500pM DEX (Myers)
 type treatment
 
+term DEX_100pM
+tag DEXe
+description 1h,100pM DEX (Myers) (Provisional)
+type treatment
+
 term DMSO_0.02pct
 tag DMSO2
 description 1h,0.02% DMSO (Myers)
@@ -7197,6 +7202,16 @@ label Estradiol_100nM
 term EtOH_0.01pct
 tag ETOH01
 description 36h,0.01% EtOH (Snyder)
+type treatment
+
+term EtOH_0.01pct_4hr
+tag ETOH01b
+description 4h,0.01% EtOH (Snyder) (Provional)
+type treatment
+
+term EtOH_0.01pct_12hr
+tag ETOH01c
+description 12h,0.01% EtOH (Snyder) (Provional)
 type treatment
 
 term EtOH_0.02pct
