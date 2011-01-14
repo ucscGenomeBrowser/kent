@@ -1644,6 +1644,44 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
 return FALSE;
 }
 
+boolean mdbObjsContainAtleastOne(struct mdbObj *mdbObjs, char *var)
+// Returns TRUE if any object in set contains var
+{
+struct mdbObj *mdbObj = mdbObjs;
+for(;mdbObj!=NULL; mdbObj=mdbObj->next)
+    {
+    if(mdbObjContains(mdbObj, var, NULL))
+        return TRUE;
+    }
+return FALSE;
+}
+
+struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs)
+// Returns a new mdbObj with all vars that are contained in every obj passed in.
+// Note that the returnd mdbObj has a meaningles obj name and vals.
+{
+if (mdbObjs == NULL || mdbObjs->vars == NULL)
+    return NULL;
+struct mdbObj *mdbObj = mdbObjs;
+struct mdbObj *commonVars = mdbObjClone(mdbObj); // Clone the first obj then prune it
+commonVars->next = NULL;
+struct mdbVar *mdbVar = mdbObj->vars;            // Will walk through the first obj's vars
+mdbObj=mdbObj->next;                             // No need to include first obj in search
+if (mdbObj != NULL)
+    {
+    struct dyString *dyPruneVars = dyStringNew(512);
+    for(; mdbVar != NULL; mdbVar = mdbVar->next )
+        {
+        if (mdbObjsContainAtleastOne(mdbObj, mdbVar->var) == FALSE)
+            dyStringPrintf(dyPruneVars,"%s ",mdbVar->var);  // var not found so add to prune list
+        }
+    if (dyStringLen(dyPruneVars) > 0)
+        mdbObjRemoveVars(commonVars,dyStringContents(dyPruneVars));
+    dyStringFree(&dyPruneVars);
+    }
+return commonVars;
+}
+
 boolean mdbByVarContains(struct mdbByVar *mdbByVar, char *val, char *obj)
 // Returns TRUE if var contains val, obj or both
 {
@@ -2524,3 +2562,17 @@ return cvsNotSearchable;
 }
 #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
 
+const char *cvLabel(char *term)
+// returns cv label if term found or else just term
+{
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *label = hashFindVal(termHash,"label");
+    if (label != NULL)
+        return label;
+    }
+return term;
+}
