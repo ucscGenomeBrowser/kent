@@ -177,13 +177,13 @@ else
         struct dyString *dySortFields = dyStringNew(512);
         struct mdbObj *commonVars = mdbObjsCommonVars(mdbObjs);
         // Problem with making common fieds as sorable is that it REQUIRES a fixed sort order
-        char *sortables[] = {"grant","lab","dataType","cell","strain","age","rnaExtract","localization","phase","treatment","antibody","protocol",
+        char *sortables[] = {"grant","lab","dataType","cell","strain","age","obtainedBy", "rnaExtract","localization","phase","treatment","antibody","protocol",
                       "labProtocolId","restrictionEnzyme","control","replicate","expId","labExpId","setType","view","submittedDataVersion","subId",
                       "dateSubmitted","dateResubmitted","dateUnrestricted","dataVersion"};//"labVersion","softwareVersion",
         // Not included:    no:not searchable
         // accession no, annotation no,   bioRep no,     composite no, controlId no, dccInternalNotes no, fileIndex no,  fileName no,
         // fragSize no,  fragLength no,   freezeDate no, geoSample,    geoSeries,    insertLength no,     labVersion,    level no,
-        // mapAlgorithm, obtainedBy,      origAssembly,  privacy no,   rank no,      readType,            seqPlatform,   sex,
+        // mapAlgorithm, origAssembly,    privacy no,    rank no,      readType,     seqPlatform,         sex,
         // size no,      softwareVersion, tableName no,   uniqueness no
 
         int ix = 0, count = sizeof(sortables)/sizeof(char *);
@@ -191,7 +191,11 @@ else
             {
             // If sortables[ix] is in common vars then then add it to the settings field
             if (mdbObjContains(commonVars,sortables[ix],NULL))
+                {
+                if (mdbRemoveCommonVar(mdbObjs, sortables[ix])) // Don't bother if all the vals are the same
+                    continue;
                 dyStringPrintf(dySortFields,"%s=%s ",sortables[ix],strSwapChar(cloneString(cvLabel(sortables[ix])),' ','_'));
+                }
             }
         if (dyStringLen(dySortFields))
             {
