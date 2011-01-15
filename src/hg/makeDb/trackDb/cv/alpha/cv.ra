@@ -3245,7 +3245,7 @@ tag WI38
 type Cell Line
 tier 3
 organism human
-description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct (Provisional)
+description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct 
 lineage Fibroblast
 karyotype Normal (RAF)
 sex F
@@ -6143,7 +6143,7 @@ lab Myers
 lots D2010 
 targetId GeneCards:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
-validation ZEB1_(SC-25388)(immunoblot+massspec)_Myers:human_ZEB1_SC-25388_validation_Myers.pdf
+validation ZEB1_(SC-25388)(Immunoblot,MassSpec)_Myers:human_ZEB1_SC-25388_validation_Myers.pdf
 
 term Znf143_(16618-1-AP)
 tag Znf143166181AP
@@ -6151,7 +6151,7 @@ type Antibody
 target Znf143
 antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein  
 targetDescription Transcriptional activator. Activates the gene for selenocysteine tRNA (tRNAsec). Binds to the SPH motif of small nuclear RNA (snRNA) gene promoters. Participates to efficient U6 RNA polymerase III transcription via its interaction with CHD8 
-vendorName Proteintech Cat#
+vendorName Proteintech
 vendorId 16618-1-AP
 orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
 lab Snyder 
@@ -7256,7 +7256,7 @@ type treatment
 
 term DEX_100pM
 tag DEXe
-description 1h,100pM DEX (Myers) (Provisional)
+description 1h,100pM DEX (Myers) 
 type treatment
 
 term DMSO_0.02pct
@@ -7410,7 +7410,7 @@ type treatment
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
-description 72 hours with 20nM 4-hydroxytamoxifen (Stam) (PROVISIONAL)
+description 72 hours with 20nM 4-hydroxytamoxifen (Stam)
 type treatment
 label 4-OHTAM_20nM_72hr
 
@@ -7528,8 +7528,8 @@ term Combined
 tag combo
 type dataType
 label Combined
-description PROVISIONAL Synthesis of multiple types of data
-# Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType
+description Synthesis of multiple types of data
+# Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
 #term not standard to match hg18???
 term DnaseDgf
@@ -8821,11 +8821,11 @@ validate cv
 term privacy
 type typeOfTerm
 label Privacy
-description PROVISIONAL Privacy may be applied to specific datasets where sequence and other identifying information is not provided
+description Privacy may be applied to specific datasets where sequence and other identifying information is not provided
 searchable no
 cvDefined no
 validate cv
-# Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided
+# Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
 # term project
 # type typeOfTerm
