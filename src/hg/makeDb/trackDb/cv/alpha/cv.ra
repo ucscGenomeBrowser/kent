@@ -3245,7 +3245,7 @@ tag WI38
 type Cell Line
 tier 3
 organism human
-description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct (Provisional)
+description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct 
 lineage Fibroblast
 karyotype Normal (RAF)
 sex F
@@ -3939,6 +3939,21 @@ lab Myers
 targetId GeneCard:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation BHLEH40(Immunoblot):human_BHLEHE40_S-8_validation_Myers.pdf
+
+term BHLHE40_(NB100-1800)
+tag BHLHE40NB100
+type Antibody
+target BHLHE40
+antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412) 
+targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation. 
+vendorName Novus 
+vendorId NB100-1800
+orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
+lab Snyder 
+lots 
+targetId GeneCards:BHLHE40
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
+validation missing
 
 term BRCA1_(C-1863)
 tag BRCA1C
@@ -5036,6 +5051,50 @@ targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation LEF1(Immunoblot):human_LEF1_C-19_validation_Myers.pdf
 
+term MafF_(M8194)
+tag MafFM8194
+type Antibody
+target MafF
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide corresponding to amino acids 147-163 of human MAFF. The immunizing peptide does not cross-react with other members of the family.
+targetDescription The protein encoded by this gene is a (bZIP) transcription factor that lacks a transactivation domain. It is known to bind the US-2 DNA element in the promoter of the oxytocin receptor (OTR) gene and most likely heterodimerizes with other leucine zipper-containing proteins to enhance expression of the OTR gene during term pregnancy. Can also form homodimers, and since it lacks a transactivation domain, the homodimer may act as a repressor of transcription. May also be involved in the cellular stress response.  
+vendorName Sigma-Aldrich 
+vendorId M8194
+orderUrl http://www.sigmaaldrich.com/
+lab Snyder 
+lots 
+targetId GeneCards:MAFF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
+validation missing
+
+term MafK_(ab50322)
+tag MafKab50322
+type Antibody
+target MafK
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide: TTNPKPNKALKVKKEA conjugated to KLH by a C-terminal Cysteine residue linker, corresponding to amino acids 2-17 of Human MAFK
+targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites. 
+vendorName Abcam 
+vendorId ab50322
+orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
+lab Snyder 
+lots 
+targetId GeneCards:MAFK
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
+validation missing
+
+term MafK_(sc477)
+tag MafKsc477
+type Antibody
+target MafK
+antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin
+targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.  
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-477
+orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
+lab Snyder 
+lots 
+targetId GeneCards:MAFK
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
+validation missing
 
 term Max
 tag MAX
@@ -5570,9 +5629,6 @@ targetId Genecards:SETDB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Setdb1
 validation SETDB1_SC-66884(Immunoprecipitation,Western_blot,CHiP):human_SETDB1-SC66884_validation_Farnham.pdf
 
-
-
-
 term Sin3Ak-20
 tag SIN3AK20
 type Antibody
@@ -5613,6 +5669,21 @@ orderUrl http://www.scbt.com/datasheet-55706-six5-k-20-antibody.html
 lab Myers
 targetId GeneCard:SIX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SIX5
+validation missing
+
+term SMC3_(ab9263)
+tag SMC3ab9263
+type Antibody
+target SMC3
+antibodyDescription Rabbit polyclonal raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH
+targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex.  The cohesin complex is required for the cohesion of sister chromatids after DNA replication. 
+vendorName Abcam Cat#
+vendorId ab9263
+orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
+lab Snyder 
+lots 
+targetId GeneCards:SMC3
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
 validation missing
 
 term SP1
@@ -6058,6 +6129,36 @@ lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
 validation ZBTB7A_SC-34508(Immunoblot)_Myers:human_ZBTB7A_SC-34508_validation_Myers.pdf
+
+term ZEB1_(SC-25388)
+tag ZEB1SC25388
+type Antibody
+target ZEB1
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin. 
+targetDescription This gene encodes a zinc finger transcription factor.  The encoded protein likely plays a role in transcriptional repression of interleukin 2.  Mutations in this gene have ben associated with posterior polymorphous corneal dystrophy-3 and late-onset Fuchs endothelial corneal dystrophy.  Alternatively spliced transcript variants encoding different isoforms have been described. (provided by RefSeq). 
+vendorName Santa Cruz Biotech Cat#
+vendorId sc-25388
+orderUrl http://www.scbt.com/datasheet-25388-zeb1-h-102-antibody.html
+lab Myers 
+lots D2010 
+targetId GeneCards:ZEB1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
+validation ZEB1_(SC-25388)(Immunoblot,MassSpec)_Myers:human_ZEB1_SC-25388_validation_Myers.pdf
+
+term Znf143_(16618-1-AP)
+tag Znf143166181AP
+type Antibody
+target Znf143
+antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein  
+targetDescription Transcriptional activator. Activates the gene for selenocysteine tRNA (tRNAsec). Binds to the SPH motif of small nuclear RNA (snRNA) gene promoters. Participates to efficient U6 RNA polymerase III transcription via its interaction with CHD8 
+vendorName Proteintech
+vendorId 16618-1-AP
+orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
+lab Snyder 
+lots 
+targetId GeneCards:ZNF143
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
+validation missing
 
 term ZNF263
 tag ZNF263
@@ -7155,7 +7256,7 @@ type treatment
 
 term DEX_100pM
 tag DEXe
-description 1h,100pM DEX (Myers) (Provisional)
+description 1h,100pM DEX (Myers) 
 type treatment
 
 term DMSO_0.02pct
@@ -7309,7 +7410,7 @@ type treatment
 
 term 4OHTAM_20nM_72hr
 tag OHTAM
-description 72 hours with 20nM 4-hydroxytamoxifen (Stam) (PROVISIONAL)
+description 72 hours with 20nM 4-hydroxytamoxifen (Stam)
 type treatment
 label 4-OHTAM_20nM_72hr
 
@@ -7427,8 +7528,8 @@ term Combined
 tag combo
 type dataType
 label Combined
-description PROVISIONAL Synthesis of multiple types of data
-# Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType
+description Synthesis of multiple types of data
+# Currently this is used by OpenChrom to combine DnaseSeq, FaireSeq and ChipSeq, but could be expanded to other situations so is being entered as a generic dateType (01/14/2011)
 
 #term not standard to match hg18???
 term DnaseDgf
@@ -8720,11 +8821,11 @@ validate cv
 term privacy
 type typeOfTerm
 label Privacy
-description PROVISIONAL Privacy may be applied to specific datasets where sequence and other identifying information is not provided
+description Privacy may be applied to specific datasets where sequence and other identifying information is not provided
 searchable no
 cvDefined no
 validate cv
-# Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided
+# Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
 # term project
 # type typeOfTerm

@@ -177,21 +177,27 @@ else
         struct dyString *dySortFields = dyStringNew(512);
         struct mdbObj *commonVars = mdbObjsCommonVars(mdbObjs);
         // Problem with making common fieds as sorable is that it REQUIRES a fixed sort order
-        char *sortables[] = {"grant","lab","dataType","cell","strain","age","rnaExtract","localization","phase","treatment","antibody","protocol",
+        char *sortables[] = {"grant","lab","dataType","cell","strain","age","obtainedBy", "rnaExtract","localization","phase","treatment","antibody","protocol",
                       "labProtocolId","restrictionEnzyme","control","replicate","expId","labExpId","setType","view","submittedDataVersion","subId",
-                      "dataVersion","dateSubmitted","dateResubmitted","dateUnrestricted",//"labVersion","softwareVersion",
-                      "mapAlgorithm","fragSize","fragLength"};
+                      "dateSubmitted","dateResubmitted","dateUnrestricted","dataVersion","origAssembly"};//"labVersion","softwareVersion",
         // Not included:    no:not searchable
-        // accession no, annotation no, bioRep no,       composite no, controlId no,    dccInternalNotes no, fileIndex no,  fileName no, freezeDate no
-        // geoSample,    geoSeries,     insertLength no, labVersion,   level no,        obtainedBy,          origAssembly,  privacy no,  rank no
-        // readType,     seqPlatform,   sex,             size no,      softwareVersion, tableName no,        uniqueness no
+        // accession no, annotation no,   bioRep no,     composite no, controlId no, dccInternalNotes no, fileIndex no,  fileName no,
+        // fragSize no,  fragLength no,   freezeDate no, geoSample,    geoSeries,    insertLength no,     labVersion,    level no,
+        // mapAlgorithm, privacy no,      rank no,       readType,     seqPlatform,  sex,                 size no,       softwareVersion,
+        // tableName no, uniqueness no
 
         int ix = 0, count = sizeof(sortables)/sizeof(char *);
         for (ix=0;ix<count;ix++)
             {
             // If sortables[ix] is in common vars then then add it to the settings field
             if (mdbObjContains(commonVars,sortables[ix],NULL))
+                {
+                // TODO: This would be good, but valuable information slips away.  This is especially true in fileSearch
+                //       Maybe another whiteList?
+                //if (mdbRemoveCommonVar(mdbObjs, sortables[ix])) // Don't bother if all the vals are the same
+                //    continue;
                 dyStringPrintf(dySortFields,"%s=%s ",sortables[ix],strSwapChar(cloneString(cvLabel(sortables[ix])),' ','_'));
+                }
             }
         if (dyStringLen(dySortFields))
             {
@@ -751,6 +757,8 @@ if (sortOrder != NULL)
     // Fill in and sort fileList
     fileDbSortList(&fileList,sortOrder);
     }
+
+mdbObjRemoveVars(mdbFiles,"tableName"); // Remove this from mdb now so that it isn't displayed in "extras'
 
 //jsIncludeFile("hui.js",NULL);
 //jsIncludeFile("ajax.js",NULL);
