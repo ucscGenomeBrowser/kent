@@ -2194,11 +2194,8 @@ struct hashEl *hel = NULL;
 
 /* there is a memory leak in this business because these values in the
  * existing settings hash were maybe cloned strings and if they get replaced
- * those previous strings are leaking.  We are not fixing that memory
- * leak because it is way way down in hashFreeEl and that guy doesn't
- * know anything about the values in a hash.  We can't even fix it here
- * because there may be existing strings that are going to be replaced
- * that actually belong to some other structure.
+ * those previous strings are leaking.  We can't fix this because we don't
+ * know which values in the hash are cloned strings or not.
  */
 while ((hel = hashNext(&hc)) != NULL)
     ctAddToSettings(track, hel->name, hel->val);
@@ -2259,8 +2256,8 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
     if (fileExists(val))
         {
 	readInGulp(val, &track->tdb->html, NULL);
+	freeMem(track->htmlFile);
         track->htmlFile = cloneString(val);
-	freeMem(val);
         }
     }
 if ((val = hashFindVal(hash, "chromosomes")) != NULL)
@@ -2764,11 +2761,11 @@ return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FAL
 }
 
 static void readAndIgnore(char *fileName)
-/* Read a few bytes from fileName, so its access time is updated. */
+/* Read a byte from fileName, so its access time is updated. */
 {
 char buf[256];
 FILE *f = mustOpen(fileName, "r");
-mustGetLine(f, buf, sizeof(buf));
+mustRead(f, buf, 1);
 fclose(f);
 }
 
