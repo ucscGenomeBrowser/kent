@@ -759,7 +759,7 @@ sub validateFastQ
     # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
     my $paramList = validationSettings("validateFiles","fastq");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq \"$file\""]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
