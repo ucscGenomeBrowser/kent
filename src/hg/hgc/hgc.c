@@ -16010,8 +16010,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgdpGeo geo;
     hgdpGeoStaticLoad(row+1, &geo);
-    jsBeginCollapsibleSection(cart, tdb->track, "hgdpGeo", "Human Genome Diversity Project SNP",
-			      FALSE);
+    char title[1024];
+    safef(title, sizeof(title), "Human Genome Diversity Project SNP"
+	  "<IMG name=\"hgdpImgIcon\" height=40 width=55 class='bigBlue' src=\"%s\">",
+	  hgdpPngFilePath(itemName));
+    jsBeginCollapsibleSection(cart, tdb->track, "hgdpGeo", title, FALSE);
     printf("Note: These annotations are taken directly from the "
 	   "<A HREF=\"http://hgdp.uchicago.edu/\" TARGET=_BLANK>HGDP Selection Browser</A>, "
 	   "and may indicate the allele on the opposite strand from that given above.<BR>\n");
