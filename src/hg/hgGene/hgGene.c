@@ -496,6 +496,33 @@ char query[256];
 safef(query, sizeof(query), "select count(*) from %s where name = '%s'", mainTable, name);
 if (sqlQuickNum(conn, query) > 0)
     return name;
+else
+    {
+    /* check OMIM gene symbol table first */
+    if (sqlTableExists(conn, "omimGeneSymbol"))
+    	{
+    	safef(query, sizeof(query), "select geneSymbol from omimGeneSymbol where geneSymbol= '%s'", name);
+    	char *symbol = sqlQuickString(conn, query);
+    	if (symbol != NULL)
+	    {
+    	    safef(query, sizeof(query), "select kgId from kgXref where geneSymbol = '%s'", symbol);
+    	    char *kgId = sqlQuickString(conn, query);
+	    if (kgId != NULL)
+	    	{
+    	    	/* The canonical gene is preferred */
+	        safef(query, sizeof(query), 
+		"select c.transcript from knownCanonical c,knownIsoforms i where i.transcript = '%s' and i.clusterId=c.clusterId", kgId);
+    	        char *canonicalKgId = sqlQuickString(conn, query);
+	    	if (canonicalKgId != NULL) 
+		    {
+		    return canonicalKgId;
+		    }
+		else
+                    return(kgId);
+		}
+	    }
+	}
+    }
 
 char *alias = genomeOptionalSetting("kgAlias");
 if (alias != NULL && sqlTableExists(conn, alias))
