@@ -109,7 +109,7 @@ struct grp *showGroupField(char *groupVar, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk)
 /* Show group control. Returns selected group. */
 {
-struct grp *group, *groupList = makeGroupList(fullTrackList, allTablesOk);
+struct grp *group, *groupList = fullGroupList;
 struct grp *selGroup = findSelectedGroup(groupList, groupVar);
 hPrintf("<B>group:</B>\n");
 hPrintf("<SELECT NAME=%s %s>\n", groupVar, groupScript);
@@ -817,7 +817,7 @@ if (correlateTrackTableOK(tdb, curTable))
     hPrintf("<TR><TD><B>correlation:</B>\n");
     if (differentWord(table2,"none") && strlen(table2))
         {
-        struct grp *groupList = makeGroupList(fullTrackList, TRUE);
+        struct grp *groupList = fullGroupList;
         struct grp *selGroup = findSelectedGroup(groupList, hgtaCorrelateGroup);
         struct trackDb *tdb2 = findSelectedTrack(fullTrackList, selGroup,hgtaCorrelateTrack);
         if (tdbIsComposite(tdb2))

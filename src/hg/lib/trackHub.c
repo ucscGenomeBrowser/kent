@@ -336,14 +336,16 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     addPrefixToSetting(tdb->settingsHash, "track", prefix);
     addPrefixToSetting(tdb->settingsHash, "parent", prefix);
     reprefixString(&tdb->track, prefix);
+    if (tdb->table != NULL)
+        reprefixString(&tdb->table, prefix);
     }
 }
 
 void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList)
-/* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. */
+/* For a hub named "hub_1" add the prefix "hub_1_" to each track and parent field. */
 {
 char namePrefix[PATH_LEN];
-safef(namePrefix, sizeof(namePrefix), "hub_%s_", hubName);
+safef(namePrefix, sizeof(namePrefix), "%s_", hubName);
 trackDbListAddNamePrefix(tdbList, namePrefix);
 }
 
