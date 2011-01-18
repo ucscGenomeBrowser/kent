@@ -209,3 +209,42 @@ BASE=/cluster/data/droVir3/bed/blastz.droGri2.2006-10-23
 
 
 #########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2011-01-17 -Chin)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # worm size is ~6.5% of human judging by gapless ce4 vs. hg18 genome 
+    # size from featureBits. So we would use 64, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    cd /hive/data/genomes/droVir3
+    blat droVir3.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/droVir3.11.ooc -repMatch=100
+    # Wrote 14348 overused 11-mers to jkStuff/droVir3.11.ooc
+    #   Wrote 8514 overused 11-mers to jkStuff/11.ooc
+
+    mkdir /hive/data/staging/data/droVir3
+    cd  /hive/data/genomes/droVir3
+    cp -p droVir3.2bit jkStuff/droVir3.11.ooc chrom.sizes /hive/data/staging/data/droVir3
+
+    #   request rsync to cluster nodes
+
+
+############################################################################
+# LIFTOVER TO droVir2 (DONE - 2011-01-17 - Chin )
+
+    mkdir /hive/data/genomes/droVir3/bed/blat.droVir2.2011-01-15
+    cd /hive/data/genomes/droVir3/bed/blat.droVir2.2011-01-15
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl \
+        -buildDir=`pwd` \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/droVir3/jkStuff/droVir3.11.ooc -debug droVir3 droVir2
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl \
+        -buildDir=`pwd` \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/droVir3/jkStuff/droVir3.11.ooc droVir3 droVir2 > do.log 2>&1
+    # real    29m40.917s
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/droVir3/liftOver
+    md5sum *.gz > md5sum.txt
+
+#########################################################################
