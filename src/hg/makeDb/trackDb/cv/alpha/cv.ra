@@ -7649,6 +7649,12 @@ type dataType
 label RIP-chip
 description Rna IP measured on microarray
 
+term RipSeq 
+tag  ripSeq  
+type dataType
+label RIP-seq 
+description Provisional RNA-seq on RIP-chip data
+
 #This should be retired (12/15/10)
 term ShortRnaSeq
 tag shortRnaSeq
