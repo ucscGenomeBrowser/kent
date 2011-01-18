@@ -13951,6 +13951,16 @@ done
 
 for f in *; do gzip $f; echo $f zipped; done
 
+## One more thing: remove overlapping items in lifted bedGraphs:
+
+for f in hg19*.bg.gz; do 
+    pre=${f%.bg.gz};
+    tab=${pre#hg19.};
+    echo $tab;
+    gunzip -c $f | sort -k1,1 -k2,2n | bedGraphLegalize -report=${pre}.bad.txt stdin stdout | gzip -c > ${pre}.legal.bg.gz
+    hgLoadBed -bedGraph=4 hg19 $tab ${pre}.legal.bg.gz
+done
+
 #############################################################################
 # SNP ARRAYS LIFT TO HG19 (DONE 2010-12-31, Andy)
 
