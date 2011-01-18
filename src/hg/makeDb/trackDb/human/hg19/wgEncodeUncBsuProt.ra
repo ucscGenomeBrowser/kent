@@ -1,0 +1,55 @@
+# UNC / BSU Proteogenomics (wrangler: cline)
+
+track wgEncodeUncBsuProt
+compositeTrack on
+shortLabel UNC/BSU Proteogenomics
+longLabel ENCODE UNC/BSU Proteogenomics
+release alpha
+group expression
+subGroup1 cellType Cell_Line GM12878=GM12878, K562=K562
+subGroup2 localization Localization nucleus=nucleus membraneFraction=membraneFraction
+subGroup3 view View Signal=Signal
+dimensions dimensionX=cellType dimensionY=localization
+sortOrder cellType=+ localization=+ view=+
+controlledVocabulary encode/cv.ra cellType localization
+dragAndDrop subTracks
+visibilityViewDefaults  Signal=full
+priority 0
+type bed 3
+noInherit on
+wgEncode 1
+
+	
+	track wgEncodeUncBsuProtSignal
+	release alpha
+	shortLabel Signal
+	view Signal
+	visibility full
+	parent wgEncodeUncBsuProt
+
+        	track wgEncodeuncBsuProtGm12878NucleusSig
+        	release alpha
+        	parent wgEncodeUncBsuProtSignal
+        	shortLabel GM12878 Sig
+        	longLabel ENCODE Proteogenomic Mapping Hits (in GM12878 cells)
+        	subGroups view=Signal cellType=GM12878 localization=nucleus
+		visibility full
+        	type bed 6
+        	origAssembly hg19
+        	color 153,38,0
+        	# subId=3160 dateSubmitted=2011-01-05
+
+
+        	track wgEncodeuncBsuProtK562MembranefractionSig
+        	release alpha
+        	parent wgEncodeUncBsuProtSignal
+        	shortLabel K562 Sig
+        	longLabel ENCODE Proteogenomic Mapping Hits (in K562 cells)
+        	subGroups view=Signal cellType=K562 localization=membraneFraction
+		visibility full
+        	type bed 6
+        	origAssembly hg19
+        	color 46,0,184
+        	# subId=3238 dateSubmitted=2011-01-12
+
+
