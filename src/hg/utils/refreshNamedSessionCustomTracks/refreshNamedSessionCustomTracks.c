@@ -5,12 +5,14 @@
 #include "options.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "hdb.h"
 #include "customTrack.h"
 #include "customFactory.h"
 #include "hui.h"
-#include "hgConfig.h"
-#include <sys/wait.h>
-#include "errCatch.h"
+
+// #include "hgConfig.h"
+// #include <sys/wait.h>
+// #include "errCatch.h"
 
 static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/01/13 17:27:35 angie Exp $";
 
@@ -50,6 +52,7 @@ static struct optionSpec options[] = {
 int CFTEcalls = 0;  // DEBUG REMOVE
 int numUpdates = 0;  // DEBUG REMOVE
 
+#ifdef NOT
 struct sqlConnection *unCachedCentralConn()
 /* do not want a cached connection because we will close and fork */
 {
@@ -60,7 +63,6 @@ return sqlConnectRemote(
  cfgOption("central.db")
 );
 }
-
 
 // due to bug in OS, won't work without a handler
 static void handle_SIGCHLD(int sig)
@@ -199,10 +201,11 @@ else
     }
 
 }
+#endif
 
 
-void scanSettingsForCT(char *userName, char *sessionName, // char *contents,
-			int *pLiveCount, int *pExpiredCount)
+static void scanSettingsForCT(char *userName, char *sessionName,
+		int *pLiveCount, int *pExpiredCount, struct sqlConnection *conn)
 /* Parse the CGI-encoded session contents into {var,val} pairs and search
  * for custom tracks.  If found, refresh the custom track.  Parsing code 
  * taken from cartParseOverHash. 
@@ -210,16 +213,12 @@ void scanSettingsForCT(char *userName, char *sessionName, // char *contents,
  * command that will remove those from this session.  We can't just do 
  * the update here because that messes up the caller's query. */
 {
-
-struct sqlConnection *conn = unCachedCentralConn();
-
 char query[512];
 
 safef(query, sizeof(query),
 	  "select contents from %s "
 	  "where userName='%s' and sessionName = '%s'", savedSessionTable, userName, sessionName);
 char *contents = sqlQuickString(conn, query);
-sqlDisconnect(&conn);
 if (!contents)
     return;
 
@@ -265,7 +264,7 @@ while (isNotEmpty(namePt))
 	    dyStringAppend(newContents, oneSetting->string);
 	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
 
-	    customFactoryTestExistenceCall(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
+	    customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
 
             //verbose(1,"called CFTE, got live=%d expired=%d\n", thisGotLiveCT, thisGotExpiredCT);  // DEBUG REMOVE
 	    ++CFTEcalls;  // DEBUG REMOVE
@@ -293,7 +292,7 @@ if (newContents->stringSize != contentLength)
     ++numUpdates;
 if (optionExists("hardcore") && newContents->stringSize != contentLength)  // almost never used
     {
-    struct sqlConnection *conn = unCachedCentralConn();
+    struct sqlConnection *conn = hConnectCentral();
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
 	errAbort("Uh, why is newContents (%d) longer than original (%d)??",
@@ -309,7 +308,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
 	    contentLength, newContents->stringSize);
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
-    sqlDisconnect(&conn);
+    hDisconnectCentral(&conn);
     }
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
@@ -332,7 +331,7 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
  * tracks that are referenced by saved sessions. */
 {
 
-struct sqlConnection *conn = unCachedCentralConn();
+struct sqlConnection *conn = hConnectCentral();
 char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
 
@@ -353,7 +352,7 @@ if (atime > 0)
     threshold = now - ((long long)atime * 24 * 60 * 60);
     }
 
-struct sessionInfo *sessionList = NULL, *si;
+struct sessionInfo *sessionList = NULL, *si, *siNext;
 if (sqlTableExists(conn, savedSessionTable))
     {
     struct sqlResult *sr = NULL;
@@ -385,19 +384,13 @@ if (sqlTableExists(conn, savedSessionTable))
     sqlFreeResult(&sr);
     }
 
-sqlDisconnect(&conn);
-
-for (si = sessionList;  si != NULL;  si = si->next)
+for (siNext = NULL, si = sessionList;  si != NULL;  si = siNext)
     {
-    /* put some error catching in so it won't just abort */
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-	scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount);
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	warn("sessionList errCatch: %s", errCatch->message->string);
-    errCatchFree(&errCatch);
+    scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount, conn);
+    siNext = si->next;
+    freeMem(si);
     }
+hDisconnectCentral(&conn);
 
 //DEBUG REMOVE
 verbose(1, "# of updates found: %d\n", numUpdates);
@@ -411,6 +404,7 @@ verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int ret = 0;
 
 optionInit(&argc, argv, options);
 if (argc != 2)
@@ -424,8 +418,8 @@ refreshNamedSessionCustomTracks(argv[1]);
 pid_t pid = getpid();
 char temp[256];
 safef(temp, sizeof(temp), "grep VmPeak /proc/%d/status", (int) pid);
-system(temp);
+ret = system(temp);
 
-return 0;
+return ret;
 }
 
