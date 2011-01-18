@@ -1,6 +1,6 @@
 /* CLASS DECLARATIONS TO MAKE NETSCAPE HAPPY */
-.topbar {	font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #D9E4F8; }
-.leftbar { text-decoration: none; font-family: arial, san-serif; color: #FDFCEA; font-size: 10pt; font-weight: 600; }
+.topbar {	font-family: arial, Geneva, Helvetica, san-serif; font-size: 15px; text-decoration: none; font-weight: bold; color: #004S99; }
+.leftbar { text-decoration: none; font-family: arial, san-serif; color: #009900; font-size: 10pt; font-weight: 600; }
 .hiddenText {background-color: silver}
 .normalText {background-color: white}
 
@@ -26,7 +26,6 @@ A:visited.bigBlue { text-decoration: none; font-family: arial, san-serif; color:
 A:active.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
 A:hover.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
 IMG.bigBlue {vertical-align: middle;}
-TD.bigBlue {vertical-align: middle;}
 
 A:link.toc { text-decoration: none; color: #0000CC;  }
 A:visited.toc { text-decoration: none; color: #0000CC;  }

@@ -411,6 +411,7 @@ verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int ret = 0;
 
 optionInit(&argc, argv, options);
 if (argc != 2)
@@ -424,8 +425,8 @@ refreshNamedSessionCustomTracks(argv[1]);
 pid_t pid = getpid();
 char temp[256];
 safef(temp, sizeof(temp), "grep VmPeak /proc/%d/status", (int) pid);
-system(temp);
+ret = system(temp);
 
-return 0;
+return ret;
 }
 

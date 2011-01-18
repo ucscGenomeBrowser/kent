@@ -104,13 +104,6 @@ if (!tdbIsComposite(tdb) && !tdbIsDownloadsOnly(tdb))
     return;
     }
 
-// Check for fileSortOrder
-if (trackDbSetting(tdb, FILE_SORT_ORDER) == NULL)
-    { // FIXME: This does not have to stay.  But lets start with this restriction until trackDb gets caught up
-    warn("Track '%s' needs '%s' trackDb setting.",track,FILE_SORT_ORDER);
-    return;
-    }
-
 // QUESTION: Do we need superTrack?  If we have lnk to superTrack, then yes.
 char *super = trackDbGetSupertrackName(tdb);
 if (super)
