@@ -41,8 +41,11 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
 extern struct hash *fullTrackHash;     /* Hash of tracks in fullTrackList keyed by ->track field. */
+extern struct hash *fullTrackAndSubtrackHash;  /* All tracks and subtracks keyed by track field. */
 extern struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
+extern struct grp *fullGroupList;	/* List of all groups. */
+extern struct grp *curGroup;	/* Currently selected group. */
 extern struct customTrack *theCtList;	/* List of custom tracks. */
 extern char *curTable;	/* Current selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
@@ -138,9 +141,6 @@ struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 void dbOverrideFromTable(char buf[256], char **pDb, char **pTable);
 /* If *pTable includes database, overrider *pDb with it, using
  * buf to hold string. */
-
-struct grp *makeGroupList(struct trackDb *trackList, boolean allTablesOk);
-/* Get list of groups that actually have something in them. */
 
 struct grp *findSelectedGroup(struct grp *groupList, char *cgiVar);
 /* Find user-selected group if possible.  If not then

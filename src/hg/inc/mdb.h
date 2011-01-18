@@ -264,6 +264,13 @@ char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 boolean mdbObjContains(struct mdbObj *mdbObj, char *var, char *val);
 // Returns TRUE if object contains var, val or both
 
+boolean mdbObjsContainAtleastOne(struct mdbObj *mdbObjs, char *var);
+// Returns TRUE if any object in set contains var
+
+struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs);
+// Returns a new mdbObj with all vars that are contained in every obj passed in.
+// Note that the returnd mdbObj has a meaningles obj name and vals.
+
 boolean mdbByVarContains(struct mdbByVar *mdbByVar, char *val, char *obj);
 // Returns TRUE if var contains val, obj or both
 
@@ -374,6 +381,9 @@ enum mdbCvSearchable
 enum mdbCvSearchable mdbCvSearchMethod(char *term);
 // returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
 #endif//ndef CV_SEARCH_SUPPORTS_FREETEXT
+
+const char *cvLabel(char *term);
+// returns cv label if term found or else just term
 
 #endif /* MDB_H */
 

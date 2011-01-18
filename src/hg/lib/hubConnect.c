@@ -13,6 +13,7 @@
 #include "hdb.h"
 #include "trackHub.h"
 #include "hubConnect.h"
+#include "hui.h"
 
 
 boolean isHubTrack(char *trackName)
@@ -126,7 +127,7 @@ sqlFreeResult(&sr);
 return hub;
 }
 
-struct hubConnectStatus *hubConnectStatusFromCart(struct cart *cart)
+struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart)
 /* Return list of track hubs that are turned on by user in cart. */
 {
 struct hubConnectStatus *hubList = NULL, *hub;
@@ -153,3 +154,35 @@ trackName += 4;
 assert(isdigit(trackName[0]));
 return atoi(trackName);
 }
+
+struct trackDb *hubConnectAddHubForTrackAndFindTdb(char *database, 
+	char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
+/* Go find hub for trackName (which will begin with hub_), and load the tracks
+ * for it, appending to end of list and adding to trackHash.  Return the
+ * trackDb associated with trackName.  */
+{
+int hubId = hubIdFromTrackName(trackName);
+struct sqlConnection *conn = hConnectCentral();
+struct hubConnectStatus *hubStatus = hubConnectStatusForId(conn, hubId);
+hDisconnectCentral(&conn);
+if (hubStatus == NULL)
+    errAbort("The hubId %d was not found", hubId);
+if (!isEmpty(hubStatus->errorMessage))
+    errAbort("Hub %s at %s has the error: %s", hubStatus->shortLabel, 
+	    hubStatus->hubUrl, hubStatus->errorMessage);
+char hubName[16];
+safef(hubName, sizeof(hubName), "hub_%d", hubId);
+struct trackHub *hub = trackHubOpen(hubStatus->hubUrl, hubName);
+struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
+tdbList = trackDbLinkUpGenerations(tdbList);
+tdbList = trackDbPolishAfterLinkup(tdbList, database);
+rAddTrackListToHash(trackHash, tdbList, NULL, FALSE);
+if (pTdbList != NULL)
+    *pTdbList = slCat(*pTdbList, tdbList);
+struct trackDb *tdb = hashFindVal(trackHash, trackName);
+if (tdb == NULL)
+    errAbort("Can't find track %s in %s", trackName, hubStatus->hubUrl);
+return tdb;
+}
+
