@@ -2760,13 +2760,16 @@ struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean 
 return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
 }
 
-static void readAndIgnore(char *fileName)
+static boolean readAndIgnore(char *fileName)
 /* Read a byte from fileName, so its access time is updated. */
 {
+boolean ret = FALSE;
 char buf[256];
-FILE *f = mustOpen(fileName, "r");
-mustRead(f, buf, 1);
+FILE *f = fopen(fileName, "r");
+if ( f && (fread(buf, 1, 1, f) == 1 ) )
+    ret = TRUE;
 fclose(f);
+return ret;
 }
 
 static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)
@@ -2779,9 +2782,8 @@ struct hashEl *s;
 for (s = fileSettings;  s != NULL;  s = s->next)
     {
     char *fileName = (char *)(s->val);
-    if (fileExists(fileName))
+    if (fileExists(fileName) && readAndIgnore(fileName))
 	{
-	readAndIgnore(fileName);
 	verbose(4, "setting %s: %s\n", s->name, fileName);
 	}
     else
@@ -2805,9 +2807,8 @@ if (url)
     struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
     for (el = list; el; el = el->next)
 	{
-	if (fileExists(el->name))
+	if (fileExists(el->name) && readAndIgnore(el->name))
 	    {
-	    readAndIgnore(el->name);
 	    verbose(4, "setting bigDataUrl: %s\n", el->name);
 	    }
 	}
