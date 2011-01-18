@@ -31,7 +31,7 @@ region with high signal.)
 </DD>
 <DT><EM>Signal</EM></DT><DD> Density graph (wiggle) of signal enrichment.
 At each base-pair position the density is calculated as the number of sequenced
-tags overlapping a 25bp window centered at that position.</DD>
+tags overlapping a 25 bp window centered at that position.</DD>
 </DL>
 <!--
 Additional data that were used to generate these tracks
@@ -44,10 +44,10 @@ mostly unique or mostly non-unique sequence. </DD>
 </P>
 
 <h2>Methods</h2>
-<P><B><em>ChIP-Seq</em></B>: Cells were grown according to the approved
+<P><B><em>ChIP-seq</em></B>: Cells were grown according to the approved
 <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 Cells were fixed in 1% formaldehyde and resuspended in lysis buffer. Chromatin
-was sheared to 200-700bp using a Diagenode Bioruptor. Solubilized chromatin was
+was sheared to 200-700 bp using a Diagenode Bioruptor. Solubilized chromatin was
 immunoprecipitated with antibodies against each of the histone antibodies
 listed above. Antibody-chromatin complexes were pulled-down using protein
 A-sepharose (or anti-IgM-conjugated agarose for RNA polymerase II), washed and
@@ -70,10 +70,10 @@ fragment. No attempt has been made, however, to remove such artifacts from the
 data, following ENCODE practices.</p>
 
 <P><B><em>Signal</em></B>: Fragment densities were computed by counting the number of
-reads overlapping each 25bp bin along the genome. Densities were computed using
+reads overlapping each 25 bp bin along the genome. Densities were computed using
 <a href="http://www.broadinstitute.org/igv/node/173" title='http://www.broadinstitute.org/igv/node/173' rel="nofollow" TARGET = _BLANK>igvtools count</a>
 with default parameters (in particular, '<code>-w 25</code>' to set window size
-of 25bp and '<code>-f mean</code>' to report the mean value across the window),
+of 25 bp and '<code>-f mean</code>' to report the mean value across the window),
 except for '<code>-e</code>' set to extend the reads to 200 bp, and the
 <em>.wig</em> output was converted to <em>bigWig</em> using <code>wigToBigWig</code>
 from the UCSC Kent software package.</p>
