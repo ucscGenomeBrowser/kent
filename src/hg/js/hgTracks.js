@@ -24,6 +24,7 @@ var selectedMenuItem;       // currently choosen context menu item (via context 
 var browser;                // browser ("msie", "safari" etc.)
 var mapIsUpdateable = true;
 var currentMapItem;
+var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 
 function initVars(img)
@@ -355,9 +356,9 @@ function toggleTrackGroupVisibility(button, prefix)
 {
 // toggle visibility of a track group; prefix is the prefix of all the id's of tr's in the
 // relevant group. This code also modifies the corresponding hidden fields and the gif of the +/- img tag.
-    if(arguments.length > 2)
+        if(arguments.length > 2)
 	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false, arguments[2]);
-    else
+        else
 	return setTableRowVisibility(button, prefix, "hgtgroup", "group", false);
 }
 
@@ -1307,6 +1308,18 @@ $(document).ready(function()
                                 if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
                                     setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
                                 }
+                                if( $('div#filesFound').length == 1) {
+                                    if( ui.panel.id == 'filesTab')
+                                        $('div#filesFound').show();
+                                    else
+                                        $('div#filesFound').hide();
+                                }
+                                if( $('div#found').length == 1) {
+                                    if( ui.panel.id != 'filesTab')
+                                        $('div#found').show();
+                                    else
+                                        $('div#found').hide();
+                                }
                             }
                         });
         $('#tabs').show();
@@ -1625,6 +1638,22 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                 windowOpenFailedMsg();
             }
         }
+    } else if (cmd == 'float') {
+        var id = selectedMenuItem.id;
+        if(floatingMenuItem && floatingMenuItem == id) {
+            $.floatMgr.FOArray = new Array();
+            floatingMenuItem = null;
+        } else {
+            if(floatingMenuItem) {
+                // This doesn't work.
+                $('#img_data_' + floatingMenuItem).parent().restartFloat();
+                // This does work
+                $.floatMgr.FOArray = new Array();
+            }
+            floatingMenuItem = id;
+            reloadFloatingItem();
+            updateTrackImg(id, "hgt.transparentImage=0", "");
+        }
     } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
@@ -1762,9 +1791,19 @@ function loadContextMenu(img)
                     var any = false;
                     if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
-                        if(rec && !(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0)) {
-                        o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
-                        o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
+                        var displayItemFunctions = false;
+                        if(rec) {
+                            if(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0) {
+                                displayItemFunctions = false;
+                            } else if(rec.type.indexOf("expRatio") == 0) {
+                                displayItemFunctions = title != "zoomInMore";
+                            } else {
+                                displayItemFunctions = true;
+                            }
+                        }
+                        if(displayItemFunctions) {
+                            o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                            o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
                         }
                         o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
@@ -1779,6 +1818,9 @@ function loadContextMenu(img)
                         } else {
                             if(str.indexOf("display density") != -1)
                                 str = makeImgTag("toggle.png") + str;
+                            else if(str == "zoomInMore")
+                                // avoid showing menu item that says "Show details for zoomInMore..." (redmine 2447)
+                                str = makeImgTag("toggle.png") + " Show details...";
                             else
                                 str = makeImgTag("book.png") + " Show details for " + str + "...";
                             o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
@@ -1824,6 +1866,9 @@ function loadContextMenu(img)
                         o[makeImgTag("folderWrench.png") + " Configure " + rec.parentLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
                 } else
                     o[makeImgTag("folderWrench.png") + " Configure " + rec.shortLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                if(jQuery.floatMgr) {
+                    o[(selectedMenuItem.id == floatingMenuItem ? selectedImg : blankImg) + " float"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "float"); return true; }};
+                }
                 menu.push($.contextMenu.separator);
                 menu.push(o);
             }
@@ -2084,6 +2129,7 @@ function handleUpdateTrackMap(response, status)
                // loadContextMenu($('#tr_' + id));
                if(trackImgTbl.tableDnDUpdate)
                    trackImgTbl.tableDnDUpdate();
+               reloadFloatingItem();
                // NOTE: Want to examine the png? Uncomment:
                //var img = $('#tr_' + id).find("img[id^='img_data_']").attr('src');
                //warn("Just parsed image:<BR>"+img);
@@ -2596,4 +2642,12 @@ function updateVisibility(track, visibility)
         rec.localVisibility = visibility;
     }
     return selectUpdated;
+}
+
+function reloadFloatingItem()
+{
+// currently dead (experimental code)
+    if(floatingMenuItem) {
+        $('#img_data_' + floatingMenuItem).parent().makeFloat({x:"current",y:"current", speed: 'fast', alwaysVisible: true, alwaysTop: true});
+    }
 }

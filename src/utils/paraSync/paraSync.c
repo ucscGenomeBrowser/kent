@@ -52,24 +52,58 @@ boolean result = TRUE;
 char *pattern = "<a href=\"";
 while (TRUE)
     {
-    char *q = strstr(p,pattern);
-    if (!q)
-	break;
-    q += strlen(pattern);
-    p = strchr(q,'"');
-    if (!p)
-	errAbort("unmatched \" in URL");
-    *p = 0;
-    ++p; // get past the terminator that we added earlier.   
+    char *q = NULL;
+    boolean isDirectory = FALSE;
+    if (startsWith("ftp:", url->string))
+	{
+	char ftype = p[0];
+	if (!ftype)
+	    break;
+	char *peol = strchr(p,'\n'); 
+	if (!peol)
+	    break;
+        *peol = 0;
+        if (*(peol-1) == '\r')
+	    *(peol-1) = 0;
+	q = strrchr(p,' ');
+	if (!q)
+	    break;  // should not happen
+	++q;
+        p = peol+1;
+	if (ftype == 'l')
+            {
+	    //skip symlinks
+	    continue;
+	    }
+	if (ftype == 'd')
+            {
+	    isDirectory = TRUE;
+	    }
+	}
+    else  // http(s)
+	{
+	q = strstr(p,pattern);
+	if (!q)
+	    break;
+	q += strlen(pattern);
+	p = strchr(q,'"');
+	if (!p)
+	    errAbort("unmatched \" in URL");
+	*p = 0;
+	++p; // get past the terminator that we added earlier.   
 
-    // We want to skip several kinds of links
-    if (q[0] == '?') continue;
-    if (q[0] == '/') continue;
-    if (startsWith(q, "ftp:")) continue;
-    if (startsWith(q, "http:")) continue;
-    if (startsWith(q, "https:")) continue;
-    if (startsWith(q, "./")) continue;
-    if (startsWith(q, "../")) continue;
+	// We want to skip several kinds of links
+	if (q[0] == '?') continue;
+	if (q[0] == '/') continue;
+	if (startsWith("ftp:"  ,q)) continue;
+	if (startsWith("http:" ,q)) continue;
+	if (startsWith("https:",q)) continue;
+	if (startsWith("./"    ,q)) continue;
+	if (startsWith("../"   ,q)) continue;
+
+	if (endsWith(q, "/")) 
+	    isDirectory = TRUE;
+	}
 
     verbose(1, "%s\n", q);
 
@@ -78,9 +112,15 @@ while (TRUE)
 
     dyStringAppend(url, q);
     dyStringAppend(outPath, q);
+    if (startsWith("ftp:", url->string) && isDirectory)
+	{
+	dyStringAppend(url, "/");
+    	dyStringAppend(outPath, "/");
+	}
+    
  
     // URL found
-    if (endsWith(q, "/")) // directory
+    if (isDirectory) 
 	{   
 	// recursive
 	if (!paraSync(numConnections, numRetries, url, outPath))

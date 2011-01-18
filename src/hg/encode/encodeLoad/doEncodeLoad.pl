@@ -451,7 +451,9 @@ for my $key (keys %ra) {
             $target = "$downloadDir/$tablename.$type";
         }
         else {
-            $target = "$downloadDir/$tablename.$type.gz";
+            my $fileType = $type;
+            $fileType = "bed" if ($type =~ /^bed /);
+            $target = "$downloadDir/$tablename.$fileType.gz";
         }
         $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
         #if(-e $target) {     # The validator is supposed to protect us from overwrites and allow them if -allowReloads
@@ -492,7 +494,9 @@ for my $key (keys %ra) {
             }
 
             # make a concatenated copy of multiple files
-            my $zippedTarget = "$downloadDir/$tablename.$type.gz";
+            my $fileType = $type;
+            $fileType = "bed" if ($type =~ /^bed /);
+            my $zippedTarget = "$downloadDir/$tablename.$fileType.gz";
             unlink($zippedTarget);
             !system("cat /dev/null > $zippedTarget") || die "gzip failed: $?\n";
             HgAutomate::verbose(2, "Zero or multiple files: files=[@files] unlink($zippedTarget)\n");

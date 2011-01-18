@@ -40,7 +40,7 @@ void hubConnectStatusFreeList(struct hubConnectStatus **pList);
 struct hubConnectStatus *hubConnectStatusForId(struct sqlConnection *conn, int id);
 /* Given a hub ID return associated status. */
 
-struct hubConnectStatus *hubConnectStatusFromCart(struct cart *cart);
+struct hubConnectStatus *hubConnectStatusListFromCart(struct cart *cart);
 /* Return list of track hubs that are turned on by user in cart. */
 
 #define hubConnectTrackHubsVarName "trackHubs"
@@ -63,5 +63,11 @@ struct slName  *hubConnectHubsInCart(struct cart *cart);
 
 int hubIdFromTrackName(char *trackName);
 /* Given something like "hub_123_myWig" return 123 */
+
+struct trackDb *hubConnectAddHubForTrackAndFindTdb(char *database, char *trackName,
+	struct trackDb **pTdbList, struct hash *trackHash);
+/* Go find hub for trackName (which will begin with hub_), and load the tracks
+ * for it, appending to end of list and adding to trackHash.  Return the
+ * trackDb associated with trackName. */
 
 #endif /* HUBCONNECT_H */

@@ -21,9 +21,9 @@ dafVersion        2.0
 # Lab and general info
 grant             Myers
 lab               HudsonAlpha
-dataType          Genotype
+dataType          Cnv     
 compositeSuffix   HaibGenotype
-group             variation 
+group             variation
 variables         cell,treatment
 assembly          hg19
 
@@ -31,14 +31,15 @@ validationSettings  none
 
 # Track/view definitions
 
-view             CNV
+view             Regions
 longLabelPrefix  HAIB Copy Number Variants
-type             bed9+1
+type             bedLogR
+sql              bedLogR
 hasReplicates    yes
 required         yes
 
-view             SNP    
-type             ????
-hasReplicates    yes
-required         yes
-downloadOnly	 yes
+#view             SNP
+#type             Illumina standard format
+#hasReplicates    yes
+#required         yes  
+#downloadOnly     yes

@@ -386,7 +386,10 @@ void doHgdpGeo(struct trackDb *tdb, char *item);
  * plotted on a world map. */
 
 void hgdpGeoImg(struct hgdpGeo *geo);
-/* Generate a PNG image: world map with pie charts for population allele frequencies. */
+/* Generate image as PNG, PDF, EPS: world map with pie charts for population allele frequencies. */
+
+char *hgdpPngFilePath(char *rsId);
+/* Return the stable PNG trash-cached image path for rsId. */
 
 void hgdpGeoFreqTable(struct hgdpGeo *geo);
 /* Print an HTML table of populations and allele frequencies. */

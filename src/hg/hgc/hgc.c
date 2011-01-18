@@ -97,6 +97,8 @@
 #include "estPair.h"
 #include "softPromoter.h"
 #include "customTrack.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "sage.h"
 #include "sageExp.h"
 #include "pslWScore.h"
@@ -913,35 +915,6 @@ void printOtherCustomUrl(struct trackDb *tdb, char *itemName, char* urlSetting, 
  to be set in trackDb. */
 {
 printCustomUrlWithLabel(tdb, itemName, itemName, urlSetting, encode);
-}
-
-void beginCollapsibleSection(char *track, char *section, char *sectionTitle, boolean isOpenDefault)
-/* Make the hidden input, collapse/expand button and <TR id=...> needed for
-* hgTracks.js's setTableRowVisibility().  Caller needs to have already creates a <TABLE>. */
-{
-char collapseGroupVar[512];
-safef(collapseGroupVar, sizeof(collapseGroupVar), "%s.section_%s_close", track, section);
-boolean isOpen = !cartUsualBoolean(cart, collapseGroupVar, !isOpenDefault);
-
-printf("<TR><TD><input type='hidden' name=\"%s\" id=\"%s\" value=\"%s\">\n",
-       collapseGroupVar, collapseGroupVar, isOpen ? "0" : "1");
-printf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'>\n",
-       cgiScriptName(), cartSidUrlString(cart), collapseGroupVar, (isOpen ? "1" : "0"), section);
-char *buttonImage = (isOpen ? "../images/remove_sm.gif" : "../images/add_sm.gif");
-printf("<IMG height='18' width='18' "
-       "onclick=\"return setTableRowVisibility(this, '%s', '%s.section', 'section', true);\" "
-       "id=\"%s_button\" src=\"%s\" alt=\"%s\" title='%s this section' class='bigBlue'>"
-       "</A></TD>\n",
-       section, track,
-       section, buttonImage, (isOpen ? "-" : "+"), (isOpen ? "Collapse": "Expand"));
-printf("<TD><FONT SIZE=4><B>&nbsp;%s</B></FONT></TD></TR>\n", sectionTitle);
-printf("<TR %sid='%s-%d'><TD colspan=2>", isOpen ? "" : "style='display: none' ", section, 1);
-}
-
-void endCollapsibleSection()
-/* End the collapsible <TR id=...>. */
-{
-puts("</TD></TR>");
 }
 
 void genericSampleClick(struct sqlConnection *conn, struct trackDb *tdb,
@@ -6791,7 +6764,6 @@ if (startsWith("user", aliTable))
 else
     {
     /* Look up alignments in database */
-    // struct trackDb *tdb = hashMustFindVal(trackHash, aliTable);	// ugly
     hFindSplitTable(database, seqName, aliTable, table, &hasBin);
     safef(query, sizeof(query),
 	  "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
@@ -14375,9 +14347,9 @@ safef(betterName, sizeof(betterName), "%s %s:%d-%d",
       database, seqName, start+1, end);
 seqNib->name = cloneString(betterName);
 
-beginCollapsibleSection(tdb->track, "realignment",
-			"Re-alignment of the SNP's flanking sequences to the genomic sequence",
-			FALSE);
+jsBeginCollapsibleSection(cart, tdb->track, "realignment",
+			  "Re-alignment of the SNP's flanking sequences to the genomic sequence",
+			  FALSE);
 printf("Note: this alignment was computed by UCSC and may not be identical to "
        "NCBI's alignment used to map the SNP.\n");
 
@@ -14431,7 +14403,7 @@ seqDbSnp->size = strlen(seqDbSnp->dna);
 
 generateAlignment(seqNib, seqDbSnp, lineWidth, start, skipCount,
 		  genoLen5, genoLen5 + snpWidth, isRc);
-endCollapsibleSection();
+jsEndCollapsibleSection();
 }
 
 void doSnp(struct trackDb *tdb, char *itemName)
@@ -15689,7 +15661,7 @@ for (gt = geneTracks;  gt != NULL;  gt = gt->next)
 	first = FALSE;
 	}
 if (! first)
-    printf("</TABLE><BR>\n");
+    printf("</TABLE>\n");
 hFreeConn(&conn);
 }
 
@@ -15822,7 +15794,7 @@ if (snp->alleleFreqCount > 0)
     if (gotNonIntN)
 	printf(" <em>Note: dbSNP extrapolates allele counts from reported frequencies and "
 	       "reported 2N sample sizes (total %d); non-integer allele count may imply "
-	       "a problem with one of the reported numbers.</em>\n", total2N);
+	       "an inaccuracy in one of the reported numbers.</em><BR>\n", total2N);
     }
 else
     puts("</TABLE>");
@@ -16037,7 +16009,11 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     struct hgdpGeo geo;
     hgdpGeoStaticLoad(row+1, &geo);
-    beginCollapsibleSection(tdb->track, "hgdpGeo", "Human Genome Diversity Project SNP", FALSE);
+    char title[1024];
+    safef(title, sizeof(title), "Human Genome Diversity Project SNP"
+	  "<IMG name=\"hgdpImgIcon\" height=40 width=55 class='bigBlue' src=\"%s\">",
+	  hgdpPngFilePath(itemName));
+    jsBeginCollapsibleSection(cart, tdb->track, "hgdpGeo", title, FALSE);
     printf("Note: These annotations are taken directly from the "
 	   "<A HREF=\"http://hgdp.uchicago.edu/\" TARGET=_BLANK>HGDP Selection Browser</A>, "
 	   "and may indicate the allele on the opposite strand from that given above.<BR>\n");
@@ -16048,7 +16024,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     printf("</TD><TD valign=top>\n");
     hgdpGeoImg(&geo);
     printf("</TD></TR></TABLE>\n");
-    endCollapsibleSection();
+    jsEndCollapsibleSection();
     }
 sqlFreeResult(&sr);
 }
@@ -16137,7 +16113,7 @@ static void printLsSnpMappings(struct sqlConnection *conn, struct slName *pdbIds
 			       char *snpTrack, char *snpId)
 /* Print lsSnp mappings. */
 {
-beginCollapsibleSection(snpTrack, "lsSnp", "Mappings to PDB protein structures", FALSE);
+jsBeginCollapsibleSection(cart, snpTrack, "lsSnp", "Mappings to PDB protein structures", FALSE);
 printf("<TABLE class=\"hgcLsSnp\">\n");
 printf("<TBODY>\n");
 int numPdbs = slCount(pdbIds);
@@ -16167,7 +16143,7 @@ if (iCol != 0)
 printf("</TBODY>\n");
 printf("</TABLE>\n");
 printf("<A href=\"../goldenPath/help/chimera.html\" TARGET=_blank>Chimera help</A>\n");
-endCollapsibleSection();
+jsEndCollapsibleSection();
 }
 
 static void checkForLsSnpMappings(struct sqlConnection *conn, char *snpTrack, char *snpId)
@@ -16233,11 +16209,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    printf("<BR><B>This SNP maps to these additional locations:"
 		   "</B><BR><BR>");
 	snpCount++;
-	bedPrintPos((struct bed *)&snp, 3, tdb);
+	bedPrintPos((struct bed *)snp, 3, tdb);
 	printf("<BR>");
 	}
     }
 sqlFreeResult(&sr);
+puts("<BR>");
 // Make table for collapsible sections:
 puts("<TABLE>");
 checkForGwasCatalog(conn, tdb, itemName);
@@ -22929,6 +22906,10 @@ if ((!isCustomTrack(track) && dbIsFound)  ||
 	    sameString(ct->dbTrackType, "maf")))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
+    if (isHubTrack(track))
+	{
+	hubConnectAddHubForTrackAndFindTdb(database, track, NULL, trackHash);
+	}
     if (parentWigMaf)
         {
         int wordCount, i;

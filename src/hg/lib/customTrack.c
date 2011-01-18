@@ -173,7 +173,7 @@ if (!tdb->settingsHash)
 
 /* add or replace if already in hash */
 hashReplace(tdb->settingsHash, name, val);
-
+freeMem(tdb->settings);
 /* regenerate settings string */
 tdb->settings = hashToRaString(tdb->settingsHash);
 }

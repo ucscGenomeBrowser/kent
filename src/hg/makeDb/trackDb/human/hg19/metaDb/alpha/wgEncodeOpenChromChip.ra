@@ -7,10 +7,12 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
+fileIndex wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+privacy noSequence
 project wgEncode
 replicate 1
 subId 2480
@@ -25,10 +27,12 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
+fileIndex wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+privacy noSequence
 project wgEncode
 replicate 2
 subId 2480
@@ -47,6 +51,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+privacy noSequence
 project wgEncode
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
@@ -65,6 +70,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+privacy noSequence
 project wgEncode
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfPkRep1
@@ -83,6 +89,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB8470
+privacy noSequence
 project wgEncode
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfSig
@@ -98,10 +105,12 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
+fileIndex wgEncodeOpenChromChipFibroblInputAln.bam.bai
 fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+privacy noSequence
 project wgEncode
 setType input
 subId 2487
@@ -121,6 +130,7 @@ fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+privacy noSequence
 project wgEncode
 setType input
 subId 2487
@@ -136,6 +146,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -154,6 +165,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
+fileIndex wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -261,6 +273,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromChipGlioblaInputAln.bam.bai
 fileName wgEncodeOpenChromChipGlioblaInputAln.bam
 grant Crawford
 lab UT-A
@@ -459,6 +472,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
+fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -478,6 +492,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
+fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -497,6 +512,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
+fileIndex wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam.bai
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
 grant Crawford
 lab UT-A
@@ -3698,7 +3714,7 @@ cell K562
 composite wgEncodeOpenChromChip
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
+dateResubmitted 2011-01-12
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromChipK562CtcfPk.narrowPeak.gz
@@ -3781,7 +3797,7 @@ cell K562
 composite wgEncodeOpenChromChip
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
+dateResubmitted 2011-01-12
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
 fileName wgEncodeOpenChromChipK562CtcfSig.bigWig
@@ -3927,7 +3943,7 @@ cell K562
 composite wgEncodeOpenChromChip
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
+dateResubmitted 2011-01-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipK562Pol2Pk.narrowPeak.gz
@@ -3987,7 +4003,7 @@ cell K562
 composite wgEncodeOpenChromChip
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-17
+dateResubmitted 2011-01-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig
@@ -4009,6 +4025,7 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4029,6 +4046,7 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4187,6 +4205,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4206,6 +4225,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4380,6 +4400,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4399,6 +4420,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4591,6 +4613,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4610,6 +4633,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
+fileIndex wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
 grant Crawford
 lab UT-A
@@ -4785,6 +4809,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam.bai
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
@@ -4803,6 +4828,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
+fileIndex wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam.bai
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
@@ -5077,6 +5103,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1657
@@ -5098,6 +5125,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 2
 subId 1657
@@ -5118,6 +5146,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
@@ -5138,6 +5167,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1657
@@ -5159,6 +5189,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfSig
@@ -5181,6 +5212,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 setType input
 subId 1832
@@ -5202,6 +5234,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
+privacy noSequence
 project wgEncode
 setType input
 subId 1832
@@ -5224,6 +5257,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1652
@@ -5245,6 +5279,7 @@ grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 2
 subId 1652
@@ -5265,6 +5300,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
@@ -5285,6 +5321,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
+privacy noSequence
 project wgEncode
 replicate 1
 subId 1652
@@ -5306,9 +5343,10 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
+privacy noSequence
 project wgEncode
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -181742070
+# MAGIC: -1815492253

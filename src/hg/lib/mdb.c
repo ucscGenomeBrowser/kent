@@ -1644,6 +1644,44 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
 return FALSE;
 }
 
+boolean mdbObjsContainAtleastOne(struct mdbObj *mdbObjs, char *var)
+// Returns TRUE if any object in set contains var
+{
+struct mdbObj *mdbObj = mdbObjs;
+for(;mdbObj!=NULL; mdbObj=mdbObj->next)
+    {
+    if(mdbObjContains(mdbObj, var, NULL))
+        return TRUE;
+    }
+return FALSE;
+}
+
+struct mdbObj *mdbObjsCommonVars(struct mdbObj *mdbObjs)
+// Returns a new mdbObj with all vars that are contained in every obj passed in.
+// Note that the returnd mdbObj has a meaningles obj name and vals.
+{
+if (mdbObjs == NULL || mdbObjs->vars == NULL)
+    return NULL;
+struct mdbObj *mdbObj = mdbObjs;
+struct mdbObj *commonVars = mdbObjClone(mdbObj); // Clone the first obj then prune it
+commonVars->next = NULL;
+struct mdbVar *mdbVar = mdbObj->vars;            // Will walk through the first obj's vars
+mdbObj=mdbObj->next;                             // No need to include first obj in search
+if (mdbObj != NULL)
+    {
+    struct dyString *dyPruneVars = dyStringNew(512);
+    for(; mdbVar != NULL; mdbVar = mdbVar->next )
+        {
+        if (mdbObjsContainAtleastOne(mdbObj, mdbVar->var) == FALSE)
+            dyStringPrintf(dyPruneVars,"%s ",mdbVar->var);  // var not found so add to prune list
+        }
+    if (dyStringLen(dyPruneVars) > 0)
+        mdbObjRemoveVars(commonVars,dyStringContents(dyPruneVars));
+    dyStringFree(&dyPruneVars);
+    }
+return commonVars;
+}
+
 boolean mdbByVarContains(struct mdbByVar *mdbByVar, char *val, char *obj)
 // Returns TRUE if var contains val, obj or both
 {
@@ -1787,6 +1825,23 @@ if(vars != NULL)
 slSort(mdbObjs, mdbObjVarCmp);
 }
 
+void mdbObjsSortOnVarPairs(struct mdbObj **mdbObjs,struct slPair *varValPairs)
+// Sorts on var,val pairs vars lists: fwd case-sensitive.  Assumes all objs' vars are in identical order.
+// This method will use mdbObjsSortOnVars()
+{
+if (varValPairs == NULL)
+    return;
+
+struct slPair *onePair = varValPairs;
+struct dyString *dyTerms = dyStringNew(256);
+dyStringAppend(dyTerms,onePair->name);
+onePair = onePair->next;
+for(; onePair != NULL; onePair = onePair->next)
+    dyStringPrintf(dyTerms,",%s",onePair->name);
+mdbObjsSortOnVars(mdbObjs,dyStringContents(dyTerms));
+dyStringFree(&dyTerms);
+}
+
 void mdbObjRemoveVars(struct mdbObj *mdbObjs, char *vars)
 // Prunes list of vars for an object, freeing the memory.  Doesn't touch DB.
 {
@@ -1880,6 +1935,107 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
     }
 }
 
+struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,boolean exclude)
+// Filters mdb objects to only those that include/exclude vars.  Optionally checks val too.
+// Returns removed objects
+{
+struct mdbObj *mdbObjsDropped = NULL;
+struct mdbObj *mdbObj=*pMdbObjs;
+struct mdbObj *mdbLastObj=NULL;
+while (mdbObj!=NULL)
+    {
+    boolean drop = FALSE;
+    char *foundVal = mdbObjFindValue(mdbObj,var);
+    if (val == NULL)
+        drop = (!foundVal && !exclude) || (foundVal && exclude);
+    else if (foundVal)
+        drop = (sameWord(foundVal,val) ? exclude : !exclude); // case-insensitive
+    else
+        drop = !exclude;
+    if (drop)
+        {
+        if (mdbLastObj==NULL)
+            *pMdbObjs          = mdbObj->next;
+        else
+            mdbLastObj->next = mdbObj->next;
+        mdbObj->next = NULL;
+        slAddHead(&mdbObjsDropped,mdbObj);
+        if (mdbLastObj==NULL)
+            {
+            mdbObj = *pMdbObjs;
+            continue;
+            }
+        }
+    else
+        mdbLastObj=mdbObj;
+    mdbObj = mdbLastObj->next;
+    }
+return mdbObjsDropped;
+}
+
+struct mdbObj *mdbObjsFilterTablesOrFiles(struct mdbObj **pMdbObjs,boolean tables, boolean files)
+// Filters mdb objects to only those that have associated tables or files. Returns removed non-table/file objects
+// Note: Since table/file objects overlap, there are 3 possibilites: tables, files, table && files
+{
+assert(tables || files); // Cant exclude both
+
+struct mdbObj *mdbObjs = *pMdbObjs;
+struct mdbObj *mdbObjsDropped  = NULL;
+if (tables)
+    mdbObjsDropped = mdbObjsFilter(&mdbObjs,"tableName",NULL,FALSE);
+
+if (files)
+    {
+    struct mdbObj *mdbObjsNoFileName = mdbObjsDropped = mdbObjsFilter(&mdbObjs,"fileName",NULL,FALSE);
+    if (mdbObjsNoFileName)
+        {
+        struct mdbObj *mdbObjsNoFileIndex = mdbObjsFilter(&mdbObjsNoFileName,"fileIndex",NULL,FALSE);
+        if (mdbObjsNoFileIndex)
+            {
+            mdbObjs        = slCat(mdbObjs,mdbObjsNoFileName);
+            mdbObjsDropped = slCat(mdbObjsDropped,mdbObjsNoFileIndex);
+            }
+        }
+    }
+slSort(&mdbObjs,       &mdbObjCmp); // Need to be returned to obj order
+slSort(&mdbObjsDropped,&mdbObjCmp);
+*pMdbObjs = mdbObjs;
+
+return mdbObjsDropped;
+}
+
+struct mdbObj *mdbObjIntersection(struct mdbObj **pA, struct mdbObj *b)
+// return duplicate objs from an intersection of two mdbObj lists.
+// List b is untouched but pA will contain the resulting intersection
+{
+struct mdbObj *mdbObj;
+struct hash *hashB = newHash(0);
+for (mdbObj = b; mdbObj != NULL; mdbObj = mdbObj->next)
+    {
+    hashAdd(hashB, mdbObj->obj, mdbObj);
+    }
+
+struct mdbObj *mdbObjsDropped = NULL;
+struct mdbObj *mdbObjsIntersecting = NULL;
+struct mdbObj *mdbObjs=*pA;
+while (mdbObjs)
+    {
+    mdbObj = slPopHead(&mdbObjs);
+    if (hashLookup(hashB, mdbObj->obj) != NULL)
+        slAddHead(&mdbObjsIntersecting,mdbObj);
+    else
+        slAddHead(&mdbObjsDropped,mdbObj);
+    }
+hashFree(&hashB);
+if (mdbObjsIntersecting)
+    slReverse(&mdbObjsIntersecting);
+*pA = mdbObjsIntersecting;
+if (mdbObjsDropped)
+    slReverse(&mdbObjsDropped);
+
+return mdbObjsDropped;
+}
+
 void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *varType,char *val,boolean deleteThis)
 // Turns one or more mdbObjs into the stucture needed to add/update or delete.
 {
@@ -1942,6 +2098,19 @@ if(mdbObj->vars != NULL)
     slReverse(&(newObj->vars));
     }
 return newObj;
+}
+
+struct slName *mdbObjToSlName(struct mdbObj *mdbObjs)
+// Creates slNames list of mdbObjs->obj.  mdbObjs remains untouched
+{
+struct slName *mdbNames = NULL;
+struct mdbObj *mdbObj = mdbObjs;
+for( ;mdbObj!=NULL; mdbObj=mdbObj->next)
+    {
+    slAddHead(&mdbNames,slNameNew(mdbObj->obj)); //allocates memory
+    }
+slReverse(&mdbNames);
+return mdbNames;
 }
 
 // --------------- Free at last ----------------
@@ -2074,39 +2243,118 @@ if (mdbObj == NULL || mdbObj == METADATA_NOT_FOUND)
 return mdbObjFindValue(mdbObj,var);
 }
 
-struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files)
+
+struct mdbObj *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit)
 // Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
 // Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
-{  // TODO: Change this to use normal mdb struct routines?
-if (!tables && !files)
-    errAbort("mdbObjSearch requests objects for neither tables or files.\n");
+{
+if (var == NULL && val == NULL)
+    errAbort("mdbObjSearch requests objects but provides no criteria.\n");
 
 char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
+// Build a query string
 struct dyString *dyQuery = dyStringNew(512);
-dyStringPrintf(dyQuery,"select distinct obj from %s l1 where ",tableName);
-if (!tables || !files)
-    {
-    dyStringPrintf(dyQuery,"l1.var='objType' and l1.val='%s' ",tables?"table":"file");
-    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",tableName);
-    }
+dyStringPrintf(dyQuery,"select l1.obj, l1.var, l1.varType, l1.val from %s l1",tableName);
 
+if (var != NULL || val != NULL)
+    dyStringPrintf(dyQuery," where exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",tableName);
 if(var != NULL)
-    dyStringPrintf(dyQuery,"l2.var = '%s' and l2.val ", var);
-if(sameString(op, "in"))
-    dyStringPrintf(dyQuery,"in (%s)", val); // Note, must be a formatted string already: 'a','b','c' or  1,2,3
-else if(sameString(op, "contains") || sameString(op, "like"))
-    dyStringPrintf(dyQuery,"like '%%%s%%'", val);
-else if (limit > 0 && strlen(val) == limit)
-    dyStringPrintf(dyQuery,"like '%s%%'", val);
-else
-    dyStringPrintf(dyQuery,"= '%s'", val);
-
-if (!tables || !files)
-    dyStringAppendC(dyQuery,')');
+    dyStringPrintf(dyQuery,"l2.var = '%s'", var);
+if(var != NULL && val != NULL)
+    dyStringAppend(dyQuery," and ");
+if(val != NULL)
+    {
+    dyStringAppend(dyQuery,"l2.val ");
+    if(sameString(op, "in"))
+        dyStringPrintf(dyQuery,"in (%s)", val); // Note, must be a formatted string already: 'a','b','c' or  1,2,3
+    else if(sameString(op, "contains") || sameString(op, "like"))
+        dyStringPrintf(dyQuery,"like '%%%s%%'", val);
+    else if (limit > 0 && strlen(val) != limit)
+        dyStringPrintf(dyQuery,"like '%.*s%%'", limit, val);
+    else
+        dyStringPrintf(dyQuery,"= '%s'", val);
+    }
+dyStringAppendC(dyQuery,')');
 dyStringAppend(dyQuery," order by obj");
 
-return sqlQuickList(conn, dyStringCannibalize(&dyQuery));
+struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dyQuery));
+verbose(3, "rows (vars) returned: %d\n",slCount(mdb));
+struct mdbObj *mdbObjs = mdbObjsLoadFromMemory(&mdb,TRUE);
+
+return mdbObjs;
+}
+
+struct mdbObj *mdbObjRepeatedSearch(struct sqlConnection *conn,struct slPair *varValPairs,boolean tables,boolean files)
+// Search the metaDb table for objs by var,val pairs.  Uses mdbCvSearchMethod() if available.
+// This method will use mdbObjsQueryByVars()
+{
+struct slPair *onePair;
+struct dyString *dyTerms = dyStringNew(256);
+// Build list of terms as "var1=val1 var2=val2a,val2b,val2c var3=%val3%"
+for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
+    {
+    enum mdbCvSearchable searchBy = mdbCvSearchMethod(onePair->name);
+    // If select is by free text then like
+    if (searchBy == cvsSearchByMultiSelect)
+        {
+        // TO BE IMPLEMENTED
+        warn("mdb search by multi-select is not yet implemented.");
+        // The mdbVal[1] will hve to be filled cartOptionalSlNameList(cart,???)
+        struct slName *choices = (struct slName *)onePair->val;
+        if (slCount(choices) == 1)
+            dyStringPrintf(dyTerms,"%s=%s ",onePair->name,choices->name);
+        else if(choices != NULL)
+            {
+            // Then slNames will need to be assembled into a string in the form of a,b,c
+            dyStringPrintf(dyTerms,"%s=%s",onePair->name,choices->name);
+            struct slName *choice = choices->next;
+            for(;choice!=NULL;choice=choice->next)
+                dyStringPrintf(dyTerms,",%s",choice->name);
+            dyStringAppendC(dyTerms,' ');
+            }
+        }
+    else if (searchBy == cvsSearchBySingleSelect)
+        dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
+    else if (searchBy == cvsSearchByFreeText)
+        dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
+    else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+        {
+        // TO BE IMPLEMENTED
+        // Requires new mdbObjSearch API and more than one (char *)onePair->val
+        warn("mdb search by date is not yet implemented.");
+        }
+    }
+// Be sure to include table of file in selections
+if (tables)
+    dyStringAppend(dyTerms,"tableName=? ");
+if (files)
+    dyStringAppend(dyTerms,"fileName=? ");
+
+// Build the mdbByVals struct and then select all mdbObjs in one query
+struct mdbByVar *mdbByVars = mdbByVarsLineParse(dyStringContents(dyTerms));
+dyStringClear(dyTerms);
+struct mdbObj *mdbObjs = mdbObjsQueryByVars(conn,NULL,mdbByVars); // Uses master table metaDb not sandbox versions
+
+return mdbObjs;
+}
+
+struct slName *mdbObjNameSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files)
+// Search the metaDb table for objs by var and val.  Can restrict by op "is", "like", "in" and accept (non-zero) limited string size
+// Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
+{  // Note: This proves faster than getting mdbObjs then converting to slNames
+struct mdbObj *mdbObjs = mdbObjSearch(conn,var,val,op,limit);
+
+// May only be interested in tables or files:
+if (tables || files)
+    {
+    struct mdbObj *mdbObjsDropped = mdbObjsFilterTablesOrFiles(&mdbObjs,tables,files);
+    mdbObjsFree(&mdbObjsDropped);
+    }
+
+struct slName *mdbNames = mdbObjToSlName(mdbObjs);
+mdbObjsFree(&mdbObjs);
+return mdbNames;
 }
 
 struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
@@ -2314,3 +2562,17 @@ return cvsNotSearchable;
 }
 #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
 
+const char *cvLabel(char *term)
+// returns cv label if term found or else just term
+{
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hash *termHash = hashFindVal(termTypeHash,term);
+if (termHash != NULL)
+    {
+    char *label = hashFindVal(termHash,"label");
+    if (label != NULL)
+        return label;
+    }
+return term;
+}

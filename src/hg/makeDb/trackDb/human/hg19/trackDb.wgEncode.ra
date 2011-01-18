@@ -7,19 +7,30 @@ include wgEncodeUwAffyExonArray.ra
 include wgEncodeSunyAlbanyGeneSt.ra
 include wgEncodeSunyAlbanyTiling.ra
 include wgEncodeSunySwitchgear.ra
-include wgEncodeHaibMethylRrbs.ra beta,public
-include wgEncodeHaibMethylRrbs.new.ra alpha
 include wgEncodeHaibTfbs.ra
 include wgEncodeSydhTfbs.ra
 include wgEncodeSydhHistone.ra
-include wgEncodeBroadHistone.ra
 include wgEncodeOpenChromChip.ra
 include wgEncodeOpenChromDnase.ra
 include wgEncodeOpenChromFaire.ra
 include wgEncodeDukeAffyExon.ra
 include wgEncodeUwHistone.ra
-include wgEncodeUwDgf.ra
-include wgEncodeUwDnase.ra
+
+#Methyl RRBS (wrangler: Venkat)
+include wgEncodeHaibMethylRrbs.ra beta,public
+include wgEncodeHaibMethylRrbs.new.ra alpha
+
+#Broad Histone (wrangler: Tim)
+include wgEncodeBroadHistone.ra alpha,beta
+
+#UW DNase DGF (wrangler: Venkat)
+include wgEncodeUwDgf.ra beta,public
+include wgEncodeUwDgf.new.ra alpha
+
+#Uw Dnase-Seq (wrangler: Venkat
+include wgEncodeUwDnase.ra beta,public
+include wgEncodeUwDnase.new.ra alpha
+
 include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethylArray.ra
 include wgEncodeGisRnaSeq.ra

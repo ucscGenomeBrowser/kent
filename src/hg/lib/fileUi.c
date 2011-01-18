@@ -5,6 +5,7 @@
 #include "cheapcgi.h"
 #include "jsHelper.h"
 #include "cart.h"
+#include "hdb.h"
 #include "fileUi.h"
 #include "hui.h"
 #include "obscure.h"
@@ -12,6 +13,7 @@
 
 // FIXME: Move to hui.h since hui.c also needs this
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
+
 
 void fileDbFree(struct fileDb **pFileList)
 // free one or more fileDb objects
@@ -21,6 +23,7 @@ while (pFileList && *pFileList)
     struct fileDb *oneFile = slPopHead(pFileList);
 
     freeMem(oneFile->fileName);
+    freeMem(oneFile->fileType);
     freeMem(oneFile->fileDate);
     freeMem(oneFile->sortFields);
     freeMem(oneFile->reverse);
@@ -61,8 +64,9 @@ if (foundFiles == NULL
         }
     else  // genome and hgwbeta can use rsync
         {
-        // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq
-        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/%s | grep %s", server, db, subDir,dir,fileName,fileName);
+        // Works:         rsync -avn rsync://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeBroadChipSeq/
+        //safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/%s | grep %s", server, db, subDir,dir,fileName,fileName);
+        safef(cmd,sizeof(cmd),"rsync -avn rsync://%s/goldenPath/%s/%s/%s/", server, db, dir, subDir);
         }
     //warn("cmd: %s",cmd);
     scriptOutput = popen(cmd, "r");
@@ -99,7 +103,6 @@ if (foundFiles == NULL
             }
         }
     pclose(scriptOutput);
-    //warn("found %d files",slCount(foundFiles));
 
     if (foundFiles == NULL)
         {
@@ -130,37 +133,102 @@ while (foundFiles)
     {
     oneFile = slPopHead(&foundFiles);
     if (sameString(fileName,oneFile->fileName))
-        break;
+        break;  // Found means removed from list: shorter list for next file.
 
     slAddHead(&newList,oneFile);
     oneFile = NULL;
     }
 if (newList)
-    foundFiles = slCat(newList,foundFiles);
+    foundFiles = slCat(foundFiles,newList);  // Order does not remain the same
 
+if (oneFile != NULL && oneFile->fileType == NULL)
+    {
+    char *suffix = strchr(oneFile->fileName, '.');
+    if (suffix != NULL && strlen(suffix) > 2)
+        {
+        oneFile->fileType = cloneString(suffix + 1);
+        if (endsWith(oneFile->fileType,".gz"))
+            chopSuffix(oneFile->fileType);
+        }
+    }
 return oneFile;
 }
 
-sortOrder_t *fileSortOrderGet(struct cart *cart,struct trackDb *parentTdb)
+static sortOrder_t *fileSortOrderGet(struct cart *cart,struct trackDb *parentTdb,struct mdbObj *mdbObjs)
 /* Parses 'fileSortOrder' trackDb/cart instructions and returns a sort order struct or NULL.
    Some trickiness here.  sortOrder->sortOrder is from cart (changed by user action), as is sortOrder->order,
    But columns are in original tdb order (unchanging)!  However, if cart is null, all is from trackDb.ra */
 {
 int ix;
-char *setting = trackDbSetting(parentTdb, FILE_SORT_ORDER);
-if(setting == NULL) // Must be in trackDb or not a sortable list of files
-    return NULL;
+sortOrder_t *sortOrder = NULL;
+char *carveSetting = NULL,*setting = NULL;
+if (parentTdb)
+    setting = trackDbSetting(parentTdb, FILE_SORT_ORDER);
+if(setting)
+    {
+    sortOrder = needMem(sizeof(sortOrder_t));
+    sortOrder->setting = cloneString(setting);
+    carveSetting = sortOrder->setting;
+    }
+else
+    {
+    if (mdbObjs != NULL)
+        {
+        struct dyString *dySortFields = dyStringNew(512);
+        struct mdbObj *commonVars = mdbObjsCommonVars(mdbObjs);
+        // Problem with making common fieds as sorable is that it REQUIRES a fixed sort order
+        char *sortables[] = {"grant","lab","dataType","cell","strain","age","obtainedBy", "rnaExtract","localization","phase","treatment","antibody","protocol",
+                      "labProtocolId","restrictionEnzyme","control","replicate","expId","labExpId","setType","view","submittedDataVersion","subId",
+                      "dateSubmitted","dateResubmitted","dateUnrestricted","dataVersion","origAssembly"};//"labVersion","softwareVersion",
+        // Not included:    no:not searchable
+        // accession no, annotation no,   bioRep no,     composite no, controlId no, dccInternalNotes no, fileIndex no,  fileName no,
+        // fragSize no,  fragLength no,   freezeDate no, geoSample,    geoSeries,    insertLength no,     labVersion,    level no,
+        // mapAlgorithm, privacy no,      rank no,       readType,     seqPlatform,  sex,                 size no,       softwareVersion,
+        // tableName no, uniqueness no
 
-sortOrder_t *sortOrder = needMem(sizeof(sortOrder_t));
-sortOrder->setting = cloneString(setting);
-sortOrder->htmlId = needMem(strlen(parentTdb->track)+20);
-safef(sortOrder->htmlId, (strlen(parentTdb->track)+20), "%s.%s", parentTdb->track,FILE_SORT_ORDER);
-if(cart != NULL)
-    sortOrder->sortOrder = cloneString(cartOptionalString(cart, sortOrder->htmlId));
+        int ix = 0, count = sizeof(sortables)/sizeof(char *);
+        for (ix=0;ix<count;ix++)
+            {
+            // If sortables[ix] is in common vars then then add it to the settings field
+            if (mdbObjContains(commonVars,sortables[ix],NULL))
+                {
+                // TODO: This would be good, but valuable information slips away.  This is especially true in fileSearch
+                //       Maybe another whiteList?
+                //if (mdbRemoveCommonVar(mdbObjs, sortables[ix])) // Don't bother if all the vals are the same
+                //    continue;
+                dyStringPrintf(dySortFields,"%s=%s ",sortables[ix],strSwapChar(cloneString(cvLabel(sortables[ix])),' ','_'));
+                }
+            }
+        if (dyStringLen(dySortFields))
+            {
+            dyStringAppend(dySortFields,"fileSize=Size fileType=File_Type");
+            setting = dyStringCannibalize(&dySortFields);
+            }
+        else
+            dyStringFree(&dySortFields);
+        mdbObjsFree(&commonVars);
+        }
+    if(setting == NULL) // Must be in trackDb or not a sortable list of files
+        {
+        #define FILE_SORT_ORDER_DEFAULT "cell=Cell_Line lab=Lab view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until"
+        setting = FILE_SORT_ORDER_DEFAULT;
+        }
+    sortOrder = needMem(sizeof(sortOrder_t));
+    carveSetting = cloneString(setting);
+    sortOrder->setting = NULL;
+    }
 
-sortOrder->count = chopByWhite(sortOrder->setting,NULL,0);  // Get size
+if (parentTdb)
+    {
+    sortOrder->htmlId = needMem(strlen(parentTdb->track)+20);
+    safef(sortOrder->htmlId, (strlen(parentTdb->track)+20), "%s.%s", parentTdb->track,FILE_SORT_ORDER);
+    if(cart != NULL)
+        sortOrder->sortOrder = cloneString(cartOptionalString(cart, sortOrder->htmlId));
+    }
+
+sortOrder->count = chopByWhite(carveSetting,NULL,0);  // Get size
 sortOrder->column  = needMem(sortOrder->count*sizeof(char*));
-sortOrder->count = chopByWhite(sortOrder->setting,sortOrder->column,sortOrder->count);
+sortOrder->count = chopByWhite(carveSetting,sortOrder->column,sortOrder->count);
 sortOrder->title   = needMem(sortOrder->count*sizeof(char*));
 sortOrder->forward = needMem(sortOrder->count*sizeof(boolean));
 sortOrder->order   = needMem(sortOrder->count*sizeof(int));
@@ -238,15 +306,10 @@ if (sortOrder && fileList)
                 field = cloneString(niceNumber);
                 }
             else if (sameString("fileType",sortOrder->column[ix]))
-                {
-                field = cloneString(oneFile->fileName + strlen(oneFile->mdb->obj) + 1);
-                if (endsWith(field,".gz"))
-                    chopSuffix(field);
-                }
+                field = oneFile->fileType;
             else
-                {
                 field = mdbObjFindValue(oneFile->mdb,sortOrder->column[ix]);
-                }
+
             if (field)
                 {
                 oneFile->sortFields[sortOrder->order[ix] - 1] = field;
@@ -266,8 +329,12 @@ if (sortOrder && fileList)
 
 static void filesDownloadsPreamble(char *db, struct trackDb *tdb)
 {
+// Do not bother getting preamble.html
+// 1) It isn't on the RR (yet)
+// 2) It will likely refer back to the composite for Description info which is included in this page
+// 3) The rsync-to-tmp-file hurdle isn't worth the effort.
 puts("<p><B>Data is <A HREF='http://genome.ucsc.edu/ENCODE/terms.html'>RESTRICTED FROM USE</a>");
-puts("in publication  until the restriction date noted for the given data file.</B></p");
+puts("in publication  until the restriction date noted for the given data file.</B></p>");
 
 struct fileDb *oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, tdb->track, "supplemental");
 if (oneFile != NULL)
@@ -280,8 +347,169 @@ printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/files.txt' TARGET
                 hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
 printf("<BR>&#149;&nbsp;<A HREF='http://%s/goldenPath/%s/%s/%s/md5sum.txt' TARGET=ucscDownloads>md5sum.txt</A> which is a list of the md5sum output for each download.</LI>\n",
                 hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track);
+
+
 puts("<P>");
 }
+
+static int filesPrintTable(char *db, struct trackDb *parentTdb, struct fileDb *fileList, sortOrder_t *sortOrder)
+// Prints filesList as a sortable table. Returns count
+{
+// Table class=sortable
+int columnCount = 0;
+int restrictedColumn = 0;
+char *nowrap = (sortOrder->setting != NULL ? " nowrap":""); // Sort order trackDb setting found so rely on <BR> in titles for wrapping
+printf("<TABLE class='sortable' style='border: 2px outset #006600;'>\n");
+printf("<THEAD class='sortable'>\n");
+printf("<TR class='sortable' valign='bottom'>\n");
+printf("<TD align='center' valign='center'>&nbsp;");
+int filesCount = slCount(fileList);
+if (filesCount > 5)
+    printf("<i>%d files</i>",filesCount);    //puts("<FONT class='subCBcount'></font>"); // Use this style when filterboxes are up and running
+//if (sortOrder) // NOTE: This could be done to preserve sort order   FIXME: However hgFileUi would need form OR changes would need to be ajaxed over AND hgsid would be needed.
+//    printf("<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE=\"%s\">",sortOrder->htmlId, sortOrder->sortOrder);
+printf("</TD>\n");
+columnCount++;
+
+/*#define SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+#ifdef SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+if (parentTdb == NULL)
+    {
+    printf("<TD align='center' valign='center'>&nbsp;</TD>");
+    columnCount++;
+    }
+#endif///def SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+*/
+// Now the columns
+int curOrder = 0,ix=0;
+if (sortOrder)
+    {
+    curOrder = sortOrder->count;
+    for(ix=0;ix<sortOrder->count;ix++)
+        {
+        char *align = (sameString("labVersion",sortOrder->column[ix]) || sameString("softwareVersion",sortOrder->column[ix]) ? " align='left'":"");
+        printf("<TH class='sortable sort%d%s' %s%s%s>%s</TH>\n",
+            sortOrder->order[ix],(sortOrder->forward[ix]?"":" sortRev"),
+            (sameString("fileSize",sortOrder->column[ix])?"abbr='use' ":""),
+            nowrap,align,sortOrder->title[ix]); // keeing track of sortOrder
+        columnCount++;
+        if (sameWord(sortOrder->column[ix],"dateUnrestricted"))
+            restrictedColumn = columnCount;
+        }
+    }
+//#define INCLUDE_FILENAMES
+#ifndef INCLUDE_FILENAMES
+else
+#endif///defn INCLUDE_FILENAMES
+    {
+    printf("<TH class='sortable sort%d' nowrap>File Name</TH>\n",++curOrder);
+    columnCount++;
+    }
+printf("<TH class='sortable sort%d' align='left' nowrap>Additional Details</TH>\n",++curOrder);
+columnCount++;
+printf("</TR></THEAD>\n");
+
+// Now the files...
+struct fileDb *oneFile = fileList;
+printf("<TBODY class='sortable sorting'>\n"); // 'sorting' is a fib but it conveniently greys the list till the table is initialized.
+for( ;oneFile!= NULL;oneFile=oneFile->next)
+    {
+    oneFile->mdb->next = NULL; // mdbs were in list for generating sortOrder, but list no longer needed
+    char *field = NULL;
+
+    printf("<TR valign='top'>");   // TODO: BUILD IN THE CLASSES TO ALLOW FILTERBOXES TO WORK!!!
+
+    // Download button
+    printf("<TD nowrap>");
+    if (parentTdb)
+        field = parentTdb->track;
+    else
+        field = mdbObjFindValue(oneFile->mdb,"composite");
+    assert(field != NULL);
+    printf("<A HREF='http://%s/goldenPath/%s/%s/%s/%s' title='Download %s ...' TARGET=ucscDownloads>",
+                hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, field, oneFile->fileName, oneFile->fileName);
+    printf("<input type='button' value='Download'>");
+    printf("</a>");
+
+#define SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+#ifdef SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+    if (parentTdb == NULL)
+        printf("&nbsp;<A href='../cgi-bin/hgFileUi?db=%s&g=%s' title='Navigate to downloads page for %s set...'><IMG SRC='../images/folderC.png'></a>&nbsp;", db,field,field);
+#endif///def SHOW_FOLDER_FRO_COMPOSITE_DOWNLOADS
+    printf("</TD>\n");
+
+    // Each of the pulled out mdb vars
+    if (sortOrder)
+        {
+        for(ix=0;ix<sortOrder->count;ix++)
+            {
+            char *align = (sameString("labVersion",sortOrder->column[ix]) || sameString("softwareVersion",sortOrder->column[ix]) ? " align='left'":" align='center'");
+            if (sameString("fileSize",sortOrder->column[ix]))
+                {
+                char niceNumber[128];
+                sprintWithGreekByte(niceNumber, sizeof(niceNumber), oneFile->fileSize);
+                field = oneFile->sortFields[sortOrder->order[ix] - 1];
+                printf("<TD abbr='%s' align='right' nowrap>%s</td>",field,niceNumber);
+                }
+            else
+                {
+                field = oneFile->sortFields[sortOrder->order[ix] - 1];
+                if (sameString("dateUnrestricted",sortOrder->column[ix]) && field && dateIsOld(field,"%F"))
+                    printf("<TD%s nowrap style='color: #BBBBBB;'>%s</td>",align,field);
+                else
+                    printf("<TD%s nowrap>%s</td>",align,field?field:" &nbsp;");
+                if (!sameString("fileType",sortOrder->column[ix]))
+                    mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
+                }
+            }
+        }
+#ifndef INCLUDE_FILENAMES
+    else
+#endif///ndef INCLUDE_FILENAMES
+        { // fileName
+        printf("<TD nowrap>%s",oneFile->fileName);
+        //// FIXME: " The "..." encapsulation could be rebuilt so it could be called here
+        //printf("&nbsp;<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",true,true);' title='Show metadata details...'>...</A>",
+        //    oneFile->mdb->obj,oneFile->mdb->obj);
+        //printf("<DIV id='div_%s_meta' style='display:none;'></div></td>",oneFile->mdb->obj);
+        }
+
+    // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
+    mdbObjRemoveVars(oneFile->mdb,"fileName fileIndex composite project dccInternalNotes"); // Remove this from mdb now so that it isn't displayed in "extras'
+    mdbObjReorderVars(oneFile->mdb,"grant lab dataType cell treatment antibody protocol replicate view",FALSE); // Bring to front
+    mdbObjReorderVars(oneFile->mdb,"subId submittedDataVersion dateResubmitted dataVersion setType inputType controlId tableName",TRUE); // Send to back
+    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);
+    printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
+
+    printf("</TR>\n");
+    }
+
+printf("</TBODY><TFOOT class='bgLevel1'>\n");
+printf("<TR valign='top'>");
+
+// Restriction policy link in first column?
+if (restrictedColumn == 1)
+    printf("<TH colspan=%d><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A></TH>", (columnCount - restrictedColumn),ENCODE_DATA_RELEASE_POLICY);
+
+printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",(restrictedColumn > 1 ? (restrictedColumn - 1) : columnCount));
+
+// Total
+if (filesCount > 5)
+    printf("<i>%d files</i>\n",filesCount);
+
+// Restriction policy link in later column?
+if (restrictedColumn > 1)
+    printf("</TD><TH colspan=%d align='left'><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", columnCount,ENCODE_DATA_RELEASE_POLICY);
+
+printf("</TD></TR>\n");
+printf("</TFOOT></TABLE><BR>\n");
+
+if (parentTdb == NULL)
+    printf("<script type='text/javascript'>{$(document).ready(function() {sortTableInitialize($('table.sortable')[0],true,true);});}</script>\n");
+
+return filesCount;
+}
+
 
 void filesDownloadUi(char *db, struct cart *cart, struct trackDb *tdb)
 // UI for a "composite like" track: This will list downloadable files associated with
@@ -313,8 +541,6 @@ char *mdbTable = mdbTableName(conn,TRUE); // Look for sandBox name first
 if(mdbTable == NULL)
     errAbort("TABLE NOT FOUND: '%s.%s'.\n",db,MDB_DEFAULT_NAME);
 
-struct fileDb *fileList = NULL, *oneFile = NULL;
-
 // Get an mdbObj list of all that belong to this track and have a fileName
 char buf[256];
 safef(buf,sizeof(buf),"composite=%s fileName=?",tdb->track);
@@ -338,7 +564,7 @@ char *commonTerms[] = { "grant", "lab", "dataType", "control", "setType" };
 struct dyString *dyCommon = dyStringNew(256);
 for(ix=0;ix<ArraySize(commonTerms);ix++)
     {
-    char *val = mdbRemoveCommonVar(mdbList, commonTerms[ix]);
+    char *val = mdbRemoveCommonVar(mdbList, commonTerms[ix]);// All mdbs have it and have the same val for it.
     if (val)
         dyStringPrintf(dyCommon,"%s=%s ",commonTerms[ix],val);
     }
@@ -347,8 +573,11 @@ if (debug && dyStringLen(dyCommon))
 dyStringFree(&dyCommon);
 
 // Verify file existance and make fileList of those found
+struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
+struct mdbObj *mdbFiles = NULL; // Will caontain a list of mdbs for the found files
 while(mdbList)
     {
+    char buf[512];
     boolean found = FALSE;
     struct mdbObj *mdbFile = slPopHead(&mdbList);
     // First for FileName
@@ -360,13 +589,20 @@ while(mdbList)
             {
             slAddHead(&fileList,oneFile);
             oneFile->mdb = mdbFile;
+            slAddHead(&mdbFiles,mdbFile);
             found = TRUE;
             }
         else if (debug)
             warn("goldenPath/%s/%s/%s/%s    in mdb but not found in directory",db,ENCODE_DCC_DOWNLOADS, tdb->track,fileName);
         }
     // Now for FileIndexes
-    fileName = mdbObjFindValue(mdbFile,"fileIndex");
+    if (fileName && endsWith(fileName,".bam")) // Special to fill in missing .bam.bai's
+        {
+        safef(buf,sizeof(buf),"%s.bai",fileName);
+        fileName = buf;
+        }
+    else
+        fileName = mdbObjFindValue(mdbFile,"fileIndex");
     if (fileName != NULL)
         {
         // Verify existance first
@@ -377,7 +613,10 @@ while(mdbList)
             if (found) // if already found then need two mdbObjs (assertable but then this is metadata)
                 oneFile->mdb = mdbObjClone(mdbFile);  // Do we really need to clone this?
             else
+                {
                 oneFile->mdb = mdbFile;
+                slAddHead(&mdbFiles,mdbFile);
+                }
             found = TRUE;
             }
         else if (debug)
@@ -405,7 +644,7 @@ if (debug)
     //membersForAll_t* membersForAll = membersForAllSubGroupsGet(tdb,cart);
 
 // Now update all files with their sortable fields and sort the list
-sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb);
+sortOrder_t *sortOrder = fileSortOrderGet(cart,tdb,mdbFiles);
 if (sortOrder != NULL)
     {
     // Fill in and sort fileList
@@ -418,126 +657,116 @@ jsIncludeFile("ajax.js",NULL);
 // standard preamble
 filesDownloadsPreamble(db,tdb);
 
-// Table class=sortable
-int columnCount = 0;
-int restrictedColumn = 0;
-printf("<TABLE class='sortable' style='border: 2px outset #006600;'>\n");
-printf("<THEAD class='sortable'>\n");
-printf("<TR class='sortable' valign='bottom'>\n");
-printf("<TD align='center' valign='center'>&nbsp;");
-int filesCount = slCount(fileList);
-if (filesCount > 5)
-    printf("<i>%d files</i>",filesCount);    //puts("<FONT class='subCBcount'></font>"); // Use this style when filterboxes are up and running
-//if (sortOrder) // NOTE: This could be done to preserve sort order   FIXME: However hgFileUi would need form OR changes would need to be ajaxed over AND hgsid would be needed.
-//    printf("<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE=\"%s\">",sortOrder->htmlId, sortOrder->sortOrder);
-printf("</TD>\n");
-columnCount++;
+// Print table
+filesPrintTable(db,tdb,fileList,sortOrder);
 
-// Now the columns
-int curOrder = 0;
-if (sortOrder)
+//fileDbFree(&fileList); // Why bother on this very long running cgi?
+}
+
+int fileSearchResults(char *db, struct sqlConnection *conn, struct slPair *varValPairs, char *fileType)
+// Prints list of files in downloads directories matching mdb search terms. Returns count
+{
+struct sqlConnection *connLocal = conn;
+if (conn == NULL)
+    connLocal = hAllocConn(db);
+struct mdbObj *mdbList = mdbObjRepeatedSearch(connLocal,varValPairs,FALSE,TRUE);
+if (conn == NULL)
+    hFreeConn(&connLocal);
+if (slCount(mdbList) == 0)
     {
-    curOrder = sortOrder->count;
-    for(ix=0;ix<sortOrder->count;ix++)
-        {
-        printf("<TH class='sortable sort%d%s' %snowrap>%s</TH>\n",
-            sortOrder->order[ix],(sortOrder->forward[ix]?"":" sortRev"),
-            (sameString("fileSize",sortOrder->column[ix])?"abbr='use' ":""),
-            sortOrder->title[ix]); // keeing track of sortOrder
-        columnCount++;
-        if (sameWord(sortOrder->column[ix],"dateUnrestricted"))
-            restrictedColumn = columnCount;
-        }
+    printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
+    return 0;
     }
-//#define INCLUDE_FILENAMES
-#ifndef INCLUDE_FILENAMES
-else
-#endif///defn INCLUDE_FILENAMES
+
+// Now sort mdbObjs so that composites will stay together and lookup of files will be most efficient
+mdbObjsSortOnVars(&mdbList, "composite");
+
+// Verify file existance and make fileList of those found
+struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
+struct mdbObj *mdbFiles = NULL; // Will caontain a list of mdbs for the found files
+while(mdbList)
     {
-    printf("<TH class='sortable sort%d' nowrap>File Name</TH>\n",++curOrder);
-    columnCount++;
-    }
-printf("<TH class='sortable sort%d' align='left' nowrap>Additional Details</TH>\n",++curOrder);
-columnCount++;
-printf("</TR></THEAD>\n");
-
-// Now the files...
-printf("<TBODY class='sortable sorting'>\n"); // 'sorting' is a fib but it conveniently greys the list till the table is initialized.
-for(oneFile = fileList;oneFile!= NULL;oneFile=oneFile->next)
-    {
-    char *field = NULL;
-
-    printf("<TR valign='top'>");   // TODO: BUILD IN THE CLASSES TO ALLOW FILTERBOXES TO WORK!!!
-
-    // Download button
-    printf("<TD>");
-    printf("<A HREF='http://%s/goldenPath/%s/%s/%s/%s' title='Download %s ...' TARGET=ucscDownloads>",
-                hDownloadsServer(),db,ENCODE_DCC_DOWNLOADS, tdb->track, oneFile->fileName, oneFile->fileName);
-    printf("<input type='button' value='Download'>");
-    printf("</a></TD>\n");
-
-    // Each of the pulled out mdb vars
-    if (sortOrder)
+    boolean found = FALSE;
+    struct mdbObj *mdbFile = slPopHead(&mdbList);
+    char *composite = mdbObjFindValue(mdbFile,"composite");
+    if (composite != NULL)
         {
-        for(ix=0;ix<sortOrder->count;ix++)
+        // First for FileName
+        char *fileName = mdbObjFindValue(mdbFile,"fileName");
+        if (fileName != NULL)
             {
-            if (sameString("fileSize",sortOrder->column[ix]))
+            oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, composite, fileName);
+            if (oneFile)
                 {
-                char niceNumber[128];
-                sprintWithGreekByte(niceNumber, sizeof(niceNumber), oneFile->fileSize);
-                field = oneFile->sortFields[sortOrder->order[ix] - 1];
-                printf("<TD abbr='%s' align='right' nowrap>%s</td>",field,niceNumber);
+                //warn("%s == %s",fileType,oneFile->fileType);
+                if (isEmpty(fileType) || sameWord(fileType,"Any")
+                || (oneFile->fileType && sameWord(fileType,oneFile->fileType)))
+                    {
+                    slAddHead(&fileList,oneFile);
+                    oneFile->mdb = mdbFile;
+                    slAddHead(&mdbFiles,mdbFile);
+                    found = TRUE;
+                    continue;
+                    }
                 }
-            else
+                else
+                    fileDbFree(&oneFile);
+            }
+        // Now for FileIndexes
+        fileName = mdbObjFindValue(mdbFile,"fileIndex");
+        if (fileName != NULL)
+            {
+           // Verify existance first
+            oneFile = fileDbGet(db, ENCODE_DCC_DOWNLOADS, composite, fileName);
+            if (oneFile)
                 {
-                field = oneFile->sortFields[sortOrder->order[ix] - 1];
-                printf("<TD align='center' nowrap>%s</td>",field?field:" &nbsp;");
-                if (!sameString("fileType",sortOrder->column[ix]))
-                    mdbObjRemoveVars(oneFile->mdb,sortOrder->column[ix]); // Remove this from mdb now so that it isn't displayed in "extras'
+                //warn("%s == %s",fileType,oneFile->fileType);
+                if (isEmpty(fileType) || sameWord(fileType,"Any")
+                || (oneFile->fileType && sameWord(fileType,oneFile->fileType)))
+                   {
+                    slAddHead(&fileList,oneFile);
+                    if (found) // if already found then need two mdbObjs (assertable but then this is metadata)
+                        oneFile->mdb = mdbObjClone(mdbFile);  // Do we really need to clone this?
+                    else
+                        {
+                        oneFile->mdb = mdbFile;
+                        slAddHead(&mdbFiles,mdbFile);
+                        }
+                    found = TRUE;
+                    continue;
+                    }
+                else
+                    fileDbFree(&oneFile);
                 }
             }
         }
-#ifndef INCLUDE_FILENAMES
-    else
-#endif///ndef INCLUDE_FILENAMES
-        { // fileName
-        printf("<TD nowrap>%s",oneFile->fileName);
-        //// FIXME: " The "..." encapsulation could be rebuilt so it could be called here
-        //printf("&nbsp;<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",true,true);' title='Show metadata details...'>...</A>",
-        //    oneFile->mdb->obj,oneFile->mdb->obj);
-        //printf("<DIV id='div_%s_meta' style='display:none;'></div></td>",oneFile->mdb->obj);
-        }
-
-    // Extras  grant=Bernstein; lab=Broad; dataType=ChipSeq; setType=exp; control=std;
-    mdbObjRemoveVars(oneFile->mdb,"fileName fileIndex composite project"); // Remove this from mdb now so that it isn't displayed in "extras'
-    mdbObjReorderVars(oneFile->mdb,"grant lab dataType cell treatment antibody protocol replicate view",FALSE); // Bring to front
-    mdbObjReorderVars(oneFile->mdb,"subId submittedDataVersion dateResubmitted dataVersion setType inputType controlId tableName",TRUE); // Send to back
-    field = mdbObjVarValPairsAsLine(oneFile->mdb,TRUE);
-    printf("<TD nowrap>%s</td>",field?field:" &nbsp;");
-
-    printf("</TR>\n");
+    if (!found)
+        mdbObjsFree(&mdbFile);
+    }
+if (slCount(fileList) == 0)
+    {
+    printf("<DIV id='filesFound'><BR>No files found.<BR></DIV><BR>\n");
+    return 0;  // No files so nothing to do.
     }
 
-printf("</TBODY><TFOOT class='bgLevel1'>\n");
-printf("<TR valign='top'>");
+// TODO Could sort on varValPairs by creating a sortOrder struct of them
+//// Now update all files with their sortable fields and sort the list
+sortOrder_t *sortOrder = fileSortOrderGet(NULL,NULL,mdbFiles); // No cart, no tdb
+if (sortOrder != NULL)
+    {
+    // Fill in and sort fileList
+    fileDbSortList(&fileList,sortOrder);
+    }
 
-// Restriction policy link in first column?
-if (restrictedColumn == 1)
-    printf("<TH colspan=%d><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A></TH>", (columnCount - restrictedColumn),ENCODE_DATA_RELEASE_POLICY);
+mdbObjRemoveVars(mdbFiles,"tableName"); // Remove this from mdb now so that it isn't displayed in "extras'
 
-printf("<TD colspan=%d>&nbsp;&nbsp;&nbsp;&nbsp;",(restrictedColumn > 1 ? (restrictedColumn - 1) : columnCount));
+//jsIncludeFile("hui.js",NULL);
+//jsIncludeFile("ajax.js",NULL);
 
-// Total
-if (filesCount > 5)
-    printf("<i>%d files</i>\n",filesCount);
+// Print table
+int filesCount = filesPrintTable(db,NULL,fileList,sortOrder);
 
-// Restriction policy link in later column?
-if (restrictedColumn > 1)
-    printf("</TD><TH colspan=%d align='left'><A HREF='%s' TARGET=BLANK style='font-size:.9em;'>Restriction Policy</A>", columnCount,ENCODE_DATA_RELEASE_POLICY);
-
-printf("</TD></TR>\n");
-printf("</TFOOT></TABLE><BR>\n");
-
-// Free mem?
+//fileDbFree(&fileList); // Why bother on this very long running cgi?
+return filesCount;
 }
 

@@ -2192,8 +2192,17 @@ struct hash *newSettings = hashVarLine(line, lineIx);
 struct hashCookie hc = hashFirst(newSettings);
 struct hashEl *hel = NULL;
 
+/* there is a memory leak in this business because these values in the
+ * existing settings hash were maybe cloned strings and if they get replaced
+ * those previous strings are leaking.  We are not fixing that memory
+ * leak because it is way way down in hashFreeEl and that guy doesn't
+ * know anything about the values in a hash.  We can't even fix it here
+ * because there may be existing strings that are going to be replaced
+ * that actually belong to some other structure.
+ */
 while ((hel = hashNext(&hc)) != NULL)
     ctAddToSettings(track, hel->name, hel->val);
+freeHash(&newSettings);
 
 struct trackDb *tdb = track->tdb;
 struct hash *hash = tdb->settingsHash;
@@ -2203,19 +2212,24 @@ if (hash == NULL) // make sure we have a settings hash
 char *val;
 if ((val = hashFindVal(hash, "name")) != NULL)
     {
+    freeMem(tdb->shortLabel);  // already set by customTrackTdbDefault()
     if (*val)  /* limit shortLabel to 128 characters to avoid problems */
         tdb->shortLabel = cloneStringZ(val,128);
     else
         tdb->shortLabel = cloneString("My Track");
     stripChar(tdb->shortLabel,'"');	/*	no quotes please	*/
     stripChar(tdb->shortLabel,'\'');	/*	no quotes please	*/
+    freeMem(tdb->table);  // already set by customTrackTdbDefault()
     tdb->table = customTrackTableFromLabel(tdb->shortLabel);
+    freeMem(tdb->track);  // already set by customTrackTdbDefault()
     tdb->track = cloneString(tdb->table);
+    freeMem(tdb->longLabel);  // already set by customTrackTdbDefault()
     /* also use name for description, if not specified */
     tdb->longLabel = cloneString(tdb->shortLabel);
     }
 if ((val = hashFindVal(hash, "description")) != NULL)
     {
+    freeMem(tdb->longLabel);  // already set by customTrackTdbDefault() or name
     if (*val)
         tdb->longLabel = cloneString(val);
     else
@@ -2246,6 +2260,7 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
         {
 	readInGulp(val, &track->tdb->html, NULL);
         track->htmlFile = cloneString(val);
+	freeMem(val);
         }
     }
 if ((val = hashFindVal(hash, "chromosomes")) != NULL)
@@ -2305,11 +2320,17 @@ if ((val = hashFindVal(hash, "useScore")) != NULL)
 if ((val = hashFindVal(hash, "priority")) != NULL)
     tdb->priority = atof(val);
 if ((val = hashFindVal(hash, "color")) != NULL)
-    parseRgb(cloneString(val), lineIx, 
-            &tdb->colorR, &tdb->colorG, &tdb->colorB);
+    {
+    char *c = cloneString(val);
+    parseRgb(c, lineIx, &tdb->colorR, &tdb->colorG, &tdb->colorB);
+    freeMem(c);
+    }
 if ((val = hashFindVal(hash, "altColor")) != NULL)
-    parseRgb(cloneString(val), lineIx, 
-            &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+    {
+    char *c = cloneString(val);
+    parseRgb(c, lineIx, &tdb->altColorR, &tdb->altColorG, &tdb->altColorB);
+    freeMem(c);
+    }
 else
     {
     /* If they don't explicitly set the alt color make it a lighter version
@@ -2797,6 +2818,49 @@ if (url)
     }
 }
 
+static void freeCustomTrack(struct customTrack **pTrack)
+{
+if (NULL == pTrack)
+    return;
+struct customTrack *track = *pTrack;
+if (NULL == track)
+    return;
+struct trackDb *tdb = track->tdb;
+freeMem(tdb->shortLabel);
+freeMem(tdb->longLabel);
+freeMem(tdb->table);
+freeMem(tdb->track);
+freeMem(tdb->grp);
+freeMem(tdb->type);
+freeMem(tdb->settings);
+if (tdb->restrictList)
+    {
+    freeMem(tdb->restrictList[0]);
+    freeMem(tdb->restrictList);
+    }
+hashFree(&tdb->settingsHash);
+hashFree(&tdb->overrides);
+hashFree(&tdb->extras);
+freeMem(tdb);
+freeMem(track->genomeDb);
+if (track->bedList)
+    bedFreeList(&track->bedList);
+freeMem(track->dbTableName);
+freeMem(track->dbTrackType);
+freeMem(track->dbStderrFile);
+freeMem(track->wigFile);
+freeMem(track->wibFile);
+freeMem(track->wigAscii);
+freeMem(track->htmlFile);
+if (track->gffHelper)
+    gffFileFree(&track->gffHelper);
+if (track->bbiFile)
+    bbiFileClose(&track->bbiFile);
+freeMem(track->groupName);
+freeMem(track->networkErrMsg);
+freez(pTrack);
+}
+
 void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotLive,
 				boolean *retGotExpired)
 /* Test existence of custom track fileName.  If it exists, parse it just 
@@ -2804,7 +2868,7 @@ void customFactoryTestExistence(char *genomeDb, char *fileName, boolean *retGotL
  * they are alive or have expired.  If they are live, touch them to keep 
  * them active. */
 {
-struct customTrack *trackList = NULL, *track = NULL;
+boolean trackNotFound = TRUE;
 char *line = NULL;
 struct sqlConnection *ctConn = NULL;
 boolean dbTrack = ctDbUseAll();
@@ -2828,6 +2892,7 @@ if (dbTrack)
 /* Loop through this once for each track. */
 while ((line = customPpNextReal(cpp)) != NULL)
     {
+    struct customTrack *track = NULL;
     boolean isLive = TRUE;
     /* Parse out track line and save it in track var.
      * First time through make up track var from thin air
@@ -2839,7 +2904,7 @@ while ((line = customPpNextReal(cpp)) != NULL)
         {
 	track = trackLineToTrack(genomeDb, line, cpp->fileStack->lineIx);
         }
-    else if (trackList == NULL)
+    else if (trackNotFound)
 	/* In this case we handle simple files with a single track
 	 * and no track line. */
         {
@@ -2905,9 +2970,11 @@ while ((line = customPpNextReal(cpp)) != NULL)
 	if (retGotExpired)
 	    *retGotExpired = TRUE;
 	}
-    slAddHead(&trackList, track);
+    freeCustomTrack(&track);
+    trackNotFound = FALSE;
     }
 customPpFree(&cpp);
+freez(&cpp);
 hFreeConn(&ctConn);
 }
 

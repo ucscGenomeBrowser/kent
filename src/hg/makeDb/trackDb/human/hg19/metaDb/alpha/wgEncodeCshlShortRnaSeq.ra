@@ -1,3 +1,8 @@
+metaObject wgEncodeCshlShortRnaSeq
+objType composite
+composite wgEncodeCshlShortRnaSeq
+geoSeriesAccession GSE24565
+
 metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
 cell GM12878
@@ -9,6 +14,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam
+geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 localization cell
@@ -29,6 +35,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw.bigWig
+geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 localization cell
@@ -49,6 +56,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw.bigWig
+geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 localization cell
@@ -88,6 +96,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605625
 grant Gingeras
 lab CSHL
 localization cell
@@ -109,6 +118,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam
+geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -129,6 +139,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw.bigWig
+geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -149,6 +160,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw.bigWig
+geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -188,6 +200,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605627
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -209,6 +222,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam
+geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -229,6 +243,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw.bigWig
+geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -249,6 +264,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw.bigWig
+geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -288,6 +304,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605633
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -309,6 +326,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCshlShortRnaSeqK562CellShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam
+geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 localization cell
@@ -329,6 +347,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw.bigWig
+geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 localization cell
@@ -349,6 +368,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw.bigWig
+geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 localization cell
@@ -388,6 +408,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605630
 grant Gingeras
 lab CSHL
 localization cell
@@ -409,6 +430,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam
+geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -429,6 +451,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw.bigWig
+geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -449,6 +472,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw.bigWig
+geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -488,6 +512,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605632
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -509,6 +534,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam
+geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -529,6 +555,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw.bigWig
+geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -549,6 +576,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw.bigWig
+geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -588,6 +616,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605629
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -609,6 +638,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam
+geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -629,6 +659,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw.bigWig
+geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -649,6 +680,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw.bigWig
+geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -688,6 +720,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605628
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -709,6 +742,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam
+geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -729,6 +763,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw.bigWig
+geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -749,6 +784,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw.bigWig
+geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -788,6 +824,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605634
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -809,6 +846,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam
+geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -829,6 +867,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw.bigWig
+geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -849,6 +888,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw.bigWig
+geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -888,6 +928,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605635
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -909,6 +950,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam
+geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 localization polysome
@@ -929,6 +971,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw.bigWig
+geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 localization polysome
@@ -949,6 +992,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw.bigWig
+geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 localization polysome
@@ -988,6 +1032,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605631
 grant Gingeras
 lab CSHL
 localization polysome
@@ -1008,6 +1053,7 @@ dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellShortTransfrags.shortFrags.gz
+geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 localization cell
@@ -1029,6 +1075,7 @@ dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileIndex wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam.bai
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam
+geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 localization cell
@@ -1049,6 +1096,7 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw.bigWig
+geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 localization cell
@@ -1069,6 +1117,7 @@ dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw.bigWig
+geoSampleAccession GSM605626
 grant Gingeras
 lab CSHL
 localization cell
@@ -1098,4 +1147,4 @@ rnaExtract shortTotal
 subId 535
 view RawData
 
-# MAGIC: 1881054664
+# MAGIC: 586072770

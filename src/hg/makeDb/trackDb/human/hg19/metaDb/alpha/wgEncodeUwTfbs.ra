@@ -2016,48 +2016,6 @@ subId 1283
 tableName wgEncodeUwTfbsBjInputStdRawRep1
 view RawSignal
 
-metaObject wgEncodeUwTfbsBjtertCtcfStdRawDataRep1
-objType file
-antibody CTCF
-cell BJ
-composite wgEncodeUwTfbs
-controlId BJ/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-20
-dateUnrestricted 2010-06-20
-fileName wgEncodeUwTfbsBjtertCtcfStdRawDataRep1.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 517
-view RawData
-
-metaObject wgEncodeUwTfbsBjtertCtcfStdRawDataRep2
-objType file
-antibody CTCF
-cell BJ
-composite wgEncodeUwTfbs
-controlId BJ/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-20
-dateUnrestricted 2010-06-19
-fileName wgEncodeUwTfbsBjtertCtcfStdRawDataRep2.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 516
-view RawData
-
 metaObject wgEncodeUwTfbsCaco2CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -11543,4 +11501,4 @@ subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: -1430034959
+# MAGIC: 1189110349
