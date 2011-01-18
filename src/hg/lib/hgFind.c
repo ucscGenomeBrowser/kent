@@ -2720,7 +2720,7 @@ if (isEmpty(term))
     return(FALSE);
 
 if (isNotEmpty(hfs->searchDescription))
-    truncatef(buf, sizeof(buf), hfs->searchDescription);
+    truncatef(buf, sizeof(buf), "%s", hfs->searchDescription);
 else
     safef(buf, sizeof(buf), "%s", hfs->searchTable);
 description = cloneString(buf);
