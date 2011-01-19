@@ -58,7 +58,7 @@ track wgEncodeBroadHistone
 compositeTrack on
 superTrack wgEncodeHistoneSuper dense
 shortLabel Broad Histone
-longLabel ChIP-seq from ENCODE/Broad Institute
+longLabel Histone Modifications by ChIP-seq from ENCODE/Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHDFa=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTBL=Osteobl
