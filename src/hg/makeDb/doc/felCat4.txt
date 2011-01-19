@@ -1577,6 +1577,7 @@ done
 
 #########################################################################
 # Phylogenetic tree from 6-way (DONE  2010-12-16 - Chin)
+#  re-run with phast.2010-12-30 (DONE 2011-01-19 - Chin) 
 #       We need one tree for all chroms
 
     # use the
@@ -1602,27 +1603,31 @@ done
     "select * from nscanGene;" \
         | cut -f 2-20 > nscanGene.gp
     wc -l nscanGene.gp
-    # 28723 nscanGene.gp
+    # 18804 nscanGene.gp
     # make sure no redundent gene name
     cat nscanGene.gp  | awk '{print $1}' | sort | uniq | wc -l
-    #  28723
+    # 18804
 
     genePredSingleCover nscanGene.gp stdout | sort > nscanGeneNR.gp
     wc -l nscanGeneNR.gp
-    #  28723 nscanGeneNR.gp
-
+    #  18804 nscanGeneNR.gp
+    
+    ssh memk
     mkdir /hive/data/genomes/felCat4/bed/multiz6way/4d/run
     cd /hive/data/genomes/felCat4/bed/multiz6way/4d/run
     mkdir ../mfa
 
 
-# whole chrom mafs version, using new version of 
-# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
-#       mjhubisz at gmail.com
+    # whole chrom mafs version, using new version of 
+    # uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+    #       mjhubisz at gmail.com
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+
 
     cat << '_EOF_' > 4d.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set r = "/hive/data/genomes/felCat4/bed/multiz6way"
 set c = $1
 set infile = $r/mafSplit/$2
@@ -1635,7 +1640,7 @@ sed "s/\t$c\t/\tfelCat4.$c\t/g" $c.gp.tmp > $c.gp
 
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
-    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
+    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
     $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
     $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
 else
@@ -1660,23 +1665,23 @@ rm -f $c.gp.tmp $c.gp $c.maf $c.ss
 '_EOF_'
     # << happy emacs
 
-    ssh swarm
+    # 8g on swarm is still not enough, run it on memk.
+    # chrA1 need  10+ cd ../GB
+    ssh memk
     cd /hive/data/genomes/felCat4/bed/multiz6way/4d/run
 
     gensub2 maf.list single template stdout | tac > jobList
-    para create jobList
+    para -ram=8g create jobList
     para try ... check ... push ... etc
     para time
-    # Checking finished jobs
-    # Completed: 19 of 20 jobs
-    # Crashed: 1 jobs
-    # error while processing chrA1:
-    # FATAL ERROR: out of memory.
-    # msa_view: misc.c:389: smalloc: Assertion `0' failed.
+    # Completed: 20 of 20 jobs
+    # CPU time in finished jobs:   852s      14.20m     0.24h    0.01d  0.000 y
+    # IO & Wait Time:              114s       1.90m     0.03h    0.00d  0.000 y
+    # Average job time:             48s       0.80m     0.01h    0.00d
+    # Longest finished job:        133s       2.22m     0.04h    0.00d
+    # Submission to last job:      515s       8.58m     0.14h    0.01d
 
-    # run chrA1 by itself with 2010-04-06:
-    ./4d0406.csh chrA1 chrA1.maf ../mfa/chrA1.mfa > chrA1.log 2>&1
-
+    
     # combine mfa files
     ssh hgwdev
     cd /hive/data/genomes/felCat4/bed/multiz6way/4d
@@ -1689,15 +1694,25 @@ rm -f $c.gp.tmp $c.gp $c.maf $c.ss
 
     #want comma-less species.list 
     # again, use 2010-04-06 version
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/msa_view \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
         --aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
         > 4d.all.mfa
 
-    # fix order in case it helps:
-    # ((felCat4 (canFam2 ailMel1),(hg19 mm9) monDom5)))
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    # >felCat4
+    # >canFam2
+    # >ailMel1
+    # >hg19
+    # >mm9
+    # >monDom5
+
+    # tree-commas.nh 
+    # (((felCat4,(canFam2,ailMel1)),(hg19,mm9)),monDom5)
 
     # use phyloFit to create tree model (output is phyloFit.mod)
-    /cluster/bin/phast.build/cornellCVS/phast.2010-04-06/bin/phyloFit \
+    time nice -n +19 \
+      /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
         --EM --precision MED --msa-format FASTA --subst-mod REV \
         --tree ../tree-commas.nh 4d.all.mfa
     # Reading alignment from 4d.all.mfa ...
@@ -1706,6 +1721,8 @@ rm -f $c.gp.tmp $c.gp $c.maf $c.ss
     # Fitting tree model to 4d.all.mfa using REV ...
     # Writing model to phyloFit.mod ...
     # Done.
+    # 
+    # real    0m2.879s
 
 ############################################################################
 # LIFTOVER TO FelCat3 (DONE - 2010-08-23 - Chin )
