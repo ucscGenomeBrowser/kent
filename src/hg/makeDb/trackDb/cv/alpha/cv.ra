@@ -6875,6 +6875,11 @@ tag bow10
 type mapAlgorithm
 description bowtie v0.10.0
 
+term bow125
+tag bow125
+type mapAlgorithm
+description bowtie v0.12.5 Provisional
+
 term BB1
 tag BB1
 type mapAlgorithm
@@ -7929,6 +7934,17 @@ description Applied Biosystems SOLiD System 2.0
 #grantInst:    The name of the institution where the grant is administered from.
 #projectName:
 #organism:     human or mouse
+
+term BioChain
+tag BioChain
+type lab
+label BioChain
+description Provisional
+labInst BioChain 
+labPi 
+labPiFull 
+grantPi 
+organism human
 
 term Broad
 tag Broad
