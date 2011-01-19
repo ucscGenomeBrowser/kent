@@ -139,7 +139,6 @@ if (newContents->stringSize != contentLength)
     ++numUpdates;
 if (optionExists("hardcore") && newContents->stringSize != contentLength)  // almost never used
     {
-    struct sqlConnection *conn = hConnectCentral();
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
 	errAbort("Uh, why is newContents (%d) longer than original (%d)??",
@@ -155,7 +154,6 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
 	    contentLength, newContents->stringSize);
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
-    hDisconnectCentral(&conn);
     }
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
