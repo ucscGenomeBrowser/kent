@@ -248,4 +248,5 @@ include wgEncodeGencodeV5.ra alpha
 include wgEncodeRikenCage.ra
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra
+include wgEncodeCshlShortRnaSeq.ra beta,public
+include wgEncodeCshlShortRnaSeq.new.ra alpha

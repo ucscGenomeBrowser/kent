@@ -1,0 +1,2125 @@
+track wgEncodeCshlShortRnaSeq
+compositeTrack on
+shortLabel CSHL Sm RNA-seq
+longLabel Small RNA-seq from ENCODE/Cold Spring Harbor Lab
+group expression
+#subGroup1 view Views Transfrags=TransFrags PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments 
+subGroup1 view Views Transfrags=TransFrags PlusRawSignal=Plus_Raw_Signal MinusRawSignal=Minus_Raw_Signal Alignments=Alignments 
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) AG04450=AG04450 A549=A549 BJ=BJ HeLaS3=HeLaS3 HepG2=HepG2 HUVEC=HUVEC MCF7=MCF-7 NHEK=NHEK prostate=Prostate SKNSHRA=SKFix
+subGroup3 localization Localization cell=Whole_Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
+subGroup4 rnaExtract RnaExtract shortTotal=ShortRNA
+subGroup5 rep Replicate rep0=0 rep1=1 rep2=2 rep3=3 rep4=4
+dimensions dimensionY=localization dimensionX=cellType 
+sortOrder cellType=+ localization=+ view=+ 
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+superTrack wgEncodeRnaSeqSuper dense
+
+    track wgEncodeCshlShortRnaSeqViewAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility hide 
+    subTrack wgEncodeCshlShortRnaSeq
+    type bam
+    pairEndsByName on
+    showNames on
+    bamColorMode off
+    bamGrayMode aliQual
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+
+        track wgEncodeCshlShortRnaSeqK562ChromatinShortAln
+        subTrack wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 chrm sm A
+        longLabel K562 chromatin small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep0
+        type bam
+        color 46,0,184
+        ## subId=1405 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqProstateCellTotalAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel Pros cell sm A
+        longLabel Prostate whole cell small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=prostate localization=cell rnaExtract=shortTotal rep=rep0
+        type bam
+        # subId=1837 dateSubmitted=2010-06-30
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12 cell sm A
+        longLabel GM12878 whole cell small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep0
+        type bam
+        color 153,38,0
+        # subId=1403 dateSubmitted=2010-06-14
+
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12 cyto sm A
+        longLabel GM12878 cytosol small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bam
+        color 153,38,0
+        # subId=1404 dateSubmitted=2010-06-14
+
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 cyto sm A
+        longLabel K562 cytosol small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bam
+        color 46,0,184
+        # subId=1406 dateSubmitted=2010-06-14
+
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nucl sm A
+        longLabel K562 nucleus small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bam
+        color 46,0,184
+        # subId=1407 dateSubmitted=2010-06-14
+
+
+        track wgEncodeCshlShortRnaSeqK562NucleolusShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nlos sm A
+        longLabel K562 nucleolus small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep0
+        type bam
+        color 46,0,184
+        # subId=1408 dateSubmitted=2010-06-14
+
+
+        track wgEncodeCshlShortRnaSeqK562CellShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 cell sm A
+        longLabel K562 whole cell small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=K562 localization=cell rnaExtract=shortTotal rep=rep0
+        type bam
+        color 46,0,184
+        # subId=1409 dateSubmitted=2010-06-14
+
+
+        track wgEncodeCshlShortRnaSeqK562PolysomeShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 psom sm A
+        longLabel K562 polysome small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=shortTotal rep=rep0
+        type bam
+        color 46,0,184
+        # subId=1410 dateSubmitted=2010-06-14
+
+
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nplm sm A
+        longLabel K562 nucleoplasm small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep0
+        type bam
+        color 46,0,184
+        # subId=1411 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12 nucl sm A
+        longLabel GM12878 nucleus small RNA-seq Alignments from ENCODE/CSHL
+        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bam
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel BJ cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in BJ cell)
+        subGroups view=Alignments cellType=BJ localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3293 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel BJ cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in BJ cell)
+        subGroups view=Alignments cellType=BJ localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3294 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000003929
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in K562 cell)
+        subGroups view=Alignments cellType=K562 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3363 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003841
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12878 nucleus shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in GM12878 nucleus)
+        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=3338 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 cytosol shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in K562 cytosol)
+        subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3298 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12878 nucleus shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in GM12878 nucleus)
+        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=3308 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12878 cytosol shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in GM12878 cytosol)
+        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=3307 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12878 cytosol shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in GM12878 cytosol)
+        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=3305 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12878 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in GM12878 cell)
+        subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=3304 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel GM12878 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in GM12878 cell)
+        subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=3302 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nucleus shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in K562 nucleus)
+        subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3301 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nucleus shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in K562 nucleus)
+        subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3299 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 cytosol shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in K562 cytosol)
+        subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3297 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in K562 cell)
+        subGroups view=Alignments cellType=K562 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3296 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000004000
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel NHEK nucleus shortTotal Aln 3
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in NHEK nucleus)
+        subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep3
+        type bam
+        origAssembly hg19
+        color 179,0,134
+        # subId=3380 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003989
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel MCF-7 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in MCF-7 cell)
+        subGroups view=Alignments cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3353 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003985
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel SK-N-SH_RA cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in SK-N-SH_RA cell)
+        subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3377 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003981
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel SK-N-SH_RA cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in SK-N-SH_RA cell)
+        subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3376 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003977
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel NHEK cytosol shortTotal Aln 4
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in NHEK cytosol)
+        subGroups view=Alignments cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep4
+        type bam
+        origAssembly hg19
+        color 179,0,134
+        # subId=3374 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003973
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel NHEK cytosol shortTotal Aln 3
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in NHEK cytosol)
+        subGroups view=Alignments cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep3
+        type bam
+        origAssembly hg19
+        color 179,0,134
+        # subId=3373 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003969
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel NHEK nucleus shortTotal Aln 4
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in NHEK nucleus)
+        subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep4
+        type bam
+        origAssembly hg19
+        color 179,0,134
+        # subId=3375 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003965
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel NHEK cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in NHEK cell)
+        subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 179,0,134
+        # subId=3371 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003961
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel NHEK cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in NHEK cell)
+        subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 179,0,134
+        # subId=3372 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003957
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel MCF-7 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in MCF-7 cell)
+        subGroups view=Alignments cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3370 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003953
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nucleoplasm shortTotal Aln 4
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in K562 nucleoplasm)
+        subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep4
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3369 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003949
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nucleoplasm shortTotal Aln 3
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in K562 nucleoplasm)
+        subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep3
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3368 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003945
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nucleolus shortTotal Aln 4
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in K562 nucleolus)
+        subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep4
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3367 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003941
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 nucleolus shortTotal Aln 3
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in K562 nucleolus)
+        subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep3
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3366 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003937
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 chromatin shortTotal Aln 4
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in K562 chromatin)
+        subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep4
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3365 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003933
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel K562 chromatin shortTotal Aln 3
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in K562 chromatin)
+        subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep3
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=3364 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003925
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HUVEC nucleus shortTotal Aln 3
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in HUVEC nucleus)
+        subGroups view=Alignments cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep3
+        type bam
+        origAssembly hg19
+        color 224,75,0
+        # subId=3362 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003921
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HUVEC cytosol shortTotal Aln 4
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in HUVEC cytosol)
+        subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep4
+        type bam
+        origAssembly hg19
+        color 224,75,0
+        # subId=3361 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003917
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HUVEC cytosol shortTotal Aln 3
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in HUVEC cytosol)
+        subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep3
+        type bam
+        origAssembly hg19
+        color 224,75,0
+        # subId=3360 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003913
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HUVEC cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HUVEC cell)
+        subGroups view=Alignments cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 224,75,0
+        # subId=3359 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003909
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HUVEC cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HUVEC cell)
+        subGroups view=Alignments cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 224,75,0
+        # subId=3358 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003905
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 nucleus shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 nucleus)
+        subGroups view=Alignments cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3357 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003901
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 nucleus shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 nucleus)
+        subGroups view=Alignments cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3356 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003897
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 cytosol shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 cytosol)
+        subGroups view=Alignments cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3355 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003893
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 cytosol shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 cytosol)
+        subGroups view=Alignments cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3354 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003889
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 cell)
+        subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3351 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003885
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HepG2 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 cell)
+        subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3350 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003881
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HeLa-S3 nucleus shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HeLa-S3 nucleus)
+        subGroups view=Alignments cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 0,119,158
+        # subId=3349 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003877
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HeLa-S3 cytosol shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HeLa-S3 cytosol)
+        subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 0,119,158
+        # subId=3347 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003873
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HeLa-S3 nucleus shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HeLa-S3 nucleus)
+        subGroups view=Alignments cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 0,119,158
+        # subId=3348 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003869
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HeLa-S3 cytosol shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HeLa-S3 cytosol)
+        subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 0,119,158
+        # subId=3346 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003865
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HeLa-S3 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HeLa-S3 cell)
+        subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 0,119,158
+        # subId=3345 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003861
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HeLa-S3 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HeLa-S3 cell)
+        subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 0,119,158
+        # subId=3344 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003857
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel H1-hESC nucleus shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in H1-hESC nucleus)
+        subGroups view=Alignments cellType=H1hESC localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 0,107,27
+        # subId=3343 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003853
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel H1-hESC cytosol shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in H1-hESC cytosol)
+        subGroups view=Alignments cellType=H1hESC localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 0,107,27
+        # subId=3342 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003849
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel H1-hESC cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in H1-hESC cell)
+        subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        color 0,107,27
+        # subId=3341 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003845
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel H1-hESC cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in H1-hESC cell)
+        subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        color 0,107,27
+        # subId=3340 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003837
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel AG04450 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in AG04450 cell)
+        subGroups view=Alignments cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3336 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003833
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel AG04450 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in AG04450 cell)
+        subGroups view=Alignments cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3335 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel HUVEC nucleus shortTotal Aln 4
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in HUVEC nucleus)
+        subGroups view=Alignments cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep4
+        type bam
+        origAssembly hg19
+        color 224,75,0
+        # subId=3295 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000003829
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel A549 cell shortTotal Aln 2
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in A549 cell)
+        subGroups view=Alignments cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3334 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003825
+        parent wgEncodeCshlShortRnaSeqViewAlignments off
+        shortLabel A549 cell shortTotal Aln 1
+        longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in A549 cell)
+        subGroups view=Alignments cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3333 dateSubmitted=2011-01-19
+
+    track wgEncodeCshlShortRnaSeqView3MinusRawSignal
+    shortLabel Minus Raw Signal
+    view MinusRawSignal
+    visibility full 
+    subTrack wgEncodeCshlShortRnaSeq
+    viewLimits 0:500
+    #minLimit 0
+    #maxLimit 5059134
+    autoScale on
+    transformFunc NONE
+    windowingFunction mean
+    maxHeightPixels 100:24:16
+
+        track wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
+        subTrack wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel K562 chrm sm -
+        longLabel K562 chromatin small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 3291154.000000
+        color 46,0,184
+        ## subId=1405 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel Pros cell sm -
+        longLabel Prostate whole cell small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=prostate localization=cell rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 1843044.000000
+        # subId=1837 dateSubmitted=2010-06-30
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel GM12 cell sm -
+        longLabel GM12878 whole cell small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 3480402.000000
+        color 153,38,0
+        # subId=1403 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel GM12 cyto sm -
+        longLabel GM12878 cytosol small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 197684.000000
+        color 153,38,0
+        # subId=1404 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel K562 cyto sm -
+        longLabel K562 cytosol small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 3846063.000000
+        color 46,0,184
+        # subId=1406 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel K562 nucl sm -
+        longLabel K562 nucleus small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 773305.000000
+        color 46,0,184
+        # subId=1407 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel K562 nlos sm -
+        longLabel K562 nucleolus small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 1097360.000000
+        color 46,0,184
+        # subId=1408 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
+        shortLabel K562 cell sm -
+        longLabel K562 whole cell small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 734700.000000
+        color 46,0,184
+        # subId=1409 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel K562 psom sm -
+        longLabel K562 polysome small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=K562 localization=polysome rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 192904.000000
+        color 46,0,184
+        # subId=1410 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel K562 nplm sm -
+        longLabel K562 nucleoplasm small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 1593871.000000
+        color 46,0,184
+        # subId=1411 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
+        shortLabel GM12 nucl sm -
+        longLabel GM12878 nucleus small RNA-seq Minus  raw signal from ENCODE/CSHL
+        subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 4933762.000000
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel BJ cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in BJ cell)
+        subGroups view=MinusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1923500.000000
+        origAssembly hg19
+        # subId=3293 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel BJ cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in BJ cell)
+        subGroups view=MinusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 5947156.000000
+        origAssembly hg19
+        # subId=3294 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000003931
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in K562 cell)
+        subGroups view=MinusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2003121.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3363 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003843
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 nucleus shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in GM12878 nucleus)
+        subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 9536975.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3338 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 cytosol shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in K562 cytosol)
+        subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3546408.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3298 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 nucleus shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in GM12878 nucleus)
+        subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 4227276.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3308 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 cytosol shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in GM12878 cytosol)
+        subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 4319529.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3307 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 cytosol shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in GM12878 cytosol)
+        subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 5676517.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3305 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in GM12878 cell)
+        subGroups view=MinusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 4146497.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3304 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in GM12878 cell)
+        subGroups view=MinusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3646991.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3302 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep2
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 nucleus shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in K562 nucleus)
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2051665.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3301 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 nucleus shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in K562 nucleus)
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2509548.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3299 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 cytosol shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in K562 cytosol)
+        subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2803742.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3297 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep1
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in K562 cell)
+        subGroups view=MinusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1822368.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3296 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000004002
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel NHEK nucleus shortTotal MinusRaw 3
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in NHEK nucleus)
+        subGroups view=MinusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 4703154.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3380 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003991
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel MCF-7 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in MCF-7 cell)
+        subGroups view=MinusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 620692.000000
+        origAssembly hg19
+        # subId=3353 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003987
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel SK-N-SH_RA cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in SK-N-SH_RA cell)
+        subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3559664.000000
+        origAssembly hg19
+        # subId=3377 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003983
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel SK-N-SH_RA cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in SK-N-SH_RA cell)
+        subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3043844.000000
+        origAssembly hg19
+        # subId=3376 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003979
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel NHEK cytosol shortTotal MinusRaw 4
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in NHEK cytosol)
+        subGroups view=MinusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 2890950.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3374 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003975
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel NHEK cytosol shortTotal MinusRaw 3
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in NHEK cytosol)
+        subGroups view=MinusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 3782447.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3373 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003971
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel NHEK nucleus shortTotal MinusRaw 4
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in NHEK nucleus)
+        subGroups view=MinusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 8210747.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3375 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003967
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel NHEK cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in NHEK cell)
+        subGroups view=MinusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2150370.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3371 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003963
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel NHEK cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in NHEK cell)
+        subGroups view=MinusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1465668.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3372 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003959
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel MCF-7 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in MCF-7 cell)
+        subGroups view=MinusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1184608.000000
+        origAssembly hg19
+        # subId=3370 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003955
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 nucleoplasm shortTotal MinusRaw 4
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleoplasm)
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 3143187.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3369 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003951
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 nucleoplasm shortTotal MinusRaw 3
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleoplasm)
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 2388836.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3368 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003947
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 nucleolus shortTotal MinusRaw 4
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleolus)
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 941876.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3367 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003943
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 nucleolus shortTotal MinusRaw 3
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleolus)
+        subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 939926.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3366 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003939
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 chromatin shortTotal MinusRaw 4
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in K562 chromatin)
+        subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 671800.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3365 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003935
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel K562 chromatin shortTotal MinusRaw 3
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in K562 chromatin)
+        subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 1152525.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3364 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003927
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HUVEC nucleus shortTotal MinusRaw 3
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in HUVEC nucleus)
+        subGroups view=MinusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 3801872.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3362 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003923
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HUVEC cytosol shortTotal MinusRaw 4
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in HUVEC cytosol)
+        subGroups view=MinusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 2161085.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3361 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003919
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HUVEC cytosol shortTotal MinusRaw 3
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in HUVEC cytosol)
+        subGroups view=MinusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 656964.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3360 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003915
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HUVEC cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HUVEC cell)
+        subGroups view=MinusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3671413.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3359 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003911
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HUVEC cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HUVEC cell)
+        subGroups view=MinusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 9282113.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3358 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003907
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 nucleus shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 nucleus)
+        subGroups view=MinusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1005346.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3357 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003903
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 nucleus shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 nucleus)
+        subGroups view=MinusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1568039.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3356 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003899
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 cytosol shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cytosol)
+        subGroups view=MinusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2304483.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3355 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003895
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 cytosol shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cytosol)
+        subGroups view=MinusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1902102.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3354 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003891
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cell)
+        subGroups view=MinusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1321262.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3351 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003887
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HepG2 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cell)
+        subGroups view=MinusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1206534.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3350 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003883
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HeLa-S3 nucleus shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 nucleus)
+        subGroups view=MinusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 7836018.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3349 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003879
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HeLa-S3 cytosol shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cytosol)
+        subGroups view=MinusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2337266.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3347 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003875
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HeLa-S3 nucleus shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 nucleus)
+        subGroups view=MinusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 9209262.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3348 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003871
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HeLa-S3 cytosol shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cytosol)
+        subGroups view=MinusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3180380.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3346 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003867
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HeLa-S3 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cell)
+        subGroups view=MinusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2126399.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3345 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003863
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HeLa-S3 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cell)
+        subGroups view=MinusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2422335.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3344 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003859
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel H1-hESC nucleus shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC nucleus)
+        subGroups view=MinusRawSignal cellType=H1hESC localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 5206543.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3343 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003855
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel H1-hESC cytosol shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cytosol)
+        subGroups view=MinusRawSignal cellType=H1hESC localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 8090327.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3342 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003851
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel H1-hESC cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cell)
+        subGroups view=MinusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 13772296.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3341 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003847
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel H1-hESC cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in H1-hESC cell)
+        subGroups view=MinusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 15677126.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3340 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003839
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel AG04450 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in AG04450 cell)
+        subGroups view=MinusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2108017.000000
+        origAssembly hg19
+        # subId=3336 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003835
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel AG04450 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in AG04450 cell)
+        subGroups view=MinusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1741127.000000
+        origAssembly hg19
+        # subId=3335 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep4
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel HUVEC nucleus shortTotal MinusRaw 4
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in HUVEC nucleus)
+        subGroups view=MinusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 1938277.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3295 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000003831
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel A549 cell shortTotal MinusRaw 2
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in A549 cell)
+        subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1785282.000000
+        origAssembly hg19
+        # subId=3334 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003827
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel A549 cell shortTotal MinusRaw 1
+        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in A549 cell)
+        subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 2036815.000000
+        origAssembly hg19
+        # subId=3333 dateSubmitted=2011-01-19
+
+    track wgEncodeCshlShortRnaSeqView2PlusRawSignal
+    shortLabel Plus Raw Signal
+    view PlusRawSignal
+    visibility full 
+    subTrack wgEncodeCshlShortRnaSeq
+    viewLimits 0:500
+    #minLimit 0
+    #maxLimit 5059134
+    autoScale on
+    transformFunc NONE
+    windowingFunction mean
+    maxHeightPixels 100:24:16
+
+        track wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
+        subTrack wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel K562 chrm sm +
+        longLabel K562 chromatin small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 4650292.000000
+        color 46,0,184
+        # subId=1405 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel Pros cell sm +
+        longLabel Prostate whole cell small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=prostate localization=cell rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 2318106.000000
+        # subId=1837 dateSubmitted=2010-06-30
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel GM12 cell sm +
+        longLabel GM12878 whole cell small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 4323744.000000
+        color 153,38,0
+        # subId=1403 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel GM12 cyto sm +
+        longLabel GM12878 cytosol small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 345681.000000
+        color 153,38,0
+        # subId=1404 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel K562 cyto sm +
+        longLabel K562 cytosol small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 3846308.000000
+        color 46,0,184
+        # subId=1406 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel K562 nucl sm +
+        longLabel K562 nucleus small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 314909.000000
+        color 46,0,184
+        # subId=1407 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel K562 nlos sm +
+        longLabel K562 nucleolus small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 901616.000000
+        color 46,0,184
+        # subId=1408 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel K562 cell sm +
+        longLabel K562 whole cell small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 11325753.000000
+        color 46,0,184
+        # subId=1409 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel K562 psom sm +
+        longLabel K562 polysome small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=K562 localization=polysome rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 20832.000000
+        color 46,0,184
+        # subId=1410 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel K562 nplm sm +
+        longLabel K562 nucleoplasm small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 4636209.000000
+        color 46,0,184
+        # subId=1411 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
+        shortLabel GM12 nucl sm +
+        longLabel GM12878 nucleus small RNA-seq Plus  raw signal from ENCODE/CSHL
+        subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bigWig 1.000000 643513.000000
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
+
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel BJ cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in BJ cell)
+        subGroups view=PlusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 6896581.000000
+        origAssembly hg19
+        # subId=3293 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel BJ cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in BJ cell)
+        subGroups view=PlusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3537517.000000
+        origAssembly hg19
+        # subId=3294 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000003930
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in K562 cell)
+        subGroups view=PlusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1897902.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3363 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003842
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel GM12878 nucleus shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in GM12878 nucleus)
+        subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 647158.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3338 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 cytosol shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in K562 cytosol)
+        subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3541956.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3298 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel GM12878 nucleus shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in GM12878 nucleus)
+        subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 805250.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3308 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel GM12878 cytosol shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in GM12878 cytosol)
+        subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 4329828.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3307 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel GM12878 cytosol shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in GM12878 cytosol)
+        subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1613718.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3305 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel GM12878 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in GM12878 cell)
+        subGroups view=PlusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1645247.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3304 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel GM12878 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in GM12878 cell)
+        subGroups view=PlusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1639543.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=3302 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep2
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 nucleus shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in K562 nucleus)
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 697712.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3301 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 nucleus shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in K562 nucleus)
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 842350.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3299 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 cytosol shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in K562 cytosol)
+        subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1944213.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3297 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep1
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in K562 cell)
+        subGroups view=PlusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1375703.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3296 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000004001
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel NHEK nucleus shortTotal PlusRaw 3
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in NHEK nucleus)
+        subGroups view=PlusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 5253015.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3380 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003990
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel MCF-7 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in MCF-7 cell)
+        subGroups view=PlusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 9000205.000000
+        origAssembly hg19
+        # subId=3353 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003986
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel SK-N-SH_RA cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in SK-N-SH_RA cell)
+        subGroups view=PlusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 5728503.000000
+        origAssembly hg19
+        # subId=3377 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003982
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel SK-N-SH_RA cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in SK-N-SH_RA cell)
+        subGroups view=PlusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 4415282.000000
+        origAssembly hg19
+        # subId=3376 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003978
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel NHEK cytosol shortTotal PlusRaw 4
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in NHEK cytosol)
+        subGroups view=PlusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 4016030.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3374 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003974
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel NHEK cytosol shortTotal PlusRaw 3
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in NHEK cytosol)
+        subGroups view=PlusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 3745979.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3373 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003970
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel NHEK nucleus shortTotal PlusRaw 4
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in NHEK nucleus)
+        subGroups view=PlusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 4491850.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3375 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003966
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel NHEK cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in NHEK cell)
+        subGroups view=PlusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3814080.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3371 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003962
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel NHEK cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in NHEK cell)
+        subGroups view=PlusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2170371.000000
+        origAssembly hg19
+        color 179,0,134
+        # subId=3372 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003958
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel MCF-7 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in MCF-7 cell)
+        subGroups view=PlusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 13069436.000000
+        origAssembly hg19
+        # subId=3370 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003954
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 nucleoplasm shortTotal PlusRaw 4
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleoplasm)
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 1228583.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3369 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003950
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 nucleoplasm shortTotal PlusRaw 3
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleoplasm)
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 889514.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3368 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003946
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 nucleolus shortTotal PlusRaw 4
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleolus)
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 1283816.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3367 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003942
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 nucleolus shortTotal PlusRaw 3
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleolus)
+        subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 1901395.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3366 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003938
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 chromatin shortTotal PlusRaw 4
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in K562 chromatin)
+        subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 2708620.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3365 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003934
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel K562 chromatin shortTotal PlusRaw 3
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in K562 chromatin)
+        subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 1791016.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=3364 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003926
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HUVEC nucleus shortTotal PlusRaw 3
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in HUVEC nucleus)
+        subGroups view=PlusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 2075138.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3362 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003922
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HUVEC cytosol shortTotal PlusRaw 4
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in HUVEC cytosol)
+        subGroups view=PlusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 2933030.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3361 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003918
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HUVEC cytosol shortTotal PlusRaw 3
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in HUVEC cytosol)
+        subGroups view=PlusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep3
+        type bigWig 1.000000 3443574.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3360 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003914
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HUVEC cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HUVEC cell)
+        subGroups view=PlusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3823736.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3359 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003910
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HUVEC cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HUVEC cell)
+        subGroups view=PlusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1171450.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3358 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003906
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 nucleus shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 nucleus)
+        subGroups view=PlusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 6063104.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3357 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003902
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 nucleus shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 nucleus)
+        subGroups view=PlusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 8130421.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3356 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003898
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 cytosol shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cytosol)
+        subGroups view=PlusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 6777459.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3355 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003894
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 cytosol shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cytosol)
+        subGroups view=PlusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 7864551.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3354 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003890
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cell)
+        subGroups view=PlusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 7019355.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3351 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003886
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HepG2 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cell)
+        subGroups view=PlusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 8320745.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3350 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003882
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HeLa-S3 nucleus shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 nucleus)
+        subGroups view=PlusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 1345811.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3349 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003878
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HeLa-S3 cytosol shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cytosol)
+        subGroups view=PlusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 4564489.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3347 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003874
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HeLa-S3 nucleus shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 nucleus)
+        subGroups view=PlusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 290391.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3348 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003870
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HeLa-S3 cytosol shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cytosol)
+        subGroups view=PlusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3223305.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3346 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003866
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HeLa-S3 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cell)
+        subGroups view=PlusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 8168482.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3345 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003862
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HeLa-S3 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cell)
+        subGroups view=PlusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 3201336.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3344 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003858
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel H1-hESC nucleus shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC nucleus)
+        subGroups view=PlusRawSignal cellType=H1hESC localization=nucleus rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 2851215.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3343 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003854
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel H1-hESC cytosol shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cytosol)
+        subGroups view=PlusRawSignal cellType=H1hESC localization=cytosol rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 448478.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3342 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003850
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel H1-hESC cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cell)
+        subGroups view=PlusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 893102.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3341 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003846
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel H1-hESC cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in H1-hESC cell)
+        subGroups view=PlusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 1064486.000000
+        origAssembly hg19
+        color 0,107,27
+        # subId=3340 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003838
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel AG04450 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in AG04450 cell)
+        subGroups view=PlusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 3606106.000000
+        origAssembly hg19
+        # subId=3336 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003834
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel AG04450 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in AG04450 cell)
+        subGroups view=PlusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 4359540.000000
+        origAssembly hg19
+        # subId=3335 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep4
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel HUVEC nucleus shortTotal PlusRaw 4
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in HUVEC nucleus)
+        subGroups view=PlusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep4
+        type bigWig 1.000000 2777483.000000
+        origAssembly hg19
+        color 224,75,0
+        # subId=3295 dateSubmitted=2011-01-18
+
+        track wgEncodeCshlShortRnaSeq000003830
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel A549 cell shortTotal PlusRaw 2
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in A549 cell)
+        subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
+        type bigWig 1.000000 10015626.000000
+        origAssembly hg19
+        # subId=3334 dateSubmitted=2011-01-19
+
+        track wgEncodeCshlShortRnaSeq000003826
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel A549 cell shortTotal PlusRaw 1
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in A549 cell)
+        subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
+        type bigWig 1.000000 7092993.000000
+        origAssembly hg19
+        # subId=3333 dateSubmitted=2011-01-19
+
+    track wgEncodeCshlShortRnaSeqViewTransfrags
+    shortLabel Transfrags
+    view Transfrags
+    visibility pack 
+    subTrack wgEncodeCshlShortRnaSeq
+    scoreFilter 0
+    scoreFilterLimits 0:1000
+    #noScoreFilter .
+
+        track wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags off
+        shortLabel Pros cell sm T
+        longLabel Prostate whole cell small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=prostate localization=cell rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel GM12 cyto sm T
+        longLabel GM12878 cytosol small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 153,38,0
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel GM12 nucl sm T
+        longLabel GM12878 nucleus small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 153,38,0
+        # subId=1965 dateSubmitted=2010-07-20
+        
+        #This file was suspect and we are not going to display it until
+        #we get confirmation from the lab to do so
+        #track wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags
+        #parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        #shortLabel GM12 cell sm T
+        #longLabel GM12878 whole cell small RNA-seq Transfrags from ENCODE/CSHL
+        #subGroups view=Transfrags cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep0
+        #type bed 6 +
+        #color 153,38,0
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel K562 chrm sm T
+        longLabel K562 chromatin small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel K562 cyto sm T
+        longLabel K562 cytosol small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel K562 nucl sm T
+        longLabel K562 nucleus small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel K562 nlos sm T
+        longLabel K562 nucleolus small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel K562 nplm sm T
+        longLabel K562 nucleoplasm small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel K562 psom sm T
+        longLabel K562 polysome small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=K562 localization=polysome rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562CellShortTransfrags
+        parent wgEncodeCshlShortRnaSeqViewTransfrags on
+        shortLabel K562 cell sm T
+        longLabel K562 whole cell small RNA-seq Transfrags from ENCODE/CSHL
+        subGroups view=Transfrags cellType=K562 localization=cell rnaExtract=shortTotal rep=rep0
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
