@@ -50,7 +50,7 @@ else if (isHubTrack(table))
     {
     struct trackDb *tdb = hashFindVal(fullTrackAndSubtrackHash, table);
     assert(tdb != NULL);
-    fileName = trackDbSetting(tdb, "bigDataUrl");
+    fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
     assert(fileName != NULL);
     }
 else
