@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+</head>
+<body>
+<h2>Description</h2>
+<p>The ENCODE project has revealed the functional elements of segments
+of the human genome in unprecedented detail. However, the ability to
+clearly distinguish transcripts designated for translation into protein
+versus those that serve purely regulatory roles remains elusive. The
+standard means for doing this is to measure the proteins, if any, that
+are produced by transcripts via mass spectrometry-based proteogenomic
+mapping. In this process, chromatographically fractionated peptides are
+fed into a tandem mass spectrometer (MS/MS). The series of fragment
+masses produced in MS/MS create a signature that can then be used to
+identify the peptide from a protein or DNA sequence database. For
+proteogenomic mapping, this identifying spectrum is mapped directly
+back to its most likely encoding locus on a genome sequence[1]. This
+allows the direct verification of protein-encoding transcripts.</p>
+<p>The proteogenomic track displays mass spectrometry data that has
+been matched to the genomic sequence for selected cell lines, using a
+workflow and software specifically designed for this purpose. </p>
+<p>The proteogenomic tracks can be used to identify which parts of the
+genome are translated into proteins, to verify which transcripts
+discovered by ENCODE are protein-encoding, and can also reveal new
+genes and/or splice variants of genes. Of particular interest may be
+its ability to reveal the translation of small ORFs, antisense
+transcripts, or sites annotated as introns that encode proteins
+</p>
+<h2>Display Conventions and Configuration</h2>
+<p>The display for this track show peptide mappings as
+grayscale-colored items where higher scores correspond to
+darker-colored blocks.</p>
+<p>There are several new nonstandard BED fields are added for this
+track. For example, there are three fields provided to assess the
+veracity of a match. The first is the <i>Raw Score </i> of the
+peptide. As the fields <i> Score </i> actually represents the
+confidence of identification (-log10(EValue)) for the peptide, we are
+providing raw score for that peptide to assess peptide identification
+(Jainab: how can users interpret this score?&nbsp; What constitutes a
+"good" score?). The second is the <i>Rank of the peptide</i> which
+indicates which position this particular peptide match was (those &gt;
+rank 5 are automatically eliminated) for that spectrum (Jainab: the
+word "position" is a bit confusing here.&nbsp; Perhaps more detail
+would help). Since a spectrum can be chimeric, containing more than one
+peptide, it is possible to obtain more than one valid match for the
+spectrum against the genome. A third field <i> Peptide Repeat Count</i>
+indicates how many places in the genome have the same matching peptide
+sequence, i.e. its uniqueness. The method may find a very strong match
+to a given peptide sequence X, but if X is present at three places in
+the genome, then we cannot be sure which of those locations encoded the
+protein observed. </p>
+<p>Another field <i>Precursor M/Z</i> represents the mass over charge
+ratio of the digested peptide before it was further dissociated by mass
+spectrometry. This is a semi unique identifier of the peptide that can
+be used to track its origins. </p>
+<h2>Methods</h2>
+<p>ENCODE cell lines K562 and GM12878 were used for large scale
+proteomic analysis. Cell lines were cultured according to standard
+ENCODE cell culture protocols
+and in-gel digestion was completed according to the standard
+protocol[3]. </p>
+The proteolytic enzyme <i>trypsin</i> was used to digest the proteins
+in order to produce short, MS/MS analyzable peptides. Trypsin is a
+common protease that typically cleaves proteins after R or K. The
+parameter <i>enzyme</i> specifies the restriction enzyme used for
+digestion. Tandem mass spectrometry (RPLC-MS/MS) analysis was then
+performed on an Eksigent Ultra-LTQ Orbitrap system.&nbsp; However, due
+to enzyme inefficiency, it does not always cleave at R or K, so there
+may be peptides that include an uncleaved R/K site. The number of such
+missed cleavages allowed in the search is described by the parameter <i>miscleavages</i>.
+<p>We performed proteogenomic mapping with two miscleavages allowed and
+using whole human genomic sequence (UCSC hg19) via the genome
+fingerprint scanning (GFS) program [2], which uses HMM_Score [4] to
+accurately match MS/MS spectra to their corresponding genome sequences.
+E-values are calculated for all results, which estimate the number of
+results at the given score level which would be expected by random
+chance. The E-values are used to assess the false-positive rate, and
+only those matches falling within the specified 5% FPR rate
+are included in the track. </p>
+<p> See the <a
+ href="../../ENCODE/protocols/general/wgEncodeBroadChipSeq.txt">Protocol
+Document</a> for more details. </p>
+<h2>Credits</h2>
+<p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
+Ahamed, Christopher Maier and Dennis Crenshaw (Giddings Lab). </p>
+<p>Proteomic analysis: Drs. Yanbao Yu and Ling Xie (Xian Lab).</p>
+<h2>References</h2>
+<p>1. Proteogenomic mapping as a complementary method to perform genome
+annotation. Jaffe, J. D., Berg, H. C., &amp; Church, G. M. (2004).
+Proteomics 2004 4(1):59-77.</p>
+<p>2. Genome-based peptide fingerprint scanning. Giddings MC, Shah AA,
+Gesteland RF, Moore MB. Proceedings of the National Academy of Sciences
+of the United States of America 100(1):20-25. </p>
+<p>3. In-gel digestion for mass spectrometric characterization of
+proteins and proteomes. Andrej Shevchenko, Henrik Tomas, Jan Havli ,
+Jesper V Olsen &amp; Matthias Mann. Nature Protocols 1, 2856 - 2860
+(2007).</p>
+<p>4. Incorporating Sequence Information into the Scoring Function: A
+Hidden Markov Model for Improved Peptide Identification . Khatun J,
+Hamlett ED and Giddings, MC. Bioinformatics 2008 24(5):674-681.</p>
+<h2> Data Release Policy </h2>
+<p>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset
+until
+nine months following the release of the dataset. This date is listed
+in
+the <em>Restricted Until</em> column on the track configuration page
+and
+the download page. The full data release policy for ENCODE is available
+<a href="../ENCODE/terms.html" target="_BLANK">here</a>.</p>
+</body>
+</html>

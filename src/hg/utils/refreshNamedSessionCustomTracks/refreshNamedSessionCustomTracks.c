@@ -5,12 +5,14 @@
 #include "options.h"
 #include "hash.h"
 #include "cheapcgi.h"
+#include "hdb.h"
 #include "customTrack.h"
 #include "customFactory.h"
 #include "hui.h"
-#include "hgConfig.h"
-#include <sys/wait.h>
-#include "errCatch.h"
+
+// #include "hgConfig.h"
+// #include <sys/wait.h>
+// #include "errCatch.h"
 
 static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/01/13 17:27:35 angie Exp $";
 
@@ -50,159 +52,8 @@ static struct optionSpec options[] = {
 int CFTEcalls = 0;  // DEBUG REMOVE
 int numUpdates = 0;  // DEBUG REMOVE
 
-struct sqlConnection *unCachedCentralConn()
-/* do not want a cached connection because we will close and fork */
-{
-return sqlConnectRemote( 
- cfgOption("central.host"),
- cfgOption("central.user"    ),
- cfgOption("central.password"),
- cfgOption("central.db")
-);
-}
-
-
-// due to bug in OS, won't work without a handler
-static void handle_SIGCHLD(int sig)
-{
-}
-
-
-void customFactoryTestExistenceCall(char *genomeDb, char *fileName, boolean *retGotLive,
-				boolean *retGotExpired)
-/* Fork and run it to avoid gigabytes of leaked memory */
-{
-
-sigset_t mask;
-sigset_t orig_mask;  
-struct timespec timeout;
-
-// due to bug we have to set up a sigchld handler
-// even though we don't use it.
-struct sigaction act;
-(void)memset (&act, 0, sizeof(act));
-act.sa_handler = handle_SIGCHLD;
-if (sigaction(SIGCHLD, &act, 0)) {
-    perror("sigaction err");
-    return;
-}
-
-sigemptyset (&mask);
-sigaddset (&mask, SIGCHLD);
-
-/* BLOCK to prevent a race condition that loses SIGCHLD events */
-if (sigprocmask(SIG_BLOCK, &mask, &orig_mask) < 0) 
-    {
-    perror ("sigprocmask");
-    return;
-    }
-
-/* This is critical because we are about to fork, 
- * otherwise your output is a mess with weird duplicates */
-fflush(stdout); fflush(stderr);
-
-
-pid_t pid = 0;
-pid = fork();
-if (pid < 0)
-    errnoAbort("refreshNamedSessionCustomTracks can't fork");
-if (pid == 0)
-    {
-
-    /* Put some error catching in so it won't just abort
-     *  and also we don't want to get thrown out to any higher-level catcher */
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-	{
-        if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD in child.
-	    {
-	    perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
-	    }
-	customFactoryTestExistence(genomeDb, fileName, retGotLive, retGotExpired);
-	int retCode = 0;
-	if (*retGotLive)
-	    retCode |= 1;
-	if (*retGotExpired)
-	    retCode |= 2;
-
-	exit(retCode);
-	}
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	{
-	verbose(1, "%s", errCatch->message->string);
-	}
-    errCatchFree(&errCatch);
-    exit(4);   
-
-    }
-else
-    {
-    int wstat;
-
-    timeout.tv_sec = 180;
-    timeout.tv_nsec = 0;
-
-    while (1)
-	{
-	int sig = sigtimedwait(&mask, NULL, &timeout);
-	int savedErrno = errno;
-
-	if (sig < 0) 
-	    {
-	    if (savedErrno == EINTR) 
-		{
-		/* Interrupted by a signal other than SIGCHLD. */
-                /* An minor improvement would be to subtract the time already consumed before continuing. */
-                verbose(1, "EINTR received, ignoring");
-		fflush(stdout); fflush(stderr);
-		continue;
-		}
-	    else if (savedErrno == EAGAIN) 
-		{
-		verbose(1,"Timed out, killing child pid %d\n", pid);
-		fflush(stdout); fflush(stderr);
-		kill (pid, SIGKILL);
-		//continue;  /* to catch the resulting SIGCHLD ?*/
-		}
-	    else 
-		{
-		perror ("sigtimedwait");
-		fflush(stdout); fflush(stderr);
-		return;
-		}
-	    }
-
-	break;  /* received SIGCHLD */
-	}
-
-    if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD
-	{
-	perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
-	}
-    if (waitpid(pid, &wstat, 0) < 0)
-	{
-	perror("waitpid failed");
-	fflush(stdout); fflush(stderr);
-	return;
-	}
-
-    int retCode = WEXITSTATUS(wstat);
-
-    if (retCode == 4)
-	return;
-    if (retCode & 1)
-	*retGotLive = TRUE;
-    if (retCode & 2)
-	*retGotExpired = TRUE;
-
-    }
-
-}
-
-
-void scanSettingsForCT(char *userName, char *sessionName, // char *contents,
-			int *pLiveCount, int *pExpiredCount)
+static void scanSettingsForCT(char *userName, char *sessionName,
+		int *pLiveCount, int *pExpiredCount, struct sqlConnection *conn)
 /* Parse the CGI-encoded session contents into {var,val} pairs and search
  * for custom tracks.  If found, refresh the custom track.  Parsing code 
  * taken from cartParseOverHash. 
@@ -210,16 +61,12 @@ void scanSettingsForCT(char *userName, char *sessionName, // char *contents,
  * command that will remove those from this session.  We can't just do 
  * the update here because that messes up the caller's query. */
 {
-
-struct sqlConnection *conn = unCachedCentralConn();
-
 char query[512];
 
 safef(query, sizeof(query),
 	  "select contents from %s "
 	  "where userName='%s' and sessionName = '%s'", savedSessionTable, userName, sessionName);
 char *contents = sqlQuickString(conn, query);
-sqlDisconnect(&conn);
 if (!contents)
     return;
 
@@ -228,7 +75,6 @@ struct dyString *newContents = dyStringNew(contentLength+1);
 struct dyString *oneSetting = dyStringNew(contentLength / 4);
 char *contentsToChop = cloneString(contents);
 char *namePt = contentsToChop;
-
 
 verbose(3, "Scanning %s %s\n", userName, sessionName);
 while (isNotEmpty(namePt))
@@ -265,7 +111,7 @@ while (isNotEmpty(namePt))
 	    dyStringAppend(newContents, oneSetting->string);
 	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
 
-	    customFactoryTestExistenceCall(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
+	    customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
 
             //verbose(1,"called CFTE, got live=%d expired=%d\n", thisGotLiveCT, thisGotExpiredCT);  // DEBUG REMOVE
 	    ++CFTEcalls;  // DEBUG REMOVE
@@ -293,7 +139,7 @@ if (newContents->stringSize != contentLength)
     ++numUpdates;
 if (optionExists("hardcore") && newContents->stringSize != contentLength)  // almost never used
     {
-    struct sqlConnection *conn = unCachedCentralConn();
+    struct sqlConnection *conn = hConnectCentral();
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
 	errAbort("Uh, why is newContents (%d) longer than original (%d)??",
@@ -309,7 +155,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
 	    contentLength, newContents->stringSize);
     sqlUpdate(conn, update->string);
     dyStringFree(&update);
-    sqlDisconnect(&conn);
+    hDisconnectCentral(&conn);
     }
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
@@ -332,7 +178,7 @@ void refreshNamedSessionCustomTracks(char *centralDbName)
  * tracks that are referenced by saved sessions. */
 {
 
-struct sqlConnection *conn = unCachedCentralConn();
+struct sqlConnection *conn = hConnectCentral();
 char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
 
@@ -353,7 +199,7 @@ if (atime > 0)
     threshold = now - ((long long)atime * 24 * 60 * 60);
     }
 
-struct sessionInfo *sessionList = NULL, *si;
+struct sessionInfo *sessionList = NULL, *si, *siNext;
 if (sqlTableExists(conn, savedSessionTable))
     {
     struct sqlResult *sr = NULL;
@@ -385,19 +231,13 @@ if (sqlTableExists(conn, savedSessionTable))
     sqlFreeResult(&sr);
     }
 
-sqlDisconnect(&conn);
-
-for (si = sessionList;  si != NULL;  si = si->next)
+for (siNext = NULL, si = sessionList;  si != NULL;  si = siNext)
     {
-    /* put some error catching in so it won't just abort */
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-	scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount);
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	warn("sessionList errCatch: %s", errCatch->message->string);
-    errCatchFree(&errCatch);
+    scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount, conn);
+    siNext = si->next;
+    freeMem(si);
     }
+hDisconnectCentral(&conn);
 
 //DEBUG REMOVE
 verbose(1, "# of updates found: %d\n", numUpdates);
@@ -429,4 +269,3 @@ ret = system(temp);
 
 return ret;
 }
-
