@@ -7275,28 +7275,33 @@ description 4h,100nM Bisphenol A (Myers)
 type treatment
 
 term DEX_100nM
-tag DEXa
+tag DEX100nM
 description 1h,100nM DEX (Myers)
 type treatment
 
+term DEX_100pM
+tag DEX100pM
+description 1h,100pM DEX (Myers)
+type treatment
+
+term DEX_1nM
+tag DEX1nM
+description 1h,1nM DEX (Myers)
+type treatment
+
 term DEX_50nM
-tag DEXb
+tag DEX50nM
 description 1h,50nM DEX (Myers)
 type treatment
 
 term DEX_5nM
-tag DEXc
+tag DEX5nM
 description 1h,5nM DEX (Myers)
 type treatment
 
 term DEX_500pM
-tag DEXd
+tag DEX500pM
 description 1h,500pM DEX (Myers)
-type treatment
-
-term DEX_100pM
-tag DEXe
-description 1h,100pM DEX (Myers)
 type treatment
 
 term DMSO_0.02pct
@@ -7312,6 +7317,11 @@ type treatment
 term DMSO_2.0pct
 tag DMSO20
 description 5d,2% DMSO (Weissman)
+type treatment
+
+term DMSO_4hr
+tag DMSO4hr
+description 4hr DMSO (Myers)
 type treatment
 
 term Estradiol_10nM
