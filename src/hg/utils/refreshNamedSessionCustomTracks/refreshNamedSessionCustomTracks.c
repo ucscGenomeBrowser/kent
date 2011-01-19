@@ -52,158 +52,6 @@ static struct optionSpec options[] = {
 int CFTEcalls = 0;  // DEBUG REMOVE
 int numUpdates = 0;  // DEBUG REMOVE
 
-#ifdef NOT
-struct sqlConnection *unCachedCentralConn()
-/* do not want a cached connection because we will close and fork */
-{
-return sqlConnectRemote( 
- cfgOption("central.host"),
- cfgOption("central.user"    ),
- cfgOption("central.password"),
- cfgOption("central.db")
-);
-}
-
-// due to bug in OS, won't work without a handler
-static void handle_SIGCHLD(int sig)
-{
-}
-
-
-void customFactoryTestExistenceCall(char *genomeDb, char *fileName, boolean *retGotLive,
-				boolean *retGotExpired)
-/* Fork and run it to avoid gigabytes of leaked memory */
-{
-
-sigset_t mask;
-sigset_t orig_mask;  
-struct timespec timeout;
-
-// due to bug we have to set up a sigchld handler
-// even though we don't use it.
-struct sigaction act;
-(void)memset (&act, 0, sizeof(act));
-act.sa_handler = handle_SIGCHLD;
-if (sigaction(SIGCHLD, &act, 0)) {
-    perror("sigaction err");
-    return;
-}
-
-sigemptyset (&mask);
-sigaddset (&mask, SIGCHLD);
-
-/* BLOCK to prevent a race condition that loses SIGCHLD events */
-if (sigprocmask(SIG_BLOCK, &mask, &orig_mask) < 0) 
-    {
-    perror ("sigprocmask");
-    return;
-    }
-
-/* This is critical because we are about to fork, 
- * otherwise your output is a mess with weird duplicates */
-fflush(stdout); fflush(stderr);
-
-
-pid_t pid = 0;
-pid = fork();
-if (pid < 0)
-    errnoAbort("refreshNamedSessionCustomTracks can't fork");
-if (pid == 0)
-    {
-
-    /* Put some error catching in so it won't just abort
-     *  and also we don't want to get thrown out to any higher-level catcher */
-    struct errCatch *errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-	{
-        if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD in child.
-	    {
-	    perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
-	    }
-	customFactoryTestExistence(genomeDb, fileName, retGotLive, retGotExpired);
-	int retCode = 0;
-	if (*retGotLive)
-	    retCode |= 1;
-	if (*retGotExpired)
-	    retCode |= 2;
-
-	exit(retCode);
-	}
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-	{
-	verbose(1, "%s", errCatch->message->string);
-	}
-    errCatchFree(&errCatch);
-    exit(4);   
-
-    }
-else
-    {
-    int wstat;
-
-    timeout.tv_sec = 180;
-    timeout.tv_nsec = 0;
-
-    while (1)
-	{
-	int sig = sigtimedwait(&mask, NULL, &timeout);
-	int savedErrno = errno;
-
-	if (sig < 0) 
-	    {
-	    if (savedErrno == EINTR) 
-		{
-		/* Interrupted by a signal other than SIGCHLD. */
-                /* An minor improvement would be to subtract the time already consumed before continuing. */
-                verbose(1, "EINTR received, ignoring");
-		fflush(stdout); fflush(stderr);
-		continue;
-		}
-	    else if (savedErrno == EAGAIN) 
-		{
-		verbose(1,"Timed out, killing child pid %d\n", pid);
-		fflush(stdout); fflush(stderr);
-		kill (pid, SIGKILL);
-		//continue;  /* to catch the resulting SIGCHLD ?*/
-		}
-	    else 
-		{
-		perror ("sigtimedwait");
-		fflush(stdout); fflush(stderr);
-		return;
-		}
-	    }
-
-	break;  /* received SIGCHLD */
-	}
-
-    if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD
-	{
-	perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
-	}
-    if (waitpid(pid, &wstat, 0) < 0)
-	{
-	perror("waitpid failed");
-	fflush(stdout); fflush(stderr);
-	return;
-	}
-
-    int retCode = WEXITSTATUS(wstat);
-
-    if (retCode == 4)
-	return;
-    if (retCode & 1)
-	*retGotLive = TRUE;
-    if (retCode & 2)
-	*retGotExpired = TRUE;
-
-    }
-
-}
-#endif
-
-
 static void scanSettingsForCT(char *userName, char *sessionName,
 		int *pLiveCount, int *pExpiredCount, struct sqlConnection *conn)
 /* Parse the CGI-encoded session contents into {var,val} pairs and search
@@ -227,7 +75,6 @@ struct dyString *newContents = dyStringNew(contentLength+1);
 struct dyString *oneSetting = dyStringNew(contentLength / 4);
 char *contentsToChop = cloneString(contents);
 char *namePt = contentsToChop;
-
 
 verbose(3, "Scanning %s %s\n", userName, sessionName);
 while (isNotEmpty(namePt))
@@ -422,4 +269,3 @@ ret = system(temp);
 
 return ret;
 }
-
