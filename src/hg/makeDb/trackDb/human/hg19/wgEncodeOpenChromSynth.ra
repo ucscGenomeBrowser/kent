@@ -1,0 +1,113 @@
+# Duke/UT/UNC Open Chromatin Synthesis track (wrangler: Tim)
+# Notes:
+
+track wgEncodeOpenChromSynth
+release alpha
+compositeTrack on
+superTrack wgEncodeDNAseSuper full
+shortLabel Open Chrom Synth
+longLabel Open Chromatin Synthesis by Dnase, FAIRE and ChIP-seq from ENCODE/Duke/UNC/UTA
+group regulation
+subGroup1 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC HEPG2=HepG2 HELA=HeLa-S3 HUVEC=HUVEC K562=K562 NHEK=NHEK
+dimensions dimensionX=cellType
+sortOrder cellType=+
+fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType
+priority 0
+type bed 9 +
+wgEncode 1
+#noInherit on
+itemRgb on
+boxedCfg on
+pValueFilter 0.0
+pValueFilterLimits 0:16
+noScoreFilter .
+#scoreFilter 100  ## Score is all 1000
+#scoreFilterLimits 100:1000
+#scoreMin 600
+## These not working
+##pvalueFilter 0.0
+##pvalueFilterLimits 0:16
+##dnasePvalueFilter 0.0
+##dnasePvalueFilterLimits 0:16
+##fairePvalueFilter 0.0
+##fairePvalueFilterLimits 0:16
+##polIIPvalueFilter 0.0
+##polIIPvalueFilterLimits 0:16
+##ctcfPvalueFilter 0.0
+##ctcfPvalueFilterLimits 0:16
+##cmycPvalueFilter 0.0
+##cmycPvalueFilterLimits 0:16
+dataVersion through the ENCODE Jan 2011 Freeze
+
+        track wgEncodeOpenChromSynthK562Pk
+        release alpha
+        parent wgEncodeOpenChromSynth
+        shortLabel K562 OpChr Syn
+        longLabel K562 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        subGroups cellType=K562
+        type bed 9 +
+        origAssembly hg19
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthGm12878Pk
+        release alpha
+        parent wgEncodeOpenChromSynth
+        shortLabel GM12878 OpChr Syn
+        longLabel GM12878 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        subGroups cellType=GM12878
+        type bed 9 +
+        origAssembly hg19
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthH1hescPk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel H1-hESC OpChr Syn
+        longLabel H1-hESC - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        subGroups cellType=H1hESC
+        type bed 9 +
+        origAssembly hg19
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthHepg2Pk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel HepG2 OpChr Syn
+        longLabel HepG2 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        subGroups cellType=HEPG2
+        type bed 9 +
+        origAssembly hg19
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthHelas3Pk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel HeLa-S3 OpChr Syn
+        longLabel HeLa-S3 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        subGroups cellType=HELA
+        type bed 9 +
+        origAssembly hg19
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthHuvecPk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel HUVEC OpChr Syn
+        longLabel HUVEC - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        subGroups cellType=HUVEC
+        type bed 9 +
+        origAssembly hg19
+        # subId=3273 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromSynthNhekPk
+        release alpha
+        parent wgEncodeOpenChromSynth off
+        shortLabel NHEK OpChr Syn
+        longLabel NHEK - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        subGroups cellType=NHEK
+        type bed 9 +
+        origAssembly hg19
+        # subId=3273 dateSubmitted=2011-01-17
+
