@@ -895,8 +895,16 @@ private
   end
 
   def get_proto_site(url)
-    pastProto = url.index("://") + 3
-    pastSite = url.index("/", pastProto) + 1
+    pastProto = url.index("://")
+    if pastProto == nil
+	return nil
+    end
+    pastProto += 3
+    pastSite = url.index("/", pastProto)
+    if pastProto == nil
+	return nil
+    end
+    pastSite += 1
     return url[0,pastSite]
   end
 

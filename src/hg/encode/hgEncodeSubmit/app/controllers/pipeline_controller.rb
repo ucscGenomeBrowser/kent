@@ -105,7 +105,7 @@ class PipelineController < ApplicationController
         #end
 
 	# new paraFetch method
-	upText = getNewestFileByExtensionIgnoringCase(@project.id, "paraFetchStatus")
+	upName,upText = getNewestFileByExtensionIgnoringCase(@project.id, "paraFetchStatus")
 
         unless upText.blank?
 	  upText = upText.split("\n")
