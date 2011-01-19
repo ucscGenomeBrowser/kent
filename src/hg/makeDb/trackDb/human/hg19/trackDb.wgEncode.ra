@@ -13,6 +13,7 @@ include wgEncodeSydhHistone.ra
 include wgEncodeOpenChromChip.ra
 include wgEncodeOpenChromDnase.ra
 include wgEncodeOpenChromFaire.ra
+include wgEncodeOpenChromSynth.ra
 include wgEncodeDukeAffyExon.ra
 include wgEncodeUwHistone.ra
 
