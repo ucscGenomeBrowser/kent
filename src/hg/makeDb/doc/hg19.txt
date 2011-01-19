@@ -13693,6 +13693,12 @@ wc -l *.fep.bed
 #  384442 hg19.fosEndPairs.fep.bed
 ## 99.6% lifted
 
+## Now we need the sequences from all_fosends to be loaded into the seq table in hg19
+
+mkdir /gbdb/hg19/fosends
+ln -s /gbdb/hg18/fosends/fosEnds.fa /gbdb/hg19/fosEnds.fromHg18.fa 
+hgLoadSeq hg19 /gbdb/hg19/fosends/fosEnds.fromHg18.fa
+
 #############################################################################
 # DECIPHER LIFT FORM HG18 (DONE 2010-12-27, Andy)
 
