@@ -16554,7 +16554,7 @@ antibody STAT3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLaS3/None/Input/IgG-rab
+controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -16576,7 +16576,7 @@ antibody STAT3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLaS3/None/Input/IgG-rab
+controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -16598,7 +16598,7 @@ antibody STAT3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLaS3/None/Input/IgG-rab
+controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -16620,7 +16620,7 @@ antibody STAT3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLaS3/None/Input/IgG-rab
+controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -16641,7 +16641,7 @@ antibody STAT3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLaS3/None/Input/IgG-rab
+controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
@@ -16662,7 +16662,7 @@ antibody STAT3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
-controlId HeLaS3/None/Input/IgG-rab
+controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -34524,4 +34524,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1713959138
+# MAGIC: -1713958868
