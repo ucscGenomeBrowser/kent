@@ -452,6 +452,26 @@ wgEncode 1
         color 179,0,134
         # subId=2120 dateSubmitted=2010-10-09
 
+        track wgEncodeGisRnaPetHelas3CellPapAlnRep2
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel HeLa-S3 cell longPolyA Aln 2
+        longLabel HeLa-S3 whole cell polyA+ RNA PET Alignments Rep 2 from ENCODE/GIS 
+        subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        color 0,119,158
+        # subId=3270 dateSubmitted=2011-01-17
+
+        track wgEncodeGisRnaPetHelas3CellPapAlnRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel HeLa-S3 cell longPolyA Aln 1
+        longLabel HeLa-S3 whole cell polyA+ RNA PET Alignments Rep 1 from ENCODE/GIS 
+        subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        color 0,119,158
+        # subId=3269 dateSubmitted=2011-01-17
+
 # These settings are all copied from Riken Cage I am not sure if they are right
     track wgEncodeGisRnaPetViewMinusRawSig
     release alpha
@@ -665,6 +685,26 @@ wgEncode 1
         type bigWig 1.000000 281517.000000
         color 179,0,134
         # subId=2120 dateSubmitted=2010-10-09
+
+        track wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep2
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel HeLa-S3 cell longPolyA 2
+        longLabel HeLa-S3 whole cell polyA+ RNA PET Minus raw signal Rep 1 from ENCODE/GIS 
+        subGroups view=MinusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 96585.000000
+        color 0,119,158
+        # subId=3270 dateSubmitted=2011-01-17
+
+        track wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel HeLa-S3 cell longPolyA 1
+        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Replicate 1 (longPolyA in HeLa-S3 cell)
+        subGroups view=MinusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 223420.000000
+        color 0,119,158
+        # subId=3269 dateSubmitted=2011-01-17
 
 
 #These settings are all copied from RikeCage, I am not sure if they are right
@@ -881,4 +921,24 @@ wgEncode 1
         type bigWig 1.000000 250705.000000
         color 179,0,134
         # subId=2120 dateSubmitted=2010-10-09
+
+        track wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep2
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel HeLa-S3 cell longPolyA 2
+        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 2 (longPolyA in HeLa-S3 cell)
+        subGroups view=PlusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 269069.000000
+        color 0,119,158
+        # subId=3270 dateSubmitted=2011-01-17
+
+        track wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel HeLa-S3 cell longPolyA 1
+        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 1 (longPolyA in HeLa-S3 cell)
+        subGroups view=PlusRawSig cellType=HeLaS3 localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 429123.000000
+        color 0,119,158
+        # subId=3269 dateSubmitted=2011-01-17
 

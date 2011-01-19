@@ -7,9 +7,6 @@
 # The header for the related .ddf should look like this:
 # files view replicate  cell rnaExtract treatment readyType mapAlgorithm origAssembly labVersion labExpId
 #
-#I am leaving this to Preti to figure out which of these metaData variables below are needed for the ddf.
-#The ones I am expecting are listed above.
-
 
 #files          a list of files that correspond to the metadata in this line
 #view           the view of the data as described below
@@ -31,7 +28,7 @@ lab               HudsonAlpha
 dataType          RnaSeq
 compositeSuffix   HaibRnaSeq
 group             expression
-variables         cell, rnaExtract, treatment
+variables         cell, rnaExtract, treatment, mapAlgorithm, readType
 assembly          hg19
 
 validationSettings validateFiles.bam:mismatches=3
