@@ -504,6 +504,15 @@ class PipelineController < ApplicationController
     return if @upload.blank? && @upurl.blank? && @upftp.blank?
 
     unless @upurl.blank?
+      @protos = ["ftp", "http", "https"]
+      unless @protos.any? {|proto| @upurl.starts_with?(proto+"://") }
+        flash[:error] = "only these protocols are allowed in the url:"
+        @protos.each do 
+	    |proto| 
+	    flash[:error] += (" "+proto) 
+        end
+        return
+      end
       @filename = sanitize_filename(@upurl)
       #TODO add a HEAD would check it exists before starting?
     else
