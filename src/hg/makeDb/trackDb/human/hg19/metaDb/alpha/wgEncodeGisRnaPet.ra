@@ -478,6 +478,192 @@ subId 2114
 tableName wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1
 view PlusRawSig
 
+metaObject wgEncodeGisRnaPetHelas3CellPapAlnRep1
+objType table
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3269
+tableName wgEncodeGisRnaPetHelas3CellPapAlnRep1
+view Alignments
+
+metaObject wgEncodeGisRnaPetHelas3CellPapAlnRep2
+objType table
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3270
+tableName wgEncodeGisRnaPetHelas3CellPapAlnRep2
+view Alignments
+
+metaObject wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep1
+objType file
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3269
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep2
+objType file
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep2.fastq.gz
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3270
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep1
+objType file
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3269
+view FastqRd2
+
+metaObject wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep2
+objType file
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep2.fastq.gz
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3270
+view FastqRd2
+
+metaObject wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep1
+objType table
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep1.bigWig
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3269
+tableName wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep1
+view MinusRawSig
+
+metaObject wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep2
+objType table
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep2.bigWig
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3270
+tableName wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep2
+view MinusRawSig
+
+metaObject wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep1
+objType table
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep1.bigWig
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3269
+tableName wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep1
+view PlusRawSig
+
+metaObject wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep2
+objType table
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep2.bigWig
+grant Gingeras
+lab GIS
+localization cell
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3270
+tableName wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep2
+view PlusRawSig
+
 metaObject wgEncodeGisRnaPetHelas3CytosolPapAlnRep1
 objType table
 cell HeLa-S3
@@ -2318,4 +2504,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSig
 
-# MAGIC: -856695111
+# MAGIC: -118332571

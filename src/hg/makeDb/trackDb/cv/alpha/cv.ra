@@ -3245,7 +3245,7 @@ tag WI38
 type Cell Line
 tier 3
 organism human
-description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct 
+description Embryonic Lung Fibroblast Cells, hTERT immortalized, includes Raf1 construct
 lineage Fibroblast
 karyotype Normal (RAF)
 sex F
@@ -3944,13 +3944,13 @@ term BHLHE40_(NB100-1800)
 tag BHLHE40NB100
 type Antibody
 target BHLHE40
-antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412) 
-targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation. 
-vendorName Novus 
+antibodyDescription Rabbit polyclonal, maps to a region between residues 350 and the C-terminus (residue 412)
+targetDescription This gene encodes a basic helix-loop-helix protein expressed in various tissues. Expression in the chondrocytes is responsive to the addition of Bt2cAMP. The encoded protein is believed to be involved in the control of cell differentiation.
+vendorName Novus
 vendorId NB100-1800
 orderUrl http://www.novusbio.com/DEC1-Antibody-_NB100-1800.html?rr=true
-lab Snyder 
-lots 
+lab Snyder
+lots
 targetId GeneCards:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation missing
@@ -4225,7 +4225,7 @@ lab  Myers
 lots  D1206
 targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation E2F6_H-50(Immunoblot)_Myers:human_E2F6_H-50_validation_Myers.pdf
+validation E2F6_(H-50)(Immunoblot,MassSpec)_Myers:human_E2F6_H-50_validation_Myers.pdf
 
 term EBF
 tag EBF
@@ -4255,6 +4255,81 @@ lots  J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
+
+term eGFP-FOS
+tag eFOS
+type Antibody
+target eGFP-FOS
+antibodyDescription Goat polyclonal 
+targetDescription Fos 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:FOS
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
+validation missing
+
+term eGFP-GATA2
+tag eGATA2
+type Antibody
+target eGFP-GATA2
+antibodyDescription Goat polyclonal 
+targetDescription GATA2 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:GATA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
+validation missing
+
+term eGFP-HDAC8
+tag eHDAC8
+type Antibody
+target eGFP-HDAC8
+antibodyDescription Goat polyclonal 
+targetDescription HDAC8 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:HDAC8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
+validation missing
+
+term eGFP-JunB
+tag eJunB
+type Antibody
+target eGFP-JunB
+antibodyDescription Goat polyclonal 
+targetDescription JunB 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:JUNB
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
+validation missing
+
+term eGFP-JunD
+tag eJunD
+type Antibody
+target eGFP-JunD
+antibodyDescription Goat polyclonal 
+targetDescription JunD 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:JUND
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
+validation missing
 
 term  ELF1_(SC-631)
 tag  ELF1SC631
@@ -4528,6 +4603,21 @@ lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
 validation GATA3_SC-268(Immunoblot)_Myers:human_GATA3-SC268_validation_Myers.pdf
+
+term GCN5
+tag GCN5
+type Antibody
+target GCN5
+antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC) 
+targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4 
+vendorName Laszlo Tora
+vendorId (None)
+orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
+lab Struhl 
+lots 
+targetId GeneCards:KAT2A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
+validation missing
 
 term GR
 tag GR
@@ -5056,12 +5146,12 @@ tag MafFM8194
 type Antibody
 target MafF
 antibodyDescription Rabbit polyclonal. Raised against synthetic peptide corresponding to amino acids 147-163 of human MAFF. The immunizing peptide does not cross-react with other members of the family.
-targetDescription The protein encoded by this gene is a (bZIP) transcription factor that lacks a transactivation domain. It is known to bind the US-2 DNA element in the promoter of the oxytocin receptor (OTR) gene and most likely heterodimerizes with other leucine zipper-containing proteins to enhance expression of the OTR gene during term pregnancy. Can also form homodimers, and since it lacks a transactivation domain, the homodimer may act as a repressor of transcription. May also be involved in the cellular stress response.  
-vendorName Sigma-Aldrich 
+targetDescription The protein encoded by this gene is a (bZIP) transcription factor that lacks a transactivation domain. It is known to bind the US-2 DNA element in the promoter of the oxytocin receptor (OTR) gene and most likely heterodimerizes with other leucine zipper-containing proteins to enhance expression of the OTR gene during term pregnancy. Can also form homodimers, and since it lacks a transactivation domain, the homodimer may act as a repressor of transcription. May also be involved in the cellular stress response.
+vendorName Sigma-Aldrich
 vendorId M8194
 orderUrl http://www.sigmaaldrich.com/
-lab Snyder 
-lots 
+lab Snyder
+lots
 targetId GeneCards:MAFF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFF
 validation missing
@@ -5071,12 +5161,12 @@ tag MafKab50322
 type Antibody
 target MafK
 antibodyDescription Rabbit polyclonal. Raised against synthetic peptide: TTNPKPNKALKVKKEA conjugated to KLH by a C-terminal Cysteine residue linker, corresponding to amino acids 2-17 of Human MAFK
-targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites. 
-vendorName Abcam 
+targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
+vendorName Abcam
 vendorId ab50322
 orderUrl http://www.abcam.com/MAFK-antibody-ab50322.html
-lab Snyder 
-lots 
+lab Snyder
+lots
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
@@ -5086,12 +5176,12 @@ tag MafKsc477
 type Antibody
 target MafK
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin
-targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.  
+targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
 vendorName Santa Cruz Biotech Cat#
 vendorId sc-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
-lab Snyder 
-lots 
+lab Snyder
+lots
 targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
@@ -5676,12 +5766,12 @@ tag SMC3ab9263
 type Antibody
 target SMC3
 antibodyDescription Rabbit polyclonal raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH
-targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex.  The cohesin complex is required for the cohesion of sister chromatids after DNA replication. 
+targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex.  The cohesin complex is required for the cohesion of sister chromatids after DNA replication.
 vendorName Abcam Cat#
 vendorId ab9263
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
-lab Snyder 
-lots 
+lab Snyder
+lots
 targetId GeneCards:SMC3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMC3
 validation missing
@@ -5715,6 +5805,20 @@ targetId SP4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
 validation SP4_V-20(Immunoblot)_Myers:human_SP4_V-20_validation_Myers.pdf
 
+term SPT20
+tag SPT20
+type Antibody
+target SPT20
+antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids) 
+targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail. 
+vendorName Laszlo Tora
+vendorId (None)
+orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
+lab Struhl 
+lots 
+targetId GeneCards:FAM48A
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
+validation missing
 
 term SREBP1
 tag SREBP1
@@ -6134,13 +6238,13 @@ term ZEB1_(SC-25388)
 tag ZEB1SC25388
 type Antibody
 target ZEB1
-antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin. 
-targetDescription This gene encodes a zinc finger transcription factor.  The encoded protein likely plays a role in transcriptional repression of interleukin 2.  Mutations in this gene have ben associated with posterior polymorphous corneal dystrophy-3 and late-onset Fuchs endothelial corneal dystrophy.  Alternatively spliced transcript variants encoding different isoforms have been described. (provided by RefSeq). 
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin.
+targetDescription This gene encodes a zinc finger transcription factor.  The encoded protein likely plays a role in transcriptional repression of interleukin 2.  Mutations in this gene have ben associated with posterior polymorphous corneal dystrophy-3 and late-onset Fuchs endothelial corneal dystrophy.  Alternatively spliced transcript variants encoding different isoforms have been described. (provided by RefSeq).
 vendorName Santa Cruz Biotech Cat#
 vendorId sc-25388
 orderUrl http://www.scbt.com/datasheet-25388-zeb1-h-102-antibody.html
-lab Myers 
-lots D2010 
+lab Myers
+lots D2010
 targetId GeneCards:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
 validation ZEB1_(SC-25388)(Immunoblot,MassSpec)_Myers:human_ZEB1_SC-25388_validation_Myers.pdf
@@ -6149,13 +6253,13 @@ term Znf143_(16618-1-AP)
 tag Znf143166181AP
 type Antibody
 target Znf143
-antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein  
-targetDescription Transcriptional activator. Activates the gene for selenocysteine tRNA (tRNAsec). Binds to the SPH motif of small nuclear RNA (snRNA) gene promoters. Participates to efficient U6 RNA polymerase III transcription via its interaction with CHD8 
+antibodyDescription Rabbit polyclonal against human ZNF143 (amino acids 283-626)-6his fusion protein
+targetDescription Transcriptional activator. Activates the gene for selenocysteine tRNA (tRNAsec). Binds to the SPH motif of small nuclear RNA (snRNA) gene promoters. Participates to efficient U6 RNA polymerase III transcription via its interaction with CHD8
 vendorName Proteintech
 vendorId 16618-1-AP
 orderUrl http://www.ptglab.com/Products/ZNF143-Antibody-16618-1-AP.htm
-lab Snyder 
-lots 
+lab Snyder
+lots
 targetId GeneCards:ZNF143
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF143
 validation missing
@@ -6846,6 +6950,11 @@ tag bow10
 type mapAlgorithm
 description bowtie v0.10.0
 
+term bow125
+tag bow125
+type mapAlgorithm
+description bowtie v0.12.5
+
 term BB1
 tag BB1
 type mapAlgorithm
@@ -7026,8 +7135,14 @@ label Total_RNA
 #term short
 #tag short
 #type rnaExtract
-#description RNA shorter than 200 nt
+#description RNA shorter than 200 nt PROVISIONAL TO RETIRE  (1/20/2011)
 #label (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
+
+term shortPolyA
+tag shortPolyA
+type rnaExtract
+description Rna shorter than 200 nt that is Poly Adenalyated 
+label short_PolyA_RNA
 
 term shortTotal
 tag shortTotal
@@ -7039,7 +7154,8 @@ label short_Total_RNA
 #tag shortDeplRrna
 #type rnaExtract
 #description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
-#Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake
+#Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake PROVISIONAL TO RETIRE
+# 1/19/2011
 
 term longPolyA
 tag pAP
@@ -7235,28 +7351,33 @@ description 4h,100nM Bisphenol A (Myers)
 type treatment
 
 term DEX_100nM
-tag DEXa
+tag DEX100nM
 description 1h,100nM DEX (Myers)
 type treatment
 
+term DEX_100pM
+tag DEX100pM
+description 1h,100pM DEX (Myers)
+type treatment
+
+term DEX_1nM
+tag DEX1nM
+description 1h,1nM DEX (Myers)
+type treatment
+
 term DEX_50nM
-tag DEXb
+tag DEX50nM
 description 1h,50nM DEX (Myers)
 type treatment
 
 term DEX_5nM
-tag DEXc
+tag DEX5nM
 description 1h,5nM DEX (Myers)
 type treatment
 
 term DEX_500pM
-tag DEXd
+tag DEX500pM
 description 1h,500pM DEX (Myers)
-type treatment
-
-term DEX_100pM
-tag DEXe
-description 1h,100pM DEX (Myers) 
 type treatment
 
 term DMSO_0.02pct
@@ -7272,6 +7393,11 @@ type treatment
 term DMSO_2.0pct
 tag DMSO20
 description 5d,2% DMSO (Weissman)
+type treatment
+
+term DMSO_4hr
+tag DMSO4hr
+description 4hr DMSO (Myers)
 type treatment
 
 term Estradiol_10nM
@@ -7307,12 +7433,12 @@ type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder) (Provional)
+description 4h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder) (Provional)
+description 12h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.02pct
@@ -7333,6 +7459,12 @@ type treatment
 term Genistein_100nM_4hr
 tag GEN4h
 description  4h,100nM Genistein   (Myers)
+type treatment
+
+term Hypoxia_LacAcid
+tag HYPOXLAC
+label Hypoxia, Lactic acidosis
+description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
 type treatment
 
 term IFNa30
@@ -7563,6 +7695,12 @@ type dataType
 label Gencode
 description Gencode
 
+term ChiaPet
+tag chiaPet
+type dataType
+label ChIA-pet
+description ChIA-pet 
+
 # TODO: retire this ?  (11/3/10)
 term LongRnaSeq
 tag longRnaSeq
@@ -7612,6 +7750,11 @@ tag NRE
 type dataType
 description Negative Regulatory Elements
 
+term Nucleosome
+tag nucleosome
+type dataType
+description Nucleosome positioning data 
+
 term Proteogenomics
 tag protgeno
 type dataType
@@ -7642,6 +7785,12 @@ tag  ripChip
 type dataType
 label RIP-chip
 description Rna IP measured on microarray
+
+term RipSeq 
+tag  ripSeq  
+type dataType
+label RIP-seq 
+description RNA-seq on RIP-chip data
 
 #This should be retired (12/15/10)
 term ShortRnaSeq
@@ -7883,6 +8032,17 @@ description Applied Biosystems SOLiD System 2.0
 #projectName:
 #organism:     human or mouse
 
+term BioChain
+tag BioChain
+type lab
+label BioChain
+description Provisional
+labInst BioChain 
+labPi 
+labPiFull 
+grantPi 
+organism human
+
 term Broad
 tag Broad
 type lab
@@ -7916,11 +8076,11 @@ labPiFull Roderic Guigo
 grantPi Guigo
 organism human
 
-term GIS-Chia
-tag GIS-Chia
+term GIS(Ruan)
+tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia)
+description Ruan - Genome Institute of Singapore (Chia) 
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8885,6 +9045,14 @@ description Fraction of total cellular RNA selected for by an experiment. This i
 searchable select
 cvDefined yes
 validate cv
+
+term run
+type run
+label Sequencing Run
+description Sequencing run 
+searchable select
+cvDefined yes
+validate none
 
 term seqPlatform
 type typeOfTerm

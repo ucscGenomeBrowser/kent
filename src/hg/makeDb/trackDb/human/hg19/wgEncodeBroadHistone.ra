@@ -41,20 +41,14 @@
 # WCE       #colorScheme2 0,0,0
 
 # track wgEncodeHistoneDownloads
-# table wgEncodeBroadHistone
+####Special just for testing table wgEncodeBroadHistone
 # #compositeTrack on
 # #type bed 3
 # type downloadsOnly
 # superTrack wgEncodeHistoneSuper dense
 # shortLabel Nothing but files
 # longLabel ENCODE Fictitious Histone Modifications by ChIP-Seq (Downloadable Files Only)
-# subGroup1 view Views Peaks=Peaks Signal=Signal
-# subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHDFa=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTBL=Osteobl
-# subGroup3 factor Antibody CTCF=CTCF H2AZ=H2A.Z H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K09me3=H3K9me3 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K79me2=H3K79me2 H4K20me1=H4K20me1 POL2B=Pol2(b) zCTRL=Input_Control
-# dimensions dimensionY=cellType dimensionX=factor
-# sortOrder cellType=+ factor=+ view=+
 # fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-# controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 # group regulation
 # priority 0
 # wgEncode 1
@@ -64,7 +58,7 @@ track wgEncodeBroadHistone
 compositeTrack on
 superTrack wgEncodeHistoneSuper dense
 shortLabel Broad Histone
-longLabel ENCODE Histone Modifications by ChIP-Seq from  Broad Institute
+longLabel Histone Modifications by ChIP-seq from ENCODE/Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHDFa=NHDF-Ad NHEK=NHEK NHLF=NHLF OSTBL=Osteobl
@@ -101,7 +95,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, H1-hESC cells)
+        longLabel H1-hESC, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=H1
         type broadPeak
         origAssembly hg18
@@ -112,7 +106,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878CtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, GM12878 cells)
+        longLabel GM12878, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -122,7 +116,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, GM12878 cells)
+        longLabel GM12878, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -132,7 +126,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, GM12878 cells)
+        longLabel GM12878, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -143,7 +137,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, GM12878 cells)
+        longLabel GM12878, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -154,7 +148,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, GM12878 cells)
+        longLabel GM12878, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -165,7 +159,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, GM12878 cells)
+        longLabel GM12878, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -176,7 +170,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, GM12878 cells)
+        longLabel GM12878, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -187,7 +181,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, GM12878 cells)
+        longLabel GM12878, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -197,7 +191,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, GM12878 cells)
+        longLabel GM12878, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=GM12878
         type broadPeak
         origAssembly hg18
@@ -208,7 +202,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, H1-hESC cells)
+        longLabel H1-hESC, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=H1
         type broadPeak
         origAssembly hg18
@@ -218,7 +212,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, H1-hESC cells)
+        longLabel H1-hESC, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=H1
         type broadPeak
         origAssembly hg19
@@ -228,7 +222,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, H1-hESC cells)
+        longLabel H1-hESC, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=H1
         type broadPeak
         origAssembly hg18
@@ -239,7 +233,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, H1-hESC cells)
+        longLabel H1-hESC, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=H1
         type broadPeak
         origAssembly hg18
@@ -250,7 +244,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1hES H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, H1-hESC cells)
+        longLabel H1-hESC, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=H1
         type broadPeak
         origAssembly hg18
@@ -261,7 +255,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel H1hES H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, H1-hESC cells)
+        longLabel H1-hESC, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=H1
         type broadPeak
         origAssembly hg18
@@ -272,7 +266,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1hES H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, H1-hESC cells)
+        longLabel H1-hESC, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=H1
         type broadPeak
         origAssembly hg18
@@ -282,7 +276,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel H1hES H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, H1-hESC cells)
+        longLabel H1-hESC, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=H1
         type broadPeak
         origAssembly hg18
@@ -293,7 +287,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HMEC cells)
+        longLabel HMEC, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -302,7 +296,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HMEC cells)
+        longLabel HMEC, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -311,7 +305,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HMEC cells)
+        longLabel HMEC, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -321,7 +315,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HMEC cells)
+        longLabel HMEC, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -331,7 +325,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HMEC cells)
+        longLabel HMEC, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -341,7 +335,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HMEC cells)
+        longLabel HMEC, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -351,7 +345,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HMEC cells)
+        longLabel HMEC, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -361,7 +355,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HMEC cells)
+        longLabel HMEC, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -370,7 +364,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HMEC H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HMEC cells)
+        longLabel HMEC, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=HMEC
         type broadPeak
         origAssembly hg18
@@ -380,7 +374,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HSMMtube cells)
+        longLabel HSMMtube, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -389,7 +383,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH2azStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H2A.Z Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, HSMMtube cells)
+        longLabel HSMMtube, H2A.Z - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -399,7 +393,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HSMMtube cells)
+        longLabel HSMMtube, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -408,7 +402,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HSMMtube cells)
+        longLabel HSMMtube, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -418,7 +412,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HSMMtube cells)
+        longLabel HSMMtube, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -428,7 +422,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HSMMtube cells)
+        longLabel HSMMtube, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -438,7 +432,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HSMMtube cells)
+        longLabel HSMMtube, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -448,7 +442,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k79me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K79me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HSMMtube cells)
+        longLabel HSMMtube, H3K79me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79me2 cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -457,7 +451,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HSMMtube cells)
+        longLabel HSMMtube, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -466,7 +460,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMMt H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HSMMtube cells)
+        longLabel HSMMtube, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=HSMMt
         type broadPeak
         origAssembly hg19
@@ -476,7 +470,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HSMM cells)
+        longLabel HSMM, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -485,7 +479,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HSMM cells)
+        longLabel HSMM, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -494,7 +488,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HSMM cells)
+        longLabel HSMM, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -504,7 +498,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HSMM cells)
+        longLabel HSMM, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -514,7 +508,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HSMM cells)
+        longLabel HSMM, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -524,7 +518,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HSMM cells)
+        longLabel HSMM, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -534,7 +528,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HSMM cells)
+        longLabel HSMM, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -544,7 +538,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k79me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K79me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HSMM cells)
+        longLabel HSMM, H3K79me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79me2 cellType=HSMM
         type broadPeak
         origAssembly hg19
@@ -553,7 +547,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HSMM cells)
+        longLabel HSMM, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -562,7 +556,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k9me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H3K9me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, HSMM cells)
+        longLabel HSMM, H3K9me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09me3 cellType=HSMM
         type broadPeak
         origAssembly hg19
@@ -572,7 +566,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HSMM cells)
+        longLabel HSMM, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=HSMM
         type broadPeak
         origAssembly hg18
@@ -582,7 +576,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3CtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HeLa-S3 cells)
+        longLabel HeLa-S3, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -592,7 +586,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -602,7 +596,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -613,7 +607,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -624,7 +618,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -635,7 +629,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k79me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K79me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K79me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79me2 cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -645,7 +639,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -655,7 +649,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HeLa-S3 cells)
+        longLabel HeLa-S3, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -666,7 +660,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3Pol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS Pol2(b) Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), HeLa-S3 cells)
+        longLabel HeLa-S3, Pol2(b) - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=POL2B cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -677,7 +671,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2CtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HepG2 cells)
+        longLabel HepG2, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -687,7 +681,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H2azStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H2A.Z Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, HepG2 cells)
+        longLabel HepG2, H2A.Z - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=HEPG2
         type broadPeak
         origAssembly hg19
@@ -698,7 +692,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HepG2 cells)
+        longLabel HepG2, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -708,7 +702,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HepG2 cells)
+        longLabel HepG2, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -719,7 +713,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HepG2 cells)
+        longLabel HepG2, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -730,7 +724,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HepG2 cells)
+        longLabel HepG2, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -741,7 +735,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HepG2 cells)
+        longLabel HepG2, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -752,7 +746,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k79me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K79me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, HepG2 cells)
+        longLabel HepG2, H3K79me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79me2 cellType=HEPG2
         type broadPeak
         origAssembly hg19
@@ -762,7 +756,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HepG2 cells)
+        longLabel HepG2, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -772,7 +766,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HepG2 H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HepG2 cells)
+        longLabel HepG2, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=HEPG2
         type broadPeak
         origAssembly hg18
@@ -783,7 +777,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, HUVEC cells)
+        longLabel HUVEC, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -793,7 +787,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, HUVEC cells)
+        longLabel HUVEC, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -803,7 +797,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HUVEC cells)
+        longLabel HUVEC, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -814,7 +808,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, HUVEC cells)
+        longLabel HUVEC, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -825,7 +819,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, HUVEC cells)
+        longLabel HUVEC, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -836,7 +830,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, HUVEC cells)
+        longLabel HUVEC, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -847,7 +841,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, HUVEC cells)
+        longLabel HUVEC, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -857,7 +851,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k9me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K9me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1, HUVEC cells)
+        longLabel HUVEC, H3K9me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09me1 cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -868,7 +862,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, HUVEC cells)
+        longLabel HUVEC, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -879,7 +873,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecPol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC Pol2(b) Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), HUVEC cells)
+        longLabel HUVEC, Pol2(b) - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=POL2B cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -890,7 +884,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562CtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, K562 cells)
+        longLabel K562, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=K562
         type broadPeak
         origAssembly hg18
@@ -900,7 +894,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, K562 cells)
+        longLabel K562, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=K562
         type broadPeak
         origAssembly hg18
@@ -910,7 +904,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, K562 cells)
+        longLabel K562, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=K562
         type broadPeak
         origAssembly hg18
@@ -921,7 +915,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, K562 cells)
+        longLabel K562, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=K562
         type broadPeak
         origAssembly hg18
@@ -932,7 +926,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, K562 cells)
+        longLabel K562, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=K562
         type broadPeak
         origAssembly hg18
@@ -943,7 +937,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, K562 cells)
+        longLabel K562, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=K562
         type broadPeak
         origAssembly hg18
@@ -954,7 +948,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks
         shortLabel K562 H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, K562 cells)
+        longLabel K562, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=K562
         type broadPeak
         origAssembly hg18
@@ -965,7 +959,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, K562 cells)
+        longLabel K562, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=K562
         type broadPeak
         origAssembly hg18
@@ -975,7 +969,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k9me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1, K562 cells)
+        longLabel K562, H3K9me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09me1 cellType=K562
         type broadPeak
         origAssembly hg18
@@ -986,7 +980,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, K562 cells)
+        longLabel K562, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=K562
         type broadPeak
         origAssembly hg18
@@ -997,7 +991,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562Pol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 Pol2(b) Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), K562 cells)
+        longLabel K562, Pol2(b) - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=POL2B cellType=K562
         type broadPeak
         origAssembly hg18
@@ -1008,7 +1002,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NH-A cells)
+        longLabel NH-A, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=NHA
         type broadPeak
         origAssembly hg19
@@ -1017,7 +1011,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NH-A cells)
+        longLabel NH-A, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=NHA
         type broadPeak
         origAssembly hg19
@@ -1026,7 +1020,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NH-A cells)
+        longLabel NH-A, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=NHA
         type broadPeak
         origAssembly hg19
@@ -1036,7 +1030,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NH-A cells)
+        longLabel NH-A, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=NHA
         type broadPeak
         origAssembly hg19
@@ -1046,7 +1040,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, NH-A cells)
+        longLabel NH-A, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=NHA
         type broadPeak
         origAssembly hg19
@@ -1056,7 +1050,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NH-A H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NH-A cells)
+        longLabel NH-A, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=NHA
         type broadPeak
         origAssembly hg19
@@ -1066,7 +1060,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NHEK cells)
+        longLabel NHEK, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1076,7 +1070,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NHEK cells)
+        longLabel NHEK, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1086,7 +1080,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NHEK cells)
+        longLabel NHEK, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1097,7 +1091,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NHEK cells)
+        longLabel NHEK, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1108,7 +1102,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, NHEK cells)
+        longLabel NHEK, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1119,7 +1113,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, NHEK cells)
+        longLabel NHEK, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1130,7 +1124,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NHEK cells)
+        longLabel NHEK, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1141,7 +1135,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, NHEK cells)
+        longLabel NHEK, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1151,7 +1145,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k9me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H3K9me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me1, NHEK cells)
+        longLabel NHEK, H3K9me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09me1 cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1162,7 +1156,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, NHEK cells)
+        longLabel NHEK, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1173,7 +1167,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekPol2bStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHEK Pol2(b) Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (Pol2(b), NHEK cells)
+        longLabel NHEK, Pol2(b) - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=POL2B cellType=NHEK
         type broadPeak
         origAssembly hg18
@@ -1184,7 +1178,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NHLF cells)
+        longLabel NHLF, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1193,7 +1187,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NHLF cells)
+        longLabel NHLF, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1202,7 +1196,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NHLF cells)
+        longLabel NHLF, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1212,7 +1206,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NHLF cells)
+        longLabel NHLF, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1222,7 +1216,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, NHLF cells)
+        longLabel NHLF, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1232,7 +1226,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, NHLF cells)
+        longLabel NHLF, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1242,7 +1236,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NHLF cells)
+        longLabel NHLF, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1252,7 +1246,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, NHLF cells)
+        longLabel NHLF, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1261,7 +1255,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH4k20me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHLF H4K20me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H4K20me1, NHLF cells)
+        longLabel NHLF, H4K20me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H4K20me1 cellType=NHLF
         type broadPeak
         origAssembly hg18
@@ -1271,7 +1265,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H2azStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel GM12878 H2A.Z Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, GM12878 cells)
+        longLabel GM12878, H2A.Z - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=GM12878
         type broadPeak
         origAssembly hg19
@@ -1282,7 +1276,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k79me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K79me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, GM12878 cells)
+        longLabel GM12878, H3K79me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79me2 cellType=GM12878
         type broadPeak
         origAssembly hg19
@@ -1292,7 +1286,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k9me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel 12878 H3K9me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, GM12878 cells)
+        longLabel GM12878, H3K9me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09me3 cellType=GM12878
         type broadPeak
         origAssembly hg19
@@ -1303,7 +1297,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HeLaS H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=HELA
         type broadPeak
         origAssembly hg19
@@ -1314,7 +1308,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH2azStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HSMM H2A.Z Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, HSMM cells)
+        longLabel HSMM, H2A.Z - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=HSMM
         type broadPeak
         origAssembly hg19
@@ -1324,7 +1318,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel HUVEC H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, HUVEC cells)
+        longLabel HUVEC, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=HUVEC
         type broadPeak
         origAssembly hg18
@@ -1335,7 +1329,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H2azStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H2A.Z Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, K562 cells)
+        longLabel K562, H2A.Z - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=K562
         type broadPeak
         origAssembly hg19
@@ -1346,7 +1340,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k79me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K79me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K79me2, K562 cells)
+        longLabel K562, H3K79me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K79me2 cellType=K562
         type broadPeak
         origAssembly hg19
@@ -1356,7 +1350,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k9me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel K562 H3K9me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, K562 cells)
+        longLabel K562, H3K9me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09me3 cellType=K562
         type broadPeak
         origAssembly hg19
@@ -1367,7 +1361,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, Osteobl cells)
+        longLabel Osteobl, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=OSTBL
         type broadPeak
         origAssembly hg19
@@ -1376,7 +1370,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH2azStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H2A.Z Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H2A.Z, Osteobl cells)
+        longLabel Osteobl, H2A.Z - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H2AZ cellType=OSTBL
         type broadPeak
         origAssembly hg19
@@ -1386,7 +1380,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, Osteobl cells)
+        longLabel Osteobl, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=OSTBL
         type broadPeak
         origAssembly hg19
@@ -1395,7 +1389,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, Osteobl cells)
+        longLabel Osteobl, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=OSTBL
         type broadPeak
         origAssembly hg19
@@ -1405,7 +1399,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k4me1StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K4me1 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me1, Osteobl cells)
+        longLabel Osteobl, H3K4me1 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me1 cellType=OSTBL
         type broadPeak
         origAssembly hg19
@@ -1415,7 +1409,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, Osteobl cells)
+        longLabel Osteobl, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=OSTBL
         type broadPeak
         origAssembly hg19
@@ -1425,7 +1419,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k9me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel Ostbl H3K9me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9me3, Osteobl cells)
+        longLabel Osteobl, H3K9me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09me3 cellType=OSTBL
         type broadPeak
         origAssembly hg19
@@ -1435,7 +1429,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadCtcfStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa CTCF Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (CTCF, NHDF-Ad cells)
+        longLabel NHDF-Ad, CTCF - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=CTCF cellType=NHDFa
         type broadPeak
         origAssembly hg19
@@ -1444,7 +1438,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k27acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K27ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27ac, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K27ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27ac cellType=NHDFa
         type broadPeak
         origAssembly hg19
@@ -1453,7 +1447,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k27me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K27me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K27me3, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K27me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K27me3 cellType=NHDFa
         type broadPeak
         origAssembly hg19
@@ -1463,7 +1457,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k36me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K36me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K36me3, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K36me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K36me3 cellType=NHDFa
         type broadPeak
         origAssembly hg19
@@ -1473,7 +1467,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k4me2StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K4me2 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me2, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K4me2 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me2 cellType=NHDFa
         type broadPeak
         origAssembly hg19
@@ -1483,7 +1477,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k4me3StdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K4me3 Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K4me3, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K4me3 - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K04me3 cellType=NHDFa
         type broadPeak
         origAssembly hg19
@@ -1493,7 +1487,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k9acStdPk
         parent wgEncodeBroadHistoneViewPeaks off
         shortLabel NHDFa H3K9ac Pk
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Peaks (H3K9ac, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K9ac - Histone Modifications by ChIP-seq Peaks from ENCODE/Broad
         subGroups view=Peaks factor=H3K09ac cellType=NHDFa
         type broadPeak
         origAssembly hg19
@@ -1524,7 +1518,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NHEK cells)
+        longLabel NHEK, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=NHEK
         type bigWig 0.040000 3664.639893
         origAssembly hg18
@@ -1534,7 +1528,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HSMMtube cells)
+        longLabel HSMMtube, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=HSMMt
         type bigWig 0.040000 15984.040039
         origAssembly hg19
@@ -1544,7 +1538,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HepG2 cells)
+        longLabel HepG2, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=HEPG2
         type bigWig 0.040000 5547.879883
         origAssembly hg18
@@ -1555,7 +1549,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NHLF cells)
+        longLabel NHLF, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=NHLF
         type bigWig 0.040000 9652.440430
         origAssembly hg18
@@ -1565,7 +1559,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HSMMtube cells)
+        longLabel HSMMtube, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=HSMMt
         type bigWig 0.040000 44143.320312
         origAssembly hg19
@@ -1575,7 +1569,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HSMM cells)
+        longLabel HSMM, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=HSMM
         type bigWig 0.040000 10200.320312
         origAssembly hg18
@@ -1585,7 +1579,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k9me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K9me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1, NHEK cells)
+        longLabel NHEK, H3K9me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09me1 cellType=NHEK
         type bigWig 0.040000 5266.720215
         origAssembly hg18
@@ -1596,7 +1590,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HUVEC cells)
+        longLabel HUVEC, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=HUVEC
         type bigWig 0.040000 6214.319824
         origAssembly hg18
@@ -1607,7 +1601,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HMEC cells)
+        longLabel HMEC, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=HMEC
         type bigWig 0.040000 10746.120117
         origAssembly hg18
@@ -1617,7 +1611,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HSMM cells)
+        longLabel HSMM, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=HSMM
         type bigWig 0.040000 10213.759766
         origAssembly hg18
@@ -1627,7 +1621,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HUVEC cells)
+        longLabel HUVEC, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=HUVEC
         type bigWig 0.040000 3125.959961
         origAssembly hg18
@@ -1637,7 +1631,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HSMM cells)
+        longLabel HSMM, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=HSMM
         type bigWig 0.040000 10439.959961
         origAssembly hg18
@@ -1646,7 +1640,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=HELA
         type bigWig 0.040000 23354.720703
         origAssembly hg19
@@ -1656,7 +1650,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HUVEC cells)
+        longLabel HUVEC, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=HUVEC
         type bigWig 0.040000 8289.919922
         origAssembly hg18
@@ -1667,7 +1661,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, K562 cells)
+        longLabel K562, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=K562
         type bigWig 0.040000 13314.719727
         origAssembly hg18
@@ -1678,7 +1672,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, NHEK cells)
+        longLabel NHEK, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=NHEK
         type bigWig 0.040000 3108.399902
         origAssembly hg18
@@ -1689,7 +1683,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HUVEC cells)
+        longLabel HUVEC, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=HUVEC
         type bigWig 0.040000 13452.160156
         origAssembly hg18
@@ -1700,7 +1694,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, NHLF cells)
+        longLabel NHLF, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=NHLF
         type bigWig 0.040000 7711.879883
         origAssembly hg18
@@ -1710,7 +1704,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, K562 cells)
+        longLabel K562, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=K562
         type bigWig 0.040000 12717.959961
         origAssembly hg18
@@ -1721,7 +1715,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, K562 cells)
+        longLabel K562, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=K562
         type bigWig 0.040000 8162.640137
         origAssembly hg18
@@ -1731,7 +1725,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HMEC cells)
+        longLabel HMEC, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=HMEC
         type bigWig 0.040000 7841.640137
         origAssembly hg18
@@ -1740,7 +1734,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, NHLF cells)
+        longLabel NHLF, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=NHLF
         type bigWig 0.040000 14138.480469
         origAssembly hg18
@@ -1750,7 +1744,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH2azStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H2A.Z Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, HSMMtube cells)
+        longLabel HSMMtube, H2A.Z - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=HSMMt
         type bigWig 0.040000 16899.519531
         origAssembly hg19
@@ -1760,7 +1754,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, H1-hESC cells)
+        longLabel H1-hESC, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=H1
         type bigWig 0.040000 17840.919922
         origAssembly hg18
@@ -1770,7 +1764,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HepG2 cells)
+        longLabel HepG2, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=HEPG2
         type bigWig 0.040000 4277.000000
         origAssembly hg18
@@ -1781,7 +1775,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NHLF cells)
+        longLabel NHLF, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=NHLF
         type bigWig 0.040000 14121.160156
         origAssembly hg18
@@ -1790,7 +1784,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, NHLF cells)
+        longLabel NHLF, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=NHLF
         type bigWig 0.040000 8105.680176
         origAssembly hg18
@@ -1799,7 +1793,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3CtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HeLa-S3 cells)
+        longLabel HeLa-S3, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=HELA
         type bigWig 0.040000 32444.480469
         origAssembly hg19
@@ -1809,7 +1803,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NHLF cells)
+        longLabel NHLF, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=NHLF
         type bigWig 0.040000 13342.759766
         origAssembly hg18
@@ -1819,7 +1813,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HeLa-S3 cells)
+        longLabel HeLa-S3, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=HELA
         type bigWig 0.040000 25408.839844
         origAssembly hg19
@@ -1830,7 +1824,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, K562 cells)
+        longLabel K562, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=K562
         type bigWig 0.040000 13777.200195
         origAssembly hg18
@@ -1841,7 +1835,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HSMM cells)
+        longLabel HSMM, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=HSMM
         type bigWig 0.040000 9619.360352
         origAssembly hg18
@@ -1851,7 +1845,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, K562 cells)
+        longLabel K562, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=K562
         type bigWig 0.040000 4060.560059
         origAssembly hg18
@@ -1862,7 +1856,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HSMM cells)
+        longLabel HSMM, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=HSMM
         type bigWig 0.040000 13583.440430
         origAssembly hg18
@@ -1872,7 +1866,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HSMMtube cells)
+        longLabel HSMMtube, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=HSMMt
         type bigWig 0.040000 12015.919922
         origAssembly hg19
@@ -1882,7 +1876,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k9me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K9me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, HSMM cells)
+        longLabel HSMM, H3K9me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09me3 cellType=HSMM
         type bigWig 0.040000 53900.359375
         origAssembly hg19
@@ -1892,7 +1886,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HSMM cells)
+        longLabel HSMM, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=HSMM
         type bigWig 0.040000 7472.680176
         origAssembly hg18
@@ -1901,7 +1895,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2ControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HepG2 cells)
+        longLabel HepG2, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=HEPG2
         type bigWig 0.040000 9153.400391
         origAssembly hg18
@@ -1912,7 +1906,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k9me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1, K562 cells)
+        longLabel K562, H3K9me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09me1 cellType=K562
         type bigWig 0.040000 22709.759766
         origAssembly hg18
@@ -1923,7 +1917,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, H1-hESC cells)
+        longLabel H1-hESC, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=H1
         type bigWig 0.040000 10269.200195
         origAssembly hg18
@@ -1934,7 +1928,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HUVEC cells)
+        longLabel HUVEC, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=HUVEC
         type bigWig 0.040000 6577.279785
         origAssembly hg18
@@ -1945,7 +1939,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NHEK cells)
+        longLabel NHEK, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=NHEK
         type bigWig 0.040000 9976.839844
         origAssembly hg18
@@ -1956,7 +1950,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k79me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K79me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HSMMtube cells)
+        longLabel HSMMtube, H3K79me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79me2 cellType=HSMMt
         type bigWig 0.040000 10657.519531
         origAssembly hg19
@@ -1965,7 +1959,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, NHEK cells)
+        longLabel NHEK, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=NHEK
         type bigWig 0.040000 3680.399902
         origAssembly hg18
@@ -1976,7 +1970,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, K562 cells)
+        longLabel K562, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=K562
         type bigWig 0.040000 9564.440430
         origAssembly hg18
@@ -1987,7 +1981,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecPol2bStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC Pol2(b) Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), HUVEC cells)
+        longLabel HUVEC, Pol2(b) - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=POL2B cellType=HUVEC
         type bigWig 0.040000 8296.240234
         origAssembly hg18
@@ -1998,7 +1992,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HSMMtube cells)
+        longLabel HSMMtube, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=HSMMt
         type bigWig 0.040000 16533.359375
         origAssembly hg19
@@ -2008,7 +2002,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k9me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K9me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me1, HUVEC cells)
+        longLabel HUVEC, H3K9me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09me1 cellType=HUVEC
         type bigWig 0.040000 6102.680176
         origAssembly hg18
@@ -2019,7 +2013,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k79me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K79me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HSMM cells)
+        longLabel HSMM, H3K79me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79me2 cellType=HSMM
         type bigWig 0.040000 12545.360352
         origAssembly hg19
@@ -2028,7 +2022,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HUVEC cells)
+        longLabel HUVEC, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=HUVEC
         type bigWig 0.040000 4396.560059
         origAssembly hg18
@@ -2038,7 +2032,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HUVEC cells)
+        longLabel HUVEC, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=HUVEC
         type bigWig 0.040000 5846.080078
         origAssembly hg18
@@ -2049,7 +2043,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NHEK cells)
+        longLabel NHEK, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=NHEK
         type bigWig 0.040000 3975.879883
         origAssembly hg18
@@ -2060,7 +2054,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, H1-hESC cells)
+        longLabel H1-hESC, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=H1
         type bigWig 0.040000 16712.320312
         origAssembly hg18
@@ -2071,7 +2065,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, K562 cells)
+        longLabel K562, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=K562
         type bigWig 0.040000 7340.479980
         origAssembly hg18
@@ -2082,7 +2076,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekPol2bStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK Pol2(b) Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), NHEK cells)
+        longLabel NHEK, Pol2(b) - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=POL2B cellType=NHEK
         type bigWig 0.040000 3405.360107
         origAssembly hg18
@@ -2093,7 +2087,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NHLF cells)
+        longLabel NHLF, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=NHLF
         type bigWig 0.040000 7016.200195
         origAssembly hg18
@@ -2102,7 +2096,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, NHLF cells)
+        longLabel NHLF, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=NHLF
         type bigWig 0.040000 12378.839844
         origAssembly hg18
@@ -2112,7 +2106,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HepG2 cells)
+        longLabel HepG2, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=HEPG2
         type bigWig 0.040000 1918.119995
         origAssembly hg18
@@ -2122,7 +2116,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HMEC cells)
+        longLabel HMEC, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=HMEC
         type bigWig 0.040000 12888.919922
         origAssembly hg18
@@ -2131,7 +2125,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3Pol2bStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS Pol2(b) Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), HeLa-S3 cells)
+        longLabel HeLa-S3, Pol2(b) - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=POL2B cellType=HELA
         type bigWig 0.040000 48100.679688
         origAssembly hg19
@@ -2142,7 +2136,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k79me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K79me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K79me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79me2 cellType=HELA
         type bigWig 0.040000 20610.480469
         origAssembly hg19
@@ -2152,7 +2146,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, H1-hESC cells)
+        longLabel H1-hESC, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=H1
         type bigWig 0.040000 9565.759766
         origAssembly hg18
@@ -2163,7 +2157,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HSMMtube cells)
+        longLabel HSMMtube, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=HSMMt
         type bigWig 0.040000 20191.000000
         origAssembly hg19
@@ -2172,7 +2166,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k79me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K79me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, HepG2 cells)
+        longLabel HepG2, H3K79me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79me2 cellType=HEPG2
         type bigWig 0.040000 14792.160156
         origAssembly hg19
@@ -2182,7 +2176,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, K562 cells)
+        longLabel K562, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=K562
         type bigWig 0.040000 14247.200195
         origAssembly hg18
@@ -2192,7 +2186,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HSMMtube cells)
+        longLabel HSMMtube, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=HSMMt
         type bigWig 0.040000 3866.080078
         origAssembly hg19
@@ -2201,7 +2195,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NHLF cells)
+        longLabel NHLF, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=NHLF
         type bigWig 0.040000 15557.639648
         origAssembly hg18
@@ -2211,7 +2205,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=HELA
         type bigWig 0.040000 25109.240234
         origAssembly hg19
@@ -2222,7 +2216,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562ControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, K562 cells)
+        longLabel K562, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=K562
         type bigWig 0.040000 17321.439453
         origAssembly hg18
@@ -2233,7 +2227,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, H1-hESC cells)
+        longLabel H1-hESC, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=H1
         type bigWig 0.040000 19690.599609
         origAssembly hg19
@@ -2243,7 +2237,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NHEK cells)
+        longLabel NHEK, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=NHEK
         type bigWig 0.040000 4187.120117
         origAssembly hg18
@@ -2254,7 +2248,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=HELA
         type bigWig 0.040000 35817.640625
         origAssembly hg19
@@ -2265,7 +2259,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HSMM cells)
+        longLabel HSMM, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=HSMM
         type bigWig 0.040000 37810.921875
         origAssembly hg18
@@ -2275,7 +2269,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HMEC cells)
+        longLabel HMEC, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=HMEC
         type bigWig 0.040000 9754.000000
         origAssembly hg18
@@ -2285,7 +2279,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HepG2 cells)
+        longLabel HepG2, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=HEPG2
         type bigWig 0.040000 12546.959961
         origAssembly hg18
@@ -2296,7 +2290,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HMEC cells)
+        longLabel HMEC, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=HMEC
         type bigWig 0.040000 12081.799805
         origAssembly hg18
@@ -2306,7 +2300,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, H1-hESC cells)
+        longLabel H1-hESC, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=H1
         type bigWig 0.040000 10153.759766
         origAssembly hg18
@@ -2317,7 +2311,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HepG2 cells)
+        longLabel HepG2, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=HEPG2
         type bigWig 0.040000 4438.439941
         origAssembly hg18
@@ -2328,7 +2322,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HSMM cells)
+        longLabel HSMM, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=HSMM
         type bigWig 0.040000 11937.519531
         origAssembly hg18
@@ -2338,7 +2332,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HUVEC cells)
+        longLabel HUVEC, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=HUVEC
         type bigWig 0.040000 13583.559570
         origAssembly hg18
@@ -2349,7 +2343,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HSMMtube cells)
+        longLabel HSMMtube, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=HSMMt
         type bigWig 0.040000 6873.759766
         origAssembly hg19
@@ -2359,7 +2353,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HepG2 cells)
+        longLabel HepG2, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=HEPG2
         type bigWig 0.040000 10882.879883
         origAssembly hg18
@@ -2369,7 +2363,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, HSMMtube cells)
+        longLabel HSMMtube, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=HSMMt
         type bigWig 0.040000 7831.160156
         origAssembly hg19
@@ -2379,7 +2373,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmtCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMMt CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HSMMtube cells)
+        longLabel HSMMtube, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=HSMMt
         type bigWig 0.040000 15696.320312
         origAssembly hg19
@@ -2388,7 +2382,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562CtcfStdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel K562 CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, K562 cells)
+        longLabel K562, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=K562
         type bigWig 0.040000 11319.440430
         origAssembly hg18
@@ -2398,7 +2392,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HMEC cells)
+        longLabel HMEC, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=HMEC
         type bigWig 0.040000 10112.240234
         origAssembly hg18
@@ -2408,7 +2402,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3ControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HeLa-S3 cells)
+        longLabel HeLa-S3, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=HELA
         type bigWig 0.040000 94318.796875
         origAssembly hg19
@@ -2419,7 +2413,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NHEK cells)
+        longLabel NHEK, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=NHEK
         type bigWig 0.040000 36868.121094
         origAssembly hg18
@@ -2429,7 +2423,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HSMM cells)
+        longLabel HSMM, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=HSMM
         type bigWig 0.040000 15504.480469
         origAssembly hg18
@@ -2439,7 +2433,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, H1-hESC cells)
+        longLabel H1-hESC, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=H1
         type bigWig 0.040000 23103.880859
         origAssembly hg18
@@ -2450,7 +2444,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NHEK cells)
+        longLabel NHEK, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=NHEK
         type bigWig 0.040000 10613.160156
         origAssembly hg18
@@ -2461,7 +2455,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, HMEC cells)
+        longLabel HMEC, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=HMEC
         type bigWig 0.040000 7273.600098
         origAssembly hg18
@@ -2470,7 +2464,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel H1hES H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, H1-hESC cells)
+        longLabel H1-hESC, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=H1
         type bigWig 0.040000 9300.160156
         origAssembly hg18
@@ -2481,7 +2475,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, HUVEC cells)
+        longLabel HUVEC, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=HUVEC
         type bigWig 0.040000 4498.640137
         origAssembly hg18
@@ -2492,7 +2486,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHLF H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NHLF cells)
+        longLabel NHLF, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=NHLF
         type bigWig 0.040000 25393.160156
         origAssembly hg18
@@ -2502,7 +2496,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=HELA
         type bigWig 0.040000 40261.800781
         origAssembly hg19
@@ -2513,7 +2507,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, H1-hESC cells)
+        longLabel H1-hESC, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=H1
         type bigWig 0.040000 23906.279297
         origAssembly hg18
@@ -2523,7 +2517,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HSMM cells)
+        longLabel HSMM, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=HSMM
         type bigWig 0.040000 7519.040039
         origAssembly hg18
@@ -2532,7 +2526,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal
         shortLabel H1hES H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, H1-hESC cells)
+        longLabel H1-hESC, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=H1
         type bigWig 0.040000 10892.639648
         origAssembly hg18
@@ -2543,7 +2537,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, NHEK cells)
+        longLabel NHEK, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=NHEK
         type bigWig 0.040000 6310.120117
         origAssembly hg18
@@ -2554,7 +2548,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, HMEC cells)
+        longLabel HMEC, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=HMEC
         type bigWig 0.040000 18010.759766
         origAssembly hg18
@@ -2564,7 +2558,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, HMEC cells)
+        longLabel HMEC, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=HMEC
         type bigWig 0.040000 12705.320312
         origAssembly hg18
@@ -2574,7 +2568,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2CtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HepG2 cells)
+        longLabel HepG2, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=HEPG2
         type bigWig 0.040000 10767.599609
         origAssembly hg18
@@ -2584,7 +2578,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HepG2 cells)
+        longLabel HepG2, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=HEPG2
         type bigWig 0.040000 12507.360352
         origAssembly hg18
@@ -2595,7 +2589,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562Pol2bStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 Pol2(b) Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Pol2(b), K562 cells)
+        longLabel K562, Pol2(b) - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=POL2B cellType=K562
         type bigWig 0.040000 16058.919922
         origAssembly hg18
@@ -2606,7 +2600,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHuvecCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HUVEC CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, HUVEC cells)
+        longLabel HUVEC, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=HUVEC
         type bigWig 0.040000 5654.680176
         origAssembly hg18
@@ -2616,7 +2610,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=HELA
         type bigWig 0.040000 22466.119141
         origAssembly hg19
@@ -2626,7 +2620,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHepg2H2azStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HepG2 H2A.Z Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, HepG2 cells)
+        longLabel HepG2, H2A.Z - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=HEPG2
         type bigWig 0.040000 25146.679688
         origAssembly hg19
@@ -2637,7 +2631,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHmecH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HMEC H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, HMEC cells)
+        longLabel HMEC, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=HMEC
         type bigWig 0.040000 14119.879883
         origAssembly hg18
@@ -2647,7 +2641,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhekH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHEK H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, NHEK cells)
+        longLabel NHEK, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=NHEK
         type bigWig 0.040000 3178.360107
         origAssembly hg18
@@ -2657,7 +2651,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878CtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, GM12878 cells)
+        longLabel GM12878, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=GM12878
         type bigWig 0.040000 16386.560547
         origAssembly hg18
@@ -2667,7 +2661,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878ControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, GM12878 cells)
+        longLabel GM12878, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=GM12878
         type bigWig 0.040000 10034.400391
         origAssembly hg18
@@ -2678,7 +2672,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, GM12878 cells)
+        longLabel GM12878, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=GM12878
         type bigWig 0.040000 355227.000000
         origAssembly hg18
@@ -2688,7 +2682,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, GM12878 cells)
+        longLabel GM12878, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=GM12878
         type bigWig 0.040000 51675.199219
         origAssembly hg18
@@ -2699,7 +2693,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, GM12878 cells)
+        longLabel GM12878, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=GM12878
         type bigWig 0.040000 11943.519531
         origAssembly hg18
@@ -2710,7 +2704,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, GM12878 cells)
+        longLabel GM12878, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=GM12878
         type bigWig 0.040000 6971.479980
         origAssembly hg18
@@ -2721,7 +2715,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, GM12878 cells)
+        longLabel GM12878, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=GM12878
         type bigWig 0.040000 6559.600098
         origAssembly hg18
@@ -2732,7 +2726,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, GM12878 cells)
+        longLabel GM12878, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=GM12878
         type bigWig 0.040000 77082.320312
         origAssembly hg18
@@ -2743,7 +2737,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, GM12878 cells)
+        longLabel GM12878, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=GM12878
         type bigWig 0.040000 6293.839844
         origAssembly hg18
@@ -2753,7 +2747,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H4k20me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H4K20me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H4K20me1, GM12878 cells)
+        longLabel GM12878, H4K20me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H4K20me1 cellType=GM12878
         type bigWig 0.040000 8058.640137
         origAssembly hg18
@@ -2764,7 +2758,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NH-A cells)
+        longLabel NH-A, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=NHA
         type bigWig 0.040000 15242.480469
         origAssembly hg19
@@ -2773,7 +2767,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NH-A cells)
+        longLabel NH-A, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=NHA
         type bigWig 0.040000 54769.359375
         origAssembly hg19
@@ -2783,7 +2777,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NH-A cells)
+        longLabel NH-A, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=NHA
         type bigWig 0.040000 6466.680176
         origAssembly hg19
@@ -2792,7 +2786,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NH-A cells)
+        longLabel NH-A, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=NHA
         type bigWig 0.040000 15338.599609
         origAssembly hg19
@@ -2802,7 +2796,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NH-A cells)
+        longLabel NH-A, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=NHA
         type bigWig 0.040000 14461.040039
         origAssembly hg19
@@ -2812,7 +2806,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, NH-A cells)
+        longLabel NH-A, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=NHA
         type bigWig 0.040000 7228.799805
         origAssembly hg19
@@ -2822,7 +2816,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhaH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NH-A H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NH-A cells)
+        longLabel NH-A, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=NHA
         type bigWig 0.040000 18680.640625
         origAssembly hg19
@@ -2832,7 +2826,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H2azStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel GM12878 H2A.Z Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, GM12878 cells)
+        longLabel GM12878, H2A.Z - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=GM12878
         type bigWig 0.040000 5573.080078
         origAssembly hg19
@@ -2843,7 +2837,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k79me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K79me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, GM12878 cells)
+        longLabel GM12878, H3K79me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79me2 cellType=GM12878
         type bigWig 0.040000 2011.920044
         origAssembly hg19
@@ -2853,7 +2847,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneGm12878H3k9me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel 12878 H3K9me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, GM12878 cells)
+        longLabel GM12878, H3K9me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09me3 cellType=GM12878
         type bigWig 0.040000 44431.519531
         origAssembly hg19
@@ -2864,7 +2858,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHelas3H3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HeLaS H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, HeLa-S3 cells)
+        longLabel HeLa-S3, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=HELA
         type bigWig 0.040000 24157.039062
         origAssembly hg19
@@ -2875,7 +2869,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneHsmmH2azStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel HSMM H2A.Z Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, HSMM cells)
+        longLabel HSMM, H2A.Z - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=HSMM
         type bigWig 0.040000 9646.160156
         origAssembly hg19
@@ -2885,7 +2879,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H2azStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H2A.Z Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, K562 cells)
+        longLabel K562, H2A.Z - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=K562
         type bigWig 0.040000 9285.080078
         origAssembly hg19
@@ -2896,7 +2890,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k79me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K79me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K79me2, K562 cells)
+        longLabel K562, H3K79me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K79me2 cellType=K562
         type bigWig 0.040000 5517.479980
         origAssembly hg19
@@ -2906,7 +2900,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneK562H3k9me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel K562 H3K9me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, K562 cells)
+        longLabel K562, H3K9me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09me3 cellType=K562
         type bigWig 0.040000 44343.121094
         origAssembly hg19
@@ -2917,7 +2911,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, Osteobl cells)
+        longLabel Osteobl, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=OSTBL
         type bigWig 0.040000 13777.519531
         origAssembly hg19
@@ -2926,7 +2920,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH2azStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H2A.Z Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H2A.Z, Osteobl cells)
+        longLabel Osteobl, H2A.Z - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H2AZ cellType=OSTBL
         type bigWig 0.040000 56248.921875
         origAssembly hg19
@@ -2936,7 +2930,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, Osteobl cells)
+        longLabel Osteobl, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=OSTBL
         type bigWig 0.040000 10683.360352
         origAssembly hg19
@@ -2945,7 +2939,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, Osteobl cells)
+        longLabel Osteobl, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=OSTBL
         type bigWig 0.040000 31413.000000
         origAssembly hg19
@@ -2955,7 +2949,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k4me1StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K4me1 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me1, Osteobl cells)
+        longLabel Osteobl, H3K4me1 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me1 cellType=OSTBL
         type bigWig 0.040000 12418.000000
         origAssembly hg19
@@ -2965,7 +2959,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, Osteobl cells)
+        longLabel Osteobl, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=OSTBL
         type bigWig 0.040000 13407.240234
         origAssembly hg19
@@ -2975,7 +2969,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblH3k9me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl H3K9me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9me3, Osteobl cells)
+        longLabel Osteobl, H3K9me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09me3 cellType=OSTBL
         type bigWig 0.040000 82158.562500
         origAssembly hg19
@@ -2985,7 +2979,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadCtcfStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa CTCF Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (CTCF, NHDF-Ad cells)
+        longLabel NHDF-Ad, CTCF - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=CTCF cellType=NHDFa
         type bigWig 0.040000 18716.720703
         origAssembly hg19
@@ -2994,7 +2988,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k27acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K27ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27ac, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K27ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27ac cellType=NHDFa
         type bigWig 0.040000 12216.320312
         origAssembly hg19
@@ -3003,7 +2997,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k27me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K27me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K27me3, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K27me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K27me3 cellType=NHDFa
         type bigWig 0.040000 16666.439453
         origAssembly hg19
@@ -3013,7 +3007,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k36me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K36me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K36me3, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K36me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K36me3 cellType=NHDFa
         type bigWig 0.040000 24724.080078
         origAssembly hg19
@@ -3023,7 +3017,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k4me2StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K4me2 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me2, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K4me2 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me2 cellType=NHDFa
         type bigWig 0.040000 13155.320312
         origAssembly hg19
@@ -3033,7 +3027,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k4me3StdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K4me3 Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K4me3, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K4me3 - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K04me3 cellType=NHDFa
         type bigWig 0.040000 26645.640625
         origAssembly hg19
@@ -3043,7 +3037,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadH3k9acStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa H3K9ac Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (H3K9ac, NHDF-Ad cells)
+        longLabel NHDF-Ad, H3K9ac - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=H3K09ac cellType=NHDFa
         type bigWig 0.040000 14526.120117
         origAssembly hg19
@@ -3052,7 +3046,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneOsteoblControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel Ostbl Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, Osteobl cells)
+        longLabel Osteobl, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=OSTBL
         type bigWig 0.040000 32139.839844
         origAssembly hg19
@@ -3061,7 +3055,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeBroadHistoneNhdfadControlStdSig
         parent wgEncodeBroadHistoneViewSignal off
         shortLabel NHDFa Control Sg
-        longLabel ENCODE Histone Mods, Broad ChIP-seq Signal (Control, NHDF-Ad cells)
+        longLabel NHDF-Ad, Control - Histone Modifications by ChIP-seq Signal from ENCODE/Broad
         subGroups view=Signal factor=zCTRL cellType=NHDFa
         type bigWig 0.040000 16604.000000
         origAssembly hg19

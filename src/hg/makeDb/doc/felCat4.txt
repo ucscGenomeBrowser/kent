@@ -520,7 +520,6 @@ TMPDIR=/scratch/tmp
          > do_chainRun.log 2>&1 &
  
     #  real    323m33.250s
-XXXX 06-07 TODO add tracks
    #  *** All done !  Elapsed time: 323m33s
    #  *** Make sure that goldenPath/canFam2/vsFelCat4/README.txt is accurate.
    #  *** Add {chain,net}FelCat4 tracks to trackDb.ra if necessary.
@@ -539,7 +538,6 @@ XXXX 06-07 TODO add tracks
         -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     # real    327m42.053s
-XXXX 06-04 TODO add track 
     #  *** All done !  Elapsed time: 327m42s
     #  *** Make sure that goldenPath/felCat4/vsCanFam2/README.txt is accurate.
     #  *** Add {chain,net}CanFam2 tracks to trackDb.ra if necessary.
@@ -1198,7 +1196,6 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCat4/felCat4.2bit $outMaf
 
 ####################################################################
 # HUMAN (hg18) PROTEINS TRACK (???? DONE braney 2010-05-05) 
-???? XXXX need to redo !!!
     # bash  if not using bash shell already
 
     cd /cluster/data/felCat4
@@ -1579,7 +1576,8 @@ done
 
 
 #########################################################################
-# Phylogenetic tree from 6-way (working 2010-12-16 - Chin)
+# Phylogenetic tree from 6-way (DONE  2010-12-16 - Chin)
+#  re-run with phast.2010-12-30 (DONE 2011-01-19 - Chin) 
 #       We need one tree for all chroms
 
     # use the
@@ -1601,33 +1599,35 @@ done
     # felCat4 does not have refGene; but has
     #    237116 xenoRefGene and 28723 nscanGene. 
     #   use nscanGene
-XXXX 04-22 stopped here, pending nscnGene task
     hgsql felCat4 -Ne \
     "select * from nscanGene;" \
         | cut -f 2-20 > nscanGene.gp
     wc -l nscanGene.gp
-    # 28723 nscanGene.gp
+    # 18804 nscanGene.gp
     # make sure no redundent gene name
     cat nscanGene.gp  | awk '{print $1}' | sort | uniq | wc -l
-    #  28723
+    # 18804
 
     genePredSingleCover nscanGene.gp stdout | sort > nscanGeneNR.gp
     wc -l nscanGeneNR.gp
-    #  28723 nscanGeneNR.gp
-
+    #  18804 nscanGeneNR.gp
+    
     ssh memk
     mkdir /hive/data/genomes/felCat4/bed/multiz6way/4d/run
     cd /hive/data/genomes/felCat4/bed/multiz6way/4d/run
     mkdir ../mfa
 
 
-# whole chrom mafs version, using new version of 
-# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
-#       mjhubisz at gmail.com
+    # whole chrom mafs version, using new version of 
+    # uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+    #       mjhubisz at gmail.com
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+
 
     cat << '_EOF_' > 4d.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
 set r = "/hive/data/genomes/felCat4/bed/multiz6way"
 set c = $1
 set infile = $r/mafSplit/$2
@@ -1635,24 +1635,28 @@ set outfile = $3
 cd /scratch/tmp
 # 'clean' maf
 perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
-awk -v C=$c '$2 == C {print}' $r/4d/nscanGene.gp > $c.gp
+awk -v C=$c '$2 == C {print}' $r/4d/nscanGene.gp > $c.gp.tmp
+sed "s/\t$c\t/\tfelCat4.$c\t/g" $c.gp.tmp > $c.gp
+
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
-    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
-    $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
+    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $c.maf -o SS > $c.ss
     $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
 else
     echo "" > $r/4d/run/$outfile
 endif
-rm -f $c.gp $c.maf $c.ss
+rm -f $c.gp.tmp $c.gp $c.maf $c.ss
 '_EOF_'
     # << happy emacs
     chmod +x 4d.csh
 
-    ls -1S /hive/data/genomes/felCat4/bed/multiz6way/mafSplit/*.maf | \
-        egrep -E -v "chrUn" \
+    cd /hive/data/genomes/felCat4/bed/multiz6way/mafSplit
+    ls -1S *.maf | \
+        grep -E -v "chrUn" \
         | sed -e "s#.*multiz6way/mafSplit/##" \
-        > maf.list
+        > /hive/data/genomes/felCat4/bed/multiz6way/4d/run/maf.list
+    cd /hive/data/genomes/felCat4/bed/multiz6way/4d/run
 
     cat << '_EOF_' > template
 #LOOP
@@ -1661,41 +1665,54 @@ rm -f $c.gp $c.maf $c.ss
 '_EOF_'
     # << happy emacs
 
+    # 8g on swarm is still not enough, run it on memk.
+    # chrA1 need  10+ cd ../GB
+    ssh memk
+    cd /hive/data/genomes/felCat4/bed/multiz6way/4d/run
+
     gensub2 maf.list single template stdout | tac > jobList
-    para create jobList
+    para -ram=8g create jobList
     para try ... check ... push ... etc
     para time
-    # Completed: 2604 of 2604 jobs
-    # CPU time in finished jobs:  2490s      41.49m     0.69h    0.03d
-    # 0.000 y
-    # IO & Wait Time:             8357s     139.29m     2.32h    0.10d
-    # 0.000 y
-    # Average job time:              4s       0.07m     0.00h    0.00d
-    # Longest finished job:        253s       4.22m     0.07h    0.00d
-    # Submission to last job:      668s      11.13m     0.19h    0.01d
-    # Manually run 4d.csh for chr11_ACFV01197442_random, result in
-    # do.log
+    # Completed: 20 of 20 jobs
+    # CPU time in finished jobs:   852s      14.20m     0.24h    0.01d  0.000 y
+    # IO & Wait Time:              114s       1.90m     0.03h    0.00d  0.000 y
+    # Average job time:             48s       0.80m     0.01h    0.00d
+    # Longest finished job:        133s       2.22m     0.04h    0.00d
+    # Submission to last job:      515s       8.58m     0.14h    0.01d
 
+    
     # combine mfa files
     ssh hgwdev
     cd /hive/data/genomes/felCat4/bed/multiz6way/4d
     # but first clean out junk 1-byte leftovers from above process.
-    # Only 24 (real chrom) out of 2623 files have real data. 
+    # Only 20 (real chrom) out of i104054 files have real data. 
     cd mfa
     find -type f -size 1c | xargs -iX rm X
     find -type f -size 0c | xargs -iX rm X
     cd /hive/data/genomes/felCat4/bed/multiz6way/4d
 
-    #want comma-less species.list
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+    #want comma-less species.list 
+    # again, use 2010-04-06 version
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
         --aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
         > 4d.all.mfa
 
-    # fix order in case it helps:
-    #((felCat4,(tetNig2,gasAcu1)),(xenTro2,(mm9,hg19)))
+    # check they are all in there:
+    grep "^>" 4d.all.mfa
+    # >felCat4
+    # >canFam2
+    # >ailMel1
+    # >hg19
+    # >mm9
+    # >monDom5
+
+    # tree-commas.nh 
+    # (((felCat4,(canFam2,ailMel1)),(hg19,mm9)),monDom5)
 
     # use phyloFit to create tree model (output is phyloFit.mod)
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+    time nice -n +19 \
+      /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
         --EM --precision MED --msa-format FASTA --subst-mod REV \
         --tree ../tree-commas.nh 4d.all.mfa
     # Reading alignment from 4d.all.mfa ...
@@ -1704,6 +1721,8 @@ rm -f $c.gp $c.maf $c.ss
     # Fitting tree model to 4d.all.mfa using REV ...
     # Writing model to phyloFit.mod ...
     # Done.
+    # 
+    # real    0m2.879s
 
 ############################################################################
 # LIFTOVER TO FelCat3 (DONE - 2010-08-23 - Chin )

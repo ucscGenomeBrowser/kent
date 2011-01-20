@@ -1596,3 +1596,464 @@ cd ../wgEncodeOpenChromFaire/
 encodeDownloadsPage.pl -db=hg19 index.html
 # 186 files.  No Missing metadata  ### 186 found in hgFileUi
 
+# Missing DNase/GM12878 rep4 and rep5 fastqs found
+cd {pip}/1494
+e *.DDF # were marked as reps 1 and 2
+e out.load.ra mdb.txt
+cd ..
+doEncodeLoad.pl x 1494
+# fastqs now in place
+
+mdbUpdate hg19 mdb.txt
+Read 2 metadata objects from hg19
+Affected 30 row(s) in hg19.metaDb_tdreszer
+
+# Check in changes:
+cd .. {hg19/metaDb.alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra 
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 416 files.  No Missing metadata  # 416 found in hgFileUi
+### Expected 417
+
+### Oops.  Running deEncodeLoad.pl by hand caused problems.
+From pipeline pages 1494 => unload
+e 1494/*.DDF # not rep1 and rep2 but rep 4 and rep5
+e 1494/*.DAF # DnaseSeq and allowReloads;skiupValidation
+From pipeline pages 1494 => validate (load)
+# mdb should already be up-to-date
+
+cd ../wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 417 files.  No Missing metadata  # 417 found in hgFileUi
+# All good
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1494 displayed
+
+2011-01-12 Work on openChrom combo tracks
+=========================================
+# Terry says the fields for the combo bed will be:
+chrom
+2 - chromStart
+3 - chromEnd
+4 - unique name 
+5 - score (set to "1000" always)
+6 - strand (set to ".." to indicate no strand)
+7 - thickStart (set to chromStart) 
+8 - thickEnd (set to chromEnd)
+9 - color:
+           validated, peaks in both DNase and FAIRE: set to "0,0,0" (black) 
+           open chromatin, fisher combined p-value < 0.01, not validated: set to "0,0,255" (blue)
+           dnase-only, peak in Dnase but combined > 0.01: set to "0,255,0"  (green)
+           faire-only, peak in FAIRE but combined > 0.01: set to "255,0,0" (red)
+           chip-only, peak in one of the ChIP assays, not in DNase or FAIRE: set to "255,0,255" (pinkish)
+10 - Open chromatin combined -log10(p-value) based on Fisher's method
+11 - DNase-seq max parzen score
+12 - DNase-seq -log10(p-value)
+13 - FAIRE-seq max parzen score
+14 - FAIRE-seq -log10(p-value)
+15 - Pol II ChIP-seq max parzen score
+16 - Pol II ChIP-seq -log10(p-value)
+17 - CTCF ChIP-seq max parzen score
+18 - CTCF ChIP-seq -log10(p-value)
+19 - c-Myc ChIP-seq max parzen score
+20 - c-Myc ChIP-seq -log10(p-value)
+21 - validated (boolean)
+22 - open chromatin code:
+set to 1 if peak in DNase and FAIRE
+set to 2 if peak in DNase-only
+set to 3 if peak in FAIRE-only
+set to 4 if peak in neither
+
+cd {pip}../ftp/prod/tsfurey
+mv mv K562_OC.bed.tgz ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/
+cd {m19}/testing
+tar -xzf K562_OC.bed.tgz
+K562_OC.bed
+openChromatin.sql
+#Locations of regions of open chromatin as determined by DNaseI HS and FAIRE experiments
+CREATE TABLE K562_OpenChromatin (
+    chrom varchar(255) not null,        # Human chromosome number
+    chromStart int unsigned not null,   # Start position in genoSeq
+    chromEnd int unsigned not null,     # End position in genoSeq
+    name varchar(255) not null, # Name of cytogenetic band
+    score int(10) unsigned not null, # Always 1000
+    strand char(1) not null, # Always .
+    thickStart int(10) unsigned not null, # Same as chromStart
+    thickEnd int(10) unsigned not null, # Same as chromEnd     
+    color int(10) unsigned not null, # Encodes validated, open chromatin, DNase-only, FAIRE-only, ChIP-
+only
+    pvalue float unsigned not null, # Combined DNase-seq and FAIRE-seq -log10(p-value)
+    dnaseSignal float unsigned not null, # Max signal value for DNase-seq
+    dnasePvalue float unsigned not null, # DNase-seq -log10(p-value) 
+    faireSignal float unsigned not null, # Max signal value for FAIRE-seq
+    fairePvalue float unsigned not null, # FAIRE-seq -log10(p-value) 
+    polIISignal float unsigned, # Max signal value for PolII ChIP-seq
+    polIIPvalue float unsigned, # PolII ChIP-seq -log10(p-value) 
+    ctcfSignal float unsigned, # Max signal value for CTCF ChIP-seq
+    ctcfPvalue float unsigned, # CTCF ChIP-seq -log10(p-value) 
+    cmycSignal float unsigned, # Max signal value for c-Myc ChIP-seq
+    cmycPvalue float unsigned, # c-Myc ChIP-seq -log10(p-value) 
+    ocCode int(10) unsigned not null, # Open Chromatin code for validated (=1), DNase-only (=2), FAIRE-
+only (=3), ChIP-only (=4)
+
+              #Indices
+    PRIMARY KEY(chrom(12),chromStart),
+    UNIQUE(chrom(12),chromStart)
+);
+cp openChromatin.sql ~/kent/src/hg/lib/encode/openChromCombinedPeaks.sql
+cd ~/kent/src/hg/lib/encode/
+e openChromCombinedPeaks.sql
+cp openChromCombinedPeaks.sql /cluster/bin/sqlCreate/
+# test load:
+/cluster/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg");
+            $fillInArg = "-fillInScore=signalValue -minScore=500 " if $tableName =~ /^wgEncodeUwDnaseSeq/;
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 tempK562Oc K562_OC.bed -tmpDir=/data/tmp -sqlTable=/cluster/bin/sqlCreate/openChromCombinedPeaks.sql -renameSqlTable -fillInScore=pValue -minScore=500 &
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 tempK562Oc K562_OC.bed -tmpDir=/data/tmp -sqlTable=/cluster/bin/sqlCreate/openChromCombinedPeaks.sql -renameSqlTable &
+# Works
+#Now try pipeline
+# mkdir zipper and load DAF/DDF and bed
+tar -czf testIt.tgz K562_OC.bed openChromCombo.daf openChromCombo.ddf
+tar -tzf testIt.tgz 
+K562_OC.bed
+openChromCombo.daf
+openChromCombo.ddf
+cd /hive/groups/encode/dcc/pipeline/ftp/prod/tdreszer
+mv ~/kent/src/hg/makeDb/trackDb/human/hg19/metaDb/alpha/testing/zipper/testIt.tgz .
+ll
+
+# 4 submissions needing to be displayed:
+select id,name,status from projects where user_id = 17 and status = "loaded";
++------+-----------------------------------------------+--------+
+| id   | name                                          | status |
++------+-----------------------------------------------+--------+
+| 3217 | DNCT Duke DNaseHS Urothelia 20110110          | loaded | 
+| 3218 | DNCT Duke DNaseHS Urothelia UT189 20110110    | loaded | 
+| 3241 | DNCT UTA CTCF K562 Signal and Peaks 20110112  | loaded | 
+| 3242 | DNCT UTA PolII K562 Signal and Peaks 20110112 | loaded | 
+# First 3241 and 3242 which are reloads
+# Wrong name for peaks!
+rename table wgEncodeOpenChromChipK562CtcfPk to wgEncodeOpenChromChipK562CtcfPk_old;
+rename table wgEncodeOpenChromChipK562CtcfPkRep1 to wgEncodeOpenChromChipK562CtcfPk;
+drop table wgEncodeOpenChromChipK562CtcfPk_old;
+rename table wgEncodeOpenChromChipK562Pol2Pk to wgEncodeOpenChromChipK562Pol2Pk_old;
+rename table wgEncodeOpenChromChipK562Pol2PkRep1 to wgEncodeOpenChromChipK562Pol2Pk;
+drop table wgEncodeOpenChromChipK562Pol2Pk_old;
+mdbUpdate hg19 -obj=wgEncodeOpenChromChipK562CtcfPk -setVars="dateResubmitted=2011-01-12"
+mdbUpdate hg19 -obj=wgEncodeOpenChromChipK562CtcfSig -setVars="dateResubmitted=2011-01-12"
+mdbUpdate hg19 -obj=wgEncodeOpenChromChipK562Pol2Pk -setVars="dateResubmitted=2011-01-12"
+mdbUpdate hg19 -obj=wgEncodeOpenChromChipK562Pol2Sig -setVars="dateResubmitted=2011-01-12"
+cd {downloadsDir}
+mkdir ../obsolete/wgEncodeOpenChromChip
+mv wgEncodeOpenChromChipK562CtcfPk.* ../obsolete/wgEncodeOpenChromChip/
+mv wgEncodeOpenChromChipK562Pol2Pk.* ../obsolete/wgEncodeOpenChromChip/
+mv wgEncodeOpenChromChipK562CtcfPkRep1.narrowPeak.gz wgEncodeOpenChromChipK562CtcfPk.narrowPeak.gz
+mv wgEncodeOpenChromChipK562Pol2PkRep1.narrowPeak.gz wgEncodeOpenChromChipK562Pol2Pk.narrowPeak.gz
+
+# Check in changes:
+cd .. {hg19/metaDb.alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra 
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromChip/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 339 files.  No Missing metadata  # 339 found in hgFileUi
+
+# Now 3217, 3218
+cd  pip/3217/out
+e trackDb.ra ../../3218/out/trackDb.ra # edit for trackDb subGroups, composite name
+cd {tdb}/hg19
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/3217/out/trackDb.ra wgEncodeOpenChromDnase.ra
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/3217/out/trackDb.ra wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra
+git: up, add, ci, up, push
+
+cd  pip/3217/out
+e mdb.txt ../../3218/out/mdb.txt # Look fine, no editing
+mdbUpdate hg19 mdb.txt
+Read 7 metadata objects from hg19
+Affected 103 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 ../../3218/out/mdb.txt
+Using table named 'hg19.metaDb_tdreszer'.
+Read 7 metadata objects from hg19
+Affected 110 row(s) in hg19.metaDb_tdreszer
+
+# Check in changes:
+cd .. {hg19/metaDb.alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra
+### Ouch, missing bai's.  Must fix pipeline!
+e wgEncodeOpenChromDnase.ra # add bai's
+mdbUpdate hg19 wgEncodeOpenChromDnase.ra
+ 
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 435 files.  No Missing metadata  # 435 found in hgFileUi
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3217 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3218 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3241 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3242 displayed
+
+2011-01-18 First try of "Combo" wgEncodeOpenChromSynth load
+===========================================================
+Using config path /hive/groups/encode/dcc/pipeline/encpipeline_prod/3273/../config
+Loading project in directory /hive/groups/encode/dcc/pipeline/encpipeline_prod/3273
+set1/HepG2_OC.bed loaded into wgEncodeOpenChromSynthHepg2Pk
+ERROR: File(s) 'set1/GM12878_OC.bed' failed bed load:
+Reading stdin
+Loaded 231413 elements of size 21
+Sorted
+Creating table definition for wgEncodeOpenChromSynthGm12878Pk
+Saving /data/tmp/loadBed_hgwdev_2c60_4955b0.tab
+Loading hg19
+load of wgEncodeOpenChromSynthGm12878Pk did not go as planned: 231413 record(s), 11 row(s) skipped, 0 warning(s) load
+ing /data/tmp/loadBed_hgwdev_2c60_4955b0.tab
+### Load error on second bed.  Try hand load with verbose?
+cd {pip}/3273
+wl /data/tmp/loadBed_hgwdev_2c60_4955b0.tab  231413
+wl set1/GM12878_OC.bed                       231413
+
+select count(*) from select count(*) from wgEncodeOpenChromSynthGm12878Pk;  |   231402 |  
+# "11 row(s) skipped"
+ll /data/tmp/loadBed_hgwdev_2c60_4955b0.tab
+-rw-rw-r-- 1 encodeteam protein 33988533 Jan 17 11:15 /data/tmp/loadBed_hgwdev_2c60_4955b0.tab
+ll set1/GM12878_OC.bed 
+-rw-rw-r-- 2 encodeteam protein 33317166 Jan 17 11:03 set1/GM12878_OC.bed
+# Files are different
+sort < set1/GM12878_OC.bed > tmp.bed
+uniq < tmp.bed > tmp2.bed
+[hgwdev:tdreszer 3273> ll tmp*
+-rw-rw-r-- 1 tdreszer protein 33317166 Jan 18 09:03 tmp.bed
+-rw-rw-r-- 1 tdreszer protein 33317166 Jan 18 09:04 tmp2.bed
+# No dups
+head -2 set1/GM12878_OC.bed 
+chr1    10166   10376   FAIREOnly_1     1000    .       10166   10376   153,0,0 0.99    0.00160 0.00    0.01580 1.680.02650  1.51    0.00840 0.00    0.03360 0.00    3
+chr1    91363   91505   ChIPOnly_1      1000    .       91363   91505   255,0,255       0.24    0.01320 0.62    0.00320      0.00    0.00000 0.00    0.22470 3.79    0.01890 0.00    4
+head -2 /data/tmp/loadBed_hgwdev_2c60_4955b0.tab
+585     chr1    10166   10376   FAIREOnly_1     1000    .       10166   10376   10027008        0.99    0.00160 0.000.01580  1.68    0.02650 1.51    0.00840 0.00    0.03360 0.00    3
+585     chr1    91363   91505   ChIPOnly_1      1000    .       91363   91505   16711935        0.24    0.01320 0.620.00320  0.00    0.00000 0.00    0.22470 3.79    0.01890 0.00    4
+# Bins added in tab
+
+/cluster/bin/x86_64/hgLoadBed -noNameIx $assembly $tableName stdin -tmpDir=$tempDir -sqlTable=$Encode::sqlCreate/${sqlTable}.sql -renameSqlTable $fillInArg"
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeOpenChromSynthGm12878Pk_tmp set1/GM12878_OC.bed -tmpDir=/data/tmp/ -sqlTable=/cluster/bin/sqlCreate/openChromCombinedPeaks.sql -renameSqlTable  -verbose=1 > tryLoad.txt 2>&1 &
+LOAD DATA INFILE '/data/tmp/loadBed_hgwdev_2c60_4955b0.tab' REPLACE INTO TABLE wgEncodeOpenChromSynthGm12878Pk_tmp;
+Deletes all and seems to accept all.  However, table still has 11 missing.
+delete from wgEncodeOpenChromSynthGm12878Pk_tmp;
+LOAD DATA INFILE '/data/tmp/loadBed_hgwdev_2c60_4955b0.tab' INTO TABLE wgEncodeOpenChromSynthGm12878Pk_tmp;
+ERROR 1062 (23000): Duplicate entry 'chr21-48022706' for key 1
+grep chr21 set1/GM12878_OC.bed | grep 48022706
+chr21   48022706        48022858        FAIREOnly_71110 1000    .       48022706        48022858        153,0,0 1.110.01280  0.59    0.01310 1.24    0.00170 0.00    0.01750 0.00    0.03410 0.00    3
+chr21   48022706        48022858        FAIREOnly_71113 1000    .       48022706        48022858        153,0,0 1.110.01280  0.59    0.01310 1.24    0.00170 0.00    0.01750 0.00    0.03410 0.00    3
+
+delete from wgEncodeOpenChromSynthGm12878Pk_tmp;
+LOAD DATA INFILE '/data/tmp/loadBed_hgwdev_2c60_4955b0.tab' REPLACE INTO TABLE wgEncodeOpenChromSynthGm12878Pk_tmp;
+Query OK, 231424 rows affected (8.61 sec)
+Records: 231413  Deleted: 11  Skipped: 0  Warnings: 0
+## Now we know, it is duplicates!!
+
+Cleverness would awk print $1 $2 $3 and then uniq to find the culprits
+### Terry fixed his data, but now there are errors when -1 is put into the unsigned float
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg19 wgEncodeOpenChromSynthNhekPk_tmp set1/NHEK_OC.bed -tmpDir=/data/tmp/ -sqlTable=/cluster/bin/sqlCreate/openChromCombinedPeaks.sql -renameSqlTable  -verbose=1 > tryLoad.txt 2>&1 &
+
+# Fixed .sql and reloaded.  Awaiting creation of trackDb.ra
+
+# Updated three existing hg19 composites for long and short label standards
+
+2011-01-19 Catch up with UTA TFBS and UNC FAIRE 
+===============================================
+select id,name,status from projects where user_id = 17 and status = "loaded";
+| 3271 | DNCT UTA Input Monocytes-CD14+ 20110116           | loaded | 
+| 3272 | DNCT UTA PolII Gliobla 20110117                   | loaded | 
+| 3273 | DNCT OpenChromCombo Set1 20110117                 | loaded | 
+| 3277 | DNCT UNC FAIRE-Seq Urothelia 20110117             | loaded | 
+| 3278 | DNCT UNC FAIRE-Seq Urothelia UT189 20110117          | loaded | 
+| 3378 | DNCT UNC FAIRE-Seq MCF-7 Hypoxia_LacAcid 20110119 | loaded | 
+| 3379 | DNCT UNC FAIRE-Seq HTR8svn 20110119               | loaded | 
+
+cd {pip}/3271
+e out/trackDb.ra ../3272/out/trackDb.ra # edit for labels, subgroups etc.
+cd {tdb19}
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/3272/out/trackDb.ra wgEncodeOpenChromChip.ra
+
+cd {pip}/3277
+e out/trackDb.ra ../3278/out/trackDb.ra ../3378/out/trackDb.ra ../3379/out/trackDb.ra # edit for labels, subgroups etc.
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/3379/out/trackDb.ra wgEncodeOpenChromFaire.ra
+
+# now metadata
+cd {pip}/3272
+e out/mdb.txt # remove rep1 from peaks
+cd ..
+mdbUpdate hg19 3271/out/mdb.txt
+mdbUpdate hg19 3272/out/mdb.txt
+mdbUpdate hg19 3277/out/mdb.txt
+mdbUpdate hg19 3278/out/mdb.txt
+mdbUpdate hg19 3378/out/mdb.txt
+mdbUpdate hg19 3379/out/mdb.txt
+
+# Check in changes:
+cd .. {hg19/metaDb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra
+
+ mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" | grep -w lab | sort | uniq
+Using table named 'hg19.metaDb_tdreszer'.
+objects:173  vars:2862
+lab UNC
+lab UNC(Lieb)
+[hgwdev:tdreszer alpha> mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" | grep -w lab | sort | uniq
+Using table named 'hg19.metaDb_tdreszer'.
+objects:275  vars:4996
+lab UT-A
+lab UT-A(Iyer)
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire lab=UNC(Lieb)" -setVars="lab=UNC"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip lab=UT-A(Iyer)" -setVars="lab=UT-A"
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra
+ 
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromChip/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 352 files.  No Missing metadata  # 352 found in hgFileUi
+
+cd ../wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 222 files.  Missing metadata for 18!!!  # 204 found in hgFileUi
+
+### Brian!
+submissions 3378 and 3378 have doc id file and table names, but mdb obj names are old style.
+### Brian!
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3271 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3272 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3277 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3278 displayed
+
+wgEncodeOpenChromFaire000004008 wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1
+wgEncodeOpenChromFaire000004009 wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2
+wgEncodeOpenChromFaire000004010 wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1
+wgEncodeOpenChromFaire000004011 wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2
+wgEncodeOpenChromFaire000004012 wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
+wgEncodeOpenChromFaire000004013 wgEncodeOpenChromFaireMcf7HypoxlacPk
+wgEncodeOpenChromFaire000004014 wgEncodeOpenChromFaireMcf7HypoxlacSig
+wgEncodeOpenChromFaire000003992 wgEncodeOpenChromFaireHtr8RawDataRep1
+wgEncodeOpenChromFaire000003993 wgEncodeOpenChromFaireHtr8RawDataRep2
+wgEncodeOpenChromFaire000003994 wgEncodeOpenChromFaireHtr8AlnRep1
+wgEncodeOpenChromFaire000003995 wgEncodeOpenChromFaireHtr8AlnRep2
+wgEncodeOpenChromFaire000003996 wgEncodeOpenChromFaireHtr8BaseOverlapSignal
+wgEncodeOpenChromFaire000003997 wgEncodeOpenChromFaireHtr8Pk
+wgEncodeOpenChromFaire000003998 wgEncodeOpenChromFaireHtr8Sig
+
+rename table wgEncodeOpenChromFaire000004012 to wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal;
+rename table wgEncodeOpenChromFaire000004013 to wgEncodeOpenChromFaireMcf7HypoxlacPk;
+rename table wgEncodeOpenChromFaire000004014 to wgEncodeOpenChromFaireMcf7HypoxlacSig;
+rename table wgEncodeOpenChromFaire000003996 to wgEncodeOpenChromFaireHtr8BaseOverlapSignal;
+rename table wgEncodeOpenChromFaire000003997 to wgEncodeOpenChromFaireHtr8Pk;
+rename table wgEncodeOpenChromFaire000003998 to wgEncodeOpenChromFaireHtr8Sig;
+update wgEncodeOpenChromFaireHtr8BaseOverlapSignal set fileName = "/gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig" ;
+update wgEncodeOpenChromFaireHtr8Sig set fileName = "/gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8Sig.bigWig" ;
+update wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal set fileName = "/gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig";
+update wgEncodeOpenChromFaireMcf7HypoxlacSig set fileName = "/gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig";
+
+mv wgEncodeOpenChromFaire000004008.fastq.gz      wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1.fastq.gz
+mv wgEncodeOpenChromFaire000004009.fastq.gz      wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2.fastq.gz
+mv wgEncodeOpenChromFaire000004010.bam           wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam
+mv wgEncodeOpenChromFaire000004011.bam           wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam
+mv wgEncodeOpenChromFaire000004010.bam.bai       wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam.bai
+mv wgEncodeOpenChromFaire000004011.bam.bai       wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam.bai
+mv wgEncodeOpenChromFaire000004012.bigWig        wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+mv wgEncodeOpenChromFaire000004013.narrowPeak.gz wgEncodeOpenChromFaireMcf7HypoxlacPk.narrowPeak.gz
+mv wgEncodeOpenChromFaire000004014.bigWig        wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+mv wgEncodeOpenChromFaire000003992.fastq.gz      wgEncodeOpenChromFaireHtr8RawDataRep1.fastq.gz
+mv wgEncodeOpenChromFaire000003993.fastq.gz      wgEncodeOpenChromFaireHtr8RawDataRep2.fastq.gz
+mv wgEncodeOpenChromFaire000003994.bam           wgEncodeOpenChromFaireHtr8AlnRep1.bam
+mv wgEncodeOpenChromFaire000003995.bam           wgEncodeOpenChromFaireHtr8AlnRep2.bam
+mv wgEncodeOpenChromFaire000003994.bam.bai       wgEncodeOpenChromFaireHtr8AlnRep1.bam.bai
+mv wgEncodeOpenChromFaire000003995.bam.bai       wgEncodeOpenChromFaireHtr8AlnRep2.bam.bai
+mv wgEncodeOpenChromFaire000003996.bigWig        wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+mv wgEncodeOpenChromFaire000003997.narrowPeak.gz wgEncodeOpenChromFaireHtr8Pk.narrowPeak.gz
+mv wgEncodeOpenChromFaire000003998.bigWig        wgEncodeOpenChromFaireHtr8Sig.bigWig
+
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000003996.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000003998.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8Sig.bigWig
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000004012.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000004014.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000003996.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000003998.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8Sig.bigWig
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000004012.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+mv /gbdb/hg19/bbi/wgEncodeOpenChromFaire000004014.bigWig /gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+# Oops
+rm /gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+rm /gbdb/hg19/bbi/wgEncodeOpenChromFaireHtr8Sig.bigWig
+rm /gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+rm /gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+cd /gbdb/hg19/bbi
+ln -sf /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+ln -sf /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/wgEncodeOpenChromFaireHtr8Sig.bigWig wgEncodeOpenChromFaireHtr8Sig.bigWig
+ln -sf /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+ln -sf /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+
+cd ../wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 222 files.  No missing metadata # 222 found in hgFileUi
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3378 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3379 displayed
+
+
+# synth is okay so work on that
+cd {tdb}/hg19
+cat /hive/groups/encode/dcc/pipeline/encpipeline_prod/3273/out/trackDb.ra >> wgEncodeOpenChromSynth.ra
+e wgEncodeOpenChromSynth.ra
+make DBS=hg19
+# Looks fine
+# Actually, remove color settings and add itemRgb on, play with filters
+
+select max(pvalue), max(dnaseSignal), max(dnasePvalue), max(faireSignal), max(fairePvalue), max(polIISignal), max(polIIPvalue), max(ctcfSignal), max(ctcfPvalue), max(cmycSignal), max(cmycPvalue) from wgEncodeOpenChromSynthK562Pk;
+select min(pvalue), min(dnaseSignal), min(dnasePvalue), min(faireSignal), min(fairePvalue), min(polIISignal), min(polIIPvalue), min(ctcfSignal), min(ctcfPvalue), min(cmycSignal), min(cmycPvalue) from wgEncodeOpenChromSynthK562Pk;
+select min(score), max(score) from wgEncodeOpenChromSynthK562Pk;
+### None of my filters are working.  Will need to investigate later.  Also hgc shows nothing useful, but I already knew that.
+
+# now metadata
+cd {pip}/3273
+mdbUpdate hg19 out/mdb.txt
+
+# Check in changes:
+cd .. {hg19/metaDb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromSynth" > wgEncodeOpenChromSynth.ra
+gold wgEncodeOpenChromChip.ra
+
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd ../wgEncodeOpenChromSynth/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 7 files.  Little metadata  # 7 found in hgFileUi
+## Looks like mdb alpha was updated under my nose.
+encodeDownloadsPage.pl -db=hg19 index.html
+# 7 files.  No missing metadata  # 7 found in hgFileUi
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 displayed
