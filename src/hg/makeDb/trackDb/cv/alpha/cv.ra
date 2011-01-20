@@ -7060,7 +7060,7 @@ label Total_RNA
 #term short
 #tag short
 #type rnaExtract
-#description RNA shorter than 200 nt PROVISIONAL TO RETIRE
+#description RNA shorter than 200 nt PROVISIONAL TO RETIRE  (1/20/2011)
 #label (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
 
 term shortPolyA
@@ -7358,12 +7358,12 @@ type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder) (Provisional)
+description 4h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder) (Provisional)
+description 12h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.02pct
@@ -7624,7 +7624,7 @@ term ChiaPet
 tag chiaPet
 type dataType
 label ChIA-pet
-description ChIA-pet (Provisional)
+description ChIA-pet 
 
 # TODO: retire this ?  (11/3/10)
 term LongRnaSeq
@@ -7678,7 +7678,7 @@ description Negative Regulatory Elements
 term Nucleosome
 tag nucleosome
 type dataType
-description Nucleosome positioning data (Provisional)
+description Nucleosome positioning data 
 
 term Proteogenomics
 tag protgeno
@@ -8005,7 +8005,7 @@ term GIS(Ruan)
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia) (Provisional)
+description Ruan - Genome Institute of Singapore (Chia) 
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8974,7 +8974,7 @@ validate cv
 term run
 type run
 label Sequencing Run
-description Sequencing run (Provisional)
+description Sequencing run 
 searchable select
 cvDefined yes
 validate none
