@@ -1131,19 +1131,24 @@ The index is followed by the sequence records, which contain nine fields:
 <LI>dnaSize - number of bases of DNA in the sequence
 <LI>nBlockCount - the number of blocks of Ns in the file (representing unknown 
 sequence)
-<LI>nBlockStarts - the starting position for each block of Ns
-<LI>nBlockSizes - the size of each block of Ns
+<LI>nBlockStarts - an array of length nBlockCount of 32 bit integers
+indicating the starting position of a block of Ns 
+<LI>nBlockSizes - an array of length nBlockCount of 32 bit integers
+indicating the length of a block of Ns
 <LI>maskBlockCount - the number of masked (lower-case) blocks
-<LI>maskBlockStarts - the starting position for each masked block
-<LI>maskBlockSizes - the size of each masked block
+<LI>maskBlockStarts - an array of length maskBlockCount of 32 bit integers
+indicating the starting position of a masked block
+<LI>maskBlockSizes - an array of length maskBlockCount of 32 bit integers
+indicating the length of a masked block
 <LI>reserved - always zero for now
 <LI>packedDna - the DNA packed to two bits per base, represented as so: 
 T - 00, C - 01, A - 10, G - 11.  The first base is in the most significant 
 2-bit byte; the last base is in the least significant 2 bits. For example, the
-sequence TCAG is represented as 00011011. The packedDna field is padded with 0 
-bits as necessary to take an even multiple of 32 bits in the file, which 
-improves I/O performance on some machines.
+sequence TCAG is represented as 00011011. 
 </UL>
+<P>For a complete definition of all fields in the twoBit format, see 
+<A HREF="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/inc/twoBit.h;hb=HEAD">this</A> 
+description in the source code.
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>
 		     </TD></TR>
