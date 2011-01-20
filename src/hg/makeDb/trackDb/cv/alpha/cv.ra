@@ -7675,6 +7675,11 @@ tag NRE
 type dataType
 description Negative Regulatory Elements
 
+term Nucleosome
+tag nucleosome
+type dataType
+description Nucleosome positioning data (Provisional)
+
 term Proteogenomics
 tag protgeno
 type dataType
