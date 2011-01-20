@@ -7358,12 +7358,12 @@ type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder) (Provional)
+description 4h,0.01% EtOH (Snyder) (Provisional)
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder) (Provional)
+description 12h,0.01% EtOH (Snyder) (Provisional)
 type treatment
 
 term EtOH_0.02pct
