@@ -3001,7 +3001,7 @@ noInherit on
         color 189,0,157
         # subId=3245 dateSubmitted=2011-01-13
 
-        track wgEncodeHaibTfbs000004016
+        track wgEncodeHaibTfbsK562Egr1V0416101PkRep2
         release alpha
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 Egr-1 Pk 2
@@ -3011,7 +3011,7 @@ noInherit on
         color 46,0,184
         # subId=3265 dateSubmitted=2011-01-19
 
-        track wgEncodeHaibTfbs000004020
+        track wgEncodeHaibTfbsK562Egr1V0416101PkRep1
         release alpha
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel K562 Egr-1 Pk 1
@@ -6051,7 +6051,7 @@ noInherit on
         color 189,0,157
         # subId=3245 dateSubmitted=2011-01-13
 
-        track wgEncodeHaibTfbs000004017
+        track wgEncodeHaibTfbsK562Egr1V0416101RawRep2
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 Egr-1 Raw 2
@@ -6061,7 +6061,7 @@ noInherit on
         color 46,0,184
         # subId=3265 dateSubmitted=2011-01-19
 
-        track wgEncodeHaibTfbs000004021
+        track wgEncodeHaibTfbsK562Egr1V0416101RawRep1
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel K562 Egr-1 Raw 1
