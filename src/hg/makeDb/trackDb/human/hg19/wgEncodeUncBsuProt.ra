@@ -25,7 +25,7 @@ wgEncode 1
 	visibility full
 	parent wgEncodeUncBsuProt
 
-        	track wgEncodeuncBsuProtGm12878NucleusSig
+        	track wgEncodeUncBsuProtGm12878NucleusSig
         	parent wgEncodeUncBsuProtSignal
         	shortLabel GM12878 Sig
         	longLabel ENCODE Proteogenomic Mapping Hits (in GM12878 cells)
@@ -37,7 +37,7 @@ wgEncode 1
         	# subId=3160 dateSubmitted=2011-01-05
 
 
-        	track wgEncodeuncBsuProtK562MembranefractionSig
+        	track wgEncodeUncBsuProtK562MembranefractionSig
         	parent wgEncodeUncBsuProtSignal
         	shortLabel K562 Sig
         	longLabel ENCODE Proteogenomic Mapping Hits (in K562 cells)
