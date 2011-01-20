@@ -4263,7 +4263,7 @@ target eGFP-FOS
 antibodyDescription Goat polyclonal 
 targetDescription Fos 
 vendorName Kevin White
-vendorId 
+vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White 
 lots 
@@ -4278,7 +4278,7 @@ target eGFP-GATA2
 antibodyDescription Goat polyclonal 
 targetDescription GATA2 
 vendorName Kevin White
-vendorId 
+vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White 
 lots 
@@ -4293,7 +4293,7 @@ target eGFP-HDAC8
 antibodyDescription Goat polyclonal 
 targetDescription HDAC8 
 vendorName Kevin White
-vendorId 
+vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White 
 lots 
@@ -4308,7 +4308,7 @@ target eGFP-JunB
 antibodyDescription Goat polyclonal 
 targetDescription JunB 
 vendorName Kevin White
-vendorId
+vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White 
 lots 
@@ -4323,7 +4323,7 @@ target eGFP-JunD
 antibodyDescription Goat polyclonal 
 targetDescription JunD 
 vendorName Kevin White
-vendorId
+vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
 lab White 
 lots 
