@@ -14,6 +14,7 @@ wgEncodeSunyGeneST.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhTfbs.ra \
+wgEncodeUncBsuProt.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwDnase.ra \

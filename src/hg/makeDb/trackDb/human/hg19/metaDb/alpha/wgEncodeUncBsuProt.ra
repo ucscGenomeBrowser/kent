@@ -1,0 +1,39 @@
+metaObject wgEncodeuncBsuProtGm12878NucleusSig
+objType table
+cell GM12878
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-05
+fileName wgEncodeUncBsuProtGm12878NucleusSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=0.2Da,msMsMassTolerance=0.5Da
+localization nucleus
+origAssembly hg19
+project wgEncode
+subId 3160
+tableName wgEncodeUncBsuProtGm12878NucleusSig
+view Signal
+
+metaObject wgEncodeuncBsuProtK562MembranefractionSig
+objType table
+cell K562
+composite wgEncodeUncBsuProt
+dataType Proteogenomics
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeUncBsuProtK562MembranefractionSig.peptideMapping.gz
+grant Giddings
+lab UNC/BSU
+labVersion enzyme=trypsin,miscleavages=2,precursorMassTolerance=.1Da,msMsMassTolerance=0.5Da
+localization membraneFraction
+origAssembly hg19
+project wgEncode
+subId 3238
+tableName wgEncodeUncBsuProtK562MembranefractionSig
+view Signal
+
+# MAGIC: -1519554458

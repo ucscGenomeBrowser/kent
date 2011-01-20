@@ -5,15 +5,19 @@
 #include "options.h"
 #include "hash.h"
 #include "cheapcgi.h"
-#include "hdb.h"
 #include "customTrack.h"
 #include "customFactory.h"
 #include "hui.h"
-
-static char const rcsid[] = "$Id: refreshNamedSessionCustomTracks.c,v 1.11 2010/01/13 17:27:35 angie Exp $";
+#include "hgConfig.h"
+#include <sys/wait.h>
+#include "errCatch.h"
 
 #define savedSessionTable "namedSessionDb"
-boolean hardcore = FALSE;
+
+int CFTEcalls = 0; 
+int numUpdates = 0;
+
+int numForks = 10;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,23 +35,153 @@ errAbort(
   "             which implies ../trash is: /usr/local/apache/trash\n"
   "    -atime=N - If the session has not been accessed since N days ago,\n"
   "             - don't refresh its custom tracks.  Default: no limit.\n"
+  "    -forks=N - Number of times to fork to recover memory.  Default: %d\n"
   "This is intended to be run as a nightly cron job for each central db.\n"
   "The ~/.hg.conf file (or $HGDB_CONF) must specify the same central db\n"
   "as the command line.  [The command line arg helps to verify coordination.]",
-  savedSessionTable, CGI_BIN, CGI_BIN
+  savedSessionTable, CGI_BIN, CGI_BIN, numForks
   );
 }
 
 /* Options: */
 static struct optionSpec options[] = {
     {"atime",    OPTION_INT},
-    {"workDir",    OPTION_STRING},
+    {"workDir",  OPTION_STRING},
+    {"forks",  OPTION_INT},
     {"hardcore", OPTION_BOOLEAN}, /* Intentionally omitted from usage(). */
     {NULL, 0},
 };
 
-char *scanSettingsForCT(char *userName, char *sessionName, char *contents,
-			int *pLiveCount, int *pExpiredCount)
+struct sqlConnection *unCachedCentralConn()
+/* do not want a cached connection because we will close and fork */
+{
+return sqlConnectRemote( 
+ cfgOption("central.host"),
+ cfgOption("central.user"    ),
+ cfgOption("central.password"),
+ cfgOption("central.db")
+);
+}
+
+void showVmPeak()
+/* show peak mem usage */
+{
+pid_t pid = getpid();
+char temp[256];
+printf("# pid=%d: ",pid); fflush(stdout);
+safef(temp, sizeof(temp), "grep VmPeak /proc/%d/status", (int) pid);
+(void) system(temp);
+fflush(stdout);
+}
+
+// due to bug in OS, won't work without a handler
+static void handle_SIGCHLD(int sig)
+{
+}
+
+sigset_t mask;
+sigset_t orig_mask;  
+
+pid_t forkIt()
+/* block sigchld and fork */
+{
+
+// due to bug in OS we have to set up a sigchld handler
+// even though we don't use it.
+struct sigaction act;
+(void)memset (&act, 0, sizeof(act));
+act.sa_handler = handle_SIGCHLD;
+if (sigaction(SIGCHLD, &act, 0)) 
+    {
+    perror("sigaction err");
+    }
+
+sigemptyset (&mask);
+sigaddset (&mask, SIGCHLD);
+
+/* BLOCK to prevent a race condition that loses SIGCHLD events */
+if (sigprocmask(SIG_BLOCK, &mask, &orig_mask) < 0) 
+    {
+    perror ("sigprocmask");
+    }
+
+/* This is critical because we are about to fork, 
+ * otherwise your output is a mess with weird duplicates */
+fflush(stdout); fflush(stderr);
+
+pid_t pid = fork();
+if (pid < 0)
+    errnoAbort("refreshNamedSessionCustomTracks can't fork");
+if (pid == 0)  // child
+    {
+    if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD
+	{
+	perror("sigprocmask SIG_SETMASK to unblock child SIGCHLD");
+	}
+    }
+
+return pid;
+}
+
+void waitForChildWithTimeout(pid_t pid)
+/* wait for child with timeout */
+{
+
+int wstat;
+struct timespec timeout;
+
+timeout.tv_sec = 2400;  // TODO make this a parameter
+timeout.tv_nsec = 0;
+
+while (1)
+    {
+    int sig = sigtimedwait(&mask, NULL, &timeout);
+    int savedErrno = errno;
+
+    if (sig < 0) 
+	{
+	if (savedErrno == EINTR) 
+	    {
+	    /* Interrupted by a signal other than SIGCHLD. */
+	    /* An minor improvement would be to subtract the time already consumed before continuing. */
+	    verbose(1, "EINTR received, ignoring");
+	    fflush(stdout); fflush(stderr);
+	    continue;
+	    }
+	else if (savedErrno == EAGAIN) 
+	    {
+	    verbose(1,"Timed out, killing child pid %d\n", pid);
+	    fflush(stdout); fflush(stderr);
+	    kill (pid, SIGKILL);
+	    }
+	else 
+	    {
+	    perror ("sigtimedwait");
+	    fflush(stdout); fflush(stderr);
+	    return;
+	    }
+	}
+
+    break;  /* received SIGCHLD */
+    }
+
+if (sigprocmask(SIG_SETMASK, &orig_mask, NULL) < 0)  // unblock SIGCHLD
+    {
+    perror("sigprocmask SIG_SETMASK to unblock SIGCHLD");
+    }
+if (waitpid(pid, &wstat, 0) < 0)
+    {
+    perror("waitpid failed");
+    fflush(stdout); fflush(stderr);
+    return;
+    }
+
+
+}
+
+
+void scanSettingsForCT(char *userName, char *sessionName,
+			int *pLiveCount, int *pExpiredCount, struct sqlConnection *conn)
 /* Parse the CGI-encoded session contents into {var,val} pairs and search
  * for custom tracks.  If found, refresh the custom track.  Parsing code 
  * taken from cartParseOverHash. 
@@ -55,12 +189,23 @@ char *scanSettingsForCT(char *userName, char *sessionName, char *contents,
  * command that will remove those from this session.  We can't just do 
  * the update here because that messes up the caller's query. */
 {
+
+char query[512];
+
+safef(query, sizeof(query),
+	  "select contents from %s "
+	  "where userName='%s' and sessionName = '%s'", savedSessionTable, userName, sessionName);
+char *contents = sqlQuickString(conn, query);
+if (!contents)
+    return;
+
 int contentLength = strlen(contents);
 struct dyString *newContents = dyStringNew(contentLength+1);
 struct dyString *oneSetting = dyStringNew(contentLength / 4);
-char *updateIfAny = NULL;
 char *contentsToChop = cloneString(contents);
 char *namePt = contentsToChop;
+
+
 verbose(3, "Scanning %s %s\n", userName, sessionName);
 while (isNotEmpty(namePt))
     {
@@ -93,10 +238,19 @@ while (isNotEmpty(namePt))
 	    }
 	else
 	    {
-	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
 	    dyStringAppend(newContents, oneSetting->string);
-	    customFactoryTestExistence(db, dataPt,
-				       &thisGotLiveCT, &thisGotExpiredCT);
+	    char *db = namePt + strlen(CT_FILE_VAR_PREFIX);
+
+	    /* put some error catching in so it won't just abort  */
+	    struct errCatch *errCatch = errCatchNew();
+	    if (errCatchStart(errCatch))
+		customFactoryTestExistence(db, dataPt, &thisGotLiveCT, &thisGotExpiredCT);
+	    errCatchEnd(errCatch);
+	    if (errCatch->gotError)
+		warn("sessionList errCatch: %s", errCatch->message->string);
+	    errCatchFree(&errCatch);
+
+	    ++CFTEcalls;
 	    }
 	if (thisGotLiveCT && pLiveCount != NULL)
 	    (*pLiveCount)++;
@@ -117,8 +271,9 @@ while (isNotEmpty(namePt))
 	dyStringAppend(newContents, oneSetting->string);
     namePt = nextNamePt;
     }
-/* only if hardcore do we need to go through all this rigamarole */
-if (hardcore && (newContents->stringSize != contentLength))
+if (newContents->stringSize != contentLength) 
+    ++numUpdates;
+if (optionExists("hardcore") && newContents->stringSize != contentLength)  // almost never used
     {
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
@@ -133,12 +288,15 @@ if (hardcore && (newContents->stringSize != contentLength))
 	    "(original length %d, now %d)\n", 
 	    userName, sessionName,
 	    contentLength, newContents->stringSize);
-    updateIfAny = dyStringCannibalize(&update);
+    sqlUpdate(conn, update->string);
+    dyStringFree(&update);
     }
 dyStringFree(&oneSetting);
 dyStringFree(&newContents);
 freeMem(contentsToChop);
-return updateIfAny;
+freeMem(contents);
+return;
+
 }
 
 struct sessionInfo
@@ -146,15 +304,14 @@ struct sessionInfo
     struct sessionInfo *next;
     char userName[256];
     char sessionName[256];
-    char *contents;
     };
 
 void refreshNamedSessionCustomTracks(char *centralDbName)
 /* refreshNamedSessionCustomTracks -- cron robot for keeping alive custom 
  * tracks that are referenced by saved sessions. */
 {
-struct sqlConnection *conn = hConnectCentral();
-struct slPair *updateList = NULL, *update;
+
+struct sqlConnection *conn = unCachedCentralConn();
 char *actualDbName = sqlGetDatabase(conn);
 int liveCount=0, expiredCount=0;
 
@@ -175,14 +332,14 @@ if (atime > 0)
     threshold = now - ((long long)atime * 24 * 60 * 60);
     }
 
+struct sessionInfo *sessionList = NULL, *si;
 if (sqlTableExists(conn, savedSessionTable))
     {
-    struct sessionInfo *sessionList = NULL, *si, *siNext;
     struct sqlResult *sr = NULL;
     char **row = NULL;
     char query[512];
     safef(query, sizeof(query),
-	  "select userName,sessionName,UNIX_TIMESTAMP(lastUse),contents from %s "
+	  "select userName,sessionName,UNIX_TIMESTAMP(lastUse) from %s "
 	  "order by userName,sessionName", savedSessionTable);
     sr = sqlGetResult(conn, query);
     // Slurp results into memory instead of processing row by row,
@@ -202,56 +359,81 @@ if (sqlTableExists(conn, savedSessionTable))
 	AllocVar(si);
 	safecpy(si->userName, sizeof(si->userName), row[0]);
 	safecpy(si->sessionName, sizeof(si->sessionName), row[1]);
-	si->contents = cloneString(row[3]);
 	slAddHead(&sessionList, si);
 	}
     sqlFreeResult(&sr);
-    if (!hardcore)  /* done with this in the case of not hardcore */
-	hDisconnectCentral(&conn);
-    siNext = NULL;
-    for (si = sessionList;  si != NULL;  si = siNext)
+    }
+
+sqlDisconnect(&conn);
+
+int childDone=0;
+int perFork = slCount(sessionList) / numForks;
+if (perFork < 1)
+    perFork = 1;
+
+verbose(1, "listlength=%d numForks=%d perFork = %d\n", slCount(sessionList), numForks, perFork);
+
+pid_t pid = 0;
+boolean parent = TRUE;
+for (si = sessionList;  si != NULL;  si = si->next)
+    {
+    if (parent && childDone == 0)
 	{
-	char *updateIfAny = scanSettingsForCT(si->userName, si->sessionName,
-	    si->contents, &liveCount, &expiredCount);
-	siNext = si->next;
-	freeMem(si->contents);
-	freeMem(si);
-	if (updateIfAny)  /* can only happen on hardcore */
+	pid = forkIt();
+	if (pid == 0)
 	    {
-	    AllocVar(update);
-	    update->name = updateIfAny;
-	    slAddHead(&updateList, update);
+	    parent = FALSE;
+	    conn = unCachedCentralConn();
+	    }
+        }
+    
+    if (!parent)
+    	scanSettingsForCT(si->userName, si->sessionName, &liveCount, &expiredCount, conn);
+    ++childDone;
+
+    if (!si->next)
+        childDone = perFork;
+	
+    if (childDone >= perFork)
+	{
+
+	childDone = 0;
+	if (parent)
+	    {
+	    waitForChildWithTimeout(pid);
+	    }
+        else
+	    {
+	    verbose(1, "# of updates found: %d\n", numUpdates);
+	    verbose(1, "# of CustomFactoryTextExistence calls done: %d\n", CFTEcalls);
+	    verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
+		liveCount, expiredCount, centralDbName);
+	    sqlDisconnect(&conn);
+	    showVmPeak();
+	    exit(0);
 	    }
 	}
     }
 
-/* Now that we're done reading from savedSessionTable, we can modify it: */
-if (hardcore)
-    {
-    struct slPair *nextUpdate = NULL;
-    for (update = updateList;  update != NULL; update = nextUpdate)
-	{
-	sqlUpdate(conn, update->name);
-	nextUpdate = update->next;
-	freeMem(update->name);
-	freez(update);
-	}
-    hDisconnectCentral(&conn);
-    }
-verbose(1, "Found %d live and %d expired custom tracks in %s.\n",
-	liveCount, expiredCount, centralDbName);
+
 }
 
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+numForks = optionInt("forks", numForks);
 char *workDir = optionVal("workDir", CGI_BIN);
-hardcore = optionExists("hardcore");
 setCurrentDir(workDir);
+
 refreshNamedSessionCustomTracks(argv[1]);
+
+showVmPeak();
+
 return 0;
 }
+

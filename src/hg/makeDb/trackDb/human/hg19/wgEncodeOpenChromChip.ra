@@ -4,31 +4,33 @@
 # Notes:
 #       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/UT-Austin (Open Chromatin)
 #       - Track Short Label: UTA TFBS
-#       - View Long Labels: [cell] [factor] TFBS [view] from ENCODE/UTA 
+#       - View Long Labels: [cell] [factor] TFBS [view] from ENCODE/UTA
 #       - cellType Order: Ordering is based on tier and alphabetical within a tier
-#       - Short Labels: 
+#       - Short Labels:
 #               Template: [cell] [factor] [view]
 #               - Views: For consistency sake view will be two letters
 #                       - Peaks = Pk
-#                       - Raw Base Overlap Signal = Sig
-#                       - F-seq Density Signal = F-Seq 
-#       - Default Tracks on: Peaks,F-Seq Density and Raw Base Overlap Signal for  tier 1 cells and Inputs.
-#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that define the tier and that they are distinct 
+#                       - F-seq Density Signal = FD
+#                       - Base Overlap Signal = BO
+#       - Default Tracks on: Peaks,F-Seq Density and Raw Overlap Signal for  tier 1 cells and Inputs.
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that define the tier and that they are distinct
 #		- [cell] (Tier ?)
 
 track wgEncodeOpenChromChip
 compositeTrack on
 superTrack wgEncodeTfBindingSuper full
 shortLabel UTA TFBS
-longLabel ENCODE Trascription Factor Binding Site by  ChIP-seq from UT-Austin (Open Chromatin)
+longLabel Open Chromatin TFBS by ChIP-seq from ENCODE/UTA
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Raw_Base_Overlap_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;<i>Tier1</i> H1=H1-hESC&nbsp;<i>Tier1</i> K562=K562&nbsp;<i>Tier1</i> HELA=HeLa-S3&nbsp;<i>Tier2</i> HEPG2=HepG2&nbsp;<i>Tier2</i> HUVEC=HUVEC&nbsp;<i>Tier2</i> AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;<i>Tier1</i> H1=H1-hESC&nbsp;<i>Tier1</i> K562=K562&nbsp;<i>Tier1</i> HELA=HeLa-S3&nbsp;<i>Tier2</i> HEPG2=HepG2&nbsp;<i>Tier2</i> HUVEC=HUVEC&nbsp;<i>Tier2</i> AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MonoCD14=Monocytes-CD14+ MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
 subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
-subGroup4 treatment Treatment NONE=None VEH=vehicle ESTRO=Estradiol;(estrogen)
+subGroup4 treatment Treatment AANONE=None ESTRO=Estradiol;(estrogen) VEH=vehicle
 sortOrder cellType=+ factor=+ treatment=+ view=+
 fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
-dimensions dimensionY=cellType dimensionX=factor
+dimensions dimA=treatment dimensionY=cellType dimensionX=factor
+dimensionAchecked AANONE
+filterComposite dimA=multi
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
 noInherit on
@@ -54,8 +56,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel GM12878 c-Myc Pk
-        longLabel ENCODE UTA TFBS Peaks (c-Myc in GM12878 cells)
-        subGroups treatment=NONE view=Peaks factor=CMYC cellType=GM12878
+        longLabel GM12878, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=GM12878
         type narrowPeak
         origAssembly hg18
         color 153,38,0
@@ -65,8 +67,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel GM12878 Pol2 Pk
-        longLabel ENCODE UTA TFBS Peaks (Pol2 in GM12878 cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=GM12878
+        longLabel GM12878, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=GM12878
         type narrowPeak
         origAssembly hg18
         color 153,38,0
@@ -76,8 +78,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel GM12891 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in GM12891 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=GM12891
+        longLabel GM12891, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=GM12891
         type narrowPeak
         origAssembly hg18
         # subId=1490 dateSubmitted=2010-06-16
@@ -86,8 +88,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel GM12892 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in GM12892 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=GM12892
+        longLabel GM12892, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=GM12892
         type narrowPeak
         origAssembly hg18
         # subId=1491 dateSubmitted=2010-06-16
@@ -96,8 +98,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HeLa-S3 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in HeLa-S3 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=HELA
+        longLabel HeLa-S3, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=HELA
         type narrowPeak
         origAssembly hg18
         color 0,119,158
@@ -107,8 +109,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel H1-hESC CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in H1-hESC cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=H1
+        longLabel H1-hESC, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=H1
         type narrowPeak
         origAssembly hg18
         color 0,107,27
@@ -118,8 +120,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HeLa-S3 c-Myc Pk
-        longLabel ENCODE UTA TFBS Peaks (c-Myc in HeLa-S3 cells)
-        subGroups treatment=NONE view=Peaks factor=CMYC cellType=HELA
+        longLabel HeLa-S3, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=HELA
         type narrowPeak
         origAssembly hg18
         color 0,119,158
@@ -129,8 +131,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel H1-hESC c-Myc Pk
-        longLabel ENCODE UTA TFBS Peaks (c-Myc in H1-hESC cells)
-        subGroups treatment=NONE view=Peaks factor=CMYC cellType=H1
+        longLabel H1-hESC, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=H1
         type narrowPeak
         origAssembly hg18
         color 0,107,27
@@ -140,8 +142,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HeLa-S3 Pol2 Pk
-        longLabel ENCODE UTA TFBS Peaks (Pol2 in HeLa-S3 cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=HELA
+        longLabel HeLa-S3, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=HELA
         type narrowPeak
         origAssembly hg18
         color 0,119,158
@@ -151,8 +153,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel GM19238 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in GM19238 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=GM19238
+        longLabel GM19238, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=GM19238
         type narrowPeak
         origAssembly hg18
         # subId=1516 dateSubmitted=2010-06-16
@@ -161,8 +163,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HepG2 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in HepG2 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=HEPG2
+        longLabel HepG2, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=HEPG2
         type narrowPeak
         origAssembly hg18
         color 189,0,157
@@ -172,8 +174,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel GM19239 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in GM19239 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=GM19239
+        longLabel GM19239, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=GM19239
         type narrowPeak
         origAssembly hg18
         # subId=1525 dateSubmitted=2010-06-16
@@ -182,8 +184,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HepG2 Pol2 Pk
-        longLabel ENCODE UTA TFBS Peaks (Pol2 in HepG2 cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=HEPG2
+        longLabel HepG2, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=HEPG2
         type narrowPeak
         origAssembly hg18
         color 189,0,157
@@ -193,8 +195,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HepG2 c-Myc Pk
-        longLabel ENCODE UTA TFBS Peaks (c-Myc in HepG2 cells)
-        subGroups treatment=NONE view=Peaks factor=CMYC cellType=HEPG2
+        longLabel HepG2, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=HEPG2
         type narrowPeak
         origAssembly hg18
         color 189,0,157
@@ -204,8 +206,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel GM19240 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in GM19240 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=GM19240
+        longLabel GM19240, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=GM19240
         type narrowPeak
         origAssembly hg18
         # subId=1536 dateSubmitted=2010-06-17
@@ -214,8 +216,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HUVEC CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in HUVEC cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=HUVEC
+        longLabel HUVEC, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=HUVEC
         type narrowPeak
         origAssembly hg18
         color 224,75,0
@@ -225,8 +227,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel K562 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in K562 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=K562
+        longLabel K562, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=K562
         type narrowPeak
         origAssembly hg18
         color 46,0,184
@@ -236,8 +238,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel NHEK CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in NHEK cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=NHEK
+        longLabel NHEK, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=NHEK
         type narrowPeak
         origAssembly hg18
         color 179,0,134
@@ -247,8 +249,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HUVEC Pol2 Pk
-        longLabel ENCODE UTA TFBS Peaks (Pol2 in HUVEC cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=HUVEC
+        longLabel HUVEC, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=HUVEC
         type narrowPeak
         origAssembly hg18
         color 224,75,0
@@ -258,8 +260,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel K562 Pol2 Pk
-        longLabel ENCODE UTA TFBS Peaks (Pol2 in K562 cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=K562
+        longLabel K562, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=K562
         type narrowPeak
         origAssembly hg18
         color 46,0,184
@@ -269,8 +271,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel HUVEC c-Myc Pk
-        longLabel ENCODE UTA TFBS Peaks (c-Myc in HUVEC cells)
-        subGroups treatment=NONE view=Peaks factor=CMYC cellType=HUVEC
+        longLabel HUVEC, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=HUVEC
         type narrowPeak
         origAssembly hg18
         color 224,75,0
@@ -280,8 +282,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel K562 c-Myc Pk
-        longLabel ENCODE UTA TFBS Peaks (c-Myc in K562 cells)
-        subGroups treatment=NONE view=Peaks factor=CMYC cellType=K562
+        longLabel K562, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CMYC cellType=K562
         type narrowPeak
         origAssembly hg18
         color 46,0,184
@@ -291,8 +293,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks (CTCF in MCF-7 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=MCF7
+        longLabel MCF-7, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=MCF7
         type narrowPeak
         origAssembly hg18
         # subId=1580 dateSubmitted=2010-06-17
@@ -301,8 +303,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel ProgFib Pol2 Pk
-        longLabel ENCODE UTA TFBS Peaks Replicate 1 (Pol2 in ProgFib cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=PROG
+        longLabel ProgFib, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=PROG
         type narrowPeak
         origAssembly hg18
         # subId=1652 dateSubmitted=2010-06-19
@@ -311,8 +313,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel ProgFib CTCF Pk
-        longLabel ENCODE UTA TFBS Peaks Replicate 1 (CTCF in ProgFib cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=PROG
+        longLabel ProgFib, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=PROG
         type narrowPeak
         origAssembly hg18
         # subId=1657 dateSubmitted=2010-06-19
@@ -321,8 +323,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks
         shortLabel H1-hESC Pol2 Pk
-        longLabel ENCODE UTA TFBS Peaks (Pol2 in H1-hESC cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=H1
+        longLabel H1-hESC, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=H1
         type narrowPeak
         origAssembly hg18
         color 0,107,27
@@ -332,8 +334,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel GM12878 CTCF Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (CTCF in GM12878 cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=GM12878
+        longLabel GM12878, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=GM12878
         type narrowPeak
         origAssembly hg18
         color 153,38,0
@@ -343,8 +345,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel Fibrobl CTCF Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (CTCF in Fibrobl cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=FIBRO
+        longLabel Fibrobl, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=FIBRO
         type narrowPeak
         # subId=2480 dateSubmitted=2010-10-13
 
@@ -352,16 +354,16 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel MCF-7 Pol2 Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (Pol2 in MCF-7 cells)
-        subGroups treatment=NONE view=Peaks factor=POL2 cellType=MCF7
+        longLabel MCF-7, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=MCF7
         type narrowPeak
         # subId=2495 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromChipMcf7CtcfEstroPkRep1
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 CTCF Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (CTCF in MCF-7 cells)
+        shortLabel MCF-7 est CTCF Pk
+        longLabel MCF-7 estrogen, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
         subGroups treatment=ESTRO view=Peaks factor=CTCF cellType=MCF7
         type narrowPeak
         # subId=2502 dateSubmitted=2010-10-16
@@ -369,8 +371,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycVehPkRep1
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 c-Myc Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (c-Myc in MCF-7 cells)
+        shortLabel MCF-7 veh cMyc Pk
+        longLabel MCF-7 vehicle, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
         subGroups treatment=VEH view=Peaks factor=CMYC cellType=MCF7
         type narrowPeak
         # subId=2504 dateSubmitted=2010-10-16
@@ -378,8 +380,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfVehPkRep1
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 CTCF Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (CTCF in MCF-7 cells)
+        shortLabel MCF-7 veh CTCF Pk
+        longLabel MCF-7 vehicle, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
         subGroups treatment=VEH view=Peaks factor=CTCF cellType=MCF7
         type narrowPeak
         # subId=2505 dateSubmitted=2010-10-16
@@ -388,19 +390,28 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
         shortLabel Gliobla CTCF Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (CTCF in Gliobla cells)
-        subGroups treatment=NONE view=Peaks factor=CTCF cellType=Gliobla
+        longLabel Gliobla, CTCF - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=CTCF cellType=Gliobla
         type narrowPeak
         # subId=2516 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromChipMcf7CmycEstroPkRep1
         release alpha
         parent wgEncodeOpenChromChipViewPeaks off
-        shortLabel MCF-7 c-Myc Pk
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Peaks (c-Myc in MCF-7 cells)
+        shortLabel MCF-7 est cMyc Pk
+        longLabel MCF-7 estrogen, c-Myc - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
         subGroups view=Peaks factor=CMYC cellType=MCF7 treatment=ESTRO
         type narrowPeak
         # subId=2503 dateSubmitted=2010-10-16
+
+        track wgEncodeOpenChromChipGlioblaPol2PkRep1
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel Gliobla Pol2 Pk
+        longLabel Gliobla, Pol2 - Open Chromatin TFBS by ChIP-seq Peaks from ENCODE/UTA
+        subGroups treatment=AANONE view=Peaks factor=POL2 cellType=Gliobla
+        type narrowPeak
+        # subId=3272 dateSubmitted=2011-01-17
 
 
     track wgEncodeOpenChromChipViewSignal
@@ -418,9 +429,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12878CmycSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel GM12878 c-Myc FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (c-Myc in GM12878 cells)
-        subGroups treatment=NONE view=SIG factor=CMYC cellType=GM12878
+        shortLabel GM12878 c-Myc DS
+        longLabel GM12878, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CMYC cellType=GM12878
         type bigWig 0.000000 0.750000
         origAssembly hg18
         color 153,38,0
@@ -429,9 +440,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12878Pol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel GM12878 Pol2 FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Pol2 in GM12878 cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=GM12878
+        shortLabel GM12878 Pol2 DS
+        longLabel GM12878, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=GM12878
         type bigWig 0.000000 3.535200
         origAssembly hg18
         color 153,38,0
@@ -440,9 +451,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12891CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel GM12891 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in GM12891 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=GM12891
+        shortLabel GM12891 CTCF DS
+        longLabel GM12891, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=GM12891
         type bigWig 0.000000 16.499300
         origAssembly hg18
         # subId=1490 dateSubmitted=2010-06-16
@@ -450,9 +461,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12892CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel GM12892 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in GM12892 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=GM12892
+        shortLabel GM12892 CTCF DS
+        longLabel GM12892, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=GM12892
         type bigWig 0.000000 13.367100
         origAssembly hg18
         # subId=1491 dateSubmitted=2010-06-16
@@ -460,9 +471,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHelas3CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HeLa-S3 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in HeLa-S3 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=HELA
+        shortLabel HeLa-S3 CTCF DS
+        longLabel HeLa-S3, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=HELA
         type bigWig 0.000000 8.258300
         origAssembly hg18
         color 0,119,158
@@ -471,9 +482,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipH1hescCtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel H1-hESC CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in H1-hESC cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=H1
+        shortLabel H1-hESC CTCF DS
+        longLabel H1-hESC, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=H1
         type bigWig 0.000000 10.491300
         origAssembly hg18
         color 0,107,27
@@ -482,9 +493,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHelas3CmycSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HeLa-S3 c-Myc FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (c-Myc in HeLa-S3 cells)
-        subGroups treatment=NONE view=SIG factor=CMYC cellType=HELA
+        shortLabel HeLa-S3 c-Myc DS
+        longLabel HeLa-S3, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CMYC cellType=HELA
         type bigWig 0.000000 0.824800
         origAssembly hg18
         color 0,119,158
@@ -493,9 +504,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipH1hescCmycSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel H1-hESC c-Myc FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (c-Myc in H1-hESC cells)
-        subGroups treatment=NONE view=SIG factor=CMYC cellType=H1
+        shortLabel H1-hESC c-Myc DS
+        longLabel H1-hESC, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CMYC cellType=H1
         type bigWig 0.000000 1.701300
         origAssembly hg18
         color 0,107,27
@@ -504,9 +515,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHelas3Pol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HeLa-S3 Pol2 FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Pol2 in HeLa-S3 cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=HELA
+        shortLabel HeLa-S3 Pol2 DS
+        longLabel HeLa-S3, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=HELA
         type bigWig 0.000000 4.858800
         origAssembly hg18
         color 0,119,158
@@ -515,9 +526,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm19238CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel GM19238 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in GM19238 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=GM19238
+        shortLabel GM19238 CTCF DS
+        longLabel GM19238, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=GM19238
         type bigWig 0.000000 15.617600
         origAssembly hg18
         # subId=1516 dateSubmitted=2010-06-16
@@ -525,9 +536,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHepg2CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HepG2 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in HepG2 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=HEPG2
+        shortLabel HepG2 CTCF DS
+        longLabel HepG2, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=HEPG2
         type bigWig 0.000000 7.433400
         origAssembly hg18
         color 189,0,157
@@ -536,9 +547,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12878InputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel GM12878 Input FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Input in GM12878 cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=GM12878
+        shortLabel GM12878 Input DS
+        longLabel GM12878, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=GM12878
         type bigWig 0.000000 3.131200
         origAssembly hg18
         color 153,38,0
@@ -547,9 +558,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm19239CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel GM19239 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in GM19239 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=GM19239
+        shortLabel GM19239 CTCF DS
+        longLabel GM19239, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=GM19239
         type bigWig 0.000000 13.094600
         origAssembly hg18
         # subId=1525 dateSubmitted=2010-06-16
@@ -557,9 +568,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHepg2Pol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HepG2 Pol2 FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Pol2 in HepG2 cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=HEPG2
+        shortLabel HepG2 Pol2 DS
+        longLabel HepG2, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=HEPG2
         type bigWig 0.000000 6.043500
         origAssembly hg18
         color 189,0,157
@@ -568,9 +579,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHepg2CmycSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HepG2 c-Myc FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (c-Myc in HepG2 cells)
-        subGroups treatment=NONE view=SIG factor=CMYC cellType=HEPG2
+        shortLabel HepG2 c-Myc DS
+        longLabel HepG2, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CMYC cellType=HEPG2
         type bigWig 0.000000 1.815900
         origAssembly hg18
         color 189,0,157
@@ -579,9 +590,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm19240CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel GM19240 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in GM19240 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=GM19240
+        shortLabel GM19240 CTCF DS
+        longLabel GM19240, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=GM19240
         type bigWig 0.000000 16.539000
         origAssembly hg18
         # subId=1536 dateSubmitted=2010-06-17
@@ -589,9 +600,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHuvecCtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HUVEC CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in HUVEC cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=HUVEC
+        shortLabel HUVEC CTCF DS
+        longLabel HUVEC, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=HUVEC
         type bigWig 0.000000 10.211700
         origAssembly hg18
         color 224,75,0
@@ -600,9 +611,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipK562CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel K562 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in K562 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=K562
+        shortLabel K562 CTCF DS
+        longLabel K562, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=K562
         type bigWig 0.000000 6.820800
         origAssembly hg18
         color 46,0,184
@@ -611,9 +622,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipNhekCtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel NHEK CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in NHEK cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=NHEK
+        shortLabel NHEK CTCF DS
+        longLabel NHEK, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=NHEK
         type bigWig 0.000000 16.593500
         origAssembly hg18
         color 179,0,134
@@ -622,9 +633,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHuvecPol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HUVEC Pol2 FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Pol2 in HUVEC cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=HUVEC
+        shortLabel HUVEC Pol2 DS
+        longLabel HUVEC, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=HUVEC
         type bigWig 0.000000 10.084000
         origAssembly hg18
         color 224,75,0
@@ -633,9 +644,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipK562Pol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel K562 Pol2 FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Pol2 in K562 cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=K562
+        shortLabel K562 Pol2 DS
+        longLabel K562, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=K562
         type bigWig 0.000000 5.497300
         origAssembly hg18
         color 46,0,184
@@ -644,9 +655,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHuvecCmycSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HUVEC c-Myc FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (c-Myc in HUVEC cells)
-        subGroups treatment=NONE view=SIG factor=CMYC cellType=HUVEC
+        shortLabel HUVEC c-Myc DS
+        longLabel HUVEC, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CMYC cellType=HUVEC
         type bigWig 0.000000 2.169800
         origAssembly hg18
         color 224,75,0
@@ -655,9 +666,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipK562CmycSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel K562 c-Myc FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (c-Myc in K562 cells)
-        subGroups treatment=NONE view=SIG factor=CMYC cellType=K562
+        shortLabel K562 c-Myc DS
+        longLabel K562, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CMYC cellType=K562
         type bigWig 0.000000 1.981500
         origAssembly hg18
         color 46,0,184
@@ -666,9 +677,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in MCF-7 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=MCF7
+        shortLabel MCF-7 CTCF DS
+        longLabel MCF-7, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=MCF7
         type bigWig 0.000000 10.135200
         origAssembly hg18
         # subId=1580 dateSubmitted=2010-06-17
@@ -676,9 +687,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipK562InputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel K562 Input FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Input in K562 cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=K562
+        shortLabel K562 Input DS
+        longLabel K562, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=K562
         type bigWig 0.000000 3.978400
         origAssembly hg18
         color 46,0,184
@@ -687,9 +698,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHuvecInputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HUVEC Input FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Input in HUVEC cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=HUVEC
+        shortLabel HUVEC Input DS
+        longLabel HUVEC, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=HUVEC
         type bigWig 0.000000 4.696200
         origAssembly hg18
         color 224,75,0
@@ -698,9 +709,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHepg2InputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HepG2 Input FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Input in HepG2 cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=HEPG2
+        shortLabel HepG2 Input DS
+        longLabel HepG2, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=HEPG2
         type bigWig 0.000000 5.315900
         origAssembly hg18
         color 189,0,157
@@ -709,9 +720,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHelas3InputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel HeLa-S3 Input FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Input in HeLa-S3 cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=HELA
+        shortLabel HeLa-S3 Input DS
+        longLabel HeLa-S3, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=HELA
         type bigWig 0.000000 3.396000
         origAssembly hg18
         color 0,119,158
@@ -720,9 +731,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipProgfibPol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel ProgFib Pol2 FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Pol2 in ProgFib cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=PROG
+        shortLabel ProgFib Pol2 DS
+        longLabel ProgFib, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=PROG
         type bigWig 0.000000 5.686900
         origAssembly hg18
         # subId=1652 dateSubmitted=2010-06-19
@@ -730,9 +741,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipProgfibCtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel ProgFib CTCF FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (CTCF in ProgFib cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=PROG
+        shortLabel ProgFib CTCF DS
+        longLabel ProgFib, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=PROG
         type bigWig 0.000000 4.544500
         origAssembly hg18
         # subId=1657 dateSubmitted=2010-06-19
@@ -740,9 +751,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipProgfibInputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel ProgFib Input FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Input in ProgFib cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=PROG
+        shortLabel ProgFib Input DS
+        longLabel ProgFib, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=PROG
         type bigWig 0.000000 3.510000
         origAssembly hg18
         # subId=1832 dateSubmitted=2010-06-22
@@ -750,9 +761,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipH1hescPol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal
-        shortLabel H1-hESC Pol2 FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Pol2 in H1-hESC cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=H1
+        shortLabel H1-hESC Pol2 DS
+        longLabel H1-hESC, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=H1
         type bigWig 0.000000 2.933300
         origAssembly hg18
         color 0,107,27
@@ -761,9 +772,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7InputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 Input FD
-        longLabel ENCODE UTA TFBS F-Seq Density Signal (Input in MCF-7 cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=MCF7
+        shortLabel MCF-7 Input DS
+        longLabel MCF-7, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=MCF7
         type bigWig 0.000000 3.677800
         origAssembly hg18
         # subId=1834 dateSubmitted=2010-06-22
@@ -771,18 +782,18 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipFibroblInputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel Fibrobl Input Sig
-        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in Fibrobl cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=FIBRO
+        shortLabel Fibrobl Input DS
+        longLabel Fibrobl, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=FIBRO
         type bigWig 0.000000 4.264300
         # subId=2487 dateSubmitted=2010-10-14
 
         track wgEncodeOpenChromChipGm12878CtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel GM12878 CTCF Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (CTCF in GM12878 cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=GM12878
+        shortLabel GM12878 CTCF DS
+        longLabel GM12878, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=GM12878
         type bigWig 0.000000 7.630200
         origAssembly hg18
         color 153,38,0
@@ -791,35 +802,35 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipFibroblCtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel Fibrobl CTCF Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (CTCF in Fibrobl cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=FIBRO
+        shortLabel Fibrobl CTCF DS
+        longLabel Fibrobl, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=FIBRO
         type bigWig 0.000000 11.194300
         # subId=2480 dateSubmitted=2010-10-13
 
         track wgEncodeOpenChromChipMcf7Pol2Sig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 Pol2 Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (Pol2 in MCF-7 cells)
-        subGroups treatment=NONE view=SIG factor=POL2 cellType=MCF7
+        shortLabel MCF-7 Pol2 DS
+        longLabel MCF-7, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=MCF7
         type bigWig 0.000000 3.522500
         # subId=2495 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromChipGlioblaInputSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel Gliobla Input Sig
-        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in Gliobla cells)
-        subGroups treatment=NONE view=SIG factor=zCTRL cellType=Gliobla
+        shortLabel Gliobla Input DS
+        longLabel Gliobla, Input - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=Gliobla
         type bigWig 0.000000 2.692900
         # subId=2499 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromChipMcf7CtcfEstroSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 CTCF Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (CTCF in MCF-7 cells)
+        shortLabel MCF-7 est CTCF DS
+        longLabel MCF-7 estro, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
         subGroups treatment=ESTRO view=SIG factor=CTCF cellType=MCF7
         type bigWig 0.000000 4.305300
         # subId=2502 dateSubmitted=2010-10-16
@@ -827,8 +838,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycVehSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 c-Myc Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (c-Myc in MCF-7 cells)
+        shortLabel MCF-7 veh cMyc DS
+        longLabel MCF-7 veh, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
         subGroups treatment=VEH view=SIG factor=CMYC cellType=MCF7
         type bigWig 0.000000 3.484600
         # subId=2504 dateSubmitted=2010-10-16
@@ -836,8 +847,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfVehSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 CTCF Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (CTCF in MCF-7 cells)
+        shortLabel MCF-7 veh CTCF DS
+        longLabel MCF-7 veh, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
         subGroups treatment=VEH view=SIG factor=CTCF cellType=MCF7
         type bigWig 0.000000 6.029000
         # subId=2505 dateSubmitted=2010-10-16
@@ -845,20 +856,38 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGlioblaCtcfSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel Gliobla CTCF Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (CTCF in Gliobla cells)
-        subGroups treatment=NONE view=SIG factor=CTCF cellType=Gliobla
+        shortLabel Gliobla CTCF DS
+        longLabel Gliobla, CTCF - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=CTCF cellType=Gliobla
         type bigWig 0.000000 5.225800
         # subId=2516 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromChipMcf7CmycEstroSig
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
-        shortLabel MCF-7 c-Myc Sig
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq F-Seq Density Signal (c-Myc in MCF-7 cells)
+        shortLabel MCF-7 est cMyc DS
+        longLabel MCF-7 estr, c-Myc - Open Chromatin TFBS by ChIP-seq Density Signal, ENCODE/UTA
         subGroups view=SIG factor=CMYC cellType=MCF7 treatment=ESTRO
         type bigWig 0.000000 0.801700
         # subId=2503 dateSubmitted=2010-10-16
+
+        track wgEncodeOpenChromChipGlioblaPol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel Gliobla Pol2 DS
+        longLabel Gliobla, Pol2 - Open Chromatin TFBS by ChIP-seq Density Signal from ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=POL2 cellType=Gliobla
+        type bigWig 0.000000 2.464900
+        # subId=3272 dateSubmitted=2011-01-17
+
+        track wgEncodeOpenChromChipMonocd14InputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel Mono-CD14+ Input DS
+        longLabel Monocytes-CD14+, Input - Open Chromatin TFBS by ChIP-seq Density Signal from ENCODE/UTA
+        subGroups treatment=AANONE view=SIG factor=zCTRL cellType=MonoCD14
+        type bigWig 0.000000 3.876800
+        # subId=3271 dateSubmitted=2011-01-17
 
 
     track wgEncodeOpenChromChipViewSigBo
@@ -876,9 +905,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel GM12878 c-Myc BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (c-Myc in GM12878 cells)
-        subGroups treatment=NONE view=SIGBO factor=CMYC cellType=GM12878
+        shortLabel GM12878 c-Myc OS
+        longLabel GM12878, c-Myc - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=GM12878
         type bigWig 0.000000 599.000000
         origAssembly hg18
         color 153,38,0
@@ -887,9 +916,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel GM12878 Pol2 BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (Pol2 in GM12878 cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=GM12878
+        shortLabel GM12878 Pol2 OS
+        longLabel GM12878, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=GM12878
         type bigWig 0.000000 2100.000000
         origAssembly hg18
         color 153,38,0
@@ -898,9 +927,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel GM12891 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in GM12891 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=GM12891
+        shortLabel GM12891 CTCF OS
+        longLabel GM12891, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=GM12891
         type bigWig 0.000000 3417.000000
         origAssembly hg18
         # subId=1490 dateSubmitted=2010-06-16
@@ -908,9 +937,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel GM12892 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in GM12892 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=GM12892
+        shortLabel GM12892 CTCF OS
+        longLabel GM12892, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=GM12892
         type bigWig 0.000000 3515.000000
         origAssembly hg18
         # subId=1491 dateSubmitted=2010-06-16
@@ -918,9 +947,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HeLa-S3 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in HeLa-S3 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=HELA
+        shortLabel HeLa-S3 CTCF OS
+        longLabel HeLa-S3, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=HELA
         type bigWig 0.000000 1958.000000
         origAssembly hg18
         color 0,119,158
@@ -929,9 +958,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel H1-hESC CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in H1-hESC cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=H1
+        shortLabel H1-hESC CTCF OS
+        longLabel H1-hESC, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=H1
         type bigWig 0.000000 1248.000000
         origAssembly hg18
         color 0,107,27
@@ -940,9 +969,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HeLa-S3 c-Myc BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (c-Myc in HeLa-S3 cells)
-        subGroups treatment=NONE view=SIGBO factor=CMYC cellType=HELA
+        shortLabel HeLa-S3 c-Myc OS
+        longLabel ENCODE Open Chromatin, UTA TFBS Overlap Signal (c-Myc in HeLa-S3)
+        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=HELA
         type bigWig 0.000000 183.000000
         origAssembly hg18
         color 0,119,158
@@ -951,9 +980,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel H1-hESC c-Myc BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (c-Myc in H1-hESC cells)
-        subGroups treatment=NONE view=SIGBO factor=CMYC cellType=H1
+        shortLabel H1-hESC c-Myc OS
+        longLabel ENCODE Open Chromatin, UTA TFBS Overlap Signal (c-Myc in H1-hESC)
+        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=H1
         type bigWig 0.000000 626.000000
         origAssembly hg18
         color 0,107,27
@@ -962,9 +991,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HeLa-S3 Pol2 BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (Pol2 in HeLa-S3 cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=HELA
+        shortLabel HeLa-S3 Pol2 OS
+        longLabel HeLa-S3, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=HELA
         type bigWig 0.000000 2084.000000
         origAssembly hg18
         color 0,119,158
@@ -973,9 +1002,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel GM19238 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in GM19238 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=GM19238
+        shortLabel GM19238 CTCF OS
+        longLabel GM19238, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=GM19238
         type bigWig 0.000000 3403.000000
         origAssembly hg18
         # subId=1516 dateSubmitted=2010-06-16
@@ -983,9 +1012,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HepG2 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in HepG2 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=HEPG2
+        shortLabel HepG2 CTCF OS
+        longLabel HepG2, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=HEPG2
         type bigWig 0.000000 629.000000
         origAssembly hg18
         color 189,0,157
@@ -994,9 +1023,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel GM19239 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in GM19239 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=GM19239
+        shortLabel GM19239 CTCF OS
+        longLabel GM19239, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=GM19239
         type bigWig 0.000000 2555.000000
         origAssembly hg18
         # subId=1525 dateSubmitted=2010-06-16
@@ -1004,9 +1033,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HepG2 Pol2 BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (Pol2 in HepG2 cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=HEPG2
+        shortLabel HepG2 Pol2 OS
+        longLabel HepG2, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=HEPG2
         type bigWig 0.000000 2206.000000
         origAssembly hg18
         color 189,0,157
@@ -1015,9 +1044,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HepG2 c-Myc BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (c-Myc in HepG2 cells)
-        subGroups treatment=NONE view=SIGBO factor=CMYC cellType=HEPG2
+        shortLabel HepG2 c-Myc OS
+        longLabel HepG2, c-Myc - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=HEPG2
         type bigWig 0.000000 558.000000
         origAssembly hg18
         color 189,0,157
@@ -1026,9 +1055,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel GM19240 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in GM19240 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=GM19240
+        shortLabel GM19240 CTCF OS
+        longLabel GM19240, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=GM19240
         type bigWig 0.000000 3688.000000
         origAssembly hg18
         # subId=1536 dateSubmitted=2010-06-17
@@ -1036,9 +1065,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HUVEC CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in HUVEC cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=HUVEC
+        shortLabel HUVEC CTCF OS
+        longLabel HUVEC, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=HUVEC
         type bigWig 0.000000 1348.000000
         origAssembly hg18
         color 224,75,0
@@ -1047,9 +1076,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipK562CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel K562 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in K562 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=K562
+        shortLabel K562 CTCF OS
+        longLabel K562, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=K562
         type bigWig 0.000000 3149.000000
         origAssembly hg18
         color 46,0,184
@@ -1058,9 +1087,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel NHEK CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in NHEK cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=NHEK
+        shortLabel NHEK CTCF OS
+        longLabel NHEK, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=NHEK
         type bigWig 0.000000 3899.000000
         origAssembly hg18
         color 179,0,134
@@ -1069,9 +1098,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HUVEC Pol2 BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (Pol2 in HUVEC cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=HUVEC
+        shortLabel HUVEC Pol2 OS
+        longLabel HUVEC, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=HUVEC
         type bigWig 0.000000 3853.000000
         origAssembly hg18
         color 224,75,0
@@ -1080,9 +1109,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipK562Pol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel K562 Pol2 BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (Pol2 in K562 cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=K562
+        shortLabel K562 Pol2 OS
+        longLabel K562, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=K562
         type bigWig 0.000000 4459.000000
         origAssembly hg18
         color 46,0,184
@@ -1091,9 +1120,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel HUVEC c-Myc BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (c-Myc in HUVEC cells)
-        subGroups treatment=NONE view=SIGBO factor=CMYC cellType=HUVEC
+        shortLabel HUVEC c-Myc OS
+        longLabel HUVEC, c-Myc - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=HUVEC
         type bigWig 0.000000 530.000000
         origAssembly hg18
         color 224,75,0
@@ -1102,9 +1131,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipK562CmycBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel K562 c-Myc BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (c-Myc in K562 cells)
-        subGroups treatment=NONE view=SIGBO factor=CMYC cellType=K562
+        shortLabel K562 c-Myc OS
+        longLabel K562, c-Myc - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CMYC cellType=K562
         type bigWig 0.000000 1968.000000
         origAssembly hg18
         color 46,0,184
@@ -1113,9 +1142,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in MCF-7 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=MCF7
+        shortLabel MCF-7 CTCF OS
+        longLabel MCF-7, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=MCF7
         type bigWig 0.000000 4684.000000
         origAssembly hg18
         # subId=1580 dateSubmitted=2010-06-17
@@ -1123,9 +1152,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel ProgFib Pol2 BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (Pol2 in ProgFib cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=PROG
+        shortLabel ProgFib Pol2 OS
+        longLabel ProgFib, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=PROG
         type bigWig 0.000000 4358.000000
         origAssembly hg18
         # subId=1652 dateSubmitted=2010-06-19
@@ -1133,9 +1162,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel ProgFib CTCF BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (CTCF in ProgFib cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=PROG
+        shortLabel ProgFib CTCF OS
+        longLabel ProgFib, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=PROG
         type bigWig 0.000000 1963.000000
         origAssembly hg18
         # subId=1657 dateSubmitted=2010-06-19
@@ -1143,9 +1172,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo
-        shortLabel H1-hESC Pol2 BO
-        longLabel ENCODE UTA TFBS Raw Base Overlap Signal (Pol2 in H1-hESC cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=H1
+        shortLabel H1-hESC Pol2 OS
+        longLabel H1-hESC, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=H1
         type bigWig 0.000000 1223.000000
         origAssembly hg18
         color 0,107,27
@@ -1154,9 +1183,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel GM12878 CTCF
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (CTCF in GM12878 cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=GM12878
+        shortLabel GM12878 CTCF OS
+        longLabel GM12878, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=GM12878
         type bigWig 0.000000 1544.000000
         origAssembly hg18
         color 153,38,0
@@ -1165,26 +1194,26 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel Fibrobl CTCF
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (CTCF in Fibrobl cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=FIBRO
+        shortLabel Fibrobl CTCF OS
+        longLabel Fibrobl, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=FIBRO
         type bigWig 0.000000 3389.000000
         # subId=2480 dateSubmitted=2010-10-13
 
         track wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 Pol2
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (Pol2 in MCF-7 cells)
-        subGroups treatment=NONE view=SIGBO factor=POL2 cellType=MCF7
+        shortLabel MCF-7 Pol2 OS
+        longLabel MCF-7, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=MCF7
         type bigWig 0.000000 3498.000000
         # subId=2495 dateSubmitted=2010-10-15
 
         track wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 CTCF
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (CTCF in MCF-7 cells)
+        shortLabel MCF-7 est CTCF OS
+        longLabel MCF-7 estro, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
         subGroups treatment=ESTRO view=SIGBO factor=CTCF cellType=MCF7
         type bigWig 0.000000 4381.000000
         # subId=2502 dateSubmitted=2010-10-16
@@ -1192,8 +1221,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 c-Myc
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (c-Myc in MCF-7 cells)
+        shortLabel MCF-7 veh cMyc OS
+        longLabel MCF-7 veh, c-Myc - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
         subGroups treatment=VEH view=SIGBO factor=CMYC cellType=MCF7
         type bigWig 0.000000 4372.000000
         # subId=2504 dateSubmitted=2010-10-16
@@ -1201,8 +1230,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 CTCF
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (CTCF in MCF-7 cells)
+        shortLabel MCF-7 veh CTCF OS
+        longLabel MCF-7 veh, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
         subGroups treatment=VEH view=SIGBO factor=CTCF cellType=MCF7
         type bigWig 0.000000 5010.000000
         # subId=2505 dateSubmitted=2010-10-16
@@ -1210,18 +1239,27 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel Gliobla CTCF
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (CTCF in Gliobla cells)
-        subGroups treatment=NONE view=SIGBO factor=CTCF cellType=Gliobla
+        shortLabel Gliobla CTCF OS
+        longLabel Gliobla, CTCF - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=CTCF cellType=Gliobla
         type bigWig 0.000000 4832.000000
         # subId=2516 dateSubmitted=2010-10-20
 
         track wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
-        shortLabel MCF-7 c-Myc
-        longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq Base Overlap Signal (c-Myc in MCF-7 cells)
+        shortLabel MCF-7 est cMyc OS
+        longLabel MCF-7 estr, c-Myc - Open Chromatin TFBS by ChIP-seq Overlap Signal, ENCODE/UTA
         subGroups view=SIGBO factor=CMYC cellType=MCF7 treatment=ESTRO
         type bigWig 0.000000 2368.000000
         # subId=2503 dateSubmitted=2010-10-16
+
+        track wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel Gliobla Pol2 OS
+        longLabel Gliobla, Pol2 - Open Chromatin TFBS by ChIP-seq Overlap Signal from ENCODE/UTA
+        subGroups treatment=AANONE view=SIGBO factor=POL2 cellType=Gliobla
+        type bigWig 0.000000 2106.000000
+        # subId=3272 dateSubmitted=2011-01-17
 

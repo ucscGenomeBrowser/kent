@@ -954,6 +954,32 @@ A special trick can be included in the label.  In the example label if
 only the first part of the label (Estrogen) would be represented as a link to the controlled
 vocabulary.
 
+Downloadable Files associated with a composite
+----------------------------------------------
+Composites (e.g. ENCODE composites) frequently have downloadable files associated with them and
+located in a hgdownloads goldenPath/{db}/encode/{compoaiteName} directory.
+By including a 'fileSortOrder' setting, this downloads directory is reachable via the hgFileUi cgi.
+For this to work, each file must be referenced as an object in the metaDb and must have the
+composite={composite} var=val pair. Example:
+    track wgEncodeBroadHistone
+    compositeTrack on
+    fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+The setting uses tag=title not tag=direction.  All directions are initially forward. The tag
+portion of the tag=title must be the term in the mdb! The title portion is literally the column
+header. Two non-mdb terms are supported in the sort columns: fileSize and fileType.  The size is
+from the file itself and the type is determined by the file suffix.
+NOTE: Currently fileSortOrder is required for the downloads links to point to the hgFileUi CGI
+      instead of the {downloadsDir}/index.html.  However, hgFileUi wil still produce a default page
+      without the fileSortOrder setting.  Edit the URL to have hgFileUi?g={composite} to see it.
+      Use of this default is a good starting point for creating your fileSortOrder.
+NOTE: It is also possible to make a downloadsOnly composite as:
+    track wgEncodeUwDownloads
+    compositeTrack on
+    type bed 3
+    type downloadsOnly
+    fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+
+
 EXAMPLE of Composite Track with ADDITIONAL OPTIONS
 -------------------------------------------------
 track broadChromatinChIPSeq

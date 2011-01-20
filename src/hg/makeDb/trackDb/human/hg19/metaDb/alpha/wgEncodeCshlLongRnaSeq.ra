@@ -1604,7 +1604,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAllRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -1649,7 +1649,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -1694,7 +1694,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd1Rep1
 objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -1737,7 +1737,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd2Rep1
 objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -1780,7 +1780,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -1825,7 +1825,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -2900,6 +2900,28 @@ subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep1
 view AllRawSig
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2
+view AllRawSig
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
 objType table
 cell GM12878
@@ -2920,6 +2942,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2.bam
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep1
@@ -2943,6 +2987,27 @@ rnaExtract longNonPolyA
 subId 3133
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep2
+objType file
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep1
 objType file
 cell GM12878
@@ -2962,6 +3027,27 @@ project wgEncode
 replicate 1
 rnaExtract longNonPolyA
 subId 3133
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep2
+objType file
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep1
@@ -2986,6 +3072,28 @@ subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSig
 
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
+view MinusRawSig
+
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
 objType table
 cell GM12878
@@ -3006,6 +3114,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3133
 tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
+view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9198
+labProtocolId 004N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3236
+tableName wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusPapAllRawSigRep1
@@ -3828,7 +3958,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAllRawSigRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -3850,7 +3980,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -3872,7 +4002,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaFastqRd1Rep2
 objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -3893,7 +4023,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaFastqRd2Rep2
 objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -3914,7 +4044,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaMinusRawSigRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -3936,7 +4066,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaPlusRawSigRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4094,7 +4224,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAllRawSigRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4116,7 +4246,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4138,7 +4268,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaFastqRd1Rep2
 objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4159,7 +4289,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaFastqRd2Rep2
 objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4180,7 +4310,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaMinusRawSigRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4202,7 +4332,7 @@ metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaPlusRawSigRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4892,7 +5022,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAllRawSigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4914,7 +5044,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAllRawSigRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4936,7 +5066,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4958,7 +5088,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -4980,7 +5110,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd1Rep1
 objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5001,7 +5131,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd1Rep2
 objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5022,7 +5152,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd2Rep1
 objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5043,7 +5173,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd2Rep2
 objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5064,7 +5194,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5086,7 +5216,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5108,7 +5238,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5130,7 +5260,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5424,7 +5554,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAllRawSigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5468,7 +5598,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5512,7 +5642,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaFastqRd1Rep1
 objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5554,7 +5684,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaFastqRd2Rep1
 objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5596,7 +5726,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -5640,7 +5770,7 @@ metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6364,7 +6494,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAllRawSigRep1
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6386,7 +6516,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAllRawSigRep2
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6408,7 +6538,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6430,7 +6560,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep2
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6452,7 +6582,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd1Rep1
 objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6473,7 +6603,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd1Rep2
 objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6494,7 +6624,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd2Rep1
 objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6515,7 +6645,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd2Rep2
 objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6536,7 +6666,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep1
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6558,7 +6688,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep2
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6580,7 +6710,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep1
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6602,7 +6732,7 @@ metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2
 objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -6914,6 +7044,28 @@ subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep1
 view AllRawSig
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2
+view AllRawSig
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
 objType table
 cell HepG2
@@ -6934,6 +7086,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2.bam
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep1
@@ -6957,6 +7131,27 @@ rnaExtract longNonPolyA
 subId 3143
 view FastqRd1
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep2
+objType file
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+view FastqRd1
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep1
 objType file
 cell HepG2
@@ -6976,6 +7171,27 @@ project wgEncode
 replicate 1
 rnaExtract longNonPolyA
 subId 3143
+view FastqRd2
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep2
+objType file
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep2.fastq.gz
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
 view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep1
@@ -7000,6 +7216,28 @@ subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep1
 view MinusRawSig
 
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
+view MinusRawSig
+
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
 objType table
 cell HepG2
@@ -7020,6 +7258,28 @@ replicate 1
 rnaExtract longNonPolyA
 subId 3143
 tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
+view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
+objType table
+cell HepG2
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-12
+dateUnrestricted 2011-10-12
+fileName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2.bigWig
+grant Gingeras
+lab CSHL
+labExpId LID9203
+labProtocolId 014N-
+localization nucleus
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longNonPolyA
+subId 3237
+tableName wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
 view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusPapAllRawSigRep1
@@ -8646,7 +8906,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAllRawSigRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8668,7 +8928,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAllRawSigRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8690,7 +8950,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8712,7 +8972,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8734,7 +8994,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd1Rep3
 objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8755,7 +9015,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd1Rep4
 objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8776,7 +9036,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd2Rep3
 objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8797,7 +9057,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd2Rep4
 objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8818,7 +9078,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8840,7 +9100,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8862,7 +9122,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -8884,7 +9144,7 @@ metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -10756,7 +11016,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAllRawSigRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -10800,7 +11060,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -10843,7 +11103,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaFastqRd1Rep2
 objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -10885,7 +11145,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaFastqRd2Rep2
 objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -10928,7 +11188,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -10972,7 +11232,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -13743,7 +14003,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAllRawSigRep4
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -13787,7 +14047,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep4
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -13830,7 +14090,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaFastqRd1Rep4
 objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -13872,7 +14132,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaFastqRd2Rep4
 objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -13915,7 +14175,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep4
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -13959,7 +14219,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep4
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -14253,7 +14513,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAllRawSigRep3
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -14297,7 +14557,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -14341,7 +14601,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaFastqRd1Rep3
 objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -14383,7 +14643,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaFastqRd2Rep3
 objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -14425,7 +14685,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep3
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -14469,7 +14729,7 @@ metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep3
 objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
 dateUnrestricted 2011-10-11
@@ -15857,4 +16117,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: -2129537626
+# MAGIC: 1486276180

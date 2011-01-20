@@ -177,7 +177,7 @@ our %validators = (
     protocol => \&validateControlledVocabOrControl,
     phase => \&validateControlledVocabOrControl,
     restrictionEnzyme => \&validateControlledVocabOrControl,
-    obtainedBy => \&validateobtainedBy,
+    obtainedBy => \&validateObtainedBy,
     default => \&validateControlledVocab,
     );
 
@@ -275,8 +275,8 @@ sub validateControlledVocab {
     return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
-sub validateobtainedBy {
-    my($val,$type) = @_;
+sub validateObtainedBy {
+    my ($val,$type) = @_;
     return defined($terms{'lab'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
@@ -759,7 +759,7 @@ sub validateFastQ
     # - The 2 urls above show how to convert between both
     my ($path, $file, $type) = @_;
     my $paramList = validationSettings("validateFiles","fastq");
-    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq $file"]);
+    my $safe = SafePipe->new(CMDS => ["validateFiles $quickOpt $paramList -type=fastq \"$file\""]);
     if(my $err = $safe->exec()) {
 	print STDERR  "ERROR: failed validateFastQ : " . $safe->stderr() . "\n";
 	# don't show end-user pipe error(s)
@@ -1987,6 +1987,7 @@ foreach my $ddfLine (@ddfLines) {
             } elsif ($var eq "obtainedBy") {
               #Not sure why when we check for obtainedBy subGroups prints out and when when this is
 	      # not pressent the subGroups provides error of unitialized.
+	      # The behavior is odd since there is no $var of obtainedBy in the cv.ra
      		$cvTypeVar = "lab";
 	    }
 

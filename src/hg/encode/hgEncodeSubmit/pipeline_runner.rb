@@ -213,7 +213,7 @@ while true
         if upurl != ""
           # load-balance paraFetch in a site-specific manner 
           # determined by the config/paraFetch.yml settings.
-          protoSite = get_proto_site(upurl)
+          protoSite = get_proto_site(upurl)  # can return nil for invalid url
           maxParaFetches = paraFetchConfig["default"]["instances"]
           if paraFetchConfig[protoSite] != nil
             if paraFetchConfig[protoSite]["instances"] != nil
@@ -276,8 +276,10 @@ while true
           loaders[project_id] = true
         elsif source.starts_with? "upload_background("
           if upurl != ""
-            paraFetchRunCount[protoSite] = paraRunCount + 1
-            paraFetchRunProtoSite[project_id] = protoSite
+            if protoSite != nil
+              paraFetchRunCount[protoSite] = paraRunCount + 1
+              paraFetchRunProtoSite[project_id] = protoSite
+            end
           end
         end
         alljobs[project_id] = true

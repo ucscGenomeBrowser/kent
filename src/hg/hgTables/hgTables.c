@@ -27,6 +27,8 @@
 #include "hgMaf.h"
 #include "gvUi.h"
 #include "wikiTrack.h"
+#include "trackHub.h"
+#include "hubConnect.h"
 #include "hgConfig.h"
 
 static char const rcsid[] = "$Id: hgTables.c,v 1.198 2010/05/19 01:37:13 kent Exp $";
@@ -53,6 +55,7 @@ struct grp *fullGroupList;	/* List of all groups. */
 struct grp *curGroup;	/* Currently selected group. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct hash *fullTrackHash;     /* Hash of all tracks in fullTrackList keyed by ->track field. */
+struct hash *fullTrackAndSubtrackHash;  /* All tracks and subtracks keyed by track field. */
 struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
@@ -225,8 +228,19 @@ if (s != NULL)
     }
 }
 
+struct grp *grpFromHub(struct hubConnectStatus *hub)
+/* Make up a grp structur from hub */
+{
+struct grp *grp;
+AllocVar(grp);
+char name[16];
+safef(name, sizeof(name), "hub_%d", hub->id);
+grp->name = cloneString(name);
+grp->label = cloneString(hub->shortLabel);
+return grp;
+}
 
-static struct trackDb *getFullTrackList()
+static struct trackDb *getFullTrackList(struct hubConnectStatus *hubList, struct grp **pHubGroups)
 /* Get all tracks including custom tracks if any. */
 {
 struct trackDb *list = hTrackDb(database);
@@ -249,6 +263,34 @@ list = newList;
 /* add wikiTrack if enabled */
 if (wikiTrackEnabled(database, NULL))
     wikiTrackDb(&list);
+
+/* Add hub tracks. */
+struct hubConnectStatus *hubStatus;
+for (hubStatus = hubList; hubStatus != NULL; hubStatus = hubStatus->next)
+    {
+    /* Load trackDb.ra file and make it into proper trackDb tree */
+    char hubName[8];
+    safef(hubName, sizeof(hubName), "hub_%d", hubStatus->id);
+    struct trackHub *hub = trackHubOpen(hubStatus->hubUrl, hubName);
+    if (hub != NULL)
+	{
+	struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+	if (hubGenome != NULL)
+	    {
+	    struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
+	    tdbList = trackDbLinkUpGenerations(tdbList);
+	    tdbList = trackDbPolishAfterLinkup(tdbList, database);
+	    trackDbPrioritizeContainerItems(tdbList);
+	    if (tdbList != NULL)
+		{
+		list = slCat(list, tdbList);
+		struct grp *grp = grpFromHub(hubStatus);
+		slAddHead(pHubGroups, grp);
+		}
+	    }
+	}
+    }
+slReverse(pHubGroups);
 
 /* Create dummy group for custom tracks if any */
 ctList = getCustomTracks();
@@ -491,28 +533,12 @@ else
     }
 }
 
-#ifdef UNUSED
-char *trackTable(char *rawTable)
-/* Return table name for track, substituting all_mrna
- * for mRNA if need be. */
-{
-char *table = rawTable;
-return table;
-}
-#endif /* UNUSED */
 
 char *connectingTableForTrack(char *rawTable)
 /* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
 {
-#ifdef UNUSED
-if (sameString(rawTable, "mrna"))
-    return cloneString("all_mrna");
-else if (sameString(rawTable, "est"))
-    return cloneString("all_est");
-else
-#endif /* UNUSED */
-    return cloneString(rawTable);
+return cloneString(rawTable);
 }
 
 char *chromTable(struct sqlConnection *conn, char *table)
@@ -555,12 +581,35 @@ if (!sqlTableExists(conn, table))
 freeMem(splitTable);
 }
 
+struct hTableInfo *hubTrackTableInfo(struct trackDb *tdb)
+/* Given trackDb entry for a hub track, wrap table info around it. */
+{
+struct hTableInfo *hti;
+if (startsWithWord("bigBed", tdb->type))
+    {
+    hti = bigBedToHti(tdb->track, NULL);
+    }
+else
+    {
+    AllocVar(hti);
+    hti->rootName = cloneString(tdb->track);
+    hti->isPos = TRUE;
+    hti->type = cloneString(tdb->type);
+    }
+return hti;
+}
+
 struct hTableInfo *maybeGetHti(char *db, char *table, struct sqlConnection *conn)
 /* Return primary table info, but don't abort if table not there. Conn should be open to db. */
 {
 struct hTableInfo *hti = NULL;
 
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+    hti = hubTrackTableInfo(tdb);
+    }
+else if (hIsBigBed(database, table, curTrack, ctLookupName))
     {
     hti = bigBedToHti(table, conn);
     }
@@ -801,7 +850,7 @@ if (track == NULL)
 return track;
 }
 
-struct grp *makeGroupList(struct trackDb *trackList, boolean allTablesOk)
+struct grp *makeGroupList(struct trackDb *trackList, struct grp **pHubGrpList, boolean allTablesOk)
 /* Get list of groups that actually have something in them. */
 {
 struct grp *groupsAll, *groupList = NULL, *group;
@@ -827,6 +876,13 @@ for (group = slPopHead(&groupsAll); group != NULL; group = slPopHead(&groupsAll)
 	}
     else
         grpFree(&group);
+    }
+
+/* Add in groups from hubs. */
+for (group = slPopHead(pHubGrpList); group != NULL; group = slPopHead(pHubGrpList))
+    {
+    slAddTail(&groupList, group);
+    hashAdd(groupsInDatabase, group->name, group);
     }
 
 /* Do some error checking for tracks with group names that are
@@ -1740,23 +1796,41 @@ cartRemovePrefix(cart, hgtaDo);
 
 char *excludeVars[] = {"Submit", "submit", NULL};
 
+static void rAddTracksToHash(struct trackDb *tdbList, struct hash *hash)
+/* Add tracks in list to hash */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    hashAdd(hash, tdb->track, tdb);
+    if (tdb->subtracks)
+        rAddTracksToHash(tdb->subtracks, hash);
+    }
+}
+
 static struct hash *hashTrackList(struct trackDb *tdbList)
 /* Return hash full of trackDb's from list, keyed by tdb->track */
 {
 struct hash *hash = hashNew(0);
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
     hashAdd(hash, tdb->track, tdb);
+    }
 return hash;
 }
 
 void initGroupsTracksTables()
 /* Get list of groups that actually have something in them. */
 {
-fullTrackList = getFullTrackList();
+struct hubConnectStatus *hubList = hubConnectStatusListFromCart(cart);
+struct grp *hubGrpList = NULL;
+fullTrackList = getFullTrackList(hubList, &hubGrpList);
 fullTrackHash = hashTrackList(fullTrackList);
+fullTrackAndSubtrackHash = hashNew(0);
+rAddTracksToHash(fullTrackList, fullTrackAndSubtrackHash);
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
-fullGroupList = makeGroupList(fullTrackList, allowAllTables());
+fullGroupList = makeGroupList(fullTrackList, &hubGrpList, allowAllTables());
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
 if (sameString(curGroup->name, "allTables"))
     curTrack = NULL;

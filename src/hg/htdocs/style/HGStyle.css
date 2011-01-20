@@ -26,6 +26,7 @@ A:visited.bigBlue { text-decoration: none; font-family: arial, san-serif; color:
 A:active.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #A000A0; font-size: 16pt; font-weight: 600; }
 A:hover.bigBlue { text-decoration: none; font-family: arial, san-serif; color: #0000A0; font-size: 16pt; font-weight: 600; }
 IMG.bigBlue {vertical-align: middle;}
+TD.bigBlue {vertical-align: middle;}
 
 A:link.toc { text-decoration: none; color: #0000CC;  }
 A:visited.toc { text-decoration: none; color: #0000CC;  }
