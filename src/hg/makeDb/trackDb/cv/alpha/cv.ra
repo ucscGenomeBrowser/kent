@@ -6878,7 +6878,7 @@ description bowtie v0.10.0
 term bow125
 tag bow125
 type mapAlgorithm
-description bowtie v0.12.5 Provisional
+description bowtie v0.12.5
 
 term BB1
 tag BB1
@@ -7066,7 +7066,7 @@ label Total_RNA
 term shortPolyA
 tag shortPolyA
 type rnaExtract
-description Rna shorter than 200 nt that is Poly Adenalyated PROVISIONAL
+description Rna shorter than 200 nt that is Poly Adenalyated 
 label short_PolyA_RNA
 
 term shortTotal
@@ -7080,6 +7080,7 @@ label short_Total_RNA
 #type rnaExtract
 #description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
 #Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake PROVISIONAL TO RETIRE
+# 1/19/2011
 
 term longPolyA
 tag pAP
@@ -7388,7 +7389,7 @@ type treatment
 term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
-description (Provisional) Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
+description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
 type treatment
 
 term IFNa30
@@ -7703,7 +7704,7 @@ term RipSeq
 tag  ripSeq  
 type dataType
 label RIP-seq 
-description Provisional RNA-seq on RIP-chip data
+description RNA-seq on RIP-chip data
 
 #This should be retired (12/15/10)
 term ShortRnaSeq
