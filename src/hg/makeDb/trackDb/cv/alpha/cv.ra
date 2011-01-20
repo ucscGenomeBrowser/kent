@@ -4256,6 +4256,81 @@ targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
 
+term eGFP-FOS
+tag eFOS
+type Antibody
+target eGFP-FOS
+antibodyDescription Goat polyclonal 
+targetDescription Fos 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:FOS
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
+validation missing
+
+term eGFP-GATA2
+tag eGATA2
+type Antibody
+target eGFP-GATA2
+antibodyDescription Goat polyclonal 
+targetDescription GATA2 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:GATA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
+validation missing
+
+term eGFP-HDAC8
+tag eHDAC8
+type Antibody
+target eGFP-HDAC8
+antibodyDescription Goat polyclonal 
+targetDescription HDAC8 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:HDAC8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
+validation missing
+
+term eGFP-JunB
+tag eJunB
+type Antibody
+target eGFP-JunB
+antibodyDescription Goat polyclonal 
+targetDescription JunB 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:JUNB
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
+validation missing
+
+term eGFP-JunD
+tag eJunD
+type Antibody
+target eGFP-JunD
+antibodyDescription Goat polyclonal 
+targetDescription JunD 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:JUND
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
+validation missing
+
 term  ELF1_(SC-631)
 tag  ELF1SC631
 type Antibody
@@ -7060,7 +7135,7 @@ label Total_RNA
 #term short
 #tag short
 #type rnaExtract
-#description RNA shorter than 200 nt PROVISIONAL TO RETIRE
+#description RNA shorter than 200 nt PROVISIONAL TO RETIRE  (1/20/2011)
 #label (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
 
 term shortPolyA
@@ -7358,12 +7433,12 @@ type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder) (Provisional)
+description 4h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder) (Provisional)
+description 12h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.02pct
@@ -7624,7 +7699,7 @@ term ChiaPet
 tag chiaPet
 type dataType
 label ChIA-pet
-description ChIA-pet (Provisional)
+description ChIA-pet 
 
 # TODO: retire this ?  (11/3/10)
 term LongRnaSeq
@@ -7674,6 +7749,11 @@ term Nre
 tag NRE
 type dataType
 description Negative Regulatory Elements
+
+term Nucleosome
+tag nucleosome
+type dataType
+description Nucleosome positioning data 
 
 term Proteogenomics
 tag protgeno
@@ -8000,7 +8080,7 @@ term GIS(Ruan)
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia) (Provisional)
+description Ruan - Genome Institute of Singapore (Chia) 
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8969,7 +9049,7 @@ validate cv
 term run
 type run
 label Sequencing Run
-description Sequencing run (Provisional)
+description Sequencing run 
 searchable select
 cvDefined yes
 validate none

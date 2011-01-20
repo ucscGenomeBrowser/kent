@@ -3695,9 +3695,19 @@ for (;;)
         break;
 
     ancestor->parent = loadTrackDbForTrack(conn, parentTrack);
+    if (ancestor->parent == NULL)
+        break;
+
+    if (!tdbIsSuper(ancestor->parent)) // supers link to children differently
+        ancestor->parent->subtracks = ancestor;
+    else
+        ancestor->parent->children = slRefNew(ancestor);
     ancestor = ancestor->parent;
     }
-
+if (tdbIsSuper(ancestor))
+    ancestor = ancestor->children->val;
+trackDbContainerMarkup(NULL, ancestor);
+rInheritFields(ancestor);
 hFreeConn(&conn);
 return tdb;
 }

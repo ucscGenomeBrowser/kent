@@ -186,7 +186,7 @@ else if(!strcmp(cmd, "tableMetadata"))
     boolean showShortLabel = (NULL != cgiOptionalString("showShortLabel"));
     if (trackName != NULL)
         {
-        struct trackDb *tdb = hTrackDbForTrack(database, trackName);
+        struct trackDb *tdb = hTrackDbForTrackAndAncestors(database, trackName); // Doesn't get whole track list
         if (tdb != NULL)
             {
             char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel,NULL);
