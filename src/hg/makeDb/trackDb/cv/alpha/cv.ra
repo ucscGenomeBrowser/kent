@@ -7620,6 +7620,12 @@ type dataType
 label Gencode
 description Gencode
 
+term ChiaPet
+tag chiaPet
+type dataType
+label ChIA-pet
+description ChIA-pet (Provisional)
+
 # TODO: retire this ?  (11/3/10)
 term LongRnaSeq
 tag longRnaSeq
@@ -7990,11 +7996,11 @@ labPiFull Roderic Guigo
 grantPi Guigo
 organism human
 
-term GIS-Chia
-tag GIS-Chia
+term GIS(Ruan)
+tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia)
+description Ruan - Genome Institute of Singapore (Chia) (Provisional)
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8959,6 +8965,14 @@ description Fraction of total cellular RNA selected for by an experiment. This i
 searchable select
 cvDefined yes
 validate cv
+
+term run
+type run
+label Sequencing Run
+description Sequencing run (Provisional)
+searchable select
+cvDefined yes
+validate none
 
 term seqPlatform
 type typeOfTerm
