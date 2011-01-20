@@ -251,3 +251,6 @@ include wgEncodeRikenCage.ra
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public
 include wgEncodeCshlShortRnaSeq.new.ra alpha
+
+# UNC/BSU Proteogenomics (wrangler: cline)
+include wgEncodeUncBsuProt.ra alpha
