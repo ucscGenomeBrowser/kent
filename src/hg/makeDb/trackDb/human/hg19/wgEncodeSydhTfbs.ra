@@ -922,7 +922,7 @@ wgEncode 1
         color 0,107,27
         # subId=3328 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbs000003784
+        track wgEncodeSydhTfbsHepg2Mafksc477IggrabPk
         release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HepG2 MafK_(sc477) Pk
@@ -932,7 +932,7 @@ wgEncode 1
         color 189,0,157
         # subId=3331 dateSubmitted=2011-01-19
 
-        track wgEncodeSydhTfbs000003776
+        track wgEncodeSydhTfbsH1hescNrf1IggrabPk
         release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel H1-hESC Nrf1 Pk
@@ -3946,7 +3946,7 @@ wgEncode 1
         color 0,107,27
         # subId=3328 dateSubmitted=2011-01-18
 
-        track wgEncodeSydhTfbs000003783
+        track wgEncodeSydhTfbsHepg2Mafksc477IggrabSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HepG2 MafK_(sc477) Sig
@@ -3956,7 +3956,7 @@ wgEncode 1
         color 189,0,157
         # subId=3331 dateSubmitted=2011-01-19
 
-        track wgEncodeSydhTfbs000003775
+        track wgEncodeSydhTfbsH1hescNrf1IggrabSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel H1-hESC Nrf1 Sig

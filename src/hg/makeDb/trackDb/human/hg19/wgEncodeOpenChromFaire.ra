@@ -266,7 +266,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         color 46,0,184
         # subId=2771 dateSubmitted=2010-10-27
 
-        track wgEncodeOpenChromFaire000003997
+        track wgEncodeOpenChromFaireHtr8Pk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel HTR8svn FAIRE Pk
@@ -275,7 +275,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type narrowPeak
         # subId=3379 dateSubmitted=2011-01-19
 
-        track wgEncodeOpenChromFaire000004013
+        track wgEncodeOpenChromFaireMcf7HypoxlacPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel MCF7 hypox FAI Pk
@@ -520,7 +520,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         color 46,0,184
         # subId=2771 dateSubmitted=2010-10-27
 
-        track wgEncodeOpenChromFaire000003998
+        track wgEncodeOpenChromFaireHtr8Sig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel HTR8svn FAIRE DS
@@ -529,7 +529,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type bigWig 0.000000 0.335400
         # subId=3379 dateSubmitted=2011-01-19
 
-        track wgEncodeOpenChromFaire000004014
+        track wgEncodeOpenChromFaireMcf7HypoxlacSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel MCF7 hypox FAI DS
@@ -774,7 +774,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         color 46,0,184
         # subId=2771 dateSubmitted=2010-10-27
 
-        track wgEncodeOpenChromFaire000003996
+        track wgEncodeOpenChromFaireHtr8BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel HTR8svn FAIRE OS
@@ -783,7 +783,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type bigWig 0.000000 1371.000000
         # subId=3379 dateSubmitted=2011-01-19
 
-        track wgEncodeOpenChromFaire000004012
+        track wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel MCF7 hypox FAI OS

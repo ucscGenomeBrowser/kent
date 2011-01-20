@@ -160,7 +160,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3294 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000003929
+        track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in K562 cell)
@@ -170,7 +170,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3363 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003841
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel GM12878 nucleus shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in GM12878 nucleus)
@@ -280,7 +280,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3296 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000004000
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK nucleus shortTotal Aln 3
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in NHEK nucleus)
@@ -290,7 +290,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3380 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003989
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel MCF-7 cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in MCF-7 cell)
@@ -299,7 +299,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3353 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003985
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel SK-N-SH_RA cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in SK-N-SH_RA cell)
@@ -308,7 +308,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3377 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003981
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel SK-N-SH_RA cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in SK-N-SH_RA cell)
@@ -317,7 +317,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3376 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003977
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cytosol shortTotal Aln 4
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in NHEK cytosol)
@@ -327,7 +327,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3374 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003973
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cytosol shortTotal Aln 3
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in NHEK cytosol)
@@ -337,7 +337,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3373 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003969
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK nucleus shortTotal Aln 4
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in NHEK nucleus)
@@ -347,7 +347,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3375 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003965
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in NHEK cell)
@@ -357,7 +357,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3371 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003961
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in NHEK cell)
@@ -367,7 +367,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3372 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003957
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel MCF-7 cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in MCF-7 cell)
@@ -376,7 +376,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3370 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003953
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucleoplasm shortTotal Aln 4
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in K562 nucleoplasm)
@@ -386,7 +386,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3369 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003949
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucleoplasm shortTotal Aln 3
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in K562 nucleoplasm)
@@ -396,7 +396,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3368 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003945
+        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucleolus shortTotal Aln 4
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in K562 nucleolus)
@@ -406,7 +406,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3367 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003941
+        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucleolus shortTotal Aln 3
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in K562 nucleolus)
@@ -416,7 +416,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3366 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003937
+        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chromatin shortTotal Aln 4
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in K562 chromatin)
@@ -426,7 +426,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3365 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003933
+        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chromatin shortTotal Aln 3
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in K562 chromatin)
@@ -436,7 +436,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3364 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003925
+        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC nucleus shortTotal Aln 3
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in HUVEC nucleus)
@@ -446,7 +446,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003921
+        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cytosol shortTotal Aln 4
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 4 (shortTotal in HUVEC cytosol)
@@ -456,7 +456,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3361 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003917
+        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cytosol shortTotal Aln 3
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 3 (shortTotal in HUVEC cytosol)
@@ -466,7 +466,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3360 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003913
+        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HUVEC cell)
@@ -476,7 +476,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3359 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003909
+        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HUVEC cell)
@@ -486,7 +486,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3358 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003905
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG2 nucleus shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 nucleus)
@@ -496,7 +496,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3357 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003901
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG2 nucleus shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 nucleus)
@@ -506,7 +506,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3356 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003897
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG2 cytosol shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 cytosol)
@@ -516,7 +516,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3355 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003893
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG2 cytosol shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 cytosol)
@@ -526,7 +526,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3354 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003889
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG2 cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HepG2 cell)
@@ -536,7 +536,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3351 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003885
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG2 cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HepG2 cell)
@@ -546,7 +546,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3350 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003881
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa-S3 nucleus shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HeLa-S3 nucleus)
@@ -556,7 +556,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3349 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003877
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa-S3 cytosol shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HeLa-S3 cytosol)
@@ -566,7 +566,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3347 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003873
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa-S3 nucleus shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HeLa-S3 nucleus)
@@ -576,7 +576,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3348 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003869
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa-S3 cytosol shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HeLa-S3 cytosol)
@@ -586,7 +586,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3346 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003865
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa-S3 cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in HeLa-S3 cell)
@@ -596,7 +596,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3345 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003861
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa-S3 cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in HeLa-S3 cell)
@@ -606,7 +606,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3344 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003857
+        track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1-hESC nucleus shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in H1-hESC nucleus)
@@ -616,7 +616,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3343 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003853
+        track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1-hESC cytosol shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in H1-hESC cytosol)
@@ -626,7 +626,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3342 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003849
+        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1-hESC cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in H1-hESC cell)
@@ -636,7 +636,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3341 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003845
+        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1-hESC cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in H1-hESC cell)
@@ -646,7 +646,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3340 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003837
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel AG04450 cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in AG04450 cell)
@@ -655,7 +655,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3336 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003833
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel AG04450 cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in AG04450 cell)
@@ -674,7 +674,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000003829
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell shortTotal Aln 2
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 2 (shortTotal in A549 cell)
@@ -683,7 +683,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3334 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003825
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell shortTotal Aln 1
         longLabel ENCODE CSHL RNA-seq Alignments Replicate 1 (shortTotal in A549 cell)
@@ -821,7 +821,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3294 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000003931
+        track wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in K562 cell)
@@ -831,7 +831,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3363 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003843
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel GM12878 nucleus shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in GM12878 nucleus)
@@ -941,7 +941,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3296 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000004002
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK nucleus shortTotal MinusRaw 3
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in NHEK nucleus)
@@ -951,7 +951,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3380 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003991
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel MCF-7 cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in MCF-7 cell)
@@ -960,7 +960,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3353 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003987
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel SK-N-SH_RA cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in SK-N-SH_RA cell)
@@ -969,7 +969,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3377 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003983
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel SK-N-SH_RA cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in SK-N-SH_RA cell)
@@ -978,7 +978,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3376 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003979
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cytosol shortTotal MinusRaw 4
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in NHEK cytosol)
@@ -988,7 +988,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3374 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003975
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cytosol shortTotal MinusRaw 3
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in NHEK cytosol)
@@ -998,7 +998,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3373 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003971
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK nucleus shortTotal MinusRaw 4
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in NHEK nucleus)
@@ -1008,7 +1008,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3375 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003967
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in NHEK cell)
@@ -1018,7 +1018,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3371 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003963
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in NHEK cell)
@@ -1028,7 +1028,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3372 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003959
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel MCF-7 cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in MCF-7 cell)
@@ -1037,7 +1037,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3370 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003955
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nucleoplasm shortTotal MinusRaw 4
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleoplasm)
@@ -1047,7 +1047,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3369 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003951
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nucleoplasm shortTotal MinusRaw 3
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleoplasm)
@@ -1057,7 +1057,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3368 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003947
+        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nucleolus shortTotal MinusRaw 4
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleolus)
@@ -1067,7 +1067,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3367 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003943
+        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nucleolus shortTotal MinusRaw 3
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleolus)
@@ -1077,7 +1077,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3366 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003939
+        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 chromatin shortTotal MinusRaw 4
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in K562 chromatin)
@@ -1087,7 +1087,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3365 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003935
+        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 chromatin shortTotal MinusRaw 3
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in K562 chromatin)
@@ -1097,7 +1097,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3364 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003927
+        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC nucleus shortTotal MinusRaw 3
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in HUVEC nucleus)
@@ -1107,7 +1107,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003923
+        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cytosol shortTotal MinusRaw 4
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 4 (shortTotal in HUVEC cytosol)
@@ -1117,7 +1117,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3361 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003919
+        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cytosol shortTotal MinusRaw 3
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 3 (shortTotal in HUVEC cytosol)
@@ -1127,7 +1127,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3360 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003915
+        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HUVEC cell)
@@ -1137,7 +1137,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3359 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003911
+        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HUVEC cell)
@@ -1147,7 +1147,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3358 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003907
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG2 nucleus shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 nucleus)
@@ -1157,7 +1157,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3357 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003903
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG2 nucleus shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 nucleus)
@@ -1167,7 +1167,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3356 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003899
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG2 cytosol shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cytosol)
@@ -1177,7 +1177,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3355 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003895
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG2 cytosol shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cytosol)
@@ -1187,7 +1187,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3354 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003891
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG2 cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cell)
@@ -1197,7 +1197,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3351 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003887
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG2 cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cell)
@@ -1207,7 +1207,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3350 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003883
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa-S3 nucleus shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 nucleus)
@@ -1217,7 +1217,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3349 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003879
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa-S3 cytosol shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cytosol)
@@ -1227,7 +1227,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3347 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003875
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa-S3 nucleus shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 nucleus)
@@ -1237,7 +1237,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3348 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003871
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa-S3 cytosol shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cytosol)
@@ -1247,7 +1247,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3346 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003867
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa-S3 cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cell)
@@ -1257,7 +1257,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3345 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003863
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa-S3 cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cell)
@@ -1267,7 +1267,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3344 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003859
+        track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel H1-hESC nucleus shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC nucleus)
@@ -1277,7 +1277,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3343 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003855
+        track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel H1-hESC cytosol shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cytosol)
@@ -1287,7 +1287,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3342 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003851
+        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel H1-hESC cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cell)
@@ -1297,7 +1297,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3341 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003847
+        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel H1-hESC cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in H1-hESC cell)
@@ -1307,7 +1307,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3340 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003839
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel AG04450 cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in AG04450 cell)
@@ -1316,7 +1316,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3336 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003835
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel AG04450 cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in AG04450 cell)
@@ -1335,7 +1335,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000003831
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel A549 cell shortTotal MinusRaw 2
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 2 (shortTotal in A549 cell)
@@ -1344,7 +1344,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3334 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003827
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel A549 cell shortTotal MinusRaw 1
         longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Replicate 1 (shortTotal in A549 cell)
@@ -1482,7 +1482,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3294 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000003930
+        track wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in K562 cell)
@@ -1492,7 +1492,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3363 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003842
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel GM12878 nucleus shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in GM12878 nucleus)
@@ -1602,7 +1602,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3296 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000004001
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK nucleus shortTotal PlusRaw 3
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in NHEK nucleus)
@@ -1612,7 +1612,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3380 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003990
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel MCF-7 cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in MCF-7 cell)
@@ -1621,7 +1621,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3353 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003986
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel SK-N-SH_RA cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in SK-N-SH_RA cell)
@@ -1630,7 +1630,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3377 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003982
+        track wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel SK-N-SH_RA cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in SK-N-SH_RA cell)
@@ -1639,7 +1639,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3376 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003978
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cytosol shortTotal PlusRaw 4
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in NHEK cytosol)
@@ -1649,7 +1649,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3374 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003974
+        track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cytosol shortTotal PlusRaw 3
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in NHEK cytosol)
@@ -1659,7 +1659,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3373 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003970
+        track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK nucleus shortTotal PlusRaw 4
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in NHEK nucleus)
@@ -1669,7 +1669,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3375 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003966
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in NHEK cell)
@@ -1679,7 +1679,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3371 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003962
+        track wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in NHEK cell)
@@ -1689,7 +1689,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 179,0,134
         # subId=3372 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003958
+        track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel MCF-7 cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in MCF-7 cell)
@@ -1698,7 +1698,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3370 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003954
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nucleoplasm shortTotal PlusRaw 4
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleoplasm)
@@ -1708,7 +1708,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3369 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003950
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nucleoplasm shortTotal PlusRaw 3
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleoplasm)
@@ -1718,7 +1718,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3368 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003946
+        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nucleolus shortTotal PlusRaw 4
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in K562 nucleolus)
@@ -1728,7 +1728,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3367 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003942
+        track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nucleolus shortTotal PlusRaw 3
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in K562 nucleolus)
@@ -1738,7 +1738,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3366 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003938
+        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 chromatin shortTotal PlusRaw 4
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in K562 chromatin)
@@ -1748,7 +1748,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3365 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003934
+        track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 chromatin shortTotal PlusRaw 3
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in K562 chromatin)
@@ -1758,7 +1758,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=3364 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003926
+        track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC nucleus shortTotal PlusRaw 3
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in HUVEC nucleus)
@@ -1768,7 +1768,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3362 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003922
+        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cytosol shortTotal PlusRaw 4
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 4 (shortTotal in HUVEC cytosol)
@@ -1778,7 +1778,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3361 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003918
+        track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cytosol shortTotal PlusRaw 3
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 3 (shortTotal in HUVEC cytosol)
@@ -1788,7 +1788,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3360 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003914
+        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HUVEC cell)
@@ -1798,7 +1798,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3359 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003910
+        track wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HUVEC cell)
@@ -1808,7 +1808,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3358 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003906
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG2 nucleus shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 nucleus)
@@ -1818,7 +1818,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3357 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003902
+        track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG2 nucleus shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 nucleus)
@@ -1828,7 +1828,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3356 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003898
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG2 cytosol shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cytosol)
@@ -1838,7 +1838,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3355 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003894
+        track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG2 cytosol shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cytosol)
@@ -1848,7 +1848,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3354 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003890
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG2 cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HepG2 cell)
@@ -1858,7 +1858,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3351 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003886
+        track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG2 cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HepG2 cell)
@@ -1868,7 +1868,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 189,0,157
         # subId=3350 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003882
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa-S3 nucleus shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 nucleus)
@@ -1878,7 +1878,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3349 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003878
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa-S3 cytosol shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cytosol)
@@ -1888,7 +1888,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3347 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003874
+        track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa-S3 nucleus shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 nucleus)
@@ -1898,7 +1898,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3348 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003870
+        track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa-S3 cytosol shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cytosol)
@@ -1908,7 +1908,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3346 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003866
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa-S3 cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in HeLa-S3 cell)
@@ -1918,7 +1918,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3345 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003862
+        track wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa-S3 cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in HeLa-S3 cell)
@@ -1928,7 +1928,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=3344 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003858
+        track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel H1-hESC nucleus shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC nucleus)
@@ -1938,7 +1938,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3343 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003854
+        track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel H1-hESC cytosol shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cytosol)
@@ -1948,7 +1948,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3342 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003850
+        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel H1-hESC cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in H1-hESC cell)
@@ -1958,7 +1958,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3341 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003846
+        track wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel H1-hESC cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in H1-hESC cell)
@@ -1968,7 +1968,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,107,27
         # subId=3340 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003838
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel AG04450 cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in AG04450 cell)
@@ -1977,7 +1977,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3336 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003834
+        track wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel AG04450 cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in AG04450 cell)
@@ -1996,7 +1996,7 @@ superTrack wgEncodeRnaSeqSuper dense
         color 224,75,0
         # subId=3295 dateSubmitted=2011-01-18
 
-        track wgEncodeCshlShortRnaSeq000003830
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel A549 cell shortTotal PlusRaw 2
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 2 (shortTotal in A549 cell)
@@ -2005,7 +2005,7 @@ superTrack wgEncodeRnaSeqSuper dense
         origAssembly hg19
         # subId=3334 dateSubmitted=2011-01-19
 
-        track wgEncodeCshlShortRnaSeq000003826
+        track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel A549 cell shortTotal PlusRaw 1
         longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Replicate 1 (shortTotal in A549 cell)
