@@ -14,7 +14,6 @@ alpha:
 	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} PIPELINE_DIR=encpipeline_beta scripts
 
 install:
-	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} PIPELINE_DIR=encpipeline_prod scripts
 
 scripts: ${SCRIPT_FILES:%=${SCRIPTS}/%}
 
