@@ -2895,7 +2895,6 @@ karyotype Normal
 termId BTO:0002398
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002398
 sex U
-tier 3
 protocol UW_Stam:PrEC_Stam_protocol.pdf
 
 
@@ -4118,7 +4117,6 @@ targetDescription CTCF zinc finger transcription factor. A sequence specific DNA
 orderUrl http://www.millipore.com/catalogue/item/07-729
 vendorName Millipore
 vendorId 07-729
-orderUrl http://www.millipore.com/catalogue/item/07-729
 lab Bernstein, Iyer
 lots 1350637, DAM1472197
 targetId GeneCard:CTCF
@@ -6558,7 +6556,6 @@ type Antibody
 target PABPC1
 targetDescription  poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
 antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
-lab Tenenbaum
 vendorName Sigma Chemical Co.
 vendorId P6246
 orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
