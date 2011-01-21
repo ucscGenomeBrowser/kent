@@ -4137,6 +4137,36 @@ targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
 
+term CTCF_(SC-5916)
+tag CTCFSC5916
+type Antibody
+target CTCF
+antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of CTCF of human origin.  (Provisional)
+targetDescription This gene is a member of the BORIS + CTCF gene family and encodes a transcriptional regulator protein with 11 highly conserved zinc finger (ZF) domains. This nuclear protein is able to use different combinations of the ZF domains to bind different DNA target sequences and proteins. (provided by RefSeq) 
+orderUrl http://www.scbt.com/datasheet-5916-ctcf-n-17-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-5916
+lots K0902
+lab Myers
+targetId GeneCard:CTCF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
+validation missing
+
+term CTCFL_(SC-98982)
+tag CTCFLSC98982
+type Antibody
+target CTCFL
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 91-210 mapping within an internal region of BORIS(CTCFL) of human origin. (Provisional)
+targetDescription CCCTC-binding factor (CTCF), an 11-zinc-finger factor involved in gene regulation, utilizes different zinc fingers to bind varying DNA target sites. CTCF forms methylation-sensitive insulators that regulate X-chromosome inactivation. This gene is a paralog of CTCF and appears to be expressed primarily in the cytoplasm of spermatocytes, unlike CTCF which is expressed primarily in the nucleus of somatic cells. CTCF and the protein encoded by this gene are normally expressed in a mutually exclusive pattern that correlates with resetting of methylation marks during male germ cell differentiation. (provided by RefSeq) 
+orderUrl http://www.scbt.com/datasheet-98982-boris-h-120-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-98982
+lots E0109
+lab Myers
+targetId GeneCard:CTCFL
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCFL
+validation missing
+
 #(comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 ##This does not appear in metaDb
 term CtBP1
@@ -4329,6 +4359,21 @@ targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation missing
 
+term eGFP-NR4A1
+tag eNR4A1
+type Antibody
+target eGFP-NR4A1
+antibodyDescription Goat polyclonal (Provisional)
+targetDescription NR4A1
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White
+lots
+targetId GeneCards:NR4A1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
+validation missing
+
 term  ELF1_(SC-631)
 tag  ELF1SC631
 type Antibody
@@ -4485,6 +4530,21 @@ lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1_SC-101058(Immunoblot)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
+
+term  FOXA2_(SC-6554)
+tag  FOXA1SC6554
+type Antibody
+target  FOXA2
+antibodyDescriptio Goat polyclonal IgG, epitope mapping at the N-terminus of FOXA2 of human origin. (Provisional) 
+targetDescription The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5. The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors. This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators. The protein is required for transcription by promoters targeted by RNA polymerase II. (provided by RefSeq) 
+vendorName Santa Cruz Biotech
+vendorId sc-6554
+orderUrl http://www.scbt.com/datasheet-6554-hnf-3beta-m-20-antibody.html
+lab  Myers
+lots  L1409
+targetId GeneCards:FOXA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA2
+validation missing
 
 term FOXP2
 tag FOXP2
@@ -5011,6 +5071,21 @@ targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf
 
+term HNF4G_(SC-6558)
+tag HNF4GSC6558
+type Antibody
+target HNF4G
+antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of HNF4G of human origin. (Provisional)
+targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene 
+orderUrl http://www.scbt.com/datasheet-6558-hnf-4gamma-c-18-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-6558
+lots I299 
+lab Myers
+targetId GeneCard:HNF4G
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
+validation missing
+
 term HSF1
 tag HSF1
 type Antibody
@@ -5229,6 +5304,21 @@ lab Myers
 targetId GeneCard:MEF2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A
 validation MEF2A(Immunoblot):human_MEF2A_validation_Myers.pdf
+
+term MEF2C_(SC-13268)
+tag MEF2ASC13268
+type Antibody
+target MEF2C
+antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of MEF2C of human origin. (Provisional) 
+targetDescription This locus encodes a member of the MADS box transcription enhancer factor 2 (MEF2) family of proteins, which play a role in myogenesis. The encoded protein, MEF2 polypeptide C, has both trans-activating and DNA binding activities. This protein may play a role in maintaining the differentiated state of muscle cells. Mutations and deletions at this locus have been associated with severe mental retardation, stereotypic movements, epilepsy, and cerebral malformation. Alternatively spliced transcript variants have been described. (provided by RefSeq) 
+vendorName Santa Cruz Biotech
+vendorId sc-13268
+orderUrl http://www.scbt.com/datasheet-13268-mef-2c-c-17-antibody.html
+lots K2009 
+lab Myers
+targetId GeneCard:MEF2C
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
+validation missing
 
 term NANOG_(SC-33759)
 tag NANOGSC33759
@@ -5499,6 +5589,21 @@ vendorId sc-13067
 lab Snyder
 targetId GeneCard:PPARGC1A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PPARGC1A
+validation missing
+
+term PITX1_(SC-81979) 
+tag PITX1SC81979 
+type Antibody
+target PITX1
+antibodyDescription Mouse monoclonal IgG, raised against recombinant Pitx1 of human origin. (Provisional) 
+targetDescription This gene encodes a member of the RIEG/PITX homeobox family, which is in the bicoid class of homeodomain proteins. Members of this family are involved in organ development and left-right asymmetry. This protein acts as a transcriptional regulator involved in basal and hormone-regulated activity of prolactin. (provided by RefSeq) 
+orderUrl http://www.scbt.com/datasheet-81979-pitx1-r-129-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-81979
+lots J0109
+lab Myers
+targetId GeneCard:PITX1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
 validation missing
 
 term Pol2
@@ -5788,6 +5893,21 @@ targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
 validation SP1(Immunoblot):human_SP1_E-3_validation_Myers.pdf
 
+term SP2_(SC-643)
+tag SP2SC643
+type Antibody
+target SP2
+antibodyDescription Rabbit polyclonal IgG, epitope mapping near the N-terminus of SP2 of human origin. (Provisional)
+targetDescription This gene encodes a member of the Sp subfamily of Sp/XKLF transcription factors. Sp family proteins are sequence-specific DNA-binding proteins characterized by an amino-terminal trans-activation domain and three carboxy-terminal zinc finger motifs. This protein contains the least conserved DNA-binding domain within the Sp subfamily of proteins, and its DNA sequence specificity differs from the other Sp proteins. It localizes primarily within subnuclear foci associated with the nuclear matrix, and can activate or in some cases repress expression from different promoters. (provided by RefSeq) 
+vendorName Santa Cruz Biotech
+vendorId sc-643
+lots K1803
+orderUrl http://www.scbt.com/datasheet-643-sp2-k-20-antibody.html
+lab Myers
+targetId GeneCard:SP2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP2
+validation missing
+
 term  SP4_(V-20)
 tag  SP4V20
 type Antibody
@@ -6073,6 +6193,20 @@ orderUrl http://www.beatson.gla.ac.uk/Regulation-of-Cancer-Cell-Proliferation-an
 lab Struhl
 targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
+validation missing
+
+term THAP1_(SC-98174) 
+tag THAP1SC98174
+type Antibody
+target THAP1
+antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of THAP1 of human origin. (Provisional)
+targetDescription The protein encoded by this gene contains a THAP domain, a conserved DNA-binding domain. This protein colocalizes with the apoptosis response protein PAWR/PAR-4 in promyelocytic leukemia (PML) nuclear bodies, and functions as a proapoptotic factor that links PAWR to PML nuclear bodies. Alternatively spliced transcript variants encoding distinct isoforms have been observed. (provided by RefSeq) 
+vendorName Santa Cruz Biotech
+vendorId sc-98174
+orderUrl http://www.scbt.com/datasheet-98174-thap1-c-18-antibody.html
+lab Myers
+targetId GeneCard:THAP1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=THAP1
 validation missing
 
 term TR4
@@ -8013,6 +8147,12 @@ tag ABSOLiD2
 geo AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
+
+term AB_SOLiD_3.5
+tag ABSOLiD3Plus
+geo AB SOLiD 3 Plus
+type seqPlatform
+description Applied Biosystems SOLiD System 3.5 (Provisional)
 
 
 #LABS          This is the CV for naming the labs.

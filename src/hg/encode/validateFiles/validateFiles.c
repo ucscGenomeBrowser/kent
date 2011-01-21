@@ -162,10 +162,15 @@ void reportErrAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
 {
 va_list args;
-va_start(args, format);
 
 if (reportF != NULL)
+    {
+    va_start(args, format);
     vfprintf(reportF, format, args);
+    va_end(args);
+    }
+
+va_start(args, format);
 vaErrAbort(format, args);
 
 va_end(args);
