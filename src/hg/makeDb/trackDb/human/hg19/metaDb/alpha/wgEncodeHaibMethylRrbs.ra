@@ -2418,6 +2418,44 @@ tableName wgEncodeHaibMethylRrbsHtb11HaibSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsHtr8DukeSitesRep1
+objType table
+cell HTR8svn
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 3239
+tableName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
+objType table
+cell HTR8svn
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Duke
+project wgEncode
+replicate 3
+subId 3239
+tableName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1
 objType table
 cell IMR90
@@ -3830,4 +3868,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -168252950
+# MAGIC: 343781822

@@ -13,8 +13,8 @@ dimensions dimensionX=cellType
 sortOrder cellType=+
 fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 dragAndDrop subTracks
-controlledVocabulary encode/cv.ra cellType
-priority 0
+controlledVocabulary encode/cv.ra cellType=cell
+priority 1
 type bed 9 +
 wgEncode 1
 #noInherit on
