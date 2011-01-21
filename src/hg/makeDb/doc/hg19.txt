@@ -13288,7 +13288,7 @@ grep -i split hg19.unmapped | wc -l
 grep -i part hg19.unmapped | wc -l
 #5
 for table in gadAll gadList; do 
-    echo "create table "$table" select * from hg18."$table | hgsql hg19
+    hgsqldump hg18 $table | hgsql hg19
 done
 
 #############################################################################
