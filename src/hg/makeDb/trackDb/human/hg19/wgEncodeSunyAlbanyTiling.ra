@@ -30,7 +30,7 @@ origAssembly hg19
 
 
     	track wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
-    	release alpha
+    	release alpha,beta
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 Input
         longLabel GM12878 Input RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -40,7 +40,7 @@ origAssembly hg19
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
-    	release alpha
+    	release alpha,beta
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 T7Tag
         longLabel GM12878 T7Tag RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -50,7 +50,7 @@ origAssembly hg19
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna
-    	release alpha
+    	release alpha,beta
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 PABPC1
         longLabel GM12878 PABPC1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -60,7 +60,7 @@ origAssembly hg19
     	# subId=1245 dateSubmitted=2010-06-01
 
    	track wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
-    	release alpha
+    	release alpha,beta
      	subTrack wgEncodeSunyAlbanyTilingView
   	shortLabel GM12878 ELAVL1
         longLabel GM12878 ELAVL1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -70,7 +70,7 @@ origAssembly hg19
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
-    	release alpha
+    	release alpha,beta
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 Input
         longLabel K562 Input RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -80,7 +80,7 @@ origAssembly hg19
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
-    	release alpha
+    	release alpha,beta
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 T7Tag
         longLabel K562 T7Tag RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -90,7 +90,7 @@ origAssembly hg19
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna
-    	release alpha
+    	release alpha,beta
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 PABPC1
         longLabel K562 PABPC1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -100,7 +100,7 @@ origAssembly hg19
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna
-    	release alpha
+    	release alpha,beta
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 ELAVL1
         longLabel K562 ELAVL1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
