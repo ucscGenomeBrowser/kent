@@ -4329,6 +4329,21 @@ targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation missing
 
+term eGFP-NR4A1
+tag eNR4A1
+type Antibody
+target eGFP-NR4A1
+antibodyDescription Goat polyclonal (Provisional)
+targetDescription NR4A1
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White
+lots
+targetId GeneCards:NR4A1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Nr4a1
+validation missing
+
 term  ELF1_(SC-631)
 tag  ELF1SC631
 type Antibody
