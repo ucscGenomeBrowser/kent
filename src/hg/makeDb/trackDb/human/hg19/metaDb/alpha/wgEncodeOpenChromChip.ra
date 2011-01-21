@@ -334,7 +334,7 @@ dateUnrestricted 2011-10-17
 fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 setType exp
@@ -354,7 +354,7 @@ dateUnrestricted 2011-10-17
 fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 setType exp
@@ -3170,25 +3170,6 @@ subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
 view Peaks
 
-metaObject wgEncodeOpenChromChipHuvecCmycRawData
-objType file
-antibody c-Myc
-cell HUVEC
-composite wgEncodeOpenChromChip
-controlId HUVEC/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-01
-dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz
-grant Crawford
-lab UT-A
-origAssembly hg18
-project wgEncode
-setType exp
-subId 635
-view RawData
-
 metaObject wgEncodeOpenChromChipHuvecCmycRawDataRep1
 objType file
 antibody c-Myc
@@ -5096,7 +5077,7 @@ dateUnrestricted 2011-10-17
 fileName wgEncodeOpenChromChipMonocd14InputAln.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 setType input
 subId 3271
@@ -5544,4 +5525,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -829902820
+# MAGIC: -388477539

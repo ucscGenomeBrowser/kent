@@ -68,9 +68,10 @@ void showVmPeak()
 {
 pid_t pid = getpid();
 char temp[256];
-printf("pid=%d\n",pid); fflush(stdout);
+printf("# pid=%d: ",pid); fflush(stdout);
 safef(temp, sizeof(temp), "grep VmPeak /proc/%d/status", (int) pid);
-system(temp);
+(void) system(temp);
+fflush(stdout);
 }
 
 // due to bug in OS, won't work without a handler
@@ -129,7 +130,7 @@ void waitForChildWithTimeout(pid_t pid)
 int wstat;
 struct timespec timeout;
 
-timeout.tv_sec = 1200;  // TODO make this a parameter
+timeout.tv_sec = 2400;  // TODO make this a parameter
 timeout.tv_nsec = 0;
 
 while (1)

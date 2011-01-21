@@ -1715,6 +1715,7 @@ rm -f $c.gp.tmp $c.gp $c.maf $c.ss
       /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
         --EM --precision MED --msa-format FASTA --subst-mod REV \
         --tree ../tree-commas.nh 4d.all.mfa
+    mv phyloFit.mod fish.mod
     # Reading alignment from 4d.all.mfa ...
     # Extracting sufficient statistics ...
     # Compacting sufficient statistics ...
@@ -1837,4 +1838,279 @@ rm -f $c.gp.tmp $c.gp $c.maf $c.ss
 
     # veryify top-level search spec, should produce no results:
     hgsql -Ne 'select name from nscanGene' felCat4 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head
+
+
+
+#########################################################################
+# phastCons 6-way (DONE - 2011-01-20 - Chin)
+    ssh swarm
+    mkdir -p /hive/data/genomes/felCat4/bed/multiz6way/cons/SS
+    cd /hive/data/genomes/felCat4/bed/multiz6way/cons/SS
+
+    cat << '_EOF_' > mkSS.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/felCat4/bed/multiz6way/mafSplit/$c.maf
+set WINDOWS = /hive/data/genomes/felCat4/bed/multiz6way/cons/SS/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+    # << happy emacs
+    chmod +x mkSS.csh
+    
+    cat << '_EOF_' > template
+#LOOP
+mkSS.csh $(root1) {check out line+ $(root1).done}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #   do the easy ones first to see some immediate results
+    ls -1S -r ../../mafSplit | sed -e "s/.maf//" > maf.list
+
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc
+XXXX 2011-01-19 4:16 PM
+# Completed: 1072 of 1072 jobs
+# CPU time in finished jobs:       1029s      17.14m     0.29h    0.01d
+# 0.000 y
+# IO & Wait Time:                  3083s      51.39m     0.86h    0.04d
+# 0.000 y
+# Average job time:                   4s       0.06m     0.00h    0.00d
+# Longest finished job:              63s       1.05m     0.02h    0.00d
+# Submission to last job:           227s       3.78m     0.06h    0.00d
+
+    find . -type f | grep ".ss$" | wc
+    #   1082    1082   36982
+
+    # Run phastCons
+    #   This job is I/O intensive in its output files, beware where this
+    #   takes place or do not run too many at once.
+    ssh swarm
+    mkdir -p /hive/data/genomes/felCat4/bed/multiz6way/cons/run.cons
+    cd /hive/data/genomes/felCat4/bed/multiz6way/cons/run.cons
+
+    #   there are going to be only one phastCons run using
+    #   this same script.  It triggers off of the current working
+    #   directory
+    #   $cwd:t which is the "grp" in this script.  It is:
+    #   all 
+
+
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/felCat4/bed/multiz6way/cons
+set tmp = $cons/tmp/$f
+mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+ln -s $ssSrc/SS/$c/$f.ss $tmp
+ln -s $cons/$grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p pp/$c bed/$c
+sleep 4
+touch pp/$c bed/$c
+rm -f pp/$c/$f.pp
+rm -f bed/$c/$f.bed
+mv $tmp/$f.pp pp/$c
+mv $tmp/$f.bed bed/$c
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
+
+    #   this template will serve for all runs
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 45 0.3 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    find ../SS -type f | grep ".ss$" | sed -e 's/.ss$//' > ss.list
+    wc -l ss.list
+    #   51064 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/felCat4/bed/multiz6way/cons
+    mkdir -p all
+    cd all
+    #   Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=8g create jobList
+    para try ... check ...
+    para -maxJob=64 push
+    # Completed: 51064 of 51064 jobs
+    # CPU time in finished jobs:  6246s     104.11m     1.74h    0.07d  0.000 y
+    # IO & Wait Time:           594205s    9903.41m   165.06h    6.88d  0.019 y
+    # Average job time:             12s       0.20m     0.00h    0.00d
+    # Longest finished job:         40s       0.67m     0.01h    0.00d
+    # Submission to last job:     2454s      40.90m     0.68h    0.03d
+
+    ssh hgwdev
+    cd /hive/data/genomes/felCat4/bed/multiz6way/cons/all
+
+    find ./bed -type f | grep ".bed$" | xargs cat | sort -k1,1 -k2,2n \
+     | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+            > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    time nice -n +19 hgLoadBed felCat4 phastConsElements6way mostConserved.bed
+    # Reading mostConserved.bed
+    # Loaded 1060573 elements of size 5
+    # Sorted
+    # Creating table definition for phastConsElements6way
+    # Saving bed.tab
+    # Loading felCat4
+    # 
+    # real    0m8.657s
+
+    # not sure what the targets should be for Cat, on human we
+    # often
+    # try for 5% overall cov, and 70% CDS cov 
+    featureBits felCat4 -enrichment refGene:cds phastConsElements6way
+    #   --rho 0.3 --expected-length 45 --target-coverage 0.3
+    # refGene:cds 0.017%, phastConsElements6way 6.402%, both 0.011%, 
+    # cover 63.01%, enrich 9.84x
+
+    featureBits felCat4 -enrichment nscanGene:cds phastConsElements6way
+    # nscanGene:cds 1.391%, phastConsElements6way 6.402%, both 0.908%, 
+    # cover 65.30%, enrich 10.20x
+
+    # hg19 for comparison
+    featureBits hg19 -enrichment refGene:cds phastConsElements46way
+    #   refGene:cds 1.196%, phastConsElements46way 5.065%,
+    #   both 0.888%, cover 74.22%, enrich 14.65x
+    #   ensGene:cds 1.278%, phastConsElements46way 5.065%,
+    #   both 0.910%, cover 71.23%, enrich 14.06x
+    #   knownGene:cds 1.252%, phastConsElements46way 5.065%,
+    #   both 0.905%, cover 72.29%, enrich 14.27x
+
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/felCat4/bed/multiz6way/cons/all
+    mkdir downloads
+
+    find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+        | sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/phastCons6way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    zcat downloads/phastCons6way.wigFix.gz \
+        | wigToBigWig stdin /hive/data/genomes/felCat4/chrom.sizes \
+            phastCons6way.bw
+
+    bigWigInfo phastCons6way.bw
+    # version: 4
+    # isCompressed: yes
+    # isSwapped: 0
+    # primaryDataSize: 3,167,968,203
+    # primaryIndexSize: 69,120,232
+    # zoomLevels: 10
+    # chromCount: 50801
+    # basesCovered: 1,636,796,497
+    # mean: 0.158595
+    # min: 0.000000
+    # max: 1.000000
+    # std: 0.269059
+
+    #   encode those files into wiggle data
+    zcat downloads/phastCons6way.wigFix.gz \
+        | wigEncode stdin phastCons6way.wig phastCons6way.wib
+    #   Converted stdin, upper limit 1.00, lower limit 0.00
+    du -hsc *.wi?
+    # 1.6G    phastCons6way.wib
+    # 211M    phastCons6way.wig
+    # 1.8G    total
+    
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons6way.wib /gbdb/felCat4/multiz6way/phastCons6way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/felCat4/multiz6way felCat4 \
+        phastCons6way phastCons6way.wig
+    # Connected to database felCat4 for track phastCons6way
+    # Creating wiggle table definition in felCat4.phastCons6way
+    # Saving wiggle.tab
+    # Loading felCat4
+
+    # use to set trackDb.ra entries for wiggle min and max
+
+    wigTableStats.sh felCat4 phastCons6way
+    # db.table      min max mean count sumData stdDev viewLimits
+    # felCat4.phastCons6way   0 1 0.158595 1636796497 2.59588e+08 0.269059
+    #  viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=felCat4 \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            phastCons6way > histogram.data 2>&1
+    #   real   4m16.548s 
+
+    #   create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Cat felCat4 Histogram phastCons6way track"
+set xlabel " phastCons6way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #   << happy emacs
+
+    display histo.png &
+
+    # download stuff: (TBD)
+    # /hive/data/genomes/felCat4/bed/multiz6way/cons/all/downloads/phastCons6way.wigFix.gz
+    # to /usr/local/apache/htdocs-hgdownload/goldenPath/felCat4/.......
+
+
+#############################################################################
 

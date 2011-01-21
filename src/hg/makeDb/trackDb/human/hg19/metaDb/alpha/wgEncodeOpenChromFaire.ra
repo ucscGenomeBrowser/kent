@@ -1697,7 +1697,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3379
@@ -1714,7 +1714,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3379
@@ -2346,7 +2346,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3378
@@ -2364,7 +2364,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3378
@@ -2910,27 +2910,11 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsPk
 view Peaks
 
-metaObject wgEncodeOpenChromFairePanisletsRawData
-objType file
-cell PanIslets
-composite wgEncodeOpenChromFaire
-controlId modelled
-dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-14
-dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsRawData.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-subId 686
-view RawData
-
 metaObject wgEncodeOpenChromFairePanisletsRawDataRep1
 objType file
 cell PanIslets
 composite wgEncodeOpenChromFaire
+controlId modelled
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2976,7 +2960,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3277
@@ -2993,7 +2977,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3277
@@ -3093,7 +3077,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3278
@@ -3111,7 +3095,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3278
@@ -3206,4 +3190,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 811807266
+# MAGIC: -1872177705
