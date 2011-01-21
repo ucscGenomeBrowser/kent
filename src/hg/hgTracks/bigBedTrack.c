@@ -17,21 +17,6 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table)
-/* Return file name from little table. */
-{
-char *fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
-if (fileName == NULL)
-    {
-    char query[256];
-    safef(query, sizeof(query), "select fileName from %s", table);
-    fileName = sqlQuickString(conn, query);
-    if (fileName == NULL)
-	errAbort("Missing fileName in %s table", table);
-    }
-return fileName;
-}
-
 static struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
 {

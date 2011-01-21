@@ -17,3 +17,9 @@ include wgEncodePsuTfbs.ra
 
 # PSU Histone (wrangler: Venkat)
 include wgEncodePsuHistone.ra
+
+# LICR Histone (wrangler: Venkat)
+include wgEncodeLicrHistone.ra
+
+# LICR TFBS (wrangler: Venkat)
+include wgEncodeLicrTfbs.ra

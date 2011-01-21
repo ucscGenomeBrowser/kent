@@ -78,7 +78,6 @@ noInherit on
     pValueFilterLimits 0:324
 
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K27m3 Ht 1
         longLabel BJ H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -88,7 +87,6 @@ noInherit on
         # subId=1284 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K4m3 Ht 1
         longLabel BJ H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -98,7 +96,6 @@ noInherit on
         # subId=1329 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K36m3 Ht 1
         longLabel BJ H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -108,7 +105,6 @@ noInherit on
         # subId=1331 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K4m3 Ht 1
         longLabel Caco-2 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -118,7 +114,6 @@ noInherit on
         # subId=1332 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K27m3 Ht 1
         longLabel Caco-2 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -128,7 +123,6 @@ noInherit on
         # subId=1334 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K36m3 Ht 1
         longLabel Caco-2 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -138,7 +132,6 @@ noInherit on
         # subId=1336 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K4m3 Ht 1
         longLabel GM06990 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -148,7 +141,6 @@ noInherit on
         # subId=1338 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K27m3 Ht 2
         longLabel BJ H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -158,7 +150,6 @@ noInherit on
         # subId=1285 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K27m3 Ht 2
         longLabel Caco-2 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -168,7 +159,6 @@ noInherit on
         # subId=1286 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K4m3 Ht 2
         longLabel BJ H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -178,7 +168,6 @@ noInherit on
         # subId=1328 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel BJ H3K36m3 Ht 2
         longLabel BJ H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -188,7 +177,6 @@ noInherit on
         # subId=1330 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K36m3 Ht 2
         longLabel Caco-2 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -198,7 +186,6 @@ noInherit on
         # subId=1335 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K4m3 Ht 2
         longLabel GM06990 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -208,7 +195,6 @@ noInherit on
         # subId=1337 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K27m3 Ht 2
         longLabel GM06990 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -218,7 +204,6 @@ noInherit on
         # subId=1339 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K27m3 Ht 1
         longLabel GM06990 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -228,7 +213,6 @@ noInherit on
         # subId=1414 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K36m3 Ht 1
         longLabel GM06990 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -238,7 +222,6 @@ noInherit on
         # subId=1415 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot
         shortLabel GM12 H3K4m3 Ht 1
         longLabel GM12878 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -249,7 +232,6 @@ noInherit on
         # subId=1418 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot
         shortLabel GM12 H3K27m3 Ht 1
         longLabel GM12878 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -260,7 +242,6 @@ noInherit on
         # subId=1419 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot
         shortLabel GM12 H3K36m3 Ht 1
         longLabel GM12878 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -271,7 +252,6 @@ noInherit on
         # subId=1422 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K4m3 Ht 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -282,7 +262,6 @@ noInherit on
         # subId=1425 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K36m3 Ht 1
         longLabel HeLa-S3 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -293,7 +272,6 @@ noInherit on
         # subId=1427 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K27m3 Ht 1
         longLabel HeLa-S3 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -304,7 +282,6 @@ noInherit on
         # subId=1428 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K4m3 Ht 1
         longLabel HepG2 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -315,7 +292,6 @@ noInherit on
         # subId=1431 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K27m3 Ht 1
         longLabel HepG2 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -326,7 +302,6 @@ noInherit on
         # subId=1432 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K36m3 Ht 1
         longLabel HepG2 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -337,7 +312,6 @@ noInherit on
         # subId=1434 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HL60 H3K4m3 Ht 1
         longLabel HL-60 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -347,7 +321,6 @@ noInherit on
         # subId=1436 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHmecH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K27m3 Ht 1
         longLabel HMEC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -357,7 +330,6 @@ noInherit on
         # subId=1439 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K36m3 Ht 1
         longLabel HRE H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -367,7 +339,6 @@ noInherit on
         # subId=1442 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K27m3 Ht 1
         longLabel HRE H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -377,7 +348,6 @@ noInherit on
         # subId=1445 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K4m3 Ht 1
         longLabel HUVEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -388,7 +358,6 @@ noInherit on
         # subId=1447 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K27m3 Ht 1
         longLabel HUVEC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -399,7 +368,6 @@ noInherit on
         # subId=1450 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K36m3 Ht 1
         longLabel HUVEC H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -410,7 +378,6 @@ noInherit on
         # subId=1451 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot
         shortLabel K562 H3K4m3 Ht 1
         longLabel K562 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -421,7 +388,6 @@ noInherit on
         # subId=1454 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot
         shortLabel K562 H3K27m3 Ht 1
         longLabel K562 H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -432,7 +398,6 @@ noInherit on
         # subId=1456 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot
         shortLabel K562 H3K36m3 Ht 1
         longLabel K562 H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -443,7 +408,6 @@ noInherit on
         # subId=1457 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K4m3 Ht 1
         longLabel NHEK H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -454,7 +418,6 @@ noInherit on
         # subId=1461 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K27m3 Ht 1
         longLabel NHEK H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -465,7 +428,6 @@ noInherit on
         # subId=1462 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K36m3 Ht 1
         longLabel NHEK H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -476,7 +438,6 @@ noInherit on
         # subId=1464 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K4m3 Ht 1
         longLabel SAEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -486,7 +447,6 @@ noInherit on
         # subId=1466 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K27m3 Ht 1
         longLabel SAEC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -496,7 +456,6 @@ noInherit on
         # subId=1468 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K36m3 Ht 1
         longLabel SAEC H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -506,7 +465,6 @@ noInherit on
         # subId=1469 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4m3 Ht 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -516,7 +474,6 @@ noInherit on
         # subId=1472 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K27m3 Ht 1
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -526,7 +483,6 @@ noInherit on
         # subId=1474 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K36m3 Ht 1
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -536,7 +492,6 @@ noInherit on
         # subId=1477 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Caco H3K4m3 Ht 2
         longLabel Caco-2 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -546,7 +501,6 @@ noInherit on
         # subId=1333 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel GM06 H3K36m3 Ht 2
         longLabel GM06990 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -556,7 +510,6 @@ noInherit on
         # subId=1413 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot 
         shortLabel GM12 H3K4m3 Ht 2
         longLabel GM12878 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -567,7 +520,6 @@ noInherit on
         # subId=1417 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot 
         shortLabel GM12 H3K36m3 Ht 2
         longLabel GM12878 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -578,7 +530,6 @@ noInherit on
         # subId=1420 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot 
         shortLabel GM12 H3K27m3 Ht 2
         longLabel GM12878 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -589,7 +540,6 @@ noInherit on
         # subId=1421 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K4m3 Ht 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -600,7 +550,6 @@ noInherit on
         # subId=1424 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K27m3 Ht 2
         longLabel HeLa-S3 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -611,7 +560,6 @@ noInherit on
         # subId=1426 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HeLa H3K36m3 Ht 2
         longLabel HeLa-S3 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -622,7 +570,6 @@ noInherit on
         # subId=1429 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K4m3 Ht 2
         longLabel HepG2 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -633,7 +580,6 @@ noInherit on
         # subId=1430 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K27m3 Ht 2
         longLabel HepG2 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -644,7 +590,6 @@ noInherit on
         # subId=1433 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHl60H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HL60 H3K4m3 Ht 2
         longLabel HL-60 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -654,7 +599,6 @@ noInherit on
         # subId=1437 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K4m3 Ht 2
         longLabel HRE H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -664,7 +608,6 @@ noInherit on
         # subId=1440 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K27m3 Ht 2
         longLabel HRE H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -674,7 +617,6 @@ noInherit on
         # subId=1443 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K36m3 Ht 2
         longLabel HRE H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -684,7 +626,6 @@ noInherit on
         # subId=1444 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K4m3 Ht 2
         longLabel HUVEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -695,7 +636,6 @@ noInherit on
         # subId=1446 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K27m3 Ht 2
         longLabel HUVEC H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -706,7 +646,6 @@ noInherit on
         # subId=1448 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HUVE H3K36m3 Ht 2
         longLabel HUVEC H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -717,7 +656,6 @@ noInherit on
         # subId=1449 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot 
         shortLabel K562 H3K4m3 Ht 2
         longLabel K562 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -728,7 +666,6 @@ noInherit on
         # subId=1455 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot 
         shortLabel K562 H3K27m3 Ht 2
         longLabel K562 H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -739,7 +676,6 @@ noInherit on
         # subId=1458 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot 
         shortLabel K562 H3K36m3 Ht 2
         longLabel K562 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -750,7 +686,6 @@ noInherit on
         # subId=1459 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K4m3 Ht 2
         longLabel NHEK H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -761,7 +696,6 @@ noInherit on
         # subId=1460 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K36m3 Ht 2
         longLabel NHEK H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -772,7 +706,6 @@ noInherit on
         # subId=1465 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K4m3 Ht 2
         longLabel SAEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -782,7 +715,6 @@ noInherit on
         # subId=1467 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K27m3 Ht 2
         longLabel SAEC H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -792,7 +724,6 @@ noInherit on
         # subId=1470 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SAEC H3K36m3 Ht 2
         longLabel SAEC H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -802,7 +733,6 @@ noInherit on
         # subId=1471 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K4m3 Ht 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -812,7 +742,6 @@ noInherit on
         # subId=1473 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K27m3 Ht 2
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -822,7 +751,6 @@ noInherit on
         # subId=1475 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel SKRA H3K36m3 Ht 2
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -832,7 +760,6 @@ noInherit on
         # subId=1476 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRE H3K4m3 Ht 1
         longLabel HRE H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -842,7 +769,6 @@ noInherit on
         # subId=1441 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHEK H3K27m3 Ht 2
         longLabel NHEK H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -853,7 +779,6 @@ noInherit on
         # subId=1463 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K4m3 Ht 1
         longLabel H7-hESC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -863,7 +788,6 @@ noInherit on
         # subId=2029 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K27m3 Ht 1
         longLabel H7-hESC H3K27me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -873,7 +797,6 @@ noInherit on
         # subId=2030 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K27m3 Ht 2
         longLabel H7-hESC H3K27me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -883,7 +806,6 @@ noInherit on
         # subId=2031 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K36m3 Ht 2
         longLabel H7-hESC H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -893,7 +815,6 @@ noInherit on
         # subId=2032 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K4m3 Ht 2
         longLabel H7-hESC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -903,7 +824,6 @@ noInherit on
         # subId=2034 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel H7ES H3K36m3 Ht 1
         longLabel H7-hESC H3K36me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -913,7 +833,6 @@ noInherit on
         # subId=2035 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HepG H3K36m3 Ht 2
         longLabel HepG2 H3K36me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -924,7 +843,6 @@ noInherit on
         # subId=2036 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG49 H3K4m3 Ht 1
         longLabel AG04449 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -934,7 +852,6 @@ noInherit on
         # subId=2592 dateSubmitted=2010-10-22
 
         track wgEncodeUwHistoneAg04449H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG49 H3K4m3 Ht 2
         longLabel AG04449 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -944,7 +861,6 @@ noInherit on
         # subId=2593 dateSubmitted=2010-10-22
 
         track wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG50 H3K4m3 Ht 1
         longLabel AG04450 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -954,7 +870,6 @@ noInherit on
         # subId=2598 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg04450H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG50 H3K4m3 Ht 2
         longLabel AG04450 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -964,7 +879,6 @@ noInherit on
         # subId=2599 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG09 H3K4m3 Ht 2
         longLabel AG09309 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -974,7 +888,6 @@ noInherit on
         # subId=2602 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09309H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG09 H3K4m3 Ht 1
         longLabel AG09309 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -984,7 +897,6 @@ noInherit on
         # subId=2603 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG19 H3K4m3 Ht 1
         longLabel AG09319 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -994,7 +906,6 @@ noInherit on
         # subId=2604 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09319H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG19 H3K4m3 Ht 2
         longLabel AG09319 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1004,7 +915,6 @@ noInherit on
         # subId=2605 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG03 H3K4m3 Ht 1
         longLabel AG10803 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1014,7 +924,6 @@ noInherit on
         # subId=2607 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg10803H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AG03 H3K4m3 Ht 2
         longLabel AG10803 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1024,7 +933,6 @@ noInherit on
         # subId=2608 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AoAF H3K4m3 Ht 2
         longLabel AoAF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1034,7 +942,6 @@ noInherit on
         # subId=2611 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAoafH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel AoAF H3K4m3 Ht 1
         longLabel AoAF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1044,7 +951,6 @@ noInherit on
         # subId=2610 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCM H3K4m3 Ht 1
         longLabel HCM H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1054,7 +960,6 @@ noInherit on
         # subId=2621 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HBMEC H3K4m3 Ht 2
         longLabel HBMEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1064,7 +969,6 @@ noInherit on
         # subId=2613 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHbmecH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HBMEC H3K4m3 Ht 1
         longLabel HBMEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1074,7 +978,6 @@ noInherit on
         # subId=2614 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfaaH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCFaa H3K4m3 Ht 1
         longLabel HCFaa H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1084,7 +987,6 @@ noInherit on
         # subId=2616 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCF H3K4m3 Ht 1
         longLabel HCF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1094,7 +996,6 @@ noInherit on
         # subId=2618 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCF H3K4m3 Ht 2
         longLabel HCF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1104,7 +1005,6 @@ noInherit on
         # subId=2619 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcmH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCM H3K4m3 Ht 2
         longLabel HCM H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1114,7 +1014,6 @@ noInherit on
         # subId=2622 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCPE H3K4m3 Ht 2
         longLabel HCPEpiC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1124,7 +1023,6 @@ noInherit on
         # subId=2624 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcpeH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCPE H3K4m3 Ht 1
         longLabel HCPEpiC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1134,7 +1032,6 @@ noInherit on
         # subId=2625 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCT16 H3K4m3 Ht 2
         longLabel HCT-116 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1144,7 +1041,6 @@ noInherit on
         # subId=2628 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHct116H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HCT16 H3K4m3 Ht 1
         longLabel HCT-116 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1154,7 +1050,6 @@ noInherit on
         # subId=2629 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEE H3K4m3 Ht 1
         longLabel HEEpiC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1164,7 +1059,6 @@ noInherit on
         # subId=2631 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHeeH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEE H3K4m3 Ht 2
         longLabel HEEpiC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1174,7 +1068,6 @@ noInherit on
         # subId=2632 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEK H3K4m3 Ht 2
         longLabel HEK293 H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1184,7 +1077,6 @@ noInherit on
         # subId=2633 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHek293H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HEK H3K4m3 Ht 1
         longLabel HEK293 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1194,7 +1086,6 @@ noInherit on
         # subId=2634 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K4m3 Ht 2
         longLabel HMEC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1204,7 +1095,6 @@ noInherit on
         # subId=2635 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmecH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMEC H3K4m3 Ht 1
         longLabel HMEC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1214,7 +1104,6 @@ noInherit on
         # subId=2636 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMF H3K4m3 Ht 1
         longLabel HMF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1224,7 +1113,6 @@ noInherit on
         # subId=2637 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmfH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HMF H3K4m3 Ht 2
         longLabel HMF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1234,7 +1122,6 @@ noInherit on
         # subId=2638 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPAF H3K4m3 Ht 1
         longLabel HPAF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1244,7 +1131,6 @@ noInherit on
         # subId=2640 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpafH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPAF H3K4m3 Ht 2
         longLabel HPAF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1254,7 +1140,6 @@ noInherit on
         # subId=2641 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPF H3K4m3 Ht 2
         longLabel HPF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1264,7 +1149,6 @@ noInherit on
         # subId=2644 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpfH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HPF H3K4m3 Ht 1
         longLabel HPF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1274,7 +1158,6 @@ noInherit on
         # subId=2645 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRPE H3K4m3 Ht 2
         longLabel HRPEpiC H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1284,7 +1167,6 @@ noInherit on
         # subId=2647 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHrpeH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HRPE H3K4m3 Ht 1
         longLabel HRPEpiC H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1294,7 +1176,6 @@ noInherit on
         # subId=2648 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HVMF H3K4m3 Ht 2
         longLabel HVMF H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1304,7 +1185,6 @@ noInherit on
         # subId=2649 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHvmfH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HVMF H3K4m3 Ht 1
         longLabel HVMF H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1314,7 +1194,6 @@ noInherit on
         # subId=2650 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Jurk H3K4m3 Ht 2
         longLabel Jurkat H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1324,7 +1203,6 @@ noInherit on
         # subId=2653 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneJurkatH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel Jurk H3K4m3 Ht 1
         longLabel Jurkat H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1334,7 +1212,6 @@ noInherit on
         # subId=2654 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneMcf7H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel MCF-7 H3K4m3 Ht 1
         longLabel MCF-7 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1344,7 +1221,6 @@ noInherit on
         # subId=2656 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNb4H3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NB4 H3K4m3 Ht 1
         longLabel NB4 H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1354,7 +1230,6 @@ noInherit on
         # subId=2658 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHDFn H3K4m3 Ht 1
         longLabel NHDF-neo H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1364,7 +1239,6 @@ noInherit on
         # subId=2660 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNhdfneoH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel NHDFn H3K4m3 Ht 2
         longLabel NHDF-neo H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1374,7 +1248,6 @@ noInherit on
         # subId=2661 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep1
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HAsp H3K4m3 Ht 1
         longLabel HA-sp H3K4me3 Histone Modifications Hotspots Rep 1 from ENCODE/UW
@@ -1384,7 +1257,6 @@ noInherit on
         # subId=2778 dateSubmitted=2010-10-28
 
         track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep2
-        release alpha
         parent wgEncodeUwHistoneViewHot off
         shortLabel HAsp H3K4m3 Ht 2
         longLabel HA-sp H3K4me3 Histone Modifications Hotspots Rep 2 from ENCODE/UW
@@ -1403,7 +1275,6 @@ noInherit on
     pValueFilterLimits 0:324
 
         track wgEncodeUwHistoneBjH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K27m3 Pk 1
         longLabel BJ H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1413,7 +1284,6 @@ noInherit on
         # subId=1284 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K4m3 Pk 1
         longLabel BJ H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1423,7 +1293,6 @@ noInherit on
         # subId=1329 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K36m3 Pk 1
         longLabel BJ H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1433,7 +1302,6 @@ noInherit on
         # subId=1331 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K4m3 Pk 1
         longLabel Caco-2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1443,7 +1311,6 @@ noInherit on
         # subId=1332 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneCaco2H3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K27m3 Pk 1
         longLabel Caco-2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1453,7 +1320,6 @@ noInherit on
         # subId=1334 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneCaco2H3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K36m3 Pk 1
         longLabel Caco-2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1463,7 +1329,6 @@ noInherit on
         # subId=1336 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K4m3 Pk 1
         longLabel GM06990 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1473,7 +1338,6 @@ noInherit on
         # subId=1338 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneBjH3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K27m3 Pk 2
         longLabel BJ H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1483,7 +1347,6 @@ noInherit on
         # subId=1285 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K27m3 Pk 2
         longLabel Caco-2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1493,7 +1356,6 @@ noInherit on
         # subId=1286 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K4m3 Pk 2
         longLabel BJ H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1503,7 +1365,6 @@ noInherit on
         # subId=1328 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K36m3 Pk 2
         longLabel BJ H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1513,7 +1374,6 @@ noInherit on
         # subId=1330 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K36m3 Pk 2
         longLabel Caco-2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1523,7 +1383,6 @@ noInherit on
         # subId=1335 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K4m3 Pk 2
         longLabel GM06990 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1533,7 +1392,6 @@ noInherit on
         # subId=1337 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K27m3 Pk 2
         longLabel GM06990 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1543,7 +1401,6 @@ noInherit on
         # subId=1339 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K27m3 Pk 1
         longLabel GM06990 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1553,7 +1410,6 @@ noInherit on
         # subId=1414 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm06990H3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K36m3 Pk 1
         longLabel GM06990 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1563,7 +1419,6 @@ noInherit on
         # subId=1415 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12 H3K4m3 Pk 1
         longLabel GM12878 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1574,7 +1429,6 @@ noInherit on
         # subId=1418 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12 H3K27m3 Pk 1
         longLabel GM12878 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1585,7 +1439,6 @@ noInherit on
         # subId=1419 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12 H3K36m3 Pk 1
         longLabel GM12878 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1596,7 +1449,6 @@ noInherit on
         # subId=1422 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K4m3 Pk 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1607,7 +1459,6 @@ noInherit on
         # subId=1425 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K36m3 Pk 1
         longLabel HeLa-S3 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1618,7 +1469,6 @@ noInherit on
         # subId=1427 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K27m3 Pk 1
         longLabel HeLa-S3 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1629,7 +1479,6 @@ noInherit on
         # subId=1428 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K4m3 Pk 1
         longLabel HepG2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1640,7 +1489,6 @@ noInherit on
         # subId=1431 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K27m3 Pk 1
         longLabel HepG2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1651,7 +1499,6 @@ noInherit on
         # subId=1432 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHepg2H3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K36m3 Pk 1
         longLabel HepG2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1662,7 +1509,6 @@ noInherit on
         # subId=1434 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHl60H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HL60 H3K4m3 Pk 1
         longLabel HL-60 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1672,7 +1518,6 @@ noInherit on
         # subId=1436 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHmecH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMEC H3K27m3 Pk 1
         longLabel HMEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1682,7 +1527,6 @@ noInherit on
         # subId=1439 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K36m3 Pk 1
         longLabel HRE H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1692,7 +1536,6 @@ noInherit on
         # subId=1442 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K27m3 Pk 1
         longLabel HRE H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1702,7 +1545,6 @@ noInherit on
         # subId=1445 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K4m3 Pk 1
         longLabel HUVEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1713,7 +1555,6 @@ noInherit on
         # subId=1447 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K27m3 Pk 1
         longLabel HUVEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1724,7 +1565,6 @@ noInherit on
         # subId=1450 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K36m3 Pk 1
         longLabel HUVEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1735,7 +1575,6 @@ noInherit on
         # subId=1451 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 H3K4m3 Pk 1
         longLabel K562 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1746,7 +1585,6 @@ noInherit on
         # subId=1454 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 H3K27m3 Pk 1
         longLabel K562 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1757,7 +1595,6 @@ noInherit on
         # subId=1456 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 H3K36m3 Pk 1
         longLabel K562 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1768,7 +1605,6 @@ noInherit on
         # subId=1457 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K4m3 Pk 1
         longLabel NHEK H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1779,7 +1615,6 @@ noInherit on
         # subId=1461 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K27m3 Pk 1
         longLabel NHEK H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1790,7 +1625,6 @@ noInherit on
         # subId=1462 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K36m3 Pk 1
         longLabel NHEK H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1801,7 +1635,6 @@ noInherit on
         # subId=1464 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K4m3 Pk 1
         longLabel SAEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1811,7 +1644,6 @@ noInherit on
         # subId=1466 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K27m3 Pk 1
         longLabel SAEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1821,7 +1653,6 @@ noInherit on
         # subId=1468 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K36m3 Pk 1
         longLabel SAEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1831,7 +1662,6 @@ noInherit on
         # subId=1469 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K4m3 Pk 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1841,7 +1671,6 @@ noInherit on
         # subId=1472 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K27m3 Pk 1
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1851,7 +1680,6 @@ noInherit on
         # subId=1474 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K36m3 Pk 1
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1861,7 +1689,6 @@ noInherit on
         # subId=1477 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneCaco2H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco H3K4m3 Pk 2
         longLabel Caco-2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1871,7 +1698,6 @@ noInherit on
         # subId=1333 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06 H3K36m3 Pk 2
         longLabel GM06990 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1881,7 +1707,6 @@ noInherit on
         # subId=1413 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel GM12 H3K4m3 Pk 2
         longLabel GM12878 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1892,7 +1717,6 @@ noInherit on
         # subId=1417 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel GM12 H3K36m3 Pk 2
         longLabel GM12878 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1903,7 +1727,6 @@ noInherit on
         # subId=1420 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel GM12 H3K27m3 Pk 2
         longLabel GM12878 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1914,7 +1737,6 @@ noInherit on
         # subId=1421 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K4m3 Pk 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1925,7 +1747,6 @@ noInherit on
         # subId=1424 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K27m3 Pk 2
         longLabel HeLa-S3 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1936,7 +1757,6 @@ noInherit on
         # subId=1426 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa H3K36m3 Pk 2
         longLabel HeLa-S3 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1947,7 +1767,6 @@ noInherit on
         # subId=1429 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K4m3 Pk 2
         longLabel HepG2 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1958,7 +1777,6 @@ noInherit on
         # subId=1430 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K27m3 Pk 2
         longLabel HepG2 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1969,7 +1787,6 @@ noInherit on
         # subId=1433 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHl60H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HL60 H3K4m3 Pk 2
         longLabel HL-60 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1979,7 +1796,6 @@ noInherit on
         # subId=1437 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K4m3 Pk 2
         longLabel HRE H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1989,7 +1805,6 @@ noInherit on
         # subId=1440 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K27m3 Pk 2
         longLabel HRE H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1999,7 +1814,6 @@ noInherit on
         # subId=1443 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K36m3 Pk 2
         longLabel HRE H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2009,7 +1823,6 @@ noInherit on
         # subId=1444 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K4m3 Pk 2
         longLabel HUVEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2020,7 +1833,6 @@ noInherit on
         # subId=1446 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K27m3 Pk 2
         longLabel HUVEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2031,7 +1843,6 @@ noInherit on
         # subId=1448 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVE H3K36m3 Pk 2
         longLabel HUVEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2042,7 +1853,6 @@ noInherit on
         # subId=1449 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel K562 H3K4m3 Pk 2
         longLabel K562 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2053,7 +1863,6 @@ noInherit on
         # subId=1455 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel K562 H3K27m3 Pk 2
         longLabel K562 H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2064,7 +1873,6 @@ noInherit on
         # subId=1458 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks 
         shortLabel K562 H3K36m3 Pk 2
         longLabel K562 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2075,7 +1883,6 @@ noInherit on
         # subId=1459 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K4m3 Pk 2
         longLabel NHEK H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2086,7 +1893,6 @@ noInherit on
         # subId=1460 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K36m3 Pk 2
         longLabel NHEK H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2097,7 +1903,6 @@ noInherit on
         # subId=1465 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K4m3 Pk 2
         longLabel SAEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2107,7 +1912,6 @@ noInherit on
         # subId=1467 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K27m3 Pk 2
         longLabel SAEC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2117,7 +1921,6 @@ noInherit on
         # subId=1470 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K36m3 Pk 2
         longLabel SAEC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2127,7 +1930,6 @@ noInherit on
         # subId=1471 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K4m3 Pk 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2137,7 +1939,6 @@ noInherit on
         # subId=1473 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K27m3 Pk 2
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2147,7 +1948,6 @@ noInherit on
         # subId=1475 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SKRA H3K36m3 Pk 2
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2157,7 +1957,6 @@ noInherit on
         # subId=1476 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K4m3 Pk 1
         longLabel HRE H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2167,7 +1966,6 @@ noInherit on
         # subId=1441 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneNhekH3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K27m3 Pk 2
         longLabel NHEK H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2178,7 +1976,6 @@ noInherit on
         # subId=1463 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneH7esH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K4m3 Pk 1
         longLabel H7-hESC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2188,7 +1985,6 @@ noInherit on
         # subId=2029 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k27me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K27m3 Pk 1
         longLabel H7-hESC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2198,7 +1994,6 @@ noInherit on
         # subId=2030 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k27me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K27m3 Pk 2
         longLabel H7-hESC H3K27me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2208,7 +2003,6 @@ noInherit on
         # subId=2031 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K36m3 Pk 2
         longLabel H7-hESC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2218,7 +2012,6 @@ noInherit on
         # subId=2032 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K4m3 Pk 2
         longLabel H7-hESC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2228,7 +2021,6 @@ noInherit on
         # subId=2034 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k36me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel H7ES H3K36m3 Pk 1
         longLabel H7-hESC H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2238,7 +2030,6 @@ noInherit on
         # subId=2035 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneHepg2H3k36me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG H3K36m3 Pk 2
         longLabel HepG2 H3K36me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2249,7 +2040,6 @@ noInherit on
         # subId=2036 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneAg04449H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG49 H3K4m3 Pk 1
         longLabel AG04449 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2259,7 +2049,6 @@ noInherit on
         # subId=2592 dateSubmitted=2010-10-22
 
         track wgEncodeUwHistoneAg04449H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG49 H3K4m3 Pk 2
         longLabel AG04449 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2269,7 +2058,6 @@ noInherit on
         # subId=2593 dateSubmitted=2010-10-22
 
         track wgEncodeUwHistoneAg04450H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG50 H3K4m3 Pk 1
         longLabel AG04450 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2279,7 +2067,6 @@ noInherit on
         # subId=2598 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg04450H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG50 H3K4m3 Pk 2
         longLabel AG04450 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2289,7 +2076,6 @@ noInherit on
         # subId=2599 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09309H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG09 H3K4m3 Pk 2
         longLabel AG09309 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2299,7 +2085,6 @@ noInherit on
         # subId=2602 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09309H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG09 H3K4m3 Pk 1
         longLabel AG09309 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2309,7 +2094,6 @@ noInherit on
         # subId=2603 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09319H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG19 H3K4m3 Pk 1
         longLabel AG09319 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2319,7 +2103,6 @@ noInherit on
         # subId=2604 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09319H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG19 H3K4m3 Pk 2
         longLabel AG09319 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2329,7 +2112,6 @@ noInherit on
         # subId=2605 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg10803H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG03 H3K4m3 Pk 1
         longLabel AG10803 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2339,7 +2121,6 @@ noInherit on
         # subId=2607 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg10803H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AG03 H3K4m3 Pk 2
         longLabel AG10803 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2349,7 +2130,6 @@ noInherit on
         # subId=2608 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAoafH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AoAF H3K4m3 Pk 2
         longLabel AoAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2359,7 +2139,6 @@ noInherit on
         # subId=2611 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAoafH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel AoAF H3K4m3 Pk 1
         longLabel AoAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2369,7 +2148,6 @@ noInherit on
         # subId=2610 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcmH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCM H3K4m3 Pk 1
         longLabel HCM H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2379,7 +2157,6 @@ noInherit on
         # subId=2621 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHbmecH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HBMEC H3K4m3 Pk 2
         longLabel HBMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2389,7 +2166,6 @@ noInherit on
         # subId=2613 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHbmecH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HBMEC H3K4m3 Pk 1
         longLabel HBMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2399,7 +2175,6 @@ noInherit on
         # subId=2614 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfaaH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCFaa H3K4m3 Pk 1
         longLabel HCFaa H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2409,7 +2184,6 @@ noInherit on
         # subId=2616 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCF H3K4m3 Pk 1
         longLabel HCF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2419,7 +2193,6 @@ noInherit on
         # subId=2618 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCF H3K4m3 Pk 2
         longLabel HCF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2429,7 +2202,6 @@ noInherit on
         # subId=2619 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcmH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCM H3K4m3 Pk 2
         longLabel HCM H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2439,7 +2211,6 @@ noInherit on
         # subId=2622 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcpeH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCPE H3K4m3 Pk 2
         longLabel HCPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2449,7 +2220,6 @@ noInherit on
         # subId=2624 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcpeH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCPE H3K4m3 Pk 1
         longLabel HCPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2459,7 +2229,6 @@ noInherit on
         # subId=2625 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHct116H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCT16 H3K4m3 Pk 2
         longLabel HCT-116 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2469,7 +2238,6 @@ noInherit on
         # subId=2628 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHct116H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HCT16 H3K4m3 Pk 1
         longLabel HCT-116 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2479,7 +2247,6 @@ noInherit on
         # subId=2629 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHeeH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEE H3K4m3 Pk 1
         longLabel HEEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2489,7 +2256,6 @@ noInherit on
         # subId=2631 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHeeH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEE H3K4m3 Pk 2
         longLabel HEEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2499,7 +2265,6 @@ noInherit on
         # subId=2632 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHek293H3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEK H3K4m3 Pk 2
         longLabel HEK293 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2509,7 +2274,6 @@ noInherit on
         # subId=2633 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHek293H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEK H3K4m3 Pk 1
         longLabel HEK293 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2519,7 +2283,6 @@ noInherit on
         # subId=2634 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmecH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMEC H3K4m3 Pk 2
         longLabel HMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2529,7 +2292,6 @@ noInherit on
         # subId=2635 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmecH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMEC H3K4m3 Pk 1
         longLabel HMEC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2539,7 +2301,6 @@ noInherit on
         # subId=2636 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmfH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMF H3K4m3 Pk 1
         longLabel HMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2549,7 +2310,6 @@ noInherit on
         # subId=2637 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmfH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMF H3K4m3 Pk 2
         longLabel HMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2559,7 +2319,6 @@ noInherit on
         # subId=2638 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpafH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPAF H3K4m3 Pk 1
         longLabel HPAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2569,7 +2328,6 @@ noInherit on
         # subId=2640 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpafH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPAF H3K4m3 Pk 2
         longLabel HPAF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2579,7 +2337,6 @@ noInherit on
         # subId=2641 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpfH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPF H3K4m3 Pk 2
         longLabel HPF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2589,7 +2346,6 @@ noInherit on
         # subId=2644 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpfH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HPF H3K4m3 Pk 1
         longLabel HPF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2599,7 +2355,6 @@ noInherit on
         # subId=2645 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHrpeH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRPE H3K4m3 Pk 2
         longLabel HRPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2609,7 +2364,6 @@ noInherit on
         # subId=2647 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHrpeH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRPE H3K4m3 Pk 1
         longLabel HRPEpiC H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2619,7 +2373,6 @@ noInherit on
         # subId=2648 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHvmfH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HVMF H3K4m3 Pk 2
         longLabel HVMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2629,7 +2382,6 @@ noInherit on
         # subId=2649 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHvmfH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HVMF H3K4m3 Pk 1
         longLabel HVMF H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2639,7 +2391,6 @@ noInherit on
         # subId=2650 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneJurkatH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Jurk H3K4m3 Pk 2
         longLabel Jurkat H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2649,7 +2400,6 @@ noInherit on
         # subId=2653 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneJurkatH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Jurk H3K4m3 Pk 1
         longLabel Jurkat H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2659,7 +2409,6 @@ noInherit on
         # subId=2654 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneMcf7H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel MCF-7 H3K4m3 Pk 1
         longLabel MCF-7 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2669,7 +2418,6 @@ noInherit on
         # subId=2656 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNb4H3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NB4 H3K4m3 Pk 1
         longLabel NB4 H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2679,7 +2427,6 @@ noInherit on
         # subId=2658 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHDFn H3K4m3 Pk 1
         longLabel NHDF-neo H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2689,7 +2436,6 @@ noInherit on
         # subId=2660 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNhdfneoH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHDFn H3K4m3 Pk 2
         longLabel NHDF-neo H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2699,7 +2445,6 @@ noInherit on
         # subId=2661 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHaspH3k4me3StdPkRep1
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HAsp H3K4m3 Pk 1
         longLabel HA-sp H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -2709,7 +2454,6 @@ noInherit on
         # subId=2778 dateSubmitted=2010-10-28
 
         track wgEncodeUwHistoneHaspH3k4me3StdPkRep2
-        release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HAsp H3K4m3 Pk 2
         longLabel HA-sp H3K4me3 Histone Modifications Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -2732,7 +2476,6 @@ noInherit on
     windowingFunction mean
 
         track wgEncodeUwHistoneBjInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ Input Sg 1
         longLabel BJ Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2742,7 +2485,6 @@ noInherit on
         # subId=1283 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K27m3 Sg 1
         longLabel BJ H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2752,7 +2494,6 @@ noInherit on
         # subId=1284 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco Input Sg 1
         longLabel Caco-2 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2762,7 +2503,6 @@ noInherit on
         # subId=1287 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneGm06990InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 Input Sg 1
         longLabel GM06990 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2773,7 +2513,6 @@ noInherit on
 
 
         track wgEncodeUwHistoneGm12878InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel GM12 Input Sg 1
         longLabel GM12878 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2784,7 +2523,6 @@ noInherit on
         # subId=1293 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneHek293InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEK Input Sg 1
         longLabel HEK293 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2794,7 +2532,6 @@ noInherit on
         # subId=1295 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneHmecInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC Input Sg 1
         longLabel HMEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2804,7 +2541,6 @@ noInherit on
         # subId=1302 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneHreInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE Input Sg 1
         longLabel HRE Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2814,7 +2550,6 @@ noInherit on
         # subId=1303 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneK562InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 Input Sg 1
         longLabel K562 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2825,7 +2560,6 @@ noInherit on
         # subId=1308 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneHuvecInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE Input Sg 1
         longLabel HUVEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2836,7 +2570,6 @@ noInherit on
         # subId=1316 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneNhekInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK Input Sg 1
         longLabel NHEK Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2847,7 +2580,6 @@ noInherit on
         # subId=1317 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneSaecInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC Input Sg 1
         longLabel SAEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2857,7 +2589,6 @@ noInherit on
         # subId=1318 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneSknshraInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA Input Sg 1
         longLabel SK-N-SH_RA Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2868,7 +2599,6 @@ noInherit on
 
 
         track wgEncodeUwHistoneBjH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K4m3 Sg 1
         longLabel BJ H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2878,7 +2608,6 @@ noInherit on
         # subId=1329 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K36m3 Sg 1
         longLabel BJ H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2888,7 +2617,6 @@ noInherit on
         # subId=1331 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K4m3 Sg 1
         longLabel Caco-2 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2898,7 +2626,6 @@ noInherit on
         # subId=1332 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneCaco2H3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K27m3 Sg 1
         longLabel Caco-2 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2908,7 +2635,6 @@ noInherit on
         # subId=1334 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneCaco2H3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K36m3 Sg 1
         longLabel Caco-2 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2918,7 +2644,6 @@ noInherit on
         # subId=1336 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K4m3 Sg 1
         longLabel GM06990 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -2928,7 +2653,6 @@ noInherit on
         # subId=1338 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneBjH3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K27m3 Sg 2
         longLabel BJ H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -2938,7 +2662,6 @@ noInherit on
         # subId=1285 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K27m3 Sg 2
         longLabel Caco-2 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -2948,7 +2671,6 @@ noInherit on
         # subId=1286 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K4m3 Sg 2
         longLabel BJ H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -2958,7 +2680,6 @@ noInherit on
         # subId=1328 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel BJ H3K36m3 Sg 2
         longLabel BJ H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -2968,7 +2689,6 @@ noInherit on
         # subId=1330 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneCaco2H3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K36m3 Sg 2
         longLabel Caco-2 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -2978,7 +2698,6 @@ noInherit on
         # subId=1335 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K4m3 Sg 2
         longLabel GM06990 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -2988,7 +2707,6 @@ noInherit on
         # subId=1337 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K27m3 Sg 2
         longLabel GM06990 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -2998,7 +2716,6 @@ noInherit on
         # subId=1339 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K27m3 Sg 1
         longLabel GM06990 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3008,7 +2725,6 @@ noInherit on
         # subId=1414 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm06990H3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K36m3 Sg 1
         longLabel GM06990 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3019,7 +2735,6 @@ noInherit on
 
 
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel GM12 H3K4m3 Sg 1
         longLabel GM12878 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3030,7 +2745,6 @@ noInherit on
         # subId=1418 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel GM12 H3K27m3 Sg 1
         longLabel GM12878 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3041,7 +2755,6 @@ noInherit on
         # subId=1419 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel GM12 H3K36m3 Sg 1
         longLabel GM12878 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3052,7 +2765,6 @@ noInherit on
         # subId=1422 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa Input Sg 1
         longLabel HeLa-S3 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3063,7 +2775,6 @@ noInherit on
         # subId=1423 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K4m3 Sg 1
         longLabel HeLa-S3 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3074,7 +2785,6 @@ noInherit on
         # subId=1425 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K36m3 Sg 1
         longLabel HeLa-S3 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3085,7 +2795,6 @@ noInherit on
         # subId=1427 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K27m3 Sg 1
         longLabel HeLa-S3 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3096,7 +2805,6 @@ noInherit on
         # subId=1428 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K4m3 Sg 1
         longLabel HepG2 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3107,7 +2815,6 @@ noInherit on
         # subId=1431 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K27m3 Sg 1
         longLabel HepG2 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3118,7 +2825,6 @@ noInherit on
         # subId=1432 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHepg2H3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K36m3 Sg 1
         longLabel HepG2 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3129,7 +2835,6 @@ noInherit on
         # subId=1434 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHepg2InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG Input Sg 1
         longLabel HepG2 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3140,7 +2845,6 @@ noInherit on
         # subId=1435 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHl60H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HL60 H3K4m3 Sg 1
         longLabel HL-60 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3150,7 +2854,6 @@ noInherit on
         # subId=1436 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHl60InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HL60 Input Sg 1
         longLabel HL-60 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3160,7 +2863,6 @@ noInherit on
         # subId=1438 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHmecH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K27m3 Sg 1
         longLabel HMEC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3170,7 +2872,6 @@ noInherit on
         # subId=1439 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K36m3 Sg 1
         longLabel HRE H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3180,7 +2881,6 @@ noInherit on
         # subId=1442 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K27m3 Sg 1
         longLabel HRE H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3190,7 +2890,6 @@ noInherit on
         # subId=1445 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K4m3 Sg 1
         longLabel HUVEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3201,7 +2900,6 @@ noInherit on
         # subId=1447 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K27m3 Sg 1
         longLabel HUVEC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3212,7 +2910,6 @@ noInherit on
         # subId=1450 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K36m3 Sg 1
         longLabel HUVEC H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3223,7 +2920,6 @@ noInherit on
         # subId=1451 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 H3K4m3 Sg 1
         longLabel K562 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3234,7 +2930,6 @@ noInherit on
         # subId=1454 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 H3K27m3 Sg 1
         longLabel K562 H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3245,7 +2940,6 @@ noInherit on
         # subId=1456 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig
         shortLabel K562 H3K36m3 Sg 1
         longLabel K562 H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3256,7 +2950,6 @@ noInherit on
         # subId=1457 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K4m3 Sg 1
         longLabel NHEK H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3267,7 +2960,6 @@ noInherit on
         # subId=1461 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K27m3 Sg 1
         longLabel NHEK H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3278,7 +2970,6 @@ noInherit on
         # subId=1462 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K36m3 Sg 1
         longLabel NHEK H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3289,7 +2980,6 @@ noInherit on
         # subId=1464 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K4m3 Sg 1
         longLabel SAEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3299,7 +2989,6 @@ noInherit on
         # subId=1466 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K27m3 Sg 1
         longLabel SAEC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3309,7 +2998,6 @@ noInherit on
         # subId=1468 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K36m3 Sg 1
         longLabel SAEC H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3319,7 +3007,6 @@ noInherit on
         # subId=1469 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4m3 Sg 1
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3329,7 +3016,6 @@ noInherit on
         # subId=1472 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K27m3 Sg 1
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3339,7 +3025,6 @@ noInherit on
         # subId=1474 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K36m3 Sg 1
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3349,7 +3034,6 @@ noInherit on
         # subId=1477 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneCaco2H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Caco H3K4m3 Sg 2
         longLabel Caco-2 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3359,7 +3043,6 @@ noInherit on
         # subId=1333 dateSubmitted=2010-06-11
 
         track wgEncodeUwHistoneGm06990H3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel GM06 H3K36m3 Sg 2
         longLabel GM06990 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3369,7 +3052,6 @@ noInherit on
         # subId=1413 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig f
         shortLabel GM12 H3K4m3 Sg 2
         longLabel GM12878 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3380,7 +3062,6 @@ noInherit on
         # subId=1417 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel GM12 H3K36m3 Sg 2
         longLabel GM12878 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3391,7 +3072,6 @@ noInherit on
         # subId=1420 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel GM12 H3K27m3 Sg 2
         longLabel GM12878 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3402,7 +3082,6 @@ noInherit on
         # subId=1421 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K4m3 Sg 2
         longLabel HeLa-S3 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3413,7 +3092,6 @@ noInherit on
         # subId=1424 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K27m3 Sg 2
         longLabel HeLa-S3 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3424,7 +3102,6 @@ noInherit on
         # subId=1426 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHelas3H3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HeLa H3K36m3 Sg 2
         longLabel HeLa-S3 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3435,7 +3112,6 @@ noInherit on
         # subId=1429 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K4m3 Sg 2
         longLabel HepG2 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3446,7 +3122,6 @@ noInherit on
         # subId=1430 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneHepg2H3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG H3K27m3 Sg 2
         longLabel HepG2 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3457,7 +3132,6 @@ noInherit on
         # subId=1433 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHl60H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HL60 H3K4m3 Sg 2
         longLabel HL-60 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3467,7 +3141,6 @@ noInherit on
         # subId=1437 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K4m3 Sg 2
         longLabel HRE H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3477,7 +3150,6 @@ noInherit on
         # subId=1440 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K27m3 Sg 2
         longLabel HRE H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3487,7 +3159,6 @@ noInherit on
         # subId=1443 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHreH3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K36m3 Sg 2
         longLabel HRE H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3497,7 +3168,6 @@ noInherit on
         # subId=1444 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K4m3 Sg 2
         longLabel HUVEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3508,7 +3178,6 @@ noInherit on
         # subId=1446 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K27m3 Sg 2
         longLabel HUVEC H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3519,7 +3188,6 @@ noInherit on
         # subId=1448 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneHuvecH3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HUVE H3K36m3 Sg 2
         longLabel HUVEC H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3530,7 +3198,6 @@ noInherit on
         # subId=1449 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel K562 H3K4m3 Sg 2
         longLabel K562 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3541,7 +3208,6 @@ noInherit on
         # subId=1455 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel K562 H3K27m3 Sg 2
         longLabel K562 H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3552,7 +3218,6 @@ noInherit on
         # subId=1458 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneK562H3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig 
         shortLabel K562 H3K36m3 Sg 2
         longLabel K562 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3563,7 +3228,6 @@ noInherit on
         # subId=1459 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K4m3 Sg 2
         longLabel NHEK H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3574,7 +3238,6 @@ noInherit on
         # subId=1460 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneNhekH3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K36m3 Sg 2
         longLabel NHEK H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3585,7 +3248,6 @@ noInherit on
         # subId=1465 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K4m3 Sg 2
         longLabel SAEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3595,7 +3257,6 @@ noInherit on
         # subId=1467 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K27m3 Sg 2
         longLabel SAEC H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3605,7 +3266,6 @@ noInherit on
         # subId=1470 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSaecH3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SAEC H3K36m3 Sg 2
         longLabel SAEC H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3615,7 +3275,6 @@ noInherit on
         # subId=1471 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K4m3 Sg 2
         longLabel SK-N-SH_RA H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3625,7 +3284,6 @@ noInherit on
         # subId=1473 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K27m3 Sg 2
         longLabel SK-N-SH_RA H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3635,7 +3293,6 @@ noInherit on
         # subId=1475 dateSubmitted=2010-06-15
 
         track wgEncodeUwHistoneSknshraH3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel SKRA H3K36m3 Sg 2
         longLabel SK-N-SH_RA H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3646,7 +3303,6 @@ noInherit on
 
 
         track wgEncodeUwHistoneHreH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRE H3K4m3 Sg 1
         longLabel HRE H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3656,7 +3312,6 @@ noInherit on
         # subId=1441 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneNhekH3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHEK H3K27m3 Sg 2
         longLabel NHEK H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3667,7 +3322,6 @@ noInherit on
         # subId=1463 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneH7esH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K4m3 Sg 1
         longLabel H7-hESC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3677,7 +3331,6 @@ noInherit on
         # subId=2029 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k27me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K27m3 Sg 1
         longLabel H7-hESC H3K27me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3687,7 +3340,6 @@ noInherit on
         # subId=2030 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k27me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K27m3 Sg 2
         longLabel H7-hESC H3K27me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3697,7 +3349,6 @@ noInherit on
         # subId=2031 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K36m3 Sg 2
         longLabel H7-hESC H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3707,7 +3358,6 @@ noInherit on
         # subId=2032 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES Input Sg 1
         longLabel H7-hESC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3717,7 +3367,6 @@ noInherit on
         # subId=2033 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K4m3 Sg 2
         longLabel H7-hESC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3727,7 +3376,6 @@ noInherit on
         # subId=2034 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneH7esH3k36me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel H7ES H3K36m3 Sg 1
         longLabel H7-hESC H3K36me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3737,7 +3385,6 @@ noInherit on
         # subId=2035 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneHepg2H3k36me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HepG  H3K36m3 Sg 2
         longLabel HepG2 H3K36me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3748,7 +3395,6 @@ noInherit on
         # subId=2036 dateSubmitted=2010-07-24
 
         track wgEncodeUwHistoneAg04449H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG49 H3K4m3 Sg 1
         longLabel AG04449 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3758,7 +3404,6 @@ noInherit on
         # subId=2592 dateSubmitted=2010-10-22
 
         track wgEncodeUwHistoneAg04449H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG49 H3K4m3 Sg 2
         longLabel AG04449 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3768,7 +3413,6 @@ noInherit on
         # subId=2593 dateSubmitted=2010-10-22
 
         track wgEncodeUwHistoneAg04449InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG49 Input Sg 1
         longLabel AG04449 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3778,7 +3422,6 @@ noInherit on
         # subId=2594 dateSubmitted=2010-10-22
 
         track wgEncodeUwHistoneAg04450H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG50 H3K4m3 Sg 1
         longLabel AG04450 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3788,7 +3431,6 @@ noInherit on
         # subId=2598 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg04450H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG50 H3K4m3 Sg 2
         longLabel AG04450 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3798,7 +3440,6 @@ noInherit on
         # subId=2599 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg04450InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG50 Input Sg 1
         longLabel AG04450 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3808,7 +3449,6 @@ noInherit on
         # subId=2600 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09309InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG09 Input Sg 1
         longLabel AG09309 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3818,7 +3458,6 @@ noInherit on
         # subId=2601 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09309H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG09 H3K4m3 Sg 2
         longLabel AG09309 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3828,7 +3467,6 @@ noInherit on
         # subId=2602 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09309H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG09 H3K4m3 Sg 1
         longLabel AG09309 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3838,7 +3476,6 @@ noInherit on
         # subId=2603 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09319H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG19 H3K4m3 Sg 1
         longLabel AG09319 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3848,7 +3485,6 @@ noInherit on
         # subId=2604 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09319H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG19 H3K4m3 Sg 2
         longLabel AG09319 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3858,7 +3494,6 @@ noInherit on
         # subId=2605 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg09319InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG19 Input Sg 1
         longLabel AG09319 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3868,7 +3503,6 @@ noInherit on
         # subId=2606 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg10803H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG03 H3K4m3 Sg 1
         longLabel AG10803 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3878,7 +3512,6 @@ noInherit on
         # subId=2607 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg10803H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG03 H3K4m3 Sg 2
         longLabel AG10803 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3888,7 +3521,6 @@ noInherit on
         # subId=2608 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAg10803InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AG03 Input Sg 1
         longLabel AG10803 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3898,7 +3530,6 @@ noInherit on
         # subId=2609 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAoafH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AoAF H3K4m3 Sg 2
         longLabel AoAF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3908,7 +3539,6 @@ noInherit on
         # subId=2611 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAoafH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AoAF H3K4m3 Sg 1
         longLabel AoAF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3918,7 +3548,6 @@ noInherit on
         # subId=2610 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneAoafInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel AoAF Input Sg 1
         longLabel AoAF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3928,7 +3557,6 @@ noInherit on
         # subId=2612 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcmH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCM H3K4m3 Sg 1
         longLabel HCM H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3938,7 +3566,6 @@ noInherit on
         # subId=2621 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHbmecH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HBMEC H3K4m3 Sg 2
         longLabel HBMEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -3948,7 +3575,6 @@ noInherit on
         # subId=2613 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHbmecH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HBMEC H3K4m3 Sg 1
         longLabel HBMEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3958,7 +3584,6 @@ noInherit on
         # subId=2614 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHbmecInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HBMEC Input Sg 1
         longLabel HBMEC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3968,7 +3593,6 @@ noInherit on
         # subId=2615 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfaaH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCFaa H3K4m3 Sg 1
         longLabel HCFaa H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3978,7 +3602,6 @@ noInherit on
         # subId=2616 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfaaInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCFaa Input Sg 1
         longLabel HCFaa Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3988,7 +3611,6 @@ noInherit on
         # subId=2617 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCF H3K4m3 Sg 1
         longLabel HCF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -3998,7 +3620,6 @@ noInherit on
         # subId=2618 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCF H3K4m3 Sg 2
         longLabel HCF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4008,7 +3629,6 @@ noInherit on
         # subId=2619 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcfInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCF Input Sg 1
         longLabel HCF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4018,7 +3638,6 @@ noInherit on
         # subId=2620 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcmH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCM H3K4m3 Sg 2
         longLabel HCM H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4028,7 +3647,6 @@ noInherit on
         # subId=2622 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcmInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCM Input Sg 1
         longLabel HCM Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4038,7 +3656,6 @@ noInherit on
         # subId=2623 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcpeH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCPE H3K4m3 Sg 2
         longLabel HCPEpiC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4048,7 +3665,6 @@ noInherit on
         # subId=2624 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcpeH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCPE H3K4m3 Sg 1
         longLabel HCPEpiC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4058,7 +3674,6 @@ noInherit on
         # subId=2625 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHcpeInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCPE Input Sg 1
         longLabel HCPEpiC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4068,7 +3683,6 @@ noInherit on
         # subId=2626 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHct116InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCT16 Input Sg 1
         longLabel HCT-116 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4078,7 +3692,6 @@ noInherit on
         # subId=2627 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHct116H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCT16 H3K4m3 Sg 2
         longLabel HCT-116 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4088,7 +3701,6 @@ noInherit on
         # subId=2628 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHct116H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HCT16 H3K4m3 Sg 1
         longLabel HCT-116 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4098,7 +3710,6 @@ noInherit on
         # subId=2629 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHeeInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEE Input Sg 1
         longLabel HEEpiC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4108,7 +3719,6 @@ noInherit on
         # subId=2630 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHeeH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEE H3K4m3 Sg 1
         longLabel HEEpiC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4118,7 +3728,6 @@ noInherit on
         # subId=2631 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHeeH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEE H3K4m3 Sg 2
         longLabel HEEpiC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4128,7 +3737,6 @@ noInherit on
         # subId=2632 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHek293H3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEK H3K4m3 Sg 2
         longLabel HEK293 H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4138,7 +3746,6 @@ noInherit on
         # subId=2633 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHek293H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HEK H3K4m3 Sg 1
         longLabel HEK293 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4148,7 +3755,6 @@ noInherit on
         # subId=2634 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmecH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K4m3 Sg 2
         longLabel HMEC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4158,7 +3764,6 @@ noInherit on
         # subId=2635 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmecH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMEC H3K4m3 Sg 1
         longLabel HMEC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4168,7 +3773,6 @@ noInherit on
         # subId=2636 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmfH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMF H3K4m3 Sg 1
         longLabel HMF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4178,7 +3782,6 @@ noInherit on
         # subId=2637 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmfH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMF H3K4m3 Sg 2
         longLabel HMF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4188,7 +3791,6 @@ noInherit on
         # subId=2638 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHmfInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HMF Input Sg 1
         longLabel HMF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4198,7 +3800,6 @@ noInherit on
         # subId=2639 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneJurkatInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Jurk Input Sg 1
         longLabel Jurkat Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4208,7 +3809,6 @@ noInherit on
         # subId=2652 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpafH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPAF H3K4m3 Sg 1
         longLabel HPAF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4218,7 +3818,6 @@ noInherit on
         # subId=2640 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpafH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPAF H3K4m3 Sg 2
         longLabel HPAF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4228,7 +3827,6 @@ noInherit on
         # subId=2641 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpafInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPAF Input Sg 1
         longLabel HPAF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4238,7 +3836,6 @@ noInherit on
         # subId=2642 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpfInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPF Input Sg 1
         longLabel HPF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4248,7 +3845,6 @@ noInherit on
         # subId=2643 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpfH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPF H3K4m3 Sg 2
         longLabel HPF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4258,7 +3854,6 @@ noInherit on
         # subId=2644 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHpfH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HPF H3K4m3 Sg 1
         longLabel HPF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4268,7 +3863,6 @@ noInherit on
         # subId=2645 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHrpeInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRPE Input Sg 1
         longLabel HRPEpiC Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4278,7 +3872,6 @@ noInherit on
         # subId=2646 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHrpeH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRPE H3K4m3 Sg 2
         longLabel HRPEpiC H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4288,7 +3881,6 @@ noInherit on
         # subId=2647 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHrpeH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HRPE H3K4m3 Sg 1
         longLabel HRPEpiC H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4298,7 +3890,6 @@ noInherit on
         # subId=2648 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHvmfH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HVMF H3K4m3 Sg 2
         longLabel HVMF H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4308,7 +3899,6 @@ noInherit on
         # subId=2649 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHvmfH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HVMF H3K4m3 Sg 1
         longLabel HVMF H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4318,7 +3908,6 @@ noInherit on
         # subId=2650 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHvmfInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HVMF Input Sg 1
         longLabel HVMF Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4328,7 +3917,6 @@ noInherit on
         # subId=2651 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneJurkatH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Jurk H3K4m3 Sg 2
         longLabel Jurkat H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4338,7 +3926,6 @@ noInherit on
         # subId=2653 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneJurkatH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel Jurk H3K4m3 Sg 1
         longLabel Jurkat H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4348,7 +3935,6 @@ noInherit on
         # subId=2654 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneMcf7InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel MCF-7 Input Sg 1
         longLabel MCF-7 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4358,7 +3944,6 @@ noInherit on
         # subId=2655 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneMcf7H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel MCF-7 H3K4m3 Sg 1
         longLabel MCF-7 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4368,7 +3953,6 @@ noInherit on
         # subId=2656 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNb4InputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NB4 Input Sg 1
         longLabel NB4 Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4378,7 +3962,6 @@ noInherit on
         # subId=2657 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNb4H3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NB4 H3K4m3 Sg 1
         longLabel NB4 H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4388,7 +3971,6 @@ noInherit on
         # subId=2658 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNhdfneoInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHDFn Input Sg 1
         longLabel NHDF-neo Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4398,7 +3980,6 @@ noInherit on
         # subId=2659 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHDFn H3K4m3 Sg 1
         longLabel NHDF-neo H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4408,7 +3989,6 @@ noInherit on
         # subId=2660 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneNhdfneoH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel NHDFn H3K4m3 Sg 2
         longLabel NHDF-neo H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW
@@ -4418,7 +3998,6 @@ noInherit on
         # subId=2661 dateSubmitted=2010-10-23
 
         track wgEncodeUwHistoneHaspInputStdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HAsp Input Sg 1
         longLabel HA-sp Input Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4428,7 +4007,6 @@ noInherit on
         # subId=2777 dateSubmitted=2010-10-28
 
         track wgEncodeUwHistoneHaspH3k4me3StdRawRep1
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HAsp H3K4m3 Sg 1
         longLabel HA-sp H3K4me3 Histone Modifications Raw Signal Rep 1 from ENCODE/UW
@@ -4438,7 +4016,6 @@ noInherit on
         # subId=2778 dateSubmitted=2010-10-28
 
         track wgEncodeUwHistoneHaspH3k4me3StdRawRep2
-        release alpha
         parent wgEncodeUwHistoneViewRawSig off
         shortLabel HAsp H3K4m3 Sg 2
         longLabel HA-sp H3K4me3 Histone Modifications Raw Signal Rep 2 from ENCODE/UW

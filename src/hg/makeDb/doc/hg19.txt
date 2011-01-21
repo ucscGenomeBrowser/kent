@@ -13288,7 +13288,7 @@ grep -i split hg19.unmapped | wc -l
 grep -i part hg19.unmapped | wc -l
 #5
 for table in gadAll gadList; do 
-    echo "create table "$table" select * from hg18."$table | hgsql hg19
+    hgsqldump hg18 $table | hgsql hg19
 done
 
 #############################################################################
@@ -13401,9 +13401,8 @@ wc -l {decipher,rgdQtl,rgdRatQtl}/hg1{8,9}.bed
 ## This isn't very good.  In each case, the unmapped % is over 2%.
 ## DECIPHER: 95.8%, RGD QTL: 88.6%, RGD RAT QTL: 96.2%
 ## update for rgdQtl:
-hgsql hg19 -e "create table rgdQtlLink select * from hg18.rgdQtlLink"
-hgsql hg19 -e "create table rgdRatQtlLink select * from hg18.rgdRatQtlLink"
-
+hgsqldump hg18 rgdQtlLink | hgsql hg19 
+hgsqldump hg18 rgdRatQtlLink | hgsql hg19
 
 #############################################################################
 # FISH CLONES LIFT (DONE, Andy 2010-12-14)
@@ -13693,6 +13692,12 @@ wc -l *.fep.bed
 #  384442 hg19.fosEndPairs.fep.bed
 ## 99.6% lifted
 
+## Now we need the sequences from all_fosends to be loaded into the seq table in hg19
+
+mkdir /gbdb/hg19/fosends
+ln -s /gbdb/hg18/fosends/fosEnds.fa /gbdb/hg19/fosEnds.fromHg18.fa 
+hgLoadSeq hg19 /gbdb/hg19/fosends/fosEnds.fromHg18.fa
+
 #############################################################################
 # DECIPHER LIFT FORM HG18 (DONE 2010-12-27, Andy)
 
@@ -13765,8 +13770,8 @@ hgsql hg18 --skip-column-names -e "select * from HInvGeneMrna" | cut -f2- > hg18
 liftOver -pslT hg18.HInvGeneMrna.psl /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.HInvGeneMrna.{psl,unmapped}
 hgLoadPsl -table=HInvGeneMrna hg19 hg19.HInvGeneMrna.psl
 ## A couple non-positional tables too:
-hgsql hg19 -e "create table knownToHInv select * from hg18.knownToHInv"
-hgsql hg19 -e "create table HInv select * from hg18.HInv"
+hgsqldump hg18 knownToHInv | hgsql hg19
+hgsqldump hg18 HInv | hgsql hg19
 
 #############################################################################
 # SIB ALT-SPLICING LIFT (DONE 2010-12-30, Andy)
@@ -13801,7 +13806,7 @@ cd /hive/data/genomes/hg19/bed/hg18MassiveLift
 mkdir illuminaProbes
 cd illuminaProbes/
 ## Just copy the seq table to hg19
-hgsql hg19 -e "create table illuminaProbesSeq select * from hg18.illuminaProbesSeq"
+hgsqldump hg18 illuminaProbesSeq | hgsql hg19
 ## Two tables: a PSL and a BED:
 hgsql hg18 --skip-column-names -e "select * from illuminaProbes" | cut -f2- > hg18.illuminaProbes.bed
 hgsql hg18 --skip-column-names -e "select * from illuminaProbesAlign" | cut -f2- > hg18.illuminaProbesAlign.psl
@@ -13851,8 +13856,8 @@ hgsql hg18 --skip-column-names -e "select * from oreganno" | cut -f2- > hg18.ore
 liftOver -bedPlus=3 -tab hg18.oreganno.bed3p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.oreganno.{bed3p,unmapped}
 cp ~/kent/src/hg/lib/oreganno.sql .
 hgLoadBed -tab -sqlTable=oreganno.sql hg19 oreganno hg19.oreganno.bed3p
-hgsql hg19 -e "create table oregannoLink select * from hg18.oregannoLink"
-hgsql hg19 -e "create table oregannoAttr select * from hg18.oregannoAttr"
+hgsqldump hg18 oregannoLink | hgsql hg19
+hgsqldump hg18 oregannoAttr | hgsql hg19
 wc -l *.bed3p
 #  23130 hg18.oreganno.bed3p
 #  23118 hg19.oreganno.bed3p

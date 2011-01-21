@@ -106,11 +106,7 @@ void genericBigBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
 {
-char query[256];
-safef(query, sizeof(query), "select fileName from %s", tdb->table);
-char *fileName = sqlQuickString(conn, query);
-if (fileName == NULL)
-    errAbort("Missing fileName in %s table", tdb->table);
+char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
 bigBedClick(fileName, tdb, item, start, bedSize);
 }
 

@@ -1686,6 +1686,123 @@ subId 1515
 tableName wgEncodeOpenChromFaireHepg2Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireHtr8AlnRep1
+objType file
+cell HTR8svn
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 3379
+view Alignments
+
+metaObject wgEncodeOpenChromFaireHtr8AlnRep2
+objType file
+cell HTR8svn
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 3379
+view Alignments
+
+metaObject wgEncodeOpenChromFaireHtr8BaseOverlapSignal
+objType table
+cell HTR8svn
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 3379
+tableName wgEncodeOpenChromFaireHtr8BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireHtr8Pk
+objType table
+cell HTR8svn
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireHtr8Pk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 3379
+tableName wgEncodeOpenChromFaireHtr8Pk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireHtr8RawDataRep1
+objType file
+cell HTR8svn
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireHtr8RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 3379
+view RawData
+
+metaObject wgEncodeOpenChromFaireHtr8RawDataRep2
+objType file
+cell HTR8svn
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireHtr8RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 3379
+view RawData
+
+metaObject wgEncodeOpenChromFaireHtr8Sig
+objType table
+cell HTR8svn
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireHtr8Sig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 3379
+tableName wgEncodeOpenChromFaireHtr8Sig
+view Signal
+
 metaObject wgEncodeOpenChromFaireHuvecAlnRep1
 objType file
 cell HUVEC
@@ -2218,6 +2335,130 @@ subId 1531
 tableName wgEncodeOpenChromFaireK562Sig
 view Signal
 
+metaObject wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1
+objType file
+cell MCF-7
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 3378
+treatment Hypoxia_LacAcid
+view Alignments
+
+metaObject wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2
+objType file
+cell MCF-7
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 3378
+treatment Hypoxia_LacAcid
+view Alignments
+
+metaObject wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
+objType table
+cell MCF-7
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 3378
+tableName wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
+treatment Hypoxia_LacAcid
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireMcf7HypoxlacPk
+objType table
+cell MCF-7
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireMcf7HypoxlacPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 3378
+tableName wgEncodeOpenChromFaireMcf7HypoxlacPk
+treatment Hypoxia_LacAcid
+view Peaks
+
+metaObject wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1
+objType file
+cell MCF-7
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 3378
+treatment Hypoxia_LacAcid
+view RawData
+
+metaObject wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 3378
+treatment Hypoxia_LacAcid
+view RawData
+
+metaObject wgEncodeOpenChromFaireMcf7HypoxlacSig
+objType table
+cell MCF-7
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_MCF7
+project wgEncode
+subId 3378
+tableName wgEncodeOpenChromFaireMcf7HypoxlacSig
+treatment Hypoxia_LacAcid
+view Signal
+
 metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
 cell Medullo
@@ -2669,27 +2910,11 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsPk
 view Peaks
 
-metaObject wgEncodeOpenChromFairePanisletsRawData
-objType file
-cell PanIslets
-composite wgEncodeOpenChromFaire
-controlId modelled
-dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-14
-dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsRawData.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-subId 686
-view RawData
-
 metaObject wgEncodeOpenChromFairePanisletsRawDataRep1
 objType file
 cell PanIslets
 composite wgEncodeOpenChromFaire
+controlId modelled
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2724,4 +2949,245 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -348256989
+metaObject wgEncodeOpenChromFaireUrotsaAlnRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 3277
+view Alignments
+
+metaObject wgEncodeOpenChromFaireUrotsaAlnRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 3277
+view Alignments
+
+metaObject wgEncodeOpenChromFaireUrotsaBaseOverlapSignal
+objType table
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 3277
+tableName wgEncodeOpenChromFaireUrotsaBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireUrotsaPk
+objType table
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaPk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 3277
+tableName wgEncodeOpenChromFaireUrotsaPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireUrotsaRawDataRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaRawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 3277
+view RawData
+
+metaObject wgEncodeOpenChromFaireUrotsaRawDataRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaRawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 3277
+view RawData
+
+metaObject wgEncodeOpenChromFaireUrotsaSig
+objType table
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaSig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 3277
+tableName wgEncodeOpenChromFaireUrotsaSig
+view Signal
+
+metaObject wgEncodeOpenChromFaireUrotsaUt189AlnRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 3278
+treatment UT189
+view Alignments
+
+metaObject wgEncodeOpenChromFaireUrotsaUt189AlnRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam
+grant Crawford
+lab UNC
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 3278
+treatment UT189
+view Alignments
+
+metaObject wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal
+objType table
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal.bigWig
+grant Crawford
+lab UNC
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 3278
+tableName wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal
+treatment UT189
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireUrotsaUt189Pk
+objType table
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaUt189Pk.narrowPeak.gz
+grant Crawford
+lab UNC
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 3278
+tableName wgEncodeOpenChromFaireUrotsaUt189Pk
+treatment UT189
+view Peaks
+
+metaObject wgEncodeOpenChromFaireUrotsaUt189RawDataRep1
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep1.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 1
+subId 3278
+treatment UT189
+view RawData
+
+metaObject wgEncodeOpenChromFaireUrotsaUt189RawDataRep2
+objType file
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep2.fastq.gz
+grant Crawford
+lab UNC
+project wgEncode
+replicate 2
+subId 3278
+treatment UT189
+view RawData
+
+metaObject wgEncodeOpenChromFaireUrotsaUt189Sig
+objType table
+cell Urothelia
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeOpenChromFaireUrotsaUt189Sig.bigWig
+grant Crawford
+lab UNC
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 3278
+tableName wgEncodeOpenChromFaireUrotsaUt189Sig
+treatment UT189
+view Signal
+
+# MAGIC: -1872177705

@@ -2895,7 +2895,6 @@ karyotype Normal
 termId BTO:0002398
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002398
 sex U
-tier 3
 protocol UW_Stam:PrEC_Stam_protocol.pdf
 
 
@@ -4118,7 +4117,6 @@ targetDescription CTCF zinc finger transcription factor. A sequence specific DNA
 orderUrl http://www.millipore.com/catalogue/item/07-729
 vendorName Millipore
 vendorId 07-729
-orderUrl http://www.millipore.com/catalogue/item/07-729
 lab Bernstein, Iyer
 lots 1350637, DAM1472197
 targetId GeneCard:CTCF
@@ -4255,6 +4253,81 @@ lots  J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
 validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
+
+term eGFP-FOS
+tag eFOS
+type Antibody
+target eGFP-FOS
+antibodyDescription Goat polyclonal 
+targetDescription Fos 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:FOS
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
+validation missing
+
+term eGFP-GATA2
+tag eGATA2
+type Antibody
+target eGFP-GATA2
+antibodyDescription Goat polyclonal 
+targetDescription GATA2 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:GATA2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
+validation missing
+
+term eGFP-HDAC8
+tag eHDAC8
+type Antibody
+target eGFP-HDAC8
+antibodyDescription Goat polyclonal 
+targetDescription HDAC8 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:HDAC8
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
+validation missing
+
+term eGFP-JunB
+tag eJunB
+type Antibody
+target eGFP-JunB
+antibodyDescription Goat polyclonal 
+targetDescription JunB 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:JUNB
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
+validation missing
+
+term eGFP-JunD
+tag eJunD
+type Antibody
+target eGFP-JunD
+antibodyDescription Goat polyclonal 
+targetDescription JunD 
+vendorName Kevin White
+vendorId (None)
+orderUrl http://www.genes.uchicago.edu/white.html
+lab White 
+lots 
+targetId GeneCards:JUND
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
+validation missing
 
 term  ELF1_(SC-631)
 tag  ELF1SC631
@@ -6483,7 +6556,6 @@ type Antibody
 target PABPC1
 targetDescription  poly(A) binding protein, cytoplasmic 1 (Homo sapiens).
 antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
-lab Tenenbaum
 vendorName Sigma Chemical Co.
 vendorId P6246
 orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
@@ -6875,6 +6947,11 @@ tag bow10
 type mapAlgorithm
 description bowtie v0.10.0
 
+term bow125
+tag bow125
+type mapAlgorithm
+description bowtie v0.12.5
+
 term BB1
 tag BB1
 type mapAlgorithm
@@ -7055,8 +7132,14 @@ label Total_RNA
 #term short
 #tag short
 #type rnaExtract
-#description RNA shorter than 200 nt
+#description RNA shorter than 200 nt PROVISIONAL TO RETIRE  (1/20/2011)
 #label (Labs all agreeed that short and short total were being used as the same, the metaData has been changed to make all say shortTotal) short_RNA
+
+term shortPolyA
+tag shortPolyA
+type rnaExtract
+description Rna shorter than 200 nt that is Poly Adenalyated 
+label short_PolyA_RNA
 
 term shortTotal
 tag shortTotal
@@ -7068,7 +7151,8 @@ label short_Total_RNA
 #tag shortDeplRrna
 #type rnaExtract
 #description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
-#Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake
+#Carrie registered this, but they are not going to use it.  Would like to keep it but commented out so that no one uses it by mistake PROVISIONAL TO RETIRE
+# 1/19/2011
 
 term longPolyA
 tag pAP
@@ -7264,28 +7348,33 @@ description 4h,100nM Bisphenol A (Myers)
 type treatment
 
 term DEX_100nM
-tag DEXa
+tag DEX100nM
 description 1h,100nM DEX (Myers)
 type treatment
 
+term DEX_100pM
+tag DEX100pM
+description 1h,100pM DEX (Myers)
+type treatment
+
+term DEX_1nM
+tag DEX1nM
+description 1h,1nM DEX (Myers)
+type treatment
+
 term DEX_50nM
-tag DEXb
+tag DEX50nM
 description 1h,50nM DEX (Myers)
 type treatment
 
 term DEX_5nM
-tag DEXc
+tag DEX5nM
 description 1h,5nM DEX (Myers)
 type treatment
 
 term DEX_500pM
-tag DEXd
+tag DEX500pM
 description 1h,500pM DEX (Myers)
-type treatment
-
-term DEX_100pM
-tag DEXe
-description 1h,100pM DEX (Myers)
 type treatment
 
 term DMSO_0.02pct
@@ -7301,6 +7390,11 @@ type treatment
 term DMSO_2.0pct
 tag DMSO20
 description 5d,2% DMSO (Weissman)
+type treatment
+
+term DMSO_4hr
+tag DMSO4hr
+description 4hr DMSO (Myers)
 type treatment
 
 term Estradiol_10nM
@@ -7336,12 +7430,12 @@ type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder) (Provional)
+description 4h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder) (Provional)
+description 12h,0.01% EtOH (Snyder) 
 type treatment
 
 term EtOH_0.02pct
@@ -7367,7 +7461,7 @@ type treatment
 term Hypoxia_LacAcid
 tag HYPOXLAC
 label Hypoxia, Lactic acidosis
-description (Provisional) Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
+description Hypoxia and Lactic acidosis: 1% p02 and 10 mM Lactate, pH of 6.7 for 24 hours (Crawford)
 type treatment
 
 term IFNa30
@@ -7598,6 +7692,12 @@ type dataType
 label Gencode
 description Gencode
 
+term ChiaPet
+tag chiaPet
+type dataType
+label ChIA-pet
+description ChIA-pet 
+
 # TODO: retire this ?  (11/3/10)
 term LongRnaSeq
 tag longRnaSeq
@@ -7647,6 +7747,11 @@ tag NRE
 type dataType
 description Negative Regulatory Elements
 
+term Nucleosome
+tag nucleosome
+type dataType
+description Nucleosome positioning data 
+
 term Proteogenomics
 tag protgeno
 type dataType
@@ -7682,7 +7787,7 @@ term RipSeq
 tag  ripSeq  
 type dataType
 label RIP-seq 
-description Provisional RNA-seq on RIP-chip data
+description RNA-seq on RIP-chip data
 
 #This should be retired (12/15/10)
 term ShortRnaSeq
@@ -7924,6 +8029,17 @@ description Applied Biosystems SOLiD System 2.0
 #projectName:
 #organism:     human or mouse
 
+term BioChain
+tag BioChain
+type lab
+label BioChain
+description Provisional
+labInst BioChain 
+labPi 
+labPiFull 
+grantPi 
+organism human
+
 term Broad
 tag Broad
 type lab
@@ -7957,11 +8073,11 @@ labPiFull Roderic Guigo
 grantPi Guigo
 organism human
 
-term GIS-Chia
-tag GIS-Chia
+term GIS(Ruan)
+tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia)
+description Ruan - Genome Institute of Singapore (Chia) 
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8926,6 +9042,14 @@ description Fraction of total cellular RNA selected for by an experiment. This i
 searchable select
 cvDefined yes
 validate cv
+
+term run
+type run
+label Sequencing Run
+description Sequencing run 
+searchable select
+cvDefined yes
+validate none
 
 term seqPlatform
 type typeOfTerm

@@ -321,6 +321,144 @@ subId 2499
 tableName wgEncodeOpenChromChipGlioblaInputSig
 view Signal
 
+metaObject wgEncodeOpenChromChipGlioblaPol2AlnRep1
+objType file
+antibody Pol2
+cell Gliobla
+composite wgEncodeOpenChromChip
+controlId Gliobla/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+setType exp
+subId 3272
+view Alignments
+
+metaObject wgEncodeOpenChromChipGlioblaPol2AlnRep2
+objType file
+antibody Pol2
+cell Gliobla
+composite wgEncodeOpenChromChip
+controlId Gliobla/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+setType exp
+subId 3272
+view Alignments
+
+metaObject wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal
+objType table
+antibody Pol2
+cell Gliobla
+composite wgEncodeOpenChromChip
+controlId Gliobla/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal.bigWig
+grant Crawford
+lab UT-A
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+setType exp
+subId 3272
+tableName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromChipGlioblaPol2PkRep1
+objType table
+antibody Pol2
+cell Gliobla
+composite wgEncodeOpenChromChip
+controlId Gliobla/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipGlioblaPol2PkRep1.narrowPeak.gz
+grant Crawford
+lab UT-A
+labVersion p-value cutoff: 0.05
+project wgEncode
+setType exp
+subId 3272
+tableName wgEncodeOpenChromChipGlioblaPol2PkRep1
+view Peaks
+
+metaObject wgEncodeOpenChromChipGlioblaPol2RawDataRep1
+objType file
+antibody Pol2
+cell Gliobla
+composite wgEncodeOpenChromChip
+controlId Gliobla/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep1.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 1
+setType exp
+subId 3272
+view RawData
+
+metaObject wgEncodeOpenChromChipGlioblaPol2RawDataRep2
+objType file
+antibody Pol2
+cell Gliobla
+composite wgEncodeOpenChromChip
+controlId Gliobla/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep2.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+replicate 2
+setType exp
+subId 3272
+view RawData
+
+metaObject wgEncodeOpenChromChipGlioblaPol2Sig
+objType table
+antibody Pol2
+cell Gliobla
+composite wgEncodeOpenChromChip
+controlId Gliobla/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipGlioblaPol2Sig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84, iff_H54
+project wgEncode
+setType exp
+subId 3272
+tableName wgEncodeOpenChromChipGlioblaPol2Sig
+view Signal
+
 metaObject wgEncodeOpenChromChipGm12878CmycAlnRep1
 objType file
 antibody c-Myc
@@ -3032,25 +3170,6 @@ subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
 view Peaks
 
-metaObject wgEncodeOpenChromChipHuvecCmycRawData
-objType file
-antibody c-Myc
-cell HUVEC
-composite wgEncodeOpenChromChip
-controlId HUVEC/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-01
-dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz
-grant Crawford
-lab UT-A
-origAssembly hg18
-project wgEncode
-setType exp
-subId 635
-view RawData
-
 metaObject wgEncodeOpenChromChipHuvecCmycRawDataRep1
 objType file
 antibody c-Myc
@@ -4945,6 +5064,63 @@ setType input
 subId 866
 view RawData
 
+metaObject wgEncodeOpenChromChipMonocd14InputAln
+objType file
+antibody Input
+cell Monocytes-CD14+
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipMonocd14InputAln.bam
+grant Crawford
+lab UT-A
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+setType input
+subId 3271
+view Alignments
+
+metaObject wgEncodeOpenChromChipMonocd14InputRawData
+objType file
+antibody Input
+cell Monocytes-CD14+
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipMonocd14InputRawData.fastq.gz
+grant Crawford
+lab UT-A
+project wgEncode
+setType input
+subId 3271
+view RawData
+
+metaObject wgEncodeOpenChromChipMonocd14InputSig
+objType table
+antibody Input
+cell Monocytes-CD14+
+composite wgEncodeOpenChromChip
+controlId Monocytes-CD14+/Input
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-17
+dateUnrestricted 2011-10-17
+fileName wgEncodeOpenChromChipMonocd14InputSig.bigWig
+grant Crawford
+lab UT-A
+labVersion fseq v 1.84
+project wgEncode
+setType input
+subId 3271
+tableName wgEncodeOpenChromChipMonocd14InputSig
+view Signal
+
 metaObject wgEncodeOpenChromChipNhekCtcfAlnRep1
 objType file
 antibody CTCF
@@ -5349,4 +5525,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1815492253
+# MAGIC: -388477539

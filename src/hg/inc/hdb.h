@@ -841,4 +841,7 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
  * custom track by name, otherwise pass NULL
  */
 
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
+/* Return file name from bigDataUrl or little table. */
+
 #endif /* HDB_H */
