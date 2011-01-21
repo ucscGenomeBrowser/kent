@@ -50,9 +50,19 @@ class _OrderedDict:
 
 class RaDict(_OrderedDict):
 
+    def addComment(self, comment):
+        if not comment.startswith('#'):
+            print 'ERROR: RaDict.addComment() - <' + comment + '> is not a comment'
+            sys.exit(1)
+
+        self._ordering.append(comment)
+
     def __str__(self):
         for key in self._ordering:
-            print self._dictionary[key]
+            if key.startswith('#'):
+                print key
+            else:
+                print self._dictionary[key]
         return ''
 
 class EntryDict(_OrderedDict):

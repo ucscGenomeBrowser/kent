@@ -27,10 +27,8 @@
 #             key1 valueC
 #             key2 valueD
 #
-#
-#
-#
 
+import sys
 import re
 import radict
 
@@ -47,6 +45,7 @@ def readRaFile(filePath, keyField):
 
         # remove all commented lines
         if (line.startswith('#')):
+            raDict.addComment(line)
             continue
 
         # a blank line indicates we need to move to the next entry
@@ -56,16 +55,25 @@ def readRaFile(filePath, keyField):
             continue
 
         # check if we're at the first key in a new entry
-        if (line.split()[0] == keyField):
-            raKey = line.split()[1]
+        if (line.split()[0].strip() == keyField):
+            if len(line.split()) < 2:
+                print 'ERROR: blank key on <' + line + '>'
+                sys.exit(1) 
+
+            raKey = line.split(' ', 1)[1].strip()
             raEntry = radict.EntryDict()
             raEntry.add(keyField, raKey)
             raDict.add(raKey, raEntry)
 
         # otherwise we should be somewhere in the middle of an entry
         elif (raEntry != None):
-            splits = line.split()            
-            raEntry.add(splits[0], splits[1])
+            raKey = line.split()[0].strip()           
+            raVal = ''
+ 
+            if len(line.split()) > 1:
+                raVal = line.split(' ', 1)[1].strip()
+
+            raEntry.add(raKey, raVal)
 
         # we'll only get here if we didn't find the keyField at the beginning
         else:
