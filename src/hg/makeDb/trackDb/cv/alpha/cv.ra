@@ -8148,6 +8148,12 @@ geo AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
 
+term AB_SOLiD_3.5
+tag ABSOLiD3Plus
+geo AB SOLiD 3 Plus
+type seqPlatform
+description Applied Biosystems SOLiD System 3.5 (Provisional)
+
 
 #LABS          This is the CV for naming the labs.
 #term:
