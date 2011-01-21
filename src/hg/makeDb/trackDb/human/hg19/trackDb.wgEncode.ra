@@ -15,7 +15,9 @@ include wgEncodeOpenChromDnase.ra
 include wgEncodeOpenChromFaire.ra
 include wgEncodeOpenChromSynth.ra
 include wgEncodeDukeAffyExon.ra
-include wgEncodeUwHistone.ra
+
+#UW Histone (wrangler:Venkat)
+include wgEncodeUwHistone.ra alpha,beta
 
 #Methyl RRBS (wrangler: Venkat)
 include wgEncodeHaibMethylRrbs.ra beta,public
