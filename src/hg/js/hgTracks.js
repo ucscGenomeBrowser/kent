@@ -1507,6 +1507,7 @@ function contextMenuHit(menuItemClicked, menuObject, cmd)
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
+    var id = selectedMenuItem.id;
     if(menuObject.shown) {
         // showWarning("Spinning: menu is still shown");
         setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 10);
@@ -1578,13 +1579,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                 }
             }
     } else if (cmd == 'hgTrackUi_popup') {
-
         hgTrackUiPopUp( selectedMenuItem.id, false );  // Launches the popup but shields the ajax with a waitOnFunction
-
     } else if (cmd == 'hgTrackUi_follow') {
 
         var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
-        var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         if (tdbHasParent(rec) && tdbIsLeaf(rec))
             url += rec.parentTrack
@@ -1623,15 +1621,16 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                });
     } else if (cmd == 'openLink' || cmd == 'followLink') {
         var href = selectedMenuItem.href;
-        var chrom = $("input[name=chromName]").val();
-        if(chrom && href.indexOf("c=" + chrom) == -1) {
-            // make sure the link contains chrom info (necessary b/c we are stripping hgsid)
-            href = href + "&c=" + chrom;
-        }
         if(cmd == 'followLink') {
             // XXXX This is blocked by Safari's popup blocker (without any warning message).
             location.assign(href);
         } else {
+            var chrom = $("input[name=chromName]").val();
+            if(chrom && id != "wikiTrack" && href.indexOf("c=" + chrom) == -1) {
+                // make sure the link contains chrom info (necessary b/c we are stripping hgsid); but don't add chrom
+                // to wikiTrack links (see redmine #2476).
+                href = href + "&c=" + chrom;
+            }
             // Remove hgsid to force a new session (see redmine ticket 1333).
             href = removeHgsid(href);
             if(window.open(href) == null) {
@@ -1639,7 +1638,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             }
         }
     } else if (cmd == 'float') {
-        var id = selectedMenuItem.id;
         if(floatingMenuItem && floatingMenuItem == id) {
             $.floatMgr.FOArray = new Array();
             floatingMenuItem = null;
@@ -1658,7 +1656,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // Change visibility settings:
         //
         // First change the select on our form:
-        var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         var selectUpdated = updateVisibility(id, cmd);
 
@@ -1789,11 +1786,12 @@ function loadContextMenu(img)
                 if(done) {
                     var o = new Object();
                     var any = false;
-                    if(isGene || isHgc) {
-                        var title = selectedMenuItem.title || "feature";
+                    var title = selectedMenuItem.title || "feature";
+                    if(isGene || isHgc || id == "wikiTrack") {
+                        // Add "Open details..." item
                         var displayItemFunctions = false;
                         if(rec) {
-                            if(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0) {
+                            if(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0 || id == "wikiTrack") {
                                 displayItemFunctions = false;
                             } else if(rec.type.indexOf("expRatio") == 0) {
                                 displayItemFunctions = title != "zoomInMore";
@@ -1808,22 +1806,22 @@ function loadContextMenu(img)
                         o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
                     }
-                    if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
-                    && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
-                        var str = selectedMenuItem.title;
-                        if(str.indexOf("Click to alter ") == 0) {
+                    if(href != undefined && href.length  > 0) {
+                        // Add "Show details..." item
+                        if(title.indexOf("Click to alter ") == 0) {
                             ; // suppress the "Click to alter..." items
                         } else if(selectedMenuItem.href.indexOf("cgi-bin/hgTracks") != -1) {
                             ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
                         } else {
-                            if(str.indexOf("display density") != -1)
-                                str = makeImgTag("toggle.png") + str;
-                            else if(str == "zoomInMore")
+                            var item;
+                            if(title.indexOf("display density") != -1)
+                                item = makeImgTag("toggle.png") + title;
+                            else if(title == "zoomInMore")
                                 // avoid showing menu item that says "Show details for zoomInMore..." (redmine 2447)
-                                str = makeImgTag("toggle.png") + " Show details...";
+                                item = makeImgTag("toggle.png") + " Show details...";
                             else
-                                str = makeImgTag("book.png") + " Show details for " + str + "...";
-                            o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                                item = makeImgTag("book.png") + " Show details for " + title + "...";
+                            o[item] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
                             any = true;
                         }
                     }
