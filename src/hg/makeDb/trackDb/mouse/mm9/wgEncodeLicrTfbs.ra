@@ -1,7 +1,7 @@
 track wgEncodeLicrTfbs
 compositeTrack on
-shortLabel LICR-m ChipSeq
-longLabel ENCODE LICR-m Ren ChipSeq
+shortLabel LICR TFBS
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex
