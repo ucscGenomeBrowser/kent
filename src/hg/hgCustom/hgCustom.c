@@ -1201,8 +1201,6 @@ else
 	}
     if (ctUpdated || ctConfigUpdate(ctFileName))
 	{
-	customTracksSaveCart(database, cart, ctList);
-
 	/* refresh ctList again to pickup remote resource error state */
 	struct errCatch *catch = errCatchNew();
 	if (errCatchStart(catch))
@@ -1216,7 +1214,6 @@ else
 	    ctParseError = TRUE;
 	    }
 	errCatchFree(&catch);
-
 	}
     warn = dyStringCannibalize(&dsWarn);
     if (measureTiming)
