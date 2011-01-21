@@ -346,19 +346,34 @@ if (!fileExists(psxy) || !fileExists(ps2raster) || !fileExists(ghostscript))
 return TRUE;
 }
 
-void hgdpGeoImg(struct hgdpGeo *geo)
-/* Generate a PNG image: world map with pie charts for population allele frequencies. */
+static void getTrashFileNames(char *rsId, char epsFile[PATH_LEN], char pdfFile[PATH_LEN],
+			      char pngFile[PATH_LEN])
+/* Get stable trash file names (always in trash/hgc, based on geo->name so we can reuse). */
 {
-if (! canMakeImages())
-    return;
 struct tempName tn;
 trashDirFile(&tn, "hgc", "", "");
 char trashDir[FILENAME_LEN];
 splitPath(tn.forCgi, trashDir, NULL, NULL);
+safef(epsFile, PATH_LEN, "%shgdpGeo_%s.eps", trashDir, rsId);
+safef(pdfFile, PATH_LEN, "%shgdpGeo_%s.pdf", trashDir, rsId);
+safef(pngFile, PATH_LEN, "%shgdpGeo_%s.png", trashDir, rsId);
+}
+
+char *hgdpPngFilePath(char *rsId)
+/* Return the stable PNG trash-cached image path for rsId. */
+{
+char epsFile[PATH_LEN], pdfFile[PATH_LEN], pngFile[PATH_LEN];
+getTrashFileNames(rsId, epsFile, pdfFile, pngFile);
+return cloneString(pngFile);
+}
+
+void hgdpGeoImg(struct hgdpGeo *geo)
+/* Generate image as PNG, PDF, EPS: world map with pie charts for population allele frequencies. */
+{
+if (! canMakeImages())
+    return;
 char geoSnpEpsFile[PATH_LEN], geoSnpPdfFile[PATH_LEN], geoSnpPngFile[PATH_LEN];
-safef(geoSnpEpsFile, sizeof(geoSnpEpsFile), "%shgdpGeo_%s.eps", trashDir, geo->name);
-safef(geoSnpPdfFile, sizeof(geoSnpPdfFile), "%shgdpGeo_%s.pdf", trashDir, geo->name);
-safef(geoSnpPngFile, sizeof(geoSnpPngFile), "%shgdpGeo_%s.png", trashDir, geo->name);
+getTrashFileNames(geo->name, geoSnpEpsFile, geoSnpPdfFile, geoSnpPngFile);
 if (! (fileExists(geoSnpEpsFile) && fileExists(geoSnpPdfFile) && fileExists(geoSnpPngFile)))
     generateImgFiles(geo, geoSnpEpsFile, geoSnpPdfFile, geoSnpPngFile);
 

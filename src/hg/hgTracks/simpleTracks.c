@@ -7731,6 +7731,93 @@ struct linkedFeatures *lf = item;
 return getSeqColorDefault(lf->name, hvg, tg->ixColor);
 }
 
+Color interactionColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+char *name = tg->itemName(tg, item);
+struct linkedFeatures *lf = item;
+if (slCount(lf->components) == 2)
+    return MG_BLACK;
+//errAbort("name %s\n", name);
+//errAbort("name %s chrom %s\n", b->name, b->chrom);
+return getSeqColorDefault(name, hvg, tg->ixColor);
+}
+
+void interactionLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis)
+{
+/*
+struct linkedFeatures *lf, *lfList = track->items;
+for (lf = lfList; lf != NULL; lf = lf->next)
+    {
+    if (tg->itemLabelColor != NULL)
+	color = tg->itemLabelColor(track, lf, hvg);
+    int itemHeight = tg->itemHeight(track, lf);
+    hvGfxTextRight(hvg, xOff, y, width - 1,
+	itemHeight, color, font, tg->itemName(tg, lf));
+    }
+    */
+}
+
+void interactionLoad(struct track *tg)
+{
+loadGappedBed(tg);
+}
+
+char *interactionName(struct track *tg, void *item)
+{
+struct linkedFeatures *lf = item;
+if (slCount(lf->components) == 2)
+    return "";
+
+char buffer[10 * 1024], *name = buffer;
+safef(buffer, sizeof buffer, "%s", lf->name);
+char *ptr;
+
+if (startsWith(chromName, buffer))
+    {
+    name = strchr(buffer,'-');
+    name++;
+    ptr = strchr(name,':');
+    *ptr = 0;
+    }
+else
+    {
+    ptr = strchr(buffer,':');
+    *ptr = 0;
+    }
+
+//return linkedFeaturesName(tg, item);
+return cloneString(name);
+}
+
+void interactionMethods(struct track *tg)
+{
+tg->freeItems = linkedFeaturesFreeItems;
+tg->drawItems = linkedFeaturesDraw;
+tg->drawItemAt = linkedFeaturesDrawAt;
+tg->mapItemName = linkedFeaturesName;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
+//tg->totalHeight = linkedFeaturesHeight;
+tg->itemHeight = tgFixedItemHeight;
+//tg->itemHeight = linkedFeaturesItemHeight;
+tg->itemStart = linkedFeaturesItemStart;
+tg->itemEnd = linkedFeaturesItemEnd;
+tg->itemNameColor = linkedFeaturesNameColor;
+tg->nextPrevExon = linkedFeaturesNextPrevItem;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->loadItems = interactionLoad;
+//tg->itemName = cactusName;
+tg->itemName = interactionName;
+//tg->itemName = linkedFeaturesName;
+//tg->mapItemName = refGeneMapName;
+tg->itemColor = interactionColor;
+tg->itemNameColor = linkedFeaturesNameColor;
+//tg->drawLeftLabels = interactionLeftLabels;
+tg->canPack = TRUE;
+}
+
 #ifndef GBROWSE
 void loadRnaGene(struct track *tg)
 /* Load up rnaGene from database table to track items. */
@@ -11616,6 +11703,10 @@ else if (sameWord(type, "remote"))
     {
     remoteMethods(track);
     }
+else if (sameWord(type, "interaction"))
+    {
+    interactionMethods(track);
+    }
 #endif /* GBROWSE */
 }
 
@@ -11937,6 +12028,9 @@ registerTrackHandler("snp131Composite", snp125Methods);
 registerTrackHandler("snp131Clinical", snp125Methods);
 registerTrackHandler("snp131NonClinical", snp125Methods);
 registerTrackHandler("snp132", snp125Methods);
+registerTrackHandler("snp132Common", snp125Methods);
+registerTrackHandler("snp132Patient", snp125Methods);
+registerTrackHandler("snp132NonUnique", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);

@@ -34,12 +34,12 @@ buildDbTrix() {
     local metaDbName="$3"
     local cvRaPath="$4"
     local outPath="$5"
-    local tmpFile=`mktemp tmpTrix.XXXXXXXXXX`;
-    makeTrackIndex $db $metaDbName $cvRaPath > $$tmpFile;
-    if test -s $$tmpFile; then
-        ixIxx $$tmpFile $outPath/${db}_${trixName}.ix $outPath/${db}_${trixName}.ixx
+    local tmpFile=`mktemp`;
+    makeTrackIndex $db $metaDbName $cvRaPath > $tmpFile;
+    if test -s $tmpFile; then
+        ixIxx $tmpFile $outPath/${db}_${trixName}.ix $outPath/${db}_${trixName}.ixx
     fi
-    rm -f $$tmpFile 
+    rm -f $tmpFile 
 }
 
 for db in $dbs ; do

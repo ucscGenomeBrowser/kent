@@ -1,6 +1,6 @@
-# Data Agreement File  $Revision: 1.3 $
+# Data Agreement File  $Revision: 1.4 $
 
-# This file specifies the data agreement between your lab and 
+# This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
 
 
@@ -13,7 +13,7 @@ dafVersion        2.0
 # Lab and general info
 grant             Gingeras
 lab               CSHL
-dataType          RnaSeq
+dataType          ShortRnaSeq
 compositeSuffix   CshlShortRnaSeq
 group             expression
 variables         cell, localization, rnaExtract
@@ -25,30 +25,36 @@ noAutoCreate     yes
 # Track/view definition
 view             Transfrags
 longLabelPrefix  CSHL RNA-seq Transfrags
-type             bed6+    
-hasReplicates    no
+type             bed6 +
+hasReplicates    yes
+required         no
+
+view             AllRawSignal
+longLabelPrefix  CSHL RNA-seq All Raw Signal
+type             bigWig
+hasReplicates    yes
 required         no
 
 view             PlusRawSignal
 longLabelPrefix  CSHL RNA-seq Plus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
-required         no
+required         yes
 
 view             MinusRawSignal
 longLabelPrefix  CSHL RNA-seq Minus Strand Raw Signal
 type             bigWig
 hasReplicates    yes
-required         no
+required         yes
 
 view             Alignments
 longLabelPrefix  CSHL RNA-seq Alignments
 type             bam
-hasReplicates    no
+hasReplicates    yes
 required         yes
 
 view             RawData
 type             fastq
-hasReplicates    no
-required         no
+hasReplicates    yes 
+required         yes 
 downloadOnly     yes

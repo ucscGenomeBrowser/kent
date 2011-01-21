@@ -130,4 +130,12 @@ char *stripRegEx(char *str, char *regEx, int flags);
 boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
 // Returns TRUE if advanced javascript features are currently enabled
 
+void jsBeginCollapsibleSection(struct cart *cart, char *track, char *section, char *sectionTitle,
+			       boolean isOpenDefault);
+/* Make the hidden input, collapse/expand button and <TR id=...> needed for utils.js's 
+ * setTableRowVisibility().  Caller needs to have already created a <TABLE> and <FORM>. */
+
+void jsEndCollapsibleSection();
+/* End the collapsible <TR id=...>. */
+
 #endif /* JSHELPER_H */

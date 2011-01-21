@@ -34,12 +34,35 @@ assembly          hg19
 validationSettings validateFiles.fastq:mmCheckOneInN=100;validateFiles.bam:mmCheckOneInN=100,mismatches=6 
 
 # Track/view definition
+
+# ONE TYPE OF FASTQ SHOULD BE WITH EVERY SUBMISSION
+# single ended fastq data
+view             Fastq
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+# first read for paired end fastq data
+view             FastqRd1
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
+
+# second read for paired end fastq data
+view             FastqRd2
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly     yes
 view             Signal
 longLabelPrefix  Caltech RNA-seq Signal
 type             bigWig
 hasReplicates    yes
 required         no
 
+# ONE TYPE OF SIGNAL SHOULD BE WITH EVERY SUBMISSION
 view             MinusSignal
 longLabelPrefix  Caltech RNA-seq Minus Signal
 type             bigWig
@@ -58,6 +81,7 @@ type             bam
 hasReplicates    yes 
 required         no
 
+#ONE TYPE OF BAM SHOULD BE WITH EVERY SUBMISSION
 view             Aligns
 longLabelPrefix  Caltech RNA-seq Alignments
 type             bam
@@ -135,26 +159,3 @@ hasReplicates    yes
 required         no
 downloadOnly     yes
 
-# fastq
-# single ended fastq data
-view             Fastq
-type             fastq
-hasReplicates    yes
-required         no
-downloadOnly     yes
-
-# fastq
-# first read for paired end fastq data
-view             FastqRd1
-type             fastq
-hasReplicates    yes
-required         no
-downloadOnly     yes
-
-# fastq
-# second read for paired end fastq data
-view             FastqRd2
-type             fastq
-hasReplicates    yes
-required         no
-downloadOnly     yes
