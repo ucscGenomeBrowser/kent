@@ -209,6 +209,9 @@ priority 300
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
 include wgEncodeBroadChipSeq.ra
 
+# BROAD Chromatin modelling by HMM HMM (wrangler: Tim)
+include wgEncodeBroadHmm.ra
+
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
 include wgEncodeChromatinMap.ra
 
