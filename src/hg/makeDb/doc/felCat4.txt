@@ -2107,6 +2107,176 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     display histo.png &
 
+
+#############################################################################
+# phyloP for 6-way (DONE - 2011-01-21 - Chin)
+    # run phyloP with score=LRT 
+    ssh swarm
+    mkdir /cluster/data/felCat4/bed/multiz6way/consPhyloP
+    cd /cluster/data/felCat4/bed/multiz6way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to
+    # be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #   0.573
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+        ../../cons/all/all.mod 0.573 > all.mod
+
+    #   following the pattern from hg19 with only one grp: "all"
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/felCat4/bed/multiz6way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/felCat4/bed/multiz6way/cons/SS/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$file1.wigFix $out
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$cName
+rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+rmdir --ignore-fail-on-non-empty $cons/tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../../cons/SS -type f | grep ".ss$" \
+        | sed -e "s/.ss$//; s#^../../cons/SS/##" > ss.list
+
+    # Create template file
+    #   file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/felCat4/bed/multiz6way/consPhyloP/all
+    cd /hive/data/genomes/felCat4/bed/multiz6way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para -ram=8g create jobList
+    para try ... check ... etc ...
+    para -maxJob=64 push
+
+    para time > run.time
+    # Completed: 51064 of 51064 jobs
+    # CPU time in finished jobs:  2956s      49.26m     0.82h    0.03d  0.000 y
+    # IO & Wait Time:           682189s   11369.82m   189.50h    7.90d  0.022 y
+    # Average job time:             13s       0.22m     0.00h    0.00d
+    # Longest finished job:         35s       0.58m     0.01h    0.00d
+    # Submission to last job:    14468s     241.13m     4.02h    0.17d
+
+    # make downloads
+    mkdir downloads
+
+    find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+        | sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+        | gzip -c > downloads/phyloP6way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    export sizeG=188743680
+    ulimit -d $sizeG
+    ulimit -v $sizeG
+
+    zcat downloads/phyloP6way.wigFix.gz \
+        | wigToBigWig stdin /hive/data/genomes/felCat4/chrom.sizes phyloP6way.bw
+
+
+    bigWigInfo phyloP6way.bw
+    # version: 4
+    # isCompressed: yes
+    # isSwapped: 0
+    # primaryDataSize: 2,502,607,434
+    # primaryIndexSize: 69,120,232
+    # zoomLevels: 10
+    # chromCount: 50801
+    # basesCovered: 1,636,796,497
+    # mean: 0.092835
+    # min: -3.244000
+    # max: 1.099000
+    # std: 0.593643
+
+    #   encode those files into wiggle data
+    zcat downloads/phyloP6way.wigFix.gz \
+        | wigEncode stdin phyloP6way.wig phyloP6way.wib
+    # Converted stdin, upper limit 1.10, lower limit -3.24
+    du -hsc *.wi?
+    # 1.6G    phyloP6way.wib
+    # 214M    phyloP6way.wig
+    # 1.8G    total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP6way.wib /gbdb/felCat4/multiz6way/phyloP6way.wib
+    nice hgLoadWiggle -pathPrefix=/gbdb/felCat4/multiz6way felCat4 \
+        phyloP6way phyloP6way.wig
+    # Connected to database felCat4 for track phyloP6way
+    # Creating wiggle table definition in felCat4.phyloP6way
+    # Saving wiggle.tab
+    # Loading felCat4
+
+  # use to set trackDb.ra entries for wiggle min and max
+
+    wigTableStats.sh felCat4 phyloP6way
+    # db.table      min max mean count sumData stdDev viewLimits
+    # felCat4.phyloP6way      -3.244 1.099 0.0928346 1636796497 1.51951e+08 
+    #    0.593643 viewLimits=-2.87538:1.099
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram -db=felCat4 \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            phyloP6way > histogram.data 2>&1
+    #   real    2m40.590s
+
+    #   create plot of histogram:
+
+    #   create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Cat felCat4 Histogram phyloP6way track"
+set xlabel " phyloP6way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.002]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #   << happy emacs
+
+    display histo.png &
+
+
     # download stuff: (TBD)
     # /hive/data/genomes/felCat4/bed/multiz6way/cons/all/downloads/phastCons6way.wigFix.gz
     # to /usr/local/apache/htdocs-hgdownload/goldenPath/felCat4/.......
