@@ -570,7 +570,7 @@ for (track = trackList; track != NULL; track = track->next)
             {
             static struct tempName tn;
             trashDirFile(&tn, "ct", CT_PREFIX, ".html");
-            track->htmlFile = tn.forCgi;
+            track->htmlFile = cloneString(tn.forCgi);
             }
         writeGulp(track->htmlFile, track->tdb->html, strlen(track->tdb->html));
         ctAddToSettings(track, "htmlFile", track->htmlFile);
@@ -758,7 +758,8 @@ if ((strlen(html) > 50*1024) || startsWith("track ", html) || startsWith("browse
 	"This is usually an indication that the data has been accidentally put into the documentation field. "
 	"Only html documentation is intended for this field. "
         "Please correct and re-submit.");
-    customText = NULL;
+    html = NULL;  /* we do not want to save this bad value */
+    customText = NULL;  /* trigger a return to the edit page */
     }
 
 struct customTrack *newCts = NULL, *ct = NULL;
