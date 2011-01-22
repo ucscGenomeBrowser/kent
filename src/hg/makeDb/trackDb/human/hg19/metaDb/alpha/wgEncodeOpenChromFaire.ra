@@ -2,6 +2,7 @@ metaObject wgEncodeOpenChromFaireAstrocyAlnRep1
 objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -20,6 +21,7 @@ metaObject wgEncodeOpenChromFaireAstrocyAlnRep2
 objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -38,6 +40,7 @@ metaObject wgEncodeOpenChromFaireAstrocyBaseOverlapSignal
 objType table
 cell Astrocy
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -55,6 +58,7 @@ metaObject wgEncodeOpenChromFaireAstrocyPk
 objType table
 cell Astrocy
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -72,6 +76,7 @@ metaObject wgEncodeOpenChromFaireAstrocyRawDataRep1
 objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -88,6 +93,7 @@ metaObject wgEncodeOpenChromFaireAstrocyRawDataRep2
 objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -104,6 +110,7 @@ metaObject wgEncodeOpenChromFaireAstrocySig
 objType table
 cell Astrocy
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -121,6 +128,7 @@ metaObject wgEncodeOpenChromFaireGlioblaAlnRep1
 objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -139,6 +147,7 @@ metaObject wgEncodeOpenChromFaireGlioblaAlnRep2
 objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -157,6 +166,7 @@ metaObject wgEncodeOpenChromFaireGlioblaAlnRep3
 objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -175,6 +185,7 @@ metaObject wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
 objType table
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -192,6 +203,7 @@ metaObject wgEncodeOpenChromFaireGlioblaPk
 objType table
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -209,6 +221,7 @@ metaObject wgEncodeOpenChromFaireGlioblaRawDataRep1
 objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -225,6 +238,7 @@ metaObject wgEncodeOpenChromFaireGlioblaRawDataRep2
 objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -241,6 +255,7 @@ metaObject wgEncodeOpenChromFaireGlioblaRawDataRep3
 objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -257,6 +272,7 @@ metaObject wgEncodeOpenChromFaireGlioblaSig
 objType table
 cell Gliobla
 composite wgEncodeOpenChromFaire
+controlId Gliobla/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -274,6 +290,7 @@ metaObject wgEncodeOpenChromFaireGm12878AlnRep1
 objType file
 cell GM12878
 composite wgEncodeOpenChromFaire
+controlId GM12878/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -294,6 +311,7 @@ metaObject wgEncodeOpenChromFaireGm12878AlnRep2
 objType file
 cell GM12878
 composite wgEncodeOpenChromFaire
+controlId GM12878/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -314,6 +332,7 @@ metaObject wgEncodeOpenChromFaireGm12878AlnRep3
 objType file
 cell GM12878
 composite wgEncodeOpenChromFaire
+controlId GM12878/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -334,6 +353,7 @@ metaObject wgEncodeOpenChromFaireGm12878BaseOverlapSignal
 objType table
 cell GM12878
 composite wgEncodeOpenChromFaire
+controlId GM12878/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -353,6 +373,7 @@ metaObject wgEncodeOpenChromFaireGm12878Pk
 objType table
 cell GM12878
 composite wgEncodeOpenChromFaire
+controlId GM12878/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -429,6 +450,7 @@ metaObject wgEncodeOpenChromFaireGm12878Sig
 objType table
 cell GM12878
 composite wgEncodeOpenChromFaire
+controlId GM12878/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -448,6 +470,7 @@ metaObject wgEncodeOpenChromFaireGm12891AlnRep1
 objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -466,6 +489,7 @@ metaObject wgEncodeOpenChromFaireGm12891AlnRep2
 objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -484,6 +508,7 @@ metaObject wgEncodeOpenChromFaireGm12891BaseOverlapSignal
 objType table
 cell GM12891
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -501,6 +526,7 @@ metaObject wgEncodeOpenChromFaireGm12891Pk
 objType table
 cell GM12891
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -518,6 +544,7 @@ metaObject wgEncodeOpenChromFaireGm12891RawDataRep1
 objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -534,6 +561,7 @@ metaObject wgEncodeOpenChromFaireGm12891RawDataRep2
 objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -550,6 +578,7 @@ metaObject wgEncodeOpenChromFaireGm12891Sig
 objType table
 cell GM12891
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -567,6 +596,7 @@ metaObject wgEncodeOpenChromFaireGm12892AlnRep1
 objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -585,6 +615,7 @@ metaObject wgEncodeOpenChromFaireGm12892AlnRep2
 objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -603,6 +634,7 @@ metaObject wgEncodeOpenChromFaireGm12892BaseOverlapSignal
 objType table
 cell GM12892
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -620,6 +652,7 @@ metaObject wgEncodeOpenChromFaireGm12892Pk
 objType table
 cell GM12892
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -637,6 +670,7 @@ metaObject wgEncodeOpenChromFaireGm12892RawDataRep1
 objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -653,6 +687,7 @@ metaObject wgEncodeOpenChromFaireGm12892RawDataRep2
 objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -669,6 +704,7 @@ metaObject wgEncodeOpenChromFaireGm12892Sig
 objType table
 cell GM12892
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -686,6 +722,7 @@ metaObject wgEncodeOpenChromFaireGm18507AlnRep1
 objType file
 cell GM18507
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -706,6 +743,7 @@ metaObject wgEncodeOpenChromFaireGm18507AlnRep2
 objType file
 cell GM18507
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -726,6 +764,7 @@ metaObject wgEncodeOpenChromFaireGm18507BaseOverlapSignal
 objType table
 cell GM18507
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -745,6 +784,7 @@ metaObject wgEncodeOpenChromFaireGm18507Pk
 objType table
 cell GM18507
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -764,7 +804,7 @@ metaObject wgEncodeOpenChromFaireGm18507RawDataRep1
 objType file
 cell GM18507
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -784,7 +824,7 @@ metaObject wgEncodeOpenChromFaireGm18507RawDataRep2
 objType file
 cell GM18507
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -804,6 +844,7 @@ metaObject wgEncodeOpenChromFaireGm18507Sig
 objType table
 cell GM18507
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -823,6 +864,7 @@ metaObject wgEncodeOpenChromFaireGm19239AlnRep1
 objType file
 cell GM19239
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -843,6 +885,7 @@ metaObject wgEncodeOpenChromFaireGm19239AlnRep2
 objType file
 cell GM19239
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -863,6 +906,7 @@ metaObject wgEncodeOpenChromFaireGm19239BaseOverlapSignal
 objType table
 cell GM19239
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -882,6 +926,7 @@ metaObject wgEncodeOpenChromFaireGm19239Pk
 objType table
 cell GM19239
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -901,7 +946,7 @@ metaObject wgEncodeOpenChromFaireGm19239RawDataRep1
 objType file
 cell GM19239
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -921,7 +966,7 @@ metaObject wgEncodeOpenChromFaireGm19239RawDataRep2
 objType file
 cell GM19239
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -941,6 +986,7 @@ metaObject wgEncodeOpenChromFaireGm19239Sig
 objType table
 cell GM19239
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -960,6 +1006,7 @@ metaObject wgEncodeOpenChromFaireH1hescAlnRep1
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -980,6 +1027,7 @@ metaObject wgEncodeOpenChromFaireH1hescAlnRep2
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1000,6 +1048,7 @@ metaObject wgEncodeOpenChromFaireH1hescBaseOverlapSignal
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1019,6 +1068,7 @@ metaObject wgEncodeOpenChromFaireH1hescPk
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1038,7 +1088,7 @@ metaObject wgEncodeOpenChromFaireH1hescRawDataRep1
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -1058,7 +1108,7 @@ metaObject wgEncodeOpenChromFaireH1hescRawDataRep2
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -1078,6 +1128,7 @@ metaObject wgEncodeOpenChromFaireH1hescSig
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1097,6 +1148,7 @@ metaObject wgEncodeOpenChromFaireHelas3AlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1117,6 +1169,7 @@ metaObject wgEncodeOpenChromFaireHelas3AlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1137,6 +1190,7 @@ metaObject wgEncodeOpenChromFaireHelas3BaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1156,6 +1210,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1177,6 +1232,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1198,6 +1254,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1218,6 +1275,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hPk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1278,6 +1336,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifna4hSig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1298,6 +1357,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1319,6 +1379,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1340,6 +1401,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1360,6 +1422,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hPk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1420,6 +1483,7 @@ metaObject wgEncodeOpenChromFaireHelas3Ifng4hSig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
@@ -1440,6 +1504,7 @@ metaObject wgEncodeOpenChromFaireHelas3Pk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1497,6 +1562,7 @@ metaObject wgEncodeOpenChromFaireHelas3Sig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromFaire
+controlId HeLa-S3/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1516,6 +1582,7 @@ metaObject wgEncodeOpenChromFaireHepg2AlnRep1
 objType file
 cell HepG2
 composite wgEncodeOpenChromFaire
+controlId HepG2/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1536,6 +1603,7 @@ metaObject wgEncodeOpenChromFaireHepg2AlnRep2
 objType file
 cell HepG2
 composite wgEncodeOpenChromFaire
+controlId HepG2/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1556,6 +1624,7 @@ metaObject wgEncodeOpenChromFaireHepg2AlnRep3
 objType file
 cell HepG2
 composite wgEncodeOpenChromFaire
+controlId HepG2/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1576,6 +1645,7 @@ metaObject wgEncodeOpenChromFaireHepg2BaseOverlapSignal
 objType table
 cell HepG2
 composite wgEncodeOpenChromFaire
+controlId HepG2/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1595,6 +1665,7 @@ metaObject wgEncodeOpenChromFaireHepg2Pk
 objType table
 cell HepG2
 composite wgEncodeOpenChromFaire
+controlId HepG2/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1671,6 +1742,7 @@ metaObject wgEncodeOpenChromFaireHepg2Sig
 objType table
 cell HepG2
 composite wgEncodeOpenChromFaire
+controlId HepG2/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1690,6 +1762,7 @@ metaObject wgEncodeOpenChromFaireHtr8AlnRep1
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -1697,7 +1770,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3379
@@ -1707,6 +1780,7 @@ metaObject wgEncodeOpenChromFaireHtr8AlnRep2
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -1714,7 +1788,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3379
@@ -1724,6 +1798,7 @@ metaObject wgEncodeOpenChromFaireHtr8BaseOverlapSignal
 objType table
 cell HTR8svn
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -1741,6 +1816,7 @@ metaObject wgEncodeOpenChromFaireHtr8Pk
 objType table
 cell HTR8svn
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -1758,6 +1834,7 @@ metaObject wgEncodeOpenChromFaireHtr8RawDataRep1
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -1774,6 +1851,7 @@ metaObject wgEncodeOpenChromFaireHtr8RawDataRep2
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -1790,6 +1868,7 @@ metaObject wgEncodeOpenChromFaireHtr8Sig
 objType table
 cell HTR8svn
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -1807,6 +1886,7 @@ metaObject wgEncodeOpenChromFaireHuvecAlnRep1
 objType file
 cell HUVEC
 composite wgEncodeOpenChromFaire
+controlId HUVEC/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1827,6 +1907,7 @@ metaObject wgEncodeOpenChromFaireHuvecAlnRep2
 objType file
 cell HUVEC
 composite wgEncodeOpenChromFaire
+controlId HUVEC/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1847,6 +1928,7 @@ metaObject wgEncodeOpenChromFaireHuvecBaseOverlapSignal
 objType table
 cell HUVEC
 composite wgEncodeOpenChromFaire
+controlId HUVEC/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1866,6 +1948,7 @@ metaObject wgEncodeOpenChromFaireHuvecPk
 objType table
 cell HUVEC
 composite wgEncodeOpenChromFaire
+controlId HUVEC/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1925,6 +2008,7 @@ metaObject wgEncodeOpenChromFaireHuvecSig
 objType table
 cell HUVEC
 composite wgEncodeOpenChromFaire
+controlId HUVEC/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1944,6 +2028,7 @@ metaObject wgEncodeOpenChromFaireK562AlnRep1
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1964,6 +2049,7 @@ metaObject wgEncodeOpenChromFaireK562AlnRep2
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1984,6 +2070,7 @@ metaObject wgEncodeOpenChromFaireK562BaseOverlapSignal
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2003,6 +2090,7 @@ metaObject wgEncodeOpenChromFaireK562NabutAlnRep1
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2023,6 +2111,7 @@ metaObject wgEncodeOpenChromFaireK562NabutAlnRep2
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2043,6 +2132,7 @@ metaObject wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2061,6 +2151,7 @@ metaObject wgEncodeOpenChromFaireK562NabutPk
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2079,6 +2170,7 @@ metaObject wgEncodeOpenChromFaireK562NabutRawDataRep1
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2097,6 +2189,7 @@ metaObject wgEncodeOpenChromFaireK562NabutRawDataRep2
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2115,6 +2208,7 @@ metaObject wgEncodeOpenChromFaireK562NabutSig
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2133,6 +2227,7 @@ metaObject wgEncodeOpenChromFaireK562OhureaAlnRep1
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2153,6 +2248,7 @@ metaObject wgEncodeOpenChromFaireK562OhureaAlnRep2
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2173,6 +2269,7 @@ metaObject wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2191,6 +2288,7 @@ metaObject wgEncodeOpenChromFaireK562OhureaPk
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2209,6 +2307,7 @@ metaObject wgEncodeOpenChromFaireK562OhureaRawDataRep1
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2227,6 +2326,7 @@ metaObject wgEncodeOpenChromFaireK562OhureaRawDataRep2
 objType file
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2245,6 +2345,7 @@ metaObject wgEncodeOpenChromFaireK562OhureaSig
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FAIRE-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -2263,6 +2364,7 @@ metaObject wgEncodeOpenChromFaireK562Pk
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2320,6 +2422,7 @@ metaObject wgEncodeOpenChromFaireK562Sig
 objType table
 cell K562
 composite wgEncodeOpenChromFaire
+controlId K562/Input
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2339,6 +2442,7 @@ metaObject wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -2346,7 +2450,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3378
@@ -2357,6 +2461,7 @@ metaObject wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -2364,7 +2469,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3378
@@ -2375,6 +2480,7 @@ metaObject wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -2393,6 +2499,7 @@ metaObject wgEncodeOpenChromFaireMcf7HypoxlacPk
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -2411,6 +2518,7 @@ metaObject wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -2428,6 +2536,7 @@ metaObject wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -2445,6 +2554,7 @@ metaObject wgEncodeOpenChromFaireMcf7HypoxlacSig
 objType table
 cell MCF-7
 composite wgEncodeOpenChromFaire
+controlId MCF-7/Input
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -2463,6 +2573,7 @@ metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2481,6 +2592,7 @@ metaObject wgEncodeOpenChromFaireMedulloAlnRep2
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2499,6 +2611,7 @@ metaObject wgEncodeOpenChromFaireMedulloBaseOverlapSignal
 objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2516,6 +2629,7 @@ metaObject wgEncodeOpenChromFaireMedulloPk
 objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2533,6 +2647,7 @@ metaObject wgEncodeOpenChromFaireMedulloRawDataRep1
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2549,6 +2664,7 @@ metaObject wgEncodeOpenChromFaireMedulloRawDataRep2
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2565,6 +2681,7 @@ metaObject wgEncodeOpenChromFaireMedulloSig
 objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2582,6 +2699,7 @@ metaObject wgEncodeOpenChromFaireNhbeAlnRep1
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2602,6 +2720,7 @@ metaObject wgEncodeOpenChromFaireNhbeAlnRep2
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2622,6 +2741,7 @@ metaObject wgEncodeOpenChromFaireNhbeBaseOverlapSignal
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2641,6 +2761,7 @@ metaObject wgEncodeOpenChromFaireNhbePk
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2660,7 +2781,7 @@ metaObject wgEncodeOpenChromFaireNhbeRawDataRep1
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2680,7 +2801,7 @@ metaObject wgEncodeOpenChromFaireNhbeRawDataRep2
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2700,6 +2821,7 @@ metaObject wgEncodeOpenChromFaireNhbeSig
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2719,6 +2841,7 @@ metaObject wgEncodeOpenChromFaireNhekAlnRep1
 objType file
 cell NHEK
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2739,6 +2862,7 @@ metaObject wgEncodeOpenChromFaireNhekAlnRep2
 objType file
 cell NHEK
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2759,6 +2883,7 @@ metaObject wgEncodeOpenChromFaireNhekBaseOverlapSignal
 objType table
 cell NHEK
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2778,6 +2903,7 @@ metaObject wgEncodeOpenChromFaireNhekPk
 objType table
 cell NHEK
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2797,7 +2923,7 @@ metaObject wgEncodeOpenChromFaireNhekRawDataRep1
 objType file
 cell NHEK
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2817,7 +2943,7 @@ metaObject wgEncodeOpenChromFaireNhekRawDataRep2
 objType file
 cell NHEK
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2837,6 +2963,7 @@ metaObject wgEncodeOpenChromFaireNhekSig
 objType table
 cell NHEK
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2856,6 +2983,7 @@ metaObject wgEncodeOpenChromFairePanisletsAlnRep1
 objType file
 cell PanIslets
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2876,6 +3004,7 @@ metaObject wgEncodeOpenChromFairePanisletsBaseOverlapSignal
 objType table
 cell PanIslets
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2895,6 +3024,7 @@ metaObject wgEncodeOpenChromFairePanisletsPk
 objType table
 cell PanIslets
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2914,7 +3044,7 @@ metaObject wgEncodeOpenChromFairePanisletsRawData
 objType file
 cell PanIslets
 composite wgEncodeOpenChromFaire
-controlId modelled
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
@@ -2931,6 +3061,7 @@ metaObject wgEncodeOpenChromFairePanisletsRawDataRep1
 objType file
 cell PanIslets
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2950,6 +3081,7 @@ metaObject wgEncodeOpenChromFairePanisletsSig
 objType table
 cell PanIslets
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2969,6 +3101,7 @@ metaObject wgEncodeOpenChromFaireUrotsaAlnRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -2976,7 +3109,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3277
@@ -2986,6 +3119,7 @@ metaObject wgEncodeOpenChromFaireUrotsaAlnRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -2993,7 +3127,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3277
@@ -3003,6 +3137,7 @@ metaObject wgEncodeOpenChromFaireUrotsaBaseOverlapSignal
 objType table
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3020,6 +3155,7 @@ metaObject wgEncodeOpenChromFaireUrotsaPk
 objType table
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3037,6 +3173,7 @@ metaObject wgEncodeOpenChromFaireUrotsaRawDataRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3053,6 +3190,7 @@ metaObject wgEncodeOpenChromFaireUrotsaRawDataRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3069,6 +3207,7 @@ metaObject wgEncodeOpenChromFaireUrotsaSig
 objType table
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3086,6 +3225,7 @@ metaObject wgEncodeOpenChromFaireUrotsaUt189AlnRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3093,7 +3233,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3278
@@ -3104,6 +3244,7 @@ metaObject wgEncodeOpenChromFaireUrotsaUt189AlnRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3111,7 +3252,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3278
@@ -3122,6 +3263,7 @@ metaObject wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal
 objType table
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3140,6 +3282,7 @@ metaObject wgEncodeOpenChromFaireUrotsaUt189Pk
 objType table
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3158,6 +3301,7 @@ metaObject wgEncodeOpenChromFaireUrotsaUt189RawDataRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3175,6 +3319,7 @@ metaObject wgEncodeOpenChromFaireUrotsaUt189RawDataRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3192,6 +3337,7 @@ metaObject wgEncodeOpenChromFaireUrotsaUt189Sig
 objType table
 cell Urothelia
 composite wgEncodeOpenChromFaire
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
@@ -3206,4 +3352,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 811807266
+# MAGIC: -1651023263

@@ -1,0 +1,23 @@
+Style Guide for Python Code
+
+Naming Conventions
+
+Packages and Modules
+    All lowercase names, no spaces. Underscores if it would improve
+readability in modules, but not for use in packages.
+
+Classes
+    CapitalCase names. Note the leading captial letter to distinguish between a
+ClassName and a functionName. Underscores are not used, except for private
+internal classes.
+
+Functions
+    mixedCase names. The leading character is not captialized, but all
+successive words are capitalized. Underscores are not used.
+
+Variables
+    mixedCase names. Underscores are not to be used.
+
+Constants
+    ALL_CAPS_WITH_UNDERSCORE used for names. No lowercase or leading
+underscores.

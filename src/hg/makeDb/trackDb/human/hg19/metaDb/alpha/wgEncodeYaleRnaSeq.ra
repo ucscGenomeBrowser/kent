@@ -127,6 +127,23 @@ tableName wgEncodeYaleRnaSeqK562Ifna30PolyaAln
 treatment IFNa30
 view Alignments
 
+metaObject wgEncodeYaleRnaSeqK562Ifna30PolyaRawData
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+fileName wgEncodeYaleRnaSeqK562Ifna30PolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+subId 540
+treatment IFNa30
+view RawData
+
 metaObject wgEncodeYaleRnaSeqK562Ifna6hPolyaAln
 objType table
 cell K562
@@ -200,6 +217,23 @@ subId 2007
 tableName wgEncodeYaleRnaSeqK562Ifng30PolyaAln
 treatment IFNg30
 view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ifng30PolyaRawData
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+fileName wgEncodeYaleRnaSeqK562Ifng30PolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+subId 542
+treatment IFNg30
+view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
 objType table
@@ -330,4 +364,4 @@ tableName wgEncodeYaleRnaSeqK562PolyaSig
 treatment None
 view Signal
 
-# MAGIC: -1028851776
+# MAGIC: 1152077996

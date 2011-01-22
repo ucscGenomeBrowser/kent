@@ -742,12 +742,23 @@ else if (isNotEmpty(docFileName))
     }
 else
     html = cartUsualString(cart, CT_CUSTOM_DOC_TEXT_VAR, "");
-html = customDocParse(html);
+html = cloneString(html);     /* do not let original cart var get eaten up */
+html = customDocParse(html);  /* this will chew up the input string */
 if(html != NULL)
     {
     char *tmp = html;
     html = jsStripJavascript(html);
     freeMem(tmp);
+    }
+
+if ((strlen(html) > 50*1024) || startsWith("track ", html) || startsWith("browser ", html))
+    {
+    err = cloneString(
+	"Optional track documentation appears to be either too large (greater than 50k) or it starts with a track or browser line. "
+	"This is usually an indication that the data has been accidentally put into the documentation field. "
+	"Only html documentation is intended for this field. "
+        "Please correct and re-submit.");
+    customText = NULL;
     }
 
 struct customTrack *newCts = NULL, *ct = NULL;

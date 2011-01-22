@@ -1660,6 +1660,23 @@ subId 1249
 tableName wgEncodeUwDnaseBjPkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseBjRawDataRep1
+objType file
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseBjRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 295
+view RawData
+
 metaObject wgEncodeUwDnaseBjRawDataRep2
 objType file
 cell BJ
@@ -9220,6 +9237,40 @@ subId 1566
 tableName wgEncodeUwDnaseHrcePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHrceRawDataRep1
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceRawDataRep1.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 398
+view RawData
+
+metaObject wgEncodeUwDnaseHrceRawDataRep2
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 399
+view RawData
+
 metaObject wgEncodeUwDnaseHrceRawRep1
 objType table
 cell HRCEpiC
@@ -14492,4 +14543,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 1023974523
+# MAGIC: -563825452

@@ -146,6 +146,8 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 }
 
 void snp125OfferGeneTracksForFunction(struct trackDb *tdb)
+/* Get a list of genePred tracks and make checkboxes to enable hgc's functional
+ * annotations. */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct slName *genePredTables = hTrackTablesOfType(conn, "genePred%%"), *gt;
@@ -154,9 +156,12 @@ if (genePredTables != NULL)
     struct trackDb *geneTdbList = NULL, *gTdb;
     for (gt = genePredTables;  gt != NULL;  gt = gt->next)
 	{
-	gTdb = hTrackDbForTrack(database, gt->name);
+	gTdb = hashFindVal(trackHash, gt->name);
 	if (gTdb && sameString(gTdb->grp, "genes"))
 	    {
+	    // We are going to overwrite gTdb's next pointer and possibly its priority,
+	    // so make a shallow copy:
+	    gTdb = CloneVar(gTdb);
 	    if (gTdb->parent)
 		gTdb->priority = (gTdb->parent->priority + gTdb->priority/1000);
 	    slAddHead(&geneTdbList, gTdb);
