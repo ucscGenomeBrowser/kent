@@ -20,6 +20,7 @@ priority 0
 type bed 3
 noInherit on
 wgEncode 1
+maxWindowToDraw 10000000
 
 
 	track wgEncodeCaltechRnaSeqViewMinusSignal

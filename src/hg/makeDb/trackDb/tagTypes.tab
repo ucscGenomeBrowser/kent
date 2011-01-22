@@ -196,7 +196,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak
-maxWindowToDraw bam rmsk bed narrowPeak broadPeak
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig
 maxWindowToQuery bigWig bed
 metadata *
 mgiUrl bed

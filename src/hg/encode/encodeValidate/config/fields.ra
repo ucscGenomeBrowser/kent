@@ -3,7 +3,6 @@
 
 # DDF fields
 
-
 # This is the name of the file that is being submitted. 
 # It can be a comma separated list
 field files
@@ -123,6 +122,16 @@ field seqPlatform
 file ddf
 type string
 required no
+
+field readType
+file ddf
+type string
+required no 
+
+field mapAlgorithm
+file ddf
+type string
+required no 
 
 
 # This is the field where you can enter which type of control is being used

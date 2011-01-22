@@ -7390,6 +7390,36 @@ tag Control
 type control
 description This data represents a control being compared with the other tracks in the set.
 
+term Control_eGFP-FOS
+tag ControlFOS
+type control
+description This data represents a control being compared to experiments using antibody eGFP-FOS (Provisional)
+
+term Control_eGFP-GATA2
+tag ControlGATA2
+type control
+description This data represents a control being compared to experiments using antibody eGFP-GATA2 (Provisional)
+
+term Control_eGFP-HDAC8
+tag ControlHDAC8
+type control
+description This data represents a control being compared to experiments using antibody eGFP-HDAC8 (Provisional)
+
+term Control_eGFP-JunB
+tag ControlJunB
+type control
+description This data represents a control being compared to experiments using antibody eGFP-JunB (Provisional)
+
+term Control_eGFP-JunD
+tag ControlJunD
+type control
+description This data represents a control being compared to experiments using antibody eGFP-JunD (Provisional)
+
+term Control_eGFP-NR4A1
+tag ControlNR4A1
+type control
+description This data represents a control being compared to experiments using antibody eGFP-NR4A1 (Provisional)
+
 term Input
 tag Input
 type control
@@ -8147,6 +8177,12 @@ tag ABSOLiD2
 geo AB_SOLiD System 2.0
 type seqPlatform
 description Applied Biosystems SOLiD System 2.0
+
+term AB_SOLiD_3.5
+tag ABSOLiD3Plus
+geo AB SOLiD 3 Plus
+type seqPlatform
+description Applied Biosystems SOLiD System 3.5 (Provisional)
 
 
 #LABS          This is the CV for naming the labs.

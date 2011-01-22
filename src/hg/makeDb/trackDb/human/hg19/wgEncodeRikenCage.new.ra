@@ -4,9 +4,9 @@ shortLabel RIKEN CAGE Loc
 longLabel RNA Subcellular CAGE Alignments Localization from ENCODE/RIKEN
 group expression
 subGroup1 view Views PlusClusters=Plus_Clusters MinusClusters=Minus_Clusters Alignments=Alignments
-subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC MCF7=MCF7 NHEK=NHEK prostate=Prostate
+subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) BJ=BJ A549=A549 AG04450=AG04450 HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC MCF7=MCF7 NHEK=NHEK prostate=Prostate SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
-subGroup4 rnaExtract RNA_Extract longNonPolyA=PolyA- longPolyA=PolyA+ total=Total_RNA
+subGroup4 rnaExtract RNA_Extract longNonPolyA=PolyA- longPolyA=PolyA+ total=Total_RNA pAP=PolyA+
 subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4
 dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dimensionB=rep
 dimensionCchecked longPolyA,longNonPolyA,total
@@ -618,6 +618,15 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
 
+        track wgEncodeRikenCageSknshraCellPapPlusClustersRep2
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel SK-N-SH_RA cell longPolyA 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in SK-N-SH_RA cell)
+        subGroups view=PlusClusters cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 232069.000000
+        origAssembly hg19
+        # subId=3339 dateSubmitted=2011-01-19
+
 
     track wgEncodeRikenCageViewMinusClusters
     shortLabel Minus Clusters
@@ -1218,6 +1227,15 @@ superTrack wgEncodeRnaSeqSuper
         origAssembly hg19
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
+
+        track wgEncodeRikenCageSknshraCellPapMinusClustersRep2
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel SK-N-SH_RA cell longPolyA 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in SK-N-SH_RA cell)
+        subGroups view=MinusClusters cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 118040.000000
+        origAssembly hg19
+        # subId=3339 dateSubmitted=2011-01-19
 
 
     track wgEncodeRikenCageViewAlignments
@@ -1829,6 +1847,97 @@ superTrack wgEncodeRnaSeqSuper
         origAssembly hg19
         color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
+
+        track wgEncodeRikenCageBjCellPapAlnRep1
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel BJ cell longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Tags Replicate 1 (longPolyA in BJ cell)
+        subGroups view=Alignments cellType=BJ localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3428 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageBjCellPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel BJ cell longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Replicate 2 (longPolyA in BJ cell)
+        subGroups view=Alignments cellType=BJ localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3429 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageAg04450CellPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel AG04450 cell longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Replicate 2 (longPolyA in AG04450 cell)
+        subGroups view=Alignments cellType=AG04450 localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3427 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageA549CellPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel A549 cell longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Replicate 2 (longPolyA in A549 cell)
+        subGroups view=Alignments cellType=A549 localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3426 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageMcf7CellPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel MCF-7 cell longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Replicate 2 (longPolyA in MCF-7 cell)
+        subGroups view=Alignments cellType=MCF7 localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3425 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageSknshraCellPapAlnRep1
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel SK-N-SH_RA cell longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Tags Replicate 1 (longPolyA in SK-N-SH_RA cell)
+        subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3423 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageA549CellPapAlnRep1
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel A549 cell longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Tags Replicate 1 (longPolyA in A549 cell)
+        subGroups view=Alignments cellType=A549 localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3422 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageAg04450CellPapAlnRep1
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel AG04450 cell longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Tags Replicate 1 (longPolyA in AG04450 cell)
+        subGroups view=Alignments cellType=AG04450 localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=3421 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageNhekCytosolPapAlnRep4
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel NHEK cytosol longPolyA Aln 4
+        longLabel ENCODE RIKEN CAGE Tags Replicate 4 (longPolyA in NHEK cytosol)
+        subGroups view=Alignments cellType=NHEK localization=cytosol rnaExtract=pAP rep=rep4
+        type bam
+        origAssembly hg19
+        color 179,0,134
+        # subId=3420 dateSubmitted=2011-01-20
+
+        track wgEncodeRikenCageSknshraCellPapAlnRep2
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel SK-N-SH_RA cell longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Replicate 2 (longPolyA in SK-N-SH_RA cell)
+        subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=pAP rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=3339 dateSubmitted=2011-01-19
 
 
 
