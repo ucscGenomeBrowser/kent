@@ -770,6 +770,94 @@ if (bedSize >= 6)
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 }
 
+void interactionPrintPos( struct bed *bed, int bedSize, struct trackDb *tdb)
+/* Print first bedSize fields of a bed type structure in
+ * standard format. */
+{
+
+if (bed->blockCount == 2)
+    {
+    printf("<B>Intrachromosomal interaction:</B> <br>\n");
+    printf("<B>Positions:</B><br> ");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom, 
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("%s:%d-%d</A>    \n", 
+	   bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
+
+    //printf("<BR>\n");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom, 
+	   bed->chromStarts[1]+bed->chromStart, 
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
+    printf("%s:%d-%d</A>     \n", 
+	   bed->chrom,
+	   bed->chromStarts[1]+bed->chromStart, 
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1], FALSE);
+
+    printf("<BR>\n");
+    printf("<B>Distance apart:</B>\n"); 
+    printLongWithCommas(stdout,
+	bed->chromStarts[1] - bed->chromStarts[0] + bed->blockSizes[0]);
+
+    printf("bp<BR>\n");
+    }
+else
+    {
+    printf("<B>Interchromosomal interaction:</B> <br>\n");
+    printf("<B>Positions:</B><br> ");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom, 
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("%s:%d-%d</A>    \n", 
+	   bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
+
+    char buffer[10 * 1024], *otherChrom = buffer;
+    safef(buffer, sizeof buffer, "%s", bed->name);
+    char *ptr;
+    int otherStart, otherEnd;
+
+    if (startsWith(bed->chrom, buffer))
+	{
+	otherChrom = strchr(buffer,'-');
+	otherChrom++;
+	}
+
+    ptr = strchr(otherChrom,':');
+    *ptr++ = 0;
+    otherStart = atoi(ptr);
+    ptr = strchr(ptr,'.');
+    ptr++;
+    ptr++;
+    otherEnd = atoi(ptr);
+    //printf("<BR>\n");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, otherChrom,
+	   otherStart, otherEnd);
+    printf("%s:%d-%d</A>     \n", 
+	   otherChrom, otherStart, otherEnd);
+    printf("Size: %d   \n", otherEnd - otherStart);
+    printBand( otherChrom, otherStart, otherEnd, FALSE);
+
+    printf("<BR>\n");
+    }
+}
+
 
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
@@ -1331,7 +1419,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    bedPrintPos(bed, bedSize, tdb);
+    if ((tdb->type != NULL) && sameString(tdb->type, "interaction"))
+	{
+	interactionPrintPos( bed, bedSize, tdb);
+	}
+    else
+	bedPrintPos(bed, bedSize, tdb);
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
     if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
@@ -3713,6 +3806,11 @@ else if (wordCount > 0)
         {
         doBedDetail(tdb, NULL, item);
         }
+    else if (sameString(type, "interaction") )
+	{
+	int num = 12;
+        genericBedClick(conn, tdb, item, start, num);
+	}
 #ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
