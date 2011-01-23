@@ -339,36 +339,6 @@ type ld2
     longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from unphased genotypes
     priority 5
 
-track hapmapLdPh
-compositeTrack on
-shortLabel HapMap LD Phased
-longLabel HapMap Linkage Disequilibrium - Phase II - from phased genotypes
-group varRep
-priority 144.491
-visibility hide
-canPack off
-chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22
-dataVersion HapMap release 22
-type ld2
-
-    track hapmapLdPhYri
-    parent hapmapLdPh
-    shortLabel Phased YRI
-    longLabel Linkage Disequilibrium for the Yoruba (YRI) from phased genotypes
-    priority 1
-
-    track hapmapLdPhCeu
-    parent hapmapLdPh
-    shortLabel Phased CEU
-    longLabel Linkage Disequilibrium for the CEPH (CEU) from phased genotypes
-    priority 2
-
-    track hapmapLdPhChbJpt
-    parent hapmapLdPh
-    shortLabel Ph JPT+CHB
-    longLabel LD for the Han Chinese + Japanese from Tokyo (JPT+CHB) from phased genotypes
-    priority 5
-
 track hapmapRecombRateBW
 shortLabel Hapmap Recomb BW
 longLabel BigWig - Hapmap Recombination Rate (phase II, release 22) - BigWig
