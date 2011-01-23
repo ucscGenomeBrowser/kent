@@ -14035,7 +14035,31 @@ for tab in `echo show tables like "'snpArray%Raw'" | hgsql hg18 | tail -n +2`; d
   hgLoadSqlTab hg19 $table hg18.${table}.sql hg19.${table}.txt
 done
 
+############################################################################
+# HAPMAP SNPS AND HAPMAP LD PHASED LIFTS FROM HG18 (Andy)
 
+mkdir /hive/data/genomes/hg19/bed/hg18MassiveLift/hapmapSnps
+cd /hive/data/genomes/hg19/bed/hg18MassiveLift/hapmapSnps
+
+## All the tables in the trackDb entry seem to be bed 6 +
+for table in `grep -B1 "parent hapmapSnps" ~/kent/src/hg/makeDb/trackDb/human/trackDb.ra | grep track | sed 's/.*track\ //'`; do
+   echo $table >> tables.txt;
+done
+for table in `cat tables.txt`; do 
+   hgsql hg18 --skip-column-names -e "select * from "$table | cut -f2- > hg18.${table}.bed6p;
+   liftOver -bedPlus=6 -tab hg18.${table}.bed6p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed6p,unmapped};
+   hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > ${table}.sql
+   hgLoadBed -sqlTable=${table}.sql -tab hg19 $table hg19.${table}.bed6p;
+   wc -l hg1{8,9}.${table}.bed6p >> lifts.txt
+done
+## Also need hapmapLd% and hapmapAllelesSummary
+for table in `hgsql hg18 --skip-column-names -e "show tables like 'hapmapLd%'"` hapmapAllelesSummary; do
+   hgsql hg18 --skip-column-names -e "select * from "$table | cut -f2- > hg18.${table}.bed6p;
+   liftOver -bedPlus=6 -tab hg18.${table}.bed6p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.${table}.{bed6p,unmapped};
+   hgsqldump --no-data --compact hg18 $table | sed '/^SET/d;s/ENGINE.*//' > ${table}.sql
+   hgLoadBed -sqlTable=${table}.sql -tab hg19 $table hg19.${table}.bed6p;
+   wc -l hg1{8,9}.${table}.bed6p >> lifts.txt
+done
 
 ############################################################################
 # INDEL-BASED CONSERVATION TRACK liftOver to hg19 (DONE - 2010-12-21 - Chin )
