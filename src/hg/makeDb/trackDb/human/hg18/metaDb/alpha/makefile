@@ -1,6 +1,7 @@
 LIST=\
 wgEncodeAffyRnaChip.ra\
 wgEncodeBroadChipSeq.ra\
+wgEncodeBroadHmm.ra\
 wgEncodeBuOrchid.ra\
 wgEncodeCaltechRnaSeq.ra\
 wgEncodeChromatinMap.ra\

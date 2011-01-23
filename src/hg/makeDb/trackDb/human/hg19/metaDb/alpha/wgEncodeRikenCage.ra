@@ -1,3 +1,261 @@
+metaObject wgEncodeRikenCageA549CellPapAlnRep1
+objType table
+cell A549
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageA549CellPapAlnRep1.bam
+grant Gingeras
+lab RIKEN
+labExpId K16
+labProtocolId 021WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3422
+tableName wgEncodeRikenCageA549CellPapAlnRep1
+view Alignments
+
+metaObject wgEncodeRikenCageA549CellPapAlnRep2
+objType table
+cell A549
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageA549CellPapAlnRep2.bam
+grant Gingeras
+lab RIKEN
+labExpId K17
+labProtocolId 022WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3426
+tableName wgEncodeRikenCageA549CellPapAlnRep2
+view Alignments
+
+metaObject wgEncodeRikenCageA549CellPapRawDataRep1
+objType file
+cell A549
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageA549CellPapRawDataRep1.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K16
+labProtocolId 021WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3422
+view RawData
+
+metaObject wgEncodeRikenCageA549CellPapRawDataRep2
+objType file
+cell A549
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageA549CellPapRawDataRep2.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K17
+labProtocolId 022WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3426
+view RawData
+
+metaObject wgEncodeRikenCageAg04450CellPapAlnRep1
+objType table
+cell AG04450
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageAg04450CellPapAlnRep1.bam
+grant Gingeras
+lab RIKEN
+labExpId K12
+labProtocolId 017WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3421
+tableName wgEncodeRikenCageAg04450CellPapAlnRep1
+view Alignments
+
+metaObject wgEncodeRikenCageAg04450CellPapAlnRep2
+objType table
+cell AG04450
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageAg04450CellPapAlnRep2.bam
+grant Gingeras
+lab RIKEN
+labExpId K13
+labProtocolId 018WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3427
+tableName wgEncodeRikenCageAg04450CellPapAlnRep2
+view Alignments
+
+metaObject wgEncodeRikenCageAg04450CellPapRawDataRep1
+objType file
+cell AG04450
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageAg04450CellPapRawDataRep1.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K12
+labProtocolId 017WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3421
+view RawData
+
+metaObject wgEncodeRikenCageAg04450CellPapRawDataRep2
+objType file
+cell AG04450
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageAg04450CellPapRawDataRep2.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K13
+labProtocolId 018WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3427
+view RawData
+
+metaObject wgEncodeRikenCageBjCellPapAlnRep1
+objType table
+cell BJ
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageBjCellPapAlnRep1.bam
+grant Gingeras
+lab RIKEN
+labExpId K18
+labProtocolId 037WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3428
+tableName wgEncodeRikenCageBjCellPapAlnRep1
+view Alignments
+
+metaObject wgEncodeRikenCageBjCellPapAlnRep2
+objType table
+cell BJ
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageBjCellPapAlnRep2.bam
+grant Gingeras
+lab RIKEN
+labExpId K19
+labProtocolId 038WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3429
+tableName wgEncodeRikenCageBjCellPapAlnRep2
+view Alignments
+
+metaObject wgEncodeRikenCageBjCellPapRawDataRep1
+objType file
+cell BJ
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageBjCellPapRawDataRep1.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K18
+labProtocolId 037WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3428
+view RawData
+
+metaObject wgEncodeRikenCageBjCellPapRawDataRep2
+objType file
+cell BJ
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageBjCellPapRawDataRep2.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K19
+labProtocolId 038WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3429
+view RawData
+
 metaObject wgEncodeRikenCageGm12878CellPapAlnRep1
 objType table
 bioRep 003WC
@@ -4501,6 +4759,28 @@ subId 2365
 tableName wgEncodeRikenCageMcf7CellPapAlnRep1
 view Alignments
 
+metaObject wgEncodeRikenCageMcf7CellPapAlnRep2
+objType table
+cell MCF-7
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageMcf7CellPapAlnRep2.bam
+grant Gingeras
+lab RIKEN
+labExpId K11
+labProtocolId 016WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3425
+tableName wgEncodeRikenCageMcf7CellPapAlnRep2
+view Alignments
+
 metaObject wgEncodeRikenCageMcf7CellPapMinusClustersRep1
 objType table
 bioRep 015WC
@@ -4567,6 +4847,27 @@ project wgEncode
 replicate 1
 rnaExtract longPolyA
 subId 2365
+view RawData
+
+metaObject wgEncodeRikenCageMcf7CellPapRawDataRep2
+objType file
+cell MCF-7
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageMcf7CellPapRawDataRep2.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K11
+labProtocolId 016WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3425
 view RawData
 
 metaObject wgEncodeRikenCageNhekCellPapAlnRep1
@@ -4859,6 +5160,28 @@ subId 2373
 tableName wgEncodeRikenCageNhekCytosolPapAlnRep3
 view Alignments
 
+metaObject wgEncodeRikenCageNhekCytosolPapAlnRep4
+objType table
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageNhekCytosolPapAlnRep4.bam
+grant Gingeras
+lab RIKEN
+labExpId K20
+labProtocolId 028C+cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+replicate 4
+rnaExtract longPolyA
+subId 3420
+tableName wgEncodeRikenCageNhekCytosolPapAlnRep4
+view Alignments
+
 metaObject wgEncodeRikenCageNhekCytosolPapMinusClustersRep3
 objType table
 bioRep 027C
@@ -4925,6 +5248,27 @@ project wgEncode
 replicate 3
 rnaExtract longPolyA
 subId 2373
+view RawData
+
+metaObject wgEncodeRikenCageNhekCytosolPapRawDataRep4
+objType file
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageNhekCytosolPapRawDataRep4.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K20
+labProtocolId 028C+cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+replicate 4
+rnaExtract longPolyA
+subId 3420
 view RawData
 
 metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaAln
@@ -5203,4 +5547,134 @@ rnaExtract longNonPolyA
 subId 2438
 view RawData2
 
-# MAGIC: 1674027912
+metaObject wgEncodeRikenCageSknshraCellPapAlnRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageSknshraCellPapAlnRep1.bam
+grant Gingeras
+lab RIKEN
+labExpId K14
+labProtocolId 019WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3423
+tableName wgEncodeRikenCageSknshraCellPapAlnRep1
+view Alignments
+
+metaObject wgEncodeRikenCageSknshraCellPapAlnRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeRikenCageSknshraCellPapAlnRep2.bam
+grant Gingeras
+lab RIKEN
+labExpId K15-DA
+labProtocolId 020WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3339
+tableName wgEncodeRikenCageSknshraCellPapAlnRep2
+view Alignments
+
+metaObject wgEncodeRikenCageSknshraCellPapMinusClustersRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeRikenCageSknshraCellPapMinusClustersRep2.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K15-DA
+labProtocolId 020WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3339
+tableName wgEncodeRikenCageSknshraCellPapMinusClustersRep2
+view MinusClusters
+
+metaObject wgEncodeRikenCageSknshraCellPapPlusClustersRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeRikenCageSknshraCellPapPlusClustersRep2.bigWig
+grant Gingeras
+lab RIKEN
+labExpId K15-DA
+labProtocolId 020WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3339
+tableName wgEncodeRikenCageSknshraCellPapPlusClustersRep2
+view PlusClusters
+
+metaObject wgEncodeRikenCageSknshraCellPapRawDataRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeRikenCageSknshraCellPapRawDataRep1.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K14
+labProtocolId 019WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 3423
+view RawData
+
+metaObject wgEncodeRikenCageSknshraCellPapRawDataRep2
+objType file
+cell SK-N-SH_RA
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeRikenCageSknshraCellPapRawDataRep2.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId K15-DA
+labProtocolId 020WC+cage
+localization cell
+origAssembly hg19h
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 3339
+view RawData
+
+# MAGIC: 862956871
