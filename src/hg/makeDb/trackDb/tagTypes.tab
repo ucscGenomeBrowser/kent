@@ -263,9 +263,9 @@ sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
-scoreFilter broadPeak narrowPeak bed
-scoreFilterByRange bigBed bed
-scoreFilterLimits broadPeak narrowPeak bed
+scoreFilter broadPeak narrowPeak bed interaction
+scoreFilterByRange bigBed bed 
+scoreFilterLimits broadPeak narrowPeak bed interaction
 scoreFilterMax bed
 scoreMax bed
 scoreMin broadPeak narrowPeak bed
