@@ -219,15 +219,15 @@ wgEncode 1
 	    color 46,0,184
 	    metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=K562 antibody=USF2 treatment=None control=std setType=exp inputType=K562/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1146 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsK562Usf2StdPk fileName=wgEncodeSydhTfbsK562Usf2StdPk.narrowPeak.gz
 
-	    track wgEncodeSydhTfbsHepg2Znf274UcdPk
+	    track wgEncodeSydhTfbsHepg2bZnf274UcdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HepG2   ZNF274 Pk
-	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in HepG2 cells)
-	    subGroups view=Peaks factor=ZNF274 cellType=HepG2 control=UCD treatment=aNone
+	    shortLabel HepG2b   ZNF274 Pk
+	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in HepG2b cells)
+	    subGroups view=Peaks factor=ZNF274 cellType=HepG2b control=UCD treatment=aNone
 	    type narrowPeak
 	    color 189,0,157
-	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdPk fileName=wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
+	    #metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Peaks labVersion="PeakSeq1.0;  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions." dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdPk fileName=wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 
         track wgEncodeSydhTfbsGm12878Znf274UcdPk
         release alpha
@@ -1409,12 +1409,12 @@ wgEncode 1
 #	    color 189,0,157
 #	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=HepG2 antibody=ZNF274 setType=exp treatment=None inputType=HepG2/None/Input/UCDavis control=UCDavis view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1190 dateSubmitted=2010-05-10 dateUnrestricted=2011-02-10 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsHepg2Znf274UcdSig fileName=wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig.gz
 
-        track wgEncodeSydhTfbsHepg2Znf274UcdSig
+        track wgEncodeSydhTfbsHepg2bZnf274UcdSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2 ZNF274 Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in HepG2 cells)
-        subGroups view=Signal factor=ZNF274 cellType=HepG2 control=UCD treatment=aNone
+        shortLabel HepG2b ZNF274 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF274 in HepG2b cells)
+        subGroups view=Signal factor=ZNF274 cellType=HepG2b control=UCD treatment=aNone
         type bigWig 0.000000 10548.200195
         color 189,0,157
         # subId=3072 dateSubmitted=2010-12-06
