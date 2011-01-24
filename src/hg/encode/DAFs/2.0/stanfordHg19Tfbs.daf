@@ -50,7 +50,7 @@ required         yes
 
 view             Alignments
 longLabelPrefix  TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Alignments
-type             tagAlign
+type             bam
 hasReplicates    yes
 required         yes
 
