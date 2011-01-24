@@ -9198,6 +9198,211 @@ printf("<HR>");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
+void printOmimGeneClass3Details(struct trackDb *tdb, char *itemName, boolean encode)
+/* Print details of an OMIM Class 3 Gene entry. */
+{
+struct sqlConnection *conn  = hAllocConn(database);
+struct sqlConnection *conn2 = hAllocConn(database);
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *url = tdb->url;
+char *kgId= NULL;
+char *title1 = NULL;
+char *title2 = NULL;
+char *geneSymbol = NULL;
+char *chrom, *chromStart, *chromEnd;
+char *kgDescription = NULL;
+char *refSeq;
+
+chrom      = cartOptionalString(cart, "c");
+chromStart = cartOptionalString(cart, "o");
+chromEnd   = cartOptionalString(cart, "t");
+
+if (url != NULL && url[0] != 0)
+    {
+    printf("<B>OMIM Gene ");fflush(stdout);
+    printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
+    printf("%s</A></B>", itemName);
+    safef(query, sizeof(query),
+    	  "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	if (row[0] != NULL)
+	    {
+	    title1 = cloneString(row[0]);
+    	    printf(": %s", title1);
+	    }
+	if (row[1] != NULL)
+	    {
+	    title2 = cloneString(row[1]);
+    	    printf(" %s ", title2);
+	    }
+	}
+    sqlFreeResult(&sr);
+
+    printf("<BR>\n");
+    
+    safef(query, sizeof(query),
+    	  "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	geneSymbol = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+
+    /* get corresponding KG ID */
+    safef(query, sizeof(query),
+	  "select k.transcript from knownCanonical k where k.chrom='%s' and k.chromStart=%s and k.chromEnd=%s",
+	  chrom, chromStart, chromEnd);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	kgId = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+
+    /* use geneSymbol from omimMorbidMap if available */
+    if (geneSymbol!= NULL)
+    	{
+	char *phenotypeClass, *questionable, *hasBracket, *hasBrace, *phenotypeId, *disorder;
+	
+	printf("<B>Gene symbol(s):</B> %s", geneSymbol);
+	printf("<BR>\n");
+
+	/* display disorder for genes in morbidmap */
+    	safef(query, sizeof(query), 
+	 "select disorder, phenotypeClass, questionable, hasBracket, hasBrace, phenotypeId from omimDisorderPhenotype where omimId=%s order by disorder",
+	 itemName);
+    	sr = sqlMustGetResult(conn, query);
+ 	printf("<B>Disorder(s):</B><UL>\n"); 
+        while ((row = sqlNextRow(sr)) != NULL)
+    	    {
+	    disorder       = row[0];
+	    phenotypeClass = row[1];
+	    questionable   = row[2];
+	    hasBracket     = row[3];
+	    hasBrace	   = row[4];
+	    phenotypeId    = row[5];
+	    printf("<LI>%s", disorder);
+ 	    if (phenotypeId != NULL)
+	    	{
+		if (!sameWord(phenotypeId, "-1"))
+		    {
+                    printf(" (phenotype <A HREF=\"%s%s\" target=_blank>", url, phenotypeId);
+                    printf("%s</A></B>)", phenotypeId);
+		    }
+		}
+	    printf("<BR>\n");
+	    }
+	printf("</UL>\n");
+    	sqlFreeResult(&sr);
+	}
+    else
+	{
+	/* display gene symbol(s) from omimGenemap  */
+    	safef(query, sizeof(query), "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+        if (row != NULL)
+    	    {
+ 	    printf("<B>OMIM Gene Symbol:</B> %s", row[0]);
+	    printf("<BR>\n");
+    	    sqlFreeResult(&sr);
+	    }
+	else
+    	    {
+	    /* get gene symbol from kgXref if the entry is not in morbidmap and omim genemap */
+    	    safef(query, sizeof(query), "select geneSymbol from kgXref where kgId='%s';", kgId);
+
+            sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+ 	    	printf("<B>UCSC Gene Symbol:</B> %s", row[0]);
+	    	printf("<BR>\n");
+	    	}
+    	    sqlFreeResult(&sr);
+    	    }
+	}
+
+    if (kgId != NULL)
+    	{
+    	printf("<B>UCSC Canonical Gene ");
+    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
+	       "../cgi-bin/hgGene?hgg_gene=", kgId);
+    	printf("%s</A></B>: ", kgId);
+
+	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
+    	sr = sqlMustGetResult(conn, query);
+    	row = sqlNextRow(sr);
+    	if (row != NULL)
+	    {
+	    refSeq = strdup(row[0]);
+	    kgDescription = gbCdnaGetDescription(conn2, refSeq);
+	    }
+	sqlFreeResult(&sr);
+        hFreeConn(&conn2);
+
+	if (kgDescription == NULL)
+	    {
+    	    safef(query, sizeof(query), "select description from kgXref where kgId='%s';", kgId);
+    	    sr = sqlMustGetResult(conn, query);
+    	    row = sqlNextRow(sr);
+    	    if (row != NULL)
+    	    	{
+	    	printf("%s", row[0]);
+	    	}
+
+	    sqlFreeResult(&sr);
+	    }
+	else
+    	    {
+	    printf("%s", kgDescription);
+	    }
+        printf("<BR>\n");
+
+	safef(query, sizeof(query),
+	      "select i.transcript from knownIsoforms i, knownCanonical c where c.transcript='%s' and i.clusterId=c.clusterId and i.transcript <>'%s'",
+	      kgId, kgId);
+    	sr = sqlMustGetResult(conn, query);
+	if (sr != NULL)
+	    {
+	    int printedCnt;
+	    printedCnt = 0;
+	    while ((row = sqlNextRow(sr)) != NULL)
+	    	{
+	        if (printedCnt < 1)
+		    printf("<B>Other UCSC Gene(s) in the same cluster: </B>");
+		else
+		    printf(", ");
+    	    	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>", "../cgi-bin/hgGene?hgg_gene=", row[0]);
+    	    	printf("%s</A></B>", row[0]);
+	    	printedCnt++;
+		}
+            if (printedCnt >= 1) printf("<BR>\n");
+	    }
+	sqlFreeResult(&sr);
+	}
+    }
+
+printf("<HR>");
+printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
+}
+
+void doOmimGeneClass3(struct trackDb *tdb, char *item)
+/* Put up OmimGene track info. */
+{
+genericHeader(tdb, item);
+printOmimGeneClass3Details(tdb, item, FALSE);
+printTrackHtml(tdb);
+}
+
 void doOmimGene(struct trackDb *tdb, char *item)
 /* Put up OmimGene track info. */
 {
@@ -23121,6 +23326,10 @@ else if (sameWord(table, "htcIlluminaProbesAlign"))
 else if (sameWord(table, "switchDbTss"))
     {
     doSwitchDbTss(tdb, item);
+    }
+else if (sameWord(table, "omimGeneClass3"))
+    {
+    doOmimGeneClass3(tdb, item);
     }
 else if (sameWord(table, "omimAv"))
     {
