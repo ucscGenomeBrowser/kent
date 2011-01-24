@@ -17686,18 +17686,18 @@ tableName wgEncodeSydhTfbsHelas3Znf274UcdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1
+metaObject wgEncodeSydhTfbsHelas3Zzz3StdAlnRep1
 objType file
 antibody ZZZ3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId HeLa-S3/None/Input/IgG-Yale
+control std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
-fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1.bam
+fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep1.bam
 grant Snyder
 lab Harvard(Weissman)
 project wgEncode
@@ -17707,18 +17707,18 @@ subId 2093
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2
+metaObject wgEncodeSydhTfbsHelas3Zzz3StdAlnRep2
 objType file
 antibody ZZZ3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId HeLa-S3/None/Input/IgG-Yale
+control std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
-fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2.bam
+fileName wgEncodeSydhTfbsHelas3Zzz3StdAlnRep2.bam
 grant Snyder
 lab Harvard(Weissman)
 project wgEncode
@@ -17728,40 +17728,40 @@ subId 2093
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHelas3Zzz3IggyalePk
+metaObject wgEncodeSydhTfbsHelas3Zzz3StdPk
 objType table
 antibody ZZZ3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId HeLa-S3/None/Input/IgG-Yale
+control std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
-fileName wgEncodeSydhTfbsHelas3Zzz3IggyalePk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHelas3Zzz3StdPk.narrowPeak.gz
 grant Snyder
 lab Harvard(Weissman)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2093
-tableName wgEncodeSydhTfbsHelas3Zzz3IggyalePk
+tableName wgEncodeSydhTfbsHelas3Zzz3StdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep1
+metaObject wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep1
 objType file
 antibody ZZZ3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId HeLa-S3/None/Input/IgG-Yale
+control std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
-fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard(Weissman)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
@@ -17772,18 +17772,18 @@ subId 2093
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep2
+metaObject wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep2
 objType file
 antibody ZZZ3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId HeLa-S3/None/Input/IgG-Yale
+control std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
-fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHelas3Zzz3StdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard(Weissman)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
@@ -17794,25 +17794,25 @@ subId 2093
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleSig
+metaObject wgEncodeSydhTfbsHelas3Zzz3StdSig
 objType table
 antibody ZZZ3
 cell HeLa-S3
 composite wgEncodeSydhTfbs
-control IgG-Yale
-controlId HeLa-S3/None/Input/IgG-Yale
+control std
+controlId HeLa-S3/None/Input/std
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
-fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleSig.bigWig
+fileName wgEncodeSydhTfbsHelas3Zzz3StdSig.bigWig
 grant Snyder
 lab Harvard(Weissman)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2093
-tableName wgEncodeSydhTfbsHelas3Zzz3IggyaleSig
+tableName wgEncodeSydhTfbsHelas3Zzz3StdSig
 treatment None
 view Signal
 

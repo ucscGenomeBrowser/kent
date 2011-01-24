@@ -26,7 +26,7 @@ origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) K562b=K562b&nbsp;(Tier_1) HeLaS3=HeLa-S3&nbsp;(Tier_2) HepG2=HepG2&nbsp;(Tier_2) HepG2b=HepG2(b)&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) GM10847=GM10847 GM12891=GM12891 GM12892=GM12892 GM15510=GM15510 GM18505=GM18505 GM18526=GM18526 GM18951=GM18951 GM19099=GM19099 GM19193=GM19193 HEK293=HEK293 HEK293b=HEK293(b) HCT116=HCT-116 MCF7=MCF-7 MCF10AES=MCF10A-Er-Src  NB4=NB4 NT2D1=NT2-D1 PBDE=PBDE Raji=Raji SHSY5Y=SH-SY5Y  U2OS=U2OS 
-subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1  BRCA1C=BRCA1_(C-1863) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD21250=CHD2_(N-1250) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFC20=CTCF_(C-20) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF=EBF ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GRP20=GRp20 GTF2B=GTF2B GTF2F1RAP=GTF2F1_(RAP-74)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max  Mxi1BHLH=Mxi1_(bHLH) NFE2H=NF-E2_(H-230) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300F4=p300_(F-4) P300N15=p300_(N-15) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM1V=PRDM1_(Val90)    RAD21=Rad21 RFX5N494=RFX5_(N-494) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3i zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
+subGroup3 factor Factor ATF3=ATF3 AP2alpha=AP-2alpha AP2gamma=AP-2gamma BAF155=BAF155 BAF170=BAF170 BDP1=BDP1  BRCA1C=BRCA1_(C-1863) BRF1=BRF1 BRF2=BRF2 BRG1=BRG1 CCNT2=CCNT2 CEBPB=CEBPB cFOS=c-FOS  CHD21250=CHD2_(N-1250) cJUN=c-Jun cMYC=c-Myc CTBP2=CtBP2 CTCFC20=CTCF_(C-20) E2F1=E2F1 E2F4=E2F4 E2F6=E2F6 EBF=EBF ELK4=ELK4 ERRA=ERRA GATA1=GATA-1 GATA2=GATA2 GRP20=GRp20 GTF2B=GTF2B GTF2F1RAP=GTF2F1_(RAP-74)  HAE2F1=HA-E2F1 HMGN3=HMGN3 HNF4A=HNF4A HSF1=HSF1 INI1=INI1 IRF1=IRF1 IRF3=IRF3  JUND=JunD KAP1=KAP1 MafFM8194=MafF_(M8194) MafKab50322=MafK_(ab50322) MafKsc477=MafK_(sc477) MAX=Max  Mxi1BHLH=Mxi1_(bHLH) NFE2H=NF-E2_(H-230) NRF1=Nrf1 NELFE=NELFe NFE2=NF-E2 NFKB=NFKB NFYA=NF-YA NFYB=NF-YB P300F4=p300_(F-4) P300N15=p300_(N-15) PGC1A=PGC1A POL2=Pol2 POL2S2=Pol2(phosphoS2) POL3=POL3 PRDM1V=PRDM1_(Val90)    RAD21=Rad21 RFX5N494=RFX5_(N-494) RPC155=RPC155 SETDB1=SETDB1 SIRT6=SIRT6 SMC3ab9263=SMC3_(ab9263) SREBP1=SREBP1 SREBP2=SREBP2 STAT1=STAT1 STAT2=STAT2 STAT3=STAT3 SUZ12=SUZ12 TAL1SC12984=TAL1_(SC-12984) TBP=TBP TCF4=TCF4 TF3C110=TFIIIC-110 TR4=TR4 USF2=USF2  WHIP=WHIP XRCC4=XRCC4 YY1=YY1 Znf143166181AP=Znf143_(16618-1-AP) ZNF274=ZNF274 ZNF263=ZNF263 ZZZ3=ZZZ3 zInputlarge=Input_(<i>Large_Fragment</i>) zInputmnase=Input_(<i>MNase</i>) zInputmus=Input_(<i>IgG-mus</i>) zInputnaked=Input_(<i>Naked_DNA</i>) zInputrab=Input_(<i>IgG-rab</i>) zInputstd=Input_(<i>Standard</i>)  zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGmus=IgG_mus IGGrab=IgG-rab IGGYale=IgG_Yale UCD=UC_Davis LargeFragment=Large_Fragment MNase=MNase NakedDNA=Naked_DNA
 subGroup5 treatment Treatment aNone=None ETOH01=EtOH_0.01pct ETOH01c=EtOH_0.01pct_12hr ETOH01b=EtOH_0.01pct_4hr FORSKLN=forskolin IFNa30=IFN&alpha;_30min IFNa6h=IFN&alpha;_6hrs IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs INSLN=insulin MNaseD=MNaseD PRAVAST=pravastatin TAM=TAM TNFa=TNFa
 dimensions dimensionX=cellType dimensionY=factor dimensionZ=treatment dimensionA=control
@@ -367,12 +367,12 @@ wgEncode 1
         color 0,119,158
         # subId=2112 dateSubmitted=2010-08-17
 
-        track wgEncodeSydhTfbsHelas3Zzz3IggyalePk
+        track wgEncodeSydhTfbsHelas3Zzz3StdPk
         release alpha
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel HeLa-S3 ZZZ3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZZZ3 in HeLa-S3 cells)
-        subGroups view=Peaks factor=ZZZ3 cellType=HeLaS3 control=IGGYale treatment=aNone
+        subGroups view=Peaks factor=ZZZ3 cellType=HeLaS3 control=std treatment=aNone
         type narrowPeak
         color 0,119,158
         # subId=2093 dateSubmitted=2010-08-17
@@ -1722,12 +1722,12 @@ wgEncode 1
         color 0,119,158
         # subId=2112 dateSubmitted=2010-08-17
 
-        track wgEncodeSydhTfbsHelas3Zzz3IggyaleSig
+        track wgEncodeSydhTfbsHelas3Zzz3StdSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel HeLa-S3 ZZZ3 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZZZ3 in HeLa-S3 cells)
-        subGroups view=Signal factor=ZZZ3 cellType=HeLaS3 control=IGGYale treatment=aNone
+        subGroups view=Signal factor=ZZZ3 cellType=HeLaS3 control=std treatment=aNone
         type bigWig 1.000000 6434.000000
         color 0,119,158
         # subId=2093 dateSubmitted=2010-08-17
