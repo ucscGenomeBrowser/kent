@@ -2,6 +2,7 @@ metaObject wgEncodeOpenChromFaireA549AlnRep1
 objType file
 cell A549
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -9,7 +10,7 @@ dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 3496
@@ -19,6 +20,7 @@ metaObject wgEncodeOpenChromFaireA549AlnRep2
 objType file
 cell A549
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -26,7 +28,7 @@ dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 3496
@@ -36,6 +38,7 @@ metaObject wgEncodeOpenChromFaireA549BaseOverlapSignal
 objType table
 cell A549
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -53,6 +56,7 @@ metaObject wgEncodeOpenChromFaireA549Pk
 objType table
 cell A549
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -70,6 +74,7 @@ metaObject wgEncodeOpenChromFaireA549RawDataRep1
 objType file
 cell A549
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -86,6 +91,7 @@ metaObject wgEncodeOpenChromFaireA549RawDataRep2
 objType file
 cell A549
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -102,6 +108,7 @@ metaObject wgEncodeOpenChromFaireA549Sig
 objType table
 cell A549
 composite wgEncodeOpenChromFaire
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-22
@@ -3469,4 +3476,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1593182542
+# MAGIC: 1391281096
