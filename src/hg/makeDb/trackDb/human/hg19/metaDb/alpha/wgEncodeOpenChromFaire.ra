@@ -1,3 +1,127 @@
+metaObject wgEncodeOpenChromFaireA549AlnRep1
+objType file
+cell A549
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeOpenChromFaireA549AlnRep1.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 3496
+view Alignments
+
+metaObject wgEncodeOpenChromFaireA549AlnRep2
+objType file
+cell A549
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeOpenChromFaireA549AlnRep2.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 3496
+view Alignments
+
+metaObject wgEncodeOpenChromFaireA549BaseOverlapSignal
+objType table
+cell A549
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeOpenChromFaireA549BaseOverlapSignal.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 3496
+tableName wgEncodeOpenChromFaireA549BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireA549Pk
+objType table
+cell A549
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeOpenChromFaireA549Pk.narrowPeak.gz
+grant Crawford
+lab UNC(Lieb)
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 3496
+tableName wgEncodeOpenChromFaireA549Pk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireA549RawDataRep1
+objType file
+cell A549
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeOpenChromFaireA549RawDataRep1.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+project wgEncode
+replicate 1
+subId 3496
+view RawData
+
+metaObject wgEncodeOpenChromFaireA549RawDataRep2
+objType file
+cell A549
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeOpenChromFaireA549RawDataRep2.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+project wgEncode
+replicate 2
+subId 3496
+view RawData
+
+metaObject wgEncodeOpenChromFaireA549Sig
+objType table
+cell A549
+composite wgEncodeOpenChromFaire
+controlId generic_male
+dataType FaireSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeOpenChromFaireA549Sig.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 3496
+tableName wgEncodeOpenChromFaireA549Sig
+view Signal
+
 metaObject wgEncodeOpenChromFaireAstrocyAlnRep1
 objType file
 cell Astrocy
@@ -3352,4 +3476,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1651023263
+# MAGIC: 1391281096
