@@ -377,12 +377,12 @@ wgEncode 1
         color 0,119,158
         # subId=2093 dateSubmitted=2010-08-17
 
-        track wgEncodeSydhTfbsK562Kap1UcdPk
+        track wgEncodeSydhTfbsK562bKap1UcdPk
         release alpha
         parent wgEncodeSydhTfbsViewPeaks off 
-        shortLabel K562 KAP1 Pk
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (KAP1 in K562 cells)
-        subGroups view=Peaks factor=KAP1 cellType=K562 control=UCD treatment=aNone
+        shortLabel K562b KAP1 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (KAP1 in K562b cells)
+        subGroups view=Peaks factor=KAP1 cellType=K562b control=UCD treatment=aNone
         type narrowPeak
         color 46,0,184
         # subId=2126 dateSubmitted=2010-08-23
@@ -1732,12 +1732,12 @@ wgEncode 1
         color 0,119,158
         # subId=2093 dateSubmitted=2010-08-17
 
-        track wgEncodeSydhTfbsK562Kap1UcdSig
+        track wgEncodeSydhTfbsK562bKap1UcdSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off 
-        shortLabel K562 KAP1 Sg
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (KAP1 in K562 cells)
-        subGroups view=Signal factor=KAP1 cellType=K562 control=UCD treatment=aNone
+        shortLabel K562b KAP1 Sg
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (KAP1 in K562b cells)
+        subGroups view=Signal factor=KAP1 cellType=K562b control=UCD treatment=aNone
         type bigWig 1.000000 31119.000000
         color 46,0,184
         # subId=2126 dateSubmitted=2010-08-23

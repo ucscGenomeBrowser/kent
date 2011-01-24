@@ -21866,19 +21866,19 @@ tableName wgEncodeSydhTfbsHepg2Usf2IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1
 objType file
 antibody ZNF274
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
-fileIndex wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam
+fileIndex wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam
 grant Snyder
 lab UCD
 project wgEncode
@@ -21888,19 +21888,19 @@ subId 1190
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2
 objType file
 antibody ZNF274
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
-fileIndex wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam
+fileIndex wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam
 grant Snyder
 lab UCD
 project wgEncode
@@ -21910,40 +21910,40 @@ subId 1190
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsHepg2Znf274UcdPk
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdPk
 objType table
 antibody ZNF274
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
-fileName wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
 subId 1190
-tableName wgEncodeSydhTfbsHepg2Znf274UcdPk
+tableName wgEncodeSydhTfbsHepg2bZnf274UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1
 objType file
 antibody ZNF274
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
-fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
@@ -21954,18 +21954,18 @@ subId 1190
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2
 objType file
 antibody ZNF274
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
-fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
@@ -21976,25 +21976,25 @@ subId 1190
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2Znf274UcdSig
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdSig
 objType table
 antibody ZNF274
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
 dateUnrestricted 2011-09-06
-fileName wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdSig.bigWig
 grant Snyder
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 3072
-tableName wgEncodeSydhTfbsHepg2Znf274UcdSig
+tableName wgEncodeSydhTfbsHepg2bZnf274UcdSig
 treatment None
 view Signal
 
@@ -28324,18 +28324,18 @@ tableName wgEncodeSydhTfbsK562JundStdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsK562Kap1UcdAlnRep1
+metaObject wgEncodeSydhTfbsK562bKap1UcdAlnRep1
 objType file
 antibody KAP1
-cell K562
+cell K562b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/None/Input/UCDavis
+controlId K562b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep1.bam
+fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep1.bam
 grant Snyder
 lab UCD
 project wgEncode
@@ -28345,18 +28345,18 @@ subId 2126
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562Kap1UcdAlnRep2
+metaObject wgEncodeSydhTfbsK562bKap1UcdAlnRep2
 objType file
 antibody KAP1
-cell K562
+cell K562b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/None/Input/UCDavis
+controlId K562b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep2.bam
+fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep2.bam
 grant Snyder
 lab UCD
 project wgEncode
@@ -28366,40 +28366,40 @@ subId 2126
 treatment None
 view Alignments
 
-metaObject wgEncodeSydhTfbsK562Kap1UcdPk
+metaObject wgEncodeSydhTfbsK562bKap1UcdPk
 objType table
 antibody KAP1
-cell K562
+cell K562b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/None/Input/UCDavis
+controlId K562b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562Kap1UcdPk.narrowPeak.gz
+fileName wgEncodeSydhTfbsK562bKap1UcdPk.narrowPeak.gz
 grant Snyder
 lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2126
-tableName wgEncodeSydhTfbsK562Kap1UcdPk
+tableName wgEncodeSydhTfbsK562bKap1UcdPk
 treatment None
 view Peaks
 
-metaObject wgEncodeSydhTfbsK562Kap1UcdRawDataRep1
+metaObject wgEncodeSydhTfbsK562bKap1UcdRawDataRep1
 objType file
 antibody KAP1
-cell K562
+cell K562b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/None/Input/UCDavis
+controlId K562b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep1.fastq.gz
+fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep1.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
@@ -28410,18 +28410,18 @@ subId 2126
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562Kap1UcdRawDataRep2
+metaObject wgEncodeSydhTfbsK562bKap1UcdRawDataRep2
 objType file
 antibody KAP1
-cell K562
+cell K562b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/None/Input/UCDavis
+controlId K562b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep2.fastq.gz
+fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep2.fastq.gz
 grant Snyder
 lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
@@ -28432,25 +28432,25 @@ subId 2126
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562Kap1UcdSig
+metaObject wgEncodeSydhTfbsK562bKap1UcdSig
 objType table
 antibody KAP1
-cell K562
+cell K562b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId K562/None/Input/UCDavis
+controlId K562b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562Kap1UcdSig.bigWig
+fileName wgEncodeSydhTfbsK562bKap1UcdSig.bigWig
 grant Snyder
 lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
 subId 2126
-tableName wgEncodeSydhTfbsK562Kap1UcdSig
+tableName wgEncodeSydhTfbsK562bKap1UcdSig
 treatment None
 view Signal
 
