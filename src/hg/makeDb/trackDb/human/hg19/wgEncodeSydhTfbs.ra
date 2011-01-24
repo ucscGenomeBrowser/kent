@@ -717,15 +717,6 @@ wgEncode 1
         type narrowPeak
         # subId=3248 dateSubmitted=2011-01-13
 
-        track wgEncodeSydhTfbsHek293Znf263UcdPk
-        release alpha
-        parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel HEK293 ZNF263 Pk
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (ZNF263 in HEK293 cells)
-        subGroups view=Peaks factor=ZNF263 cellType=HEK293 control=UCD treatment=aNone
-        type narrowPeak
-        # subId=3249 dateSubmitted=2011-01-13
-
         track wgEncodeSydhTfbsHuvecCfosUcdPk
         release alpha
         parent wgEncodeSydhTfbsViewPeaks off
@@ -3753,15 +3744,6 @@ wgEncode 1
         subGroups view=Signal factor=ELK4 cellType=HEK293b control=UCD treatment=aNone
         type bigWig 1.000000 27993.000000
         # subId=3248 dateSubmitted=2011-01-13
-
-        track wgEncodeSydhTfbsHek293Znf263UcdSig
-        release alpha
-        parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HEK293 ZNF263 Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (ZNF263 in HEK293 cells)
-        subGroups view=Signal factor=ZNF263 cellType=HEK293 control=UCD treatment=aNone
-        type bigWig 1.000000 10229.000000
-        # subId=3249 dateSubmitted=2011-01-13
 
         track wgEncodeSydhTfbsHuvecCfosUcdSig
         release alpha
