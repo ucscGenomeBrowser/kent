@@ -3,7 +3,7 @@ track wgEncodeCshlLongRnaSeq
 compositeTrack on
 superTrack wgEncodeRnaSeqSuper
 shortLabel CSHL Long RNA-seq
-longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
+longLabel Long RNA-seq from ENCODE/Cold Spring Harbor Lab
 group expression
 subGroup1 view Views PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal AllRawSig=All_Raw_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC NHEK=NHEK A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC  HSMM=HSMM MCF7=MCF-7  NHLF=NHLF SKNSHRA=SK-N-SH_RA
@@ -1009,16 +1009,27 @@ noInherit on
 		color 224,75,0
 		# subId=3137 dateSubmitted=2010-12-23
 
-		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
-		release alpha
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
-		shortLabel HeLa cell pA- 1
-		longLabel HeLa-S3 cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
-		subGroups view=PlusRawSig cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
-		type bigWig 1.000000 920085.000000
-		origAssembly hg19
-		color 0,119,158
-		# subId=3139 dateSubmitted=2010-12-23
+#		track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
+#		release alpha
+#		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+#		shortLabel HeLa cell pA- 1
+#		longLabel HeLa-S3 cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
+#		subGroups view=PlusRawSig cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
+#		type bigWig 1.000000 920085.000000
+#		origAssembly hg19
+#		color 0,119,158
+#		# subId=3139 dateSubmitted=2010-12-23
+
+        track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel HeLa-S3 cell longNonPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Replicate 1 (longNonPolyA in HeLa-S3 cell)
+        subGroups view=PlusRawSig cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
+        type bigWig 1.000000 920085.000000
+        origAssembly hg19
+        color 0,119,158
+        # subId=3486 dateSubmitted=2011-01-21
 
 		track wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep3
 		release alpha
@@ -1270,7 +1281,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaPlusRawSigRep2
 		release alpha
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on 
 		shortLabel H1ES cyto pA- 2
 		longLabel H1-hESC cytosol polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=H1hESC localization=cytosol rnaExtract=longNonPolyA rep=rep2
@@ -1281,7 +1292,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaPlusRawSigRep2
 		release alpha
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on 
 		shortLabel H1ES nucl pA- 2
 		longLabel H1-hESC nucleus polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=H1hESC localization=nucleus rnaExtract=longNonPolyA rep=rep2
@@ -1292,7 +1303,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2
 		release alpha
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on 
 		shortLabel K562 cyto pA- 2
 		longLabel K562 cytosol polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep2
@@ -1303,7 +1314,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
 		release alpha
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on 
 		shortLabel GM12878 cell pA- 1
 		longLabel GM12878 cell polyA- Long RNA-seq Plus strand signal Rep 1 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=GM12878 localization=cell rnaExtract=longNonPolyA rep=rep1
@@ -1314,7 +1325,7 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
 		release alpha
-		parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+		parent wgEncodeCshlLongRnaSeqViewPlusRawSig on
 		shortLabel GM12878 nucl pA- 2
 		longLabel GM12878 nucleus polyA- Long RNA-seq Plus strand signal Rep 2 from ENCODE/CSHL
 		subGroups view=PlusRawSig cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep2
@@ -1333,6 +1344,17 @@ noInherit on
 		origAssembly hg19
 		color 189,0,157
 		# subId=3237 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel HepG2 cell longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Replicate 2 (longNonPolyA in HepG2 cell)
+        subGroups view=PlusRawSig cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 1251920.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3487 dateSubmitted=2011-01-21
 
 
 
@@ -1374,7 +1396,7 @@ noInherit on
     		release alpha
     		subTrack wgEncodeCshlLongRnaSeqViewMinusRawSig on
     		shortLabel K562 cell tot - 1
-        longLabel K562 whole cell total Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+                longLabel K562 whole cell total Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
     		subGroups view=MinusRawSig cellType=K562 localization=cell rnaExtract=total rep=rep1
     		type bigWig 1.000000 3699513.000000
     		color 46,0,184
@@ -2322,16 +2344,27 @@ noInherit on
         color 224,75,0
         # subId=3137 dateSubmitted=2010-12-23
 
+#        track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep1
+#        release alpha
+#        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+#        shortLabel HeLa cell pA- 1
+#        longLabel HeLa-S3 cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+#        subGroups view=MinusRawSig cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
+#        type bigWig 1.000000 580980.000000
+#        origAssembly hg19
+#        color 0,119,158
+#        # subId=3139 dateSubmitted=2010-12-23
+
         track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep1
         release alpha
         parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
-        shortLabel HeLa cell pA- 1
-        longLabel HeLa-S3 cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
+        shortLabel HeLa-S3 cell longNonPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Replicate 1 (longNonPolyA in HeLa-S3 cell)
         subGroups view=MinusRawSig cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
         type bigWig 1.000000 580980.000000
         origAssembly hg19
         color 0,119,158
-        # subId=3139 dateSubmitted=2010-12-23
+        # subId=3486 dateSubmitted=2011-01-21
 
         track wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep3
         release alpha
@@ -2583,7 +2616,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaMinusRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig on 
         shortLabel H1ES cyto pA- 2
         longLabel H1-hESC cytosol polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSig cellType=H1hESC localization=cytosol rnaExtract=longNonPolyA rep=rep2
@@ -2594,7 +2627,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaMinusRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig on 
         shortLabel H1ES nucl pA- 2
         longLabel H1-hESC nucleus polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSig cellType=H1hESC localization=nucleus rnaExtract=longNonPolyA rep=rep2
@@ -2605,7 +2638,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig on 
         shortLabel K562 cyto pA- 2
         longLabel K562 cytosol polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSig cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep2
@@ -2616,7 +2649,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep1
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig on 
         shortLabel GM12878 cell pA- 1
         longLabel GM12878 cell polyA- Long RNA-seq Minus Strand Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSig cellType=GM12878 localization=cell rnaExtract=longNonPolyA rep=rep1
@@ -2627,7 +2660,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig on 
         shortLabel GM12878 nucl pA- 2
         longLabel GM12878 nucleus polyA- Long RNA-seq Minus Strand Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSig cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep2
@@ -2646,6 +2679,17 @@ noInherit on
         origAssembly hg19
         color 189,0,157
         # subId=3237 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel HepG2 cell longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Replicate 2 (longNonPolyA in HepG2 cell)
+        subGroups view=MinusRawSig cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 1212148.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3487 dateSubmitted=2011-01-21
 
     	track wgEncodeCshlLongRnaSeqViewAllRawSig
     	shortLabel All Raw Sig
@@ -3631,16 +3675,27 @@ noInherit on
         color 224,75,0
         # subId=3137 dateSubmitted=2010-12-23
 
+#        track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAllRawSigRep1
+#        release alpha
+#        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+#        shortLabel HeLa cell pA- 1
+#        longLabel HeLa-S3 cell polyA- Long RNA-seq All Signal Rep 1 from ENCODE/CSHL
+#        subGroups view=AllRawSig cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
+#        type bigWig 1.000000 920253.000000
+#        origAssembly hg19
+#        color 0,119,158
+#        # subId=3139 dateSubmitted=2010-12-23
+
         track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAllRawSigRep1
         release alpha
         parent wgEncodeCshlLongRnaSeqViewAllRawSig off
-        shortLabel HeLa cell pA- 1
-        longLabel HeLa-S3 cell polyA- Long RNA-seq All Signal Rep 1 from ENCODE/CSHL
+        shortLabel HeLa-S3 cell longNonPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Replicate 1 (longNonPolyA in HeLa-S3 cell)
         subGroups view=AllRawSig cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
         type bigWig 1.000000 920253.000000
         origAssembly hg19
         color 0,119,158
-        # subId=3139 dateSubmitted=2010-12-23
+        # subId=3486 dateSubmitted=2011-01-21
 
         track wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAllRawSigRep3
         release alpha
@@ -3892,7 +3947,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAllRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig on
         shortLabel H1ES cyto pA- 2
         longLabel H1-hESC cytosol polyA- Long RNA-seq All Signal Rep 2 from ENCODE/CSHL
         subGroups view=AllRawSig cellType=H1hESC localization=cytosol rnaExtract=longNonPolyA rep=rep2
@@ -3903,7 +3958,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAllRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig on 
         shortLabel H1ES nucl pA- 2
         longLabel H1-hESC nucleus polyA- Long RNA-seq All Signal Rep 2 from ENCODE/CSHL
         subGroups view=AllRawSig cellType=H1hESC localization=nucleus rnaExtract=longNonPolyA rep=rep2
@@ -3914,7 +3969,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAllRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig on 
         shortLabel K562 cyto pA- 2
         longLabel K562 cytosol polyA- Long RNA-seq All Signal Rep 2 from ENCODE/CSHL
         subGroups view=AllRawSig cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep2
@@ -3925,7 +3980,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAllRawSigRep1
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig on 
         shortLabel GM12878 cell pA- 1
         longLabel GM12878 cell polyA- Long RNA-seq All Signal Rep 1 from ENCODE/CSHL
         subGroups view=AllRawSig cellType=GM12878 localization=cell rnaExtract=longNonPolyA rep=rep1
@@ -3936,7 +3991,7 @@ noInherit on
 
         track wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2
         release alpha
-        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig on 
         shortLabel GM12878 nucl pA- 2
         longLabel GM12878 nucleus polyA- Long RNA-seq All Signal Rep 2 from ENCODE/CSHL
         subGroups view=AllRawSig cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep2
@@ -3955,6 +4010,17 @@ noInherit on
         origAssembly hg19
         color 189,0,157
         # subId=3237 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        shortLabel HepG2 cell longNonPolyA 2
+        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Replicate 2 (longNonPolyA in HepG2 cell)
+        subGroups view=AllRawSig cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
+        type bigWig 1.000000 1252262.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=3487 dateSubmitted=2011-01-21
    		
 
     	track wgEncodeCshlLongRnaSeqViewAlignments
@@ -3967,9 +4033,9 @@ noInherit on
 
 		track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
     		release alpha
-    		subTrack wgEncodeCshlLongRnaSeqViewAlignments on 
+    		subTrack wgEncodeCshlLongRnaSeqViewAlignments off
     		shortLabel K562 cell tot A 1
-        longLabel K562 whole cell total Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+                longLabel K562 whole cell total Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
     		subGroups view=Alignments cellType=K562 localization=cell rnaExtract=total rep=rep1
     		type bam
     		color 46,0,184
@@ -3977,9 +4043,9 @@ noInherit on
 
     		track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
     		release alpha
-    		subTrack wgEncodeCshlLongRnaSeqViewAlignments on 
+    		subTrack wgEncodeCshlLongRnaSeqViewAlignments off
     		shortLabel K562 cell tot A 2
-        longLabel K562 whole cell total Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
+                longLabel K562 whole cell total Long RNA-seq Alignments Rep 2 from ENCODE/CSHL
     		subGroups view=Alignments cellType=K562 localization=cell rnaExtract=total rep=rep2
     		type bam
     		color 46,0,184
@@ -3989,7 +4055,7 @@ noInherit on
     		release alpha
     		subTrack wgEncodeCshlLongRnaSeqViewAlignments off
     		shortLabel GM12 cell tot A 1
-        longLabel GM12878 whole cell total Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+                longLabel GM12878 whole cell total Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
     		subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=total rep=rep1
     		type bam
     		color 153,38,0
@@ -4937,16 +5003,27 @@ noInherit on
         color 224,75,0
         # subId=3137 dateSubmitted=2010-12-23
 
+#        track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
+#        release alpha
+#        parent wgEncodeCshlLongRnaSeqViewAlignments off
+#        shortLabel HeLa cell pA- A 1
+#        longLabel HeLa-S3 cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+#        subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
+#        type bam
+#        origAssembly hg19
+#        color 0,119,158
+#        # subId=3139 dateSubmitted=2010-12-23
+
         track wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
         release alpha
         parent wgEncodeCshlLongRnaSeqViewAlignments off
-        shortLabel HeLa cell pA- A 1
-        longLabel HeLa-S3 cell polyA- Long RNA-seq Alignments Rep 1 from ENCODE/CSHL
+        shortLabel HeLa-S3 cell longNonPolyA Aln 1
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 1 (longNonPolyA in HeLa-S3 cell)
         subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=longNonPolyA rep=rep1
         type bam
         origAssembly hg19
         color 0,119,158
-        # subId=3139 dateSubmitted=2010-12-23
+        # subId=3486 dateSubmitted=2011-01-21
 
         track wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3
         release alpha
@@ -5261,6 +5338,17 @@ noInherit on
         origAssembly hg19
         color 189,0,157
         # subId=3237 dateSubmitted=2011-01-12
+
+        track wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel HepG2 cell longNonPolyA Aln 2
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 2 (longNonPolyA in HepG2 cell)
+        subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=longNonPolyA rep=rep2
+        type bam
+        origAssembly hg19
+        color 189,0,157
+        # subId=3487 dateSubmitted=2011-01-21
 
 
  
