@@ -2,6 +2,7 @@ metaObject wgEncodeOpenChromDnase8988tAlnRep1
 objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -21,6 +22,7 @@ metaObject wgEncodeOpenChromDnase8988tAlnRep2
 objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -40,6 +42,7 @@ metaObject wgEncodeOpenChromDnase8988tBaseOverlapSignal
 objType table
 cell 8988T
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -57,6 +60,7 @@ metaObject wgEncodeOpenChromDnase8988tPk
 objType table
 cell 8988T
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -74,6 +78,7 @@ metaObject wgEncodeOpenChromDnase8988tRawDataRep1
 objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -91,6 +96,7 @@ metaObject wgEncodeOpenChromDnase8988tRawDataRep2
 objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -108,6 +114,7 @@ metaObject wgEncodeOpenChromDnase8988tSig
 objType table
 cell 8988T
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -125,6 +132,7 @@ metaObject wgEncodeOpenChromDnaseA549AlnRep1
 objType file
 cell A549
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -143,6 +151,7 @@ metaObject wgEncodeOpenChromDnaseA549AlnRep2
 objType file
 cell A549
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -161,6 +170,7 @@ metaObject wgEncodeOpenChromDnaseA549BaseOverlapSignal
 objType table
 cell A549
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -178,6 +188,7 @@ metaObject wgEncodeOpenChromDnaseA549Pk
 objType table
 cell A549
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -195,6 +206,7 @@ metaObject wgEncodeOpenChromDnaseA549RawDataRep1
 objType file
 cell A549
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -211,6 +223,7 @@ metaObject wgEncodeOpenChromDnaseA549RawDataRep2
 objType file
 cell A549
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -227,6 +240,7 @@ metaObject wgEncodeOpenChromDnaseA549Sig
 objType table
 cell A549
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -244,6 +258,7 @@ metaObject wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1
 objType file
 cell AoSMC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -266,6 +281,7 @@ metaObject wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2
 objType file
 cell AoSMC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -288,6 +304,7 @@ metaObject wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal
 objType table
 cell AoSMC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -309,6 +326,7 @@ metaObject wgEncodeOpenChromDnaseAosmcSerumfreePk
 objType table
 cell AoSMC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -330,6 +348,7 @@ metaObject wgEncodeOpenChromDnaseAosmcSerumfreeSig
 objType table
 cell AoSMC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -351,6 +370,7 @@ metaObject wgEncodeOpenChromDnaseChorionAlnRep1
 objType file
 cell Chorion
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -372,6 +392,7 @@ metaObject wgEncodeOpenChromDnaseChorionAlnRep2
 objType file
 cell Chorion
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -393,6 +414,7 @@ metaObject wgEncodeOpenChromDnaseChorionBaseOverlapSignal
 objType table
 cell Chorion
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -413,6 +435,7 @@ metaObject wgEncodeOpenChromDnaseChorionPk
 objType table
 cell Chorion
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -433,7 +456,7 @@ metaObject wgEncodeOpenChromDnaseChorionRawDataRep1
 objType file
 cell Chorion
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
@@ -451,7 +474,7 @@ metaObject wgEncodeOpenChromDnaseChorionRawDataRep2
 objType file
 cell Chorion
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
@@ -469,6 +492,7 @@ metaObject wgEncodeOpenChromDnaseChorionSig
 objType table
 cell Chorion
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
@@ -489,6 +513,7 @@ metaObject wgEncodeOpenChromDnaseCllAlnRep1
 objType file
 cell CLL
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -509,6 +534,7 @@ metaObject wgEncodeOpenChromDnaseCllAlnRep2
 objType file
 cell CLL
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -529,6 +555,7 @@ metaObject wgEncodeOpenChromDnaseCllAlnRep3
 objType file
 cell CLL
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -549,6 +576,7 @@ metaObject wgEncodeOpenChromDnaseCllBaseOverlapSignal
 objType table
 cell CLL
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -567,6 +595,7 @@ metaObject wgEncodeOpenChromDnaseCllPk
 objType table
 cell CLL
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -585,6 +614,7 @@ metaObject wgEncodeOpenChromDnaseCllSig
 objType table
 cell CLL
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
@@ -603,6 +633,7 @@ metaObject wgEncodeOpenChromDnaseFibroblAlnRep1
 objType file
 cell Fibrobl
 composite wgEncodeOpenChromDnase
+controlId Fibrobl/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -625,6 +656,7 @@ metaObject wgEncodeOpenChromDnaseFibroblAlnRep2
 objType file
 cell Fibrobl
 composite wgEncodeOpenChromDnase
+controlId Fibrobl/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -647,6 +679,7 @@ metaObject wgEncodeOpenChromDnaseFibroblBaseOverlapSignal
 objType table
 cell Fibrobl
 composite wgEncodeOpenChromDnase
+controlId Fibrobl/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -668,6 +701,7 @@ metaObject wgEncodeOpenChromDnaseFibroblPk
 objType table
 cell Fibrobl
 composite wgEncodeOpenChromDnase
+controlId Fibrobl/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -689,6 +723,7 @@ metaObject wgEncodeOpenChromDnaseFibroblSig
 objType table
 cell Fibrobl
 composite wgEncodeOpenChromDnase
+controlId Fibrobl/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -710,6 +745,7 @@ metaObject wgEncodeOpenChromDnaseFibropAlnRep1
 objType file
 cell FibroP
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -732,6 +768,7 @@ metaObject wgEncodeOpenChromDnaseFibropAlnRep2
 objType file
 cell FibroP
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -754,6 +791,7 @@ metaObject wgEncodeOpenChromDnaseFibropAlnRep3
 objType file
 cell FibroP
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -776,6 +814,7 @@ metaObject wgEncodeOpenChromDnaseFibropBaseOverlapSignal
 objType table
 cell FibroP
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -797,6 +836,7 @@ metaObject wgEncodeOpenChromDnaseFibropPk
 objType table
 cell FibroP
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -818,6 +858,7 @@ metaObject wgEncodeOpenChromDnaseFibropSig
 objType table
 cell FibroP
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -839,6 +880,7 @@ metaObject wgEncodeOpenChromDnaseGlioblaAlnRep1
 objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
+controlId Gliobla/Input
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
@@ -858,6 +900,7 @@ metaObject wgEncodeOpenChromDnaseGlioblaAlnRep2
 objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
+controlId Gliobla/Input
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
@@ -877,6 +920,7 @@ metaObject wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal
 objType table
 cell Gliobla
 composite wgEncodeOpenChromDnase
+controlId Gliobla/Input
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
@@ -894,6 +938,7 @@ metaObject wgEncodeOpenChromDnaseGlioblaPk
 objType table
 cell Gliobla
 composite wgEncodeOpenChromDnase
+controlId Gliobla/Input
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
@@ -911,6 +956,7 @@ metaObject wgEncodeOpenChromDnaseGlioblaRawDataRep1
 objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
+controlId Gliobla/Input
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
@@ -928,6 +974,7 @@ metaObject wgEncodeOpenChromDnaseGlioblaRawDataRep2
 objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
+controlId Gliobla/Input
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
@@ -945,6 +992,7 @@ metaObject wgEncodeOpenChromDnaseGlioblaSig
 objType table
 cell Gliobla
 composite wgEncodeOpenChromDnase
+controlId Gliobla/Input
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
@@ -962,6 +1010,7 @@ metaObject wgEncodeOpenChromDnaseGm12878AlnRep1
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -983,6 +1032,7 @@ metaObject wgEncodeOpenChromDnaseGm12878AlnRep2
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1004,6 +1054,7 @@ metaObject wgEncodeOpenChromDnaseGm12878AlnRep3
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1025,6 +1076,7 @@ metaObject wgEncodeOpenChromDnaseGm12878AlnRep4
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1046,6 +1098,7 @@ metaObject wgEncodeOpenChromDnaseGm12878AlnRep5
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1067,6 +1120,7 @@ metaObject wgEncodeOpenChromDnaseGm12878BaseOverlapSignal
 objType table
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1087,6 +1141,7 @@ metaObject wgEncodeOpenChromDnaseGm12878Pk
 objType table
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1167,6 +1222,7 @@ metaObject wgEncodeOpenChromDnaseGm12878RawDataRep4
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DNase-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
@@ -1184,6 +1240,7 @@ metaObject wgEncodeOpenChromDnaseGm12878RawDataRep5
 objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DNase-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
@@ -1201,6 +1258,7 @@ metaObject wgEncodeOpenChromDnaseGm12878Sig
 objType table
 cell GM12878
 composite wgEncodeOpenChromDnase
+controlId GM12878/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1221,6 +1279,7 @@ metaObject wgEncodeOpenChromDnaseGm12891AlnRep1
 objType file
 cell GM12891
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1242,6 +1301,7 @@ metaObject wgEncodeOpenChromDnaseGm12891AlnRep2
 objType file
 cell GM12891
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1263,6 +1323,7 @@ metaObject wgEncodeOpenChromDnaseGm12891BaseOverlapSignal
 objType table
 cell GM12891
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1283,6 +1344,7 @@ metaObject wgEncodeOpenChromDnaseGm12891Pk
 objType table
 cell GM12891
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1303,7 +1365,7 @@ metaObject wgEncodeOpenChromDnaseGm12891RawDataRep1
 objType file
 cell GM12891
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
@@ -1321,7 +1383,7 @@ metaObject wgEncodeOpenChromDnaseGm12891RawDataRep2
 objType file
 cell GM12891
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
@@ -1339,6 +1401,7 @@ metaObject wgEncodeOpenChromDnaseGm12891Sig
 objType table
 cell GM12891
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1359,6 +1422,7 @@ metaObject wgEncodeOpenChromDnaseGm12892AlnRep1
 objType file
 cell GM12892
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1380,6 +1444,7 @@ metaObject wgEncodeOpenChromDnaseGm12892AlnRep2
 objType file
 cell GM12892
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1401,6 +1466,7 @@ metaObject wgEncodeOpenChromDnaseGm12892BaseOverlapSignal
 objType table
 cell GM12892
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1421,6 +1487,7 @@ metaObject wgEncodeOpenChromDnaseGm12892Pk
 objType table
 cell GM12892
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1441,7 +1508,7 @@ metaObject wgEncodeOpenChromDnaseGm12892RawDataRep1
 objType file
 cell GM12892
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1459,7 +1526,7 @@ metaObject wgEncodeOpenChromDnaseGm12892RawDataRep2
 objType file
 cell GM12892
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1477,6 +1544,7 @@ metaObject wgEncodeOpenChromDnaseGm12892Sig
 objType table
 cell GM12892
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1497,6 +1565,7 @@ metaObject wgEncodeOpenChromDnaseGm18507AlnRep1
 objType file
 cell GM18507
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1518,6 +1587,7 @@ metaObject wgEncodeOpenChromDnaseGm18507AlnRep2
 objType file
 cell GM18507
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1539,6 +1609,7 @@ metaObject wgEncodeOpenChromDnaseGm18507AlnRep3
 objType file
 cell GM18507
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1560,6 +1631,7 @@ metaObject wgEncodeOpenChromDnaseGm18507BaseOverlapSignal
 objType table
 cell GM18507
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1580,6 +1652,7 @@ metaObject wgEncodeOpenChromDnaseGm18507Pk
 objType table
 cell GM18507
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1600,7 +1673,7 @@ metaObject wgEncodeOpenChromDnaseGm18507RawDataRep1
 objType file
 cell GM18507
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
@@ -1618,7 +1691,7 @@ metaObject wgEncodeOpenChromDnaseGm18507RawDataRep2
 objType file
 cell GM18507
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
@@ -1636,7 +1709,7 @@ metaObject wgEncodeOpenChromDnaseGm18507RawDataRep3
 objType file
 cell GM18507
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
@@ -1654,6 +1727,7 @@ metaObject wgEncodeOpenChromDnaseGm18507Sig
 objType table
 cell GM18507
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1674,6 +1748,7 @@ metaObject wgEncodeOpenChromDnaseGm19238AlnRep1
 objType file
 cell GM19238
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1695,6 +1770,7 @@ metaObject wgEncodeOpenChromDnaseGm19238AlnRep2
 objType file
 cell GM19238
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1716,6 +1792,7 @@ metaObject wgEncodeOpenChromDnaseGm19238BaseOverlapSignal
 objType table
 cell GM19238
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1736,6 +1813,7 @@ metaObject wgEncodeOpenChromDnaseGm19238Pk
 objType table
 cell GM19238
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1756,7 +1834,7 @@ metaObject wgEncodeOpenChromDnaseGm19238RawDataRep1
 objType file
 cell GM19238
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1774,7 +1852,7 @@ metaObject wgEncodeOpenChromDnaseGm19238RawDataRep2
 objType file
 cell GM19238
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1792,6 +1870,7 @@ metaObject wgEncodeOpenChromDnaseGm19238Sig
 objType table
 cell GM19238
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1812,6 +1891,7 @@ metaObject wgEncodeOpenChromDnaseGm19239AlnRep1
 objType file
 cell GM19239
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1833,6 +1913,7 @@ metaObject wgEncodeOpenChromDnaseGm19239AlnRep2
 objType file
 cell GM19239
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1854,6 +1935,7 @@ metaObject wgEncodeOpenChromDnaseGm19239BaseOverlapSignal
 objType table
 cell GM19239
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1874,6 +1956,7 @@ metaObject wgEncodeOpenChromDnaseGm19239Pk
 objType table
 cell GM19239
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1894,7 +1977,7 @@ metaObject wgEncodeOpenChromDnaseGm19239RawDataRep1
 objType file
 cell GM19239
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1912,7 +1995,7 @@ metaObject wgEncodeOpenChromDnaseGm19239RawDataRep2
 objType file
 cell GM19239
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1930,6 +2013,7 @@ metaObject wgEncodeOpenChromDnaseGm19239Sig
 objType table
 cell GM19239
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1950,6 +2034,7 @@ metaObject wgEncodeOpenChromDnaseGm19240AlnRep1
 objType file
 cell GM19240
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1971,6 +2056,7 @@ metaObject wgEncodeOpenChromDnaseGm19240AlnRep2
 objType file
 cell GM19240
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1992,6 +2078,7 @@ metaObject wgEncodeOpenChromDnaseGm19240BaseOverlapSignal
 objType table
 cell GM19240
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2012,6 +2099,7 @@ metaObject wgEncodeOpenChromDnaseGm19240Pk
 objType table
 cell GM19240
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2032,7 +2120,7 @@ metaObject wgEncodeOpenChromDnaseGm19240RawDataRep1
 objType file
 cell GM19240
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -2050,7 +2138,7 @@ metaObject wgEncodeOpenChromDnaseGm19240RawDataRep2
 objType file
 cell GM19240
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -2068,6 +2156,7 @@ metaObject wgEncodeOpenChromDnaseGm19240Sig
 objType table
 cell GM19240
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2088,6 +2177,7 @@ metaObject wgEncodeOpenChromDnaseH1hescAlnRep1
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2109,6 +2199,7 @@ metaObject wgEncodeOpenChromDnaseH1hescAlnRep2
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2130,6 +2221,7 @@ metaObject wgEncodeOpenChromDnaseH1hescBaseOverlapSignal
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2150,6 +2242,7 @@ metaObject wgEncodeOpenChromDnaseH1hescPk
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2170,7 +2263,7 @@ metaObject wgEncodeOpenChromDnaseH1hescRawDataRep1
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
@@ -2188,7 +2281,7 @@ metaObject wgEncodeOpenChromDnaseH1hescRawDataRep2
 objType file
 cell H1-hESC
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
@@ -2206,6 +2299,7 @@ metaObject wgEncodeOpenChromDnaseH1hescSig
 objType table
 cell H1-hESC
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2226,6 +2320,7 @@ metaObject wgEncodeOpenChromDnaseH9esAlnRep1
 objType file
 cell H9ES
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2247,6 +2342,7 @@ metaObject wgEncodeOpenChromDnaseH9esAlnRep2
 objType file
 cell H9ES
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2268,6 +2364,7 @@ metaObject wgEncodeOpenChromDnaseH9esBaseOverlapSignal
 objType table
 cell H9ES
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2288,6 +2385,7 @@ metaObject wgEncodeOpenChromDnaseH9esPk
 objType table
 cell H9ES
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2308,7 +2406,7 @@ metaObject wgEncodeOpenChromDnaseH9esRawDataRep1
 objType file
 cell H9ES
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
@@ -2326,7 +2424,7 @@ metaObject wgEncodeOpenChromDnaseH9esRawDataRep2
 objType file
 cell H9ES
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
@@ -2344,6 +2442,7 @@ metaObject wgEncodeOpenChromDnaseH9esSig
 objType table
 cell H9ES
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2364,6 +2463,7 @@ metaObject wgEncodeOpenChromDnaseHelas3AlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2385,6 +2485,7 @@ metaObject wgEncodeOpenChromDnaseHelas3AlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2406,6 +2507,7 @@ metaObject wgEncodeOpenChromDnaseHelas3AlnRep3
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2427,6 +2529,7 @@ metaObject wgEncodeOpenChromDnaseHelas3BaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2447,6 +2550,7 @@ metaObject wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2468,6 +2572,7 @@ metaObject wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2
 objType file
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2489,6 +2594,7 @@ metaObject wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2509,6 +2615,7 @@ metaObject wgEncodeOpenChromDnaseHelas3Ifna4hPk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2567,6 +2674,7 @@ metaObject wgEncodeOpenChromDnaseHelas3Ifna4hSig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2587,6 +2695,7 @@ metaObject wgEncodeOpenChromDnaseHelas3Pk
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2664,6 +2773,7 @@ metaObject wgEncodeOpenChromDnaseHelas3Sig
 objType table
 cell HeLa-S3
 composite wgEncodeOpenChromDnase
+controlId HeLa-S3/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2684,6 +2794,7 @@ metaObject wgEncodeOpenChromDnaseHepatocytesAlnRep1
 objType file
 cell Hepatocytes
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -2702,6 +2813,7 @@ metaObject wgEncodeOpenChromDnaseHepatocytesAlnRep2
 objType file
 cell Hepatocytes
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -2720,6 +2832,7 @@ metaObject wgEncodeOpenChromDnaseHepatocytesBaseOverlapSignal
 objType table
 cell Hepatocytes
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -2737,6 +2850,7 @@ metaObject wgEncodeOpenChromDnaseHepatocytesPk
 objType table
 cell Hepatocytes
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -2754,6 +2868,7 @@ metaObject wgEncodeOpenChromDnaseHepatocytesRawDataRep1
 objType file
 cell Hepatocytes
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -2770,6 +2885,7 @@ metaObject wgEncodeOpenChromDnaseHepatocytesRawDataRep2
 objType file
 cell Hepatocytes
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -2786,6 +2902,7 @@ metaObject wgEncodeOpenChromDnaseHepatocytesSig
 objType table
 cell Hepatocytes
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -2803,6 +2920,7 @@ metaObject wgEncodeOpenChromDnaseHepg2AlnRep1
 objType file
 cell HepG2
 composite wgEncodeOpenChromDnase
+controlId HepG2/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2824,6 +2942,7 @@ metaObject wgEncodeOpenChromDnaseHepg2AlnRep2
 objType file
 cell HepG2
 composite wgEncodeOpenChromDnase
+controlId HepG2/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2845,6 +2964,7 @@ metaObject wgEncodeOpenChromDnaseHepg2AlnRep3
 objType file
 cell HepG2
 composite wgEncodeOpenChromDnase
+controlId HepG2/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2866,6 +2986,7 @@ metaObject wgEncodeOpenChromDnaseHepg2BaseOverlapSignal
 objType table
 cell HepG2
 composite wgEncodeOpenChromDnase
+controlId HepG2/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2886,6 +3007,7 @@ metaObject wgEncodeOpenChromDnaseHepg2Pk
 objType table
 cell HepG2
 composite wgEncodeOpenChromDnase
+controlId HepG2/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2963,6 +3085,7 @@ metaObject wgEncodeOpenChromDnaseHepg2Sig
 objType table
 cell HepG2
 composite wgEncodeOpenChromDnase
+controlId HepG2/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2983,6 +3106,7 @@ metaObject wgEncodeOpenChromDnaseHmecAlnRep1
 objType file
 cell HMEC
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -3003,6 +3127,7 @@ metaObject wgEncodeOpenChromDnaseHmecAlnRep2
 objType file
 cell HMEC
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -3023,6 +3148,7 @@ metaObject wgEncodeOpenChromDnaseHmecBaseOverlapSignal
 objType table
 cell HMEC
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -3041,6 +3167,7 @@ metaObject wgEncodeOpenChromDnaseHmecPk
 objType table
 cell HMEC
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -3059,6 +3186,7 @@ metaObject wgEncodeOpenChromDnaseHmecSig
 objType table
 cell HMEC
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
@@ -3077,6 +3205,7 @@ metaObject wgEncodeOpenChromDnaseHpde6e6e7AlnRep1
 objType file
 cell HPDE6-E6E7
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3095,6 +3224,7 @@ metaObject wgEncodeOpenChromDnaseHpde6e6e7AlnRep2
 objType file
 cell HPDE6-E6E7
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3113,6 +3243,7 @@ metaObject wgEncodeOpenChromDnaseHpde6e6e7BaseOverlapSignal
 objType table
 cell HPDE6-E6E7
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3130,6 +3261,7 @@ metaObject wgEncodeOpenChromDnaseHpde6e6e7Pk
 objType table
 cell HPDE6-E6E7
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3147,6 +3279,7 @@ metaObject wgEncodeOpenChromDnaseHpde6e6e7RawDataRep1
 objType file
 cell HPDE6-E6E7
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3163,6 +3296,7 @@ metaObject wgEncodeOpenChromDnaseHpde6e6e7RawDataRep2
 objType file
 cell HPDE6-E6E7
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3179,6 +3313,7 @@ metaObject wgEncodeOpenChromDnaseHpde6e6e7Sig
 objType table
 cell HPDE6-E6E7
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3196,6 +3331,7 @@ metaObject wgEncodeOpenChromDnaseHsmmAlnRep1
 objType file
 cell HSMM
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3218,6 +3354,7 @@ metaObject wgEncodeOpenChromDnaseHsmmAlnRep2
 objType file
 cell HSMM
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3240,6 +3377,7 @@ metaObject wgEncodeOpenChromDnaseHsmmAlnRep3
 objType file
 cell HSMM
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3262,6 +3400,7 @@ metaObject wgEncodeOpenChromDnaseHsmmBaseOverlapSignal
 objType table
 cell HSMM
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3283,6 +3422,7 @@ metaObject wgEncodeOpenChromDnaseHsmmPk
 objType table
 cell HSMM
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3304,6 +3444,7 @@ metaObject wgEncodeOpenChromDnaseHsmmSig
 objType table
 cell HSMM
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3325,6 +3466,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtAlnRep1
 objType file
 cell HSMMtube
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3347,6 +3489,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtAlnRep2
 objType file
 cell HSMMtube
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3369,6 +3512,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtAlnRep3
 objType file
 cell HSMMtube
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3391,6 +3535,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal
 objType table
 cell HSMMtube
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3412,6 +3557,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtPk
 objType table
 cell HSMMtube
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3433,6 +3579,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtSig
 objType table
 cell HSMMtube
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3454,6 +3601,7 @@ metaObject wgEncodeOpenChromDnaseHtr8AlnRep1
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
@@ -3473,6 +3621,7 @@ metaObject wgEncodeOpenChromDnaseHtr8AlnRep2
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
@@ -3492,6 +3641,7 @@ metaObject wgEncodeOpenChromDnaseHtr8BaseOverlapSignal
 objType table
 cell HTR8svn
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
@@ -3509,6 +3659,7 @@ metaObject wgEncodeOpenChromDnaseHtr8Pk
 objType table
 cell HTR8svn
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
@@ -3526,6 +3677,7 @@ metaObject wgEncodeOpenChromDnaseHtr8RawDataRep1
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
@@ -3543,6 +3695,7 @@ metaObject wgEncodeOpenChromDnaseHtr8RawDataRep2
 objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
@@ -3560,6 +3713,7 @@ metaObject wgEncodeOpenChromDnaseHtr8Sig
 objType table
 cell HTR8svn
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
@@ -3577,6 +3731,7 @@ metaObject wgEncodeOpenChromDnaseHuh75AlnRep1
 objType file
 cell Huh-7.5
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3595,6 +3750,7 @@ metaObject wgEncodeOpenChromDnaseHuh75AlnRep2
 objType file
 cell Huh-7.5
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3613,6 +3769,7 @@ metaObject wgEncodeOpenChromDnaseHuh75BaseOverlapSignal
 objType table
 cell Huh-7.5
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3630,6 +3787,7 @@ metaObject wgEncodeOpenChromDnaseHuh75Pk
 objType table
 cell Huh-7.5
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3647,6 +3805,7 @@ metaObject wgEncodeOpenChromDnaseHuh75RawDataRep1
 objType file
 cell Huh-7.5
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3663,6 +3822,7 @@ metaObject wgEncodeOpenChromDnaseHuh75RawDataRep2
 objType file
 cell Huh-7.5
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3679,6 +3839,7 @@ metaObject wgEncodeOpenChromDnaseHuh75Sig
 objType table
 cell Huh-7.5
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3696,6 +3857,7 @@ metaObject wgEncodeOpenChromDnaseHuh7AlnRep1
 objType file
 cell Huh-7
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3714,6 +3876,7 @@ metaObject wgEncodeOpenChromDnaseHuh7AlnRep2
 objType file
 cell Huh-7
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3732,6 +3895,7 @@ metaObject wgEncodeOpenChromDnaseHuh7BaseOverlapSignal
 objType table
 cell Huh-7
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3749,6 +3913,7 @@ metaObject wgEncodeOpenChromDnaseHuh7Pk
 objType table
 cell Huh-7
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3766,6 +3931,7 @@ metaObject wgEncodeOpenChromDnaseHuh7RawDataRep1
 objType file
 cell Huh-7
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3782,6 +3948,7 @@ metaObject wgEncodeOpenChromDnaseHuh7RawDataRep2
 objType file
 cell Huh-7
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3798,6 +3965,7 @@ metaObject wgEncodeOpenChromDnaseHuh7Sig
 objType table
 cell Huh-7
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-07
@@ -3815,6 +3983,7 @@ metaObject wgEncodeOpenChromDnaseHuvecAlnRep1
 objType file
 cell HUVEC
 composite wgEncodeOpenChromDnase
+controlId HUVEC/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3836,6 +4005,7 @@ metaObject wgEncodeOpenChromDnaseHuvecAlnRep2
 objType file
 cell HUVEC
 composite wgEncodeOpenChromDnase
+controlId HUVEC/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3857,6 +4027,7 @@ metaObject wgEncodeOpenChromDnaseHuvecBaseOverlapSignal
 objType table
 cell HUVEC
 composite wgEncodeOpenChromDnase
+controlId HUVEC/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3877,6 +4048,7 @@ metaObject wgEncodeOpenChromDnaseHuvecPk
 objType table
 cell HUVEC
 composite wgEncodeOpenChromDnase
+controlId HUVEC/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3933,6 +4105,7 @@ metaObject wgEncodeOpenChromDnaseHuvecSig
 objType table
 cell HUVEC
 composite wgEncodeOpenChromDnase
+controlId HUVEC/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3953,6 +4126,7 @@ metaObject wgEncodeOpenChromDnaseIpsAlnRep1
 objType file
 cell iPS
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3972,6 +4146,7 @@ metaObject wgEncodeOpenChromDnaseIpsAlnRep2
 objType file
 cell iPS
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -3991,6 +4166,7 @@ metaObject wgEncodeOpenChromDnaseIpsAlnRep3
 objType file
 cell iPS
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -4010,6 +4186,7 @@ metaObject wgEncodeOpenChromDnaseIpsBaseOverlapSignal
 objType table
 cell iPS
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -4028,6 +4205,7 @@ metaObject wgEncodeOpenChromDnaseIpsPk
 objType table
 cell iPS
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -4046,6 +4224,7 @@ metaObject wgEncodeOpenChromDnaseIpsSig
 objType table
 cell iPS
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -4064,6 +4243,7 @@ metaObject wgEncodeOpenChromDnaseK562AlnRep1
 objType file
 cell K562
 composite wgEncodeOpenChromDnase
+controlId K562/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4085,6 +4265,7 @@ metaObject wgEncodeOpenChromDnaseK562AlnRep2
 objType file
 cell K562
 composite wgEncodeOpenChromDnase
+controlId K562/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4106,6 +4287,7 @@ metaObject wgEncodeOpenChromDnaseK562BaseOverlapSignal
 objType table
 cell K562
 composite wgEncodeOpenChromDnase
+controlId K562/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4126,6 +4308,7 @@ metaObject wgEncodeOpenChromDnaseK562Pk
 objType table
 cell K562
 composite wgEncodeOpenChromDnase
+controlId K562/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4184,6 +4367,7 @@ metaObject wgEncodeOpenChromDnaseK562Sig
 objType table
 cell K562
 composite wgEncodeOpenChromDnase
+controlId K562/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4204,6 +4388,7 @@ metaObject wgEncodeOpenChromDnaseLncapAlnRep1
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4222,6 +4407,7 @@ metaObject wgEncodeOpenChromDnaseLncapAlnRep2
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4240,6 +4426,7 @@ metaObject wgEncodeOpenChromDnaseLncapAlnRep3
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4258,6 +4445,7 @@ metaObject wgEncodeOpenChromDnaseLncapAndroAlnRep1
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4277,6 +4465,7 @@ metaObject wgEncodeOpenChromDnaseLncapAndroAlnRep2
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4296,6 +4485,7 @@ metaObject wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
 objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4314,6 +4504,7 @@ metaObject wgEncodeOpenChromDnaseLncapAndroPk
 objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4332,6 +4523,7 @@ metaObject wgEncodeOpenChromDnaseLncapAndroRawDataRep1
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4349,6 +4541,7 @@ metaObject wgEncodeOpenChromDnaseLncapAndroRawDataRep2
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4366,6 +4559,7 @@ metaObject wgEncodeOpenChromDnaseLncapAndroSig
 objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4384,6 +4578,7 @@ metaObject wgEncodeOpenChromDnaseLncapBaseOverlapSignal
 objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4401,6 +4596,7 @@ metaObject wgEncodeOpenChromDnaseLncapPk
 objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4418,6 +4614,7 @@ metaObject wgEncodeOpenChromDnaseLncapRawDataRep1
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4434,6 +4631,7 @@ metaObject wgEncodeOpenChromDnaseLncapRawDataRep2
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4450,6 +4648,7 @@ metaObject wgEncodeOpenChromDnaseLncapRawDataRep3
 objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4466,6 +4665,7 @@ metaObject wgEncodeOpenChromDnaseLncapSig
 objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4483,6 +4683,7 @@ metaObject wgEncodeOpenChromDnaseMcf7AlnRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
+controlId MCF-7/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4504,6 +4705,7 @@ metaObject wgEncodeOpenChromDnaseMcf7AlnRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
+controlId MCF-7/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4525,6 +4727,7 @@ metaObject wgEncodeOpenChromDnaseMcf7BaseOverlapSignal
 objType table
 cell MCF-7
 composite wgEncodeOpenChromDnase
+controlId MCF-7/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4545,6 +4748,7 @@ metaObject wgEncodeOpenChromDnaseMcf7Pk
 objType table
 cell MCF-7
 composite wgEncodeOpenChromDnase
+controlId MCF-7/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4565,7 +4769,7 @@ metaObject wgEncodeOpenChromDnaseMcf7RawDataRep1
 objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId MCF-7/Input
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
@@ -4583,7 +4787,7 @@ metaObject wgEncodeOpenChromDnaseMcf7RawDataRep2
 objType file
 cell MCF-7
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId MCF-7/Input
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
@@ -4601,6 +4805,7 @@ metaObject wgEncodeOpenChromDnaseMcf7Sig
 objType table
 cell MCF-7
 composite wgEncodeOpenChromDnase
+controlId MCF-7/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4621,6 +4826,7 @@ metaObject wgEncodeOpenChromDnaseMedulloAlnRep1
 objType file
 cell Medullo
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4642,6 +4848,7 @@ metaObject wgEncodeOpenChromDnaseMedulloAlnRep2
 objType file
 cell Medullo
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4663,6 +4870,7 @@ metaObject wgEncodeOpenChromDnaseMedulloBaseOverlapSignal
 objType table
 cell Medullo
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4683,6 +4891,7 @@ metaObject wgEncodeOpenChromDnaseMedulloPk
 objType table
 cell Medullo
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4703,7 +4912,7 @@ metaObject wgEncodeOpenChromDnaseMedulloRawDataRep1
 objType file
 cell Medullo
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
@@ -4721,7 +4930,7 @@ metaObject wgEncodeOpenChromDnaseMedulloRawDataRep2
 objType file
 cell Medullo
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
@@ -4739,6 +4948,7 @@ metaObject wgEncodeOpenChromDnaseMedulloSig
 objType table
 cell Medullo
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -4759,6 +4969,7 @@ metaObject wgEncodeOpenChromDnaseMelanoAlnRep1
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -4779,6 +4990,7 @@ metaObject wgEncodeOpenChromDnaseMelanoAlnRep2
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -4799,6 +5011,7 @@ metaObject wgEncodeOpenChromDnaseMelanoBaseOverlapSignal
 objType table
 cell Melano
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -4818,6 +5031,7 @@ metaObject wgEncodeOpenChromDnaseMelanoPk
 objType table
 cell Melano
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -4837,7 +5051,7 @@ metaObject wgEncodeOpenChromDnaseMelanoRawDataRep1
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
@@ -4855,7 +5069,7 @@ metaObject wgEncodeOpenChromDnaseMelanoRawDataRep2
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
@@ -4873,6 +5087,7 @@ metaObject wgEncodeOpenChromDnaseMelanoSig
 objType table
 cell Melano
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -4892,6 +5107,7 @@ metaObject wgEncodeOpenChromDnaseMyometrAlnRep1
 objType file
 cell Myometr
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -4914,6 +5130,7 @@ metaObject wgEncodeOpenChromDnaseMyometrAlnRep2
 objType file
 cell Myometr
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -4936,6 +5153,7 @@ metaObject wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
 objType table
 cell Myometr
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -4957,6 +5175,7 @@ metaObject wgEncodeOpenChromDnaseMyometrPk
 objType table
 cell Myometr
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -4978,6 +5197,7 @@ metaObject wgEncodeOpenChromDnaseMyometrSig
 objType table
 cell Myometr
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -4999,6 +5219,7 @@ metaObject wgEncodeOpenChromDnaseNhekAlnRep1
 objType file
 cell NHEK
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5020,6 +5241,7 @@ metaObject wgEncodeOpenChromDnaseNhekAlnRep2
 objType file
 cell NHEK
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5041,6 +5263,7 @@ metaObject wgEncodeOpenChromDnaseNhekBaseOverlapSignal
 objType table
 cell NHEK
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5061,6 +5284,7 @@ metaObject wgEncodeOpenChromDnaseNhekPk
 objType table
 cell NHEK
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5081,7 +5305,7 @@ metaObject wgEncodeOpenChromDnaseNhekRawDataRep1
 objType file
 cell NHEK
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -5099,7 +5323,7 @@ metaObject wgEncodeOpenChromDnaseNhekRawDataRep2
 objType file
 cell NHEK
 composite wgEncodeOpenChromDnase
-controlId modelled
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
@@ -5117,6 +5341,7 @@ metaObject wgEncodeOpenChromDnaseNhekSig
 objType table
 cell NHEK
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5137,6 +5362,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblAlnRep1
 objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5155,6 +5381,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblAlnRep2
 objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5173,6 +5400,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblAlnRep3
 objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5191,6 +5419,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal
 objType table
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5208,6 +5437,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblPk
 objType table
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5225,6 +5455,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblRawDataRep1
 objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5241,6 +5472,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblRawDataRep2
 objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5257,6 +5489,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblRawDataRep3
 objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5273,6 +5506,7 @@ metaObject wgEncodeOpenChromDnaseOsteoblSig
 objType table
 cell Osteobl
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -5290,6 +5524,7 @@ metaObject wgEncodeOpenChromDnasePanisdAlnRep1
 objType file
 cell PanIsletD
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
@@ -5311,6 +5546,7 @@ metaObject wgEncodeOpenChromDnasePanisdAlnRep2
 objType file
 cell PanIsletD
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
@@ -5332,6 +5568,7 @@ metaObject wgEncodeOpenChromDnasePanisdAlnRep3
 objType file
 cell PanIsletD
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
@@ -5353,6 +5590,7 @@ metaObject wgEncodeOpenChromDnasePanisdBaseOverlapSignal
 objType table
 cell PanIsletD
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
@@ -5372,6 +5610,7 @@ metaObject wgEncodeOpenChromDnasePanisdPk
 objType table
 cell PanIsletD
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
@@ -5391,6 +5630,7 @@ metaObject wgEncodeOpenChromDnasePanisdSig
 objType table
 cell PanIsletD
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DNase-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
@@ -5410,6 +5650,7 @@ metaObject wgEncodeOpenChromDnasePanisletsAlnRep1
 objType file
 cell PanIslets
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5432,6 +5673,7 @@ metaObject wgEncodeOpenChromDnasePanisletsAlnRep2
 objType file
 cell PanIslets
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5454,6 +5696,7 @@ metaObject wgEncodeOpenChromDnasePanisletsAlnRep3
 objType file
 cell PanIslets
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5476,6 +5719,7 @@ metaObject wgEncodeOpenChromDnasePanisletsBaseOverlapSignal
 objType table
 cell PanIslets
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5497,6 +5741,7 @@ metaObject wgEncodeOpenChromDnasePanisletsPk
 objType table
 cell PanIslets
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5518,6 +5763,7 @@ metaObject wgEncodeOpenChromDnasePanisletsSig
 objType table
 cell PanIslets
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5539,6 +5785,7 @@ metaObject wgEncodeOpenChromDnasePhteAlnRep1
 objType file
 cell pHTE
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
@@ -5558,6 +5805,7 @@ metaObject wgEncodeOpenChromDnasePhteAlnRep2
 objType file
 cell pHTE
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
@@ -5577,6 +5825,7 @@ metaObject wgEncodeOpenChromDnasePhteBaseOverlapSignal
 objType table
 cell pHTE
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
@@ -5595,6 +5844,7 @@ metaObject wgEncodeOpenChromDnasePhtePk
 objType table
 cell pHTE
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
@@ -5613,6 +5863,7 @@ metaObject wgEncodeOpenChromDnasePhteSig
 objType table
 cell pHTE
 composite wgEncodeOpenChromDnase
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
@@ -5631,6 +5882,7 @@ metaObject wgEncodeOpenChromDnaseProgfibAlnRep1
 objType file
 cell ProgFib
 composite wgEncodeOpenChromDnase
+controlId ProgFib/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5653,6 +5905,7 @@ metaObject wgEncodeOpenChromDnaseProgfibAlnRep2
 objType file
 cell ProgFib
 composite wgEncodeOpenChromDnase
+controlId ProgFib/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5675,6 +5928,7 @@ metaObject wgEncodeOpenChromDnaseProgfibBaseOverlapSignal
 objType table
 cell ProgFib
 composite wgEncodeOpenChromDnase
+controlId ProgFib/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5696,6 +5950,7 @@ metaObject wgEncodeOpenChromDnaseProgfibPk
 objType table
 cell ProgFib
 composite wgEncodeOpenChromDnase
+controlId ProgFib/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5717,6 +5972,7 @@ metaObject wgEncodeOpenChromDnaseProgfibSig
 objType table
 cell ProgFib
 composite wgEncodeOpenChromDnase
+controlId ProgFib/Input
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5738,6 +5994,7 @@ metaObject wgEncodeOpenChromDnaseStellateAlnRep1
 objType file
 cell Stellate
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5756,6 +6013,7 @@ metaObject wgEncodeOpenChromDnaseStellateAlnRep2
 objType file
 cell Stellate
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5774,6 +6032,7 @@ metaObject wgEncodeOpenChromDnaseStellateBaseOverlapSignal
 objType table
 cell Stellate
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5791,6 +6050,7 @@ metaObject wgEncodeOpenChromDnaseStellatePk
 objType table
 cell Stellate
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5808,6 +6068,7 @@ metaObject wgEncodeOpenChromDnaseStellateRawDataRep1
 objType file
 cell Stellate
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5824,6 +6085,7 @@ metaObject wgEncodeOpenChromDnaseStellateRawDataRep2
 objType file
 cell Stellate
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5840,6 +6102,7 @@ metaObject wgEncodeOpenChromDnaseStellateSig
 objType table
 cell Stellate
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5857,6 +6120,7 @@ metaObject wgEncodeOpenChromDnaseT47dAlnRep1
 objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5875,6 +6139,7 @@ metaObject wgEncodeOpenChromDnaseT47dAlnRep2
 objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5893,6 +6158,7 @@ metaObject wgEncodeOpenChromDnaseT47dBaseOverlapSignal
 objType table
 cell T-47D
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5910,6 +6176,7 @@ metaObject wgEncodeOpenChromDnaseT47dPk
 objType table
 cell T-47D
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5927,6 +6194,7 @@ metaObject wgEncodeOpenChromDnaseT47dRawDataRep1
 objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5943,6 +6211,7 @@ metaObject wgEncodeOpenChromDnaseT47dRawDataRep2
 objType file
 cell T-47D
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5959,6 +6228,7 @@ metaObject wgEncodeOpenChromDnaseT47dSig
 objType table
 cell T-47D
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-06
@@ -5976,6 +6246,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaAlnRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -5994,6 +6265,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaAlnRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6012,6 +6284,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaBaseOverlapSignal
 objType table
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6029,6 +6302,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaPk
 objType table
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6046,6 +6320,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaRawDataRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6062,6 +6337,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaRawDataRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6078,6 +6354,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaSig
 objType table
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6095,6 +6372,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaUt189AlnRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6114,6 +6392,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaUt189AlnRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6133,6 +6412,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaUt189BaseOverlapSignal
 objType table
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6151,6 +6431,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaUt189Pk
 objType table
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6169,6 +6450,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaUt189RawDataRep1
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6186,6 +6468,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaUt189RawDataRep2
 objType file
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6203,6 +6486,7 @@ metaObject wgEncodeOpenChromDnaseUrotsaUt189Sig
 objType table
 cell Urothelia
 composite wgEncodeOpenChromDnase
+controlId generic_female
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-11
@@ -6217,4 +6501,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -418982649
+# MAGIC: -2054064343

@@ -63,7 +63,7 @@ struct lineFile *lf = lineFileOpen(chromSizesFile, TRUE);
 struct hash *sizes = newHash(12);
 char *words[2];
 while (lineFileRow(lf, words))
-    hashAdd(sizes, words[0], words[1]);
+    hashAddInt(sizes, words[0], sqlSigned(words[1]));
 lineFileClose(&lf);
 return sizes;
 }
@@ -75,7 +75,7 @@ struct genePred *gp = NULL;
 struct psl *psl=NULL;
 for(gp=gpList; gp != NULL; gp=gp->next)
     {
-    int size = sqlSigned(hashMustFindVal(chromSizes, gp->chrom));
+    int size = hashIntVal(chromSizes, gp->chrom);
     psl = pslFromGenePred(gp, size);
     pslTabOut(psl, out);
     }

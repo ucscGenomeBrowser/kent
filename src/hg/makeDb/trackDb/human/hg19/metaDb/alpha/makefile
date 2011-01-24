@@ -9,11 +9,13 @@ wgEncodeHaibTfbs.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
+wgEncodeOpenChromSynth.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeSunyGeneST.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhTfbs.ra \
+wgEncodeUncBsuProt.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwDnase.ra \

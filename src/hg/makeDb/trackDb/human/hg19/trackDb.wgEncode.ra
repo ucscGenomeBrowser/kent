@@ -13,8 +13,11 @@ include wgEncodeSydhHistone.ra
 include wgEncodeOpenChromChip.ra
 include wgEncodeOpenChromDnase.ra
 include wgEncodeOpenChromFaire.ra
+include wgEncodeOpenChromSynth.ra
 include wgEncodeDukeAffyExon.ra
-include wgEncodeUwHistone.ra
+
+#UW Histone (wrangler:Venkat)
+include wgEncodeUwHistone.ra alpha,beta
 
 #Methyl RRBS (wrangler: Venkat)
 include wgEncodeHaibMethylRrbs.ra beta,public
@@ -248,4 +251,11 @@ include wgEncodeGencodeV5.ra alpha
 include wgEncodeRikenCage.ra
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra
+include wgEncodeCshlShortRnaSeq.ra beta,public
+include wgEncodeCshlShortRnaSeq.new.ra alpha
+
+# UNC/BSU Proteogenomics (wrangler: cline)
+include wgEncodeUncBsuProt.ra alpha
+
+# GIS ChIA-pet (wrangler: braney)
+include wgEncodeGisChiaPet.ra alpha

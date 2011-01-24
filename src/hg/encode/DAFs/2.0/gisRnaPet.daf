@@ -25,22 +25,34 @@ view             PlusRawSig
 longLabelPrefix  GIS RNA PET Raw Signal (plus strand)
 type             bigWig
 hasReplicates    yes
-required         no
+required         yes
 
 view             MinusRawSig
 longLabelPrefix  GIS RNA PET Raw Signal (minus strand)
 type             bigWig
 hasReplicates    yes
-required         no
+required         yes
 
 view             Alignments
 longLabelPrefix  GIS RNA PET Alignments
 type             bam
 hasReplicates    yes
-required         no
+required         yes
 
 view             Clusters
 longLabelPrefix  GIS RNA PET Clusters
 type             bed 12
 hasReplicates    yes
 required         no
+
+view             FastqRd1
+type             fastq  
+hasReplicates    yes
+required         yes
+
+view             FastqRd2
+type             fastq  
+hasReplicates    yes
+required         yes
+
+

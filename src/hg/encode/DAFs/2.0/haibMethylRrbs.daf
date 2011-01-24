@@ -20,7 +20,7 @@ grant           Myers
 lab             HudsonAlpha
 dataType        MethylRrbs
 compositeSuffix HaibMethylRrbs
-variables       cell,treatment,protocol
+variables       cell,treatment,obtainedBy
 assembly        hg19
 
 validationSettings none
