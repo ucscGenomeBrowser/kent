@@ -3170,6 +3170,17 @@ type bed 4
 hgsid on
 url http://www.ncbi.nlm.nih.gov/omim/
 
+track omimGeneClass2
+shortLabel OMIM Class 2
+longLabel OMIM-Associated Phenotype Class 2 Genes
+group phenDis
+priority 29.6
+visibility hide
+color 240, 100, 0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
 track omimGeneClass3
 shortLabel OMIM Class 3
 longLabel OMIM-Associated Phenotype Class 3 Genes
