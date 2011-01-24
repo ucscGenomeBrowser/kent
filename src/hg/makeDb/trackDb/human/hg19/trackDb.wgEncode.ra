@@ -45,6 +45,7 @@ include wgEncodeCshlLongRnaSeq.ra
 include wgEncodeCaltechRnaSeq.ra
 include wgEncodeYaleRnaSeq.ra
 include wgEncodeBuOrchid.ra
+include wgEncodeUchicagoTfbs.ra
 
 track wgEncodeMapability
 compositeTrack on
