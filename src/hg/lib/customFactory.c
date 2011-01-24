@@ -2256,7 +2256,8 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
     if (fileExists(val))
         {
 	readInGulp(val, &track->tdb->html, NULL);
-	freeMem(track->htmlFile);
+        if (val != track->htmlFile)
+	    freeMem(track->htmlFile);
         track->htmlFile = cloneString(val);
         }
     }
