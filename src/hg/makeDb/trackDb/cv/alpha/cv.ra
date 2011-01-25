@@ -1062,7 +1062,7 @@ description chronic lymphocytic leukemia cell
 tier 3
 lineage T-cell lymphocyte
 karyotype cancer
-sex U
+sex F
 tissue lymphocyte
 vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
 vendorId
@@ -1100,7 +1100,7 @@ lineage Fetal membranes were collected from women who underwent planned cesarean
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
-sex U
+sex F
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
@@ -1904,7 +1904,7 @@ target  Hepatocytes
 description  Primary Human Hepatocytes
 lineage  Liver perfused by enzymes to generate single cell suspension
 karyotype  normal
-sex  U
+sex F
 tissue  Liver
 vendorName  zen-bio
 vendorId
@@ -2045,7 +2045,7 @@ lineage
 karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
-sex U
+sex F
 tier 3
 protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
@@ -2312,7 +2312,7 @@ orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
-sex U
+sex M
 tier 3
 protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -2328,7 +2328,7 @@ orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
-sex U
+sex M
 tier 3
 protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -2372,7 +2372,7 @@ tier 3
 description Trophoblast (HTR-8/SVneo) cell line. A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo.
 lineage Blastula
 karyotype normal
-sex U
+sex F
 tissue Ectoderm
 vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada
 vendorId HTR8svn
@@ -2591,7 +2591,7 @@ vendorName Duke University Medical Center, surgical resection from a patient wit
 orderUrl http://pathology.mc.duke.edu/neuropath/np_faculty_dbigner.htm
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359
-sex U
+sex M
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:D721_Crawford_protocol.pdf
 
@@ -2684,7 +2684,7 @@ vendorName Lonza
 vendorId CC-2541
 orderUrl http://www.lonza.com/
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
-sex U
+sex F
 tier 3
 termId BTO:0002022
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:NHBE_Crawford_protocol.pdf
@@ -2762,7 +2762,7 @@ lineage
 karyotype normal
 termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593
-sex U
+sex F
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf Broad_Histone:Osteoblast_Bernstein_protocol.pdf
 
