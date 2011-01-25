@@ -1683,7 +1683,7 @@ lineage Astrocytic
 karyotype Normal
 sex U
 tissue cerebellar
-vendorName Sciencell
+vendorName ScienCell
 vendorId 1810
 orderUrl http://www.sciencellonline.com/site/products/1810.php
 termId BTO:0000099
@@ -1713,8 +1713,8 @@ lineage Astrocytic
 karyotype Normal
 sex U
 tissue brain hippocampus
-vendorName
-vendorId Sciencell
+vendorName ScienCell
+vendorId 1830
 orderUrl http://www.sciencellonline.com/site/products/1830.php
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
@@ -1741,7 +1741,7 @@ type Cell Line
 organism human
 description Human astrocytes spinal cord
 tissue Spinal cord
-vendorName Sciencell
+vendorName ScienCell
 vendorId 1820
 orderUrl http://www.sciencellonline.com/site/products/1820.php
 karyotype Normal
@@ -2280,8 +2280,8 @@ lineage Endothelial
 karyotype Normal
 sex U
 tissue kidney
-vendorName
-vendorId Sciencell
+vendorName ScienCell
+vendorId 4000
 orderUrl http://www.sciencellonline.com/site/products/4000.php
 termId BTO:0001176
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001176
@@ -3272,7 +3272,7 @@ sex F
 tissue embryonic lung
 vendorName Dr. Carl Mann, SBIGeM
 vendorId
-orderUrl http://www.ggc.u-psud.fr/equipe_accueil_doc/equipes_institut.html
+orderUrl http://www-dsv.cea.fr/dsv/instituts/institut-de-biologie-et-de-technologies-de-saclay-ibitec-s/unites/service-de-biologie-integrative-et-genetique-moleculaire-sbigem/laboratoire-stress-oxydants-et-cancer-lsoc/equipe-mecanismes-de-stabilite-genomique-c.-mann
 termId BTO:0001958
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001958
 protocol UW_Stam:WI38_Stam_protocol.pdf
@@ -4497,7 +4497,7 @@ type Antibody
 target  FOSL1
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the N-terminus of FOSL1 of human origin.
 targetDescription  The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2.  These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1.  As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-183
 orderUrl http://www.scbt.com/datasheet-183-fra-1-n-17-antibody.html
 lab  Myers
@@ -4629,7 +4629,7 @@ type Antibody
 target  GATA1
 antibodyDescription  Rat monoclonal raised against bacterially expressed murine GATA-1
 targetDescription  GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes.
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 lab  Snyder
@@ -4673,7 +4673,7 @@ type Antibody
 target  GATA3
 antibodyDescription  Mouse monoclonal IgG raised against human recombinant GATA-3.
 targetDescription  This gene encodes a protein which belongs to the GATA family of transcription factors.  The protein contains two GATA-type zinc fingers and is a n important regulator of T-cell development and plays an important role in endothelial cell biology.  Defects in this gene are the cause of hypoparathyroidism with sensorineural deafness and renal dysplasia (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-268
 orderUrl http://www.scbt.com/datasheet-268-gata-3-hg3-31-antibody.html
 lab  Myers
@@ -5097,7 +5097,7 @@ type Antibody
 target HNF4G
 antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of HNF4G of human origin. 
 targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene 
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-6558
 orderUrl http://www.scbt.com/datasheet-6558-hnf-4gamma-c-18-antibody.html
 lab Myers 
@@ -5264,14 +5264,14 @@ targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
 
-term MafK_(sc477)
+term MafK_(SC-477)
 tag MafKsc477
 type Antibody
 target MafK
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
-vendorName Santa Cruz Biotech Cat#
-vendorId sc-477
+vendorName Santa Cruz Biotech 
+vendorId SC-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
 lots
@@ -5346,7 +5346,7 @@ type Antibody
 target NANOG
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 151-305 mapping at the C-terminus of Nanog of human origin.
 targetDescription Transcription regulator involved in inner cell mass and embryonic stem (ES) cells proliferation and self-renewal.  Imposes pluripotency on ES cells and prevents their differentiation towards extraembryonic endoderm and trophectoderm lineages.  Blocks bone morphogenetic protein-induced mesoderm differentiation of ES cells by physically interacting with SMAD1 and interfering with the recruitment of coactivators to the active SMAD transcriptional complexes (By similarity).  Acts as a transcriptional activator or repressor (By similarity).  Binds optimally to the DNA consensus sequence 5'-TAAT[GT][GT]-3' or 5'-[CG][GA][CG]C[GC]ATTAN[GC]-3' (By similarity).  When overexpressed, promotes cells to enter into S phase and proliferation (By similarity) (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-33759
 orderUrl http://www.scbt.com/datasheet-33759-nanog-h-155-antibody.html
 lab Myers
@@ -5705,7 +5705,7 @@ type Antibody
 target POU5F1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 1-134 of Oct3/4 of human origin.
 targetDescription This gene encodes a transcription factor containing a POU homeodomain.  This transcription factor plays a role in embryonic development, especially during early embryogenesis, and it is necessary for embryonic stem cell pluripotency.  A translocation of this gene with the Ewing's sarcoma gene, t(6;22)(p21;q12), has been linked to tumor formation.  Alternative splicing, as well as usage of alternative translation initiation codons, results in multiple isoforms, one of which initiates at a non-AUG (CUG) start codon.  Related pseudogenes have been identified on chromosomes 1, 3, 8, 10, and 12 (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-9081
 orderUrl http://www.scbt.com/datasheet-9081-oct-3-4-h-134-antibody.html
 lab Myers
@@ -5834,7 +5834,7 @@ target  SETDB1
 antibodyDescription  SETDB1 (H-300) is an affinity purified rabbit polyclonal antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog.
 targetDescription  SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
 vendorName Santa Cruz Biotech
-vendorId Cat#sc-66884
+vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 lab  Farnham
 lots
@@ -5890,7 +5890,7 @@ type Antibody
 target SMC3
 antibodyDescription Rabbit polyclonal raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH
 targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex.  The cohesin complex is required for the cohesion of sister chromatids after DNA replication.
-vendorName Abcam Cat#
+vendorName Abcam 
 vendorId ab9263
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 lab Snyder
@@ -6393,7 +6393,7 @@ type Antibody
 target ZEB1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin.
 targetDescription This gene encodes a zinc finger transcription factor.  The encoded protein likely plays a role in transcriptional repression of interleukin 2.  Mutations in this gene have ben associated with posterior polymorphous corneal dystrophy-3 and late-onset Fuchs endothelial corneal dystrophy.  Alternatively spliced transcript variants encoding different isoforms have been described. (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-25388
 orderUrl http://www.scbt.com/datasheet-25388-zeb1-h-102-antibody.html
 lab Myers
