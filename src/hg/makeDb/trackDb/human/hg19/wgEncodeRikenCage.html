@@ -28,13 +28,15 @@ you wish to hide.</P>
 <DT><I>Plus</I> and <I>Minus</I> <I>Clusters</I>
 <DD>These views display clusters of overlapping read mappings on the
 forward and reverse genomic strands.
-<DT><i>Alignments</i>
-<DD>The Alignments view shows the individual tags (read mappings), with
-mismatches from the genomic reference highlighted.
-</DL>
+<DT><i>Alignments</i></DT>
+<DD>The Alignments view shows reads mapped to the genome and indicates where
+bases may mismatch. Every mapped read is displayed, i.e. uncollapsed. 
+The alignment file follows the standard SAM format of Bowtie output with the following additions: The custom tag XP. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format.
+ Where mapping quality is not available for this track a score of 255 is used in accordance with the SAM Format Specification. Also, where the sequence quality scores are not available, all scores are displayed as 40.
+</dd></dl>
 
-<P>Color differences in subtracks are are used as a visual cue to
-distinguish between the different cell types, and between annotations
+<P>Color differences in subtracks may be set as a visual cue to
+distinguish between the different cell types or between annotations
 on the plus and minus strand.
 
 <H2>Methods</H2>
@@ -65,7 +67,7 @@ for each alignment. There is no set limit on the number of errors allowed and th
 commonly 100%. However, for analysis it is recommended to discard alignments with low mapping qualities.
 An exception to the above are K562 polyA- RNA from the cytosol and nucleus and the prostate cells samples
 which were sequenced using ABI <A
-HREF="http://marketing.appliedbiosystems.com/images/Product_Microsites/Solid_Knowledge_MS/pdf/SOLiD_Dibase_Sequencing_and_Color_Space_Analysis.pdf"
+HREF="http://www.appliedbiosystems.com/absite/us/en/home/applications-technologies/solid-next-generation-sequencing.html"
 TARGET=_blank>SOLiD</A>  technology. These reads were mapped using Bowtie using default parameters.
  Clusters were defined as regions of overlapping CAGE reads. The expression level was computed as the number
  of reads making up the cluster, divided by the total number of reads sequenced, times 1 million.

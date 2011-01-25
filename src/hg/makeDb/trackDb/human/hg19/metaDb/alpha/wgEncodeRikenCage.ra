@@ -1951,6 +1951,90 @@ rnaExtract longPolyA
 subId 2374
 view RawData
 
+metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam
+grant Gingeras
+lab RIKEN
+labExpId J56
+labProtocolId GEN1+cage
+localization cytosol
+origAssembly hg18
+project wgEncode
+rnaExtract longNonPolyA
+subId 2784
+tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
+view Alignments
+
+metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J56
+labProtocolId GEN1+cage
+localization cytosol
+origAssembly hg18
+project wgEncode
+rnaExtract longNonPolyA
+subId 2784
+tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
+view MinusClusters
+
+metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J56
+labProtocolId GEN1+cage
+localization cytosol
+origAssembly hg18
+project wgEncode
+rnaExtract longNonPolyA
+subId 2784
+tableName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
+view PlusClusters
+
+metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData
+objType file
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId J56
+labProtocolId GEN1+cage
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageHelas3CytosolLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2784
+view RawData
+
 metaObject wgEncodeRikenCageHelas3CytosolPapAlnRep1
 objType table
 bioRep 011C
@@ -2133,6 +2217,90 @@ project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 2355
+view RawData
+
+metaObject wgEncodeRikenCageHelas3NucleolusTotalAln
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3NucleolusTotalAln.bam
+grant Gingeras
+lab RIKEN
+labExpId J58
+labProtocolId GEN1+cage
+localization nucleolus
+origAssembly hg18
+project wgEncode
+rnaExtract total
+subId 2783
+tableName wgEncodeRikenCageHelas3NucleolusTotalAln
+view Alignments
+
+metaObject wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J58
+labProtocolId GEN1+cage
+localization nucleolus
+origAssembly hg18
+project wgEncode
+rnaExtract total
+subId 2783
+tableName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
+view MinusClusters
+
+metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
+objType table
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J58
+labProtocolId GEN1+cage
+localization nucleolus
+origAssembly hg18
+project wgEncode
+rnaExtract total
+subId 2783
+tableName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
+view PlusClusters
+
+metaObject wgEncodeRikenCageHelas3NucleolusTotalRawData
+objType file
+cell HeLa-S3
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-29
+dateUnrestricted 2011-07-29
+fileName wgEncodeRikenCageHelas3NucleolusTotalRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId J58
+labProtocolId GEN1+cage
+localization nucleolus
+origAssembly hg18
+parentTable wgEncodeRikenCageHelas3NucleolusTotalRawSignal
+project wgEncode
+rnaExtract total
+subId 2783
 view RawData
 
 metaObject wgEncodeRikenCageHelas3NucleusPapAlnRep1
@@ -5941,4 +6109,4 @@ rnaExtract longPolyA
 subId 3339
 view RawData
 
-# MAGIC: 469684061
+# MAGIC: -1076428355
