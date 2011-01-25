@@ -1697,7 +1697,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -1719,7 +1719,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -1741,7 +1741,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -1763,7 +1763,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -1785,7 +1785,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -1807,7 +1807,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -2059,7 +2059,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
@@ -2081,7 +2081,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
@@ -2103,7 +2103,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
@@ -2125,7 +2125,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
@@ -2148,7 +2148,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
@@ -2171,7 +2171,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
@@ -2745,7 +2745,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -2767,7 +2767,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -2789,7 +2789,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -2811,7 +2811,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -2833,7 +2833,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -2855,7 +2855,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -3581,7 +3581,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -3603,7 +3603,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -3625,7 +3625,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -3647,7 +3647,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -3669,7 +3669,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -3691,7 +3691,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4097,7 +4097,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4119,7 +4119,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4141,7 +4141,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4163,7 +4163,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4185,7 +4185,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4207,7 +4207,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4476,7 +4476,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4498,7 +4498,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4520,7 +4520,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4542,7 +4542,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4564,7 +4564,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -4586,7 +4586,7 @@ cell GM12878
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -10407,7 +10407,7 @@ cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -10429,7 +10429,7 @@ cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -10451,7 +10451,7 @@ cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -10473,7 +10473,7 @@ cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -10495,7 +10495,7 @@ cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -10517,7 +10517,7 @@ cell H1-hESC
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13101,7 +13101,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13123,7 +13123,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13145,7 +13145,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13167,7 +13167,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13189,7 +13189,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13211,7 +13211,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13628,7 +13628,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13650,7 +13650,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13672,7 +13672,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13694,7 +13694,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13716,7 +13716,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -13738,7 +13738,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -14724,7 +14724,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -14746,7 +14746,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -14768,7 +14768,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -14790,7 +14790,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -14812,7 +14812,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -14834,7 +14834,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16234,7 +16234,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -16256,7 +16256,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -16278,7 +16278,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -16300,7 +16300,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -16322,7 +16322,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -16344,7 +16344,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -16549,7 +16549,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16571,7 +16571,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16593,7 +16593,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16615,7 +16615,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16637,7 +16637,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16659,7 +16659,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16974,7 +16974,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -16996,7 +16996,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17018,7 +17018,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17040,7 +17040,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17062,7 +17062,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17084,7 +17084,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17259,7 +17259,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17281,7 +17281,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17303,7 +17303,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17325,7 +17325,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17347,7 +17347,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -17369,7 +17369,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -18327,7 +18327,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -18349,7 +18349,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -18371,7 +18371,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -18393,7 +18393,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -18415,7 +18415,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -18437,7 +18437,7 @@ cell HeLa-S3
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -25995,7 +25995,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26017,7 +26017,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26039,7 +26039,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26061,7 +26061,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26083,7 +26083,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26105,7 +26105,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26289,7 +26289,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26311,7 +26311,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26333,7 +26333,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26355,7 +26355,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26377,7 +26377,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -26399,7 +26399,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -27389,7 +27389,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -27411,7 +27411,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -27433,7 +27433,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -27455,7 +27455,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -27477,7 +27477,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -27499,7 +27499,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -29600,7 +29600,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -29622,7 +29622,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -29644,7 +29644,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -29666,7 +29666,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -29688,7 +29688,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -29710,7 +29710,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -30322,7 +30322,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -30344,7 +30344,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -30366,7 +30366,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -30388,7 +30388,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -30410,7 +30410,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -30432,7 +30432,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -32213,7 +32213,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32235,7 +32235,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32257,7 +32257,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32279,7 +32279,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32301,7 +32301,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32323,7 +32323,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32345,7 +32345,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32367,7 +32367,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32389,7 +32389,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32411,7 +32411,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32433,7 +32433,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -32455,7 +32455,7 @@ cell K562
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33013,7 +33013,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33035,7 +33035,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33057,7 +33057,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33079,7 +33079,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33101,7 +33101,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33123,7 +33123,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33145,7 +33145,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33167,7 +33167,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33189,7 +33189,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33211,7 +33211,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33233,7 +33233,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33255,7 +33255,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33533,7 +33533,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33555,7 +33555,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33577,7 +33577,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33599,7 +33599,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33621,7 +33621,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33643,7 +33643,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -33665,7 +33665,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33687,7 +33687,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33709,7 +33709,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33731,7 +33731,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33753,7 +33753,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -33775,7 +33775,7 @@ cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -34957,7 +34957,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
@@ -34979,7 +34979,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
@@ -35001,7 +35001,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
@@ -35023,7 +35023,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
@@ -35046,7 +35046,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
@@ -35069,7 +35069,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
@@ -35153,7 +35153,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
@@ -35175,7 +35175,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
@@ -35197,7 +35197,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
@@ -35219,7 +35219,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
@@ -35242,7 +35242,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
@@ -35265,7 +35265,7 @@ cell PBDE
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
@@ -35480,7 +35480,7 @@ cell SH-SY5Y
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -35502,7 +35502,7 @@ cell SH-SY5Y
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -35524,7 +35524,7 @@ cell SH-SY5Y
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -35546,7 +35546,7 @@ cell SH-SY5Y
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -35569,7 +35569,7 @@ cell SH-SY5Y
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -35592,7 +35592,7 @@ cell SH-SY5Y
 composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
@@ -36060,4 +36060,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1619582011
+# MAGIC: -1617883771
