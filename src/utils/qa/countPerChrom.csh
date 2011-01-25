@@ -202,6 +202,11 @@ if ( $histo == "true" ) then
     echo "max = $max | each x = $eachX"
     echo
   else
+    if ($max1 > $histosize) then
+      set eachX=`echo $max1 $histosize | awk '{printf("%2d", $1/$2)}'`
+    else
+      set eachX=1
+    endif
     graph.csh XgraphFile0$$ | awk '{printf("%3s %-36s\n", $1, $2)}'
     echo "max = $max1 | each x = $eachX"
     echo
