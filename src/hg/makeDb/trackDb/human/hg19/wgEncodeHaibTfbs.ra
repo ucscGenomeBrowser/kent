@@ -3189,7 +3189,7 @@ noInherit on
         color 189,0,157
         # subId=3445 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsHepg2Foxa1sc6554V0416101PkRep2
+        track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101PkRep2
         release alpha
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 FOXA2_(SC-6554) Pk 2
@@ -3199,7 +3199,7 @@ noInherit on
         color 189,0,157
         # subId=3489 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsHepg2Foxa1sc6554V0416101PkRep1
+        track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101PkRep1
         release alpha
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel HepG2 FOXA2_(SC-6554) Pk 1
@@ -3269,7 +3269,7 @@ noInherit on
         color 46,0,184
         # subId=3492 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsGm12878Mef2asc13268V0416101PkRep2
+        track wgEncodeHaibTfbsGm12878Mef2csc13268V0416101PkRep2
         release alpha
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12878 MEF2C_(SC-13268) Pk 2
@@ -3279,7 +3279,7 @@ noInherit on
         color 153,38,0
         # subId=3494 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsGm12878Mef2asc13268Pcr1xPkRep1
+        track wgEncodeHaibTfbsGm12878Mef2csc13268Pcr1xPkRep1
         release alpha
         parent wgEncodeHaibTfbsViewPeaks off
         shortLabel GM12878 MEF2C_(SC-13268) Pk 1
@@ -6885,7 +6885,7 @@ noInherit on
         color 189,0,157
         # subId=3445 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsHepg2Foxa1sc6554V0416101RawRep2
+        track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101RawRep2
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 FOXA2_(SC-6554) Raw 2
@@ -6895,7 +6895,7 @@ noInherit on
         color 189,0,157
         # subId=3489 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsHepg2Foxa1sc6554V0416101RawRep1
+        track wgEncodeHaibTfbsHepg2Foxa2sc6554V0416101RawRep1
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel HepG2 FOXA2_(SC-6554) Raw 1
@@ -6975,7 +6975,7 @@ noInherit on
         color 46,0,184
         # subId=3492 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsGm12878Mef2asc13268V0416101RawRep2
+        track wgEncodeHaibTfbsGm12878Mef2csc13268V0416101RawRep2
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 MEF2C_(SC-13268) Raw 2
@@ -6985,7 +6985,7 @@ noInherit on
         color 153,38,0
         # subId=3494 dateSubmitted=2011-01-21
 
-        track wgEncodeHaibTfbsGm12878Mef2asc13268Pcr1xRawRep1
+        track wgEncodeHaibTfbsGm12878Mef2csc13268Pcr1xRawRep1
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
         shortLabel GM12878 MEF2C_(SC-13268) Raw 1
