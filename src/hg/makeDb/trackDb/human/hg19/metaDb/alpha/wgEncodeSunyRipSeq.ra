@@ -1,0 +1,951 @@
+metaObject wgEncodeSunyRipSeqGm12878Elavl1AlnRep1
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1AlnRep2
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1Pk
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+fileName wgEncodeSunyRipSeqGm12878Elavl1Pk.bed.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+subId 3306
+tableName wgEncodeSunyRipSeqGm12878Elavl1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1
+objType file
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Elavl1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2
+objType file
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Elavl1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1SigRep1
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Elavl1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878Elavl1SigRep2
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Elavl1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Elavl1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1Pk
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+fileName wgEncodeSunyRipSeqGm12878Pabpc1Pk.bed.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+subId 3306
+tableName wgEncodeSunyRipSeqGm12878Pabpc1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1
+objType file
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2
+objType file
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Pabpc1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1SigRep1
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Pabpc1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878Pabpc1SigRep2
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878Pabpc1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878Pabpc1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputAlnRep1
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputAlnRep2
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878RipinputAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputPk
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+fileName wgEncodeSunyRipSeqGm12878RipinputPk.bed.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+subId 3306
+tableName wgEncodeSunyRipSeqGm12878RipinputPk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputRawDataRep1
+objType file
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878RipinputRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputRawDataRep2
+objType file
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878RipinputRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputSigRep1
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878RipinputSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878RipinputSigRep2
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878RipinputSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878RipinputSigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagAlnRep1
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagAlnRep2
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878T7tagAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagRawDataRep1
+objType file
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878T7tagRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagRawDataRep2
+objType file
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878T7tagRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+view RawData
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagSigRep1
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878T7tagSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqGm12878T7tagSigRep2
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqGm12878T7tagSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3408
+tableName wgEncodeSunyRipSeqGm12878T7tagSigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Elavl1AlnRep1
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Elavl1AlnRep2
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Elavl1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Elavl1Pk
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeSunyRipSeqK562Elavl1Pk.bed.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+subId 3291
+tableName wgEncodeSunyRipSeqK562Elavl1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqK562Elavl1RawDataRep1
+objType file
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Elavl1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Elavl1RawDataRep2
+objType file
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Elavl1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Elavl1SigRep1
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Elavl1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Elavl1SigRep2
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Elavl1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Elavl1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1AlnRep1
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1AlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1AlnRep2
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Pabpc1AlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1AlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1Pk
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeSunyRipSeqK562Pabpc1Pk.bed.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+subId 3291
+tableName wgEncodeSunyRipSeqK562Pabpc1Pk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1RawDataRep1
+objType file
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Pabpc1RawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1RawDataRep2
+objType file
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Pabpc1RawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1SigRep1
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Pabpc1SigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1SigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562Pabpc1SigRep2
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562Pabpc1SigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562Pabpc1SigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562RipinputAlnRep1
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562RipinputAlnRep2
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562RipinputAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562RipinputPk
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-18
+fileName wgEncodeSunyRipSeqK562RipinputPk.bed.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+subId 3291
+tableName wgEncodeSunyRipSeqK562RipinputPk
+view Peaks
+
+metaObject wgEncodeSunyRipSeqK562RipinputRawDataRep1
+objType file
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562RipinputRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562RipinputRawDataRep2
+objType file
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562RipinputRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562RipinputSigRep1
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562RipinputSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562RipinputSigRep2
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562RipinputSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562RipinputSigRep2
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562T7tagAlnRep1
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep1.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagAlnRep1
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562T7tagAlnRep2
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562T7tagAlnRep2.bam
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagAlnRep2
+view Alignments
+
+metaObject wgEncodeSunyRipSeqK562T7tagRawDataRep1
+objType file
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562T7tagRawDataRep1.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562T7tagRawDataRep2
+objType file
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562T7tagRawDataRep2.fastq.gz
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+view RawData
+
+metaObject wgEncodeSunyRipSeqK562T7tagSigRep1
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562T7tagSigRep1.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 1
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagSigRep1
+view Signal
+
+metaObject wgEncodeSunyRipSeqK562T7tagSigRep2
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyRipSeq
+dataType RipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-20
+fileName wgEncodeSunyRipSeqK562T7tagSigRep2.bigWig
+grant Tenenbaum
+lab SunyAlbany
+project wgEncode
+replicate 2
+subId 3407
+tableName wgEncodeSunyRipSeqK562T7tagSigRep2
+view Signal
+
+# MAGIC: 176778550
