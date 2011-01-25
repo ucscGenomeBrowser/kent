@@ -2674,7 +2674,7 @@ objType file
 antibody ERalpha_a
 cell ECC-1
 composite wgEncodeHaibTfbs
-controlId None
+controlId SL1034
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -15388,7 +15388,7 @@ antibody JunD
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
@@ -15411,7 +15411,7 @@ antibody JunD
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
@@ -15434,7 +15434,7 @@ antibody JunD
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
@@ -15458,7 +15458,7 @@ antibody JunD
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
@@ -27559,7 +27559,7 @@ antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -27582,7 +27582,7 @@ antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1780
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -27605,7 +27605,7 @@ antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -27629,7 +27629,7 @@ antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1780
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -29430,7 +29430,7 @@ antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -29453,7 +29453,7 @@ antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -29476,7 +29476,7 @@ antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -29500,7 +29500,7 @@ antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -30080,7 +30080,7 @@ antibody Rad21
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
@@ -30103,7 +30103,7 @@ antibody Rad21
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
@@ -30126,7 +30126,7 @@ antibody Rad21
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1396
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
@@ -30150,7 +30150,7 @@ antibody Rad21
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1397
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
@@ -30732,7 +30732,7 @@ antibody SP1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
@@ -30755,7 +30755,7 @@ antibody SP1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
@@ -30778,7 +30778,7 @@ antibody SP1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
@@ -30802,7 +30802,7 @@ antibody SP1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
@@ -31568,7 +31568,7 @@ antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -31591,7 +31591,7 @@ antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -31614,7 +31614,7 @@ antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -31638,7 +31638,7 @@ antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32185,7 +32185,7 @@ antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1780
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32208,7 +32208,7 @@ antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1780
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32231,7 +32231,7 @@ antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1780
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32255,7 +32255,7 @@ antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1780
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32369,7 +32369,7 @@ antibody YY1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32392,7 +32392,7 @@ antibody YY1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32415,7 +32415,7 @@ antibody YY1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -32439,7 +32439,7 @@ antibody YY1
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL1613
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
@@ -36402,4 +36402,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 149784565
+# MAGIC: 150198143
