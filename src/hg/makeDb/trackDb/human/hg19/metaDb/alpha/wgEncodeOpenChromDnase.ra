@@ -3331,7 +3331,7 @@ metaObject wgEncodeOpenChromDnaseHsmmAlnRep1
 objType file
 cell HSMM
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3354,7 +3354,7 @@ metaObject wgEncodeOpenChromDnaseHsmmAlnRep2
 objType file
 cell HSMM
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3377,7 +3377,7 @@ metaObject wgEncodeOpenChromDnaseHsmmAlnRep3
 objType file
 cell HSMM
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3400,7 +3400,7 @@ metaObject wgEncodeOpenChromDnaseHsmmBaseOverlapSignal
 objType table
 cell HSMM
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3422,7 +3422,7 @@ metaObject wgEncodeOpenChromDnaseHsmmPk
 objType table
 cell HSMM
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3444,7 +3444,7 @@ metaObject wgEncodeOpenChromDnaseHsmmSig
 objType table
 cell HSMM
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -3453,7 +3453,7 @@ dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmSig.bigWig
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -3466,7 +3466,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtAlnRep1
 objType file
 cell HSMMtube
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3489,7 +3489,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtAlnRep2
 objType file
 cell HSMMtube
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3512,7 +3512,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtAlnRep3
 objType file
 cell HSMMtube
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3535,7 +3535,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal
 objType table
 cell HSMMtube
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3557,7 +3557,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtPk
 objType table
 cell HSMMtube
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3579,7 +3579,7 @@ metaObject wgEncodeOpenChromDnaseHsmmtSig
 objType table
 cell HSMMtube
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
@@ -3588,7 +3588,7 @@ dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmtSig.bigWig
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 privacy noSequence
 project wgEncode
@@ -4957,7 +4957,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeOpenChromDnaseMedulloSig.bigWig
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion fseq v 1.84, iff_generic_female, should have been male
 origAssembly hg18
 project wgEncode
 subId 1479
@@ -4969,7 +4969,7 @@ metaObject wgEncodeOpenChromDnaseMelanoAlnRep1
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -4990,7 +4990,7 @@ metaObject wgEncodeOpenChromDnaseMelanoAlnRep2
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -5011,7 +5011,7 @@ metaObject wgEncodeOpenChromDnaseMelanoBaseOverlapSignal
 objType table
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -5031,7 +5031,7 @@ metaObject wgEncodeOpenChromDnaseMelanoPk
 objType table
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -5051,7 +5051,7 @@ metaObject wgEncodeOpenChromDnaseMelanoRawDataRep1
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
@@ -5069,7 +5069,7 @@ metaObject wgEncodeOpenChromDnaseMelanoRawDataRep2
 objType file
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
@@ -5087,7 +5087,7 @@ metaObject wgEncodeOpenChromDnaseMelanoSig
 objType table
 cell Melano
 composite wgEncodeOpenChromDnase
-controlId generic_female
+controlId generic_male
 dataType DnaseSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
@@ -5095,7 +5095,7 @@ dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoSig.bigWig
 grant Crawford
 lab Duke
-labVersion fseq v 1.84, iff_generic_female
+labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
 subId 2096
@@ -6501,4 +6501,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -2054064343
+# MAGIC: 1298783439
