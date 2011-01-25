@@ -29,6 +29,7 @@ set split=""
 set regular=""
 set random=""
 set max=""
+set eachX=1
 set histo="false"
 set histosize=35
 set histosize1=35
@@ -165,6 +166,7 @@ if ( $histo == "true" ) then
   cat Xout$$ | grep chr | egrep -v "random|hap|Un|$db" | sed "s/chr//" \
     | sort -n -k1,1  > XgraphFile0$$
   set max1=`cat XgraphFile0$$ | awk '{print $2}' | sort -n | tail -1`
+  set max=$max1
   if ( $machineOut != "" ) then
     # get max values for 2nd dataset for scaling purposes
     set max2=`cat XgraphFile0$$ | awk '{print $3}' | sort -n | tail -1`
@@ -174,11 +176,6 @@ if ( $histo == "true" ) then
     else
       set histosize1=`echo $max1 $max2 $histosize | awk '{printf("%2d", $1/$2*$3)}'`
       set max=$max2
-    endif
-    if ($max > $histosize) then
-      set eachX=`echo $max $histosize | awk '{printf("%2d", $1/$2)}'`
-    else
-      set eachX=1
     endif
 
     if ( $debug == true) then
@@ -199,14 +196,20 @@ if ( $histo == "true" ) then
     echo
     # join on first col, retaining everything from first col
     join -a1 -j1 Xgraph1b$$ Xgraph2b$$ | awk '{printf("%3s %'$histosize1's %-'$histosize2's\n", $1, $2, $3)}'
-    echo "max = $max | each x = $eachX"
-    echo
   else
     graph.csh XgraphFile0$$ | awk '{printf("%3s %-36s\n", $1, $2)}'
-    echo "max = $max1 | each x = $eachX"
-    echo
   endif
+
+  # print some stats
+  if ($max > $histosize) then
+    set eachX=`echo $max1 $histosize | awk '{printf("%2d", $1/$2)}'`
+  else
+    set eachX=1
+  endif
+  echo "max = $max1 | each x = $eachX"
+  echo
 else
+  # print text, not histogram
   # output header
   echo "chrom \t$db \t$oldDb$machineOut" 
   cat Xout$$

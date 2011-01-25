@@ -69,6 +69,7 @@ db *
 dbProfile *
 dbTrackType customTracks
 defaultGeneTracks bed
+defaultMaxWeight bed
 defaultLinkedTables genePred
 dimensionAchecked *
 dimensionBchecked *

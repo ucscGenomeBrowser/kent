@@ -113,11 +113,6 @@ struct snp125Extended *snpExtendedLoad(char **row);
  * database.  Additional fields are for run-time drawing and
  * calculations */
 
-struct snp125Extended *snp125ExtendedLoad(char **row);
-/* Load a snp125 from row fetched with select * from snp125 from
- * database.  Additional fields are for run-time drawing and
- * calculations */
-
 int snpVersion(char *track);
 /* If track starts with snpNNN where NNN is 125 or later, return the number;
  * otherwise return 0. */
