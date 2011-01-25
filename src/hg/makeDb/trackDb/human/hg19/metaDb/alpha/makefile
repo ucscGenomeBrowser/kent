@@ -5,7 +5,9 @@ wgEncodeBroadHistone.ra \
 wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
 wgEncodeHaibMethylRrbs.ra \
+wgEncodeHaibRnaSeq.ra\
 wgEncodeHaibTfbs.ra \
+wgEncodeHaibGenotype.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
