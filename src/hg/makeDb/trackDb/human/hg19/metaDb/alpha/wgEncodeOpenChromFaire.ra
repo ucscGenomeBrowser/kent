@@ -2697,7 +2697,7 @@ metaObject wgEncodeOpenChromFaireMedulloAlnRep1
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2716,7 +2716,7 @@ metaObject wgEncodeOpenChromFaireMedulloAlnRep2
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2735,7 +2735,7 @@ metaObject wgEncodeOpenChromFaireMedulloBaseOverlapSignal
 objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2753,7 +2753,7 @@ metaObject wgEncodeOpenChromFaireMedulloPk
 objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2771,7 +2771,7 @@ metaObject wgEncodeOpenChromFaireMedulloRawDataRep1
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2788,7 +2788,7 @@ metaObject wgEncodeOpenChromFaireMedulloRawDataRep2
 objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2805,7 +2805,7 @@ metaObject wgEncodeOpenChromFaireMedulloSig
 objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -2813,7 +2813,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloSig.bigWig
 grant Crawford
 lab UNC
-labVersion fseq v 1.84, iff_generic_female
+labVersion fseq v 1.84, iff_generic_male
 project wgEncode
 subId 2501
 tableName wgEncodeOpenChromFaireMedulloSig
@@ -2823,7 +2823,7 @@ metaObject wgEncodeOpenChromFaireNhbeAlnRep1
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_male
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2844,7 +2844,7 @@ metaObject wgEncodeOpenChromFaireNhbeAlnRep2
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_male
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2865,7 +2865,7 @@ metaObject wgEncodeOpenChromFaireNhbeBaseOverlapSignal
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_male
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2885,7 +2885,7 @@ metaObject wgEncodeOpenChromFaireNhbePk
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_male
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2905,7 +2905,7 @@ metaObject wgEncodeOpenChromFaireNhbeRawDataRep1
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_male
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2925,7 +2925,7 @@ metaObject wgEncodeOpenChromFaireNhbeRawDataRep2
 objType file
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_male
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-12-31
@@ -2945,7 +2945,7 @@ metaObject wgEncodeOpenChromFaireNhbeSig
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_male
+controlId generic_female
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2954,7 +2954,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeSig.bigWig
 grant Crawford
 lab UNC
-labVersion fseq v 1.84, iff_generic_male
+labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
 subId 1574

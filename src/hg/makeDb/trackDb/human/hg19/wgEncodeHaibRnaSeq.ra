@@ -1,0 +1,49 @@
+
+# Myers lab RNA-seq (wrangler: cricket)
+
+track wgEncodeHaibRnaSeq
+compositeTrack on
+shortLabel HudsonAlpha RNA-seq
+longLabel RNA-seq from ENCODE/HudsonAlpha
+group expression
+subGroup1 view Views Aligns=Alignments RPKM=RPKM
+subGroup2 cellType Cell_Line A549=A549 Jurkat=Jurkat
+subGroup3 localization Localization cell=cell
+subGroup4 rnaExtract RnaExtract pAP=longPolyA
+subGroup5 mapAlgorithm MapAlgorithm erng3=erng3 bow10=bow10
+subGroup6 readType ReadType r1x25=1x25 r1x36=1x36
+subGroup7 treatment Treatment EtOH02=EtOH_0.02pct DEXa=DEX_100nM None=None
+subGroup8 rep Replicate rep1=1 rep2=2 
+#dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
+sortOrder cellType=+ rep=+ view=+ treatment=+ 
+dimensionZchecked rep1,rep2
+dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm treatment=treatment
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+
+    track wgEncodeHudsonalphaRnaSeqViewAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility hide
+    subTrack wgEncodeHudsonalphaRnaSeq
+    type bam
+
+
+    track wgEncodeHudsonalphaRnaSeqViewGencV3
+    shortLabel Transcripts GencodeV3c
+    view TranscriptGencV3
+    visibility hide
+    subTrack wgEncodeHudsonalphaRnaSeq
+    type gtf
+
+    track wgEncodeHudsonalphaRnaSeqViewSignal
+    shortLabel Signal
+    view RawSignal
+    visibility hide
+    subTrack wgEncodeHudsonalphaRnaSeq
+    type bigWig
+

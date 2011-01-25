@@ -3086,8 +3086,12 @@ termId BTO:0002316
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002316
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Stellate_Crawford_protocol.pdf
 
+#
+# NOTE: this cell type was added provisionally, before all its metadata was collected, so
+# that Venkat could finish a submission that he'd accidentally started with the 
+# standard HEK93 cell line.
 term T-REx-HEK293 
-tag TRExHEK293 
+tag tHEK293 
 type Cell Line
 tier 3
 organism human

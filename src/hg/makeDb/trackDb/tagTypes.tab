@@ -177,7 +177,7 @@ itemClassTbl bed genePred
 itemCount customTracks
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed
+itemRgb bedDetail bedGraph bed bedLogR
 linesAt chromGraph
 longLabel *
 longlabel genePred
@@ -196,12 +196,12 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak
-maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedLogR
 maxWindowToQuery bigWig bed
 metadata *
 mgiUrl bed
 mgiUrlLabel bed
-minGrayLevel bed broadPeak narrowPeak
+minGrayLevel bed broadPeak narrowPeak bedLogR
 minLimit *
 minMax chromGraph
 minScore bed broadPeak narrowPeak
@@ -210,7 +210,7 @@ ncbiAccXref bed
 nextItemButton *
 noColorTag bam
 noInherit *
-noScoreFilter bedGraph bed
+noScoreFilter bedGraph bed bedLogR
 notNCBI bed
 ococci bed
 offset customTracks
