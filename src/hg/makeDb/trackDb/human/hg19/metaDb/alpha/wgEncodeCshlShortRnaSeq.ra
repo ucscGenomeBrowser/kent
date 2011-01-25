@@ -7,7 +7,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
 objType table
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -29,7 +29,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
 objType table
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -51,7 +51,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
 objType table
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -73,7 +73,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
 objType table
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -95,7 +95,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
 objType table
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -117,7 +117,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
 objType table
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -139,7 +139,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep1
 objType file
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -160,7 +160,7 @@ metaObject wgEncodeCshlShortRnaSeqA549CellShorttotalRawDataRep2
 objType file
 cell A549
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
@@ -181,7 +181,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1
 objType table
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -203,7 +203,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2
 objType table
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -225,7 +225,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep1
 objType table
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -247,7 +247,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep2
 objType table
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -269,7 +269,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep1
 objType table
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -291,7 +291,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep2
 objType table
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -313,7 +313,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalRawDataRep1
 objType file
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -334,7 +334,7 @@ metaObject wgEncodeCshlShortRnaSeqAg04450CellShorttotalRawDataRep2
 objType file
 cell AG04450
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -355,7 +355,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1
 objType table
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -377,7 +377,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2
 objType table
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -399,7 +399,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1
 objType table
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -421,7 +421,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
 objType table
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -443,7 +443,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep1
 objType table
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -465,7 +465,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
 objType table
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -487,7 +487,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalRawDataRep1
 objType file
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -508,7 +508,7 @@ metaObject wgEncodeCshlShortRnaSeqBjCellShorttotalRawDataRep2
 objType file
 cell BJ
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -616,7 +616,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -638,7 +638,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -660,7 +660,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -682,7 +682,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -704,7 +704,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -726,7 +726,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -748,7 +748,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -769,7 +769,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShorttotalRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -899,7 +899,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -921,7 +921,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -943,7 +943,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -965,7 +965,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -987,7 +987,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1009,7 +1009,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1031,7 +1031,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1052,7 +1052,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1182,7 +1182,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1204,7 +1204,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1226,7 +1226,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1248,7 +1248,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1270,7 +1270,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep1
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1292,7 +1292,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep2
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1314,7 +1314,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -1335,7 +1335,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1378,7 +1378,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep1
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1400,7 +1400,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1422,7 +1422,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep1
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1444,7 +1444,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1466,7 +1466,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep1
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1488,7 +1488,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1510,7 +1510,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalRawDataRep1
 objType file
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1531,7 +1531,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCellShorttotalRawDataRep2
 objType file
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1552,7 +1552,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1574,7 +1574,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalMinusRawRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1596,7 +1596,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalPlusRawRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1618,7 +1618,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalRawDataRep2
 objType file
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1639,7 +1639,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1661,7 +1661,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalMinusRawRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1683,7 +1683,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalPlusRawRep2
 objType table
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1705,7 +1705,7 @@ metaObject wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalRawDataRep2
 objType file
 cell H1-hESC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1726,7 +1726,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1748,7 +1748,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1770,7 +1770,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1792,7 +1792,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1814,7 +1814,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1836,7 +1836,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1858,7 +1858,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalRawDataRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1879,7 +1879,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CellShorttotalRawDataRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1900,7 +1900,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1922,7 +1922,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1944,7 +1944,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1966,7 +1966,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -1988,7 +1988,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2010,7 +2010,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2032,7 +2032,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalRawDataRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2053,7 +2053,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalRawDataRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2074,7 +2074,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2096,7 +2096,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2118,7 +2118,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2140,7 +2140,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2162,7 +2162,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2184,7 +2184,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2206,7 +2206,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalRawDataRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2227,7 +2227,7 @@ metaObject wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalRawDataRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2248,7 +2248,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2270,7 +2270,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2292,7 +2292,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2314,7 +2314,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2336,7 +2336,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2358,7 +2358,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2380,7 +2380,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep1
 objType file
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2401,7 +2401,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CellShorttotalRawDataRep2
 objType file
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2422,7 +2422,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2444,7 +2444,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2466,7 +2466,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2488,7 +2488,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2510,7 +2510,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2532,7 +2532,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2554,7 +2554,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep1
 objType file
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2575,7 +2575,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalRawDataRep2
 objType file
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2596,7 +2596,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2618,7 +2618,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2640,7 +2640,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2662,7 +2662,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2684,7 +2684,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2706,7 +2706,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
 objType table
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2728,7 +2728,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep1
 objType file
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2749,7 +2749,7 @@ metaObject wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalRawDataRep2
 objType file
 cell HepG2
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2770,7 +2770,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2792,7 +2792,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2814,7 +2814,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep1
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2836,7 +2836,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep2
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2858,7 +2858,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep1
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2880,7 +2880,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep2
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2902,7 +2902,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep1
 objType file
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2923,7 +2923,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCellShorttotalRawDataRep2
 objType file
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2944,7 +2944,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2966,7 +2966,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -2988,7 +2988,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3010,7 +3010,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3032,7 +3032,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3054,7 +3054,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3076,7 +3076,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep3
 objType file
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3097,7 +3097,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalRawDataRep4
 objType file
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3118,7 +3118,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3140,7 +3140,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3162,7 +3162,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3184,7 +3184,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3206,7 +3206,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep3
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3228,7 +3228,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep4
 objType table
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3250,7 +3250,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalRawDataRep3
 objType file
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3271,7 +3271,7 @@ metaObject wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalRawDataRep4
 objType file
 cell HUVEC
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3379,7 +3379,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3401,7 +3401,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3423,7 +3423,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3445,7 +3445,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3467,7 +3467,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3489,7 +3489,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3511,7 +3511,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalRawDataRep1
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3532,7 +3532,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShorttotalRawDataRep2
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3662,7 +3662,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3684,7 +3684,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3706,7 +3706,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3728,7 +3728,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3750,7 +3750,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3772,7 +3772,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3794,7 +3794,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalRawDataRep3
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3815,7 +3815,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShorttotalRawDataRep4
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -3945,7 +3945,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3967,7 +3967,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -3989,7 +3989,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4011,7 +4011,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4033,7 +4033,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4055,7 +4055,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4077,7 +4077,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalRawDataRep1
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4098,7 +4098,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShorttotalRawDataRep2
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4228,7 +4228,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4250,7 +4250,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4272,7 +4272,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4294,7 +4294,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4316,7 +4316,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4338,7 +4338,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4360,7 +4360,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalRawDataRep3
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4381,7 +4381,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShorttotalRawDataRep4
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4511,7 +4511,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4533,7 +4533,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4555,7 +4555,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4577,7 +4577,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4599,7 +4599,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep3
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4621,7 +4621,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep4
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4643,7 +4643,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalRawDataRep3
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4664,7 +4664,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalRawDataRep4
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -4794,7 +4794,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4816,7 +4816,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4838,7 +4838,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4860,7 +4860,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4882,7 +4882,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep1
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4904,7 +4904,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep2
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4926,7 +4926,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalRawDataRep1
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -4947,7 +4947,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShorttotalRawDataRep2
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-18
 dateUnrestricted 2011-10-18
@@ -5099,7 +5099,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1
 objType table
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5121,7 +5121,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2
 objType table
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5143,7 +5143,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1
 objType table
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5165,7 +5165,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2
 objType table
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5187,7 +5187,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1
 objType table
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5209,7 +5209,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2
 objType table
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5231,7 +5231,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalRawDataRep1
 objType file
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5252,7 +5252,7 @@ metaObject wgEncodeCshlShortRnaSeqMcf7CellShorttotalRawDataRep2
 objType file
 cell MCF-7
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5273,7 +5273,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5295,7 +5295,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5317,7 +5317,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep1
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5339,7 +5339,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5361,7 +5361,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep1
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5383,7 +5383,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5405,7 +5405,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalRawDataRep1
 objType file
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5426,7 +5426,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCellShorttotalRawDataRep2
 objType file
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5447,7 +5447,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5469,7 +5469,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5491,7 +5491,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep3
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5513,7 +5513,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep4
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5535,7 +5535,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep3
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5557,7 +5557,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep4
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5579,7 +5579,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalRawDataRep3
 objType file
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5600,7 +5600,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekCytosolShorttotalRawDataRep4
 objType file
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5621,7 +5621,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5643,7 +5643,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5665,7 +5665,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5687,7 +5687,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep4
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5709,7 +5709,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5731,7 +5731,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep4
 objType table
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5753,7 +5753,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalRawDataRep3
 objType file
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5774,7 +5774,7 @@ metaObject wgEncodeCshlShortRnaSeqNhekNucleusShorttotalRawDataRep4
 objType file
 cell NHEK
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5904,7 +5904,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1
 objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5926,7 +5926,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2
 objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5948,7 +5948,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep1
 objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5970,7 +5970,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep2
 objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -5992,7 +5992,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep1
 objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -6014,7 +6014,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep2
 objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -6036,7 +6036,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalRawDataRep1
 objType file
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
@@ -6057,7 +6057,7 @@ metaObject wgEncodeCshlShortRnaSeqSknshraCellShorttotalRawDataRep2
 objType file
 cell SK-N-SH_RA
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
