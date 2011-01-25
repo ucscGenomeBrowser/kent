@@ -6,6 +6,7 @@ wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
+wgEncodeHaibGenotype.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
