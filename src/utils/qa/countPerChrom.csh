@@ -28,8 +28,11 @@ set machineOut=""
 set split=""
 set regular=""
 set random=""
+set max=""
 set histo="false"
 set histosize=35
+set histosize1=35
+set histosize2=35
 
 set debug=true 
 set debug=false
@@ -142,7 +145,7 @@ else
 endif
 
 rm -f Xout$$
-rm -f XgraphFile$$
+rm -f XgraphFile0$$
 foreach c ( $regular $random )
   if ( $split != "" ) then
     set table="${c}_$table"
@@ -160,18 +163,48 @@ end
 
 if ( $histo == "true" ) then
   cat Xout$$ | grep chr | egrep -v "random|hap|Un|$db" | sed "s/chr//" \
-    | sort -n -k1,1  > XgraphFile$$
+    | sort -n -k1,1  > XgraphFile0$$
+  set max1=`cat XgraphFile0$$ | awk '{print $2}' | sort -n | tail -1`
   if ( $machineOut != "" ) then
-    cat XgraphFile$$ | awk '{print $1, $3}' > XgraphFile2$$ 
-    graph.csh XgraphFile$$  $histosize > Xgraph1$$
-    graph.csh XgraphFile2$$ $histosize > Xgraph2$$
+    # get max values for 2nd dataset for scaling purposes
+    set max2=`cat XgraphFile0$$ | awk '{print $3}' | sort -n | tail -1`
+    if ( $max1 > $max2 ) then
+      set histosize2=`echo $max1 $max2 $histosize | awk '{printf("%2d", $2/$1*$3)}'`
+      set max=$max1
+    else
+      set histosize1=`echo $max1 $max2 $histosize | awk '{printf("%2d", $1/$2*$3)}'`
+      set max=$max2
+    endif
+    if ($max > $histosize) then
+      set eachX=`echo $max $histosize | awk '{printf("%2d", $1/$2)}'`
+    else
+      set eachX=1
+    endif
+
+    if ( $debug == true) then
+      echo max1 max2 eachX $max1 $max2 $eachX
+      echo histosize.histosize1.histosize2 $histosize.$histosize1.$histosize2
+    endif
+
+    cat XgraphFile0$$ | awk '{print $1, $2}' > XgraphFile1$$ 
+    cat XgraphFile0$$ | awk '{print $1, $3}' > XgraphFile2$$ 
+    graph.csh XgraphFile1$$ $histosize1 > Xgraph1$$
+    graph.csh XgraphFile2$$ $histosize2 > Xgraph2$$
+    # put a . into files where the value is blank, to keep join from collapsing
+    cat Xgraph1$$ | egrep "." | awk '{ if ($2 == "") { $2 = "."; } print $1, $2; }' > Xgraph1b$$
+    cat Xgraph2$$ | egrep "." | awk '{ if ($2 == "") { $2 = "."; } print $1, $2; }' > Xgraph2b$$
     # output header
     echo
-    echo "chr \t$db \t$oldDb$machineOut" | awk '{printf("%3s %'$histosize's %-'$histosize's\n", $1, $2, $3)}'
+    echo "chr \t$db \t$oldDb$machineOut" | awk '{printf("%3s %'$histosize1's %-'$histosize2's\n", $1, $2, $3)}'
+    echo
     # join on first col, retaining everything from first col
-    join -a1 -j1 Xgraph1$$ Xgraph2$$ | awk '{printf("%3s %'$histosize's %-'$histosize's\n", $1, $2, $3)}'
+    join -a1 -j1 Xgraph1b$$ Xgraph2b$$ | awk '{printf("%3s %'$histosize1's %-'$histosize2's\n", $1, $2, $3)}'
+    echo "max = $max | each x = $eachX"
+    echo
   else
-    graph.csh XgraphFile$$ | awk '{printf("%3s %-36s\n", $1, $2)}'
+    graph.csh XgraphFile0$$ | awk '{printf("%3s %-36s\n", $1, $2)}'
+    echo "max = $max1 | each x = $eachX"
+    echo
   endif
 else
   # output header
@@ -181,6 +214,10 @@ endif
 
 rm -f Xgraph1$$
 rm -f Xgraph2$$
-rm -f XgraphFile$$
+rm -f Xgraph1b$$
+rm -f Xgraph2b$$
+rm -f XgraphFile0$$
+rm -f XgraphFile1$$
 rm -f XgraphFile2$$
 rm -f Xout$$
+

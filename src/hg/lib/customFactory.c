@@ -2194,11 +2194,8 @@ struct hashEl *hel = NULL;
 
 /* there is a memory leak in this business because these values in the
  * existing settings hash were maybe cloned strings and if they get replaced
- * those previous strings are leaking.  We are not fixing that memory
- * leak because it is way way down in hashFreeEl and that guy doesn't
- * know anything about the values in a hash.  We can't even fix it here
- * because there may be existing strings that are going to be replaced
- * that actually belong to some other structure.
+ * those previous strings are leaking.  We can't fix this because we don't
+ * know which values in the hash are cloned strings or not.
  */
 while ((hel = hashNext(&hc)) != NULL)
     ctAddToSettings(track, hel->name, hel->val);
@@ -2259,8 +2256,9 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
     if (fileExists(val))
         {
 	readInGulp(val, &track->tdb->html, NULL);
+        if (val != track->htmlFile)
+	    freeMem(track->htmlFile);
         track->htmlFile = cloneString(val);
-	freeMem(val);
         }
     }
 if ((val = hashFindVal(hash, "chromosomes")) != NULL)
@@ -2763,13 +2761,16 @@ struct customTrack *customFactoryParseAnyDb(char *genomeDb, char *text, boolean 
 return customFactoryParseOptionalDb(genomeDb, text, isFile, retBrowserLines, FALSE);
 }
 
-static void readAndIgnore(char *fileName)
-/* Read a few bytes from fileName, so its access time is updated. */
+static boolean readAndIgnore(char *fileName)
+/* Read a byte from fileName, so its access time is updated. */
 {
+boolean ret = FALSE;
 char buf[256];
-FILE *f = mustOpen(fileName, "r");
-mustGetLine(f, buf, sizeof(buf));
+FILE *f = fopen(fileName, "r");
+if ( f && (fread(buf, 1, 1, f) == 1 ) )
+    ret = TRUE;
 fclose(f);
+return ret;
 }
 
 static boolean testFileSettings(struct trackDb *tdb, char *ctFileName)
@@ -2782,9 +2783,8 @@ struct hashEl *s;
 for (s = fileSettings;  s != NULL;  s = s->next)
     {
     char *fileName = (char *)(s->val);
-    if (fileExists(fileName))
+    if (fileExists(fileName) && readAndIgnore(fileName))
 	{
-	readAndIgnore(fileName);
 	verbose(4, "setting %s: %s\n", s->name, fileName);
 	}
     else
@@ -2808,9 +2808,8 @@ if (url)
     struct slName *el, *list = udcFileCacheFiles(url, udcDefaultDir());
     for (el = list; el; el = el->next)
 	{
-	if (fileExists(el->name))
+	if (fileExists(el->name) && readAndIgnore(el->name))
 	    {
-	    readAndIgnore(el->name);
 	    verbose(4, "setting bigDataUrl: %s\n", el->name);
 	    }
 	}

@@ -51,6 +51,7 @@ DIRS = \
 	aveCols \
 	bedClip \
 	bedGraphToBigWig \
+	bedRemoveOverlap \
 	bedToBigBed \
 	bigBedSummary \
 	bigBedToBed \

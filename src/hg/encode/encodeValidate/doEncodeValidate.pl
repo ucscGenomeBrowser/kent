@@ -177,7 +177,7 @@ our %validators = (
     protocol => \&validateControlledVocabOrControl,
     phase => \&validateControlledVocabOrControl,
     restrictionEnzyme => \&validateControlledVocabOrControl,
-    obtainedBy => \&validateobtainedBy,
+    obtainedBy => \&validateObtainedBy,
     default => \&validateControlledVocab,
     );
 
@@ -275,8 +275,8 @@ sub validateControlledVocab {
     return defined($terms{$type}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 
-sub validateobtainedBy {
-    my($val,$type) = @_;
+sub validateObtainedBy {
+    my ($val,$type) = @_;
     return defined($terms{'lab'}{$val}) ? () : ("Controlled Vocabulary \'$type\' value \'$val\' is not known");
 }
 

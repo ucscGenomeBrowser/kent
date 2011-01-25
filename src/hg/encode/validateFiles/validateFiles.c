@@ -114,7 +114,7 @@ void usage()
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
   "   -allowBadLength              allow chromosomes that have the wrong length\n in BAM\n"
   "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
-  "   -doReport                    output report in filename.report"
+  "   -doReport                    output report in filename.report\n"
   "   -showBadAlign                show non-compliant alignments\n"
   "   -bamPercent=N.N              percentage of BAM alignments that must be compliant\n"
   "   -allowErrors=N               number of errors allowed to still pass (default 0)\n"
@@ -162,10 +162,15 @@ void reportErrAbort(char *format, ...)
 /* Abort function, with optional (printf formatted) error message. */
 {
 va_list args;
-va_start(args, format);
 
 if (reportF != NULL)
+    {
+    va_start(args, format);
     vfprintf(reportF, format, args);
+    va_end(args);
+    }
+
+va_start(args, format);
 vaErrAbort(format, args);
 
 va_end(args);
