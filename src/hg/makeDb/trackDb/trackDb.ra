@@ -1607,6 +1607,7 @@ visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
+defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
 

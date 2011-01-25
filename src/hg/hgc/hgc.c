@@ -15470,7 +15470,7 @@ else
 return dyStringCannibalize(&dy);
 }
 
-#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
+#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
 
 void getSnp125RefCodonAndSnpPos(struct snp125 *snp, struct genePred *gene, int exonIx,
 				int *pSnpCodonPos, char refCodon[4], char *pRefAA)
@@ -15685,7 +15685,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 if (nearCount == 0)
-    printf("<TR><TD>%s</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
+    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
 }
 
 static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneTable,
