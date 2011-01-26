@@ -1274,7 +1274,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId None
+controlId A549/EtOH/GR/PCR1x
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-07
@@ -1299,7 +1299,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId None
+controlId A549/EtOH/GR/PCR1x
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-07
@@ -1371,7 +1371,7 @@ objType table
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId None
+controlId A549/EtOH/GR/PCR1x
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-01
@@ -1394,7 +1394,7 @@ objType table
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId None
+controlId A549/EtOH/GR/PCR1x
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-01
@@ -1605,7 +1605,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId None
+controlId SL247
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-20
@@ -36402,4 +36402,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 150087928
+# MAGIC: -632414762
