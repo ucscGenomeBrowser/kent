@@ -1543,9 +1543,37 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp132Common override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
+track snp132Patient override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
+track snp132NonUnique override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
 track snp132 override
-release alpha
-visibility hide
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2

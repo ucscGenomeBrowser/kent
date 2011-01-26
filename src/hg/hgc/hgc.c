@@ -15470,7 +15470,7 @@ else
 return dyStringCannibalize(&dy);
 }
 
-#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
+#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
 
 void getSnp125RefCodonAndSnpPos(struct snp125 *snp, struct genePred *gene, int exonIx,
 				int *pSnpCodonPos, char refCodon[4], char *pRefAA)
@@ -15660,10 +15660,11 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (snpStart - end + 1),
+	   geneTrack, geneName, (snpStart - end + 1),
 	   (strand[0] == '-' ? "up" : "down"));
     nearCount++;
     }
@@ -15676,16 +15677,17 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (start - snpEnd + 1),
+	   geneTrack, geneName, (start - snpEnd + 1),
 	   (strand[0] == '-' ? "down" : "up"));
     nearCount++;
     }
 sqlFreeResult(&sr);
 if (nearCount == 0)
-    printf("<TR><TD>%s</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
+    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
 }
 
 static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneTable,
