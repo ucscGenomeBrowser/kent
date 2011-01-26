@@ -13,6 +13,7 @@
 #include "snpUi.h"
 #include "snp125.h"
 #include "snp125Ui.h"
+#include "snp132Ext.h"
 #include "spaceSaver.h"
 #include "ld.h"
 #include "ld2.h"
@@ -102,10 +103,6 @@ boolean snpValidFilterItem(struct track *tg, void *item);
 
 boolean snpFuncFilterItem(struct track *tg, void *item);
 /* Return TRUE if item passes filter. */
-
-void loadSnp(struct track *tg);
-void loadSnp125(struct track *tg);
-/* Load up snps from database table to track items. */
 
 void freeSnp(struct track *tg);
 /* Free up snp items. */

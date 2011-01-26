@@ -222,7 +222,8 @@ cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttribut
 printf("</TD></TR>\n");
 }
 
-void snp125PrintColorSpec(char *vars[], char *labels[], char *defaults[], int varCount)
+static void snp125PrintColorSpec(char *track, char *attribute, char *vars[], boolean varsAreOld,
+				 char *labels[], char *defaults[], int varCount)
 /* Print a table displaying snp125 attribute color selects. */
 {
 int i;
@@ -236,28 +237,163 @@ for (i=0; i < varCount; i++)
 	printf("<TR>");
 	}
     printf("<TD align=right>%s</TD><TD>", labels[i]);
-    char *selected = cartUsualString(cart, vars[i], defaults[i]);
-    cgiMakeDropListWithVals(vars[i], snp125ColorLabel, snp125ColorLabel,
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.%s%s", track, attribute,
+	  (varsAreOld ? snp125OldColorVarToNew(vars[i], attribute) : vars[i]));
+    char *defaultCol = defaults[i];
+    if (varsAreOld)
+	defaultCol = cartUsualString(cart, vars[i], defaultCol);
+    char *selected = cartUsualString(cart, cartVar, defaultCol);
+    cgiMakeDropListWithVals(cartVar, snp125ColorLabel, snp125ColorLabel,
 			    snp125ColorArraySize, selected);
     printf("</TD><TD>&nbsp;&nbsp;&nbsp;</TD>");
     }
 printf("</TABLE>\n");
 }
 
-static void cartRemoveStringArray(struct cart *cart, char *vars[], int varCount)
-/* Remove each variable in vars[]. */
+static void snp125RemoveColorVars(struct cart *cart, char *vars[], boolean varsAreOld,
+				  int varCount, char *track, char *attribute)
+/* Remove each cart variable in vars[], as well as the new cart vars that begin with 
+ * the track name if varsAreOld. */
 {
 int i;
 for (i = 0;  i < varCount;  i++)
-    cartRemove(cart, vars[i]);
+    {
+    if (varsAreOld)
+	cartRemove(cart, vars[i]);
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.%s%s", track, attribute,
+	  (varsAreOld ? snp125OldColorVarToNew(vars[i], attribute) : vars[i]));
+    cartRemove(cart, cartVar);
+    }
+}
+
+static void snp125ResetColorVarsIfNecessary(struct trackDb *tdb, char *buttonVar, int version)
+/* If the 'Set defaults' button has been clicked, remove all color-control cart variables. */
+{
+// Note we use CGI, not cart, to detect a click:
+if (isNotEmpty(cgiOptionalString(buttonVar)))
+    {
+    char cartVar[512];
+    safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
+    cartRemove(cart, cartVar);
+    cartRemove(cart, snp125ColorSourceOldVar);
+    snp125RemoveColorVars(cart, snp125LocTypeOldColorVars,  TRUE, snp125LocTypeArraySize,
+			  tdb->track, "locType");
+    snp125RemoveColorVars(cart, snp125ClassOldColorVars, TRUE, snp125ClassArraySize,
+			  tdb->track, "class");
+    snp125RemoveColorVars(cart, snp125ValidOldColorVars, TRUE, snp125ValidArraySize,
+			  tdb->track, "valid");
+    int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+    snp125RemoveColorVars(cart, snp125FuncOldColorVars, TRUE, funcArraySize,
+			  tdb->track, "func");
+    snp125RemoveColorVars(cart, snp125MolTypeOldColorVars, TRUE, snp125MolTypeArraySize,
+			  tdb->track, "molType");
+    snp125RemoveColorVars(cart, snp132ExceptionVarName, FALSE, snp132ExceptionArraySize,
+			  tdb->track, "exceptions");
+    snp125RemoveColorVars(cart, snp132BitfieldVarName, FALSE, snp132BitfieldArraySize,
+			  tdb->track, "bitfields");
+    }
+}
+
+void snp125PrintColorControlSection(struct trackDb *tdb, int version)
+/* Print a collapsible section of color controls: user selects an attribute to color by,
+ * and then a color for each possible value of the selected attribute. */
+{
+printf("<TR><TD colspan=2><A name=\"colorSpec\"></TD></TR>\n");
+jsBeginCollapsibleSection(cart, tdb->track, "colorByAttribute", "Color by Attribute", FALSE);
+
+char defaultButtonVar[512];
+safef(defaultButtonVar, sizeof(defaultButtonVar), "%s_coloring", SNP125_DEFAULTS);
+stripChar(defaultButtonVar, ' ');
+snp125ResetColorVarsIfNecessary(tdb, defaultButtonVar, version);
+
+printf("<BR><B>SNP Feature for Color Specification:</B>\n");
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
+char *snp125ColorSourceDefault = snp125ColorSourceLabels[SNP125_DEFAULT_COLOR_SOURCE];
+char *colorSourceCart = cartUsualString(cart, cartVar,
+					cartUsualString(cart, snp125ColorSourceOldVar,
+							snp125ColorSourceDefault));
+char **labels = snp132ColorSourceLabels;
+int arraySize = snp132ColorSourceArraySize;
+if (version <= 127)
+    {
+    labels = snp125ColorSourceLabels;
+    arraySize = snp125ColorSourceArraySize;
+    }
+else if (version <= 131)
+    {
+    labels = snp128ColorSourceLabels;
+    arraySize = snp128ColorSourceArraySize;
+    }
+if (stringArrayIx(colorSourceCart, labels, arraySize) < 0)
+    colorSourceCart = snp125ColorSourceDefault;
+
+// It would be preferable for Javascript to handle changing the color selection
+// menus when the color source selection changes, but for now we do a submit that
+// returns to the current vertical position:
+char autoSubmit[2048];
+safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
+      "document."MAIN_FORM".action = '%s'; %s"
+      "document."MAIN_FORM".submit();\"",
+      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
+cgiContinueHiddenVar("g");
+cgiContinueHiddenVar("c");
+
+cgiMakeDropListFull(cartVar, labels, labels, arraySize, colorSourceCart, autoSubmit);
+printf("&nbsp;\n");
+char javascript[2048];
+safef(javascript, sizeof(javascript),
+      "document."MAIN_FORM".action='%s'; %s document."MAIN_FORM".submit();",
+      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
+cgiMakeOnClickSubmitButton(javascript, defaultButtonVar, JS_DEFAULTS_BUTTON_LABEL);
+printf("<BR><BR>\n"
+       "The selected &quot;Feature for Color Specification&quot; above has the\n"
+       "selection of colors below for each attribute. Only the color\n"
+       "options for the feature selected above will be used to color items;\n"
+       "color options for other features will not be shown. If a SNP has more\n"
+       "than one of these attributes, the stronger color will override the\n"
+       "weaker color. The order of colors, from strongest to weakest, is red,\n"
+       "green, blue, gray, and black.\n"
+       "<BR><BR>\n");
+
+if (sameString(colorSourceCart, "Location Type"))
+    {
+    if (version <= 127)
+	snp125PrintColorSpec(tdb->track, "locType", snp125LocTypeOldColorVars, TRUE,
+			     snp125LocTypeLabels, snp125LocTypeDefault, snp125LocTypeArraySize);
+    }
+else if (sameString(colorSourceCart, "Class"))
+    snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
+			 snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
+else if (sameString(colorSourceCart, "Validation"))
+    snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
+			 snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
+else if (sameString(colorSourceCart, "Function"))
+    {
+    int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+    snp125PrintColorSpec(tdb->track, "func", snp125FuncOldColorVars, TRUE,
+			 snp125FuncLabels, snp125FuncDefault, funcArraySize);
+    }
+else if (sameString(colorSourceCart, "Molecule Type"))
+    snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
+			 snp125MolTypeLabels, snp125MolTypeDefault, snp125MolTypeArraySize);
+else if (sameString(colorSourceCart, "Unusual Conditions (UCSC)"))
+    snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
+			 snp132ExceptionLabels, snp132ExceptionDefault, snp132ExceptionArraySize);
+else if (sameString(colorSourceCart, "Miscellaneous Attributes (dbSNP)"))
+    snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
+			 snp132BitfieldLabels, snp132BitfieldDefault, snp132BitfieldArraySize);
+jsEndCollapsibleSection();
 }
 
 void snp125Ui(struct trackDb *tdb)
 /* UI for dbSNP version 125 and later. */
 {
-char autoSubmit[2048];
 char *orthoTable = snp125OrthoTable(tdb, NULL);
 int version = snpVersion(tdb->track);
+char cartVar[512];
 jsInit();
 
 if (version < 130)
@@ -265,32 +401,58 @@ if (version < 130)
 
 if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
     {
-    snp125ExtendedNames = cartUsualBoolean(cart, "snp125ExtendedNames", FALSE);
     printf("<BR><B>Include Chimp state and observed human alleles in name: </B>&nbsp;");
-    cgiMakeCheckBox("snp125ExtendedNames",snp125ExtendedNames);
-    printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles). </B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.extendedNames", tdb->track);
+    snp125ExtendedNames = cartUsualBoolean(cart, cartVar,
+			  // Check old cart var name for backwards compatibility w/ old sessions:
+					   cartUsualBoolean(cart, "snp125ExtendedNames", FALSE));
+    cgiMakeCheckBox(cartVar, snp125ExtendedNames);
+    printf("<BR>(If enabled, chimp allele is displayed first, then '>', then human alleles).");
     printf("<BR><BR>\n");
     }
+else
+    puts("<BR>");
 
 // Make wrapper table for collapsible sections:
 puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
 
 snp125OfferGeneTracksForFunction(tdb);
 
-//#*** Need snp125Ui funcs for backwards compat with old cart vars when these have track-specific
-//#*** settings as they should:
-double snp125AvHetCutoff = cartUsualDouble(cart, "snp125AvHetCutoff", SNP125_DEFAULT_MIN_AVHET);
-printf("<TR><TD colspan=2><BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
-cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
-printf("</TD></TR>\n");
-
-int snp125WeightCutoff = cartUsualInt(cart, "snp125WeightCutoff", SNP125_DEFAULT_MAX_WEIGHT);
-printf("<TR><TD colspan=2><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
-cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
-printf("&nbsp;<EM>Range: 1, 2 or 3; SNPs with higher weights are less reliable</EM><BR><BR>\n");
-printf("</TD></TR>\n");
-
+printf("<TR><TD colspan=2><BR></TD></TR>\n");
 printf("<TR><TD colspan=2><A name=\"filterControls\"></TD></TR>\n");
+
+safef(cartVar, sizeof(cartVar), "%s.minAvHet", tdb->track);
+double minAvHet = cartUsualDouble(cart, cartVar,
+			     // Check old cart var name:
+			     cartUsualDouble(cart, "snp125AvHetCutoff", SNP125_DEFAULT_MIN_AVHET));
+printf("<TR><TD colspan=2><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
+cgiMakeDoubleVar(cartVar, minAvHet, 6);
+printf("</TD></TR>\n");
+
+safef(cartVar, sizeof(cartVar), "%s.maxWeight", tdb->track);
+int defaultMaxWeight = SNP125_DEFAULT_MAX_WEIGHT;
+char *setting = trackDbSetting(tdb, "defaultMaxWeight");
+if (isNotEmpty(setting))
+    defaultMaxWeight = atoi(setting);
+int maxWeight = cartUsualInt(cart, cartVar,
+			     // Check old cart var name:
+			     cartUsualInt(cart, "snp125WeightCutoff", defaultMaxWeight));
+printf("<TR><TD colspan=2><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
+cgiMakeIntVar(cartVar, maxWeight, 4);
+printf("&nbsp;<EM>Range: 1, 2 or 3; SNPs with higher weights are less reliable</EM><BR>\n");
+printf("</TD></TR>\n");
+
+if (version >= 132)
+    {
+    printf("<TR><TD colspan=2><B>Minimum number of distinct "
+	   "<A HREF=\"#Submitters\">Submitters</A>:</B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.minSubmitters", tdb->track);
+    cgiMakeIntVar(cartVar, cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_SUBMITTERS), 4);
+    printf("</TD></TR>\n");
+    }
+
+printf("<TR><TD colspan=2><BR></TD></TR>\n");
+
 jsBeginCollapsibleSection(cart, tdb->track, "filterByAttribute", "Filter by Attribute", FALSE);
 printf("Check the boxes below to include SNPs with those attributes.  "
        "In order to be displayed, a SNP must pass the filter for each "
@@ -312,84 +474,18 @@ snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
 			  snp125FuncDataName, funcArraySize);
 snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
 			  snp125MolTypeDataName, snp125MolTypeArraySize);
+if (version >= 132)
+    {
+    snp125PrintFilterControls(tdb->track, "Unusual Conditions (UCSC)", "exceptions",
+		      snp132ExceptionLabels, snp132ExceptionVarName, snp132ExceptionArraySize);
+    snp125PrintFilterControls(tdb->track, "Miscellaneous Attributes (dbSNP)", "bitfields",
+		      snp132BitfieldLabels, snp132BitfieldDataName, snp132BitfieldArraySize);
+    }
 printf("</TABLE>\n");
 jsEndCollapsibleSection();
 puts("<TR><TD colspan=2><BR></TD></TR>");
 
-safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
-      "document."MAIN_FORM".action = '%s'; %s"
-      "document."MAIN_FORM".submit();\"",
-      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
-cgiContinueHiddenVar("g");
-cgiContinueHiddenVar("c");
-
-/* The actual set defaults button is below, but we need to handle it here: */
-char defaultButton[1024];
-safef(defaultButton, sizeof(defaultButton), "%s_coloring", SNP125_DEFAULTS);
-stripChar(defaultButton, ' ');
-boolean defaultColoring = isNotEmpty(cgiOptionalString(defaultButton));
-if (defaultColoring)
-    {
-    cartRemove(cart, snp125ColorSourceVarName);
-    cartRemoveStringArray(cart, snp125LocTypeStrings, snp125LocTypeArraySize);
-    cartRemoveStringArray(cart, snp125ClassStrings, snp125ClassArraySize);
-    cartRemoveStringArray(cart, snp125ValidStrings, snp125ValidArraySize);
-    cartRemoveStringArray(cart, snp125FuncStrings, funcArraySize);
-    cartRemoveStringArray(cart, snp125MolTypeStrings, snp125MolTypeArraySize);
-    }
-printf("<TR><TD colspan=2><A name=\"colorSpec\"></TD></TR>\n");
-jsBeginCollapsibleSection(cart, tdb->track, "colorByAttribute", "Color by Attribute", FALSE);
-printf("<BR><B>SNP Feature for Color Specification:</B>\n");
-char *snp125ColorSourceCart = cartUsualString(cart, snp125ColorSourceVarName,
-					      snp125ColorSourceDefault);
-if (version <= 127)
-    cgiMakeDropListFull(snp125ColorSourceVarName, snp125ColorSourceLabels,
-			snp125ColorSourceLabels, snp125ColorSourceArraySize,
-			snp125ColorSourceCart, autoSubmit);
-else
-    {
-    if (stringArrayIx(snp125ColorSourceCart, snp128ColorSourceLabels,
-		      snp128ColorSourceArraySize) < 0)
-	snp125ColorSourceCart = snp125ColorSourceDefault;
-    cgiMakeDropListFull(snp125ColorSourceVarName, snp128ColorSourceLabels,
-			snp128ColorSourceLabels, snp128ColorSourceArraySize,
-			snp125ColorSourceCart, autoSubmit);
-    }
-printf("&nbsp;\n");
-char javascript[2048];
-safef(javascript, sizeof(javascript),
-      "document."MAIN_FORM".action='%s'; %s document."MAIN_FORM".submit();",
-      cgiScriptName(), jsSetVerticalPosition(MAIN_FORM));
-cgiMakeOnClickSubmitButton(javascript, defaultButton, JS_DEFAULTS_BUTTON_LABEL);
-printf("<BR><BR>\n"
-       "The selected &quot;Feature for Color Specification&quot; above has the\n"
-       "selection of colors below for each attribute. Only the color\n"
-       "options for the feature selected above will be used to color items;\n"
-       "color options for other features will not be shown. If a SNP has more\n"
-       "than one of these attributes, the stronger color will override the\n"
-       "weaker color. The order of colors, from strongest to weakest, is red,\n"
-       "green, blue, gray, and black.\n"
-       "<BR><BR>\n");
-
-if (sameString(snp125ColorSourceCart, "Location Type"))
-    {
-    if (version <= 127)
-	snp125PrintColorSpec(snp125LocTypeStrings, snp125LocTypeLabels, snp125LocTypeDefault,
-			     snp125LocTypeArraySize);
-    }
-else if (sameString(snp125ColorSourceCart, "Class"))
-    snp125PrintColorSpec(snp125ClassStrings, snp125ClassLabels, snp125ClassDefault,
-			 snp125ClassArraySize);
-else if (sameString(snp125ColorSourceCart, "Validation"))
-    snp125PrintColorSpec(snp125ValidStrings, snp125ValidLabels, snp125ValidDefault,
-			 snp125ValidArraySize);
-else if (sameString(snp125ColorSourceCart, "Function"))
-    snp125PrintColorSpec(snp125FuncStrings, snp125FuncLabels, snp125FuncDefault,
-			 funcArraySize);
-else if (sameString(snp125ColorSourceCart, "Molecule Type"))
-    snp125PrintColorSpec(snp125MolTypeStrings, snp125MolTypeLabels, snp125MolTypeDefault,
-			 snp125MolTypeArraySize);
-jsEndCollapsibleSection();
+snp125PrintColorControlSection(tdb, version);
 // End wrapper table for collapsible sections:
 puts("</TABLE>");
 }
