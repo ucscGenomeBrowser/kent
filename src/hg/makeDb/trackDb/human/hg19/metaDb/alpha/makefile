@@ -34,7 +34,8 @@ wgEncodeGisRnaPet.ra \
 wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
 wgEncodeUwDgf.ra \
-wgEncodeDukeAffyExon.ra 
+wgEncodeDukeAffyExon.ra \
+wgEncodeUchicagoTfbs.ra 
 
 include ../../../../makefile.metaDb
 
