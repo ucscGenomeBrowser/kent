@@ -162,6 +162,9 @@ void genePredAddGenbankCds(struct psl *psl, struct genbankCds* cds,
 int genePredCmp(const void *va, const void *vb);
 /* Compare to sort based on chromosome, txStart. */
 
+int genePredNameCmp(const void *va, const void *vb);
+/* Compare to sort based on name, then chromosome, txStart. */
+
 struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *group, 
                                         char *name, char *exonSelectWord, unsigned optFields,
                                         unsigned options);

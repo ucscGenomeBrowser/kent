@@ -94,6 +94,7 @@ clean:
 	cd jkOwnLib && ${MAKE} clean
 	cd utils && ${MAKE} clean
 	cd webBlat && ${MAKE} clean
+	cd isPcr && ${MAKE} clean
 	touch non-empty-rm.o
 	- find . -name \*.o -print | xargs rm
 	rm -f tags TAGS

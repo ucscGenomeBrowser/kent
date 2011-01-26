@@ -5,3 +5,6 @@ SCRIPTS = compareRandomSample.py \
 
 all:	${SCRIPTS}
 	cp ${SCRIPTS} ${DESTDIR}${BINDIR}
+
+clean:
+

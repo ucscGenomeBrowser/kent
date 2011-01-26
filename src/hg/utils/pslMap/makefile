@@ -13,6 +13,7 @@ all: ${BINDIR}/pslMap
 ${BINDIR}/${A}${EXE}: ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	@rm -f usage.msg
 
 pslMap.o: usage.msg
 
