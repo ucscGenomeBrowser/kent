@@ -10413,7 +10413,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -10435,7 +10435,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -10457,7 +10457,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdPk.narrowPeak.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -10479,7 +10479,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -10501,7 +10501,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsH1hescCtbp2UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -10523,7 +10523,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdSig.bigWig
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11875,7 +11875,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -11896,7 +11896,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -11917,7 +11917,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -11939,7 +11939,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -11960,7 +11960,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -11981,7 +11981,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293bElk4UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12294,7 +12294,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293InputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3257
@@ -12314,7 +12314,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293InputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 3257
@@ -12334,7 +12334,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHek293InputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -22649,7 +22649,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -22670,7 +22670,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -22691,7 +22691,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22713,7 +22713,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -22734,7 +22734,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -22755,7 +22755,7 @@ dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-19
 fileName wgEncodeSydhTfbsHepg2Tcf4UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22907,7 +22907,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -22928,7 +22928,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -22949,7 +22949,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -22971,7 +22971,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 project wgEncode
 replicate 1
@@ -22993,7 +22993,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 project wgEncode
 replicate 2
@@ -23015,7 +23015,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsHuvecCfosUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34833,7 +34833,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -34854,7 +34854,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -34875,7 +34875,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34897,7 +34897,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G Magnetic Beads
 project wgEncode
 replicate 1
@@ -34919,7 +34919,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Protein G Magnetic Beads
 project wgEncode
 replicate 2
@@ -34941,7 +34941,7 @@ dateSubmitted 2011-01-13
 dateUnrestricted 2011-10-13
 fileName wgEncodeSydhTfbsNt2d1Znf274UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -34963,7 +34963,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep1.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsPbdeGata1UcdAlnRep1
 project wgEncode
 replicate 1
@@ -34985,7 +34985,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep2.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsPbdeGata1UcdAlnRep2
 project wgEncode
 replicate 2
@@ -35007,7 +35007,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdPk.narrowPeak.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35029,7 +35029,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsPbdeGata1UcdRawSignalRep1
 project wgEncode
@@ -35052,7 +35052,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsPbdeGata1UcdRawSignalRep2
 project wgEncode
@@ -35075,7 +35075,7 @@ dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdSig.bigWig
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35097,7 +35097,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 fileName wgEncodeSydhTfbsPbdeInputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 1956
@@ -35117,7 +35117,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 fileName wgEncodeSydhTfbsPbdeInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 setType input
 subId 1956
@@ -35137,7 +35137,7 @@ dateSubmitted 2011-01-14
 dateUnrestricted 2011-10-14
 fileName wgEncodeSydhTfbsPbdeInputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -35159,7 +35159,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep1.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsPbdePol2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -35181,7 +35181,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep2.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsPbdePol2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -35203,7 +35203,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdPk.narrowPeak.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35225,7 +35225,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq
 parentTable wgEncodeSydhTfbsPbdePol2UcdRawSignalRep1
 project wgEncode
@@ -35248,7 +35248,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq
 parentTable wgEncodeSydhTfbsPbdePol2UcdRawSignalRep2
 project wgEncode
@@ -35271,7 +35271,7 @@ dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdSig.bigWig
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35486,7 +35486,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -35508,7 +35508,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2.bam
 grant Snyder
-lab UCDavis
+lab UCD
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -35530,7 +35530,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdPk.narrowPeak.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35552,7 +35552,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdRawSignalRep1
 project wgEncode
@@ -35575,7 +35575,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA-seq (SIGMA)
 parentTable wgEncodeSydhTfbsShsy5yGata2UcdRawSignalRep2
 project wgEncode
@@ -35598,7 +35598,7 @@ dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdSig.bigWig
 grant Snyder
-lab UCDavis
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35620,7 +35620,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -35641,7 +35641,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -35662,7 +35662,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -35684,7 +35684,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 1
@@ -35706,7 +35706,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonciation.  Method of Immunoprecipitation:  StaphA
 project wgEncode
 replicate 2
@@ -35728,7 +35728,7 @@ dateSubmitted 2011-01-24
 dateUnrestricted 2011-10-24
 fileName wgEncodeSydhTfbsTrexhek293Znf263UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -36060,4 +36060,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1617883771
+# MAGIC: -609534519

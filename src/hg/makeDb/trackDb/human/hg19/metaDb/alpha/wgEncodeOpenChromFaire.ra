@@ -9,7 +9,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549AlnRep1.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
@@ -27,7 +27,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549AlnRep2.bam
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
@@ -45,7 +45,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549BaseOverlapSignal.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion baseAlignCounts.pl v 1
 project wgEncode
 subId 3496
@@ -63,7 +63,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549Pk.narrowPeak.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion p-value cutoff: 0.1
 project wgEncode
 subId 3496
@@ -81,7 +81,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549RawDataRep1.fastq.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 project wgEncode
 replicate 1
 subId 3496
@@ -98,7 +98,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549RawDataRep2.fastq.gz
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 project wgEncode
 replicate 2
 subId 3496
@@ -115,7 +115,7 @@ dateSubmitted 2011-01-22
 dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549Sig.bigWig
 grant Crawford
-lab UNC(Lieb)
+lab UNC
 labVersion fseq v 1.84, iff_generic_male
 project wgEncode
 subId 3496
@@ -3476,4 +3476,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1391281096
+# MAGIC: 1340945139
