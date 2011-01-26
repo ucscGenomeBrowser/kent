@@ -1,0 +1,153 @@
+metaObject wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
+objType table
+antibody ELAVL1
+cell GM12878
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+project wgEncode
+ripTgtProtein ELAVL1
+subId 1245
+tableName wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna
+objType table
+antibody PABPC1
+cell GM12878
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+project wgEncode
+ripTgtProtein PABPC1
+subId 1245
+tableName wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
+objType table
+antibody ripInput
+cell GM12878
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Input
+project wgEncode
+ripTgtProtein ripInput
+subId 1245
+tableName wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
+objType table
+antibody T7Tag
+cell GM12878
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522 antibody
+project wgEncode
+ripTgtProtein T7Tag
+subId 1245
+tableName wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna
+objType table
+antibody ELAVL1
+cell K562
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion SC_5261 antibody
+project wgEncode
+ripTgtProtein ELAVL1
+subId 1245
+tableName wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna
+objType table
+antibody PABPC1
+cell K562
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Sig_P6246 antibody
+project wgEncode
+ripTgtProtein PABPC1
+subId 1245
+tableName wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
+objType table
+antibody ripInput
+cell K562
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Input
+project wgEncode
+ripTgtProtein ripInput
+subId 1245
+tableName wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
+view RbpAssocRna
+
+metaObject wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
+objType table
+antibody T7Tag
+cell K562
+composite wgEncodeSunyAlbanyTiling
+dataType RipChip
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-01
+dateUnrestricted 2011-03-01
+fileName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna.broadPeak.gz
+grant Tenenbaum
+lab SunyAlbany
+labVersion Nov_69522,Mil_AB3790 antibodies
+project wgEncode
+ripTgtProtein T7Tag
+subId 1245
+tableName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
+view RbpAssocRna
+
+# MAGIC: 107326309

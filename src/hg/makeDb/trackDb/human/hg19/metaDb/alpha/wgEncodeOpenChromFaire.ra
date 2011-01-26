@@ -2833,7 +2833,7 @@ fileIndex wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai
 fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
 grant Crawford
 lab UNC
-labVersion align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1, input was generic_male (should have been female)
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2854,7 +2854,7 @@ fileIndex wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai
 fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
 grant Crawford
 lab UNC
-labVersion align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1, input was generic_male (should have been female)
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2865,7 +2865,7 @@ metaObject wgEncodeOpenChromFaireNhbeBaseOverlapSignal
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2874,7 +2874,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
-labVersion baseAlignCounts.pl v 1
+labVersion baseAlignCounts.pl v 1, input was generic_male (should have been female)
 origAssembly hg18
 project wgEncode
 subId 1574
@@ -2885,7 +2885,7 @@ metaObject wgEncodeOpenChromFaireNhbePk
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2894,7 +2894,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
 grant Crawford
 lab UNC
-labVersion p-value cutoff: 0.01
+labVersion fseq v 1.84, iff_generic_male (should have been female)
 origAssembly hg18
 project wgEncode
 subId 1574
@@ -2914,6 +2914,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+labVersion input was generic_male (should have been female)
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2934,6 +2935,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+labVersion input was generic_male (should have been female)
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2945,7 +2947,7 @@ metaObject wgEncodeOpenChromFaireNhbeSig
 objType table
 cell NHBE
 composite wgEncodeOpenChromFaire
-controlId generic_female
+controlId generic_male
 dataType FaireSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -2954,7 +2956,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeSig.bigWig
 grant Crawford
 lab UNC
-labVersion fseq v 1.84, iff_generic_female
+labVersion fseq v 1.84, iff_generic_male (should have been female)
 origAssembly hg18
 project wgEncode
 subId 1574
@@ -3476,4 +3478,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1391281096
+# MAGIC: 1644816375

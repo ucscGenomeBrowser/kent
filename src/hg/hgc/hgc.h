@@ -394,6 +394,10 @@ char *hgdpPngFilePath(char *rsId);
 void hgdpGeoFreqTable(struct hgdpGeo *geo);
 /* Print an HTML table of populations and allele frequencies. */
 
+void printOtherSnpMappings(char *table, char *name, int start,
+			   struct sqlConnection *conn, int rowOffset);
+/* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
+
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 

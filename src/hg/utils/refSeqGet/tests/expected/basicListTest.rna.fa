@@ -1,9 +1,3 @@
->NR_000010.1
-ggtgcagatgatgacactgtaaagcgaccaaagtctgaacaaagtgattg
-gtacctcgttgtctgatgcacc
->NR_000014.1
-gggtaatgatggaaaaatcattattggaaaagaatgacatgaacaaagga
-accactgaagtg
 >NM_001129819.2
 agccacactgggaaaacattggagcttggtctgccatcctgaactgtggt
 tcccctgcctcccagcccggctgtgagtgctcagcgaccctgacaggctg
@@ -151,3 +145,9 @@ agccactggtttctcagaatccaaagatcacatattctagtgtaacactg
 caagaagtcttgagaaaaagattattgtagtgttcaaaatatttttgtat
 tgttaatgcatcatcatagaaaaacttttaaacatgagaataaagatact
 ttttactgggtttgtttttcaaagcctgaaaaaaa
+>NR_000010.1
+ggtgcagatgatgacactgtaaagcgaccaaagtctgaacaaagtgattg
+gtacctcgttgtctgatgcacc
+>NR_000014.1
+gggtaatgatggaaaaatcattattggaaaagaatgacatgaacaaagga
+accactgaagtg

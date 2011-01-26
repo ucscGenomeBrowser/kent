@@ -16258,6 +16258,31 @@ if (pdbIds != NULL)
     }
 }
 
+void printOtherSnpMappings(char *table, char *name, int start,
+			   struct sqlConnection *conn, int rowOffset)
+/* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
+{
+char query[512];
+safef(query, sizeof(query), "select * from %s where name='%s'",
+      table, name);
+struct sqlResult *sr = sqlGetResult(conn, query);
+int snpCount = 0;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *snp = bedLoad3(row + rowOffset);
+    if (snp->chromStart != start || differentString(snp->chrom, seqName))
+	{
+	printf("<BR>\n");
+	if (snpCount == 0)
+	    printf("<B>This SNP maps to these additional locations:</B><BR><BR>\n");
+	snpCount++;
+	bedPrintPos((struct bed *)snp, 3, tdb);
+	}
+    }
+sqlFreeResult(&sr);
+}
+
 void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Process SNP details. */
 {
@@ -16270,7 +16295,6 @@ struct sqlResult *sr;
 char **row;
 char   query[512];
 int    rowOffset=hOffsetPastBin(database, seqName, table);
-int    snpCount=0;
 
 genericHeader(tdb, NULL);
 printf("<H2>dbSNP build %d %s</H2>\n", version, itemName);
@@ -16294,26 +16318,7 @@ else
     errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select * from %s where name='%s'",
-      table, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (version >= 132)
-	snp = snp132ExtLoad(row+rowOffset);
-    else
-	snp = (struct snp132Ext *)snp125Load(row+rowOffset);
-    if (snp->chromStart != start || differentString(snp->chrom, seqName))
-	{
-	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these additional locations:"
-		   "</B><BR><BR>");
-	snpCount++;
-	bedPrintPos((struct bed *)snp, 3, tdb);
-	printf("<BR>");
-	}
-    }
-sqlFreeResult(&sr);
+printOtherSnpMappings(table, itemName, start, conn, rowOffset);
 puts("<BR>");
 // Make table for collapsible sections:
 puts("<TABLE>");

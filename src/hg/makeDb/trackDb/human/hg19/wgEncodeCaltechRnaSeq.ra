@@ -1,5 +1,4 @@
 track wgEncodeCaltechRnaSeq
-release alpha,beta
 superTrack wgEncodeRnaSeqSuper dense
 compositeTrack on
 shortLabel Caltech RNA-seq
@@ -24,7 +23,6 @@ maxWindowToDraw 10000000
 
 
 	track wgEncodeCaltechRnaSeqViewMinusSignal
-	release alpha,beta
 	view MinusSignal
 	shortLabel Minus Raw Signal
 	visibility full
@@ -36,7 +34,6 @@ maxWindowToDraw 10000000
         windowingFunction mean
 
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
                 longLabel NHEK single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel NHEK 1x75D - 1
@@ -46,7 +43,6 @@ maxWindowToDraw 10000000
 		# subId=1483 dateSubmitted=2010-06-18
 
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on 
                 longLabel H1-hESC single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel H1ES 1x75D - 2
@@ -56,7 +52,6 @@ maxWindowToDraw 10000000
 		# subId=1626 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
                 longLabel GM12878 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel GM12 1x75D - 1
@@ -66,7 +61,6 @@ maxWindowToDraw 10000000
 		# subId=1631 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
                 longLabel GM12878 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel GM12 1x75D - 2
@@ -76,7 +70,6 @@ maxWindowToDraw 10000000
 		# subId=1632 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on 
                 longLabel H1-hESC single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel H1ES 1x75D - 1
@@ -86,7 +79,6 @@ maxWindowToDraw 10000000
 		# subId=1633 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
                 longLabel HeLa-S3 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel HeLa 1x75D - 1
@@ -96,7 +88,6 @@ maxWindowToDraw 10000000
 		# subId=1634 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
                 longLabel HeLa-S3 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel HeLa 1x75D - 2
@@ -106,7 +97,6 @@ maxWindowToDraw 10000000
 		# subId=1635 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
                 longLabel HepG2 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel HepG 1x75D - 1
@@ -116,7 +106,6 @@ maxWindowToDraw 10000000
 		# subId=1636 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
                 longLabel K562 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel K562 1x75D - 1
@@ -126,7 +115,6 @@ maxWindowToDraw 10000000
 		# subId=1637 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
                 longLabel HepG2 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel HepG 1x75D - 2
@@ -136,7 +124,6 @@ maxWindowToDraw 10000000
 		# subId=1638 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
                 longLabel HUVEC single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel HUVE 1x75D - 1
@@ -146,7 +133,6 @@ maxWindowToDraw 10000000
 		# subId=1639 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
                 longLabel HUVEC single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel HUVE 1x75D - 2
@@ -156,7 +142,6 @@ maxWindowToDraw 10000000
 		# subId=1645 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
                 longLabel K562 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel K562 1x75D - 2
@@ -167,7 +152,6 @@ maxWindowToDraw 10000000
 
 
 	track wgEncodeCaltechRnaSeqViewPlusSignal
-	release alpha,beta
 	shortLabel Plus Raw Signal
 	view PlusSignal
 	visibility full
@@ -179,7 +163,6 @@ maxWindowToDraw 10000000
         windowingFunction mean
 
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
                 longLabel NHEK single read RNA-seq Plus signal rep 1 from ENCODE/Caltech
 		shortLabel NHEK 1x75D + 1
@@ -189,7 +172,6 @@ maxWindowToDraw 10000000
 		# subId=1483 dateSubmitted=2010-06-18
 
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on 
                 longLabel H1-hESC single read RNA-seq Plus signal rep 2 from ENCODE/Caltech
 		shortLabel H1ES 1x75D + 2
@@ -199,7 +181,6 @@ maxWindowToDraw 10000000
 		# subId=1626 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on
                 longLabel GM12878 single read RNA-seq Plus signal rep 1 from ENCODE/Caltech
 		shortLabel GM12 1x75D + 1
@@ -209,7 +190,6 @@ maxWindowToDraw 10000000
 		# subId=1631 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on
                 longLabel GM12878 single read RNA-seq Plus signal rep 2 from ENCODE/Caltech
 		shortLabel GM12 1x75D + 2
@@ -219,7 +199,6 @@ maxWindowToDraw 10000000
 		# subId=1632 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on 
                 longLabel H1-hESC single read RNA-seq Plus signal rep 1 from ENCODE/Caltech
 		shortLabel H1ES 1x75D + 1
@@ -229,7 +208,6 @@ maxWindowToDraw 10000000
 		# subId=1633 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
                 longLabel HeLa-S3 single read RNA-seq Plus signal rep 1 from ENCODE/Caltech
 		shortLabel HeLa 1x75D + 1
@@ -239,7 +217,6 @@ maxWindowToDraw 10000000
 		# subId=1634 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
                 longLabel HeLa-S3 single read RNA-seq Plus signal rep 2 from ENCODE/Caltech
 		shortLabel HeLa 1x75D + 2
@@ -249,7 +226,6 @@ maxWindowToDraw 10000000
 		# subId=1635 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
                 longLabel HepG2 single read RNA-seq Plus signal rep 1 from ENCODE/Caltech
 		shortLabel HepG 1x75D + 1
@@ -259,7 +235,6 @@ maxWindowToDraw 10000000
 		# subId=1636 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal
                 longLabel K562 single read RNA-seq Plus signal rep 1 from ENCODE/Caltech
 		shortLabel K562 1x75D + 1
@@ -269,7 +244,6 @@ maxWindowToDraw 10000000
 		# subId=1637 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
                 longLabel HepG2 single read RNA-seq Plus signal rep 2 from ENCODE/Caltech
 		shortLabel HepG 1x75D + 2
@@ -279,7 +253,6 @@ maxWindowToDraw 10000000
 		# subId=1638 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
                 longLabel HUVEC single read RNA-seq Plus signal rep 1 from ENCODE/Caltech
 		shortLabel HUVE 1x75D + 1
@@ -289,7 +262,6 @@ maxWindowToDraw 10000000
 		# subId=1639 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
                 longLabel HUVEC single read RNA-seq Plus signal rep 2 from ENCODE/Caltech
 		shortLabel HUVE 1x75D + 2
@@ -299,7 +271,6 @@ maxWindowToDraw 10000000
 		# subId=1645 dateSubmitted=2010-06-19
 
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal
                 longLabel K562 single read RNA-seq Plus signal rep 2 from ENCODE/Caltech
 		shortLabel K562 1x75D + 2
@@ -310,7 +281,6 @@ maxWindowToDraw 10000000
 
 
 	track wgEncodeCaltechRnaSeqViewSignal
-	release alpha,beta
 	shortLabel Signal
 	view Signal
 	visibility full 
@@ -322,7 +292,6 @@ maxWindowToDraw 10000000
         windowingFunction mean
 
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel NHEK paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Sg 1
@@ -332,7 +301,6 @@ maxWindowToDraw 10000000
 		# subId=1493 dateSubmitted=2010-06-18
 
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HepG2 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HepG 2x75 Sg 2
@@ -342,7 +310,6 @@ maxWindowToDraw 10000000
 		# subId=1660 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HepG2 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HepG 2x75 Sg 1
@@ -352,7 +319,6 @@ maxWindowToDraw 10000000
 		# subId=1661 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HeLa-S3 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HeLa 2x75 Sg 2
@@ -362,7 +328,6 @@ maxWindowToDraw 10000000
 		# subId=1662 dateSubmitted=2010-06-22
 
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HeLa-S3 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HeLa 2x75 Sg 1
@@ -372,7 +337,6 @@ maxWindowToDraw 10000000
 		# subId=1663 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HUVEC paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Sg 2
@@ -382,7 +346,6 @@ maxWindowToDraw 10000000
 		# subId=1664 dateSubmitted=2010-06-22
 
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HUVEC paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Sg 1
@@ -392,7 +355,6 @@ maxWindowToDraw 10000000
 		# subId=1665 dateSubmitted=2010-06-22
 
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
                 longLabel H1-hESC paired read RNA-seq Signal rep 4 from ENCODE/Caltech
 		shortLabel H1ES 2x75 Sg 4
@@ -402,7 +364,6 @@ maxWindowToDraw 10000000
 		# subId=1666 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
                 longLabel H1-hESC paired read RNA-seq Signal rep 3 from ENCODE/Caltech
 		shortLabel H1ES 2x75 Sg 3
@@ -412,7 +373,6 @@ maxWindowToDraw 10000000
 		# subId=1667 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
                 longLabel H1-hESC paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel H1ES 2x75 Sg 2
@@ -422,7 +382,6 @@ maxWindowToDraw 10000000
 		# subId=1668 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
                 longLabel H1-hESC (400bp) paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel H1ES 400 Sg 1
@@ -432,7 +391,6 @@ maxWindowToDraw 10000000
 		# subId=1669 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
                 longLabel GM12878 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel GM12 2x75 Sg 1
@@ -442,7 +400,6 @@ maxWindowToDraw 10000000
 		# subId=1647 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
                 longLabel K562 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel K562 2x75 Sg 2
@@ -452,7 +409,6 @@ maxWindowToDraw 10000000
 		# subId=1658 dateSubmitted=2010-06-22
 
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
                 longLabel K562 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel K562 2x75 Sg 1
@@ -462,7 +418,6 @@ maxWindowToDraw 10000000
 		# subId=1659 dateSubmitted=2010-06-22
 
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
                 longLabel H1-hESC paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel H1ES 2x75 Sg 1
@@ -472,7 +427,6 @@ maxWindowToDraw 10000000
 		# subId=1670 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
                 longLabel GM12878 (400bp) paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel GM12 400 Sg 2
@@ -482,7 +436,6 @@ maxWindowToDraw 10000000
 		# subId=1672 dateSubmitted=2010-06-21
 
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal
                 longLabel GM12878 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel GM12 2x75 Sg 2
@@ -492,7 +445,6 @@ maxWindowToDraw 10000000
 		# subId=1856 dateSubmitted=2010-07-07
 
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel NHEK paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Sg 2
@@ -502,7 +454,6 @@ maxWindowToDraw 10000000
 		# subId=1909 dateSubmitted=2010-07-13
 
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HSMM paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Sg 2
@@ -511,7 +462,6 @@ maxWindowToDraw 10000000
 		# subId=1908 dateSubmitted=2010-07-13
 
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel HSMM paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Sg 1
@@ -520,7 +470,6 @@ maxWindowToDraw 10000000
 		# subId=1907 dateSubmitted=2010-07-13
 
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel NHLF paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Sg 1
@@ -529,7 +478,6 @@ maxWindowToDraw 10000000
 		# subId=1906 dateSubmitted=2010-07-13
 
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel NHLF paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Sg 2
@@ -538,7 +486,6 @@ maxWindowToDraw 10000000
 		# subId=1905 dateSubmitted=2010-07-13
 
 		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
-		release alpha,beta
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
                 longLabel MCF-7 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel MCF7 2x75 Sg 2
@@ -547,7 +494,6 @@ maxWindowToDraw 10000000
 		# subId=1904 dateSubmitted=2010-07-13
 
 		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
-		release alpha,beta
 		parent wgEncodeCaltechRnaSeqViewSignal off
 		shortLabel MCF7 Sig 1
                 longLabel MCF-7 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
