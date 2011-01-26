@@ -1612,7 +1612,7 @@ maxWindowToDraw 10000000
 type bed 6 +
 
 track snp132
-shortLabel SNPs (132)
+shortLabel All SNPs (132)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 132)
 group varRep
 priority 99.0925

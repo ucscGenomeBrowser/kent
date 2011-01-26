@@ -27,11 +27,14 @@ Genome Analyzer (GA II).</P>
 The length of sequence reads was 36 bp. Mapping was performed using 
 Bowtie (version 0.11.3, 
 Langmead B, Trapnell C, Pop M, Salzberg SL (2009)) allowing up to one
-mismatch to map all sequence reads to the gender appropriate human genome hg18,
-and 67-87% of the reads in the neuronal samples mapped to one unique
+mismatch to map all sequence reads to the gender appropriate human genome hg18 (NCBI36), and
+67-87% of the reads in the neuronal samples mapped to one unique
 location in the genome. The mapped reads were analyzed using the MACS software
-package (version 1.3.5, Zhang Y, et al. (2008)) with bw = 230 bp, as defined
-experimentally by PCR, tSize = 36 bp, and other parameters set at default.</P>
+package (version 1.3.5, Zhang Y, et al. (2008)) to identify peaks, with bw = 230 bp, as defined
+experimentally by PCR, tSize = 36 bp, and other parameters set at default.
+The scored peaks were then lifted to the hg19 (GRCh37) assembly.  
+Signal tracks were generated directly from a remapping of the reads to hg19.
+</P>
 
 <H2>Verification</H2>
 <P>
