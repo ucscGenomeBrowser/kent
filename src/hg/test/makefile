@@ -9,6 +9,12 @@ O = test.o
 
 test: lib ${O}
 	${CC} ${COPT} -o test $O ${MYLIBS} $L
+	@./test
+	@rm -f test
+
+compile: lib ${O}
+	${CC} ${COPT} -o test $O ${MYLIBS} $L
+	@./test
 
 lib:
 	cd ../../lib && ${MAKE}
