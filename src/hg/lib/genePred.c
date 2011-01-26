@@ -382,8 +382,20 @@ int genePredCmp(const void *va, const void *vb)
 {
 const struct genePred *a = *((struct genePred **)va);
 const struct genePred *b = *((struct genePred **)vb);
-int dif;
-dif = strcmp(a->chrom, b->chrom);
+int dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = a->txStart - b->txStart;
+return dif;
+}
+
+int genePredNameCmp(const void *va, const void *vb)
+/* Compare to sort based on name, then chromosome, txStart. */
+{
+const struct genePred *a = *((struct genePred **)va);
+const struct genePred *b = *((struct genePred **)vb);
+int dif = strcmp(a->name, b->name);
+if (dif == 0)
+    dif = strcmp(a->chrom, b->chrom);
 if (dif == 0)
     dif = a->txStart - b->txStart;
 return dif;
