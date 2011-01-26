@@ -34,7 +34,7 @@ shortLabel UNC FAIRE
 longLabel Open Chromatin by FAIRE-seq from ENCODE/UNC
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Raw_Base_Overlap_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2)  AOSMC=AoSMC Astrocy=Astrocy CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC  HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib UROtsa=Urothelia
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) A549=A549 AOSMC=AoSMC Astrocy=Astrocy CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC  HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib UROtsa=Urothelia
 #subGroup2 cellType Cell_Line AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
 subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen HYPOXLAC=Hypoxia_LacAcid IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs NaBut=Sodium_Butyrate OHUrea=Hydroxyurea SERUMFREE=Serum_Free UT189=UT189_E.coli
 sortOrder cellType=+ treatment=+ view=+
@@ -45,7 +45,7 @@ controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 noInherit on
 configurable on
 useScore 0
-priority 0
+priority 3
 type bed 3
 wgEncode 1
 dataVersion through the ENCODE Jan 2011 Freeze
@@ -302,6 +302,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type narrowPeak
         # subId=3277 dateSubmitted=2011-01-18
 
+        track wgEncodeOpenChromFaireA549Pk
+        release alpha
+        parent wgEncodeOpenChromFaireViewPeaks off
+        shortLabel A549 FAIRE Pk
+        longLabel A549 - Open Chromatin by FAIRE-seq Peaks from ENCODE/UNC
+        subGroups view=Peaks cellType=A549 treatment=AANONE
+        type narrowPeak
+        # subId=3496 dateSubmitted=2011-01-22
+
 
     track wgEncodeOpenChromFaireViewSignal
     shortLabel F-Seq Signal
@@ -556,6 +565,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type bigWig 0.000000 0.358300
         # subId=3277 dateSubmitted=2011-01-18
 
+        track wgEncodeOpenChromFaireA549Sig
+        release alpha
+        parent wgEncodeOpenChromFaireViewSignal off
+        shortLabel A549 FAIRE DS
+        longLabel A549 - Open Chromatin by FAIRE-seq Overlap Signal from ENCODE/UNC
+        subGroups view=SIG cellType=A549 treatment=AANONE
+        type bigWig 0.000000 0.403700
+        # subId=3496 dateSubmitted=2011-01-22
+
 
     track wgEncodeOpenChromFaireViewSigBo
     shortLabel Overlap Signal
@@ -809,4 +827,13 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups treatment=AANONE view=SIGBO cellType=UROtsa
         type bigWig 0.000000 1146.000000
         # subId=3277 dateSubmitted=2011-01-18
+
+        track wgEncodeOpenChromFaireA549BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromFaireViewSigBo off
+        shortLabel A549 FAIRE OS
+        longLabel A549 - Open Chromatin by FAIRE-seq Overlap Signal from ENCODE/UNC
+        subGroups view=SIGBO cellType=A549 treatment=AANONE
+        type bigWig 0.000000 1563.000000
+        # subId=3496 dateSubmitted=2011-01-22
 

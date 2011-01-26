@@ -5,22 +5,24 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-14
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-05
 fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
-labVersion 11/19/09 Lane 1
+labVersion 11/19/09 Lane 1, 12/14/09 Lane 1
 parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2489
+subId 3157
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2
@@ -30,22 +32,24 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-14
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-05
 fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
-labVersion 12/14/09 Lane 1
+labVersion 12/09/09 Lane 4
 parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2489
+subId 3157
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdAlnRep3
@@ -73,6 +77,32 @@ strain C57BL/6
 subId 2489
 view Alignments
 
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-05
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3157
+tableName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
+view Peaks
+
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep1
 objType file
 age adult-8wks
@@ -80,22 +110,24 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-14
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-05
 fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
-labVersion 11/19/09 Lane 1
+labVersion 11/19/09 Lane 1, 12/14/09 Lane 1
 parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2489
+subId 3157
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -105,22 +137,24 @@ antibody CTCF
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-14
-dateUnrestricted 2011-07-14
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-05
 fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
-labVersion 12/14/09 Lane 1
+labVersion 12/09/09 Lane 4
 parentTable wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2489
+subId 3157
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdRawDataRep3
@@ -148,6 +182,32 @@ strain C57BL/6
 subId 2489
 view RawData
 
+metaObject wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody CTCF
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-05
+dateUnrestricted 2011-10-05
+fileName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom scripts
+strain C57BL/6
+subId 3157
+tableName wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
+view Signal
+
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1
 objType file
 age adult-8wks
@@ -155,10 +215,11 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -167,10 +228,11 @@ parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2498
+subId 3391
 view Alignments
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2
@@ -180,10 +242,11 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -192,11 +255,38 @@ parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2498
+subId 3391
 view Alignments
+
+metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody Pol2
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3391
+tableName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -205,10 +295,11 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -217,10 +308,11 @@ parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2498
+subId 3391
 view RawData
 
 metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep2
@@ -230,10 +322,11 @@ antibody Pol2
 cell BoneMarrow
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -242,11 +335,38 @@ parentTable wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2498
+subId 3391
 view RawData
+
+metaObject wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Pol2
+cell BoneMarrow
+composite wgEncodeLicrTfbs
+control std
+controlId BoneMarrow/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3391
+tableName wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
@@ -255,10 +375,11 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -267,10 +388,11 @@ parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2496
+subId 3393
 view Alignments
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2
@@ -280,10 +402,11 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -292,11 +415,38 @@ parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2496
+subId 3393
 view Alignments
+
+metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody CTCF
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3393
+tableName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -305,10 +455,11 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -317,10 +468,11 @@ parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2496
+subId 3393
 view RawData
 
 metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -330,10 +482,11 @@ antibody CTCF
 cell Cerebellum
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-15
-dateUnrestricted 2011-07-15
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -342,11 +495,116 @@ parentTable wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2496
+subId 3393
 view RawData
+
+metaObject wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody CTCF
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3393
+tableName wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
+view Signal
+
+metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody Input
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-17
+fileName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdAlnRep1.bam
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3275
+view Alignments
+
+metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody Input
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-17
+fileName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR-m
+labVersion 05/27/09 Lane 1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 3275
+view RawData
+
+metaObject wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Input
+cell Cerebellum
+composite wgEncodeLicrTfbs
+control std
+controlId Cerebellum/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-18
+dateUnrestricted 2011-10-17
+fileName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3275
+tableName wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrTfbsCerebellumInputMAdult8wksC57bl6StdAlnRep1
 objType file
@@ -405,10 +663,11 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -417,10 +676,11 @@ parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2507
+subId 3395
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2
@@ -430,10 +690,11 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -442,11 +703,38 @@ parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2507
+subId 3395
 view Alignments
+
+metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody CTCF
+cell Cortex
+composite wgEncodeLicrTfbs
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3395
+tableName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -455,10 +743,11 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -467,10 +756,11 @@ parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2507
+subId 3395
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep2
@@ -480,10 +770,11 @@ antibody CTCF
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -492,11 +783,38 @@ parentTable wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2507
+subId 3395
 view RawData
+
+metaObject wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody CTCF
+cell Cortex
+composite wgEncodeLicrTfbs
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3395
+tableName wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1
 objType file
@@ -505,10 +823,11 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -517,10 +836,11 @@ parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType input
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2510
+subId 3398
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2
@@ -530,10 +850,11 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -542,10 +863,11 @@ parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType input
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2510
+subId 3398
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep1
@@ -555,10 +877,11 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -567,10 +890,11 @@ parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType input
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2510
+subId 3398
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep2
@@ -580,10 +904,11 @@ antibody Input
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -592,11 +917,38 @@ parentTable wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType input
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2510
+subId 3398
 view RawData
+
+metaObject wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Input
+cell Cortex
+composite wgEncodeLicrTfbs
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType input
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3398
+tableName wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1
 objType file
@@ -605,10 +957,11 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1.bam
 grant Ren
 lab LICR-m
@@ -617,10 +970,11 @@ parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2512
+subId 3406
 view Alignments
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2
@@ -630,10 +984,11 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2.bam
 grant Ren
 lab LICR-m
@@ -642,11 +997,38 @@ parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdAlnRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2512
+subId 3406
 view Alignments
+
+metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
+objType table
+age adult-8wks
+antibody Pol2
+cell Cortex
+composite wgEncodeLicrTfbs
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk.broadPeak.gz
+grant Ren
+lab LICR-m
+labVersion Pooled & filtered
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion MACS
+strain C57BL/6
+subId 3406
+tableName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
+view Peaks
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep1
 objType file
@@ -655,10 +1037,11 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep1.fastq.gz
 grant Ren
 lab LICR-m
@@ -667,10 +1050,11 @@ parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawSignalRep1
 project wgEncode
 replicate 1
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2512
+subId 3406
 view RawData
 
 metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep2
@@ -680,10 +1064,11 @@ antibody Pol2
 cell Cortex
 composite wgEncodeLicrTfbs
 control std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-18
-dateUnrestricted 2011-07-18
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
 fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawDataRep2.fastq.gz
 grant Ren
 lab LICR-m
@@ -692,11 +1077,38 @@ parentTable wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdRawSignalRep2
 project wgEncode
 replicate 2
 seqPlatform Illumina_GA2
+setType exp
 sex M
 softwareVersion ELAND
 strain C57BL/6
-subId 2512
+subId 3406
 view RawData
+
+metaObject wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
+objType table
+age adult-8wks
+antibody Pol2
+cell Cortex
+composite wgEncodeLicrTfbs
+control std
+controlId Cortex/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig.bigWig
+grant Ren
+lab LICR-m
+labVersion Pooled & normalized
+project wgEncode
+seqPlatform Illumina_GA2
+setType exp
+sex M
+softwareVersion Custom Scripts
+strain C57BL/6
+subId 3406
+tableName wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
+view Signal
 
 metaObject wgEncodeLicrTfbsHeartCtcfMAdult8wksC57bl6StdAlnRep1
 objType file
@@ -1062,4 +1474,4 @@ strain C57BL/6
 subId 3005
 view RawData
 
-# MAGIC: 1499593313
+# MAGIC: 14783078

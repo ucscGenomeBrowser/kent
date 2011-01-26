@@ -17,18 +17,21 @@ struct slName *snp125FilterFromCart(struct cart *cart, char *track, char *attrib
 /* Look up snp125 filter settings in the cart, keeping backwards compatibility with old
  * cart variable names. */
 
+char *snp125OldColorVarToNew(char *oldVar, char *attribute);
+/* Abbreviate an old cart var name -- new name is based on track plus this. Don't free result. */
+
 #define SNP125_DEFAULT_MAX_WEIGHT 1
 #define SNP125_DEFAULT_MIN_AVHET 0.0
+#define SNP132_DEFAULT_MIN_SUBMITTERS 0
 
 extern boolean snp125ExtendedNames;
 
-enum snp125ColorEnum {
+enum snp125Color {
     snp125ColorRed,
     snp125ColorGreen,
     snp125ColorBlue,
     snp125ColorGray,
     snp125ColorBlack,
-    snp125ColorExclude
 };
 
 extern char *snp125ColorLabel[];
@@ -37,27 +40,33 @@ extern int snp125ColorArraySize;
 /****** Color source related controls *******/
 /* Molecule Type, Class, Validation, Function */
 
-enum snp125ColorSourceEnum {
+enum snp125ColorSource {
     snp125ColorSourceLocType,
     snp125ColorSourceClass,
     snp125ColorSourceValid,
     snp125ColorSourceFunc,
     snp125ColorSourceMolType,
+    snp125ColorSourceExceptions,
+    snp125ColorSourceBitfields,
 };
 
+#define SNP125_DEFAULT_COLOR_SOURCE snp125ColorSourceFunc
+
 extern char *snp125ColorSourceLabels[];
-extern char *snp125ColorSourceVarName;
-extern char *snp125ColorSourceDefault;
+extern char *snp125ColorSourceOldVar;
 extern int snp125ColorSourceArraySize;
 
 extern char *snp128ColorSourceLabels[];
 extern int snp128ColorSourceArraySize;
 
+extern char *snp132ColorSourceLabels[];
+extern int snp132ColorSourceArraySize;
+
 /****** MolType related controls *******/
 /* unknown, genomic, cDNA */
 
 extern char *snp125MolTypeLabels[];
-extern char *snp125MolTypeStrings[];
+extern char *snp125MolTypeOldColorVars[];
 extern char *snp125MolTypeDataName[];
 extern char *snp125MolTypeDefault[];
 extern int snp125MolTypeArraySize;
@@ -65,7 +74,7 @@ extern int snp125MolTypeArraySize;
 /****** Class related controls *******/
 
 extern char *snp125ClassLabels[];
-extern char *snp125ClassStrings[];
+extern char *snp125ClassOldColorVars[];
 extern char *snp125ClassDataName[];
 extern char *snp125ClassDefault[];
 extern int snp125ClassArraySize;
@@ -73,7 +82,7 @@ extern int snp125ClassArraySize;
 /****** Valid related controls *******/
 
 extern char *snp125ValidLabels[];
-extern char *snp125ValidStrings[];
+extern char *snp125ValidOldColorVars[];
 extern char *snp125ValidDataName[];
 extern char *snp125ValidDefault[];
 extern int snp125ValidArraySize;
@@ -81,7 +90,7 @@ extern int snp125ValidArraySize;
 /****** Func related controls *******/
 
 extern char *snp125FuncLabels[];
-extern char *snp125FuncStrings[];
+extern char *snp125FuncOldColorVars[];
 extern char *snp125FuncDataName[];
 extern char *snp125FuncDefault[];
 extern char **snp125FuncDataSynonyms[];
@@ -92,10 +101,25 @@ extern int snp125FuncArraySize;
    rangeInsertion, rangeSubstitution, rangeDeletion */
 
 extern char *snp125LocTypeLabels[];
-extern char *snp125LocTypeStrings[];
+extern char *snp125LocTypeOldColorVars[];
 extern char *snp125LocTypeDataName[];
 extern char *snp125LocTypeDefault[];
 extern int snp125LocTypeArraySize;
+
+/****** Exception related controls *******/
+
+extern char *snp132ExceptionLabels[];
+extern char *snp132ExceptionVarName[];
+extern char *snp132ExceptionDefault[];
+extern int snp132ExceptionArraySize;
+
+/****** Miscellaneous attributes (bitfields) related controls *******/
+
+extern char *snp132BitfieldLabels[];
+extern char *snp132BitfieldVarName[];
+extern char *snp132BitfieldDataName[];
+extern char *snp132BitfieldDefault[];
+extern int snp132BitfieldArraySize;
 
 #endif /* SNP125UI_H */
 

@@ -3,6 +3,7 @@ objType file
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
+controlId Fibrobl/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -15,6 +16,7 @@ labVersion align_on_cluster_bwa.pl v 1
 privacy noSequence
 project wgEncode
 replicate 1
+setType exp
 subId 2480
 view Alignments
 
@@ -23,6 +25,7 @@ objType file
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
+controlId Fibrobl/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -35,6 +38,7 @@ labVersion align_on_cluster_bwa.pl v 1
 privacy noSequence
 project wgEncode
 replicate 2
+setType exp
 subId 2480
 view Alignments
 
@@ -43,6 +47,7 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
+controlId Fibrobl/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -53,6 +58,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 privacy noSequence
 project wgEncode
+setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -62,6 +68,7 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
+controlId Fibrobl/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -72,6 +79,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 privacy noSequence
 project wgEncode
+setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfPkRep1
 view Peaks
@@ -81,6 +89,7 @@ objType table
 antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
+controlId Fibrobl/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
@@ -91,6 +100,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_FB8470
 privacy noSequence
 project wgEncode
+setType exp
 subId 2480
 tableName wgEncodeOpenChromChipFibroblCtcfSig
 view Signal
@@ -142,6 +152,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
+controlId Gliobla/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -153,6 +164,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
+setType exp
 subId 2516
 view Alignments
 
@@ -161,6 +173,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
+controlId Gliobla/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -172,6 +185,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
+setType exp
 subId 2516
 view Alignments
 
@@ -180,6 +194,7 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
+controlId Gliobla/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -189,6 +204,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
+setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -198,6 +214,7 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
+controlId Gliobla/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -207,6 +224,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
+setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfPkRep1
 view Peaks
@@ -216,6 +234,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
+controlId Gliobla/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -225,6 +244,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 1
+setType exp
 subId 2516
 view RawData
 
@@ -233,6 +253,7 @@ objType file
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
+controlId Gliobla/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -242,6 +263,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 2
+setType exp
 subId 2516
 view RawData
 
@@ -250,6 +272,7 @@ objType table
 antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
+controlId Gliobla/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -259,6 +282,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_H54
 project wgEncode
+setType exp
 subId 2516
 tableName wgEncodeOpenChromChipGlioblaCtcfSig
 view Signal
@@ -464,6 +488,7 @@ objType file
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -477,6 +502,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1229
 view Alignments
 
@@ -485,6 +511,7 @@ objType file
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -498,6 +525,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1229
 view Alignments
 
@@ -506,6 +534,7 @@ objType table
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -517,6 +546,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
 view Base_Overlap_Signal
@@ -526,6 +556,7 @@ objType table
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -537,6 +568,7 @@ lab UT-A
 labVersion p-value cutoff: 0.001
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycPk
 view Peaks
@@ -586,6 +618,7 @@ objType table
 antibody c-Myc
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
@@ -597,6 +630,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_GM12878
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1229
 tableName wgEncodeOpenChromChipGm12878CmycSig
 view Signal
@@ -606,6 +640,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -618,6 +653,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 2449
 view Alignments
 
@@ -626,6 +662,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -638,6 +675,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 2449
 view Alignments
 
@@ -646,6 +684,7 @@ objType file
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -658,6 +697,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 3
+setType exp
 subId 2449
 view Alignments
 
@@ -666,6 +706,7 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -676,6 +717,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -685,6 +727,7 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -695,6 +738,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfPkRep1
 view Peaks
@@ -767,6 +811,7 @@ objType table
 antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
@@ -777,6 +822,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_GM12878
 origAssembly hg18
 project wgEncode
+setType exp
 subId 2449
 tableName wgEncodeOpenChromChipGm12878CtcfSig
 view Signal
@@ -786,6 +832,7 @@ objType file
 antibody Input
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -798,6 +845,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
+setType input
 subId 1518
 view Alignments
 
@@ -825,6 +873,7 @@ objType table
 antibody Input
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -836,6 +885,7 @@ lab UT-A
 labVersion fseq v 1.84
 origAssembly hg18
 project wgEncode
+setType input
 subId 1518
 tableName wgEncodeOpenChromChipGm12878InputSig
 view Signal
@@ -845,6 +895,7 @@ objType file
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -858,6 +909,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1478
 view Alignments
 
@@ -866,6 +918,7 @@ objType file
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -879,6 +932,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1478
 view Alignments
 
@@ -887,6 +941,7 @@ objType table
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -898,6 +953,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -907,6 +963,7 @@ objType table
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -918,6 +975,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Pk
 view Peaks
@@ -967,6 +1025,7 @@ objType table
 antibody Pol2
 cell GM12878
 composite wgEncodeOpenChromChip
+controlId GM12878/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
@@ -978,6 +1037,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_GM12878
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1478
 tableName wgEncodeOpenChromChipGm12878Pol2Sig
 view Signal
@@ -987,6 +1047,7 @@ objType file
 antibody CTCF
 cell GM12891
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1000,6 +1061,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1490
 view Alignments
 
@@ -1008,6 +1070,7 @@ objType file
 antibody CTCF
 cell GM12891
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1021,6 +1084,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1490
 view Alignments
 
@@ -1029,6 +1093,7 @@ objType table
 antibody CTCF
 cell GM12891
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1040,6 +1105,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -1049,6 +1115,7 @@ objType table
 antibody CTCF
 cell GM12891
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1060,6 +1127,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfPk
 view Peaks
@@ -1069,7 +1137,7 @@ objType file
 antibody CTCF
 cell GM12891
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1089,7 +1157,7 @@ objType file
 antibody CTCF
 cell GM12891
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1109,6 +1177,7 @@ objType table
 antibody CTCF
 cell GM12891
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1120,6 +1189,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1490
 tableName wgEncodeOpenChromChipGm12891CtcfSig
 view Signal
@@ -1129,6 +1199,7 @@ objType file
 antibody CTCF
 cell GM12892
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1142,6 +1213,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1491
 view Alignments
 
@@ -1150,6 +1222,7 @@ objType file
 antibody CTCF
 cell GM12892
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1163,6 +1236,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1491
 view Alignments
 
@@ -1171,6 +1245,7 @@ objType table
 antibody CTCF
 cell GM12892
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1182,6 +1257,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -1191,6 +1267,7 @@ objType table
 antibody CTCF
 cell GM12892
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1202,6 +1279,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfPk
 view Peaks
@@ -1211,7 +1289,7 @@ objType file
 antibody CTCF
 cell GM12892
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
@@ -1231,7 +1309,7 @@ objType file
 antibody CTCF
 cell GM12892
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
@@ -1251,6 +1329,7 @@ objType table
 antibody CTCF
 cell GM12892
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1262,6 +1341,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1491
 tableName wgEncodeOpenChromChipGm12892CtcfSig
 view Signal
@@ -1271,6 +1351,7 @@ objType file
 antibody CTCF
 cell GM19238
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1284,6 +1365,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1516
 view Alignments
 
@@ -1292,6 +1374,7 @@ objType file
 antibody CTCF
 cell GM19238
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1305,6 +1388,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1516
 view Alignments
 
@@ -1313,6 +1397,7 @@ objType table
 antibody CTCF
 cell GM19238
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1324,6 +1409,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -1333,6 +1419,7 @@ objType table
 antibody CTCF
 cell GM19238
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1344,6 +1431,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfPk
 view Peaks
@@ -1353,7 +1441,7 @@ objType file
 antibody CTCF
 cell GM19238
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1373,7 +1461,7 @@ objType file
 antibody CTCF
 cell GM19238
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1393,6 +1481,7 @@ objType table
 antibody CTCF
 cell GM19238
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1404,6 +1493,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1516
 tableName wgEncodeOpenChromChipGm19238CtcfSig
 view Signal
@@ -1413,6 +1503,7 @@ objType file
 antibody CTCF
 cell GM19239
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1426,6 +1517,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1525
 view Alignments
 
@@ -1434,6 +1526,7 @@ objType file
 antibody CTCF
 cell GM19239
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1447,6 +1540,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1525
 view Alignments
 
@@ -1455,6 +1549,7 @@ objType table
 antibody CTCF
 cell GM19239
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1466,6 +1561,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -1475,6 +1571,7 @@ objType table
 antibody CTCF
 cell GM19239
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1486,6 +1583,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfPk
 view Peaks
@@ -1495,7 +1593,7 @@ objType file
 antibody CTCF
 cell GM19239
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1515,7 +1613,7 @@ objType file
 antibody CTCF
 cell GM19239
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1535,6 +1633,7 @@ objType table
 antibody CTCF
 cell GM19239
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1546,6 +1645,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1525
 tableName wgEncodeOpenChromChipGm19239CtcfSig
 view Signal
@@ -1555,6 +1655,7 @@ objType file
 antibody CTCF
 cell GM19240
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1568,6 +1669,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1536
 view Alignments
 
@@ -1576,6 +1678,7 @@ objType file
 antibody CTCF
 cell GM19240
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1589,6 +1692,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1536
 view Alignments
 
@@ -1597,6 +1701,7 @@ objType table
 antibody CTCF
 cell GM19240
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1608,6 +1713,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -1617,6 +1723,7 @@ objType table
 antibody CTCF
 cell GM19240
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1628,6 +1735,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfPk
 view Peaks
@@ -1637,7 +1745,7 @@ objType file
 antibody CTCF
 cell GM19240
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1657,7 +1765,7 @@ objType file
 antibody CTCF
 cell GM19240
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
@@ -1677,6 +1785,7 @@ objType table
 antibody CTCF
 cell GM19240
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -1688,6 +1797,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1536
 tableName wgEncodeOpenChromChipGm19240CtcfSig
 view Signal
@@ -1697,6 +1807,7 @@ objType file
 antibody c-Myc
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1710,6 +1821,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1504
 view Alignments
 
@@ -1718,6 +1830,7 @@ objType table
 antibody c-Myc
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1729,6 +1842,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
 view Base_Overlap_Signal
@@ -1738,6 +1852,7 @@ objType table
 antibody c-Myc
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1749,6 +1864,7 @@ lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycPk
 view Peaks
@@ -1758,7 +1874,7 @@ objType file
 antibody c-Myc
 cell H1-hESC
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
@@ -1777,6 +1893,7 @@ objType table
 antibody c-Myc
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1788,6 +1905,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1504
 tableName wgEncodeOpenChromChipH1hescCmycSig
 view Signal
@@ -1797,6 +1915,7 @@ objType file
 antibody CTCF
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1810,6 +1929,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1500
 view Alignments
 
@@ -1818,6 +1938,7 @@ objType table
 antibody CTCF
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1829,6 +1950,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -1838,6 +1960,7 @@ objType table
 antibody CTCF
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1849,6 +1972,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfPk
 view Peaks
@@ -1858,7 +1982,7 @@ objType file
 antibody CTCF
 cell H1-hESC
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
@@ -1877,6 +2001,7 @@ objType table
 antibody CTCF
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -1888,6 +2013,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1500
 tableName wgEncodeOpenChromChipH1hescCtcfSig
 view Signal
@@ -1897,6 +2023,7 @@ objType file
 antibody Pol2
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -1910,6 +2037,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1833
 view Alignments
 
@@ -1918,6 +2046,7 @@ objType table
 antibody Pol2
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -1929,6 +2058,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -1938,6 +2068,7 @@ objType table
 antibody Pol2
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -1949,6 +2080,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Pk
 view Peaks
@@ -1958,7 +2090,7 @@ objType file
 antibody Pol2
 cell H1-hESC
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
@@ -1977,6 +2109,7 @@ objType table
 antibody Pol2
 cell H1-hESC
 composite wgEncodeOpenChromChip
+controlId generic_male
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -1988,6 +2121,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_male
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1833
 tableName wgEncodeOpenChromChipH1hescPol2Sig
 view Signal
@@ -1997,6 +2131,7 @@ objType file
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2010,6 +2145,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1501
 view Alignments
 
@@ -2018,6 +2154,7 @@ objType file
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2031,6 +2168,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1501
 view Alignments
 
@@ -2039,6 +2177,7 @@ objType table
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2050,6 +2189,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
 view Base_Overlap_Signal
@@ -2059,6 +2199,7 @@ objType table
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2070,6 +2211,7 @@ lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycPk
 view Peaks
@@ -2143,6 +2285,7 @@ objType table
 antibody c-Myc
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2154,6 +2297,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1501
 tableName wgEncodeOpenChromChipHelas3CmycSig
 view Signal
@@ -2163,6 +2307,7 @@ objType file
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2176,6 +2321,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1499
 view Alignments
 
@@ -2184,6 +2330,7 @@ objType file
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2197,6 +2344,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1499
 view Alignments
 
@@ -2205,6 +2353,7 @@ objType table
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2216,6 +2365,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -2225,6 +2375,7 @@ objType table
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2236,6 +2387,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfPk
 view Peaks
@@ -2309,6 +2461,7 @@ objType table
 antibody CTCF
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2320,6 +2473,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1499
 tableName wgEncodeOpenChromChipHelas3CtcfSig
 view Signal
@@ -2393,6 +2547,7 @@ objType file
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2406,6 +2561,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1505
 view Alignments
 
@@ -2414,6 +2570,7 @@ objType file
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2427,6 +2584,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1505
 view Alignments
 
@@ -2435,6 +2593,7 @@ objType table
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2446,6 +2605,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -2455,6 +2615,7 @@ objType table
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2466,6 +2627,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Pk
 view Peaks
@@ -2516,6 +2678,7 @@ objType table
 antibody Pol2
 cell HeLa-S3
 composite wgEncodeOpenChromChip
+controlId HeLa-S3/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2527,6 +2690,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HelaS3
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1505
 tableName wgEncodeOpenChromChipHelas3Pol2Sig
 view Signal
@@ -2536,6 +2700,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2549,6 +2714,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1527
 view Alignments
 
@@ -2557,6 +2723,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2570,6 +2737,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1527
 view Alignments
 
@@ -2578,6 +2746,7 @@ objType file
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2591,6 +2760,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 3
+setType exp
 subId 1527
 view Alignments
 
@@ -2599,6 +2769,7 @@ objType table
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2610,6 +2781,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
 view Base_Overlap_Signal
@@ -2619,6 +2791,7 @@ objType table
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2630,6 +2803,7 @@ lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycPk
 view Peaks
@@ -2702,6 +2876,7 @@ objType table
 antibody c-Myc
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2713,6 +2888,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HepG2
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1527
 tableName wgEncodeOpenChromChipHepg2CmycSig
 view Signal
@@ -2722,6 +2898,7 @@ objType file
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2735,6 +2912,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1517
 view Alignments
 
@@ -2743,6 +2921,7 @@ objType file
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2756,6 +2935,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1517
 view Alignments
 
@@ -2764,6 +2944,7 @@ objType table
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2775,6 +2956,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -2784,6 +2966,7 @@ objType table
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2795,6 +2978,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfPk
 view Peaks
@@ -2846,6 +3030,7 @@ objType table
 antibody CTCF
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2857,6 +3042,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HepG2
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1517
 tableName wgEncodeOpenChromChipHepg2CtcfSig
 view Signal
@@ -2930,6 +3116,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2943,6 +3130,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1526
 view Alignments
 
@@ -2951,6 +3139,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2964,6 +3153,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1526
 view Alignments
 
@@ -2972,6 +3162,7 @@ objType file
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -2985,6 +3176,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 3
+setType exp
 subId 1526
 view Alignments
 
@@ -2993,6 +3185,7 @@ objType table
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3004,6 +3197,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -3013,6 +3207,7 @@ objType table
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3024,6 +3219,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Pk
 view Peaks
@@ -3094,6 +3290,7 @@ objType table
 antibody Pol2
 cell HepG2
 composite wgEncodeOpenChromChip
+controlId HepG2/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
@@ -3105,6 +3302,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HepG2
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1526
 tableName wgEncodeOpenChromChipHepg2Pol2Sig
 view Signal
@@ -3114,6 +3312,7 @@ objType file
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3127,6 +3326,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1542
 view Alignments
 
@@ -3135,6 +3335,7 @@ objType table
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3146,6 +3347,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
 view Base_Overlap_Signal
@@ -3155,6 +3357,7 @@ objType table
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3166,9 +3369,29 @@ lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
 view Peaks
+
+metaObject wgEncodeOpenChromChipHuvecCmycRawData
+objType file
+antibody c-Myc
+cell HUVEC
+composite wgEncodeOpenChromChip
+controlId HUVEC/Input
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-01
+dateUnrestricted 2010-07-01
+fileName wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz
+grant Crawford
+lab UT-A
+origAssembly hg18
+project wgEncode
+setType exp
+subId 635
+view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCmycRawDataRep1
 objType file
@@ -3195,6 +3418,7 @@ objType table
 antibody c-Myc
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3206,6 +3430,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycSig
 view Signal
@@ -3215,6 +3440,7 @@ objType file
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3228,6 +3454,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1537
 view Alignments
 
@@ -3236,6 +3463,7 @@ objType file
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3249,6 +3477,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1537
 view Alignments
 
@@ -3257,6 +3486,7 @@ objType table
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3268,6 +3498,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -3277,6 +3508,7 @@ objType table
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3288,6 +3520,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfPk
 view Peaks
@@ -3337,6 +3570,7 @@ objType table
 antibody CTCF
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3348,6 +3582,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1537
 tableName wgEncodeOpenChromChipHuvecCtcfSig
 view Signal
@@ -3420,6 +3655,7 @@ objType file
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3433,6 +3669,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1540
 view Alignments
 
@@ -3441,6 +3678,7 @@ objType file
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3454,6 +3692,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1540
 view Alignments
 
@@ -3462,6 +3701,7 @@ objType table
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3473,6 +3713,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -3482,6 +3723,7 @@ objType table
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3493,6 +3735,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2Pk
 view Peaks
@@ -3542,6 +3785,7 @@ objType table
 antibody Pol2
 cell HUVEC
 composite wgEncodeOpenChromChip
+controlId HUVEC/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3553,6 +3797,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_HUVEC
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1540
 tableName wgEncodeOpenChromChipHuvecPol2Sig
 view Signal
@@ -3562,6 +3807,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3575,6 +3821,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1543
 view Alignments
 
@@ -3583,6 +3830,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3596,6 +3844,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1543
 view Alignments
 
@@ -3604,6 +3853,7 @@ objType file
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3617,6 +3867,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 3
+setType exp
 subId 1543
 view Alignments
 
@@ -3625,6 +3876,7 @@ objType table
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3636,6 +3888,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycBaseOverlapSignal
 view Base_Overlap_Signal
@@ -3645,6 +3898,7 @@ objType table
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3656,6 +3910,7 @@ lab UT-A
 labVersion p-value cutoff: 0.01
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycPk
 view Peaks
@@ -3728,6 +3983,7 @@ objType table
 antibody c-Myc
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3739,6 +3995,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_K562
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1543
 tableName wgEncodeOpenChromChipK562CmycSig
 view Signal
@@ -3748,6 +4005,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3761,6 +4019,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1538
 view Alignments
 
@@ -3769,6 +4028,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3782,6 +4042,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1538
 view Alignments
 
@@ -3790,6 +4051,7 @@ objType file
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3803,6 +4065,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 3
+setType exp
 subId 1538
 view Alignments
 
@@ -3811,6 +4074,7 @@ objType table
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -3822,6 +4086,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -3831,6 +4096,7 @@ objType table
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -3842,6 +4108,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfPk
 view Peaks
@@ -3914,6 +4181,7 @@ objType table
 antibody CTCF
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -3925,6 +4193,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_K562
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1538
 tableName wgEncodeOpenChromChipK562CtcfSig
 view Signal
@@ -3998,6 +4267,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4011,6 +4281,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1541
 view Alignments
 
@@ -4019,6 +4290,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4032,6 +4304,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1541
 view Alignments
 
@@ -4040,6 +4313,7 @@ objType table
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4051,6 +4325,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -4060,6 +4335,7 @@ objType table
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -4071,6 +4347,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Pk
 view Peaks
@@ -4120,6 +4397,7 @@ objType table
 antibody Pol2
 cell K562
 composite wgEncodeOpenChromChip
+controlId K562/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2011-01-12
@@ -4131,6 +4409,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_K562
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1541
 tableName wgEncodeOpenChromChipK562Pol2Sig
 view Signal
@@ -4140,6 +4419,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
@@ -4152,6 +4432,7 @@ labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
 project wgEncode
 replicate 1
+setType exp
 subId 2503
 treatment estrogen
 view Alignments
@@ -4161,6 +4442,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
@@ -4173,6 +4455,7 @@ labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep2
 project wgEncode
 replicate 2
+setType exp
 subId 2503
 treatment estrogen
 view Alignments
@@ -4182,6 +4465,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
@@ -4191,6 +4475,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
+setType exp
 subId 2503
 tableName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal
 treatment estrogen
@@ -4201,6 +4486,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
@@ -4211,6 +4497,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
 replicate 1
+setType exp
 subId 2503
 tableName wgEncodeOpenChromChipMcf7CmycEstroPkRep1
 treatment estrogen
@@ -4221,6 +4508,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
@@ -4231,6 +4519,7 @@ lab UT-A
 parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep1
 project wgEncode
 replicate 1
+setType exp
 subId 2503
 treatment estrogen
 view RawData
@@ -4240,6 +4529,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
@@ -4250,6 +4540,7 @@ lab UT-A
 parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep2
 project wgEncode
 replicate 2
+setType exp
 subId 2503
 treatment estrogen
 view RawData
@@ -4259,6 +4550,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
@@ -4268,6 +4560,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
+setType exp
 subId 2503
 tableName wgEncodeOpenChromChipMcf7CmycEstroSig
 treatment estrogen
@@ -4320,6 +4613,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4331,6 +4625,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
+setType exp
 subId 2504
 treatment vehicle
 view Alignments
@@ -4340,6 +4635,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4351,6 +4647,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
+setType exp
 subId 2504
 treatment vehicle
 view Alignments
@@ -4360,6 +4657,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4369,6 +4667,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
+setType exp
 subId 2504
 tableName wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal
 treatment vehicle
@@ -4379,6 +4678,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4388,6 +4688,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
+setType exp
 subId 2504
 tableName wgEncodeOpenChromChipMcf7CmycVehPkRep1
 treatment vehicle
@@ -4398,6 +4699,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4407,6 +4709,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 1
+setType exp
 subId 2504
 treatment vehicle
 view RawData
@@ -4416,6 +4719,7 @@ objType file
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4425,6 +4729,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 2
+setType exp
 subId 2504
 treatment vehicle
 view RawData
@@ -4434,6 +4739,7 @@ objType table
 antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4443,6 +4749,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
+setType exp
 subId 2504
 tableName wgEncodeOpenChromChipMcf7CmycVehSig
 treatment vehicle
@@ -4453,6 +4760,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4466,6 +4774,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1580
 view Alignments
 
@@ -4474,6 +4783,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4487,6 +4797,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1580
 view Alignments
 
@@ -4495,6 +4806,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4506,6 +4818,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -4515,6 +4828,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4526,6 +4840,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
+setType exp
 subId 2502
 treatment estrogen
 view Alignments
@@ -4535,6 +4850,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4546,6 +4862,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
+setType exp
 subId 2502
 treatment estrogen
 view Alignments
@@ -4555,6 +4872,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4564,6 +4882,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
+setType exp
 subId 2502
 tableName wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal
 treatment estrogen
@@ -4574,6 +4893,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4583,6 +4903,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
+setType exp
 subId 2502
 tableName wgEncodeOpenChromChipMcf7CtcfEstroPkRep1
 treatment estrogen
@@ -4593,6 +4914,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4602,6 +4924,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 1
+setType exp
 subId 2502
 treatment estrogen
 view RawData
@@ -4611,6 +4934,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4620,6 +4944,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 2
+setType exp
 subId 2502
 treatment estrogen
 view RawData
@@ -4629,6 +4954,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4638,6 +4964,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
+setType exp
 subId 2502
 tableName wgEncodeOpenChromChipMcf7CtcfEstroSig
 treatment estrogen
@@ -4648,6 +4975,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4659,6 +4987,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfPk
 view Peaks
@@ -4708,6 +5037,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -4719,6 +5049,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1580
 tableName wgEncodeOpenChromChipMcf7CtcfSig
 view Signal
@@ -4728,6 +5059,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4739,6 +5071,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
+setType exp
 subId 2505
 treatment vehicle
 view Alignments
@@ -4748,6 +5081,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4759,6 +5093,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
+setType exp
 subId 2505
 treatment vehicle
 view Alignments
@@ -4768,6 +5103,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4777,6 +5113,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
+setType exp
 subId 2505
 tableName wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal
 treatment vehicle
@@ -4787,6 +5124,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4796,6 +5134,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
+setType exp
 subId 2505
 tableName wgEncodeOpenChromChipMcf7CtcfVehPkRep1
 treatment vehicle
@@ -4806,6 +5145,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4815,6 +5155,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 1
+setType exp
 subId 2505
 treatment vehicle
 view RawData
@@ -4824,6 +5165,7 @@ objType file
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4833,6 +5175,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 2
+setType exp
 subId 2505
 treatment vehicle
 view RawData
@@ -4842,6 +5185,7 @@ objType table
 antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
@@ -4851,6 +5195,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
+setType exp
 subId 2505
 tableName wgEncodeOpenChromChipMcf7CtcfVehSig
 treatment vehicle
@@ -4924,6 +5269,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4935,6 +5281,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
+setType exp
 subId 2495
 view Alignments
 
@@ -4943,6 +5290,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4954,6 +5302,7 @@ lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
+setType exp
 subId 2495
 view Alignments
 
@@ -4962,6 +5311,7 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4971,6 +5321,7 @@ grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
 project wgEncode
+setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -4980,6 +5331,7 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -4989,6 +5341,7 @@ grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
 project wgEncode
+setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2PkRep1
 view Peaks
@@ -4998,6 +5351,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -5007,6 +5361,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 1
+setType exp
 subId 2495
 view RawData
 
@@ -5015,6 +5370,7 @@ objType file
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -5024,6 +5380,7 @@ grant Crawford
 lab UT-A
 project wgEncode
 replicate 2
+setType exp
 subId 2495
 view RawData
 
@@ -5032,6 +5389,7 @@ objType table
 antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
+controlId MCF-7/Input
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
@@ -5041,6 +5399,7 @@ grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
 project wgEncode
+setType exp
 subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2Sig
 view Signal
@@ -5126,6 +5485,7 @@ objType file
 antibody CTCF
 cell NHEK
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5139,6 +5499,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
+setType exp
 subId 1539
 view Alignments
 
@@ -5147,6 +5508,7 @@ objType file
 antibody CTCF
 cell NHEK
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5160,6 +5522,7 @@ labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
+setType exp
 subId 1539
 view Alignments
 
@@ -5168,6 +5531,7 @@ objType table
 antibody CTCF
 cell NHEK
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5179,6 +5543,7 @@ lab UT-A
 labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -5188,6 +5553,7 @@ objType table
 antibody CTCF
 cell NHEK
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5199,6 +5565,7 @@ lab UT-A
 labVersion p-value cutoff: 0.05
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfPk
 view Peaks
@@ -5208,7 +5575,7 @@ objType file
 antibody CTCF
 cell NHEK
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
@@ -5228,7 +5595,7 @@ objType file
 antibody CTCF
 cell NHEK
 composite wgEncodeOpenChromChip
-controlId modelled
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
@@ -5248,6 +5615,7 @@ objType table
 antibody CTCF
 cell NHEK
 composite wgEncodeOpenChromChip
+controlId generic_female
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
@@ -5259,6 +5627,7 @@ lab UT-A
 labVersion fseq v 1.84, iff_generic_female
 origAssembly hg18
 project wgEncode
+setType exp
 subId 1539
 tableName wgEncodeOpenChromChipNhekCtcfSig
 view Signal
@@ -5268,6 +5637,7 @@ objType file
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5282,6 +5652,7 @@ origAssembly hg18
 privacy noSequence
 project wgEncode
 replicate 1
+setType exp
 subId 1657
 view Alignments
 
@@ -5290,6 +5661,7 @@ objType file
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5304,6 +5676,7 @@ origAssembly hg18
 privacy noSequence
 project wgEncode
 replicate 2
+setType exp
 subId 1657
 view Alignments
 
@@ -5312,6 +5685,7 @@ objType table
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5324,6 +5698,7 @@ labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 privacy noSequence
 project wgEncode
+setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
 view Base_Overlap_Signal
@@ -5333,6 +5708,7 @@ objType table
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5346,6 +5722,7 @@ origAssembly hg18
 privacy noSequence
 project wgEncode
 replicate 1
+setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfPkRep1
 view Peaks
@@ -5355,6 +5732,7 @@ objType table
 antibody CTCF
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5367,6 +5745,7 @@ labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
 privacy noSequence
 project wgEncode
+setType exp
 subId 1657
 tableName wgEncodeOpenChromChipProgfibCtcfSig
 view Signal
@@ -5422,6 +5801,7 @@ objType file
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5436,6 +5816,7 @@ origAssembly hg18
 privacy noSequence
 project wgEncode
 replicate 1
+setType exp
 subId 1652
 view Alignments
 
@@ -5444,6 +5825,7 @@ objType file
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5458,6 +5840,7 @@ origAssembly hg18
 privacy noSequence
 project wgEncode
 replicate 2
+setType exp
 subId 1652
 view Alignments
 
@@ -5466,6 +5849,7 @@ objType table
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5478,6 +5862,7 @@ labVersion baseAlignCounts.pl v 1
 origAssembly hg18
 privacy noSequence
 project wgEncode
+setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
 view Base_Overlap_Signal
@@ -5487,6 +5872,7 @@ objType table
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5500,6 +5886,7 @@ origAssembly hg18
 privacy noSequence
 project wgEncode
 replicate 1
+setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2PkRep1
 view Peaks
@@ -5509,6 +5896,7 @@ objType table
 antibody Pol2
 cell ProgFib
 composite wgEncodeOpenChromChip
+controlId ProgFib/Input
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
@@ -5521,8 +5909,9 @@ labVersion fseq v 1.84, iff_FB0167P
 origAssembly hg18
 privacy noSequence
 project wgEncode
+setType exp
 subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -388477539
+# MAGIC: 1178486362
