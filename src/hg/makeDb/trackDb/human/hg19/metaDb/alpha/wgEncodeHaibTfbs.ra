@@ -1465,7 +1465,7 @@ objType table
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId Sl247
+controlId SL247
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1490,7 +1490,7 @@ objType table
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId Sl305
+controlId SL305
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
@@ -1820,7 +1820,7 @@ objType table
 antibody Pol2
 cell A549
 composite wgEncodeHaibTfbs
-controlId Sl335
+controlId SL335
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
@@ -4041,7 +4041,7 @@ objType table
 antibody BATF
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId Sl517
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -4209,7 +4209,7 @@ objType table
 antibody BCL11A
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId Sl516
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -10705,7 +10705,7 @@ objType table
 antibody USF-1
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId Sl218
+controlId SL218
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
@@ -11648,7 +11648,7 @@ objType table
 antibody Pol2-4H8
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId Sl817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -11816,7 +11816,7 @@ objType table
 antibody Pol2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId Sl817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -11842,7 +11842,7 @@ objType table
 antibody Pol2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId Sl817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -11985,7 +11985,7 @@ objType file
 antibody POU2F2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId Sl817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -12036,7 +12036,7 @@ objType table
 antibody POU2F2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GSL817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -12204,7 +12204,7 @@ objType table
 antibody PU.1
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId Sl817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -12230,7 +12230,7 @@ objType table
 antibody PU.1
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId Sl817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -12424,7 +12424,7 @@ objType table
 antibody TAF1
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId Sl817
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -13550,7 +13550,7 @@ objType file
 antibody TAF1
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId Sl818
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
@@ -16411,7 +16411,7 @@ objType file
 antibody Pol2
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId Sl969
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-05-25
@@ -17508,7 +17508,7 @@ objType file
 antibody SP1
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId Sl969
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
@@ -17556,7 +17556,7 @@ objType table
 antibody SP1
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId Sl969
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
@@ -17725,7 +17725,7 @@ objType table
 antibody SRF
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId Sl969
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
@@ -36402,4 +36402,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 150198143
+# MAGIC: 150087928
