@@ -45,9 +45,12 @@ include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
 include wgEncodeUwTfbs.ra
 include wgEncodeCshlLongRnaSeq.ra
-include wgEncodeCaltechRnaSeq.ra
 include wgEncodeYaleRnaSeq.ra
 include wgEncodeBuOrchid.ra
+
+# Caltech RNA Seq
+include wgEncodeCaltechRnaSeq.ra alpha,beta
+#include wgEncodeCaltechRnaSeq.new.ra alpha
 
 track wgEncodeMapability
 compositeTrack on

@@ -10,7 +10,6 @@ wgEncodeUwDnase.ra \
 wgEncodeUwDgf.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeAffyRnaChip.ra \
-wgEncodeCaltechRnaSeq.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeRikenCage.ra \
 wgEncodeUwHistone.ra \
