@@ -11,6 +11,7 @@ A =  pslCDnaFilter
 $A: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	@rm -f usage.msg algo.msg
 
 pslCDnaFilter.o: pslCDnaFilter.c $H
 cDnaAligns.o: cDnaAligns.c $H
