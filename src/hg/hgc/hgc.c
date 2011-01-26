@@ -15660,10 +15660,11 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (snpStart - end + 1),
+	   geneTrack, geneName, (snpStart - end + 1),
 	   (strand[0] == '-' ? "up" : "down"));
     nearCount++;
     }
@@ -15676,10 +15677,11 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (start - snpEnd + 1),
+	   geneTrack, geneName, (start - snpEnd + 1),
 	   (strand[0] == '-' ? "down" : "up"));
     nearCount++;
     }

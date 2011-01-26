@@ -1544,7 +1544,7 @@ priority 103.29
         priority 23
 
 track snp132Common override
-visibility hide
+snpSeqFile /gbdb/hg19/snp/snp132.fa
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
@@ -1554,7 +1554,7 @@ codingAnnotations snp132CodingDbSnp,
 codingAnnoLabel_snp132CodingDbSnp dbSNP
 
 track snp132Patient override
-visibility hide
+snpSeqFile /gbdb/hg19/snp/snp132.fa
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
@@ -1564,7 +1564,7 @@ codingAnnotations snp132CodingDbSnp,
 codingAnnoLabel_snp132CodingDbSnp dbSNP
 
 track snp132NonUnique override
-visibility hide
+snpSeqFile /gbdb/hg19/snp/snp132.fa
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
@@ -1574,8 +1574,6 @@ codingAnnotations snp132CodingDbSnp,
 codingAnnoLabel_snp132CodingDbSnp dbSNP
 
 track snp132 override
-release alpha
-visibility hide
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
