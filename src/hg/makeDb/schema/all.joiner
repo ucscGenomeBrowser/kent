@@ -2252,15 +2252,13 @@ identifier snpExceptions131
 identifier snpName132
 "dbSNP version 132 rs* identifiers"
     $gbd.snp132.name dupeOk
+    $gbd.snp132Common.name
+    $gbd.snp132Patient.name
+    $gbd.snp132NonUnique.name
     $gbd.snp132Exceptions.name minCheck=.999
     $gbd.snp132Seq.acc minCheck=.98
     $gbd.snp132CodingDbSnp.name minCheck=.90
     $hg.snp132OrthoPt2Pa2Rm2.name
-
-identifier snpExceptions132
-"Annotations of unusual conditions in dbSNP version 132"
-    $gbd.snp132ExceptionDesc.exception
-    $gbd.snp132Exceptions.exception
 
 # Other NCBI Identifiers
 
