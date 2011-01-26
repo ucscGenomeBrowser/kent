@@ -1582,6 +1582,7 @@ priority 99.0921
 visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+snpSeq snp132Seq
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1594,6 +1595,7 @@ priority 99.0922
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+snpSeq snp132Seq
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1606,6 +1608,7 @@ priority 99.0923
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
+snpSeq snp132Seq
 defaultGeneTracks knownGene
 defaultMaxWeight 3
 maxWindowToDraw 10000000
