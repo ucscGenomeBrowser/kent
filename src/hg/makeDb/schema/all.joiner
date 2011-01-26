@@ -3294,6 +3294,7 @@ tablesIgnored hg19
     hinv70Coding
     hinv70NonCoding
     hinv70PseudoGene
+    uMassBrainHistone%
 
 tablesIgnored mm9
     crgMapability%
