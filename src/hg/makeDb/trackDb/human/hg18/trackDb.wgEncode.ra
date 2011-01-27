@@ -1307,7 +1307,7 @@ canPack On
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
 	shortLabel Gm12878
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 100593.50
 	color 255,128,128
@@ -1315,7 +1315,7 @@ canPack On
 	track wgEncodeRegMarkPromoterH1hesc
         table wgEncodeBroadChipSeqSignalH1hescH3k4me3
 	shortLabel H1 ES
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on H1 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on H1 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12434.00
 	color 255,212,128
@@ -1323,7 +1323,7 @@ canPack On
 	track wgEncodeRegMarkEnhH3k4me3Hepg2
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
 	shortLabel HepG2
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 4927.00
 	color 212,255,128
@@ -1331,7 +1331,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHmec
         table wgEncodeBroadChipSeqSignalHmecH3k4me3
 	shortLabel HMEC
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HMEC cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 15838.00
 	color 120,235,120
@@ -1339,7 +1339,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHsmm
         table wgEncodeBroadChipSeqSignalHsmmH3k4me3
 	shortLabel HSMM
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HSMM cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 42282.00
 	color 120,235,204
@@ -1347,7 +1347,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHuvec
         table wgEncodeBroadChipSeqSignalHuvecH3k4me3
 	shortLabel HUVEC
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on HUVEC cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 9954.75
 	color 128,212,255
@@ -1355,7 +1355,7 @@ canPack On
 	track wgEncodeRegMarkPromoterK562
         table wgEncodeBroadChipSeqSignalK562H3k4me3
 	shortLabel K562
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on K562 cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on K562 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 16145.25
 	color 128,128,255
@@ -1363,7 +1363,7 @@ canPack On
 	track wgEncodeRegMarkPromoterNhek
         table wgEncodeBroadChipSeqSignalNhekH3k4me3
 	shortLabel NHEK
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on NHEK cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12229.50
 	color 212,128,255
@@ -1371,7 +1371,7 @@ canPack On
 	track wgEncodeRegMarkPromoterNhlf
         table wgEncodeBroadChipSeqSignalNhlfH3k4me3
 	shortLabel NHLF
-	longLabel Promoter Associated Histone Mark (H3K4Me3) on NHLF cells from ENCODE
+	longLabel Promoter-Associated Histone Mark (H3K4Me3) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 28587.00
 	color 255,128,212
