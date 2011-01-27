@@ -197,8 +197,8 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak
-maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedLogR
-maxWindowToQuery bigWig bed
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR
+maxWindowToQuery bigWig bed bedlogR
 metadata *
 mgiUrl bed
 mgiUrlLabel bed
@@ -264,12 +264,12 @@ sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
-scoreFilter broadPeak narrowPeak bed interaction
+scoreFilter broadPeak narrowPeak bed interaction bedlogR
 scoreFilterByRange bigBed bed 
-scoreFilterLimits broadPeak narrowPeak bed interaction
-scoreFilterMax bed
-scoreMax bed
-scoreMin broadPeak narrowPeak bed
+scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR
+scoreFilterMax bed bedlogR
+scoreMax bed bedlogR
+scoreMin broadPeak narrowPeak bed bedlogR
 searchMethod bed
 searchType bed
 selectSubject psl
