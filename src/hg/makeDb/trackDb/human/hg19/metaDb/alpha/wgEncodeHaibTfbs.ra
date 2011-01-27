@@ -29401,6 +29401,29 @@ tableName wgEncodeHaibTfbsK562Pol24h8Pcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsK562Pol24h8RawDataRep1
+objType file
+antibody Pol2-4H8
+cell K562
+composite wgEncodeHaibTfbs
+controlId K562/None/Input/PCR2x
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-20
+dateUnrestricted 2010-08-19
+fileName wgEncodeHaibTfbsK562Pol24h8RawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labVersion 3
+origAssembly hg18
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 768
+treatment None
+view RawData
+
 metaObject wgEncodeHaibTfbsK562Pol24h8RawDataRep2
 objType file
 antibody Pol2-4H8
@@ -29608,29 +29631,6 @@ tableName wgEncodeHaibTfbsK562Pol24h8V0416101RawRep2
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsK562Pol2Pcr2xRawDataRep1
-objType file
-antibody Pol2-4H8
-cell K562
-composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR2x
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-11-20
-dateUnrestricted 2010-08-19
-fileName wgEncodeHaibTfbsK562Pol2Pcr2xRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labVersion 3
-origAssembly hg18
-project wgEncode
-protocol PCR2x
-replicate 1
-setType exp
-subId 768
-treatment None
-view RawData
-
 metaObject wgEncodeHaibTfbsK562Pol2Pcr2xRawRep1
 objType table
 antibody Pol2
@@ -29676,6 +29676,48 @@ subId 3028
 tableName wgEncodeHaibTfbsK562Pol2Pcr2xRawRep2
 treatment None
 view RawSignal
+
+metaObject wgEncodeHaibTfbsK562Pol2RawDataRep1
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeHaibTfbs
+controlId K562/None/Input/PCR2x
+dataType ChipSeq
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
+fileName wgEncodeHaibTfbsK562Pol2RawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+setType exp
+subId 52
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsK562Pol2RawDataRep2
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeHaibTfbs
+controlId K562/None/Input/PCR2x
+dataType ChipSeq
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
+fileName wgEncodeHaibTfbsK562Pol2RawDataRep2.fastq.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 2
+setType exp
+subId 52
+treatment None
+view RawData
 
 metaObject wgEncodeHaibTfbsK562Pol2V0416101AlnRep1
 objType file
@@ -36402,4 +36444,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -632414762
+# MAGIC: 2082562747
