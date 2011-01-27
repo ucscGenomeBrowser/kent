@@ -1904,7 +1904,7 @@ target  Hepatocytes
 description  Primary Human Hepatocytes
 lineage  Liver perfused by enzymes to generate single cell suspension
 karyotype  normal
-sex F
+sex B
 tissue  Liver
 vendorName  zen-bio
 vendorId
@@ -2312,7 +2312,7 @@ orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
-sex M
+sex B
 tier 3
 protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -2328,7 +2328,7 @@ orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
-sex M
+sex B
 tier 3
 protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -2452,7 +2452,7 @@ target  iPS
 description  induced pluripotent stem cell
 lineage  induced pluripotent stem cell derived from skin fibroblast
 karyotype  Unknown
-sex  U
+sex  B
 tissue  iPS stem cell derived from skin fibroblast
 vendorName  Josh Chenoweth, Laboratory of Molecular Biology, National Institutes of Health, NINDS
 vendorId
@@ -2811,7 +2811,7 @@ vendorId
 orderUrlhttp://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
 termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991
-sex U
+sex B
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIsletD_Crawford_protocol.pdf
 
@@ -2876,7 +2876,7 @@ orderUrl https://www.case.edu/cgi-bin/directory/pb_lookup.cgi?search_text=calvin
 lineage primary
 termId BTO:0001120 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120
-sex U
+sex B
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:pHTE_Crawford_protocol.pdf
 
@@ -8125,12 +8125,12 @@ description Female
 term B
 tag B
 type sex
-description Both
+description Both: a cell population with both male and female cells
 
 term U
 tag U
 type sex
-description UnknownD
+description Unknown
 
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
