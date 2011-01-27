@@ -2932,7 +2932,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 sex M
-#protocol
+protocol CSHL:Prostate_Gingeras_protocol.pdf
 
 term Raji
 tag Raji
@@ -4407,7 +4407,7 @@ lab  Myers
 lots  L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation ELF1_(SC-631)(Immunoblot)_Myers:human_ELF1_SC-631_validation_Myers.pdf
+validation ELF1_(SC-631)(Immunoblot,MassSpec)_Myers:human_ELF1_SC-631_validation_Myers.pdf
 
 term ELK4
 tag ELK4
@@ -4435,7 +4435,7 @@ orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
 lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
-validation ERalpha_a(Immunoblot):human_ERalpha_a_validation_Myers.pdf
+validation ERalpha_a(Immunoblo,MassSpect):human_ERalpha_a_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term ERalpha_b
@@ -4489,7 +4489,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
 lab Myers
-validation ETS1(Immunoblot):human_ETS1_validation_Myers.pdf
+validation ETS1(Immunoblot,MassSpec):human_ETS1_validation_Myers.pdf
 
 term  FOSL1_(SC-183)
 tag  FOSL1SC183
@@ -4534,7 +4534,7 @@ orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
 lab Myers
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1(Immunoblot):human_FOXA1_C-20_validation_Myers.pdf
+validation FOXA1(Immunoblot,MassSpec):human_FOXA1_C-20_validation_Myers.pdf
 
 term  FOXA1_(SC-101058)
 tag  FOXA1SC101058
@@ -4549,7 +4549,7 @@ lab  Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1_SC-101058(Immunoblot)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
+validation FOXA1_SC-101058(Immunoblot,MassSpec)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
 
 term FOXA2_(SC-6554)
 tag FOXA2SC6554
@@ -5031,7 +5031,7 @@ lab  Myers
 lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation HDAC2_(SC-6296)(Immunoblot)_Myers:human_HDAC2_SC-6296_validation_Myers.pdf
+validation HDAC2_(SC-6296)(Immunoblot,MassSpec)_Myers:human_HDAC2_SC-6296_validation_Myers.pdf
 
 term HEY1
 tag HEY1
@@ -5089,7 +5089,7 @@ vendorId sc-8987
 lab Myers
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
-validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf
+validation HNF4a(Immunoblot,MassSpec):human_HNF4a_H-171_validation_Myers.pdf
 
 term HNF4G_(SC-6558)
 tag HNF4GSC6558
@@ -5190,7 +5190,7 @@ lab  Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_M-17(Immunoblot)_Myers:human_IRF4_M-17_validation_Myers.pdf
+validation IRF4_M-17(Immunoblot,MassSpec)_Myers:human_IRF4_M-17_validation_Myers.pdf
 
 term JunD
 tag JUND
@@ -5232,7 +5232,7 @@ orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
 lab Myers
 targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
-validation LEF1(Immunoblot):human_LEF1_C-19_validation_Myers.pdf
+validation LEF1(Immunoblot,MassSpec):human_LEF1_C-19_validation_Myers.pdf
 
 term MafF_(M8194)
 tag MafFM8194
@@ -5306,7 +5306,7 @@ lab  Myers
 lots  J0809
 targetId MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX_C-17(Immunoblot)_Myers:human_MAX_C-17_validation_Myers.pdf
+validation MAX_C-17(Immunoblot,MassSpec)_Myers:human_MAX_C-17_validation_Myers.pdf
 
 
 
@@ -5552,7 +5552,7 @@ orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-C20(Immunoblot):human_PAX5_C-20_validation_Myers.pdf
+validation PAX5-C20(Immunoblot,MassSpec):human_PAX5_C-20_validation_Myers.pdf
 
 term PAX5-N19
 tag PAX5N19
@@ -5726,7 +5726,7 @@ orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 lab Myers
 targetId GeneCard:POU2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
-validation POU2F2(Immunoblot):human_POU2F2_C-20_validation_Myers.pdf
+validation POU2F2(Immunoblot,MassSpec):human_POU2F2_validation_Myers.pdf
 
 term PRDM1_(Val90)
 tag PRDM1V
@@ -5811,7 +5811,7 @@ orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 lab Myers
 targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
-validation missing
+validation RXRA(Immunoblot,MassSpec):human_RXRA_validation_Myers.pdf
 
 term SETDB1
 tag SETDB1
@@ -5854,7 +5854,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
 targetId
 targetUrl
-validation Sin3Ak-20(Immunoblot):human_Sin3A_K-20_validation_Myers.pdf
+validation Sin3Ak-20(Immunoblot,MassSpec):human_Sin3A_K-20_validation_Myers.pdf
 
 term SIRT6
 tag SIRT6
@@ -5911,7 +5911,7 @@ orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 lab Myers
 targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
-validation SP1(Immunoblot):human_SP1_E-3_validation_Myers.pdf
+validation SP1(Immunoblot,MassSpec):human_SP1_validation_Myers.pdf
 
 term SP2_(SC-643)
 tag SP2SC643
@@ -5999,7 +5999,7 @@ lab Myers / Wold
 lots F3006 L2005 H2604
 targetId GeneCard:SRF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SRF
-validation SRF(Immunoblot):human_SRF_G-20_validation_Myers.pdf
+validation SRF(Immunoblot,MassSpec):human_SRF_validation_Myers.pdf
 
 term STAT1
 tag STAT1
@@ -6086,7 +6086,7 @@ lab  Myers
 lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
-validation TAF7_SQ-8(Immunoblot)_Myers:human_TAF7_SQ-8_validation_Myers.pdf
+validation TAF7_SQ-8(Immunoblot,MassSpec)_Myers:human_TAF7_SQ-8_validation_Myers.pdf
 
 term TAL1_(SC-12984)
 tag TAL1SC12984
@@ -6140,7 +6140,7 @@ orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 lab Myers
 targetId GeneCard:TCF12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
-validation TCF12(Immunoblot):human_TCF12_A-20_validation_Myers.pdf
+validation TCF12(Immunoblot,MassSpec):human_TCF12_A-20_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term TCF3
@@ -6255,7 +6255,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=229
 lab Myers
 targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF-1(Immunoblot):human_USF-1_C-20_validation_Myers.pdf
+validation USF-1(Immunoblot,MassSpec):human_USF1_validation_Myers.pdf
 
 term  USF1_(SC-8983)
 tag  USF1SC8983
