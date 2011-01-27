@@ -1290,8 +1290,8 @@ canPack On
     track wgEncodeRegMarkPromoter
     container multiWig
     superTrack wgEncodeReg full
-    shortLabel Promoted H3K4Me3
-    longLabel ENCODE Promoter Associated Histone Mark (H3K4Me3) on 9 Cell Lines
+    shortLabel Promoter H3K4Me3
+    longLabel ENCODE Promoter-Associated Histone Mark (H3K4Me3) on 9 Cell Lines
     type wig 0 30000
     viewLimits 0:100
     configurable on
