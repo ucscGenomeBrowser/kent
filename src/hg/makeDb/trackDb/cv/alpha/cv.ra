@@ -2932,7 +2932,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 sex M
-#protocol
+protocol CSHL:Prostate_Gingeras_protocol.pdf
 
 term Raji
 tag Raji
