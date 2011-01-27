@@ -3045,6 +3045,29 @@ subId 1394
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep1
+objType file
+antibody Pol2
+cell GM12878
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId GM12878/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 957
+treatment None
+view RawData
+
 metaObject wgEncodeSydhTfbsGm12878Pol2IggmusRawDataRep2
 objType file
 antibody Pol2
@@ -3223,29 +3246,6 @@ project wgEncode
 replicate 1
 setType exp
 subId 92
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsGm12878Pol2RawDataRep1Iggmus
-objType file
-antibody Pol2
-cell GM12878
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId GM12878/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsGm12878Pol2RawDataRep1Iggmus.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 957
 treatment None
 view RawData
 
@@ -21350,6 +21350,29 @@ tableName wgEncodeSydhTfbsHepg2Pgc1aForsklnStdSig
 treatment forskolin
 view Signal
 
+metaObject wgEncodeSydhTfbsHepg2Pol2ForsklnRawDataRep1
+objType file
+antibody Pol2
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/forskolin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsHepg2Pol2ForsklnRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1072
+treatment forskolin
+view RawData
+
 metaObject wgEncodeSydhTfbsHepg2Pol2ForsklnRawDataRep2
 objType file
 antibody Pol2
@@ -21692,29 +21715,6 @@ subId 241
 treatment pravastatin
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2Pol2RawDataRep1Forskln
-objType file
-antibody Pol2
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/forskolin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsHepg2Pol2RawDataRep1Forskln.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1072
-treatment forskolin
-view RawData
-
 metaObject wgEncodeSydhTfbsHepg2Pol2RawDataRep2
 objType file
 antibody Pol2
@@ -22017,6 +22017,75 @@ tableName wgEncodeSydhTfbsHepg2Rfx5n494IggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep1
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/insulin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1073
+treatment insulin
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep2
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/insulin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1073
+treatment insulin
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep3
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/insulin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep3.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 1073
+treatment insulin
+view RawData
+
 metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1
 objType file
 antibody SREBP1
@@ -22037,29 +22106,6 @@ replicate 1
 setType exp
 subId 242
 treatment pravastatin
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1Insln
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/insulin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1Insln.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1073
-treatment insulin
 view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2
@@ -22084,29 +22130,6 @@ subId 242
 treatment pravastatin
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2Insln
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/insulin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2Insln.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1073
-treatment insulin
-view RawData
-
 metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3
 objType file
 antibody SREBP1
@@ -22127,29 +22150,6 @@ replicate 3
 setType exp
 subId 242
 treatment pravastatin
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3Insln
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/insulin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3Insln.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
-origAssembly hg18
-project wgEncode
-replicate 3
-setType exp
-subId 1073
-treatment insulin
 view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep1
@@ -25239,6 +25239,30 @@ subId 1088
 treatment MNaseD
 view RawData
 
+metaObject wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view RawData
+
 metaObject wgEncodeSydhTfbsK562bSetdb1RawDataRep1
 objType file
 antibody SETDB1
@@ -25285,30 +25309,6 @@ setType exp
 softwareVersion PeakSeq1.0 (fdr 0.001)
 subId 377
 treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bSetdb1RawDataRep2Mnase
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep2Mnase.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
 view RawData
 
 metaObject wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1
@@ -30781,6 +30781,52 @@ subId 1388
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsK562Pol2IggmusRawDataRep1
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId K562/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsK562Pol2IggmusRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Data paired with IgG_Control.
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 895
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Pol2IggmusRawDataRep2
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeSydhTfbs
+control IgG-mus
+controlId K562/None/Input/IgG-mus
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-12
+dateUnrestricted 2010-10-12
+fileName wgEncodeSydhTfbsK562Pol2IggmusRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Data paired with IgG_Control.
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 895
+treatment None
+view RawData
+
 metaObject wgEncodeSydhTfbsK562Pol2IggmusSig
 objType table
 antibody Pol2
@@ -30824,29 +30870,6 @@ subId 16
 treatment None
 view RawData
 
-metaObject wgEncodeSydhTfbsK562Pol2RawDataRep1Iggmus
-objType file
-antibody Pol2
-cell K562
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId K562/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Pol2RawDataRep1Iggmus.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Data paired with IgG_Control.
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 895
-treatment None
-view RawData
-
 metaObject wgEncodeSydhTfbsK562Pol2RawDataRep2
 objType file
 antibody Pol2
@@ -30866,29 +30889,6 @@ project wgEncode
 replicate 2
 setType exp
 subId 16
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562Pol2RawDataRep2Iggmus
-objType file
-antibody Pol2
-cell K562
-composite wgEncodeSydhTfbs
-control IgG-mus
-controlId K562/None/Input/IgG-mus
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-12
-dateUnrestricted 2010-10-12
-fileName wgEncodeSydhTfbsK562Pol2RawDataRep2Iggmus.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Data paired with IgG_Control.
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 895
 treatment None
 view RawData
 
@@ -36060,4 +36060,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -609534519
+# MAGIC: 287052952
