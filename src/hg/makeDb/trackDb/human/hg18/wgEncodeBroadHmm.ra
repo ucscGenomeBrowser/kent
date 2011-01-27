@@ -3,7 +3,7 @@
 track wgEncodeBroadHmm
 compositeTrack on
 shortLabel Broad HMM
-longLabel ENCODE Chromatin Modelling by HMM from Broad Institute
+longLabel ENCODE Chromatin Modeling by HMM from Broad Institute, MIT and MGH
 group regulation
 subGroup1 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
 dimensions dimensionX=cellType
@@ -12,8 +12,13 @@ fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Subm
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell
 priority 0
-type bed 9
+type bed 9 +
 itemRgb on
+boxedCfg on
+# filterBy needs bed 9 "+" but shouldn't.  boxedCfg not working for bed
+filterBy name:State="1 Active Promoter","2 Weak Promoter","3 Poised Promoter","4 Strong Enhancer","5 Strong Enhancer","6 Weak Enhancer","7 Weak Enhancer","8 Insulator","9 Txn Transition","10 Txn Elongation","11 Weak Txn","12 Repressed","13 Heterochrom/lo","14 Repetitive/CNV","15 Repetitive/CNV"
+###configurable on
+### configurable on would be nice but doesn't work without view (which column/cell gets the link?)
 wgEncode 1
 dataVersion through the ENCODE Jan 2011 Freeze
 
@@ -21,7 +26,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm
         shortLabel GM12878
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in GM12878 cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in GM12878 cells)
         subGroups cellType=GM12878
         type bed 9
         #color 153,38,0
@@ -31,7 +36,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm off
         shortLabel H1-hESC
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in H1-hESC cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in H1-hESC cells)
         subGroups cellType=H1
         type bed 9
         #color 0,107,27
@@ -41,7 +46,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm
         shortLabel K562
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in K562 cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in K562 cells)
         subGroups cellType=K562
         type bed 9
         #color 46,0,184
@@ -51,7 +56,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm off
         shortLabel HepG2
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in HepG2 cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in HepG2 cells)
         subGroups cellType=HEPG2
         type bed 9
         #color 189,0,157
@@ -61,7 +66,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm off
         shortLabel HMEC
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in HMEC cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in HMEC cells)
         subGroups cellType=HMEC
         type bed 9
         # subId=3446 dateSubmitted=2011-01-21
@@ -70,7 +75,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm off
         shortLabel NHLF
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in NHLF cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in NHLF cells)
         subGroups cellType=NHLF
         type bed 9
         # subId=3446 dateSubmitted=2011-01-21
@@ -79,7 +84,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm off
         shortLabel NHEK
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in NHEK cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in NHEK cells)
         subGroups cellType=NHEK
         type bed 9
         #color 179,0,134
@@ -89,7 +94,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm off
         shortLabel HSMM
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in HSMM cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in HSMM cells)
         subGroups cellType=HSMM
         type bed 9
         # subId=3446 dateSubmitted=2011-01-21
@@ -98,7 +103,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeBroadHmm off
         shortLabel HUVEC
-        longLabel ENCODE Broad Chromatin Modelling by HMM (in HUVEC cells)
+        longLabel ENCODE Broad Chromatin Modeling by HMM (in HUVEC cells)
         subGroups cellType=HUVEC
         type bed 9
         #color 224,75,0
