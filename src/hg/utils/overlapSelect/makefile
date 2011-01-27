@@ -11,6 +11,7 @@ A =  overlapSelect
 $A: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+	@rm -f usage.msg
 
 chromAnn.o: rowReader.c rowReader.h
 chromAnn.o: chromAnn.c chromAnn.h rowReader.h

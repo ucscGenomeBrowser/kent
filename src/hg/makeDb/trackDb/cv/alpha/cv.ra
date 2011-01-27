@@ -1062,7 +1062,7 @@ description chronic lymphocytic leukemia cell
 tier 3
 lineage T-cell lymphocyte
 karyotype cancer
-sex U
+sex F
 tissue lymphocyte
 vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
 vendorId
@@ -1100,7 +1100,7 @@ lineage Fetal membranes were collected from women who underwent planned cesarean
 karyotype unknown
 termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252
-sex U
+sex F
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
@@ -1683,7 +1683,7 @@ lineage Astrocytic
 karyotype Normal
 sex U
 tissue cerebellar
-vendorName Sciencell
+vendorName ScienCell
 vendorId 1810
 orderUrl http://www.sciencellonline.com/site/products/1810.php
 termId BTO:0000099
@@ -1713,8 +1713,8 @@ lineage Astrocytic
 karyotype Normal
 sex U
 tissue brain hippocampus
-vendorName
-vendorId Sciencell
+vendorName ScienCell
+vendorId 1830
 orderUrl http://www.sciencellonline.com/site/products/1830.php
 termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
@@ -1741,7 +1741,7 @@ type Cell Line
 organism human
 description Human astrocytes spinal cord
 tissue Spinal cord
-vendorName Sciencell
+vendorName ScienCell
 vendorId 1820
 orderUrl http://www.sciencellonline.com/site/products/1820.php
 karyotype Normal
@@ -1904,7 +1904,7 @@ target  Hepatocytes
 description  Primary Human Hepatocytes
 lineage  Liver perfused by enzymes to generate single cell suspension
 karyotype  normal
-sex  U
+sex F
 tissue  Liver
 vendorName  zen-bio
 vendorId
@@ -2045,7 +2045,7 @@ lineage
 karyotype
 termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178
-sex U
+sex F
 tier 3
 protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
@@ -2280,8 +2280,8 @@ lineage Endothelial
 karyotype Normal
 sex U
 tissue kidney
-vendorName
-vendorId Sciencell
+vendorName ScienCell
+vendorId 4000
 orderUrl http://www.sciencellonline.com/site/products/4000.php
 termId BTO:0001176
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001176
@@ -2312,7 +2312,7 @@ orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256
-sex U
+sex M
 tier 3
 protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -2328,7 +2328,7 @@ orderUrl http://www.lonza.com/
 karyotype normal
 termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760
-sex U
+sex M
 tier 3
 protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
@@ -2372,7 +2372,7 @@ tier 3
 description Trophoblast (HTR-8/SVneo) cell line. A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo.
 lineage Blastula
 karyotype normal
-sex U
+sex F
 tissue Ectoderm
 vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada
 vendorId HTR8svn
@@ -2591,7 +2591,7 @@ vendorName Duke University Medical Center, surgical resection from a patient wit
 orderUrl http://pathology.mc.duke.edu/neuropath/np_faculty_dbigner.htm
 termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359
-sex U
+sex M
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:D721_Crawford_protocol.pdf
 
@@ -2684,7 +2684,7 @@ vendorName Lonza
 vendorId CC-2541
 orderUrl http://www.lonza.com/
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
-sex U
+sex F
 tier 3
 termId BTO:0002022
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:NHBE_Crawford_protocol.pdf
@@ -2762,7 +2762,7 @@ lineage
 karyotype normal
 termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593
-sex U
+sex F
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf Broad_Histone:Osteoblast_Bernstein_protocol.pdf
 
@@ -2932,7 +2932,7 @@ termId BTO:0001129
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001129
 tier 3
 sex M
-#protocol
+protocol CSHL:Prostate_Gingeras_protocol.pdf
 
 term Raji
 tag Raji
@@ -3272,7 +3272,7 @@ sex F
 tissue embryonic lung
 vendorName Dr. Carl Mann, SBIGeM
 vendorId
-orderUrl http://www.ggc.u-psud.fr/equipe_accueil_doc/equipes_institut.html
+orderUrl http://www-dsv.cea.fr/dsv/instituts/institut-de-biologie-et-de-technologies-de-saclay-ibitec-s/unites/service-de-biologie-integrative-et-genetique-moleculaire-sbigem/laboratoire-stress-oxydants-et-cancer-lsoc/equipe-mecanismes-de-stabilite-genomique-c.-mann
 termId BTO:0001958
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001958
 protocol UW_Stam:WI38_Stam_protocol.pdf
@@ -4407,7 +4407,7 @@ lab  Myers
 lots  L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation ELF1_(SC-631)(Immunoblot)_Myers:human_ELF1_SC-631_validation_Myers.pdf
+validation ELF1_(SC-631)(Immunoblot,MassSpec)_Myers:human_ELF1_SC-631_validation_Myers.pdf
 
 term ELK4
 tag ELK4
@@ -4435,7 +4435,7 @@ orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
 lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
-validation ERalpha_a(Immunoblot):human_ERalpha_a_validation_Myers.pdf
+validation ERalpha_a(Immunoblo,MassSpect):human_ERalpha_a_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term ERalpha_b
@@ -4489,7 +4489,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
 lab Myers
-validation ETS1(Immunoblot):human_ETS1_validation_Myers.pdf
+validation ETS1(Immunoblot,MassSpec):human_ETS1_validation_Myers.pdf
 
 term  FOSL1_(SC-183)
 tag  FOSL1SC183
@@ -4497,7 +4497,7 @@ type Antibody
 target  FOSL1
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the N-terminus of FOSL1 of human origin.
 targetDescription  The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2.  These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1.  As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-183
 orderUrl http://www.scbt.com/datasheet-183-fra-1-n-17-antibody.html
 lab  Myers
@@ -4534,7 +4534,7 @@ orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
 lab Myers
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1(Immunoblot):human_FOXA1_C-20_validation_Myers.pdf
+validation FOXA1(Immunoblot,MassSpec):human_FOXA1_C-20_validation_Myers.pdf
 
 term  FOXA1_(SC-101058)
 tag  FOXA1SC101058
@@ -4549,7 +4549,7 @@ lab  Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1_SC-101058(Immunoblot)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
+validation FOXA1_SC-101058(Immunoblot,MassSpec)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
 
 term FOXA2_(SC-6554)
 tag FOXA2SC6554
@@ -4629,7 +4629,7 @@ type Antibody
 target  GATA1
 antibodyDescription  Rat monoclonal raised against bacterially expressed murine GATA-1
 targetDescription  GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes.
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 lab  Snyder
@@ -4673,7 +4673,7 @@ type Antibody
 target  GATA3
 antibodyDescription  Mouse monoclonal IgG raised against human recombinant GATA-3.
 targetDescription  This gene encodes a protein which belongs to the GATA family of transcription factors.  The protein contains two GATA-type zinc fingers and is a n important regulator of T-cell development and plays an important role in endothelial cell biology.  Defects in this gene are the cause of hypoparathyroidism with sensorineural deafness and renal dysplasia (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-268
 orderUrl http://www.scbt.com/datasheet-268-gata-3-hg3-31-antibody.html
 lab  Myers
@@ -5031,7 +5031,7 @@ lab  Myers
 lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation HDAC2_(SC-6296)(Immunoblot)_Myers:human_HDAC2_SC-6296_validation_Myers.pdf
+validation HDAC2_(SC-6296)(Immunoblot,MassSpec)_Myers:human_HDAC2_SC-6296_validation_Myers.pdf
 
 term HEY1
 tag HEY1
@@ -5089,7 +5089,7 @@ vendorId sc-8987
 lab Myers
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
-validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf
+validation HNF4a(Immunoblot,MassSpec):human_HNF4a_H-171_validation_Myers.pdf
 
 term HNF4G_(SC-6558)
 tag HNF4GSC6558
@@ -5097,7 +5097,7 @@ type Antibody
 target HNF4G
 antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of HNF4G of human origin. 
 targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene 
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-6558
 orderUrl http://www.scbt.com/datasheet-6558-hnf-4gamma-c-18-antibody.html
 lab Myers 
@@ -5190,7 +5190,7 @@ lab  Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_M-17(Immunoblot)_Myers:human_IRF4_M-17_validation_Myers.pdf
+validation IRF4_M-17(Immunoblot,MassSpec)_Myers:human_IRF4_M-17_validation_Myers.pdf
 
 term JunD
 tag JUND
@@ -5232,7 +5232,7 @@ orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
 lab Myers
 targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
-validation LEF1(Immunoblot):human_LEF1_C-19_validation_Myers.pdf
+validation LEF1(Immunoblot,MassSpec):human_LEF1_C-19_validation_Myers.pdf
 
 term MafF_(M8194)
 tag MafFM8194
@@ -5264,14 +5264,14 @@ targetId GeneCards:MAFK
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAFK
 validation missing
 
-term MafK_(sc477)
+term MafK_(SC-477)
 tag MafKsc477
 type Antibody
 target MafK
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
-vendorName Santa Cruz Biotech Cat#
-vendorId sc-477
+vendorName Santa Cruz Biotech 
+vendorId SC-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
 lots
@@ -5306,7 +5306,7 @@ lab  Myers
 lots  J0809
 targetId MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX_C-17(Immunoblot)_Myers:human_MAX_C-17_validation_Myers.pdf
+validation MAX_C-17(Immunoblot,MassSpec)_Myers:human_MAX_C-17_validation_Myers.pdf
 
 
 
@@ -5346,7 +5346,7 @@ type Antibody
 target NANOG
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 151-305 mapping at the C-terminus of Nanog of human origin.
 targetDescription Transcription regulator involved in inner cell mass and embryonic stem (ES) cells proliferation and self-renewal.  Imposes pluripotency on ES cells and prevents their differentiation towards extraembryonic endoderm and trophectoderm lineages.  Blocks bone morphogenetic protein-induced mesoderm differentiation of ES cells by physically interacting with SMAD1 and interfering with the recruitment of coactivators to the active SMAD transcriptional complexes (By similarity).  Acts as a transcriptional activator or repressor (By similarity).  Binds optimally to the DNA consensus sequence 5'-TAAT[GT][GT]-3' or 5'-[CG][GA][CG]C[GC]ATTAN[GC]-3' (By similarity).  When overexpressed, promotes cells to enter into S phase and proliferation (By similarity) (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-33759
 orderUrl http://www.scbt.com/datasheet-33759-nanog-h-155-antibody.html
 lab Myers
@@ -5552,7 +5552,7 @@ orderUrl http://www.scbt.com/datasheet-1974-pax-5-c-20-antibody.html
 lab Myers
 targetId GeneCard:PAX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
-validation PAX5-C20(Immunoblot):human_PAX5_C-20_validation_Myers.pdf
+validation PAX5-C20(Immunoblot,MassSpec):human_PAX5_C-20_validation_Myers.pdf
 
 term PAX5-N19
 tag PAX5N19
@@ -5705,7 +5705,7 @@ type Antibody
 target POU5F1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 1-134 of Oct3/4 of human origin.
 targetDescription This gene encodes a transcription factor containing a POU homeodomain.  This transcription factor plays a role in embryonic development, especially during early embryogenesis, and it is necessary for embryonic stem cell pluripotency.  A translocation of this gene with the Ewing's sarcoma gene, t(6;22)(p21;q12), has been linked to tumor formation.  Alternative splicing, as well as usage of alternative translation initiation codons, results in multiple isoforms, one of which initiates at a non-AUG (CUG) start codon.  Related pseudogenes have been identified on chromosomes 1, 3, 8, 10, and 12 (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-9081
 orderUrl http://www.scbt.com/datasheet-9081-oct-3-4-h-134-antibody.html
 lab Myers
@@ -5726,7 +5726,7 @@ orderUrl http://www.scbt.com/datasheet-233-oct-2-c-20-antibody.html
 lab Myers
 targetId GeneCard:POU2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
-validation POU2F2(Immunoblot):human_POU2F2_C-20_validation_Myers.pdf
+validation POU2F2(Immunoblot,MassSpec):human_POU2F2_validation_Myers.pdf
 
 term PRDM1_(Val90)
 tag PRDM1V
@@ -5811,7 +5811,7 @@ orderUrl http://www.scbt.com/datasheet-553-rxralpha-d-20-antibody.html
 lab Myers
 targetId GeneCard:RXRA
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RXRA
-validation missing
+validation RXRA(Immunoblot,MassSpec):human_RXRA_validation_Myers.pdf
 
 term SETDB1
 tag SETDB1
@@ -5834,7 +5834,7 @@ target  SETDB1
 antibodyDescription  SETDB1 (H-300) is an affinity purified rabbit polyclonal antibody raised against an epitope corresponding to amino acids 1-300 mapping at the N-terminus of the human SETDB1 protein. Recommended for detection of SETDB1 of m, r and h origin by WB, IP, IF and ELISA; also reactive with additional mammalian species, including cow and dog.
 targetDescription  SETDB1 is a H3K9-selective histone methyltransferase, methylating Lys-9 of Histone H3 and mutations within the SETDB1 gene abolishes its methyltransferase activity. This methylation acts is thought to play a role in transcriptional repression through HP1 protein recruitment to methylated histones.
 vendorName Santa Cruz Biotech
-vendorId Cat#sc-66884
+vendorId sc-66884
 orderUrl http://www.scbt.com/datasheet-66884-eset-h-300-antibody.html
 lab  Farnham
 lots
@@ -5854,7 +5854,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
 targetId
 targetUrl
-validation Sin3Ak-20(Immunoblot):human_Sin3A_K-20_validation_Myers.pdf
+validation Sin3Ak-20(Immunoblot,MassSpec):human_Sin3A_K-20_validation_Myers.pdf
 
 term SIRT6
 tag SIRT6
@@ -5890,7 +5890,7 @@ type Antibody
 target SMC3
 antibodyDescription Rabbit polyclonal raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH
 targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex.  The cohesin complex is required for the cohesion of sister chromatids after DNA replication.
-vendorName Abcam Cat#
+vendorName Abcam 
 vendorId ab9263
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 lab Snyder
@@ -5911,7 +5911,7 @@ orderUrl http://www.scbt.com/datasheet-17824-sp1-e-3-antibody.html
 lab Myers
 targetId GeneCard:SP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP1
-validation SP1(Immunoblot):human_SP1_E-3_validation_Myers.pdf
+validation SP1(Immunoblot,MassSpec):human_SP1_validation_Myers.pdf
 
 term SP2_(SC-643)
 tag SP2SC643
@@ -5999,7 +5999,7 @@ lab Myers / Wold
 lots F3006 L2005 H2604
 targetId GeneCard:SRF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SRF
-validation SRF(Immunoblot):human_SRF_G-20_validation_Myers.pdf
+validation SRF(Immunoblot,MassSpec):human_SRF_validation_Myers.pdf
 
 term STAT1
 tag STAT1
@@ -6086,7 +6086,7 @@ lab  Myers
 lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
-validation TAF7_SQ-8(Immunoblot)_Myers:human_TAF7_SQ-8_validation_Myers.pdf
+validation TAF7_SQ-8(Immunoblot,MassSpec)_Myers:human_TAF7_SQ-8_validation_Myers.pdf
 
 term TAL1_(SC-12984)
 tag TAL1SC12984
@@ -6140,7 +6140,7 @@ orderUrl http://www.scbt.com/datasheet-357-heb-a-20-antibody.html
 lab Myers
 targetId GeneCard:TCF12
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF12
-validation TCF12(Immunoblot):human_TCF12_A-20_validation_Myers.pdf
+validation TCF12(Immunoblot,MassSpec):human_TCF12_A-20_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term TCF3
@@ -6255,7 +6255,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=229
 lab Myers
 targetId GeneCard:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF-1(Immunoblot):human_USF-1_C-20_validation_Myers.pdf
+validation USF-1(Immunoblot,MassSpec):human_USF1_validation_Myers.pdf
 
 term  USF1_(SC-8983)
 tag  USF1SC8983
@@ -6393,7 +6393,7 @@ type Antibody
 target ZEB1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin.
 targetDescription This gene encodes a zinc finger transcription factor.  The encoded protein likely plays a role in transcriptional repression of interleukin 2.  Mutations in this gene have ben associated with posterior polymorphous corneal dystrophy-3 and late-onset Fuchs endothelial corneal dystrophy.  Alternatively spliced transcript variants encoding different isoforms have been described. (provided by RefSeq).
-vendorName Santa Cruz Biotech Cat#
+vendorName Santa Cruz Biotech 
 vendorId sc-25388
 orderUrl http://www.scbt.com/datasheet-25388-zeb1-h-102-antibody.html
 lab Myers

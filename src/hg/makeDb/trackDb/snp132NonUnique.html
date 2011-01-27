@@ -1,12 +1,18 @@
 <H2>Description</H2>
 
 <P>
-This track contains information about single nucleotide polymorphisms
+This track contains information about a subset of the 
+single nucleotide polymorphisms
 and small insertions and deletions (indels) &mdash; collectively Simple
 Nucleotide Polymorphisms &mdash; from
 <A HREF="http://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
 build 132, available from
 <A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms" target=_blank>ftp.ncbi.nih.gov/snp</A>.
+Only SNPs that have been mapped to multiple locations in the reference
+genome assembly are included in this subset.  When a SNP's flanking sequences 
+map to multiple locations in the reference genome, it calls into question 
+whether there is true variation at those sites, or whether the sites' 
+sequences are merely highly similar but not identical.
 </P>
 
 <H2>Interpreting and Configuring the Graphical Display</H2>
@@ -224,7 +230,7 @@ display according to several attributes:
       <LI>Weight can be 0, 1, 2, 3 or 10.   
       <LI>Weight = 1 are the highest quality alignments.
       <LI>Weight = 0 and weight = 10 are excluded from the data set.
-      <LI>A filter on maximum weight value is supported, which defaults to 1.
+      <LI>A filter on maximum weight value is supported, which defaults to 3.
       </UL>
     </LI>
     <LI>
