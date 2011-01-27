@@ -406,7 +406,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/DEX_100nM/Input/PCR1x
+controlId SL474
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
@@ -414,6 +414,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549CtcfPcr1xDexaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1204
 labVersion SL1204
 origAssembly hg18
 project wgEncode
@@ -429,7 +430,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/DEX_100nM/Input/PCR1x
+controlId SL474
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
@@ -437,6 +438,7 @@ dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549CtcfPcr1xDexaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1077
 labVersion SL1077
 origAssembly hg18
 project wgEncode
@@ -600,7 +602,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/Input/PCR1x
+controlId SL475
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -608,6 +610,7 @@ dateUnrestricted 2010-10-12
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1205
 labVersion SL1205
 origAssembly hg18
 project wgEncode
@@ -623,7 +626,7 @@ objType file
 antibody CTCF
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/Input/PCR1x
+controlId SL475
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -631,6 +634,7 @@ dateUnrestricted 2010-10-12
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1078
 labVersion SL1078
 origAssembly hg18
 project wgEncode
@@ -692,7 +696,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
@@ -700,6 +704,7 @@ dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL884
 labVersion 1
 origAssembly hg18
 project wgEncode
@@ -715,7 +720,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL879
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
@@ -723,6 +728,7 @@ dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDex500pmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL885
 labVersion 2
 origAssembly hg18
 project wgEncode
@@ -738,7 +744,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
@@ -746,6 +752,7 @@ dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL882
 labVersion 1
 origAssembly hg18
 project wgEncode
@@ -761,7 +768,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL879
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
@@ -769,6 +776,7 @@ dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDex50nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL883
 labVersion 2
 origAssembly hg18
 project wgEncode
@@ -784,7 +792,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
@@ -792,6 +800,7 @@ dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL880
 labVersion 5
 origAssembly hg18
 project wgEncode
@@ -807,7 +816,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL879
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-09
@@ -815,6 +824,7 @@ dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDex5nmRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL881
 labVersion 2
 origAssembly hg18
 project wgEncode
@@ -1274,7 +1284,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-07
@@ -1299,7 +1309,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL879
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-07
@@ -1324,7 +1334,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
@@ -1332,6 +1342,7 @@ dateUnrestricted 2010-12-01
 fileName wgEncodeHaibTfbsA549GrPcr1xEtoh02RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL878
 labVersion 1
 origAssembly hg18
 project wgEncode
@@ -1348,7 +1359,7 @@ objType file
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL879
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-01
@@ -1356,6 +1367,7 @@ dateUnrestricted 2010-12-01
 fileName wgEncodeHaibTfbsA549GrPcr1xEtoh02RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL879
 labVersion 2
 origAssembly hg18
 project wgEncode
@@ -1371,7 +1383,7 @@ objType table
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL878
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-01
@@ -1394,7 +1406,7 @@ objType table
 antibody GR
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/EtOH/GR/PCR1x
+controlId SL879
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-01
@@ -2207,7 +2219,7 @@ objType file
 antibody USF-1
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/DEX_100nM/Input/PCR1x
+controlId SL474
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
@@ -2215,6 +2227,7 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xDexaRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1206
 labVersion SL1206
 origAssembly hg18
 project wgEncode
@@ -2230,7 +2243,7 @@ objType file
 antibody USF-1
 cell A549
 composite wgEncodeHaibTfbs
-controlId A549/DEX_100nM/Input/PCR1x
+controlId SL474
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
@@ -2238,6 +2251,7 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xDexaRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1079
 labVersion SL1079
 origAssembly hg18
 project wgEncode
@@ -4113,7 +4127,7 @@ objType file
 antibody BATF
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -4121,6 +4135,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsGm12878BatfRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL839
 labVersion 7
 origAssembly hg18
 project wgEncode
@@ -4136,7 +4151,7 @@ objType file
 antibody BATF
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -4144,6 +4159,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsGm12878BatfRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL985
 labVersion 8
 origAssembly hg18
 project wgEncode
@@ -4403,7 +4419,7 @@ objType file
 antibody BCL3
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-10
@@ -4411,6 +4427,7 @@ dateUnrestricted 2010-09-10
 fileName wgEncodeHaibTfbsGm12878Bcl3Pcr1xBcl3RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL652
 labVersion SL652
 origAssembly hg18
 project wgEncode
@@ -4426,7 +4443,7 @@ objType file
 antibody BCL3
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-10
@@ -4434,6 +4451,7 @@ dateUnrestricted 2010-09-10
 fileName wgEncodeHaibTfbsGm12878Bcl3Pcr1xBcl3RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1018
 labVersion SL1018
 origAssembly hg18
 project wgEncode
@@ -5031,7 +5049,7 @@ objType file
 antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR2x
+controlId SL217
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
@@ -5039,6 +5057,7 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHaibTfbsGm12878ControlPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL217
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -5053,7 +5072,7 @@ objType file
 antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR2x
+controlId SL218
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
@@ -5061,6 +5080,7 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHaibTfbsGm12878ControlPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL218
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -5448,7 +5468,7 @@ objType file
 antibody EBF
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -5456,6 +5476,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsGm12878EbfRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL745
 labVersion 6
 origAssembly hg18
 project wgEncode
@@ -5471,7 +5492,7 @@ objType file
 antibody EBF
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -5479,6 +5500,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsGm12878EbfRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL988
 labVersion 8
 origAssembly hg18
 project wgEncode
@@ -6315,7 +6337,7 @@ objType file
 antibody GABP
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR2x
+controlId SL218
 dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
@@ -6323,6 +6345,7 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsGm12878GabpPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL205
 labVersion PCR2x
 origAssembly hg18
 project wgEncode
@@ -6384,7 +6407,7 @@ objType file
 antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
@@ -6392,6 +6415,7 @@ dateUnrestricted 2011-02-14
 fileName wgEncodeHaibTfbsGm12878InputPcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL516
 labVersion SL516
 origAssembly hg18
 project wgEncode
@@ -6407,7 +6431,7 @@ objType file
 antibody Input
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
@@ -6415,6 +6439,7 @@ dateUnrestricted 2011-02-14
 fileName wgEncodeHaibTfbsGm12878InputPcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL517
 labVersion SL517
 origAssembly hg18
 project wgEncode
@@ -6622,7 +6647,7 @@ objType file
 antibody IRF4
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -6630,6 +6655,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsGm12878Irf4RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL838
 labVersion 7
 origAssembly hg18
 project wgEncode
@@ -6645,7 +6671,7 @@ objType file
 antibody IRF4
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -6653,6 +6679,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsGm12878Irf4RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL951
 labVersion 8
 origAssembly hg18
 project wgEncode
@@ -7465,7 +7492,7 @@ objType file
 antibody p300
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
@@ -7473,6 +7500,7 @@ dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878P300RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL551
 labVersion 3
 origAssembly hg18
 project wgEncode
@@ -7488,7 +7516,7 @@ objType file
 antibody p300
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
@@ -7496,6 +7524,7 @@ dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878P300RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL564
 labVersion 4
 origAssembly hg18
 project wgEncode
@@ -7703,7 +7732,7 @@ objType file
 antibody PAX5-C20
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL678
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
@@ -7711,6 +7740,7 @@ dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsGm12878Pax5c20RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL675
 labVersion 5
 origAssembly hg18
 project wgEncode
@@ -7726,7 +7756,7 @@ objType file
 antibody PAX5-C20
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
@@ -7734,6 +7764,7 @@ dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsGm12878Pax5c20RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL735
 labVersion 6
 origAssembly hg18
 project wgEncode
@@ -7941,7 +7972,7 @@ objType file
 antibody PAX5-N19
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -7949,6 +7980,7 @@ dateUnrestricted 2010-09-17
 fileName wgEncodeHaibTfbsGm12878Pax5n19RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL848
 labVersion SL848
 origAssembly hg18
 project wgEncode
@@ -8262,7 +8294,7 @@ objType file
 antibody Pol2-4H8
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
@@ -8270,6 +8302,7 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL748
 labVersion SL748
 origAssembly hg18
 project wgEncode
@@ -8285,7 +8318,7 @@ objType file
 antibody Pol2-4H8
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-08
@@ -8293,6 +8326,7 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeHaibTfbsGm12878Pol24h8Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL847
 labVersion SL847
 origAssembly hg18
 project wgEncode
@@ -9365,7 +9399,7 @@ objType file
 antibody Sin3Ak-20
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR2x
+controlId SL217
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
@@ -9373,6 +9407,7 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHaibTfbsGm12878Sin3ak20Pcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL433
 labVersion PCR2x
 origAssembly hg18
 project wgEncode
@@ -9748,7 +9783,7 @@ objType file
 antibody SP1
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-05-14
@@ -9757,6 +9792,7 @@ dateUnrestricted 2010-04-20
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL746
 labVersion SL612
 origAssembly hg18
 project wgEncode
@@ -9772,7 +9808,7 @@ objType file
 antibody SP1
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL678
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -9780,6 +9816,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL846
 labVersion SL846
 origAssembly hg18
 project wgEncode
@@ -10537,7 +10574,7 @@ objType file
 antibody TCF12
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-05-14
@@ -10545,6 +10582,7 @@ dateUnrestricted 2011-02-14
 fileName wgEncodeHaibTfbsGm12878Tcf12Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL673
 labVersion SL673
 origAssembly hg18
 project wgEncode
@@ -10606,7 +10644,7 @@ objType file
 antibody TCF12
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -10614,6 +10652,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsGm12878Tcf12RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1019
 labVersion 8
 origAssembly hg18
 project wgEncode
@@ -10731,7 +10770,7 @@ objType file
 antibody USF-1
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR2x
+controlId SL217
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
@@ -10739,6 +10778,7 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHaibTfbsGm12878Usf1Pcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL488
 labVersion PCR2x
 origAssembly hg18
 project wgEncode
@@ -10754,7 +10794,7 @@ objType file
 antibody USF-1
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR2x
+controlId SL218
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
@@ -10762,6 +10802,7 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHaibTfbsGm12878Usf1Pcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL483
 labVersion PCR2x
 origAssembly hg18
 project wgEncode
@@ -10971,7 +11012,7 @@ objType file
 antibody ZBTB33
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
@@ -10979,6 +11020,7 @@ dateUnrestricted 2010-08-30
 fileName wgEncodeHaibTfbsGm12878Zbtb33RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL814
 labVersion 7
 origAssembly hg18
 project wgEncode
@@ -10994,7 +11036,7 @@ objType file
 antibody ZBTB33
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-30
@@ -11002,6 +11044,7 @@ dateUnrestricted 2010-08-30
 fileName wgEncodeHaibTfbsGm12878Zbtb33RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL923
 labVersion 8
 origAssembly hg18
 project wgEncode
@@ -11224,7 +11267,7 @@ objType file
 antibody Input
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -11232,6 +11275,7 @@ dateUnrestricted 2010-10-10
 fileName wgEncodeHaibTfbsGm12891ControlPcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL817
 labVersion SL817
 origAssembly hg18
 project wgEncode
@@ -11674,7 +11718,7 @@ objType file
 antibody Pol2-4H8
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -11682,6 +11726,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol24h8Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL910
 labVersion SL910
 origAssembly hg18
 project wgEncode
@@ -11697,7 +11742,7 @@ objType file
 antibody Pol2-4H8
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -11705,6 +11750,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol24h8Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL922
 labVersion SL922
 origAssembly hg18
 project wgEncode
@@ -11868,7 +11914,7 @@ objType file
 antibody Pol2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -11876,6 +11922,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol2Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL908
 labVersion SL908
 origAssembly hg18
 project wgEncode
@@ -11891,7 +11938,7 @@ objType file
 antibody Pol2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -11899,6 +11946,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol2Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL921
 labVersion SL921
 origAssembly hg18
 project wgEncode
@@ -12062,7 +12110,7 @@ objType file
 antibody POU2F2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -12070,6 +12118,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pou2f2Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL802
 labVersion SL802
 origAssembly hg18
 project wgEncode
@@ -12085,7 +12134,7 @@ objType file
 antibody POU2F2
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -12093,6 +12142,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pou2f2Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL918
 labVersion SL918
 origAssembly hg18
 project wgEncode
@@ -12256,7 +12306,7 @@ objType file
 antibody PU.1
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -12264,6 +12314,7 @@ dateUnrestricted 2010-10-10
 fileName wgEncodeHaibTfbsGm12891Pu1Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL977
 labVersion SL977
 origAssembly hg18
 project wgEncode
@@ -12279,7 +12330,7 @@ objType file
 antibody PU.1
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -12287,6 +12338,7 @@ dateUnrestricted 2010-10-10
 fileName wgEncodeHaibTfbsGm12891Pu1Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL948
 labVersion SL948
 origAssembly hg18
 project wgEncode
@@ -12450,7 +12502,7 @@ objType file
 antibody TAF1
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -12458,6 +12510,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Taf1Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL749
 labVersion SL749
 origAssembly hg18
 project wgEncode
@@ -12473,7 +12526,7 @@ objType file
 antibody TAF1
 cell GM12891
 composite wgEncodeHaibTfbs
-controlId GM12891/None/Input/PCR1x
+controlId SL817
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -12481,6 +12534,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Taf1Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL920
 labVersion SL920
 origAssembly hg18
 project wgEncode
@@ -12771,7 +12825,7 @@ objType file
 antibody Input
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId GM12892/None/Input/PCR1x
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -12779,6 +12833,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892ControlPcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL818
 labVersion SL818
 origAssembly hg18
 project wgEncode
@@ -13199,7 +13254,7 @@ objType file
 antibody Pol2-4H8
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId GM12892/None/Input/PCR1x
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -13207,6 +13262,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol24h8Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL911
 labVersion SL911
 origAssembly hg18
 project wgEncode
@@ -13222,7 +13278,7 @@ objType file
 antibody Pol2-4H8
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId GM12892/None/Input/PCR1x
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -13230,6 +13286,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol24h8Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL946
 labVersion SL946
 origAssembly hg18
 project wgEncode
@@ -13414,7 +13471,7 @@ objType file
 antibody Pol2
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId GM12892/None/Input/PCR1x
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -13422,6 +13479,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol2Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL909
 labVersion SL909
 origAssembly hg18
 project wgEncode
@@ -13437,7 +13495,7 @@ objType file
 antibody Pol2
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId GM12892/None/Input/PCR1x
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-11
@@ -13445,6 +13503,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol2Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL944
 labVersion SL944
 origAssembly hg18
 project wgEncode
@@ -13652,7 +13711,7 @@ objType file
 antibody TAF1
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId GM12892/None/Input/PCR1x
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -13660,6 +13719,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Taf1Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL736
 labVersion SL736
 origAssembly hg18
 project wgEncode
@@ -13675,7 +13735,7 @@ objType file
 antibody TAF1
 cell GM12892
 composite wgEncodeHaibTfbs
-controlId GM12892/None/Input/PCR1x
+controlId SL818
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
@@ -13683,6 +13743,7 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Taf1Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL945
 labVersion SL945
 origAssembly hg18
 project wgEncode
@@ -14534,7 +14595,7 @@ objType file
 antibody Input
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -14542,6 +14603,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescControlPcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL969
 labVersion SL969
 origAssembly hg18
 project wgEncode
@@ -15855,7 +15917,7 @@ objType file
 antibody NRSF
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -15863,6 +15925,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescNrsfPcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL978
 labVersion SL978
 origAssembly hg18
 project wgEncode
@@ -15878,7 +15941,7 @@ objType file
 antibody NRSF
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -15886,6 +15949,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescNrsfPcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1053
 labVersion SL1053
 origAssembly hg18
 project wgEncode
@@ -16275,7 +16339,7 @@ objType file
 antibody Pol2-4H8
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
@@ -16283,6 +16347,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeHaibTfbsH1hescPol24h8Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL979
 labVersion SL979
 origAssembly hg18
 project wgEncode
@@ -16298,7 +16363,7 @@ objType file
 antibody Pol2-4H8
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
@@ -16306,6 +16371,7 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeHaibTfbsH1hescPol24h8Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1051
 labVersion SL1051
 origAssembly hg18
 project wgEncode
@@ -16517,7 +16583,7 @@ objType file
 antibody Pol2
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
@@ -16525,6 +16591,7 @@ dateUnrestricted 2010-09-24
 fileName wgEncodeHaibTfbsH1hescPol2Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL980
 labVersion SL980
 origAssembly hg18
 project wgEncode
@@ -16540,7 +16607,7 @@ objType file
 antibody Pol2
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
@@ -16548,6 +16615,7 @@ dateUnrestricted 2010-09-24
 fileName wgEncodeHaibTfbsH1hescPol2Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1052
 labVersion SL1052
 origAssembly hg18
 project wgEncode
@@ -17942,7 +18010,7 @@ objType file
 antibody TAF1
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -17950,6 +18018,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescTaf1Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL853
 labVersion SL853
 origAssembly hg18
 project wgEncode
@@ -17965,7 +18034,7 @@ objType file
 antibody TAF1
 cell H1-hESC
 composite wgEncodeHaibTfbs
-controlId H1-hESC/None/Input/PCR1x
+controlId SL969
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -17973,6 +18042,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescTaf1Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL964
 labVersion SL964
 origAssembly hg18
 project wgEncode
@@ -19791,7 +19861,7 @@ objType file
 antibody TAF1
 cell HeLa-S3
 composite wgEncodeHaibTfbs
-controlId HeLa-S3/None/Input/PCR1x
+controlId SL592
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
@@ -19799,6 +19869,7 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeHaibTfbsHelas3Taf1Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL706
 labVersion SL706
 origAssembly hg18
 project wgEncode
@@ -20042,7 +20113,7 @@ objType file
 antibody BHLHE40
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
@@ -20050,6 +20121,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeHaibTfbsHepg2Bhlhe40Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1059
 labVersion SL1059
 origAssembly hg18
 project wgEncode
@@ -20065,7 +20137,7 @@ objType file
 antibody BHLHE40
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL819
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
@@ -20073,6 +20145,7 @@ dateUnrestricted 2010-10-14
 fileName wgEncodeHaibTfbsHepg2Bhlhe40Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1169
 labVersion SL1169
 origAssembly hg18
 project wgEncode
@@ -21247,7 +21320,7 @@ objType file
 antibody FOSL2
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
@@ -21255,6 +21328,7 @@ dateUnrestricted 2010-09-22
 fileName wgEncodeHaibTfbsHepg2Fosl2Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL632
 labVersion SL632
 origAssembly hg18
 project wgEncode
@@ -21270,7 +21344,7 @@ objType file
 antibody FOSL2
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL819
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
@@ -21278,6 +21352,7 @@ dateUnrestricted 2010-09-22
 fileName wgEncodeHaibTfbsHepg2Fosl2Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1107
 labVersion SL1107
 origAssembly hg18
 project wgEncode
@@ -22282,7 +22357,7 @@ objType file
 antibody HEY1
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
@@ -22290,6 +22365,7 @@ dateUnrestricted 2010-09-23
 fileName wgEncodeHaibTfbsHepg2Hey1Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1057
 labVersion SL1057
 origAssembly hg18
 project wgEncode
@@ -22305,7 +22381,7 @@ objType file
 antibody HEY1
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL819
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
@@ -22313,6 +22389,7 @@ dateUnrestricted 2010-09-23
 fileName wgEncodeHaibTfbsHepg2Hey1Pcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1170
 labVersion SL1170
 origAssembly hg18
 project wgEncode
@@ -24063,7 +24140,7 @@ objType file
 antibody RXRA
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -24071,6 +24148,7 @@ dateUnrestricted 2010-09-25
 fileName wgEncodeHaibTfbsHepg2RxraPcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL984
 labVersion SL984
 origAssembly hg18
 project wgEncode
@@ -24086,7 +24164,7 @@ objType file
 antibody RXRA
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL819
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -24094,6 +24172,7 @@ dateUnrestricted 2010-09-25
 fileName wgEncodeHaibTfbsHepg2RxraPcr1xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL1054
 labVersion SL1054
 origAssembly hg18
 project wgEncode
@@ -25458,6 +25537,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsHepg2Zbtb33Pcr1xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL981
 labVersion SL981
 origAssembly hg18
 project wgEncode
@@ -26711,7 +26791,7 @@ objType file
 antibody Input
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL518
 dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-07-06
@@ -26720,6 +26800,7 @@ dateUnrestricted 2009-08-11
 fileName wgEncodeHaibTfbsK562ControlV2RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL518
 labVersion 1
 origAssembly hg18
 project wgEncode
@@ -26736,7 +26817,7 @@ objType file
 antibody Input
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL519
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-10-26
@@ -26745,6 +26826,7 @@ dateUnrestricted 2009-08-11
 fileName wgEncodeHaibTfbsK562ControlV2RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL519
 labVersion 2
 origAssembly hg18
 project wgEncode
@@ -28710,7 +28792,7 @@ objType file
 antibody HEY1
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL518
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -28718,6 +28800,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsK562Hey1RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL845
 labVersion 3
 origAssembly hg18
 project wgEncode
@@ -28733,7 +28816,7 @@ objType file
 antibody HEY1
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL519
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -28741,6 +28824,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsK562Hey1RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL987
 labVersion 4
 origAssembly hg18
 project wgEncode
@@ -29406,7 +29490,7 @@ objType file
 antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR2x
+controlId SL518
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -29414,6 +29498,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsK562Pol24h8RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL949
 labVersion 3
 origAssembly hg18
 project wgEncode
@@ -29429,7 +29514,7 @@ objType file
 antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR2x
+controlId SL519
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -29437,6 +29522,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsK562Pol24h8RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL950
 labVersion 4
 origAssembly hg18
 project wgEncode
@@ -29682,7 +29768,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR2x
+controlId SL233
 dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
@@ -29690,6 +29776,7 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsK562Pol2RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL240
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -29703,7 +29790,7 @@ objType file
 antibody Pol2
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR2x
+controlId SL234
 dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
@@ -29711,6 +29798,7 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsK562Pol2RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL241
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -30098,7 +30186,7 @@ objType file
 antibody PU.1
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL519
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -30106,6 +30194,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsK562Pu1RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL705
 labVersion 4
 origAssembly hg18
 project wgEncode
@@ -30727,7 +30816,7 @@ objType file
 antibody SIX5
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL518
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -30735,6 +30824,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsK562Six5RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL842
 labVersion 3
 origAssembly hg18
 project wgEncode
@@ -30750,7 +30840,7 @@ objType file
 antibody SIX5
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL519
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-20
@@ -30758,6 +30848,7 @@ dateUnrestricted 2010-08-19
 fileName wgEncodeHaibTfbsK562Six5RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL986
 labVersion 4
 origAssembly hg18
 project wgEncode
@@ -31141,7 +31232,7 @@ objType file
 antibody SRF
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR2x
+controlId SL233
 dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
@@ -31149,6 +31240,7 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsK562SrfPcr2xRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL289
 labVersion PCR2x
 origAssembly hg18
 project wgEncode
@@ -31164,7 +31256,7 @@ objType file
 antibody SRF
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR2x
+controlId SL234
 dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
@@ -31172,6 +31264,7 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsK562SrfPcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL290
 labVersion PCR2x
 origAssembly hg18
 project wgEncode
@@ -31563,7 +31656,7 @@ objType file
 antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL519
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
@@ -31571,6 +31664,7 @@ dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsK562Taf1RawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL514
 labVersion 2
 origAssembly hg18
 project wgEncode
@@ -31586,7 +31680,7 @@ objType file
 antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
-controlId K562/None/Input/PCR1x
+controlId SL519
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
@@ -31594,6 +31688,7 @@ dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsK562Taf1RawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL738
 labVersion 3
 origAssembly hg18
 project wgEncode
@@ -33231,7 +33326,7 @@ objType file
 antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
-controlId PANC-1/None/Input/PCR2x
+controlId SL117
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
@@ -33239,6 +33334,7 @@ dateUnrestricted 2010-04-19
 fileName wgEncodeHaibTfbsPanc1ControlRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL117
 labVersion SL117
 origAssembly hg18
 project wgEncode
@@ -33254,7 +33350,7 @@ objType file
 antibody Input
 cell PANC-1
 composite wgEncodeHaibTfbs
-controlId PANC-1/None/Input/PCR2x
+controlId SL523
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
@@ -33262,6 +33358,7 @@ dateUnrestricted 2010-04-19
 fileName wgEncodeHaibTfbsPanc1ControlRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL523
 labVersion SL523
 origAssembly hg18
 project wgEncode
@@ -33802,7 +33899,7 @@ objType file
 antibody Input
 cell SK-N-MC
 composite wgEncodeHaibTfbs
-controlId SK-N-MC/None/Input/PCR1x
+controlId SL714
 dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-09-11
@@ -33810,6 +33907,7 @@ dateUnrestricted 2009-06-11
 fileName wgEncodeHaibTfbsSknmcControlRawData.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId Sl714
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -36444,4 +36542,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 2082562747
+# MAGIC: -905042564
