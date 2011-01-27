@@ -23425,6 +23425,14 @@ else if (sameWord(table, "switchDbTss"))
     {
     doSwitchDbTss(tdb, item);
     }
+else if (sameWord(table, "omimLocationClass2"))
+    {
+    doOmimGeneClass3(tdb, item);
+    }
+else if (sameWord(table, "omimGeneClass2"))
+    {
+    doOmimGeneClass3(tdb, item);
+    }
 else if (sameWord(table, "omimGeneClass3"))
     {
     doOmimGeneClass3(tdb, item);
