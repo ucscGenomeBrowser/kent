@@ -60,7 +60,7 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
         bigBedInfo bigBedSummary bigBedToBed \
 	bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
 	faCount faFrag faOneRecord faRandomize faSize faSomeRecords faToNib \
-	faToTwoBit htmlCheck nibFrag stringify \
+	faToTwoBit htmlCheck nibFrag sizeof stringify \
 	textHistogram twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
 
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
@@ -69,6 +69,8 @@ HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 
 
 HG_UTILS_APPLIST = bedExtendRanges gff3ToGenePred gtfToGenePred overlapSelect
+
+HG_HGWIGGLE_APP = hgWiggle
 
 userApps: topLibs hgLib
 	@for P in ${UTILS_APPLIST}; do \
@@ -79,6 +81,9 @@ userApps: topLibs hgLib
 	done
 	@for P in ${HG_UTILS_APPLIST}; do \
 	    ( cd hg/utils/$${P} && echo hg/utils/$${P} && ${MAKE} ) ; \
+	done
+	@for P in ${HG_HGWIGGLE_APP}; do \
+	    ( cd hg/makeDb/hgLoadWiggle && echo hg/makeDb/hgLoadWiggle && ${MAKE} $${P} ) ; \
 	done
 
 clean:
