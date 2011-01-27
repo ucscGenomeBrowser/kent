@@ -4323,7 +4323,7 @@ objType file
 antibody BCL11A
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL516
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
@@ -4331,6 +4331,7 @@ dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878Bcl11aRawDataRep1.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId 650
 labVersion 5
 origAssembly hg18
 project wgEncode
@@ -4346,7 +4347,7 @@ objType file
 antibody BCL11A
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR1x
+controlId SL517
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-25
@@ -4354,6 +4355,7 @@ dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878Bcl11aRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL976
 labVersion 8
 origAssembly hg18
 project wgEncode
@@ -9423,7 +9425,7 @@ objType file
 antibody Sin3Ak-20
 cell GM12878
 composite wgEncodeHaibTfbs
-controlId GM12878/None/Input/PCR2x
+controlId SL217
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
@@ -9431,6 +9433,7 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHaibTfbsGm12878Sin3ak20Pcr2xRawDataRep2.fastq.gz
 grant Myers
 lab HudsonAlpha
+labExpId SL433
 labVersion PCR2x
 origAssembly hg18
 project wgEncode
@@ -25529,7 +25532,7 @@ objType file
 antibody ZBTB33
 cell HepG2
 composite wgEncodeHaibTfbs
-controlId HepG2/None/Input/PCR1x
+controlId SL593
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
@@ -36542,4 +36545,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -905042564
+# MAGIC: 1275271619
