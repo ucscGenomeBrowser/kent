@@ -4420,7 +4420,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
@@ -4443,7 +4443,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
@@ -4466,7 +4466,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
@@ -4487,7 +4487,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
@@ -4509,7 +4509,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
@@ -4530,7 +4530,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
@@ -4551,7 +4551,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
@@ -5914,4 +5914,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 1178486362
+# MAGIC: 1170034751
