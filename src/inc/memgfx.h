@@ -22,6 +22,7 @@ typedef unsigned int Color;
 
 #if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(sparc) || defined(__ppc__) || defined(__s390__) || defined(__s390x__)
 
+#define MEMGFX_BIGENDIAN	1
 #define MG_WHITE   0xffffffff
 #define MG_BLACK   0x000000ff
 #define MG_RED     0xff0000ff
