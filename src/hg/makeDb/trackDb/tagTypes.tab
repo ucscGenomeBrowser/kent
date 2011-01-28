@@ -69,6 +69,7 @@ db *
 dbProfile *
 dbTrackType customTracks
 defaultGeneTracks bed
+defaultMaxWeight bed
 defaultLinkedTables genePred
 dimensionAchecked *
 dimensionBchecked *
@@ -177,7 +178,7 @@ itemClassTbl bed genePred
 itemCount customTracks
 itemFirstCharCase wigMafProt wigMaf
 itemImagePath bed
-itemRgb bedDetail bedGraph bed
+itemRgb bedDetail bedGraph bed bedLogR
 linesAt chromGraph
 longLabel *
 longlabel genePred
@@ -196,12 +197,12 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak
-maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig
-maxWindowToQuery bigWig bed
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR
+maxWindowToQuery bigWig bed bedlogR
 metadata *
 mgiUrl bed
 mgiUrlLabel bed
-minGrayLevel bed broadPeak narrowPeak
+minGrayLevel bed broadPeak narrowPeak bedLogR
 minLimit *
 minMax chromGraph
 minScore bed broadPeak narrowPeak
@@ -210,7 +211,7 @@ ncbiAccXref bed
 nextItemButton *
 noColorTag bam
 noInherit *
-noScoreFilter bedGraph bed
+noScoreFilter bedGraph bed bedLogR
 notNCBI bed
 ococci bed
 offset customTracks
@@ -263,12 +264,12 @@ sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
 sGroup_Caenorhabditis wigMaf
 sGroup_Nematode wigMaf
-scoreFilter broadPeak narrowPeak bed
-scoreFilterByRange bigBed bed
-scoreFilterLimits broadPeak narrowPeak bed
-scoreFilterMax bed
-scoreMax bed
-scoreMin broadPeak narrowPeak bed
+scoreFilter broadPeak narrowPeak bed interaction bedlogR
+scoreFilterByRange bigBed bed 
+scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR
+scoreFilterMax bed bedlogR
+scoreMax bed bedlogR
+scoreMin broadPeak narrowPeak bed bedlogR
 searchMethod bed
 searchType bed
 selectSubject psl

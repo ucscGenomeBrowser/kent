@@ -770,6 +770,94 @@ if (bedSize >= 6)
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
 }
 
+void interactionPrintPos( struct bed *bed, int bedSize, struct trackDb *tdb)
+/* Print first bedSize fields of a bed type structure in
+ * standard format. */
+{
+
+if (bed->blockCount == 2)
+    {
+    printf("<B>Intrachromosomal interaction:</B> <br>\n");
+    printf("<B>Positions:</B><br> ");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom, 
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("%s:%d-%d</A>    \n", 
+	   bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
+
+    //printf("<BR>\n");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom, 
+	   bed->chromStarts[1]+bed->chromStart, 
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
+    printf("%s:%d-%d</A>     \n", 
+	   bed->chrom,
+	   bed->chromStarts[1]+bed->chromStart, 
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1], FALSE);
+
+    printf("<BR>\n");
+    printf("<B>Distance apart:</B>\n"); 
+    printLongWithCommas(stdout,
+	bed->chromStarts[1] - bed->chromStarts[0] + bed->blockSizes[0]);
+
+    printf("bp<BR>\n");
+    }
+else
+    {
+    printf("<B>Interchromosomal interaction:</B> <br>\n");
+    printf("<B>Positions:</B><br> ");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, bed->chrom, 
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("%s:%d-%d</A>    \n", 
+	   bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
+    printf("Size: %d   \n", bed->blockSizes[0]);
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
+
+    char buffer[10 * 1024], *otherChrom = buffer;
+    safef(buffer, sizeof buffer, "%s", bed->name);
+    char *ptr;
+    int otherStart, otherEnd;
+
+    if (startsWith(bed->chrom, buffer))
+	{
+	otherChrom = strchr(buffer,'-');
+	otherChrom++;
+	}
+
+    ptr = strchr(otherChrom,':');
+    *ptr++ = 0;
+    otherStart = atoi(ptr);
+    ptr = strchr(ptr,'.');
+    ptr++;
+    ptr++;
+    otherEnd = atoi(ptr);
+    //printf("<BR>\n");
+    printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, otherChrom,
+	   otherStart, otherEnd);
+    printf("%s:%d-%d</A>     \n", 
+	   otherChrom, otherStart, otherEnd);
+    printf("Size: %d   \n", otherEnd - otherStart);
+    printBand( otherChrom, otherStart, otherEnd, FALSE);
+
+    printf("<BR>\n");
+    }
+}
+
 
 void genericHeader(struct trackDb *tdb, char *item)
 /* Put up generic track info. */
@@ -1331,7 +1419,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     else
 	htmlHorizontalLine();
     bed = bedLoadN(row+hasBin, bedSize);
-    bedPrintPos(bed, bedSize, tdb);
+    if ((tdb->type != NULL) && sameString(tdb->type, "interaction"))
+	{
+	interactionPrintPos( bed, bedSize, tdb);
+	}
+    else
+	bedPrintPos(bed, bedSize, tdb);
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
     if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
@@ -3713,6 +3806,11 @@ else if (wordCount > 0)
         {
         doBedDetail(tdb, NULL, item);
         }
+    else if (sameString(type, "interaction") )
+	{
+	int num = 12;
+        genericBedClick(conn, tdb, item, start, num);
+	}
 #ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
@@ -15372,7 +15470,7 @@ else
 return dyStringCannibalize(&dy);
 }
 
-#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
+#define firstTwoColumnsPctS "<TR><TD>%s&nbsp;&nbsp;</TD><TD>%s&nbsp;</TD><TD>"
 
 void getSnp125RefCodonAndSnpPos(struct snp125 *snp, struct genePred *gene, int exonIx,
 				int *pSnpCodonPos, char refCodon[4], char *pRefAA)
@@ -15562,10 +15660,11 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int end = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (snpStart - end + 1),
+	   geneTrack, geneName, (snpStart - end + 1),
 	   (strand[0] == '-' ? "up" : "down"));
     nearCount++;
     }
@@ -15578,16 +15677,17 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
+    char *geneName = getSymbolForGeneName(geneTable, gene);
     int start = sqlUnsigned(row[1]);
     char *strand = row[2];
     printf(firstTwoColumnsPctS "%d bases %sstream</TD></TR>\n",
-	   geneTable, gene, (start - snpEnd + 1),
+	   geneTrack, geneName, (start - snpEnd + 1),
 	   (strand[0] == '-' ? "down" : "up"));
     nearCount++;
     }
 sqlFreeResult(&sr);
 if (nearCount == 0)
-    printf("<TR><TD>%s</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
+    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
 }
 
 static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneTable,
@@ -16158,6 +16258,31 @@ if (pdbIds != NULL)
     }
 }
 
+void printOtherSnpMappings(char *table, char *name, int start,
+			   struct sqlConnection *conn, int rowOffset)
+/* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
+{
+char query[512];
+safef(query, sizeof(query), "select * from %s where name='%s'",
+      table, name);
+struct sqlResult *sr = sqlGetResult(conn, query);
+int snpCount = 0;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *snp = bedLoad3(row + rowOffset);
+    if (snp->chromStart != start || differentString(snp->chrom, seqName))
+	{
+	printf("<BR>\n");
+	if (snpCount == 0)
+	    printf("<B>This SNP maps to these additional locations:</B><BR><BR>\n");
+	snpCount++;
+	bedPrintPos((struct bed *)snp, 3, tdb);
+	}
+    }
+sqlFreeResult(&sr);
+}
+
 void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Process SNP details. */
 {
@@ -16170,7 +16295,6 @@ struct sqlResult *sr;
 char **row;
 char   query[512];
 int    rowOffset=hOffsetPastBin(database, seqName, table);
-int    snpCount=0;
 
 genericHeader(tdb, NULL);
 printf("<H2>dbSNP build %d %s</H2>\n", version, itemName);
@@ -16194,26 +16318,7 @@ else
     errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select * from %s where name='%s'",
-      table, itemName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (version >= 132)
-	snp = snp132ExtLoad(row+rowOffset);
-    else
-	snp = (struct snp132Ext *)snp125Load(row+rowOffset);
-    if (snp->chromStart != start || differentString(snp->chrom, seqName))
-	{
-	if (snpCount==0)
-	    printf("<BR><B>This SNP maps to these additional locations:"
-		   "</B><BR><BR>");
-	snpCount++;
-	bedPrintPos((struct bed *)snp, 3, tdb);
-	printf("<BR>");
-	}
-    }
-sqlFreeResult(&sr);
+printOtherSnpMappings(table, itemName, start, conn, rowOffset);
 puts("<BR>");
 // Make table for collapsible sections:
 puts("<TABLE>");

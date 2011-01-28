@@ -1,0 +1,796 @@
+track wgEncodeHaibGenotype  
+compositeTrack on
+shortLabel Common Cell CNV
+longLabel Copy Number Variation by Illumina 1M and CBS from ENCODE/HudsonAlpha
+group varRep
+subGroup1 cellType Cell_Line GM12878=GM12878<BR>&nbsp;(Tier_1) H1hESC=H1-hESC<BR>&nbsp;(Tier_1) K562=K562<BR>&nbsp;(Tier_1) HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) HepG2=HepG2<BR>&nbsp;(Tier_2) A549=A459 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N 
+subGroup2 treatment Treatment None=None TAM=Tamoxifen
+subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
+dimensions dimA=cellType dimB=treatment dimC=rep
+dimensionAchecked GM12878,K562,H1hESC
+dimensionBchecked None
+dimensionCchecked rep1
+sortOrder cellType=+ treatment=+ rep=+
+filterComposite dimA=multi dimB=multi dimC=multi
+fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By replicate=Rep dataType=Data_Type fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
+dragAndDrop subTracks
+priority 0
+wgEncode 1
+type bed 9
+itemRgb on
+visibility dense
+scoreFilter 10
+scoreFilterLimits 0:1000
+#maxWindowToQuery 10000000
+
+        track wgEncodeHaibGenotypeA549RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel A549 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in A549 cells)
+        subGroups  cellType=A549 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeAg04449RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel AG04449 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in AG04449 cells)
+        subGroups  cellType=AG04449 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeAg04450RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel AG04450 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in AG04450 cells)
+        subGroups  cellType=AG04450 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeAg09309RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel AG09309 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in AG09309 cells)
+        subGroups  cellType=AG09309 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeAg09319RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel AG09319 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in AG09319 cells)
+        subGroups  cellType=AG09319 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeAg10803RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel AG10803 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in AG10803 cells)
+        subGroups  cellType=AG10803 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeAosmcRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel AoSMC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in AoSMC cells)
+        subGroups  cellType=AOSMC treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeAstrocyRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel Astrocy 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in Astrocy cells)
+        subGroups  cellType=Astrocy treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeBjRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel BJ 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in BJ cells)
+        subGroups  cellType=BJ treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeCaco2RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel Caco-2 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in Caco-2 cells)
+        subGroups  cellType=Caco2 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeChorionRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel Chorion 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in Chorion cells)
+        subGroups  cellType=Chorion treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHsmmRegionsRep3
+        parent wgEncodeHaibGenotype off
+        shortLabel HSMM 3
+        longLabel ENCODE HAIB Copy Number Variants Replicate 3 (in HSMM cells)
+        subGroups  cellType=HSMM treatment=None rep=rep3
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHsmmRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HSMM 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HSMM cells)
+        subGroups  cellType=HSMM treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeCmkRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel CMK 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in CMK cells)
+        subGroups  cellType=CMK treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHsmmRegionsRep6
+        parent wgEncodeHaibGenotype off
+        shortLabel HSMM 6
+        longLabel ENCODE HAIB Copy Number Variants Replicate 6 (in HSMM cells)
+        subGroups  cellType=HSMM treatment=None rep=rep6
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeGm06990RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel GM06990 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in GM06990 cells)
+        subGroups  cellType=GM06990 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeGm12891RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel GM12891 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in GM12891 cells)
+        subGroups  cellType=GM12891 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeGm12892RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel GM12892 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in GM12892 cells)
+        subGroups  cellType=GM12892 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeGm19239RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel GM19239 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in GM19239 cells)
+        subGroups  cellType=GM19239 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeH1hescRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel H1-hESC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in H1-hESC cells)
+        subGroups  cellType=H1hESC treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        color 0,107,27
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHaeRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HAEpiC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HAEpiC cells)
+        subGroups  cellType=HAE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHaeRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HAEpiC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HAEpiC cells)
+        subGroups  cellType=HAE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHcfRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HCF 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HCF cells)
+        subGroups  cellType=HCF treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHcfRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HCF 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HCF cells)
+        subGroups  cellType=HCF treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHcmRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HCM 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HCM cells)
+        subGroups  cellType=HCM treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHcmRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HCM 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HCM cells)
+        subGroups  cellType=HCM treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHcpeRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HCPEpiC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HCPEpiC cells)
+        subGroups  cellType=HCPE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHcpeRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HCPEpiC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HCPEpiC cells)
+        subGroups  cellType=HCPE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHeeRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HEEpiC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HEEpiC cells)
+        subGroups  cellType=HEE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHek293RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HEK293 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HEK293 cells)
+        subGroups  cellType=HEK293 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHelas3RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HeLa-S3 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HeLa-S3 cells)
+        subGroups  cellType=HeLaS3 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        color 0,119,158
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHipeRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HIPEpiC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HIPEpiC cells)
+        subGroups  cellType=HIPE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHipeRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HIPEpiC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HIPEpiC cells)
+        subGroups  cellType=HIPE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHl60RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HL-60 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HL-60 cells)
+        subGroups  cellType=HL60 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHmecRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HMEC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HMEC cells)
+        subGroups  cellType=HMEC treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHnpceRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HNPCEpiC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HNPCEpiC cells)
+        subGroups  cellType=HNPCE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHpaeRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HPAEpiC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HPAEpiC cells)
+        subGroups  cellType=HPAE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHpaeRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HPAEpiC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HPAEpiC cells)
+        subGroups  cellType=HPAE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHuvecRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HUVEC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HUVEC cells)
+        subGroups  cellType=HUVEC treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        color 224,75,0
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeMelanoRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel Melano 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in Melano cells)
+        subGroups  cellType=MELANO treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeMyometrRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel Myometr 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in Myometr cells)
+        subGroups  cellType=MYOMETR treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeMelanoRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel Melano 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in Melano cells)
+        subGroups  cellType=MELANO treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeOvcar3RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel Ovcar-3 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in Ovcar-3 cells)
+        subGroups  cellType=OVCAR3 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypePanc1RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel PANC-1 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in PANC-1 cells)
+        subGroups  cellType=PANC1 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypePfsk1RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel PFSK-1 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in PFSK-1 cells)
+        subGroups  cellType=PFSK1 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel BC Sm Intest 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in BC_Small_Intestine_01-11002 cells)
+        subGroups  cellType=BCSmallIntestine0111002 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel BC Jejunum 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in BC_Jejunum_H12817N cells)
+        subGroups  cellType=BCJejunumH12817N treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeT47dRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel T-47D 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in T-47D cells)
+        subGroups  cellType=T47D treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHtr8RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HTR8svn 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HTR8svn cells)
+        subGroups  cellType=HTR8 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeU87RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel U87 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in U87 cells)
+        subGroups  cellType=U87 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3432 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibGenotypeHrceRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HRCEpiC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HRCEpiC cells)
+        subGroups  cellType=HRCE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeHrceRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HRCEpiC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HRCEpiC cells)
+        subGroups  cellType=HRCE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeHreRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HRE 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HRE cells)
+        subGroups  cellType=HRE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeHreRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HRE 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HRE cells)
+        subGroups  cellType=HRE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeHrpeRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel HRPEpiC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in HRPEpiC cells)
+        subGroups  cellType=HRPE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeHrpeRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel HRPEpiC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HRPEpiC cells)
+        subGroups  cellType=HRPE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeImr90RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel IMR90 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in IMR90 cells)
+        subGroups  cellType=IMR90 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeImr90RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel IMR90 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in IMR90 cells)
+        subGroups  cellType=IMR90 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeJurkatRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel Jurkat 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in Jurkat cells)
+        subGroups  cellType=Jurkat treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeLncapRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel LNCaP 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in LNCaP cells)
+        subGroups  cellType=LNCaP treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        color 0,119,158
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeJurkatRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel Jurkat 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in Jurkat cells)
+        subGroups  cellType=Jurkat treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeMcf10aesRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel MCF10A-Er-Src 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in MCF10A-Er-Src cells)
+        subGroups  cellType=MCF10AES treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeMcf10aesRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel MCF10A-Er-Src 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in MCF10A-Er-Src cells)
+        subGroups  cellType=MCF10AES treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeMcf10aesRegionsRep3
+        parent wgEncodeHaibGenotype off
+        shortLabel MCF10A-Er-Src 3
+        longLabel ENCODE HAIB Copy Number Variants Replicate 3 (in MCF10A-Er-Src cells)
+        subGroups  cellType=MCF10AES treatment=None rep=rep3
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeMcf7RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel MCF-7 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in MCF-7 cells)
+        subGroups  cellType=MCF7 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeMcf7RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel MCF-7 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in MCF-7 cells)
+        subGroups  cellType=MCF7 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNb4RegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel NB4 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in NB4 cells)
+        subGroups  cellType=NB4 treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNb4RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel NB4 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in NB4 cells)
+        subGroups  cellType=NB4 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNhaRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel NH-A 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in NH-A cells)
+        subGroups  cellType=NHA treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNhaRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel NH-A 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in NH-A cells)
+        subGroups  cellType=NHA treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNhbeRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel NHBE 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in NHBE cells)
+        subGroups  cellType=NHBE treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNhbeRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel NHBE 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in NHBE cells)
+        subGroups  cellType=NHBE treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNhdfneoRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel NHDF-neo 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in NHDF-neo cells)
+        subGroups  cellType=NHDF-neo treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeNt2d1RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel NT2-D1 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in NT2-D1 cells)
+        subGroups  cellType=NT2D1 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypePanc1RegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel PANC-1 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in PANC-1 cells)
+        subGroups  cellType=PANC1 treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypePrecRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel PrEC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in PrEC cells)
+        subGroups  cellType=PrEC treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeRptecRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel RPTEC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in RPTEC cells)
+        subGroups  cellType=RPTEC treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeRptecRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel RPTEC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in RPTEC cells)
+        subGroups  cellType=RPTEC treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeSaecRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel SAEC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in SAEC cells)
+        subGroups  cellType=SAEC treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeSaecRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel SAEC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in SAEC cells)
+        subGroups  cellType=SAEC treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeSkmcRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel SKMC 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in SKMC cells)
+        subGroups  cellType=SKMC treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeSkmcRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel SKMC 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in SKMC cells)
+        subGroups  cellType=SKMC treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeSknshraRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel SK-N-SH_RA 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in SK-N-SH_RA cells)
+        subGroups  cellType=SKNSHRA treatment=None rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeSknshraRegionsRep2
+        parent wgEncodeHaibGenotype off
+        shortLabel SK-N-SH_RA 2
+        longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in SK-N-SH_RA cells)
+        subGroups  cellType=SKNSHRA treatment=None rep=rep2
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+        track wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
+        parent wgEncodeHaibGenotype off
+        shortLabel MCF10A-Er-Src 1
+        longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in MCF10A-Er-Src cells)
+        subGroups  cellType=MCF10AES treatment=TAM rep=rep1
+        type bedLogR
+        origAssembly hg19
+        # subId=3303 dateSubmitted=2011-01-18
+
+

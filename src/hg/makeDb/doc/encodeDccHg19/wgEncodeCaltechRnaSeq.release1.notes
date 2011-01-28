@@ -1,10 +1,6 @@
 # generated with encodeMkChangeNotes 0.9
-This is a release1/ of the "ENCODE wgEncodeCaltechRnaSeq"
+This is a release1 of the "ENCODE wgEncodeCaltechRnaSeq"
 The composite track is wgEncodeCaltechRnaSeq
-# WARNINGS #################################################
-1 - table wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1 does not exist, from filetype bigWig
-2 - table wgEncodeCaltechRnaSeqGm12891R1x75dTh1014TranscriptGencV3cRep2 does not exist, from filetype gtf
-############################################################
 
 Categories of tables and files('):
 A) Untouched - are on public browser and should remain
@@ -14,10 +10,10 @@ B) Deprecated - are currently on RR but will no longer be needed and should not 
 C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
-Summary total counts for release1/ (new+untouched):
-    Tables: 53
-    Files: 127
-    Gbdbs: 54
+Summary total counts for release1 (new+untouched):
+    Tables: 50
+    Files: 114
+    Gbdbs: 50
 
 A) Untouched Tables (0):
 
@@ -27,17 +23,14 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (53):
+C) New tables (50):
 wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
 wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
 wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
 wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
+wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
 wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
 wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
-wgEncodeCaltechRnaSeqGm12891R1x75dTh1014AlignsRep2
-wgEncodeCaltechRnaSeqGm12891R1x75dTh1014GeneModelRep2
-wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SigRep2
-wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SplicesRep2
 wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
 wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
 wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
@@ -82,148 +75,131 @@ wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
 wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
 wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 
-C') New files (124 downloadables, 54 gbdbs):
+C') New files (111 downloadables, 50 gbdbs):
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/
     NOT on RR but must be placed in:
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dNaFastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dNaFastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014AlignsRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014AlignsRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014GeneDeNovoRep2.fpkm.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014GeneGCV3cRep2.fpkm.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014GeneModelRep2.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SplicesRep2.bam
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SplicesRep2.bam.bai
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014TranscriptDeNovoRep2.fpkm.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014TranscriptGCV3cRep2.fpkm.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqGm12891R1x75dTh1014TranscriptGencV3cRep2.gtf.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2.fastq.gz
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
 
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R1x75dTh1014AlignsRep2.bam
-/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R1x75dTh1014AlignsRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SigRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SplicesRep2.bam
-/gbdb/hg19/bbi/wgEncodeCaltechRnaSeqGm12891R1x75dTh1014SplicesRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
@@ -270,10 +246,10 @@ C') New files (124 downloadables, 54 gbdbs):
 
 D) Additional items:
     current location on alpha:
-      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/
     should be placed on the RR in (overwritting any existing copy):
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/
 
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//index.html
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//files.txt
-/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1//md5sum.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/index.html
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/files.txt
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeCaltechRnaSeq/release1/md5sum.txt

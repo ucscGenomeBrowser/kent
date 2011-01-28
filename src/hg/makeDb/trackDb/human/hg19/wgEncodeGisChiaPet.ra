@@ -1,26 +1,31 @@
 track wgEncodeGisChiaPet
 compositeTrack on
-shortLabel GIS(Ruan) ChIA-pet
-longLabel ENCODE GIS(Ruan) ChIA-pet
+shortLabel GIS-Ruan ChIA-pet
+longLabel ENCODE GIS-Ruan ChIA-pet
 group regulation
-subGroup1 view Views Interactions=Interactions Interactions=Interactions Interactions=Interactions Interactions=Interactions Interactions=Interactions Interactions=Interactions
-subGroup2 cellType Cell_Line MCF7=MCF-7 HeLaS3=HeLa-S3 K562=K562 NB4=NB4 HCT116=HCT-116
-subGroup3 factor Factor ERalpha(a)=ERalpha_a POL2=Pol2
-subGroup4 rep Replicate rep1=1  rep2=2  rep3=3  rep4=4 
-dimensions dimensionX=cellType dimensionY=factor
-sortOrder cellType=+ factor=+ view=+
+#subGroup1 view Views Interactions=Interactions Interactions=Interactions Interactions=Interactions Interactions=Interactions Interactions=Interactions Interactions=Interactions
+subGroup1 cellType Cell_Line MCF7=MCF-7 HeLaS3=HeLa-S3 K562=K562 NB4=NB4 HCT116=HCT-116
+subGroup2 factor Factor ERalpha(a)=ERalpha_a POL2=Pol2
+subGroup3 rep Replicate rep1=1  rep2=2  rep3=3  rep4=pooled 
+dimensions dimensionX=cellType dimensionY=factor dimensionZ=rep
+sortOrder cellType=+ factor=+ 
 controlledVocabulary encode/cv.ra cellType factor
 dragAndDrop subTracks
 visibilityViewDefaults  Interactions=hide Interactions=hide Interactions=hide Interactions=hide Interactions=hide Interactions=hide
 priority 0
 type interaction
+useScore 1
+canPack 1
 wgEncode 1
+scoreFilter 200
+scoreFilterLimits 200:1000
+
 
         track wgEncodeGisChiaPetHelas3Pol2InteractionsRep1
         parent wgEncodeGisChiaPet off
         shortLabel HeLa-S3 Pol2 1
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 1 (Pol2 in HeLa-S3 cells)
-        subGroups view=Interactions factor=POL2 cellType=HeLaS3 rep=rep1
+        subGroups factor=POL2 cellType=HeLaS3 rep=rep1
         color 0,119,158
         # subId=3433 dateSubmitted=2011-01-20
 
@@ -28,7 +33,7 @@ wgEncode 1
         parent wgEncodeGisChiaPet off
         shortLabel K562 Pol2 1
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 1 (Pol2 in K562 cells)
-        subGroups view=Interactions factor=POL2 cellType=K562 rep=rep1
+        subGroups factor=POL2 cellType=K562 rep=rep1
         color 46,0,184
         # subId=3433 dateSubmitted=2011-01-20
 
@@ -36,42 +41,42 @@ wgEncode 1
         parent wgEncodeGisChiaPet off
         shortLabel HCT-116 Pol2 1
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 1 (Pol2 in HCT-116 cells)
-        subGroups view=Interactions factor=POL2 cellType=HCT116 rep=rep1
+        subGroups factor=POL2 cellType=HCT116 rep=rep1
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetNb4Pol2InteractionsRep1
         parent wgEncodeGisChiaPet off
         shortLabel NB4 Pol2 1
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 1 (Pol2 in NB4 cells)
-        subGroups view=Interactions factor=POL2 cellType=NB4 rep=rep1
+        subGroups factor=POL2 cellType=NB4 rep=rep1
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetMcf7Pol2InteractionsRep1
         parent wgEncodeGisChiaPet off
         shortLabel MCF-7 Pol2 1
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 1 (Pol2 in MCF-7 cells)
-        subGroups view=Interactions factor=POL2 cellType=MCF7 rep=rep1
+        subGroups factor=POL2 cellType=MCF7 rep=rep1
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetNb4Pol2InteractionsRep2
         parent wgEncodeGisChiaPet off
         shortLabel NB4 Pol2 2
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 2 (Pol2 in NB4 cells)
-        subGroups view=Interactions factor=POL2 cellType=NB4 rep=rep2
+        subGroups factor=POL2 cellType=NB4 rep=rep2
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetMcf7Pol2InteractionsRep2
         parent wgEncodeGisChiaPet off
         shortLabel MCF-7 Pol2 2
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 2 (Pol2 in MCF-7 cells)
-        subGroups view=Interactions factor=POL2 cellType=MCF7 rep=rep2
+        subGroups factor=POL2 cellType=MCF7 rep=rep2
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetK562Pol2InteractionsRep2
         parent wgEncodeGisChiaPet off
         shortLabel K562 Pol2 2
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 2 (Pol2 in K562 cells)
-        subGroups view=Interactions factor=POL2 cellType=K562 rep=rep2
+        subGroups factor=POL2 cellType=K562 rep=rep2
         color 46,0,184
         # subId=3433 dateSubmitted=2011-01-20
 
@@ -79,49 +84,49 @@ wgEncode 1
         parent wgEncodeGisChiaPet off
         shortLabel MCF-7 ERalpha_a 1
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 1 (ERalpha_a in MCF-7 cells)
-        subGroups view=Interactions factor=ERalpha(a) cellType=MCF7 rep=rep1
+        subGroups factor=ERalpha(a) cellType=MCF7 rep=rep1
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetMcf7EralphaaInteractionsRep2
         parent wgEncodeGisChiaPet off
         shortLabel MCF-7 ERalpha_a 2
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 2 (ERalpha_a in MCF-7 cells)
-        subGroups view=Interactions factor=ERalpha(a) cellType=MCF7 rep=rep2
+        subGroups factor=ERalpha(a) cellType=MCF7 rep=rep2
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetMcf7EralphaaInteractionsRep3
         parent wgEncodeGisChiaPet off
         shortLabel MCF-7 ERalpha_a 3
         longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 3 (ERalpha_a in MCF-7 cells)
-        subGroups view=Interactions factor=ERalpha(a) cellType=MCF7 rep=rep3
+        subGroups factor=ERalpha(a) cellType=MCF7 rep=rep3
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetNb4Pol2InteractionsRep4
-        parent wgEncodeGisChiaPet off
+        parent wgEncodeGisChiaPet on
         shortLabel NB4 Pol2 4
-        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 4 (Pol2 in NB4 cells)
-        subGroups view=Interactions factor=POL2 cellType=NB4 rep=rep4
+        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Pooled Replicate  (Pol2 in NB4 cells)
+        subGroups factor=POL2 cellType=NB4 rep=rep4
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetK562Pol2InteractionsRep4
-        parent wgEncodeGisChiaPet off
+        parent wgEncodeGisChiaPet on
         shortLabel K562 Pol2 4
-        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 4 (Pol2 in K562 cells)
-        subGroups view=Interactions factor=POL2 cellType=K562 rep=rep4
+        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Pooled Replicate (Pol2 in K562 cells)
+        subGroups factor=POL2 cellType=K562 rep=rep4
         color 46,0,184
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetMcf7Pol2InteractionsRep4
-        parent wgEncodeGisChiaPet off
+        parent wgEncodeGisChiaPet on
         shortLabel MCF-7 Pol2 4
-        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 4 (Pol2 in MCF-7 cells)
-        subGroups view=Interactions factor=POL2 cellType=MCF7 rep=rep4
+        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Pooled Replicate (Pol2 in MCF-7 cells)
+        subGroups factor=POL2 cellType=MCF7 rep=rep4
         # subId=3433 dateSubmitted=2011-01-20
 
         track wgEncodeGisChiaPetMcf7EralphaaInteractionsRep4
         parent wgEncodeGisChiaPet off
         shortLabel MCF-7 ERalpha_a 4
-        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Replicate 4 (ERalpha_a in MCF-7 cells)
-        subGroups view=Interactions factor=ERalpha(a) cellType=MCF7 rep=rep4
+        longLabel ENCODE ChIA-PET Chromatin Interaction PET clusters Pooled Replicate (ERalpha_a in MCF-7 cells)
+        subGroups factor=ERalpha(a) cellType=MCF7 rep=rep4
         # subId=3433 dateSubmitted=2011-01-20
 

@@ -109,7 +109,7 @@ priority 103.29
         track multiz13way
         subTrack cons13wayViewalign on
         shortLabel Multiz Align
-        longLabel Multiz Alignments of 13 Vertebrates
+        longLabel Multiz Alignments of 13 Species
         subGroups view=align
         noInherit on
         irows on
@@ -140,13 +140,13 @@ priority 103.29
         track phyloP13wayAll
         subTrack cons13wayViewphyloP on
         subGroups view=phyloP 
-        shortLabel Vertebrate PhyloP Cons
-        longLabel  Vertebrate Basewise Conservation by PhyloP
+        shortLabel 13 Way PhyloP Cons
+        longLabel  Basewise Conservation by PhyloP
         noInherit on
         #configurable on
-        type wig -9.32 1.34
+        type wig -3.12 1.34
         maxHeightPixels 100:50:11
-        viewLimits -3:1
+        viewLimits -3.12:1.34
         autoScale off
         spanList 1
         windowingFunction mean
@@ -155,24 +155,6 @@ priority 103.29
         priority 1
 
 
-
-         track phyloP13wayAllVert
-         subTrack cons13wayViewphyloP on
-         subGroups view=phyloP 
-         shortLabel Vertebrate Cons
-         longLabel Vertebrate Basewise Conservation by PhyloP
-         noInherit on
-         #configurable on
-         type wig -14.08 6.42
-         maxHeightPixels 100:50:11
-         viewLimits -4:4
-         autoScale off
-         spanList 1
-         windowingFunction mean
-         color 40,40,120
-         altColor 120,40,40
-         priority 2
- 
 
     track cons13wayViewphastcons
     shortLabel Element Conservation (phastCons)
@@ -183,8 +165,8 @@ priority 103.29
         track phastCons13way
         subTrack cons13wayViewphastcons on
         subGroups view=phastcons 
-        shortLabel Vertebrate Cons
-        longLabel Vertebrate Conservation by PhastCons
+        shortLabel 13 Way Cons
+        longLabel Conservation by PhastCons
         noInherit on
         #configurable on
         type wig 0 1
@@ -206,8 +188,8 @@ priority 103.29
         track phastConsElements13way
         subTrack cons13wayViewelements off
         subGroups view=elements 
-        shortLabel Vertebrate El
-        longLabel Vertebrate Conserved Elements
+        shortLabel 13 Way El
+        longLabel Conserved Elements
         noInherit on
         color 170,100,50
         type bed 5 .

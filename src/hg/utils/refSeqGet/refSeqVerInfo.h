@@ -14,10 +14,10 @@ struct refSeqVerInfo
     int requestVer;       // requested version from accList, or 0 if version not specified.
 };
 
-struct hash *refSeqVerInfoFromDb(struct sqlConnection *conn, boolean getNM, boolean getNR);
+struct hash *refSeqVerInfoFromDb(struct sqlConnection *conn, boolean getNM, boolean getNR, struct refSeqVerInfo **refSeqVerInfoList);
 /* load refSeqVerInfo table for all native refseqs in the database */
 
-struct hash *refSeqVerInfoFromFile(struct sqlConnection *conn, char *accList);
+struct hash *refSeqVerInfoFromFile(struct sqlConnection *conn, char *accList, struct refSeqVerInfo **refSeqVerInfoList);
 /* load refSeqVerInfo table for all native refseqs specified in a file, then validate it against
  * the database. */
 

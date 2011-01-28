@@ -2256,7 +2256,8 @@ if ((val = hashFindVal(hash, "htmlFile")) != NULL)
     if (fileExists(val))
         {
 	readInGulp(val, &track->tdb->html, NULL);
-	freeMem(track->htmlFile);
+        if (val != track->htmlFile)
+	    freeMem(track->htmlFile);
         track->htmlFile = cloneString(val);
         }
     }
@@ -2768,7 +2769,8 @@ char buf[256];
 FILE *f = fopen(fileName, "r");
 if ( f && (fread(buf, 1, 1, f) == 1 ) )
     ret = TRUE;
-fclose(f);
+if (f)
+    fclose(f);
 return ret;
 }
 

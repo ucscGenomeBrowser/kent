@@ -531,8 +531,8 @@ while (s < bam->data + bam->data_len)
     else if (type == 'd') { printf("%lg", *(double*)s); s += 8; }
     else if (type == 'Z' || type == 'H')
 	{
-	while (*s) putc(*s++, stdout);
-	++s;
+	htmTextOut(stdout, (char *)s);
+	s += strlen((char *)s) + 1;
 	}
     }
 putc('\n', stdout);
