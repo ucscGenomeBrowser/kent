@@ -1627,6 +1627,9 @@ origAssembly hg18
 track hapmapSnps override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)
+dataVersion rel27
+hapmapPhase III
 
 track hapmapLdPh override
 origAssembly hg18
