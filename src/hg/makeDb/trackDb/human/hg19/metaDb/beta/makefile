@@ -14,6 +14,7 @@ wgEncodeBroadHistone.ra \
 wgEncodeRikenCage.ra \
 wgEncodeUwHistone.ra \
 wgEncodeSunyAlbanyTiling.ra \
+wgEncodeCaltechRnaSeq.ra \
 
 include ../../../../makefile.metaDb
 
