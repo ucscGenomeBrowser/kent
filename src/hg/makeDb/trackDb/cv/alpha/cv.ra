@@ -1678,7 +1678,7 @@ tag HAc
 type Cell Line
 tier 3
 organism human
-description Human Astrocytes-cerebellar 
+description Human Astrocytes-cerebellar
 lineage Astrocytic
 karyotype Normal
 sex U
@@ -1708,7 +1708,7 @@ tag HAh
 type Cell Line
 tier 3
 organism human
-description Human Astrocytes-hippocampal 
+description Human Astrocytes-hippocampal
 lineage Astrocytic
 karyotype Normal
 sex U
@@ -1918,7 +1918,7 @@ tag HFF
 type Cell Line
 tier 3
 organism human
-description Human Foreskin Fibroblast 
+description Human Foreskin Fibroblast
 lineage Fibroblast
 karyotype Normal
 sex M
@@ -1935,7 +1935,7 @@ tag HFFMyc
 type Cell Line
 tier 3
 organism human
-description Human Foreskin Fibroblast Cells Expressing Canine cMyc 
+description Human Foreskin Fibroblast Cells Expressing Canine cMyc
 lineage Fibroblast
 karyotype Normal (cMyc)
 sex M
@@ -2275,7 +2275,7 @@ tag HRGEC
 type Cell Line
 tier 3
 organism human
-description Human Renal Glomerular Endothelial Cells 
+description Human Renal Glomerular Endothelial Cells
 lineage Endothelial
 karyotype Normal
 sex U
@@ -2615,7 +2615,7 @@ tag MonoCD14
 type Cell Line
 tier 3
 organism human
-description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product 
+description Monocytes-CD14+ are CD14-positive cells from human leukapheresis product
 lineage Monocytic
 karyotype Normal
 sex F
@@ -3088,10 +3088,10 @@ protocol Duke/UNC/UTA/EBI_Open_Chromatin:Stellate_Crawford_protocol.pdf
 
 #
 # NOTE: this cell type was added provisionally, before all its metadata was collected, so
-# that Venkat could finish a submission that he'd accidentally started with the 
+# that Venkat could finish a submission that he'd accidentally started with the
 # standard HEK93 cell line.
-term T-REx-HEK293 
-tag tHEK293 
+term T-REx-HEK293
+tag tHEK293
 type Cell Line
 tier 3
 organism human
@@ -3103,7 +3103,7 @@ tissue Kidney
 vendorName Invitrogen
 vendorId r71007
 orderUrl http://products.invitrogen.com/ivgn/product/R71007?ICID=search-r71007
-termId (Term ID)  
+termId (Term ID)
 termUrl
 protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
 
@@ -4162,13 +4162,13 @@ term CTCF_(SC-5916)
 tag CTCFSC5916
 type Antibody
 target CTCF
-antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of CTCF of human origin. 
-targetDescription This gene is a member of the BORIS + CTCF gene family and encodes a transcriptional regulator protein with 11 highly conserved zinc finger (ZF) domains. This nuclear protein is able to use different combinations of the ZF domains to bind different DNA target sequences and proteins. (provided by RefSeq) 
-vendorName Santa Cruz Biotech 
+antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of CTCF of human origin.
+targetDescription This gene is a member of the BORIS + CTCF gene family and encodes a transcriptional regulator protein with 11 highly conserved zinc finger (ZF) domains. This nuclear protein is able to use different combinations of the ZF domains to bind different DNA target sequences and proteins. (provided by RefSeq)
+vendorName Santa Cruz Biotech
 vendorId sc-5916
 orderUrl http://www.scbt.com/datasheet-5916-ctcf-n-17-antibody.html
-lab Myers 
-lots K0902 
+lab Myers
+lots K0902
 targetId GeneCards:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
@@ -4177,13 +4177,13 @@ term CTCFL_(SC-98982)
 tag CTCFLSC98982
 type Antibody
 target CTCFL
-antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 91-210 mapping within an internal region of BORIS(CTCFL) of human origin. 
-targetDescription CCCTC-binding factor (CTCF), an 11-zinc-finger factor involved in gene regulation, utilizes different zinc fingers to bind varying DNA target sites. CTCF forms methylation-sensitive insulators that regulate X-chromosome inactivation.  This gene is a paralog of CTCF and appears to be expressed primarily in the cytoplasm of spermatocytes, unlike CTCF which is expressed primarily in the nucleus of somatic cells.  CTCF and the protein encoded by this gene are normally expressed in a mutually exclusive pattern that correlates with resetting of methylation marks during male germ cell differentiation. (provided by RefSeq) 
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 91-210 mapping within an internal region of BORIS(CTCFL) of human origin.
+targetDescription CCCTC-binding factor (CTCF), an 11-zinc-finger factor involved in gene regulation, utilizes different zinc fingers to bind varying DNA target sites. CTCF forms methylation-sensitive insulators that regulate X-chromosome inactivation.  This gene is a paralog of CTCF and appears to be expressed primarily in the cytoplasm of spermatocytes, unlike CTCF which is expressed primarily in the nucleus of somatic cells.  CTCF and the protein encoded by this gene are normally expressed in a mutually exclusive pattern that correlates with resetting of methylation marks during male germ cell differentiation. (provided by RefSeq)
 vendorName Santa Cruz Biotech
 vendorId sc-98982
 orderUrl http://www.scbt.com/datasheet-98982-boris-h-120-antibody.html
-lab Myers 
-lots E0109 
+lab Myers
+lots E0109
 targetId GeneCards:CTCFL
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCFL
 validation missing
@@ -4308,13 +4308,13 @@ term eGFP-FOS
 tag eFOS
 type Antibody
 target eGFP-FOS
-antibodyDescription Goat polyclonal 
-targetDescription Fos 
+antibodyDescription Goat polyclonal
+targetDescription Fos
 vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
-lab White 
-lots 
+lab White
+lots
 targetId GeneCards:FOS
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOS
 validation missing
@@ -4323,13 +4323,13 @@ term eGFP-GATA2
 tag eGATA2
 type Antibody
 target eGFP-GATA2
-antibodyDescription Goat polyclonal 
-targetDescription GATA2 
+antibodyDescription Goat polyclonal
+targetDescription GATA2
 vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
-lab White 
-lots 
+lab White
+lots
 targetId GeneCards:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 validation missing
@@ -4338,13 +4338,13 @@ term eGFP-HDAC8
 tag eHDAC8
 type Antibody
 target eGFP-HDAC8
-antibodyDescription Goat polyclonal 
-targetDescription HDAC8 
+antibodyDescription Goat polyclonal
+targetDescription HDAC8
 vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
-lab White 
-lots 
+lab White
+lots
 targetId GeneCards:HDAC8
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC8
 validation missing
@@ -4353,13 +4353,13 @@ term eGFP-JunB
 tag eJunB
 type Antibody
 target eGFP-JunB
-antibodyDescription Goat polyclonal 
-targetDescription JunB 
+antibodyDescription Goat polyclonal
+targetDescription JunB
 vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
-lab White 
-lots 
+lab White
+lots
 targetId GeneCards:JUNB
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUNB
 validation missing
@@ -4368,13 +4368,13 @@ term eGFP-JunD
 tag eJunD
 type Antibody
 target eGFP-JunD
-antibodyDescription Goat polyclonal 
-targetDescription JunD 
+antibodyDescription Goat polyclonal
+targetDescription JunD
 vendorName Kevin White
 vendorId (None)
 orderUrl http://www.genes.uchicago.edu/white.html
-lab White 
-lots 
+lab White
+lots
 targetId GeneCards:JUND
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUND
 validation missing
@@ -4383,7 +4383,7 @@ term eGFP-NR4A1
 tag eNR4A1
 type Antibody
 target eGFP-NR4A1
-antibodyDescription Goat polyclonal 
+antibodyDescription Goat polyclonal
 targetDescription NR4A1
 vendorName Kevin White
 vendorId (None)
@@ -4497,7 +4497,7 @@ type Antibody
 target  FOSL1
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the N-terminus of FOSL1 of human origin.
 targetDescription  The Fos gene family consists of 4 members: FOS, FOSB, FOSL1, and FOSL2.  These genes encode leucine zipper proteins that can dimerize with proteins of the JUN family, thereby forming the transcription factor complex AP-1.  As such, the FOS proteins have been implicated as regulators of cell proliferation, differentiation, and transformation. (provided by RefSeq)
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId sc-183
 orderUrl http://www.scbt.com/datasheet-183-fra-1-n-17-antibody.html
 lab  Myers
@@ -4555,13 +4555,13 @@ term FOXA2_(SC-6554)
 tag FOXA2SC6554
 type Antibody
 target FOXA2
-antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of FOXA2 of human origin. 
-targetDescription The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5.  The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors.  This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators.  The protein is required for transcription by promoters targeted by RNA polymerase II. (provided by RefSeq) 
-vendorName Santa Cruz Biotech 
+antibodyDescription Goat polyclonal IgG, epitope mapping at the N-terminus of FOXA2 of human origin.
+targetDescription The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5.  The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors.  This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators.  The protein is required for transcription by promoters targeted by RNA polymerase II. (provided by RefSeq)
+vendorName Santa Cruz Biotech
 vendorId sc-6554
 orderUrl http://www.scbt.com/datasheet-6554-hnf-3beta-m-20-antibody.html
-lab Myers 
-lots L1409 
+lab Myers
+lots L1409
 targetId GeneCards:FOXA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA2
 validation missing
@@ -4629,7 +4629,7 @@ type Antibody
 target  GATA1
 antibodyDescription  Rat monoclonal raised against bacterially expressed murine GATA-1
 targetDescription  GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes.
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId sc-266
 orderUrl http://www.scbt.com/datasheet-266-gata-1-n1-antibody.html
 lab  Snyder
@@ -4673,7 +4673,7 @@ type Antibody
 target  GATA3
 antibodyDescription  Mouse monoclonal IgG raised against human recombinant GATA-3.
 targetDescription  This gene encodes a protein which belongs to the GATA family of transcription factors.  The protein contains two GATA-type zinc fingers and is a n important regulator of T-cell development and plays an important role in endothelial cell biology.  Defects in this gene are the cause of hypoparathyroidism with sensorineural deafness and renal dysplasia (provided by RefSeq).
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId sc-268
 orderUrl http://www.scbt.com/datasheet-268-gata-3-hg3-31-antibody.html
 lab  Myers
@@ -4686,13 +4686,13 @@ term GCN5
 tag GCN5
 type Antibody
 target GCN5
-antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC) 
-targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4 
+antibodyDescription Rabbit polyclonal anti-GCN5 antibody (2676), Immunogen&nbsp;: synthetic peptide coupled to Ovalbumin (sequence-MAEPSQAPTPAPAAQPRPLC)
+targetDescription KAT2A, or GCN5, is a histone acetyltransferase (HAT) that functions primarily as a transcriptional activator. Acetylation of histones gives a specific tag for epigenetic transcription activation. In case of HIV-1 infection, it is recruited by the viral protein Tat. Regulates Tat's transactivating activity and may help inducing chromatin remodeling of proviral genes. Component of the SAGA and ATAC complexes, complexes with histone acetyltransferase activities on histones H3 and H4
 vendorName Laszlo Tora
 vendorId (None)
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
-lab Struhl 
-lots 
+lab Struhl
+lots
 targetId GeneCards:KAT2A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=KAT2A&search=gcn5
 validation missing
@@ -5095,13 +5095,13 @@ term HNF4G_(SC-6558)
 tag HNF4GSC6558
 type Antibody
 target HNF4G
-antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of HNF4G of human origin. 
-targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene 
-vendorName Santa Cruz Biotech 
+antibodyDescription Goat polyclonal IgG, epitope mapping at the C-terminus of HNF4G of human origin.
+targetDescription Hepatocyte nuclear factor 4 gamma (HNF4G) also known as NR2A2 (nuclear receptor subfamily 2, group A, member 2) is a nuclear receptor that in humans is encoded by the HNF4G gene
+vendorName Santa Cruz Biotech
 vendorId sc-6558
 orderUrl http://www.scbt.com/datasheet-6558-hnf-4gamma-c-18-antibody.html
-lab Myers 
-lots I299 
+lab Myers
+lots I299
 targetId GeneCards:HNF4G
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4G
 validation missing
@@ -5270,7 +5270,7 @@ type Antibody
 target MafK
 antibodyDescription Rabbit polyclonal raised against epitope mapping at the C-terminus of NF-E2 p18 of mouse origin; recommended for detection of NF-E2 p18 (MafK) of mouse, rat and human origin
 targetDescription NFE2 DNA-binding activity consists of a heterodimer containing an 18-kD Maf protein (MafF, MafG, or MafK) and p45. Both subunits are members of the activator protein-1 superfamily of basic leucine zipper (bZIP)proteins. Since they lack a putative transactivation domain, small Mafs behave as transcriptional repressors when they dimerize among themselves. They serve as transcriptional activators by dimerizing with other (usually larger) bZip proteins and recruiting them to specific DNA-binding sites.
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId SC-477
 orderUrl http://www.scbt.com/datasheet-477-nf-e2-p18-c-16-antibody.html
 lab Snyder
@@ -5329,13 +5329,13 @@ term MEF2C_(SC-13268)
 tag MEF2CSC13268
 type Antibody
 target MEF2C
-antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of MEF2C of human origin. 
-targetDescription This locus encodes a member of the MADS box transcription enhancer factor 2 (MEF2) family of proteins, which play a role in myogenesis. The encoded protein, MEF2 polypeptide C, has both trans-activating and DNA binding activities.  This protein may play a role in maintaining the differentiated state of muscle cells. Mutations and deletions at this locus have been associated with severe mental retardation, stereotypic movements, epilepsy, and cerebral malformation.  Alternatively spliced transcript variants have been described. (provided by RefSeq) 
-vendorName Santa Cruz Biotech 
+antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of MEF2C of human origin.
+targetDescription This locus encodes a member of the MADS box transcription enhancer factor 2 (MEF2) family of proteins, which play a role in myogenesis. The encoded protein, MEF2 polypeptide C, has both trans-activating and DNA binding activities.  This protein may play a role in maintaining the differentiated state of muscle cells. Mutations and deletions at this locus have been associated with severe mental retardation, stereotypic movements, epilepsy, and cerebral malformation.  Alternatively spliced transcript variants have been described. (provided by RefSeq)
+vendorName Santa Cruz Biotech
 vendorId sc-13268
 orderUrl http://www.scbt.com/datasheet-13268-mef-2c-c-17-antibody.html
-lab Myers 
-lots K2009 
+lab Myers
+lots K2009
 targetId GeneCards:MEF2C
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2C
 validation missing
@@ -5346,7 +5346,7 @@ type Antibody
 target NANOG
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 151-305 mapping at the C-terminus of Nanog of human origin.
 targetDescription Transcription regulator involved in inner cell mass and embryonic stem (ES) cells proliferation and self-renewal.  Imposes pluripotency on ES cells and prevents their differentiation towards extraembryonic endoderm and trophectoderm lineages.  Blocks bone morphogenetic protein-induced mesoderm differentiation of ES cells by physically interacting with SMAD1 and interfering with the recruitment of coactivators to the active SMAD transcriptional complexes (By similarity).  Acts as a transcriptional activator or repressor (By similarity).  Binds optimally to the DNA consensus sequence 5'-TAAT[GT][GT]-3' or 5'-[CG][GA][CG]C[GC]ATTAN[GC]-3' (By similarity).  When overexpressed, promotes cells to enter into S phase and proliferation (By similarity) (provided by RefSeq).
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId sc-33759
 orderUrl http://www.scbt.com/datasheet-33759-nanog-h-155-antibody.html
 lab Myers
@@ -5615,13 +5615,13 @@ term PITX1_(SC-81979)
 tag PITX1SC81979
 type Antibody
 target PITX1
-antibodyDescription Mouse monoclonal IgG, raised against recombinant Pitx1 of human origin. 
-targetDescription This gene encodes a member of the RIEG/PITX homeobox family, which is in the bicoid class of homeodomain proteins.  Members of this family are involved in organ development and left-right asymmetry.  This protein acts as a transcriptional regulator involved in basal and hormone-regulated activity of prolactin. (provided by RefSeq) 
-vendorName Santa Cruz Biotech 
+antibodyDescription Mouse monoclonal IgG, raised against recombinant Pitx1 of human origin.
+targetDescription This gene encodes a member of the RIEG/PITX homeobox family, which is in the bicoid class of homeodomain proteins.  Members of this family are involved in organ development and left-right asymmetry.  This protein acts as a transcriptional regulator involved in basal and hormone-regulated activity of prolactin. (provided by RefSeq)
+vendorName Santa Cruz Biotech
 vendorId sc-81979
 orderUrl http://www.scbt.com/datasheet-81979-pitx1-r-129-antibody.html
-lab Myers 
-lots J0109 
+lab Myers
+lots J0109
 targetId GeneCards:PITX1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PITX1
 validation missing
@@ -5705,7 +5705,7 @@ type Antibody
 target POU5F1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 1-134 of Oct3/4 of human origin.
 targetDescription This gene encodes a transcription factor containing a POU homeodomain.  This transcription factor plays a role in embryonic development, especially during early embryogenesis, and it is necessary for embryonic stem cell pluripotency.  A translocation of this gene with the Ewing's sarcoma gene, t(6;22)(p21;q12), has been linked to tumor formation.  Alternative splicing, as well as usage of alternative translation initiation codons, results in multiple isoforms, one of which initiates at a non-AUG (CUG) start codon.  Related pseudogenes have been identified on chromosomes 1, 3, 8, 10, and 12 (provided by RefSeq).
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId sc-9081
 orderUrl http://www.scbt.com/datasheet-9081-oct-3-4-h-134-antibody.html
 lab Myers
@@ -5890,7 +5890,7 @@ type Antibody
 target SMC3
 antibodyDescription Rabbit polyclonal raised against synthetic peptide representing a portion within the last 100 amino acids of the human Structural Maintenance of Chromosomes-3 conjugated to KLH
 targetDescription Involved in chromosome cohesion during cell cycle and in DNA repair. Central component of cohesin complex.  The cohesin complex is required for the cohesion of sister chromatids after DNA replication.
-vendorName Abcam 
+vendorName Abcam
 vendorId ab9263
 orderUrl http://www.abcam.com/SMC3-antibody-ab9263.html
 lab Snyder
@@ -5917,13 +5917,13 @@ term SP2_(SC-643)
 tag SP2SC643
 type Antibody
 target SP2
-antibodyDescription Rabbit polyclonal IgG, epitope mapping near the N-terminus of SP2 of human origin. 
-targetDescription This gene encodes a member of the Sp subfamily of Sp/XKLF transcription factors.  Sp family proteins are sequence-specific DNA-binding proteins characterized by an amino-terminal trans-activation domain and three carboxy-terminal zinc finger motifs. This protein contains the least conserved DNA-binding domain within the Sp subfamily of proteins, and its DNA sequence specificity differs from the other Sp proteins.  It localizes primarily within subnuclear foci associated with the nuclear matrix, and can activate or in some cases repress expression from different promoters. (provided by RefSeq) 
-vendorName Santa Cruz Biotech 
+antibodyDescription Rabbit polyclonal IgG, epitope mapping near the N-terminus of SP2 of human origin.
+targetDescription This gene encodes a member of the Sp subfamily of Sp/XKLF transcription factors.  Sp family proteins are sequence-specific DNA-binding proteins characterized by an amino-terminal trans-activation domain and three carboxy-terminal zinc finger motifs. This protein contains the least conserved DNA-binding domain within the Sp subfamily of proteins, and its DNA sequence specificity differs from the other Sp proteins.  It localizes primarily within subnuclear foci associated with the nuclear matrix, and can activate or in some cases repress expression from different promoters. (provided by RefSeq)
+vendorName Santa Cruz Biotech
 vendorId sc-643
 orderUrl http://www.scbt.com/datasheet-643-sp2-k-20-antibody.html
-lab Myers 
-lots K1803 
+lab Myers
+lots K1803
 targetId GeneCards:TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
 validation missing
@@ -5947,13 +5947,13 @@ term SPT20
 tag SPT20
 type Antibody
 target SPT20
-antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids) 
-targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail. 
+antibodyDescription Rabbit polyclonal anti-SPT20 antibody (3006), Immunogen:  C-terminal region of mSPT20 (330-531 aa) is cloned in pET28b and over expressed in E. Coli. Protein was purified on Ni-NTA exchange column. Sequence: mSPT20 (330-531 amino acids)
+targetDescription Also known as FAM48A or P38IP.   It is a component of SAGA complex.  Required for MAP kinase p38 (MAPK11, MAPK12, MAPK13 and/or MAPK14) activation during gastrulation. Required for down-regulation of E-cadherin during gastrulation by regulating E-cadherin protein level downstream from NCK-interacting kinase (NIK) and independently of the regulation of transcription by Fgf signaling and Snail.
 vendorName Laszlo Tora
 vendorId (None)
 orderUrl http://www.igbmc.fr/recherche/Prog_FGC/Eq_LTora/index.html
-lab Struhl 
-lots 
+lab Struhl
+lots
 targetId GeneCards:FAM48A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FAM48A&search=spt20
 validation missing
@@ -6219,13 +6219,13 @@ term THAP1_(SC-98174)
 tag THAP1SC98174
 type Antibody
 target THAP1
-antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of THAP1 of human origin. 
-targetDescription The protein encoded by this gene contains a THAP domain, a conserved DNA-binding domain.  This protein colocalizes with the apoptosis response protein PAWR/PAR-4 in promyelocytic leukemia (PML) nuclear bodies, and functions as a proapoptotic factor that links PAWR to PML nuclear bodies.  Alternatively spliced transcript variants encoding distinct isoforms have been observed. (provided by RefSeq) 
-vendorName Santa Cruz Biotech 
+antibodyDescription Goat polyclonal IgG, epitope mapping near the C-terminus of THAP1 of human origin.
+targetDescription The protein encoded by this gene contains a THAP domain, a conserved DNA-binding domain.  This protein colocalizes with the apoptosis response protein PAWR/PAR-4 in promyelocytic leukemia (PML) nuclear bodies, and functions as a proapoptotic factor that links PAWR to PML nuclear bodies.  Alternatively spliced transcript variants encoding distinct isoforms have been observed. (provided by RefSeq)
+vendorName Santa Cruz Biotech
 vendorId sc-98174
 orderUrl http://www.scbt.com/datasheet-98174-thap1-c-18-antibody.html
-lab Myers 
-lots D1910 
+lab Myers
+lots D1910
 targetId GeneCards:THAP1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=THAP1
 validation missing
@@ -6393,7 +6393,7 @@ type Antibody
 target ZEB1
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to amino acids 39-140 mapping near the N-terminus of ZEB1 of human origin.
 targetDescription This gene encodes a zinc finger transcription factor.  The encoded protein likely plays a role in transcriptional repression of interleukin 2.  Mutations in this gene have ben associated with posterior polymorphous corneal dystrophy-3 and late-onset Fuchs endothelial corneal dystrophy.  Alternatively spliced transcript variants encoding different isoforms have been described. (provided by RefSeq).
-vendorName Santa Cruz Biotech 
+vendorName Santa Cruz Biotech
 vendorId sc-25388
 orderUrl http://www.scbt.com/datasheet-25388-zeb1-h-102-antibody.html
 lab Myers
@@ -7293,7 +7293,7 @@ label Total_RNA
 term shortPolyA
 tag shortPolyA
 type rnaExtract
-description Rna shorter than 200 nt that is Poly Adenalyated 
+description Rna shorter than 200 nt that is Poly Adenalyated
 label short_PolyA_RNA
 
 term shortTotal
@@ -7414,32 +7414,32 @@ description This data represents a control being compared with the other tracks 
 term Control_eGFP-FOS
 tag ControlFOS
 type control
-description This data represents a control being compared to experiments using antibody eGFP-FOS 
+description This data represents a control being compared to experiments using antibody eGFP-FOS
 
 term Control_eGFP-GATA2
 tag ControlGATA2
 type control
-description This data represents a control being compared to experiments using antibody eGFP-GATA2 
+description This data represents a control being compared to experiments using antibody eGFP-GATA2
 
 term Control_eGFP-HDAC8
 tag ControlHDAC8
 type control
-description This data represents a control being compared to experiments using antibody eGFP-HDAC8 
+description This data represents a control being compared to experiments using antibody eGFP-HDAC8
 
 term Control_eGFP-JunB
 tag ControlJunB
 type control
-description This data represents a control being compared to experiments using antibody eGFP-JunB 
+description This data represents a control being compared to experiments using antibody eGFP-JunB
 
 term Control_eGFP-JunD
 tag ControlJunD
 type control
-description This data represents a control being compared to experiments using antibody eGFP-JunD 
+description This data represents a control being compared to experiments using antibody eGFP-JunD
 
 term Control_eGFP-NR4A1
 tag ControlNR4A1
 type control
-description This data represents a control being compared to experiments using antibody eGFP-NR4A1 
+description This data represents a control being compared to experiments using antibody eGFP-NR4A1
 
 term Input
 tag Input
@@ -7615,12 +7615,12 @@ type treatment
 
 term EtOH_0.01pct_4hr
 tag ETOH01b
-description 4h,0.01% EtOH (Snyder) 
+description 4h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.01pct_12hr
 tag ETOH01c
-description 12h,0.01% EtOH (Snyder) 
+description 12h,0.01% EtOH (Snyder)
 type treatment
 
 term EtOH_0.02pct
@@ -7881,7 +7881,7 @@ term ChiaPet
 tag chiaPet
 type dataType
 label ChIA-pet
-description ChIA-pet 
+description ChIA-pet
 
 # TODO: retire this ?  (11/3/10)
 term LongRnaSeq
@@ -7935,7 +7935,7 @@ description Negative Regulatory Elements
 term Nucleosome
 tag nucleosome
 type dataType
-description Nucleosome positioning data 
+description Nucleosome positioning data
 
 term Proteogenomics
 tag protgeno
@@ -7968,10 +7968,10 @@ type dataType
 label RIP-chip
 description Rna IP measured on microarray
 
-term RipSeq 
-tag  ripSeq  
+term RipSeq
+tag  ripSeq
 type dataType
-label RIP-seq 
+label RIP-seq
 description RNA-seq on RIP-chip data
 
 #This should be retired (12/15/10)
@@ -8203,7 +8203,7 @@ term AB_SOLiD_3.5
 tag ABSOLiD3Plus
 geo AB SOLiD 3 Plus
 type seqPlatform
-description Applied Biosystems SOLiD System 3.5 
+description Applied Biosystems SOLiD System 3.5
 
 
 #LABS          This is the CV for naming the labs.
@@ -8224,11 +8224,11 @@ term BioChain
 tag BioChain
 type lab
 label BioChain
-description 
-labInst BioChain 
-labPi 
-labPiFull 
-grantPi 
+description
+labInst BioChain
+labPi
+labPiFull
+grantPi
 organism human
 
 term Broad
@@ -8268,7 +8268,7 @@ term GIS(Ruan)
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia) 
+description Ruan - Genome Institute of Singapore (Chia)
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8827,8 +8827,34 @@ projectName UNC-Giddings
 #    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
 #
 #       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
-#  validation: outlines the expected values
-
+#
+#     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
+#           cv: must be defined term in cv (e.g. cell=GM12878)  # could be "cv or control" or "cv or None" to say control terms also acceptable
+#         date: must be date in YYYY-MM-DD format
+#       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
+#        float: must be floating point number
+#      integer: must be integer
+#      "list:": must be one of several terms in comma delimeited list (e.g. "list: yes,no,maybe" )  # ("list:" includes colon)
+#         none: not validated in any way
+#     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
+#    # NOTE: that validate rules may end comment delimited by a '#'
+#
+#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances.  (e.g. sortable column order in hgFileUi)
+#       At beginnning:
+#         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
+#       Experiment defining:
+#         expId:100  strain:110  cell:120  sex:130  age:140  rnaExtract:150  localization:160  phase:170  treatment:180  antibody:190
+#         protocol:200  restrictionEnzyme:220  control:230  replicate:240  submittedDataVersion:250
+#       DCC descriptive:
+#         origAssembly:305  dataVersion:310  dateSubmitted:315  dateResubmitted:320  dateUnrestricted:325  freezeDate:330
+#         subId:335  geoSeries:340  geoSample:345  setType:350  controlId:355
+#       Lab descriptive:
+#         labExpId:410  labProtocolId:420  labVersion:430  softwareVersion:440  privacy:450  rank:460
+#       Miscellaneous junk which will be put into the 500 pot which will sort near the end
+#         accession:500  annotation:500  bioRep:500  fragLength:500  fragSize:500  mapAlgorithm:500
+#         insertLength:500  level:500  obtainedBy:500  readType:500  run:500  seqPlatform:500  size:500  uniqueness:500
+#       At End:
+#         dccInternalNotes:910  parentTable:920  tableName:970  fileName:980  fileIndex:990
 
 
 term typeOfTerm
@@ -8837,8 +8863,9 @@ label Term types defined
 description Types of terms used frequently in controlled vocabulary or metadata should be defined here.
 searchable no
 cvDefined yes
-validation cv.ra
+validate cv
 hidden yes
+priority 500
 
 term accession
 type typeOfTerm
@@ -8846,7 +8873,8 @@ label GEO accession number provided by lab
 description A generic GEO accession number provided by the producing lab.
 searchable no
 cvDefined no
-validation  GS[M,E][0-9]*
+validate regex: ^GS[M,E][0-9]*$
+priority 500
 # Superceded by geoSample? will be, but for now we can't sort the lab ones into geoSample or geoSeries easily
 
 term age
@@ -8855,7 +8883,8 @@ label Age of donor organism
 description The age of the organism used to produce tissue or cell line.
 searchable select
 cvDefined yes
-validation cv
+priority 140
+validate cv
 
 term annotation
 type typeOfTerm
@@ -8863,7 +8892,8 @@ label GENCODE annotation.
 description GENCODE specifies if an annotation is done manually or automatically.
 searchable no
 cvDefined no
-validation /manual/ || /automatic/
+priority 500
+validate list: manual,automatic
 
 term Antibody
 type typeOfTerm
@@ -8871,7 +8901,8 @@ label Antibody or target protein
 description The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
 searchable select
 cvDefined yes
-validation cv
+validate cv or control
+priority 190
 
 term bioRep
 type typeOfTerm
@@ -8879,7 +8910,8 @@ label  Transcriptome Bio-Replicate ID
 description Cross Transcriptome sample ID number.
 searchable no
 cvDefined no
-validation [0-9][0-9][0-9][A-Z]*
+validate regex: ^[0-9][0-9][0-9][A-Z]*$
+priority 500
 
 term cellType
 type typeOfTerm
@@ -8887,7 +8919,8 @@ label Cell, tissue or DNA sample
 description Cell line or tissue used as the source of experimental material.
 searchable select
 cvDefined yes
-validation cv
+validate cv or None
+priority 120
 ### Warning should be "term cell line", but the term here has to be a single
 ### word.  Or, "term cell line" in the cell type definitions should be
 ### "term cellType", but that requires changing a huge amount of existing code.
@@ -8899,7 +8932,8 @@ label UCSC Composite Track
 description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.
 searchable no
 cvDefined no
-validation wgEncode*
+validate regex: ^wgEncode.*$
+priority 025
 # Are composites used by the browser in the same way?
 # This allows convenient selection and configuration.  Also provided will be a detailed description of the set of related experiments.
 # Should be cvDefined
@@ -8911,6 +8945,7 @@ description The type of control (or 'input') used in ChIP-seq experiments to rem
 searchable select
 cvDefined yes
 validate cv
+priority 230
 
 term controlId
 type typeOfTerm
@@ -8920,6 +8955,7 @@ description This ID is used to explicitly tie a ChIP-seq experiment with the con
 searchable no
 cvDefined no
 validate none
+priority 355
 #This is diffiuclt to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
 
 term dataType
@@ -8929,6 +8965,7 @@ description The types of experiments such as ChIP-seq, DNAse-seq and RNA-seq.
 searchable select
 cvDefined yes
 validate cv
+priority 030
 
 term dataVersion
 type typeOfTerm
@@ -8936,7 +8973,8 @@ label ENCODE Data Freeze
 description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
 searchable select
 cvDefined no
-validate ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
+priority 310
+validate none # ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 
 term dateResubmitted
 type typeOfTerm
@@ -8944,7 +8982,8 @@ label Date resubmitted to UCSC
 description Submitted data that was remapped to a new assembly, found to have errors or otherwise needed to be updated will have a date of resubmission.
 searchable date
 cvDefined no
-validation date, later than dateSubmitted
+priority 320
+validate date # later than dateSubmitted
 
 term dateSubmitted
 type typeOfTerm
@@ -8952,7 +8991,8 @@ label Date submitted to UCSC
 description Date that a particular file  was originally submitted to the UCSC Genome Browser.
 searchable date
 cvDefined no
-validation date, nine months less than dateUnrestricted
+priority 315
+validate date # nine months less than dateUnrestricted
 
 term dateUnrestricted
 type typeOfTerm
@@ -8960,7 +9000,8 @@ label Date restrictions end
 description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted. After this date, the data is unrestricted.
 searchable date
 cvDefined no
-validation date nine months more than dateSubmitted
+priority 235
+validate date # nine months more than dateSubmitted
 
 term dccInternalNotes
 type typeOfTerm
@@ -8969,6 +9010,7 @@ description Notes about tracks that are internal to the DCC.
 searchable no
 cvDefined no
 hidden yes
+priority 910
 
 # term expVars
 # type typeOfTerm
@@ -8984,9 +9026,9 @@ label BAM Index file
 description  The name of the index file (.bai) that is associated with a particular bam file.
 searchable no
 cvDefined no
-validate Matches the fileName prefix with the suffix .bai
+validate exists # Matches the fileName prefix with the suffix .bai
 #hidden yes
-
+priority 990
 
 term fileName
 type typeOfTerm
@@ -8994,7 +9036,8 @@ label File Name for downloading
 description The name of a downloadable file associated with a particular track in the browser.
 searchable no
 cvDefined no
-validate Exists
+validate exists
+priority 980
 
 term fragLength
 type typeOfTerm
@@ -9002,10 +9045,11 @@ label Mean Length of DNA fragments
 description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size.
 searchable no
 cvDefined no
+validate integer
+priority 500
 # Cricket's special story (11/19/10): in fields.ra we have fragLength
 # and medianFragLength.  fragLength and medianFragLength appear to be
 # redundant, and should be collapsed into fragLength
-
 
 term fragSize
 type typeOfTerm
@@ -9013,6 +9057,8 @@ label Length of GIS DNA PET fragments
 description length of GIS DNA PET fragments, which has different values than fragLength
 searchable no
 cvDefined yes
+validate regex: ^[0-9]*k$
+priority 500
 # With more investigation, this could be collapsed in with fragLength (11/19/10)
 
 term freezeDate
@@ -9021,7 +9067,8 @@ label Gencode freeze date
 description Date when GENCODE froze data in order to submit to UCSC.
 searchable no
 cvDefined yes
-validation cv
+validate cv
+priority 330
 # outdated, should not be used going forward. 11/3/10
 
 term geoSample
@@ -9030,7 +9077,8 @@ label GEO sample accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
 searchable freeText
 cvDefined no
-validate GSM[0-9]*
+validate regex: ^GSM[0-9]*$
+priority 345
 
 # term geoSampleAccession
 # type typeOfTerm
@@ -9046,7 +9094,8 @@ label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
 searchable freeText
 cvDefined no
-validate GSE[0-9]*
+validate regex: ^GSE[0-9]*$
+priority 340
 
 # term geoSeriesAccession
 # type typeOfTerm
@@ -9062,7 +9111,8 @@ label Principal Investigator on grant
 description Principle investigator holding the grant by which a set of experiments are financed. Several labs led by other PI's may be under one grant.
 searchable select
 cvDefined yes
-valdate cv
+validate cv
+priority 015
 
 term insertLength
 type typeOfTerm
@@ -9071,6 +9121,7 @@ description The length of the insertion for paired reads for RNA-seq experiments
 searchable no
 cvDefined yes
 validate cv
+priority 500
 # This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
 
 term lab
@@ -9080,6 +9131,7 @@ description The name of the lab producing the data.  Often many labs are working
 searchable select
 cvDefined yes
 validate cv
+priority 020
 
 term labExpId
 type typeOfTerm
@@ -9088,6 +9140,7 @@ description An ID provided by a lab that uniquely identifies an experiment (data
 searchable freeText
 cvDefined no
 validate none
+priority 410
 
 term labProtocolId
 type typeOfTerm
@@ -9096,6 +9149,7 @@ description Some labs produce experiments under multiple defined protocols which
 searchable no
 cvDefined no
 validate none
+priority 420
 
 term labVersion
 type typeOfTerm
@@ -9104,6 +9158,7 @@ description Free text field for labs to record miscellaneous details of their ex
 searchable freeText
 cvDefined no
 validate none
+priority 430
 
 term level
 type typeOfTerm
@@ -9111,7 +9166,8 @@ label Gencode level
 description GENCODE level of annotation.  Level 1: validated.  Level 2: manually annotated.  Level 3: automated annotation.
 searchable no
 cvDefined no
-validate [1,2,3]
+validate list: 1,2,3
+priority 500
 
 term localization
 type typeOfTerm
@@ -9120,6 +9176,7 @@ description The cellular compartment from which RNA is extracted. Primarily used
 searchable select
 cvDefined yes
 validate cv
+priority 160
 
 term mapAlgorithm
 type typeOfTerm
@@ -9128,6 +9185,7 @@ description Algorithm used in high-throughput sequencing experiments to map sequ
 searchable select
 cvDefined yes
 validate cv
+priority 500
 # This is Caltech only and possibly should be retired.  (11/3/10)
 
 term obtainedBy
@@ -9136,7 +9194,8 @@ label obtainedBy
 description The production group that grew the cells and isolated genomic DNA. (Provis
 searchable select
 cvDefined no #(Defined by lab)
-validate cv
+validate none
+priority 500
 
 term origAssembly
 type typeOfTerm
@@ -9144,7 +9203,8 @@ label Assembly originally mapped to
 description Some experiments are originally performed and mapped to an earlier assembly of the reference genome and then are remapped or lifted over to a more recent assembly.
 searchable select
 cvDefined no
-validate /hg18/ || /hg19/ || /mm9/
+validate list: hg18,hg19,mm9
+priority 305
 # Could be cv.ra term
 
 term parentTable
@@ -9153,7 +9213,9 @@ label Closest related table
 description A data file available for downloads may not be directly associated with a track in the UCSC Genome Browser.  If this is the case, this term will identify the closest track or table related to this file.
 searchable no
 cvDefined no
+validate none
 hidden yes
+priority 920
 # On its way out (11/3/10)
 
 term phase
@@ -9162,7 +9224,8 @@ label Cell phase
 description The phase in a cell cycle.  Some experiments attempt to isolate DNA from a single phase.
 searchable no
 cvDefined yes
-validate cv
+validate cv or None
+priority 170
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
 # We have talked about obsoleting this term, but thought there was more data like this coming (11/3/10)
 
@@ -9172,7 +9235,8 @@ label Privacy
 description Privacy may be applied to specific datasets where sequence and other identifying information is not provided
 searchable no
 cvDefined no
-validate cv
+validate list: noSequence,none
+priority 450
 # Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
 # term project
@@ -9181,6 +9245,7 @@ validate cv
 # description Project that funded this and a related set of experiments.
 # searchable no
 # cvDefined no
+# priority 010
 # Only one: all encode is under single project='wgEncode' (11/3/10)
 
 term protocol
@@ -9189,7 +9254,8 @@ label Library Protocol
 description Lab specific protocol that may cover a number of steps in an experiment.  Most typically this identifies methods for building a DNA or RNA library.
 searchable select
 cvDefined yes
-validate cv
+validate cv or None
+priority 200
 # Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab (11/3/10)
 
 term rank
@@ -9198,7 +9264,8 @@ label Rank of replicate
 description Experiments with multiple replicates may declare a preferred replicate for visualization.
 searchable no
 cvDefined no
-validate [0-9]
+validate integer
+priority 460
 # Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
 
 term readType
@@ -9208,6 +9275,7 @@ description Specific information about cDNA sequence reads including length, dir
 searchable select
 cvDefined yes
 validate cv
+priority 500
 #description Length of single or paired-end reads in a high-throughput sequencing experiment.
 
 term replicate
@@ -9216,7 +9284,8 @@ label Replicate number
 description The biological replicate of a particular experiment.
 searchable select
 cvDefined no
-validate [0-9]
+validate integer
+priority 240
 
 term restrictionEnzyme
 type typeOfTerm
@@ -9224,7 +9293,8 @@ label Restriction Enzyme used
 description The restriction enzyme used in an experiment, typically for DNA library preparation for a high-throughput sequencing experiment.
 searchable no
 cvDefined yes
-validate cv
+validate cv or None
+priority 220
 
 term rnaExtract
 type typeOfTerm
@@ -9233,14 +9303,16 @@ description Fraction of total cellular RNA selected for by an experiment. This i
 searchable select
 cvDefined yes
 validate cv
+priority 150
 
 term run
 type run
 label Sequencing Run
-description Sequencing run 
+description Sequencing run
 searchable select
 cvDefined yes
 validate none
+priority 500
 
 term seqPlatform
 type typeOfTerm
@@ -9249,6 +9321,7 @@ description Sequencing platform used in high-throughput sequencing experiment.
 searchable select
 cvDefined yes
 validate cv
+priority 500
 
 term setType
 type typeOfTerm
@@ -9256,7 +9329,8 @@ label Experiment or Input
 description ChIP-seq experiments often require 'input' or control results to be subtracted from the experimental results.  This term clearly identifies which datasets are being used as the experiment and which are the input.
 searchable select
 cvDefined no
-validate /exp/ || /input/ || /control/
+priority 350
+validate list: exp,input,control
 
 term sex
 type typeOfTerm
@@ -9265,6 +9339,7 @@ description The sex of a cell line or tissue sample affects the genome target of
 searchable select
 cvDefined yes
 validate cv
+priority 130
 
 term size
 type typeOfTerm
@@ -9272,7 +9347,8 @@ label Mapability windowing size
 description The windowing size used, typically in a whole genome computational analysis and characterization dataset.
 searchable no
 cvDefined no
-validate integer
+validate regex: ^[0-9]*mer$
+priority 500
 # Used in hg19 mapability only (11/3/10)
 
 term softwareVersion
@@ -9282,6 +9358,7 @@ description A free-text field for a lab to declare the software and computationa
 searchable freeText
 cvDefined no
 validate none
+priority 440
 
 term strain
 type typeOfTerm
@@ -9290,6 +9367,7 @@ description The strain of the doner organism used in an experiment.
 searchable select
 cvDefined yes
 validate cv
+priority 110
 
 term subId
 type typeOfTerm
@@ -9297,7 +9375,8 @@ label Submission ID
 description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
 searchable freeText
 cvDefined no
-validate [0-9]*
+validate integer
+priority 335
 
 term submittedDataVersion
 type typeOfTerm
@@ -9305,7 +9384,8 @@ label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 searchable no
 cvDefined no
-validate V[2-9]*
+validate regex: ^V[2-9]*.*$   # shoue be with reason: "V2 - earlier version had a bad smell"
+priority 250
 
 term tableName
 type typeOfTerm
@@ -9313,6 +9393,8 @@ label Name of SQL table at UCSC
 description Downloadable files containing data displayed in tracks in the UCSC Genome Browser are often stored in SQL tables.  The particular table can be located by this name.
 searchable no
 cvDefined no
+validate exists
+priority 970
 # This should be metaDb variable only for file objects. A table object will have an object name that is the table name.  In fact, the object name of the file shouuld also be the table name, so this field could be obsoleted.
 # Only one case has been found where tableName != objName:
 #  select * from hg18.metaDb where var = "tableName" and obj != val; # wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya  wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
@@ -9323,7 +9405,8 @@ label Treatment
 description Treatment used as an experimental variable in a series of experiments.
 searchable select
 cvDefined yes
-validate cv
+validate cv or None
+priority 180
 
 # term type
 # type typeOfTerm
@@ -9331,6 +9414,7 @@ validate cv
 # searchable no
 # description Data format of a particular file or table.
 # cvDefined no
+# priority 040
 # Used rarely in hg18 to distinguish wig and bedGraph
 #This is to be retired (11/3/10)
 
@@ -9340,7 +9424,8 @@ label Number of mismatches tolerated
 description Mapping sequence tags to a reference genome will typically tolerate a number of mismatches which may be due to natural variability. This variable is used in generating mapability tracks.
 searchable no
 cvDefined no
-validate
+validate none
+priority 500
 # Used in hg19 mapability only
 # It does not vary at all, it was on the possible retire list (11/3/10)
 
@@ -9350,4 +9435,7 @@ label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
 searchable select
 cvDefined no
+validate none  # When this is cv defined it then change to cv
+priority 035
 #This should be CV defined (11/3/10)
+
