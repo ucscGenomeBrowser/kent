@@ -55,6 +55,7 @@ include wgEncodeUwTfbs.ra
 include wgEncodeCshlLongRnaSeq.ra
 include wgEncodeYaleRnaSeq.ra
 include wgEncodeBuOrchid.ra
+include wgEncodeUchicagoTfbs.ra
 
 # Caltech RNA Seq
 include wgEncodeCaltechRnaSeq.ra alpha,beta

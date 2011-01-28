@@ -14062,6 +14062,12 @@ for table in `hgsql hg18 --skip-column-names -e "show tables like 'hapmapLd%'"` 
    hgLoadBed -sqlTable=${table}.sql -tab hg19 $table hg19.${table}.bed6p;
    wc -l hg1{8,9}.${table}.bed6p >> lifts.txt
 done
+## Also need hapmapPhaseIIISummary
+hgsql hg18 --skip-column-names -e "select * from hapmapPhaseIIISummary" | cut -f2- > hg18.hapmapPhaseIIISummary.bed5p
+liftOver -bedPlus=5 hg18.hapmapPhaseIIISummary.bed5p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.hapmapPhaseIIISummary.{bed5p,unmapped}
+hgsqldump --no-data --compact hg18 hapmapPhaseIIISummary | sed '/^SET/d;s/ENGINE.*//' > hapmapPhaseIIISummary.sql
+hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.hapmapPhaseIIISummary.bed5p
+
 
 ############################################################################
 # INDEL-BASED CONSERVATION TRACK liftOver to hg19 (DONE - 2010-12-21 - Chin )
