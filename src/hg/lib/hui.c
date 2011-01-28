@@ -3290,7 +3290,7 @@ if( name == NULL )
 
 setting = cloneString(setting);
 char *filters[10];
-int filterCount = chopLine(setting, filters);
+int filterCount = chopByWhiteRespectDoubleQuotes(setting, filters, ArraySize(filters));
 int ix;
 for(ix=0;ix<filterCount;ix++)
     {
@@ -3309,23 +3309,26 @@ for(ix=0;ix<filterCount;ix++)
         filterBy->useIndex = TRUE;
         }
     filterBy->valueAndLabel = (strchr(filter,'|') != NULL);
+    // Remove any double quotes now and rely upon commmas for delimiting
+    stripString(filter, "\"");
     filterBy->slValues = slNameListFromComma(filter);
-    if(filterBy->valueAndLabel)
+    if (filterBy->valueAndLabel)
         {
         struct slName *val = filterBy->slValues;
         for(;val!=NULL;val=val->next)
             {
             char * lab =strchr(val->name,'|');
-            if(lab == NULL)
+            if (lab == NULL)
                 {
                 warn("Using filterBy but only some values contain labels in form of value|label.");
                 filterBy->valueAndLabel = FALSE;
                 break;
                 }
-            *lab++ = 0;
+            *lab++ = 0;  // The label is found inside the filters->svValues as the next string
             strSwapChar(lab,'_',' '); // Title does not have underscores
             }
         }
+
     slAddTail(&filterBySet,filterBy); // Keep them in order (only a few)
 
     if(cart != NULL)
@@ -4742,7 +4745,6 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 {
 char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
-
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 if(filterBySet != NULL)
     {

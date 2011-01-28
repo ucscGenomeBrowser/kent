@@ -7,7 +7,6 @@ group map
 subGroup1 view Views Signal=Signal
 sortOrder view=+
 controlledVocabulary encode/cv.ra 
-dragAndDrop subTracks
 priority 0
 type bed 
 wgEncode 1
