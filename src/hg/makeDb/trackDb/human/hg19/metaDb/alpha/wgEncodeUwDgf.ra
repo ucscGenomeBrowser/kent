@@ -279,6 +279,25 @@ subId 2047
 tableName wgEncodeUwDgfH7esPk
 view Peaks
 
+metaObject wgEncodeUwDgfH7esPkV2
+objType table
+cell H7-hESC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfH7esPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfH7esPkV2
+view Peaks
+
 metaObject wgEncodeUwDgfH7esRaw
 objType table
 cell H7-hESC
@@ -389,6 +408,25 @@ subId 2048
 tableName wgEncodeUwDgfHaePk
 view Peaks
 
+metaObject wgEncodeUwDgfHaePkV2
+objType table
+cell HAEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHaePkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHaePkV2
+view Peaks
+
 metaObject wgEncodeUwDgfHaeRaw
 objType table
 cell HAEpiC
@@ -497,6 +535,25 @@ origAssembly hg19
 project wgEncode
 subId 2050
 tableName wgEncodeUwDgfHcpePk
+view Peaks
+
+metaObject wgEncodeUwDgfHcpePkV2
+objType table
+cell HCPEpiC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHcpePkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHcpePkV2
 view Peaks
 
 metaObject wgEncodeUwDgfHcpeRaw
@@ -725,6 +782,25 @@ subId 2049
 tableName wgEncodeUwDgfHmfPk
 view Peaks
 
+metaObject wgEncodeUwDgfHmfPkV2
+objType table
+cell HMF
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHmfPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHmfPkV2
+view Peaks
+
 metaObject wgEncodeUwDgfHmfRaw
 objType table
 cell HMF
@@ -833,6 +909,25 @@ origAssembly hg19
 project wgEncode
 subId 2051
 tableName wgEncodeUwDgfHmvecdbladPk
+view Peaks
+
+metaObject wgEncodeUwDgfHmvecdbladPkV2
+objType table
+cell HMVEC-dBl-Ad
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfHmvecdbladPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfHmvecdbladPkV2
 view Peaks
 
 metaObject wgEncodeUwDgfHmvecdbladRaw
@@ -1581,6 +1676,25 @@ subId 2046
 tableName wgEncodeUwDgfNhdfadPk
 view Peaks
 
+metaObject wgEncodeUwDgfNhdfadPkV2
+objType table
+cell NHDF-Ad
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfNhdfadPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfNhdfadPkV2
+view Peaks
+
 metaObject wgEncodeUwDgfNhdfadRaw
 objType table
 cell NHDF-Ad
@@ -1793,6 +1907,25 @@ origAssembly hg19
 project wgEncode
 subId 2045
 tableName wgEncodeUwDgfSkmcPk
+view Peaks
+
+metaObject wgEncodeUwDgfSkmcPkV2
+objType table
+cell SKMC
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDgfSkmcPkV2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg19
+project wgEncode
+subId 3260
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDgfSkmcPkV2
 view Peaks
 
 metaObject wgEncodeUwDgfSkmcRaw
@@ -2081,4 +2214,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -1576332934
+# MAGIC: -1849932064

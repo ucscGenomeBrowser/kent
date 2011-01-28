@@ -444,7 +444,6 @@ else
 
         hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-    #ifdef CV_SEARCH_SUPPORTS_FREETEXT
         cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged2(this);'");
         // TODO: move to lib since hgTracks and hgApi share
         enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
@@ -470,13 +469,6 @@ else
             {
             // TO BE IMPLEMENTED
             }
-    #else//ifndef CV_SEARCH_SUPPORTS_FREETEXT
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
-        hPrintf("</td><td align='right' style='width:10px;'>is</td><td nowrap style='max-width:600px;'>is\n");
-        len = getTermArray(conn, &labels, &terms, mdbVar[i]);
-        safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'");
-    #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
         hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
         hPrintf("</tr>\n");
         }

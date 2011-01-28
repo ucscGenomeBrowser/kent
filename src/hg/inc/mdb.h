@@ -209,6 +209,8 @@ char*mdbTableName(struct sqlConnection *conn,boolean mySandBox);
 int mdbObjsSetToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean replace,boolean testOnly);
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 
+int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean testOnly);
+// Adds mdb Objs with minimal error checking
 
 // ------------------ Querys -------------------
 struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj *mdbObj);
@@ -365,8 +367,6 @@ struct hash *mdbCvTermTypeHash();
 struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
 
-#define CV_SEARCH_SUPPORTS_FREETEXT
-#ifdef CV_SEARCH_SUPPORTS_FREETEXT
 enum mdbCvSearchable
 // metadata Variavble are only certain declared types
     {
@@ -380,7 +380,6 @@ enum mdbCvSearchable
 
 enum mdbCvSearchable mdbCvSearchMethod(char *term);
 // returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
-#endif//ndef CV_SEARCH_SUPPORTS_FREETEXT
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term

@@ -1,7 +1,5 @@
 import sys
-import radict
-import read
-import write
+import raFile
 
 if len(sys.argv) != 3:
     print 'Usage Error. use python test.py file key'
@@ -9,5 +7,7 @@ if len(sys.argv) != 3:
 
 file = sys.argv[1]
 key = sys.argv[2]
-d = read.readRaFile(file, key)
-write.writeRaFile(d, 'valueC')
+ra = raFile.RaFile()
+ra.read(file, key)
+ra.write()
+#ra.writeEntry('valueC')

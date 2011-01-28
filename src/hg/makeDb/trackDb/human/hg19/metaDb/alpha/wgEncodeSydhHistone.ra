@@ -1384,7 +1384,7 @@ cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -1406,7 +1406,7 @@ cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -1428,7 +1428,7 @@ cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -1450,7 +1450,7 @@ cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -1472,7 +1472,7 @@ cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -1494,7 +1494,7 @@ cell U2OS
 composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
-dataType ChIPseq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -1639,4 +1639,4 @@ tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1376044456
+# MAGIC: 1376103016
