@@ -306,14 +306,14 @@ superTrack wgEncodeRnaSeqSuper dense
     view TranscriptGencV3
     visibility full 
     parent wgEncodeHaibRnaSeq
-    type gtf
+    type genepred
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep3
         parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
         shortLabel A549 3
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 3 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -322,7 +322,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -331,7 +331,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -340,7 +340,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -349,7 +349,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 4
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 4 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -358,7 +358,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -367,7 +367,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -376,7 +376,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -385,7 +385,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2974 dateSubmitted=2011-01-22
 
@@ -394,7 +394,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -403,7 +403,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -412,7 +412,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -421,7 +421,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -430,7 +430,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -439,7 +439,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -448,7 +448,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -457,7 +457,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -466,7 +466,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -475,7 +475,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2975 dateSubmitted=2011-01-21
 
@@ -484,7 +484,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
@@ -493,7 +493,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
@@ -502,7 +502,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel T-47D 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in T-47D cells)
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
@@ -511,7 +511,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
@@ -520,7 +520,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
@@ -529,7 +529,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel ECC-1 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in ECC-1 cells)
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=2976 dateSubmitted=2011-01-21
 
@@ -538,7 +538,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
@@ -547,7 +547,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
@@ -556,7 +556,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
@@ -565,7 +565,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 2
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 2 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep2
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=1849 dateSubmitted=2011-01-21
 
@@ -574,7 +574,7 @@ superTrack wgEncodeRnaSeqSuper dense
         shortLabel A549 1
         longLabel ENCODE HAIB RNA-seq Transcripts FPKM Replicate 1 (in A549 cells)
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
-        type gtf
+        type genepred
         origAssembly hg19
         # subId=3274 dateSubmitted=2011-01-19
 

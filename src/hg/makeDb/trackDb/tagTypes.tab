@@ -197,7 +197,7 @@ maxHeightPixels *
 maxItems *
 maxLimit *
 maxScore broadPeak
-maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR gtf
+maxWindowToDraw bam rmsk bed narrowPeak broadPeak bigWig bedlogR genepred
 maxWindowToQuery bigWig bed bedlogR
 metadata *
 mgiUrl bed
