@@ -70,7 +70,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel A549 1
-        longLabel A549 (DEX 5nM) RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel A549 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
         type bam
         origAssembly hg19
