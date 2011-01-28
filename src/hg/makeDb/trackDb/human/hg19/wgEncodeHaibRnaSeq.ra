@@ -33,7 +33,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 3
+        shortLabel A549 3
         longLabel A549 RNA-seq Alignments Rep 3 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
         type bam
@@ -42,7 +42,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
         type bam
@@ -60,7 +60,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 1
+        shortLabel A549 1
         longLabel A549 (DEX 1nM) RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
         type bam
@@ -69,7 +69,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 1
+        shortLabel A549 1
         longLabel A549 (DEX 5nM) RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
         type bam
@@ -78,7 +78,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 4
+        shortLabel A549 4
         longLabel A549 (ETOH .02%) RNA-seq Alignments Rep 4 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
         type bam
@@ -87,7 +87,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 2
+        shortLabel A549 2
         longLabel A549 (DEX 100pM) RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep2
         type bam
@@ -96,7 +96,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep2
         type bam
@@ -105,7 +105,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep2
         type bam
@@ -114,7 +114,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep2
         type bam
@@ -123,7 +123,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep1
         type bam
@@ -132,7 +132,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bam
@@ -141,7 +141,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bam
@@ -150,7 +150,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bam
@@ -159,7 +159,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep1
         type bam
@@ -168,7 +168,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
         type bam
@@ -177,7 +177,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bam
@@ -186,7 +186,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep2
         type bam
@@ -195,7 +195,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep2
         type bam
@@ -204,7 +204,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
         type bam
@@ -213,7 +213,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
         type bam
@@ -222,7 +222,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
         type bam
@@ -231,7 +231,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel T-47D Aln 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
         type bam
@@ -240,7 +240,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
         type bam
@@ -249,7 +249,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
         type bam
@@ -258,7 +258,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel ECC-1 Aln 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
         type bam
@@ -267,7 +267,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
         type bam
@@ -276,7 +276,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
         type bam
@@ -285,7 +285,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
         type bam
@@ -294,7 +294,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
-        shortLabel A549 Aln 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep2
         type bam
@@ -587,7 +587,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 3
+        shortLabel A549 3
         longLabel A549 RNA-seq Signal Rep 3 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
         type bigWig 0.115095 1155.819946
@@ -596,7 +596,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
         type bigWig 0.122735 1558.979980
@@ -605,7 +605,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
         type bigWig 0.117905 1144.349976
@@ -614,7 +614,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
         type bigWig 0.120431 1351.449951
@@ -623,7 +623,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
         type bigWig 0.149512 1237.839966
@@ -632,7 +632,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 4
+        shortLabel A549 4
         longLabel A549 RNA-seq Signal Rep 4 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
         type bigWig 0.120691 1476.140015
@@ -641,7 +641,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep2
         type bigWig 0.140351 1194.630005
@@ -650,7 +650,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep2
         type bigWig 0.108844 1106.400024
@@ -659,7 +659,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep2
         type bigWig 0.122421 1310.829956
@@ -668,7 +668,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep2
         type bigWig 0.157130 1170.689941
@@ -677,7 +677,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep1
         type bigWig 0.248248 738.353027
@@ -686,7 +686,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bigWig 0.208881 751.294006
@@ -695,7 +695,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bigWig 0.267722 963.263977
@@ -704,7 +704,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bigWig 0.271642 1572.939941
@@ -713,7 +713,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep1
         type bigWig 0.256140 872.221008
@@ -722,7 +722,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
         type bigWig 0.098354 737.018005
@@ -731,7 +731,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bigWig 0.090113 781.908997
@@ -740,7 +740,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep2
         type bigWig 0.174213 644.237976
@@ -749,7 +749,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep2
         type bigWig 0.204548 865.341980
@@ -758,7 +758,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
         type bigWig 0.138023 880.583984
@@ -767,7 +767,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 1
+        shortLabel T-47D 1
         longLabel T-47D RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
         type bigWig 0.149111 676.367004
@@ -776,7 +776,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
         type bigWig 0.210921 561.841003
@@ -785,7 +785,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel T-47D Raw 2
+        shortLabel T-47D 2
         longLabel T-47D RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
         type bigWig 0.129285 618.044983
@@ -794,7 +794,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
         type bigWig 0.206326 724.461975
@@ -803,7 +803,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 2
+        shortLabel ECC-1 2
         longLabel ECC-1 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
         type bigWig 0.176215 817.461975
@@ -812,7 +812,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel ECC-1 Raw 1
+        shortLabel ECC-1 1
         longLabel ECC-1 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
         type bigWig 0.264957 963.716003
@@ -821,7 +821,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
         type bigWig 0.218757 915.445007
@@ -830,7 +830,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
         type bigWig 0.228926 1241.689941
@@ -839,7 +839,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 1
+        shortLabel A549 1
         longLabel A549 RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
         type bigWig 0.217478 1051.670044
@@ -848,7 +848,7 @@ superTrack wgEncodeRnaSeqSuper dense
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
-        shortLabel A549 Raw 2
+        shortLabel A549 2
         longLabel A549 RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep2
         type bigWig 0.124371 1297.219971
