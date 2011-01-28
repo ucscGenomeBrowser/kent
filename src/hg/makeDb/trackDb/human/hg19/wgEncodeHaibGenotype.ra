@@ -786,8 +786,8 @@ scoreFilterLimits 0:1000
 
         track wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
         parent wgEncodeHaibGenotype off
-        shortLabel MCF10A-Er-Src 1
-        longLabel MCF10A-Er-Src Copy Number Variants Rep 1 from ENCODE/HAIB
+        shortLabel MCF10A Tam 1
+        longLabel MCF10A-Er-Src Tamoxifen Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=MCF10AES treatment=TAM rep=rep1
         type bedLogR
         origAssembly hg19
