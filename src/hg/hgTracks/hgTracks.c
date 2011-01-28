@@ -115,7 +115,7 @@ struct hgPositions *hgp = NULL;
 /* Other global variables. */
 struct trackHub *hubList = NULL;	/* List of all relevant hubs. */
 struct group *groupList = NULL;    /* List of all tracks. */
-char *browserName;              /* Test or public browser */
+char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */

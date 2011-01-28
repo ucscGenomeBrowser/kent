@@ -629,7 +629,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3339 dateSubmitted=2011-01-19
 
         track wgEncodeRikenCageBjCellPapPlusRawRep2
-        release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel BJ cell longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 2 (longPolyA in BJ cell)
@@ -639,7 +638,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3484 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageBjCellPapPlusRawRep1
-        release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel BJ cell longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 1 (longPolyA in BJ cell)
@@ -649,7 +647,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3483 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageA549CellPapPlusRawRep2
-        release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel A549 cell longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 2 (longPolyA in A549 cell)
@@ -659,7 +656,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3482 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageA549CellPapPlusRawRep1
-        release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel A549 cell longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 1 (longPolyA in A549 cell)
@@ -669,7 +665,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3481 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageAg04450CellPapPlusRawRep2
-        release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel AG04450 cell longPolyA PlusRaw 2
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 2 (longPolyA in AG04450 cell)
@@ -679,7 +674,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3480 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageAg04450CellPapPlusRawRep1
-        release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel AG04450 cell longPolyA PlusRaw 1
         longLabel ENCODE RIKEN CAGE Plus Raw Signal Replicate 1 (longPolyA in AG04450 cell)
@@ -1299,7 +1293,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3339 dateSubmitted=2011-01-19
 
         track wgEncodeRikenCageBjCellPapMinusRawRep2
-        release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel BJ cell longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 2 (longPolyA in BJ cell)
@@ -1309,7 +1302,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3484 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageBjCellPapMinusRawRep1
-        release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel BJ cell longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 1 (longPolyA in BJ cell)
@@ -1319,7 +1311,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3483 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageA549CellPapMinusRawRep2
-        release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel A549 cell longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 2 (longPolyA in A549 cell)
@@ -1329,7 +1320,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3482 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageA549CellPapMinusRawRep1
-        release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel A549 cell longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 1 (longPolyA in A549 cell)
@@ -1339,7 +1329,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3481 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageAg04450CellPapMinusRawRep2
-        release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel AG04450 cell longPolyA MinusRaw 2
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 2 (longPolyA in AG04450 cell)
@@ -1349,7 +1338,6 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=3480 dateSubmitted=2011-01-21
 
         track wgEncodeRikenCageAg04450CellPapMinusRawRep1
-        release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel AG04450 cell longPolyA MinusRaw 1
         longLabel ENCODE RIKEN CAGE Minus Raw Signal Replicate 1 (longPolyA in AG04450 cell)
