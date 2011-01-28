@@ -51,8 +51,19 @@
 		    TARGET=_blank>UCSC</A>). 
 		    If you have feedback or questions concerning the tools or
 		    data on this website, feel free to contact us on our 
-		    <A HREF="contacts.html">public mailing list</A>. 
-		    </P>
+		    <A HREF="contacts.html">public mailing list</A>.</P>
+
+<!--#if expr='"$SERVER_NAME" = "genome-preview.ucsc.edu" || "$SERVER_NAME" = "hgwdev-kate.cse.ucsc.edu"'-->
+<P><FONT color="grey">
+WARNING: This is our preview site. It is a weekly mirror of our internal 
+development server for public access.  Data and tools here are under 
+construction, have not been quality reviewed, and are subject to change 
+at any time.  We provide this site for early access, with the warning that it is
+less available and stable than our public site. For 
+high-quality reviewed annotations on our production server, visit
+<A href="http://genome.ucsc.edu">http://genome.ucsc.edu</a>.</P>
+                    </P>
+<!--#endif -->
                     </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
             <BR></TD></TR></TABLE>
