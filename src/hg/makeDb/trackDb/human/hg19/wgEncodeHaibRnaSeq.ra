@@ -2,16 +2,16 @@
 
 track wgEncodeHaibRnaSeq
 compositeTrack on
-shortLabel HudsonAlpha RNA-seq
+shortLabel HAIB RNA-seq
 longLabel RNA-seq from ENCODE/HudsonAlpha
 group expression
 subGroup1 view Views TranscriptGencV3=Gene_model RawSignal=Signal Alignments=Alignments
 subGroup2 cellType Cell_Line GM12878=GM12878<BR>&nbsp;(Tier_1) H1hESC=H1-hESC<BR>&nbsp;(Tier_1) K562=K562<BR>&nbsp;(Tier_1) HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) HepG2=HepG2<BR>&nbsp;(Tier_2) A549=A459 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
 subGroup3 rnaExtract RnaExtract pAP=longPolyA shortPolyA=shortPolyA
-subGroup4 treatment Treatment  BPA14h=BPA14h DMSO4hr=DMSO4hr ESTRADIa4h=Estrodial ETOH02=EtOH_0.02pct DEX100nM=DEX100nm DEX100pM=DEX_100nM DEX500pM=DEx500?? DEX1nM=DEX1nM?? DEX5nM=DEX5nm?? GEN4h=GEN4h None=None
+subGroup4 treatment Treatment  BPA14h=BPA_100nM DEX100nM=DEX_100nM DEX100pM=DEX_100pM DEX500pM=DEX_500pM DEX1nM=DEX_1nM DEX5nM=DEX_5nM DMSO4hr=DMSO_0.02pct ESTRADIa4h=Estrodial_10nM ETOH02=EtOH_0.02pct GEN4h=Genistein_100nM None=None
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
-sortOrder cellType=+ view=+ treatment=+ rep=+
-dimensionZchecked rep1,rep2
+sortOrder cellType=+ treatment=+ rep=+ view=-
+dimensionZchecked rep1
 dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
 fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By view=View replicate=Rep fileType=File_Type fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell rnaExtract=rnaExtract treatment=treatment obtainedBy=obtainedBy
@@ -52,7 +52,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel A549 Aln 1
-        longLabel A549 RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel A549 (DEX 500nm) RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
         type bam
         origAssembly hg19
@@ -61,7 +61,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel A549 Aln 1
-        longLabel A549 RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel A549 (DEX 1nM) RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
         type bam
         origAssembly hg19
@@ -70,7 +70,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel A549 Aln 1
-        longLabel A549 RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel A549 (DEX 5nM) RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
         type bam
         origAssembly hg19
@@ -79,7 +79,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel A549 Aln 4
-        longLabel A549 RNA-seq Alignments Rep 4 from ENCODE/HAIB
+        longLabel A549 (ETOH .02%) RNA-seq Alignments Rep 4 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
         type bam
         origAssembly hg19
@@ -88,7 +88,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel A549 Aln 2
-        longLabel A549 RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        longLabel A549 (DEX 100pM) RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep2
         type bam
         origAssembly hg19
