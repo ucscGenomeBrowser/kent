@@ -273,7 +273,10 @@ if(mdbObjs != NULL)
     if(testIt && verboseLevel() > 2)
         mdbObjPrint(mdbObjs,FALSE);
 
-    count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
+    if(recreate) // recreate then do the fast load
+        count = mdbObjsLoadToDb(conn,table,mdbObjs,testIt);
+    else
+        count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
     }
 if(testIt)
     verbose(1, "Command would affected %d row(s) in %s.%s\n", count,db,table);
