@@ -1,54 +1,77 @@
-<h2>Description and display conventions</h2> <p><b>NumtS</b> (Nuclear mitochondrial sequences) are
-mitochondrial fragments inserted in nuclear genomic sequences. The most credited hypothesis
-concerning their generation suggests that in the presence of mutagenic agents or under stress
-conditions fragments of mtDNA escape from mitochondria, reach the nucleus and insert into
-chromosomes during break repair, although NumtS can also be derived from duplication of genomic
-fragments. NumtS may be the cause of contamination during human mtDNA sequencing and hence, frequent
-false low heteroplasmic evidences have been reported. The Bioinformatics group chaired by M.
-Attimonelli (Bari, Italy) has produced the RHNumtS compilation annotating more than 600 Human NumtS.
-To allow the scientific community access to the compilation and to perform genomics comparative
-analyses inclusive of the NumtS data, the group has designed the Human NumtS tracks below
-described.</p>
+<h2>Description and display conventions</h2>
+<p>
+<b>NumtS</b> (Nuclear mitochondrial sequences) are mitochondrial fragments inserted in nuclear genomic sequences. The most credited hypothesis concerning their generation suggests that in presence of mutagenic agents or under stress conditions fragments of mtDNA escape from mitochondria, reach the nucleus and insert into chromosomes during break repair, although NumtS can derive from duplication of genomic fragments. NumtS may be cause of contamination during human mtDNA sequencing and hence frequent false low heteroplasmic evidences have been reported.
+The Bioinformatics group chaired by M.Attimonelli (Bari, Italy) has produced the RHNumtS compilation annotating more than 500 Human NumtS. To allow the scientific community to access to the compilation and to perform genomics comparative analyses inclusive of the NumtS data, the group has designed the Human NumtS tracks below described.
+</p>
 
-<p>Tracks show the High Score Pairs (HSPs) obtained by aligning the mitochondrial reference genome
-(NC_012920) with the hg18 release of the human genome.</p>
+<p> 
+The NumtS tracks show the High Score Pairs (HSPs) obtained by aligning the mitochondrial reference genome (NC_012920) with the hg18 release of the human genome.
+</p>
+<ol>
+<li><b>"NumtS (Nuclear mitochondrial Sequences)" Track</b>
+<p>
+The "NumtS mitochondrial sequences" track shows the mapping of the HSPs returned by BlastN on the nuclear genome. The shading of the items reflects the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the mitochondrial mapping is provided, thus allowing a fast cross among the NumtS genomic contexts.
+</p>
+</li>
 
-<ol> <li><b>"NumtS (Nuclear mitochondrial Sequences)" Track</b> <p> The "NumtS mitochondrial
-sequences" track shows the mapping of the HSPs returned by BlastN on the nuclear genome. The shading
-of the items reflects the similarity returned by BlastN, and the direction of the arrows is
-concordant with the strand of the alignment. For every item, a link pointing to the mitochondrial
-mapping is provided, thus allowing a fast cross among the NumtS genomic contexts.</p> </li>
+<li><b>"NumtS assembled" Track</b>
+<p>
+The "NumtS assembled" track shows items obtained by assembling HSPs annotated in the "NumtS" track fulfilling the following conditions:
+<ul type="disc">
+<li>the orientation of their alignments must be concordant.</li>
+<li>the distance between them must be less than 2 kb, on the mitochondrial genome as well as on the nuclear genome.</li>
+</ul></p>
+<p>
+Exceptions for the second condition arise when a long repetitive element is present between two HSPs.
+</p>
+</li>
 
-<li><b>"NumtS assembled" Track</b> <p> The "NumtS assembled" track shows items obtained by
-assembling HSPs annotated in the "NumtS" track fulfilling the following conditions: <ul type="disc">
-<li> the orientation of their alignments must be concordant.</li> <li> the distance between them
-must be less than 2 kb, on the mitochondrial genome as well as on the nuclear genome.</li> </ul> <p>
-Exceptions for the second condition arise when a long repetitive element is present between two
-HSPs.</p> </li>
+<li><b>"NumtS on mitochondrion" Track</b>
+<p>
+The "NumtS on mitochondrion" track shows the mapping of the HSPs on the mitochondrial genome. The shading of the items reflects the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the nuclear mapping is provided.
+</p>
 
-<li><b>"NumtS on mitochondrion" Track</b> <p> The "NumtS on mitochondrion" track shows the mapping
-of the HSPs on the mitochondrial genome. The shading of the items reflects the similarity returned
-by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every
-item, a link pointing to the nuclear mapping is provided.</p> </li>
+<li><b>"NumtS on mitochondrion with chromosome placement" Track</b>
+<p>
+The "NumtS on mitochondrion with chromosome placement" shows the mapping of the HSPs on the mitochondrial genome, but the items are coloured according to the colours assigned to each human chromosome on the UCSC genome browser. No shading is here provided. For every item, a link pointing to the nuclear mapping is provided.
+</p>
+</ol>
 
-<li><b>"NumtS on mitochondrion with chromosome placement" Track</b> <p>The "NumtS on mitochondrion
-with chromosome placement" shows the mapping of the HSPs on the mitochondrial genome, but the items
-are colored according to the colors assigned to each human chromosome on the UCSC genome browser. No
-shading is provided here. For every item, a link pointing to the nuclear mapping is provided.</p>
-</li> </ol>
+<h2>Methods</h2>
+<p>
+NumtS mappings were obtained by running Blast2seq (program: BlastN) between each chromosome of of the Human Genome hg18 build and the human mitochondrial reference sequence (rCRS, AC: NC_012920), fixing the e-value threshold to 1e-03. The assembling of the HSPs was performed with spreadsheet interpolation and manual inspection.
+</p>
+
+<h2>Verification</h2>
+<p>
+NumtS predicted in silico were validated by carrying out PCR amplification and sequencing on blood-extracted DNA of a healthy individual of European origin. PCR amplification was successful for 275 NumtS and provided amplicons of the expected length. All PCR fragments were sequenced on both strands, and submitted to the EMBL databank.
+</p>
+<p>
+Furthermore, 541 NumtS were validated by merging NumtS nuclear coordinates with HapMap annotations. Our analysis has been carried on eight HapMap individuals (NA18517, NA18507, NA18956, NA19240, NA18555, NA12878, NA19129, NA12156). For each sample, clones with a single best concordant placement (according to the fosmid end-sequence-pair analysis described in Kidd et al., 2008), have been considered. The analysis showed that 541 NumtS (at least 30bp for each one) had been sequenced in such samples.
+</p>
+
+<h2>Credits</h2>
+<p>
+These data were provided by Domenico Simone and Marcella Attimonelli at Department of Biochemistry and Molecular Biology "Ernesto Quagliariello" (University of Bari, Italy). Primer designing was carried out by Francesco Calabrese and Giuseppe Mineccia. PCR validation was carried out by Martin Lang, Domenico Simone and Giuseppe Gasparre. Merging with HapMap annotations has been performed by Domenico Simone.
+</p>
+
+<h2>References</h2>
+<p>
+Simone D, Calabrese FM, Lang M, Gasparre G, Attimonelli M: Validation and UCSC tracks of the extended RHNumtS compilation (submitted). 
+</p>
+
+<p>
+Lascaro D, Castellana S, Gasparre G, Romeo G, Saccone S, Attimonelli M. <a
+href="http://www.biomedcentral.com/1471-2164/9/267/abstract/" target="_blank">The RHNumtS compilation: features and bioinformatics approaches to locate and quantify Human NumtS</a>. <i>BMC
+Genomics</i>. 2008 June 3;9:267.
+</p>
+
+<p>
+Kidd JM, Cooper GM, Donahue WF, et al.
+<a href="http://www.nature.com/nature/journal/v453/n7191/abs/nature06862.html"  target="_blank">
+Mapping and sequencing of structural variation from eight human genomes.</a>
+<i>Nature</i>, 2008, 453(7191):56-64.
+</p>
 
 
-<h2>Verification</h2> <p> NumtS predicted in silico were validated by carrying out PCR amplification
-and sequencing on blood-extracted DNA of a healthy individual of European origin. PCR amplification
-was successful for 155 NumtS and provided amplicons of the expected length. All PCR fragments were
-sequenced on both strands.</p>
 
-<h2>Credits</h2> <p> These data were provided by Domenico Simone and Marcella Attimonelli at
-Department of Biochemistry and Molecular Biology "Ernesto Quagliariello" (University of Bari,
-Italy). Primer designing was carried out by Francesco Calabrese and Giuseppe Mineccia. Validation
-was carried out by Martin Lang, Domenico Simone and Giuseppe Gasparre.</p>
-
-<h2>References</h2> <p>Lascaro D, Castellana S, Gasparre G, Romeo G, Saccone S, Attimonelli M. <a
-href="http://www.biomedcentral.com/1471-2164/9/267/abstract/" target="_blank">The RHNumtS
-compilation: features and bioinformatics approaches to locate and quantify Human NumtS</a>. <i>BMC
-Genomics</i>. 2008 June 3;9:267.</p>
