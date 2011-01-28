@@ -18,10 +18,10 @@ dragAndDrop subTracks
 priority 0
 wgEncode 1
 type bed 9
-itemRgb on
+#itemRgb on
 visibility dense
-scoreFilter 10
-scoreFilterLimits 0:1000
+#scoreFilter 10
+#scoreFilterLimits 0:1000
 #maxWindowToQuery 10000000
 
         track wgEncodeHaibGenotypeA549RegionsRep1
@@ -29,8 +29,7 @@ scoreFilterLimits 0:1000
         shortLabel A549 1
         longLabel A549 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=A549 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeAg04449RegionsRep1
@@ -38,8 +37,7 @@ scoreFilterLimits 0:1000
         shortLabel AG04449 1
         longLabel AG04449 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=AG04449 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeAg04450RegionsRep2
@@ -47,8 +45,7 @@ scoreFilterLimits 0:1000
         shortLabel AG04450 2
         longLabel AG04450 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=AG04450 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeAg09309RegionsRep1
@@ -56,8 +53,7 @@ scoreFilterLimits 0:1000
         shortLabel AG09309 1
         longLabel AG09309 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=AG09309 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeAg09319RegionsRep2
@@ -65,8 +61,7 @@ scoreFilterLimits 0:1000
         shortLabel AG09319 2
         longLabel AG09319 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=AG09319 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeAg10803RegionsRep1
@@ -74,8 +69,7 @@ scoreFilterLimits 0:1000
         shortLabel AG10803 1
         longLabel AG10803 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=AG10803 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeAosmcRegionsRep1
@@ -83,8 +77,7 @@ scoreFilterLimits 0:1000
         shortLabel AoSMC 1
         longLabel AoSMC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=AOSMC treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeAstrocyRegionsRep1
@@ -92,8 +85,7 @@ scoreFilterLimits 0:1000
         shortLabel Astrocy 1
         longLabel Astrocy Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=Astrocy treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeBjRegionsRep1
@@ -101,8 +93,7 @@ scoreFilterLimits 0:1000
         shortLabel BJ 1
         longLabel BJ Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=BJ treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeCaco2RegionsRep1
@@ -110,8 +101,7 @@ scoreFilterLimits 0:1000
         shortLabel Caco-2 1
         longLabel Caco-2 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=Caco2 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeChorionRegionsRep1
@@ -119,8 +109,7 @@ scoreFilterLimits 0:1000
         shortLabel Chorion 1
         longLabel Chorion Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=Chorion treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHsmmRegionsRep3
@@ -128,8 +117,7 @@ scoreFilterLimits 0:1000
         shortLabel HSMM 3
         longLabel HSMM Copy Number Variants Rep 3 from ENCODE/HAIB
         subGroups  cellType=HSMM treatment=None rep=rep3
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHsmmRegionsRep2
@@ -137,8 +125,7 @@ scoreFilterLimits 0:1000
         shortLabel HSMM 2
         longLabel HSMM Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HSMM treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeCmkRegionsRep2
@@ -146,8 +133,7 @@ scoreFilterLimits 0:1000
         shortLabel CMK 2
         longLabel CMK Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=CMK treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHsmmRegionsRep6
@@ -155,8 +141,7 @@ scoreFilterLimits 0:1000
         shortLabel HSMM 6
         longLabel HSMM Copy Number Variants Rep 6 from ENCODE/HAIB
         subGroups  cellType=HSMM treatment=None rep=rep6
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeGm06990RegionsRep1
@@ -164,8 +149,7 @@ scoreFilterLimits 0:1000
         shortLabel GM06990 1
         longLabel GM06990 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=GM06990 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeGm12891RegionsRep2
@@ -173,8 +157,7 @@ scoreFilterLimits 0:1000
         shortLabel GM12891 2
         longLabel GM12891 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=GM12891 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeGm12892RegionsRep2
@@ -182,8 +165,7 @@ scoreFilterLimits 0:1000
         shortLabel GM12892 2
         longLabel GM12892 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=GM12892 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeGm19239RegionsRep1
@@ -191,8 +173,7 @@ scoreFilterLimits 0:1000
         shortLabel GM19239 1
         longLabel GM19239 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=GM19239 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeH1hescRegionsRep2
@@ -200,8 +181,7 @@ scoreFilterLimits 0:1000
         shortLabel H1-hESC 2
         longLabel H1-hESC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=H1hESC treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         color 0,107,27
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -210,8 +190,7 @@ scoreFilterLimits 0:1000
         shortLabel HAEpiC 1
         longLabel HAEpiC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HAE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHaeRegionsRep2
@@ -219,8 +198,7 @@ scoreFilterLimits 0:1000
         shortLabel HAEpiC 2
         longLabel HAEpiC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HAE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHcfRegionsRep1
@@ -228,8 +206,7 @@ scoreFilterLimits 0:1000
         shortLabel HCF 1
         longLabel HCF Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HCF treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHcfRegionsRep2
@@ -237,8 +214,7 @@ scoreFilterLimits 0:1000
         shortLabel HCF 2
         longLabel HCF Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HCF treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHcmRegionsRep1
@@ -246,8 +222,7 @@ scoreFilterLimits 0:1000
         shortLabel HCM 1
         longLabel HCM Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HCM treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHcmRegionsRep2
@@ -255,8 +230,7 @@ scoreFilterLimits 0:1000
         shortLabel HCM 2
         longLabel HCM Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HCM treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHcpeRegionsRep1
@@ -264,8 +238,7 @@ scoreFilterLimits 0:1000
         shortLabel HCPEpiC 1
         longLabel HCPEpiC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HCPE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHcpeRegionsRep2
@@ -273,8 +246,7 @@ scoreFilterLimits 0:1000
         shortLabel HCPEpiC 2
         longLabel HCPEpiC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HCPE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHeeRegionsRep2
@@ -282,8 +254,7 @@ scoreFilterLimits 0:1000
         shortLabel HEEpiC 2
         longLabel HEEpiC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HEE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHek293RegionsRep2
@@ -291,8 +262,7 @@ scoreFilterLimits 0:1000
         shortLabel HEK293 2
         longLabel HEK293 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HEK293 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHelas3RegionsRep2
@@ -300,8 +270,7 @@ scoreFilterLimits 0:1000
         shortLabel HeLa-S3 2
         longLabel HeLa-S3 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HeLaS3 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         color 0,119,158
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -310,8 +279,7 @@ scoreFilterLimits 0:1000
         shortLabel HIPEpiC 1
         longLabel HIPEpiC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HIPE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHipeRegionsRep2
@@ -319,8 +287,7 @@ scoreFilterLimits 0:1000
         shortLabel HIPEpiC 2
         longLabel HIPEpiC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HIPE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHl60RegionsRep1
@@ -328,8 +295,7 @@ scoreFilterLimits 0:1000
         shortLabel HL-60 1
         longLabel HL-60 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HL60 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHmecRegionsRep2
@@ -337,8 +303,7 @@ scoreFilterLimits 0:1000
         shortLabel HMEC 2
         longLabel HMEC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HMEC treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHnpceRegionsRep1
@@ -346,8 +311,7 @@ scoreFilterLimits 0:1000
         shortLabel HNPCEpiC 1
         longLabel HNPCEpiC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HNPCE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHpaeRegionsRep1
@@ -355,8 +319,7 @@ scoreFilterLimits 0:1000
         shortLabel HPAEpiC 1
         longLabel HPAEpiC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HPAE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHpaeRegionsRep2
@@ -364,8 +327,7 @@ scoreFilterLimits 0:1000
         shortLabel HPAEpiC 2
         longLabel HPAEpiC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HPAE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHuvecRegionsRep2
@@ -373,8 +335,7 @@ scoreFilterLimits 0:1000
         shortLabel HUVEC 2
         longLabel HUVEC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HUVEC treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         color 224,75,0
         # subId=3432 dateSubmitted=2011-01-20
 
@@ -383,8 +344,7 @@ scoreFilterLimits 0:1000
         shortLabel Melano 2
         longLabel Melano Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=MELANO treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeMyometrRegionsRep1
@@ -392,8 +352,7 @@ scoreFilterLimits 0:1000
         shortLabel Myometr 1
         longLabel Myometr Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=MYOMETR treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeMelanoRegionsRep1
@@ -401,8 +360,7 @@ scoreFilterLimits 0:1000
         shortLabel Melano 1
         longLabel Melano Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=MELANO treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeOvcar3RegionsRep1
@@ -410,8 +368,7 @@ scoreFilterLimits 0:1000
         shortLabel Ovcar-3 1
         longLabel Ovcar-3 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=OVCAR3 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypePanc1RegionsRep2
@@ -419,8 +376,7 @@ scoreFilterLimits 0:1000
         shortLabel PANC-1 2
         longLabel PANC-1 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=PANC1 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypePfsk1RegionsRep1
@@ -428,8 +384,7 @@ scoreFilterLimits 0:1000
         shortLabel PFSK-1 1
         longLabel PFSK-1 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=PFSK1 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeBcsmallintestine0111002RegionsRep1
@@ -437,8 +392,7 @@ scoreFilterLimits 0:1000
         shortLabel BC Sm Intest 1
         longLabel BC_Small_Intestine_01-11002 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=BCSmallIntestine0111002 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeBcjejunumh12817nRegionsRep1
@@ -446,8 +400,7 @@ scoreFilterLimits 0:1000
         shortLabel BC Jejunum 1
         longLabel BC_Jejunum_H12817N Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=BCJejunumH12817N treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeT47dRegionsRep2
@@ -455,8 +408,7 @@ scoreFilterLimits 0:1000
         shortLabel T-47D 2
         longLabel T-47D Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=T47D treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHtr8RegionsRep1
@@ -464,8 +416,7 @@ scoreFilterLimits 0:1000
         shortLabel HTR8svn 1
         longLabel HTR8svn Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HTR8 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeU87RegionsRep1
@@ -473,8 +424,7 @@ scoreFilterLimits 0:1000
         shortLabel U87 1
         longLabel U87 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=U87 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3432 dateSubmitted=2011-01-20
 
         track wgEncodeHaibGenotypeHrceRegionsRep2
@@ -482,8 +432,7 @@ scoreFilterLimits 0:1000
         shortLabel HRCEpiC 2
         longLabel HRCEpiC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HRCE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeHrceRegionsRep1
@@ -491,8 +440,7 @@ scoreFilterLimits 0:1000
         shortLabel HRCEpiC 1
         longLabel HRCEpiC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HRCE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeHreRegionsRep1
@@ -500,8 +448,7 @@ scoreFilterLimits 0:1000
         shortLabel HRE 1
         longLabel HRE Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HRE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeHreRegionsRep2
@@ -509,8 +456,7 @@ scoreFilterLimits 0:1000
         shortLabel HRE 2
         longLabel HRE Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HRE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeHrpeRegionsRep2
@@ -518,8 +464,7 @@ scoreFilterLimits 0:1000
         shortLabel HRPEpiC 2
         longLabel HRPEpiC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=HRPE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeHrpeRegionsRep1
@@ -527,8 +472,7 @@ scoreFilterLimits 0:1000
         shortLabel HRPEpiC 1
         longLabel HRPEpiC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=HRPE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeImr90RegionsRep2
@@ -536,8 +480,7 @@ scoreFilterLimits 0:1000
         shortLabel IMR90 2
         longLabel IMR90 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=IMR90 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeImr90RegionsRep1
@@ -545,8 +488,7 @@ scoreFilterLimits 0:1000
         shortLabel IMR90 1
         longLabel IMR90 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=IMR90 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeJurkatRegionsRep2
@@ -554,8 +496,7 @@ scoreFilterLimits 0:1000
         shortLabel Jurkat 2
         longLabel Jurkat Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=Jurkat treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeLncapRegionsRep1
@@ -563,8 +504,7 @@ scoreFilterLimits 0:1000
         shortLabel LNCaP 1
         longLabel LNCaP Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=LNCaP treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         color 0,119,158
         # subId=3303 dateSubmitted=2011-01-18
 
@@ -573,8 +513,7 @@ scoreFilterLimits 0:1000
         shortLabel Jurkat 1
         longLabel Jurkat Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=Jurkat treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeMcf10aesRegionsRep2
@@ -582,8 +521,7 @@ scoreFilterLimits 0:1000
         shortLabel MCF10A-Er-Src 2
         longLabel MCF10A-Er-Src Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=MCF10AES treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeMcf10aesRegionsRep1
@@ -591,8 +529,7 @@ scoreFilterLimits 0:1000
         shortLabel MCF10A-Er-Src 1
         longLabel MCF10A-Er-Src Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=MCF10AES treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeMcf10aesRegionsRep3
@@ -600,8 +537,7 @@ scoreFilterLimits 0:1000
         shortLabel MCF10A-Er-Src 3
         longLabel MCF10A-Er-Src Copy Number Variants Rep 3 from ENCODE/HAIB
         subGroups  cellType=MCF10AES treatment=None rep=rep3
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeMcf7RegionsRep1
@@ -609,8 +545,7 @@ scoreFilterLimits 0:1000
         shortLabel MCF-7 1
         longLabel MCF-7 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=MCF7 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeMcf7RegionsRep2
@@ -618,8 +553,7 @@ scoreFilterLimits 0:1000
         shortLabel MCF-7 2
         longLabel MCF-7 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=MCF7 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNb4RegionsRep2
@@ -627,8 +561,7 @@ scoreFilterLimits 0:1000
         shortLabel NB4 2
         longLabel NB4 Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=NB4 treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNb4RegionsRep1
@@ -636,8 +569,7 @@ scoreFilterLimits 0:1000
         shortLabel NB4 1
         longLabel NB4 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=NB4 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNhaRegionsRep2
@@ -645,8 +577,7 @@ scoreFilterLimits 0:1000
         shortLabel NH-A 2
         longLabel NH-A Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=NHA treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNhaRegionsRep1
@@ -654,8 +585,7 @@ scoreFilterLimits 0:1000
         shortLabel NH-A 1
         longLabel NH-A Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=NHA treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNhbeRegionsRep1
@@ -663,8 +593,7 @@ scoreFilterLimits 0:1000
         shortLabel NHBE 1
         longLabel NHBE Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=NHBE treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNhbeRegionsRep2
@@ -672,8 +601,7 @@ scoreFilterLimits 0:1000
         shortLabel NHBE 2
         longLabel NHBE Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=NHBE treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNhdfneoRegionsRep1
@@ -681,8 +609,7 @@ scoreFilterLimits 0:1000
         shortLabel NHDF-neo 1
         longLabel NHDF-neo Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=NHDF-neo treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeNt2d1RegionsRep1
@@ -690,8 +617,7 @@ scoreFilterLimits 0:1000
         shortLabel NT2-D1 1
         longLabel NT2-D1 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=NT2D1 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypePanc1RegionsRep1
@@ -699,8 +625,7 @@ scoreFilterLimits 0:1000
         shortLabel PANC-1 1
         longLabel PANC-1 Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=PANC1 treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypePrecRegionsRep1
@@ -708,8 +633,7 @@ scoreFilterLimits 0:1000
         shortLabel PrEC 1
         longLabel PrEC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=PrEC treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeRptecRegionsRep1
@@ -717,8 +641,7 @@ scoreFilterLimits 0:1000
         shortLabel RPTEC 1
         longLabel RPTEC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=RPTEC treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeRptecRegionsRep2
@@ -726,8 +649,7 @@ scoreFilterLimits 0:1000
         shortLabel RPTEC 2
         longLabel RPTEC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=RPTEC treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeSaecRegionsRep2
@@ -735,8 +657,7 @@ scoreFilterLimits 0:1000
         shortLabel SAEC 2
         longLabel SAEC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=SAEC treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeSaecRegionsRep1
@@ -744,8 +665,7 @@ scoreFilterLimits 0:1000
         shortLabel SAEC 1
         longLabel SAEC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=SAEC treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeSkmcRegionsRep2
@@ -753,8 +673,7 @@ scoreFilterLimits 0:1000
         shortLabel SKMC 2
         longLabel SKMC Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=SKMC treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeSkmcRegionsRep1
@@ -762,8 +681,7 @@ scoreFilterLimits 0:1000
         shortLabel SKMC 1
         longLabel SKMC Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=SKMC treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeSknshraRegionsRep1
@@ -771,8 +689,7 @@ scoreFilterLimits 0:1000
         shortLabel SK-N-SH_RA 1
         longLabel SK-N-SH_RA Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=SKNSHRA treatment=None rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeSknshraRegionsRep2
@@ -780,8 +697,7 @@ scoreFilterLimits 0:1000
         shortLabel SK-N-SH_RA 2
         longLabel SK-N-SH_RA Copy Number Variants Rep 2 from ENCODE/HAIB
         subGroups  cellType=SKNSHRA treatment=None rep=rep2
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeMcf10aesTamRegionsRep1
@@ -789,8 +705,7 @@ scoreFilterLimits 0:1000
         shortLabel MCF10A-Er-Src 1
         longLabel MCF10A-Er-Src Copy Number Variants Rep 1 from ENCODE/HAIB
         subGroups  cellType=MCF10AES treatment=TAM rep=rep1
-        type bedLogR
-        origAssembly hg19
+        type bed 9
         # subId=3303 dateSubmitted=2011-01-18
 
 
