@@ -42,7 +42,7 @@ RENDERA = ./hgRenderTracks
 
 # when it is time to deliver hgRenderTracks, remove the rm and echo below
 compile: compileMain
-	@rm -f ${RENDERA} ${RENDERO}
+	@rm -f ${RENDERA}
 	@echo "run 'make hgRenderTracks' to obtain that binary"
 
 compileMain: $O

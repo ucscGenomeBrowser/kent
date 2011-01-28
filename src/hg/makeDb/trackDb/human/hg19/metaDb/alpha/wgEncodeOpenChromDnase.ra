@@ -3,7 +3,7 @@ objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -23,7 +23,7 @@ objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -43,7 +43,7 @@ objType table
 cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -61,7 +61,7 @@ objType table
 cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -79,7 +79,7 @@ objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -97,7 +97,7 @@ objType file
 cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -115,7 +115,7 @@ objType table
 cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -514,7 +514,7 @@ objType file
 cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -535,7 +535,7 @@ objType file
 cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -556,7 +556,7 @@ objType file
 cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -577,7 +577,7 @@ objType table
 cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -596,7 +596,7 @@ objType table
 cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -615,7 +615,7 @@ objType table
 cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
@@ -881,7 +881,7 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
@@ -901,7 +901,7 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
@@ -921,7 +921,7 @@ objType table
 cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
@@ -939,7 +939,7 @@ objType table
 cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
@@ -957,7 +957,7 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
@@ -975,7 +975,7 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
@@ -993,7 +993,7 @@ objType table
 cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
@@ -1223,7 +1223,7 @@ objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
 controlId GM12878/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
@@ -1241,7 +1241,7 @@ objType file
 cell GM12878
 composite wgEncodeOpenChromDnase
 controlId GM12878/Input
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
@@ -2876,7 +2876,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHepatocytesRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-labVersion input was generic_female (should have been male)
+labVersion aligned to female and input was generic_female (should have been male)
 project wgEncode
 replicate 1
 subId 3063
@@ -2894,7 +2894,7 @@ dateUnrestricted 2011-09-06
 fileName wgEncodeOpenChromDnaseHepatocytesRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-labVersion input was generic_female (should have been male)
+labVersion aligned to female and input was generic_female (should have been male)
 project wgEncode
 replicate 2
 subId 3063
@@ -3109,7 +3109,7 @@ objType file
 cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -3130,7 +3130,7 @@ objType file
 cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -3151,7 +3151,7 @@ objType table
 cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -3170,7 +3170,7 @@ objType table
 cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -3189,7 +3189,7 @@ objType table
 cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
@@ -3604,7 +3604,7 @@ objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -3624,7 +3624,7 @@ objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -3644,7 +3644,7 @@ objType table
 cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -3662,7 +3662,7 @@ objType table
 cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -3680,7 +3680,7 @@ objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -3698,7 +3698,7 @@ objType file
 cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -3716,7 +3716,7 @@ objType table
 cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
@@ -4922,7 +4922,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeOpenChromDnaseMedulloRawDataRep1.fastq.gz
 grant Crawford
 lab Duke
-labVersion input was generic_female (should have been male)
+labVersion aligned to female and input was generic_female (should have been male)
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -4941,7 +4941,7 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeOpenChromDnaseMedulloRawDataRep2.fastq.gz
 grant Crawford
 lab Duke
-labVersion input was generic_female (should have been male)
+labVersion aligned to female and input was generic_female (should have been male)
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -5529,7 +5529,7 @@ objType file
 cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -5551,7 +5551,7 @@ objType file
 cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -5573,7 +5573,7 @@ objType file
 cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -5595,7 +5595,7 @@ objType table
 cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -5615,7 +5615,7 @@ objType table
 cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -5635,7 +5635,7 @@ objType table
 cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -6505,4 +6505,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1592549349
+# MAGIC: -1775695773
