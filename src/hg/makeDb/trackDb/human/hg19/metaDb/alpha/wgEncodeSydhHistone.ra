@@ -1390,7 +1390,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
 project wgEncode
 replicate 1
@@ -1412,7 +1412,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
 project wgEncode
 replicate 2
@@ -1434,7 +1434,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1456,7 +1456,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -1478,7 +1478,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -1500,7 +1500,7 @@ dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1639,4 +1639,4 @@ tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1376103016
+# MAGIC: -1317384122
