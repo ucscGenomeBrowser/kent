@@ -1088,6 +1088,64 @@ for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
 return count;
 }
 
+int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean testOnly)
+// Adds mdb Objs with minimal error checking
+{
+char query[8192];
+struct mdbObj *mdbObj;
+struct mdbVar *mdbVar;
+int count = 0;
+
+if (tableName == NULL)
+    tableName = MDB_DEFAULT_NAME;
+
+if (!sqlTableExists(conn,tableName))
+    errAbort("mdbObjsSetToDb attempting to update non-existent table named '%s'.\n",tableName);
+
+for(mdbObj = mdbObjs;mdbObj != NULL; mdbObj = mdbObj->next)
+    {
+    if (mdbObj->deleteThis)
+        continue;
+
+    for(mdbVar = mdbObj->vars;mdbVar != NULL; mdbVar = mdbVar->next)
+        {
+        stripEnclosingDoubleQuotes(mdbVar->val); // Ensures values are stripped of enclosing quotes
+
+        // Finally ready to insert new vars
+        safef(query, sizeof(query),
+            "insert into %s values ( '%s','%s','%s','%s')",
+                tableName,mdbObj->obj,mdbVar->var,mdbVarTypeEnumToString(mdbVar->varType),
+                sqlEscapeString(mdbVar->val)); // FIXME: binary val?  // FIXME Strip quotes
+        verbose(2, "Requesting insert of one row:\n\t%s;\n",query);
+        if (!testOnly)
+            {
+            // Use the sqlGetResultExt() instead of the normal sqlUpdate() in order to getany error messages
+            unsigned int errorNo = 0;
+            char *errorMsg = NULL;
+            struct sqlResult *sr = sqlGetResultExt(conn, query, &errorNo, &errorMsg);
+            if (errorNo != 0)
+                verbose(1, "INSERT failed: %s\n",errorMsg);
+            else
+                count++;
+            if (sr) // Should will be null, but just for good measure
+                sqlFreeResult(&sr);
+            }
+        else
+            {
+            struct mdbObj *objExists = mdbObjQueryByObj(conn,tableName,mdbObj->obj,mdbVar->var);
+            if(objExists)
+                {
+                verbose(1, "INSERT will fail for obj:%s and var:%s\n",mdbObj->obj,mdbVar->var);
+                mdbObjsFree(&objExists);
+                }
+            else
+                count++; // Of course this does not find duplicates within the mdbObjs list.
+            }
+        }
+    }
+return count;
+}
+
 // ------------------ Querys -------------------
 struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj *mdbObj)
 // Query the metadata table by obj and optional vars and vals in metaObj struct.  If mdbObj is NULL query all.
@@ -1665,18 +1723,26 @@ if (mdbObjs == NULL || mdbObjs->vars == NULL)
 struct mdbObj *mdbObj = mdbObjs;
 struct mdbObj *commonVars = mdbObjClone(mdbObj); // Clone the first obj then prune it
 commonVars->next = NULL;
-struct mdbVar *mdbVar = mdbObj->vars;            // Will walk through the first obj's vars
 mdbObj=mdbObj->next;                             // No need to include first obj in search
 if (mdbObj != NULL)
     {
+    int count = 1;
+    // NOTE: This should not loop through all, as the list could be huge.  Just compare the first 10 for now
     struct dyString *dyPruneVars = dyStringNew(512);
-    for(; mdbVar != NULL; mdbVar = mdbVar->next )
+    for(;mdbObj != NULL && count < 10;mdbObj=mdbObj->next, count++)
         {
-        if (mdbObjsContainAtleastOne(mdbObj, mdbVar->var) == FALSE)
-            dyStringPrintf(dyPruneVars,"%s ",mdbVar->var);  // var not found so add to prune list
+        struct mdbVar *mdbVar = commonVars->vars;            // Will walk through the first obj's vars
+        for(; mdbVar != NULL; mdbVar = mdbVar->next )
+            {
+            if (mdbObjsContainAtleastOne(mdbObj, mdbVar->var) == FALSE)
+                dyStringPrintf(dyPruneVars,"%s ",mdbVar->var);  // var not found so add to prune list
+            }
+        if (dyStringLen(dyPruneVars) > 0)
+            {
+            mdbObjRemoveVars(commonVars,dyStringContents(dyPruneVars));
+            dyStringClear(dyPruneVars);
+            }
         }
-    if (dyStringLen(dyPruneVars) > 0)
-        mdbObjRemoveVars(commonVars,dyStringContents(dyPruneVars));
     dyStringFree(&dyPruneVars);
     }
 return commonVars;
@@ -2514,12 +2580,8 @@ while ((hEl = hashNext(&hc)) != NULL)
     if (searchTracks)
         {
         setting = hashFindVal(typeHash,"searchable");
-#ifdef CV_SEARCH_SUPPORTS_FREETEXT
         if (setting == NULL
         || (differentWord(setting,"select") && differentWord(setting,"freeText")))
-#else///ifndef CV_SEARCH_SUPPORTS_FREETEXT
-        if (setting == NULL || differentWord(setting,"select")) // TODO: Currently only 'select's are supported
-#endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
            continue;
         }
     if (cvDefined)
@@ -2540,7 +2602,6 @@ if (whitePairs != NULL)
 return whitePairs;
 }
 
-#ifdef CV_SEARCH_SUPPORTS_FREETEXT
 enum mdbCvSearchable mdbCvSearchMethod(char *term)
 // returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
 {
@@ -2560,7 +2621,6 @@ if (termHash != NULL)
     }
 return cvsNotSearchable;
 }
-#endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
 
 const char *cvLabel(char *term)
 // returns cv label if term found or else just term
