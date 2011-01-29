@@ -3754,7 +3754,8 @@ slSort(tdbRefList, trackDbRefCmp);
 return cartPriorities;
 }
 
-static void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
+void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
+// Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
 {
 switch(cType)
     {
@@ -4748,10 +4749,10 @@ boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 if(filterBySet != NULL)
     {
-    if(!tdbIsComposite(tdb) && !tdbIsCompositeChild(tdb))
+    if(!tdbIsComposite(tdb))
         jsIncludeFile("hui.js",NULL);
 
-    filterBySetCfgUi(tdb,filterBySet);
+    filterBySetCfgUi(tdb,filterBySet);   // Note filterBy boxes don't need to be double "boxed"
     filterBySetFree(&filterBySet);
     return; // Cannot have both 'filterBy' score and 'scoreFilter'
     }

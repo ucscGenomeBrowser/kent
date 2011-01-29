@@ -253,7 +253,7 @@ printf("</TABLE>\n");
 
 static void snp125RemoveColorVars(struct cart *cart, char *vars[], boolean varsAreOld,
 				  int varCount, char *track, char *attribute)
-/* Remove each cart variable in vars[], as well as the new cart vars that begin with 
+/* Remove each cart variable in vars[], as well as the new cart vars that begin with
  * the track name if varsAreOld. */
 {
 int i;
@@ -2455,11 +2455,7 @@ else if (tdb->type != NULL)
             &&  !sameString(track, "jaxQTL3") && !sameString(track, "wgRna")
             &&  !startsWith("encodeGencodeIntron", track))
                 {
-                if (trackDbSetting(tdb, "scoreFilterMax"))
-                    scoreCfgUi(database, cart,tdb,tdb->track,NULL,
-                        sqlUnsigned(trackDbSetting(tdb, "scoreFilterMax")),FALSE);
-                else
-                    scoreCfgUi(database, cart,tdb,tdb->track,NULL,1000,FALSE);
+                cfgByCfgType(cfgBedScore,database, cart, tdb,tdb->track, NULL, trackDbSettingClosestToHomeOn(tdb, "boxedCfg"));
                 }
             }
         else if (sameWord(words[0], "bed5FloatScore") || sameWord(words[0], "bed5FloatScoreWithFdr"))
