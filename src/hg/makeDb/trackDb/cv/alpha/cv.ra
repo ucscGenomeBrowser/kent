@@ -9265,7 +9265,7 @@ label Rank of replicate
 description Experiments with multiple replicates may declare a preferred replicate for visualization.
 searchable no
 cvDefined no
-validate regex: ^[1-9]*$
+validate list: 1st,2nd,3rd
 priority 460
 # Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
 
