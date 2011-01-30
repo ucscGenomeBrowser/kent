@@ -10,6 +10,11 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = refreshNamedSessionCustomTracks.o
 
+ifeq (${SYS},Darwin)
+# refreshNamedSessionCustomTracks uses sigtimedwait, which is not available on OS/X, despite being POSIX
+donothing:
+	@echo "Warning: refreshNamedSessionCustomTracks does not compile on OS/S" >&2
+endif
 refreshNamedSessionCustomTracks: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/refreshNamedSessionCustomTracks $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/refreshNamedSessionCustomTracks${EXE}
