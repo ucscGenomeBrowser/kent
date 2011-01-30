@@ -1,10 +1,10 @@
 include ../../../inc/common.mk
 
-SCRIPTS = compareRandomSample.py \
+scripts = compareRandomSample.py \
 	compareModifiedFileSizes.csh
 
-all:	${SCRIPTS}
-	cp ${SCRIPTS} ${DESTDIR}${BINDIR}
+all:	${scripts}
+	cp ${scripts} ${DESTDIR}${BINDIR}
 
 clean:
 
