@@ -10,6 +10,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 #include <sys/wait.h>
+#include <signal.h>
 #include "errCatch.h"
 
 #define savedSessionTable "namedSessionDb"
