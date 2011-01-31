@@ -182,6 +182,9 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *varType,char *val);
 struct mdbByVar *mdbByVarCreate(char *var, char *varType,char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
 
+boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *varType,char *val,boolean notEqual);
+/* Adds a another var to a list of mdbByVar pairs to be used in metadata queries. */
+
 struct mdbObj *mdbObjsLoadFromHashes(struct hash *objsHash);
 // Load all mdbObjs from a file containing metadata formatted lines
 
@@ -209,6 +212,8 @@ char*mdbTableName(struct sqlConnection *conn,boolean mySandBox);
 int mdbObjsSetToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean replace,boolean testOnly);
 // Adds or updates metadata obj/var pairs into the named table.  Returns total rows affected
 
+int mdbObjsLoadToDb(struct sqlConnection *conn,char *tableName,struct mdbObj *mdbObjs,boolean testOnly);
+// Adds mdb Objs with minimal error checking
 
 // ------------------ Querys -------------------
 struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj *mdbObj);
@@ -358,6 +363,9 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 // (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
 // Return is case insensitive sorted on name (label or else val).
 
+struct hash *mdbCvTermHash(char *term);
+// returns a hash of hashes of a term which should be defined in cv.ra
+
 struct hash *mdbCvTermTypeHash();
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,descrition,searchable,cvDefined,hidden
@@ -365,8 +373,6 @@ struct hash *mdbCvTermTypeHash();
 struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
 
-#define CV_SEARCH_SUPPORTS_FREETEXT
-#ifdef CV_SEARCH_SUPPORTS_FREETEXT
 enum mdbCvSearchable
 // metadata Variavble are only certain declared types
     {
@@ -380,10 +386,13 @@ enum mdbCvSearchable
 
 enum mdbCvSearchable mdbCvSearchMethod(char *term);
 // returns whether the term is searchable // TODO: replace with mdbCvWhiteList() returning struct
-#endif//ndef CV_SEARCH_SUPPORTS_FREETEXT
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
+
+int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
+// Validates vars and vals against cv.ra.  Returns count of errors found.
+// Full considers vars not defined in cv as invalids
 
 #endif /* MDB_H */
 

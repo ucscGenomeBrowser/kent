@@ -1,0 +1,129 @@
+
+<H2>Description</H2>
+This track is produced as part of the ENCODE Project. This track shows short tag
+sequencing of cDNA obtained from biological replicate samples (different culture
+plates) of the ENCODE cell lines. The sequences were aligned to the human genome
+(hg18) and UCSC known-gene splice junctions using different  sequence alignment
+programs such ELAND (Illumina) or Bowtie (Langmead et al., 2009). RNA-seq is a
+method for mapping and quantifying the transcriptome of any organism that has a
+genomic DNA sequence assembly. RNA-seq is performed by reverse-transcribing an
+RNA sample into cDNA, followed by high throughput DNA sequencing, which was done
+here on an Illumina Genome Analyzer (GA2) (Mortazavi et al., 2008). The
+transcriptome measurements shown on these tracks were performed on polyA selected
+RNA from total cellular RNA. Data have been produced in two formats: single reads,
+each of which comes from one end of a randomly primed cDNA molecule; and
+paired-end reads, which are obtained as pairs from both ends cDNAs resulting from
+random priming. The resulting sequence reads are then informatically mapped onto
+the genome sequence (Alignments). Those that don't map to the genome are mapped
+to known RNA splice junctions (Splice Sites). These mapped reads are then counted
+to determine their frequency of occurrence at known gene models. Sequence reads
+that cluster at genome locations that lack an existing transcript model are also
+identified informatically and they are quantified. RNA-seq is especially suited
+for giving information about RNA splicing patterns and for determining
+unequivocally the presence or absence of lower abundance class RNAs. As
+performed here, internal RNA standards are used to assist in quantification and
+to provide internal process controls. This RNA-seq protocol does not specify the
+coding strand. As a result, there will be ambiguity at loci where both strands
+are transcribed. The "randomly primed" reverse transcription is, apparently, not
+fully random. This is inferred from a sequence bias in the first residues of the
+read population, and this likely contributes to observed unevenness in sequence
+coverage across transcripts.</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+This track is a multi-view composite track that contains multiple data types 
+(<EM>views</EM>). For each view, there are multiple subtracks that display 
+individually on the browser.  
+Instructions for configuring multi-view
+tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+The following views are in this track: <DL>
+<DT><I>RPKM</I>
+<DD>RefSeq gene models are displayed shaded by their RPKM (Reads Per Kilobase of 
+exon per Million reads) value. RPKM is reported in the score of each element, and 
+each element 
+is shaded using a gray scale that becomes darker as RPKM increases. The RPKM 
+measure assists in visualizing the relative amount of a given transcript 
+across multiple samples.  
+<DT><I>Alignments</I>
+<DD>The Alignments view shows reads mapped to the genome. 
+Alignments are colored by cell type.
+</DL>
+
+<H2>Methods</H2>
+<P>
+Gene expression is measured in Reads Per Kilobase exon per Million reads 
+(RPKM; Mortazavi et al., 2008).  RNA-seq reads are aligned to RefSeq gene models. 
+RPKM is then calculated by dividing the total number of reads that align to the 
+gene model (RefSeq) by the size of the spliced transcript in kilobases.  This 
+number is then divided by the total number of reads in millions for the 
+experiment.  For example, if x reads align to a RefSeq gene whose spliced 
+transcript is y kb in size and there are z million reads in the experiment, 
+then RPKM = x/(y*z).  
+</P>
+<P>
+Cells were grown according to the approved <A HREF="../../ENCODE/protocols/cell" 
+TARGET=_BLANK>ENCODE cell culture protocols</A>. A total of 2 X 107 cells were 
+lysed in either 4mls of RLT buffer (Qiagen RNEasy kit), and processed on 2 
+RNEasy midi columns according to the manufacturer's protocol, with the inclusion 
+of the "on-column" DNAse digestion step to remove residual genomic DNA.  75 µg 
+of total RNA was selected twice with oligodT beads (Dynal) according to the 
+manufacturer's protocol to isolate mRNA from each of the preparations. 100 ng of 
+mRNA was then processed according to the protocol in Mortazavi <EM>et al.</EM> (2008), 
+and prepared for sequencing on the Genome Analyzer flow cell according to the 
+protocol for the ChIPSeq DNA genomic DNA kit (Illumina). 
+Following alignment of the sequence reads to the genome assembly as described 
+above, the sequence reads were further analyzed using the ERANGE 3.0 software 
+package, which quantifies the number of reads falling within the mapped boundaries 
+of known transcripts from the Gencode annotations. ERANGE assigns both genomically 
+unique reads and reads that occur in 2-10 genomic locations for quantification. 
+<H2>Verification</H2>
+
+<UL>
+<LI>Known exon maps as displayed on the genome browser are confirmed by the 
+alignment of sequence reads. </LI>
+<LI>Known spliced exons are detected at the expected frequency for transcripts 
+of given abundance.   </LI>
+<LI> RT-QCPR confirms expression measurements with r > 0.8
+</LI>
+</UL>
+
+<H2>Credits</H2>
+
+<P>Myers Group: Florencia Pauli, Tim Reddy 
+<P>Wold Group: Ali Mortazavi, Brian Williams, Diane Trout, Brandon King, Ken McCue, 
+Lorian Schaeffer.
+<P>Illumina gene expression group: Gary Schroth, Shujun Luo, Eric Vermaas.
+<P>Contacts: 
+  <A HREF="mailto:&#116;re&#100;&#100;&#121;&#64;&#104;&#117;&#100;&#115;&#111;&#110;&#97;lp&#104;&#97;.
+o&#114;&#103;">Tim Reddy</A>
+  <!-- above address is treddy at hudsonalpha.org -->
+  and 
+  <A HREF="mailto:&#102;&#112;au&#108;&#105;&#64;&#104;&#117;&#100;so&#110;&#97;&#108;&#112;h&#97;.
+&#111;&#114;&#103;">Flo Pauli</A>
+  <!-- above address is fpauli at hudsonalpha.org -->
+  (experimental). 
+
+
+</P>
+
+<H2>References</H2>
+
+<P>Mortazavi A, Williams BA, McCue K, Schaeffer L, and Wold BJ. 
+<A TARGET=_BLANK HREF="http://www.ncbi.nlm.nih.gov/pubmed/18516045">Mapping and 
+quantifying mammalian transcriptomes by RNA-Seq</A>
+<EM>Nature Methods</EM>. 2008 Jul; 5(7):621-628.</P> 
+
+<P>Langmead B, Trapnell C, Pop M, Salzberg SL.
+<A TARGET=_BLANK HREF="http://genomebiology.com/2009/10/3/R25"><U>Ultrafast and 
+memory-efficient alignment of short DNA sequences to the human genome</U></A>
+<EM>Genome Biology</EM>. 2009 Mar; 10:R25.</P>
+
+<H2> Data Release Policy </H2>
+
+<P>Data users may freely use ENCODE data, but may not, without prior
+consent, submit publications that use an unpublished ENCODE dataset until
+nine months following the release of the dataset.  This date is listed in
+the <EM>Restricted Until</EM> column, above.  The full data release policy
+for ENCODE is available
+<A HREF="../ENCODE/terms.html" TARGET=_BLANK>here</A>.</P>
+

@@ -14,6 +14,15 @@ enum refSeqVerInfoStatus
     refSeqVerInfoError
 };
 
+static int refSeqVerInfoCmp(const void *va, const void *vb)
+/* Compare by accession. */
+{
+const struct refSeqVerInfo *a = *((struct refSeqVerInfo **)va);
+const struct refSeqVerInfo *b = *((struct refSeqVerInfo **)vb);
+return strcmp(a->acc, b->acc);
+}
+
+
 static struct refSeqVerInfo *refSeqVerInfoNewDb(char **row)
 /* construct a refSeqVerInfo object from a database query */
 {
@@ -24,10 +33,11 @@ rsvi->ver = sqlSigned(row[1]);
 return rsvi;
 }
 
-struct hash *refSeqVerInfoFromDb(struct sqlConnection *conn, boolean getNM, boolean getNR)
+struct hash *refSeqVerInfoFromDb(struct sqlConnection *conn, boolean getNM, boolean getNR, struct refSeqVerInfo **refSeqVerInfoList)
 /* load refSeqVerInfo table for all native refseqs in the database */
 {
 struct hash *refSeqVerInfoTbl = hashNew(18);
+*refSeqVerInfoList = NULL;
 char *accRestrict = "";
 if (getNM && !getNR)
     accRestrict = " AND (acc LIKE \"NM%\")";
@@ -42,9 +52,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     struct refSeqVerInfo *rsvi = refSeqVerInfoNewDb(row);
     hashAdd(refSeqVerInfoTbl, rsvi->acc, rsvi);
+    slAddHead(refSeqVerInfoList, rsvi);
     }
 
 sqlFreeResult(&sr);
+slSort(refSeqVerInfoList, refSeqVerInfoCmp);
 return refSeqVerInfoTbl;
 }
 
@@ -116,7 +128,7 @@ rsvi->ver = dbVer;
 return refSeqVerInfoOk;
 }
 
-static enum refSeqVerInfoStatus fromFileAdd(struct hash *refSeqVerInfoTbl, struct refSeqVerInfo *rsvi, struct sqlConnection *conn)
+static enum refSeqVerInfoStatus fromFileAdd(struct hash *refSeqVerInfoTbl, struct refSeqVerInfo *rsvi, struct sqlConnection *conn, struct refSeqVerInfo **refSeqVerInfoList)
 /* add a refseq parsed from a file to the table, validating against database
  * and setting the actually version number. */
 {
@@ -127,27 +139,29 @@ stat = versionGetCheck(rsvi, conn);
 if (stat != refSeqVerInfoOk)
     return stat;
 hashAdd(refSeqVerInfoTbl, rsvi->acc, rsvi);
+slAddHead(refSeqVerInfoList, rsvi);
 return refSeqVerInfoOk;
 }
 
-struct hash *refSeqVerInfoFromFile(struct sqlConnection *conn, char *accList)
+struct hash *refSeqVerInfoFromFile(struct sqlConnection *conn, char *accList, struct refSeqVerInfo **refSeqVerInfoList)
 /* load refSeqVerInfo table for all native refseqs specified in a file, then validate it against
  * the database. */
 {
 struct hash *refSeqVerInfoTbl = hashNew(18);
+*refSeqVerInfoList = NULL;
 struct lineFile *lf = lineFileOpen(accList, TRUE); 
 int errCnt = 0;
 char *line;
 while (lineFileNextReal(lf, &line))
     {
     char *acc = trimSpaces(line);
-    if (fromFileAdd(refSeqVerInfoTbl, refSeqVerInfoNewFile(acc), conn) == refSeqVerInfoError)
+    if (fromFileAdd(refSeqVerInfoTbl, refSeqVerInfoNewFile(acc), conn, refSeqVerInfoList) == refSeqVerInfoError)
         errCnt++;
     }
 lineFileClose(&lf);
 if (errCnt > 0)
     errAbort("%d errors detected loading RefSeq accessioned from %s", errCnt, accList);
+slSort(refSeqVerInfoList, refSeqVerInfoCmp);
 return refSeqVerInfoTbl;
 }
-
 

@@ -168,17 +168,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireNhbePk
-        release alpha
-        parent wgEncodeOpenChromFaireViewPeaks off
-        shortLabel NHBE FAIRE Pk
-        longLabel NHBE - Open Chromatin by FAIRE-seq Peaks from ENCODE/UNC
-        subGroups view=Peaks cellType=NHBE treatment=AANONE
-        type narrowPeak
-        origAssembly hg18
-        # subId=1574 dateSubmitted=2010-06-17
-
-
         track wgEncodeOpenChromFaireHelas3Ifna4hPk
         release alpha
         parent wgEncodeOpenChromFaireViewPeaks off
@@ -431,17 +420,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
 
-        track wgEncodeOpenChromFaireNhbeSig
-        release alpha
-        parent wgEncodeOpenChromFaireViewSignal off
-        shortLabel NHBE FAIRE DS
-        longLabel NHBE - Open Chromatin by FAIRE-seq Density Signal from ENCODE/UNC
-        subGroups view=SIG cellType=NHBE treatment=AANONE
-        type bigWig 0.000000 0.523100
-        origAssembly hg18
-        # subId=1574 dateSubmitted=2010-06-17
-
-
         track wgEncodeOpenChromFaireHelas3Ifna4hSig
         release alpha
         parent wgEncodeOpenChromFaireViewSignal off
@@ -693,17 +671,6 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type bigWig 0.000000 984.000000
         origAssembly hg18
         # subId=1546 dateSubmitted=2010-06-17
-
-
-        track wgEncodeOpenChromFaireNhbeBaseOverlapSignal
-        release alpha
-        parent wgEncodeOpenChromFaireViewSigBo off
-        shortLabel NHBE FAIRE OS
-        longLabel NHBE - Open Chromatin by FAIRE-seq Overlap Signal from ENCODE/UNC
-        subGroups view=SIGBO cellType=NHBE treatment=AANONE
-        type bigWig 0.000000 1465.000000
-        origAssembly hg18
-        # subId=1574 dateSubmitted=2010-06-17
 
         track wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal
         release alpha

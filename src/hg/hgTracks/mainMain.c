@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 uglyTime(NULL);
-browserName = (hIsPrivateHost() ? "Test Browser" : "Genome Browser");
+browserName = hBrowserName();
 organization = "UCSC";
 
 /* change title if this is for GSID */

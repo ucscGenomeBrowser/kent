@@ -13027,7 +13027,9 @@ hgLoadBed hg19 darned allChroms.bed
     # once this has been QAed, will auto-update from genbank scripts
 
 #############################################################################
-# NEW SNP132 (DONE 1/5/11 angie)
+# NEW SNP132 (DONE 1/24/11 angie)
+# Previously loaded 1/5 -- reloaded 1/24 to get rid of a couple exceptions
+# that were derived from dbSNP bitfields
     # New table type snp132Ext, with same columns as snp125 plus exceptions,
     # allele freqs, and submitter handles, using new script doDbSnp.pl.
     mkdir -p /hive/data/outside/dbSNP/132/human
@@ -14060,6 +14062,12 @@ for table in `hgsql hg18 --skip-column-names -e "show tables like 'hapmapLd%'"` 
    hgLoadBed -sqlTable=${table}.sql -tab hg19 $table hg19.${table}.bed6p;
    wc -l hg1{8,9}.${table}.bed6p >> lifts.txt
 done
+## Also need hapmapPhaseIIISummary
+hgsql hg18 --skip-column-names -e "select * from hapmapPhaseIIISummary" | cut -f2- > hg18.hapmapPhaseIIISummary.bed5p
+liftOver -bedPlus=5 hg18.hapmapPhaseIIISummary.bed5p /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.hapmapPhaseIIISummary.{bed5p,unmapped}
+hgsqldump --no-data --compact hg18 hapmapPhaseIIISummary | sed '/^SET/d;s/ENGINE.*//' > hapmapPhaseIIISummary.sql
+hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.hapmapPhaseIIISummary.bed5p
+
 
 ############################################################################
 # INDEL-BASED CONSERVATION TRACK liftOver to hg19 (DONE - 2010-12-21 - Chin )
@@ -14213,76 +14221,52 @@ done
 
 
 #############################################################################
-# FILTER SNP132 (DONE 1/14/11 angie)
+# FILTER SNP132 (DONE 1/24/11 angie)
+    # Redmine: Track #1684 (SNPs 132 (dbSNP))
     # Make several tracks that are filtered subsets of snp132:
     # First, filter out the multiply-aligned and/or weight >1 SNPs [any other exceptions?]
     cd /hive/data/outside/dbSNP/132/human
     zcat snp132.bed.gz \
     | perl -we \
-      'open($unique, "| gzip -c > snp132Unique.bed.gz") || die; \
-       open($nonUnique, "| gzip -c > snp132NonUnique.bed.gz") || die; \
+      'open($nonUnique, "| gzip -c > snp132NonUnique.bed.gz") || die; \
+       open($common,    "| gzip -c > snp132Common.bed.gz") || die; \
+       open($patient,   "| gzip -c > snp132Patient.bed.gz") || die; \
+       open($misc,      "| gzip -c > snp132Misc.bed.gz") || die; \
        while (<>) { \
          @w = split("\t"); \
          if ($w[16] > 1 || $w[17] =~ /MultipleAlignments/) { \
            print $nonUnique $_; \
          } else { \
-           print $unique $_; \
+           my ($alleleFreqCount, $nStr, $freqStr) = ($w[20], $w[22], $w[23]); \
+           my @alNs = split(",", $nStr);      die unless scalar(@alNs) == $alleleFreqCount; \
+           my @freqs = split(",", $freqStr);  die unless scalar(@freqs) == $alleleFreqCount; \
+           my ($total2N, $maxAlleleFreq) = (0, 0); \
+           for (my $i = 0;  $i < $alleleFreqCount;  $i++) { \
+             $total2N += $alNs[$i]; \
+             $maxAlleleFreq = $freqs[$i] if ($freqs[$i] > $maxAlleleFreq); \
+           } \
+           if ($alleleFreqCount >= 2 && $total2N >= 4 && $maxAlleleFreq <= 0.99) { \
+             print $common $_; \
+           } elsif($w[24] =~ /clinically-assoc/)  { \
+             print $patient $_; \
+           } else { \
+             print $misc $_; \
+           } \
          } \
        } \
-       close($unique);  close($nonUnique);'
+       close($nonUnique);  close($common); \
+       close($patient);  close($misc);'
     zcat snp132NonUnique.bed.gz | wc -l
 #3644436
-    zcat snp132Unique.bed.gz | wc -l
-#29381685
-
-    # Next, filter out Common SNPs from the uniquely mapped set.
-    # SNP is common if alleleCount >= 2 && total2N >= 4 && maxAlleleFreq <= 99% and !MultAli
-    zcat snp132Unique.bed.gz \
-    | perl -we \
-      'open($common, "| gzip -c > snp132Common.bed.gz") || die; \
-       open($unCommon, "| gzip -c > snp132UnCommon.bed.gz") || die; \
-       while (<>) { \
-         @w = split("\t"); \
-         my ($alleleFreqCount, $nStr, $freqStr) = ($w[20], $w[22], $w[23]); \
-         my @alNs = split(",", $nStr);      die unless scalar(@alNs) == $alleleFreqCount; \
-         my @freqs = split(",", $freqStr);  die unless scalar(@freqs) == $alleleFreqCount; \
-         my ($total2N, $maxAlleleFreq) = (0, 0); \
-         for (my $i = 0;  $i < $alleleFreqCount;  $i++) { \
-           $total2N += $alNs[$i]; \
-           $maxAlleleFreq = $freqs[$i] if ($freqs[$i] > $maxAlleleFreq); \
-         } \
-         if ($alleleFreqCount >= 2 && $total2N >= 4 && $maxAlleleFreq <= 0.99) { \
-           print $common $_; \
-         } else { \
-           print $unCommon $_; \
-         } \
-       } \
-       close($common);  close($unCommon);'
     zcat snp132Common.bed.gz | wc -l
 #14009545
-    zcat snp132UnCommon.bed.gz | wc -l
-#15372140
-
-    # Then, filter out Patient SNPs (clinical bit but not common) from the unique non-common SNPs:
-    zcat snp132UnCommon.bed.gz \
-    | perl -we \
-      'open($patient, "| gzip -c > snp132Patient.bed.gz") || die; \
-       open($misc, "| gzip -c > snp132Misc.bed.gz") || die; \
-       while (<>) { \
-         if (/clinically-assoc/) { \
-           print $patient $_; \
-         } else { \
-           print $misc $_; \
-         } \
-       } \
-       close($patient);  close($misc);'
     zcat snp132Patient.bed.gz | wc -l
 #18084
     zcat snp132Misc.bed.gz | wc -l
 #15354056
 
     # Load tables
-    foreach subset (NonUnique Common Patient)
+    foreach subset (NonUnique Common Patient Misc)
       hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
         hg19 snp132$subset -sqlTable=snp132.sql snp132$subset.bed.gz
     end

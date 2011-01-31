@@ -79,12 +79,14 @@ ifeq (${USE_BAM},1)
     endif
 endif
 
+SYS = $(shell uname -s)
+
 ifeq (${HG_WARN},)
-  ifeq (darwin,$(findstring darwin,${OSTYPE}))
+  ifeq (${SYS},Darwin)
       HG_WARN = -Wall -Wno-unused-variable
       HG_WARN_UNINIT=
   else
-    ifeq (solaris,$(findstring solaris,${OSTYPE}))
+    ifeq (${SYS},SunOS)
       HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     else

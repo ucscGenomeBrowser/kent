@@ -31,7 +31,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions
         shortLabel K562 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in K562 cells)
+        longLabel K562 Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=K562 rep=rep2
         type bed 9
         color 46,0,184
@@ -41,7 +41,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HeLa-S3 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HeLa-S3 cells)
+        longLabel HeLa-S3 Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HeLaS3 rep=rep1
         type bed 9
         color 0,119,158
@@ -51,7 +51,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HepG2 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HepG2 cells)
+        longLabel HepG2 Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HepG2 rep=rep1
         type bed 9
         color 189,0,157
@@ -61,7 +61,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HepG2 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HepG2 cells)
+        longLabel HepG2 Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HepG2 rep=rep2
         type bed 9
         color 189,0,157
@@ -71,7 +71,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HeLa-S3 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HeLa-S3 cells)
+        longLabel HeLa-S3 Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HeLaS3 rep=rep2
         type bed 9
         color 0,119,158
@@ -81,7 +81,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H1-hESC 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H1-hESC cells)
+        longLabel H1-hESC Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H1hESC rep=rep1
         type bed 9
         color 0,107,27
@@ -91,7 +91,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H1-hESC 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in H1-hESC cells)
+        longLabel H1-hESC Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H1hESC rep=rep2
         type bed 9
         color 0,107,27
@@ -101,7 +101,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel GM12891 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12891 cells)
+        longLabel GM12891 Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=GM12891 rep=rep1
         type bed 9
         # subId=1247 dateSubmitted=2011-01-04
@@ -110,7 +110,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel GM12891 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12891 cells)
+        longLabel GM12891 Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=GM12891 rep=rep2
         type bed 9
         # subId=1247 dateSubmitted=2011-01-04
@@ -119,7 +119,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel GM12892 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12892 cells)
+        longLabel GM12892 Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=GM12892 rep=rep1
         type bed 9
         # subId=1247 dateSubmitted=2011-01-04
@@ -128,7 +128,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel GM12892 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12892 cells)
+        longLabel GM12892 Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=GM12892 rep=rep2
         type bed 9
         # subId=1247 dateSubmitted=2011-01-04
@@ -137,7 +137,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions
         shortLabel K562 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in K562 cells)
+        longLabel K562 Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=K562 rep=rep1
         type bed 9
         color 46,0,184
@@ -147,7 +147,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions
         shortLabel GM12878 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12878 cells)
+        longLabel GM12878 Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=GM12878 rep=rep1
         type bed 9
         color 153,38,0
@@ -157,7 +157,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions
         shortLabel GM12878 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12878 cells)
+        longLabel GM12878 Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=GM12878 rep=rep2
         type bed 9
         color 153,38,0
@@ -167,7 +167,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel BG02ES-EBD 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES-EBD cells)
+        longLabel BG02ES-EBD Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=BG02ESEBD rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -176,7 +176,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel BG02ES-EBD 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in BG02ES-EBD cells)
+        longLabel BG02ES-EBD Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=BG02ESEBD rep=rep2
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -185,7 +185,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HFL11W 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL11W cells)
+        longLabel HFL11W Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HFL11W rep=rep1
         type bed 9
         color 189,0,157
@@ -195,7 +195,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HFL24W 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HFL24W cells)
+        longLabel HFL24W Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HFL24W rep=rep1
         type bed 9
         color 189,0,157
@@ -205,7 +205,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H9ES-E 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-E cells)
+        longLabel H9ES-E Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H9ESE rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -214,7 +214,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H9ES 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES cells)
+        longLabel H9ES Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H9ES rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -223,7 +223,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HCT-116 2
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in HCT-116 cells)
+        longLabel HCT-116 Methyl-Seq Regions Rep 2 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HCT116 rep=rep2
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -232,7 +232,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HAL 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HAL cells)
+        longLabel HAL Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HAL rep=rep1
         type bed 9
         color 189,0,157
@@ -242,7 +242,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H9ES-AFP+ 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP+ cells)
+        longLabel H9ES-AFP+ Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H9ESAFPPlus rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -251,7 +251,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H9ES-CM 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-CM cells)
+        longLabel H9ES-CM Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H9ESCM rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -260,7 +260,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel HCT-116 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HCT-116 cells)
+        longLabel HCT-116 Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=HCT116 rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -269,7 +269,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel BG02ES 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES cells)
+        longLabel BG02ES Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=BG02ES rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2011-01-04
@@ -278,7 +278,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H9ES-EBD 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EBD cells)
+        longLabel H9ES-EBD Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H9ESEBD rep=rep1
         type bed 9
         # subId=1968 dateSubmitted=2011-01-04
@@ -287,7 +287,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H9ES-AFP- 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP- cells)
+        longLabel H9ES-AFP- Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H9ESAFPMinus rep=rep1
         type bed 9
         # subId=1968 dateSubmitted=2011-01-04
@@ -296,7 +296,7 @@ release alpha
         release alpha
         parent wgEncodeHaibMethylSeqViewRegions off
         shortLabel H9ES-EB 1
-        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EB cells)
+        longLabel H9ES-EB Methyl-Seq Regions Rep 1 from ENCODE/HudsonAlpha
         subGroups view=Regions cellType=H9ESEB rep=rep1
         type bed 9
         # subId=1968 dateSubmitted=2011-01-04
