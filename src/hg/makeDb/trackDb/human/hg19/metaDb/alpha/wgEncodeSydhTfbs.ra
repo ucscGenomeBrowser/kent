@@ -12284,10 +12284,10 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293InputUcdAln
 objType file
 antibody Input
-cell HEK293
+cell HEK293(b)
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293/None/Input/UCDavis
+controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
@@ -12304,10 +12304,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsHek293InputUcdRawData
 objType file
 antibody Input
-cell HEK293
+cell HEK293(b)
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293/None/Input/UCDavis
+controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
@@ -12324,10 +12324,10 @@ view RawData
 metaObject wgEncodeSydhTfbsHek293InputUcdSig
 objType table
 antibody Input
-cell HEK293
+cell HEK293(b)
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HEK293/None/Input/UCDavis
+controlId HEK293(b)/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-14
@@ -22639,10 +22639,10 @@ view Signal
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep1
 objType file
 antibody TCF4
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -22660,10 +22660,10 @@ view Alignments
 metaObject wgEncodeSydhTfbsHepg2Tcf4UcdAlnRep2
 objType file
 antibody TCF4
-cell HepG2
+cell HepG2b
 composite wgEncodeSydhTfbs
 control UCDavis
-controlId HepG2/None/Input/UCDavis
+controlId HepG2b/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
@@ -36060,4 +36060,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 287052952
+# MAGIC: 305604184

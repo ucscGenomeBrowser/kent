@@ -3880,9 +3880,9 @@ wgEncode 1
         track wgEncodeSydhTfbsHek293InputUcdSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HEK293 Input Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HEK293 cells)
-        subGroups view=Signal factor=zInputucd cellType=HEK293 control=UCD treatment=aNone
+        shortLabel HEK293b Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HEK293b cells)
+        subGroups view=Signal factor=zInputucd cellType=HEK293b control=UCD treatment=aNone
         type bigWig 1.000000 24948.000000
         # subId=3257 dateSubmitted=2011-01-14
 
