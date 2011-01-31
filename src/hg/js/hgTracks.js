@@ -1818,7 +1818,7 @@ function loadContextMenu(img)
                                 item = makeImgTag("toggle.png") + title;
                             else if(title == "zoomInMore")
                                 // avoid showing menu item that says "Show details for zoomInMore..." (redmine 2447)
-                                item = makeImgTag("toggle.png") + " Show details...";
+                                item = makeImgTag("book.png") + " Show details...";
                             else
                                 item = makeImgTag("book.png") + " Show details for " + title + "...";
                             o[item] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
