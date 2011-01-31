@@ -2679,7 +2679,13 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         {
         struct hash *termHash = hashFindVal(termTypeHash,mdbVar->var);
         if (termHash == NULL) // No cv definition for term so no validation can be done
+            {
+            if (sameString(mdbVar->var,"objType")
+            && (sameString(mdbVar->val,"table") || sameString(mdbVar->val,"file")))
+                continue;
+            verbose(2,"Variable '%s' not defined in cv.ra: %s -> %s = %s\n",mdbVar->var,mdbObj->obj,mdbVar->var,mdbVar->val);
             continue;
+            }
         char *validationRule = hashFindVal(termHash,"validate");
         if (validationRule == NULL)
             {
