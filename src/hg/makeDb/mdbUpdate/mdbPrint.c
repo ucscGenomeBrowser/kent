@@ -30,9 +30,10 @@ errAbort(
   "    -ra      Default. Print each obj with set of indented var val pairs on\n"
   "              separate lines and objects as a stanzas (-byVar prints pseudo-RA).\n"
   "    -line      Print each obj and all var=val pairs on a single line.\n"
-  "    -validate   Validate mdb objects against cv.ra.  (Incompatible with -byVars; supercedes -ra, -line.)\n"
-  "    -count       Just print count of objects, variables and values selected.\n"
-  "    -specialHelp  Prints help for some special case features.\n"
+  "    -count      Just print count of objects, variables and values selected.\n"
+  "    -validate    Validate mdb objects against cv.ra.  (Incompatible with -byVars; supercedes -ra, -line.)\n"
+  "    -validateFull like validate but considers vars not defined in cv as invalid.\n"
+  "    -specialHelp   Prints help for some special case features.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
   "    -vars={var=val...}  Request a combination of var=val pairs.\n\n"
@@ -74,6 +75,7 @@ static struct optionSpec optionSpecs[] = {
     {"var",      OPTION_STRING}, // variable
     {"val",      OPTION_STRING}, // value
     {"validate", OPTION_BOOLEAN},// Validate vars and vals against cv.ra terms
+    {"validateFull", OPTION_BOOLEAN},// Like validate but considers vars not defined in cv as invalid
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
     {"updDb",    OPTION_STRING},// DB to update
     {"updMdb",   OPTION_STRING},// MDB table to update
@@ -345,7 +347,7 @@ if(optionExists("line") && !optionExists("ra"))
     raStyle = FALSE;
 boolean justCounts = (optionExists("count") || optionExists("counts"));
 boolean byVar      = optionExists("byVar");
-boolean validate   = optionExists("validate");
+boolean validate   = (optionExists("validate") || optionExists("validateFull"));
 
 boolean all = optionExists("all");
 if(all)
@@ -447,8 +449,8 @@ else
                 }
             else if (validate) // Validate vars and vals against cv.ra
                 {
-                int invalids = mdbObjsValidate(queryResults);
-                printf("%d invalid of %d variable%s\n",invalids,varsCnt,(varsCnt==1?"":"s"));
+                int invalids = mdbObjsValidate(queryResults,optionExists("validateFull"));
+                printf("%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
                 }
             else
                 mdbObjPrint(queryResults,raStyle);

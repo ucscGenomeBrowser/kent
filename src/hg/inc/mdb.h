@@ -390,8 +390,9 @@ enum mdbCvSearchable mdbCvSearchMethod(char *term);
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
 
-int mdbObjsValidate(struct mdbObj *mdbObjs);
-// Validates vars and vals against cv.ra.  Returns count of errors found
+int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
+// Validates vars and vals against cv.ra.  Returns count of errors found.
+// Full considers vars not defined in cv as invalids
 
 #endif /* MDB_H */
 
