@@ -94,6 +94,7 @@ set ramFarm = memk
 set cpuFarm = swarm
 
 # Create initial dir
+set scriptDir = `pwd`
 mkdir -p $dir
 cd $dir
 
@@ -317,6 +318,7 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
     txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
 end
 
+
 #
 # testing suggestion: uncomment below
 # mkdir -p $scratchDir/ucscGenes
@@ -406,6 +408,7 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 cd ..
 
+<<<<<<< Updated upstream:src/hg/makeDb/doc/ucscGenes/hg19.ucscGenes13.csh
 # move this endif statement past business that has been successfully completed
 endif # BRACKET
 
@@ -415,6 +418,10 @@ endif # BRACKET
 # compareModifiedFileSizes.csh $scratchDir/ucscGenes \
 #       new.edges.wc.txt $oldGeneDir  old.edges.wc.txt
 #
+=======
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+>>>>>>> Stashed changes:src/hg/makeDb/doc/ucscGenes/hg19.ucscGenes13.csh
 
 
 # Clean up chains and nets since they are big
