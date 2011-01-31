@@ -30,9 +30,10 @@ errAbort(
   "    -ra      Default. Print each obj with set of indented var val pairs on\n"
   "              separate lines and objects as a stanzas (-byVar prints pseudo-RA).\n"
   "    -line      Print each obj and all var=val pairs on a single line.\n"
-  "    -validate   Validate mdb objects against cv.ra.  (Incompatible with -byVars; supercedes -ra, -line.)\n"
-  "    -count       Just print count of objects, variables and values selected.\n"
-  "    -specialHelp  Prints help for some special case features.\n"
+  "    -count      Just print count of objects, variables and values selected.\n"
+  "    -validate    Validate mdb objects against cv.ra.  (Incompatible with -byVars; supercedes -ra, -line.)\n"
+  "    -validateFull like validate but considers vars not defined in cv as invalid.\n"
+  "    -specialHelp   Prints help for some special case features.\n"
   "  Four alternate ways to select metadata:\n"
   "    -all       Will print entire table (this could be huge).\n"
   "    -vars={var=val...}  Request a combination of var=val pairs.\n\n"
@@ -40,6 +41,7 @@ errAbort(
   "             'var!=val' 'var!=v%%' 'var!=' 'var!=val1,val2' are all supported.\n"
   "    -obj={objName}  Request a single object.  Can be narrowed by var and val.\n"
   "    -var={varName}  Request a single variable.  Can be narrowed by val.\n"
+  "    -composite={}   Special commonly used var=val pair replaces -vars=\"composite=wgEn...\".\n"
   "There are two basic views of the data: by objects and by variables.  The default view "
   "is by object.  Each object will print out in an RA style stanza (by default) or as "
   "a single line of output containing all var=val pairs. In 'byVar' view, each RA style "
@@ -63,6 +65,7 @@ static struct optionSpec optionSpecs[] = {
     {"table",    OPTION_STRING}, // default "metaDb"
     {"ra",       OPTION_BOOLEAN},// ra format
     {"line",     OPTION_BOOLEAN},// linear format
+    {"composite",OPTION_STRING}, // Special case of a commn var (replaces vars="composite=wgEncodeBroadHistone")
     {"count",    OPTION_BOOLEAN},// returns only counts of objects, vars and vals
     {"counts",   OPTION_BOOLEAN},// sames as count
     {"all",      OPTION_BOOLEAN},// query entire table
@@ -72,6 +75,7 @@ static struct optionSpec optionSpecs[] = {
     {"var",      OPTION_STRING}, // variable
     {"val",      OPTION_STRING}, // value
     {"validate", OPTION_BOOLEAN},// Validate vars and vals against cv.ra terms
+    {"validateFull", OPTION_BOOLEAN},// Like validate but considers vars not defined in cv as invalid
     {"vars",     OPTION_STRING},// var1=val1 var2=val2...
     {"updDb",    OPTION_STRING},// DB to update
     {"updMdb",   OPTION_STRING},// MDB table to update
@@ -343,7 +347,7 @@ if(optionExists("line") && !optionExists("ra"))
     raStyle = FALSE;
 boolean justCounts = (optionExists("count") || optionExists("counts"));
 boolean byVar      = optionExists("byVar");
-boolean validate   = optionExists("validate");
+boolean validate   = (optionExists("validate") || optionExists("validateFull"));
 
 boolean all = optionExists("all");
 if(all)
@@ -358,11 +362,19 @@ else if(optionExists("obj"))
     }
 else if(optionExists("var"))
     {
-    mdbByVars =  mdbByVarCreate(optionVal("var", NULL),NULL,optionVal("val", NULL));
+    mdbByVars = mdbByVarCreate(optionVal("var", NULL),NULL,optionVal("val", NULL));
+    if (optionExists("composite"))
+        mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
     }
 else if(optionExists("vars"))
     {
     mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
+    if (optionExists("composite"))
+        mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
+    }
+else if(optionExists("composite"))
+    {
+    mdbByVars = mdbByVarCreate("composite", NULL,optionVal("composite", NULL));
     }
 else
     usage();
@@ -437,8 +449,8 @@ else
                 }
             else if (validate) // Validate vars and vals against cv.ra
                 {
-                int invalids = mdbObjsValidate(queryResults);
-                printf("%d invalid of %d variable%s\n",invalids,varsCnt,(varsCnt==1?"":"s"));
+                int invalids = mdbObjsValidate(queryResults,optionExists("validateFull"));
+                printf("%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
                 }
             else
                 mdbObjPrint(queryResults,raStyle);
