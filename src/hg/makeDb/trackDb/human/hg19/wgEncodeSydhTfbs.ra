@@ -926,9 +926,9 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Tcf4UcdPk
         release alpha
         parent wgEncodeSydhTfbsViewPeaks off
-        shortLabel HepG2 TCF4 Pk
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TCF4 in HepG2 cells)
-        subGroups view=Peaks factor=TCF4 cellType=HepG2 control=UCD treatment=aNone
+        shortLabel HepG2b TCF4 Pk
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (TCF4 in HepG2b cells)
+        subGroups view=Peaks factor=TCF4 cellType=HepG2b control=UCD treatment=aNone
         type narrowPeak
         color 189,0,157
         # subId=3390 dateSubmitted=2011-01-19
@@ -3880,9 +3880,9 @@ wgEncode 1
         track wgEncodeSydhTfbsHek293InputUcdSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HEK293 Input Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HEK293 cells)
-        subGroups view=Signal factor=zInputucd cellType=HEK293 control=UCD treatment=aNone
+        shortLabel HEK293(b) Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in HEK293(b) cells)
+        subGroups view=Signal factor=zInputucd cellType=HEK293b control=UCD treatment=aNone
         type bigWig 1.000000 24948.000000
         # subId=3257 dateSubmitted=2011-01-14
 
@@ -4069,9 +4069,9 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Tcf4UcdSig
         release alpha
         parent wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2 TCF4 Sig
-        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TCF4 in HepG2 cells)
-        subGroups view=Signal factor=TCF4 cellType=HepG2 control=UCD treatment=aNone
+        shortLabel HepG2b TCF4 Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (TCF4 in HepG2b cells)
+        subGroups view=Signal factor=TCF4 cellType=HepG2b control=UCD treatment=aNone
         type bigWig 1.000000 14201.000000
         color 189,0,157
         # subId=3390 dateSubmitted=2011-01-19
