@@ -13739,8 +13739,10 @@ mkdir gl
 cd gl/
 echo "show tables like 'chr%_gl'" | hgsql hg18 | tail -n +2 | while read table; do echo "select * from "$table | hgsql hg18 | tail -n +2 | cut -f2- | awk -v chr=${table%_gl} 'BEGIN{OFS="\t"}{print chr, $2, $3, $1, "1000", $4;}'; done > hg18.gl.bed
 liftOver hg18.gl.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.gl.{bed,unmapped}
-awk 'BEGIN{OFS="\t";}{fname=$1"_gl.txt"; print $4, $2, $3, $6 >> fname;}' hg19.gl.bed
-for f in chr*.txt; do hgLoadSqlTab hg19 ${f%.txt} glDbRep.sql $f; done
+hgLoadBed -noLoad hg19 gl hg19.gl.bed
+mv bed.tab hg19.gl.withBin.bed
+awk 'BEGIN{OFS="\t";}{fname=$2"_gl.txt"; print $1, $5, $3, $4, $7 >> fname;}' hg19.gl.withBin.bed
+for f in chr*.txt; do hgLoadSqlTab hg19 ${f%.txt} hg18.chr1_gl.sql $f; done
 
 #############################################################################
 # MGI MOUSE QTL LIFT (DONE 2010-12-30, Andy)
