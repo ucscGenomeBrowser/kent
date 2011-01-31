@@ -11556,7 +11556,7 @@ if (wordCount <= 0)
 type = words[0];
 
 #ifndef GBROWSE
-if (sameWord(type, "bed"))
+if (sameWord(type, "bed") || sameWord(type, "bedLogR"))
     {
     complexBedMethods(track, tdb, FALSE, wordCount, words);
     /* bed.h includes genePred.h so should be able to use these trackDb

@@ -182,6 +182,9 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *varType,char *val);
 struct mdbByVar *mdbByVarCreate(char *var, char *varType,char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
 
+boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *varType,char *val,boolean notEqual);
+/* Adds a another var to a list of mdbByVar pairs to be used in metadata queries. */
+
 struct mdbObj *mdbObjsLoadFromHashes(struct hash *objsHash);
 // Load all mdbObjs from a file containing metadata formatted lines
 
@@ -360,6 +363,9 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 // (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
 // Return is case insensitive sorted on name (label or else val).
 
+struct hash *mdbCvTermHash(char *term);
+// returns a hash of hashes of a term which should be defined in cv.ra
+
 struct hash *mdbCvTermTypeHash();
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,descrition,searchable,cvDefined,hidden
@@ -383,6 +389,10 @@ enum mdbCvSearchable mdbCvSearchMethod(char *term);
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
+
+int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
+// Validates vars and vals against cv.ra.  Returns count of errors found.
+// Full considers vars not defined in cv as invalids
 
 #endif /* MDB_H */
 

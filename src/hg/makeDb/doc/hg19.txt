@@ -14222,6 +14222,7 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 
 #############################################################################
 # FILTER SNP132 (DONE 1/24/11 angie)
+    # Redmine: Track #1684 (SNPs 132 (dbSNP))
     # Make several tracks that are filtered subsets of snp132:
     # First, filter out the multiply-aligned and/or weight >1 SNPs [any other exceptions?]
     cd /hive/data/outside/dbSNP/132/human

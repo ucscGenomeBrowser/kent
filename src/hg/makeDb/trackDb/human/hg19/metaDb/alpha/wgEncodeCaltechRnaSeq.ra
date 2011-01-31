@@ -5588,6 +5588,88 @@ rnaExtract longPolyA
 subId 2946
 view TranscriptGencV4
 
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1V2
+objType file
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd1Rep1V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+project wgEncode
+readType 2x75
+replicate 1
+subId 3474
+submittedDataVersion V2 - A better mapping technique.
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1V2
+objType file
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200FastqRd2Rep1V2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+project wgEncode
+readType 2x75
+replicate 1
+subId 3474
+submittedDataVersion V2 - A better mapping technique.
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2
+objType table
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 3474
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2
+objType table
+cell HCT-116
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-22
+dateUnrestricted 2011-10-21
+fileName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2.bam
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 3474
+submittedDataVersion V2 - A better mapping technique.
+tableName wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2
+view Splices
+
 metaObject wgEncodeCaltechRnaSeqHelas3R1x75dIlnaAlignsRep1V2
 objType table
 cell HeLa-S3
@@ -14867,4 +14949,4 @@ rnaExtract longPolyA
 subId 2963
 view TranscriptGencV4
 
-# MAGIC: 1589264095
+# MAGIC: -1304415958

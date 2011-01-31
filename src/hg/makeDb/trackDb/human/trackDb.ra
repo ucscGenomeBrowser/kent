@@ -4243,6 +4243,15 @@ type bed 4 .
     type bed 6 +
     priority 12
 
+track iscaRetrospective
+shortLabel ISCA Retro
+longLabel International Standard Cytogenetic Array Consortium - Retrospective variants
+group varRep
+priority 110
+visibility hide
+type bed 8 +
+noScoreFilter .
+
 searchName decipherId
 searchTable decipher
 termRegex [0-9]+

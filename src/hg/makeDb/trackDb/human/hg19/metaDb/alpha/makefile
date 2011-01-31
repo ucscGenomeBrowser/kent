@@ -4,6 +4,7 @@ wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
+wgEncodeHaibMethyl27.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibRnaSeq.ra\
 wgEncodeHaibTfbs.ra \

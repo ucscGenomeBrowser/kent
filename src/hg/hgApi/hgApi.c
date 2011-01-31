@@ -115,7 +115,6 @@ else if(!strcmp(cmd, "metaDb"))
     else
         fail("Assembly does not support metaDb");
     }
-#ifdef CV_SEARCH_SUPPORTS_FREETEXT
 // TODO: move to lib since hgTracks and hgApi share
 #define METADATA_VALUE_PREFIX    "hgt_mdbVal"
 else if(startsWith(METADATA_VALUE_PREFIX, cmd))
@@ -178,7 +177,6 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
     else
         fail("Assembly does not support metaDb");
     }
-#endif///def CV_SEARCH_SUPPORTS_FREETEXT
 else if(!strcmp(cmd, "tableMetadata"))
     { // returns an html table with metadata for a given track
     char *trackName = cgiOptionalString("track");

@@ -10,6 +10,7 @@
 #include "cheapcgi.h"
 #include "hui.h"
 #include "mdb.h"
+#include <regex.h>
 
 static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
 
@@ -735,6 +736,39 @@ struct mdbByVar *mdbByVar = NULL;
         }
 
 return mdbByVar;
+}
+
+boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *varType,char *val,boolean notEqual)
+/* Adds a another var to a list of mdbByVar pairs to be used in metadata queries. */
+{
+// Does var already exist in mdbByVars?
+enum mdbVarType newVarType = (varType==NULL?vtUnknown:mdbVarTypeStringToEnum(varType));
+struct mdbByVar *mdbByVar = mdbByVars;
+for(;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
+    {
+    if (sameString(mdbByVar->var,var) && mdbByVar->varType == newVarType && mdbByVar->notEqual == notEqual)
+        {
+        struct mdbLimbVal * limbVal = mdbByVar->vals;
+        for(;limbVal!=NULL;limbVal=limbVal->next)
+            {
+            if (sameString(limbVal->val,val))
+                return FALSE; // Nothing to do as this var is already there.
+            }
+        struct mdbLimbVal * newLimbVal;
+        AllocVar(newLimbVal);
+
+        newLimbVal->val    = cloneString(val);
+        slAddTail(&(mdbByVar->vals),newLimbVal);
+        return TRUE;
+        }
+    }
+
+// Not found so add it
+struct mdbByVar *newVar = mdbByVarCreate(var, varType,val);
+newVar->notEqual = notEqual;
+slAddTail(&mdbByVars,newVar); // Add to tail to avoid changing passed in pointer
+
+return TRUE;
 }
 
 struct mdbObj *mdbObjCreate(char *obj,char *var, char *varType,char *val)
@@ -2458,7 +2492,11 @@ static char *cv_file()
 // return default location of cv.ra
 {
 static char filePath[PATH_LEN];
-safef(filePath, sizeof(filePath), "%s/encode/cv.ra", hCgiRoot());
+char *root = hCgiRoot();
+if (root == NULL || *root == 0)
+    root = "/usr/local/apache/cgi-bin/"; // Make this check out sandboxes?
+//    root = "/cluster/home/tdreszer/kent/src/hg/makeDb/trackDb/cv/alpha/"; // Make this check out sandboxes?
+safef(filePath, sizeof(filePath), "%s/encode/cv.ra", root);
 if(!fileExists(filePath))
     errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
 return filePath;
@@ -2528,10 +2566,34 @@ slPairSortCase(&pairs);
 return pairs;
 }
 
+struct hash *mdbCvTermHash(char *term)
+// returns a hash of hashes of a term which should be defined in cv.ra
+{
+static struct hash *cvHashOfHashOfHashes = NULL;
+if (sameString(term,"cell"))
+    term = "Cell Line";
+else if (sameString(term,"antibody"))
+    term = "Antibody";
+
+if (cvHashOfHashOfHashes == NULL)
+    cvHashOfHashOfHashes = hashNew(0);
+
+struct hash *cvTermHash = hashFindVal(cvHashOfHashOfHashes,term);
+// Establish cv hash of Term Types if it doesn't already exist
+if (cvTermHash == NULL)
+    {
+    cvTermHash = raReadWithFilter(cv_file(), "term","type",term);
+    if (cvTermHash != NULL)
+        hashAdd(cvHashOfHashOfHashes,term,cvTermHash);
+    }
+
+return cvTermHash;
+}
+
 struct hash *mdbCvTermTypeHash()
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,description,searchable,cvDefined,hidden
-{
+{ // NOTE: "typeOfTerm" is specialized, so don't use mdbCvTermHash
 static struct hash *cvHashOfTermTypes = NULL;
 
 // Establish cv hash of Term Types if it doesn't already exist
@@ -2635,4 +2697,178 @@ if (termHash != NULL)
         return label;
     }
 return term;
+}
+
+int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
+// Validates vars and vals against cv.ra.  Returns count of errors found.
+// Full considers vars not defined in cv as invalids
+{
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct mdbObj *mdbObj = NULL;
+int invalids = 0;
+for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
+    {
+    struct mdbVar *mdbVar = NULL;
+    for(mdbVar = mdbObj->vars;mdbVar != NULL;mdbVar=mdbVar->next)
+        {
+        struct hash *termHash = hashFindVal(termTypeHash,mdbVar->var);
+        if (termHash == NULL) // No cv definition for term so no validation can be done
+            {
+            if (!full)
+                continue;
+            if (sameString(mdbVar->var,"objType")
+            && (sameString(mdbVar->val,"table") || sameString(mdbVar->val,"file") || sameString(mdbVar->val,"composite")))
+                continue;
+            printf("INVALID '%s' not defined in cv.ra: %s -> %s = %s\n",mdbVar->var,mdbObj->obj,mdbVar->var,mdbVar->val);
+            invalids++;
+            continue;
+            }
+        char *validationRule = hashFindVal(termHash,"validate");
+        if (validationRule == NULL)
+            {
+            verbose(1,"ERROR in cv.ra: Term %s in typeOfTerms but has no 'validate' setting.\n",mdbVar->var);
+            continue;  // Should we errAbort?
+            }
+
+        // NOTE: Working on memory in hash but we are throwing away a comment and removing trailing spaces so that is okay
+        strSwapChar(validationRule,'#','\0'); // Chop off any comment in the setting
+        validationRule = trimSpaces(validationRule);
+
+        // Validate should be or start with known word
+        if (startsWithWord("cv",validationRule))
+            {
+            if (SETTING_NOT_ON(hashFindVal(termHash,"cvDefined"))) // Known type of term but no validation to be done
+                {
+                verbose(1,"ERROR in cv.ra: Term %s says validate in cv but is not 'cvDefined'.\n",mdbVar->var);
+                continue;
+                }
+
+           // cvDefined so every val should be in cv
+           struct hash *cvTermHash = mdbCvTermHash(mdbVar->var);
+           if (cvTermHash == NULL)
+                {
+                verbose(1,"ERROR in cv.ra: Term %s says validate in cv but not found as a cv term.\n",mdbVar->var);
+                continue;
+                }
+            if (hashFindVal(cvTermHash,mdbVar->val) == NULL) // No cv definition for term so no validation can be done
+                {
+                char * orControl = skipBeyondDelimit(validationRule,' ');
+                if (orControl && sameString(orControl,"or None") && sameString(mdbVar->val,"None"))
+                    continue;
+                else if (orControl && sameString(orControl,"or control"))
+                    {
+                    cvTermHash = mdbCvTermHash("control");
+                    if (cvTermHash == NULL)
+                        {
+                        verbose(1,"ERROR in cv.ra: Term control says validate in cv but not found as a cv term.\n");
+                        continue;
+                        }
+                    if (hashFindVal(cvTermHash,mdbVar->val) != NULL)
+                        continue;
+                    }
+                printf("INVALID cv lookup: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
+                invalids++;
+                }
+           }
+        else if (startsWithWord("date",validationRule))
+            {
+            if (dateToSeconds(mdbVar->val,"%F") == 0)
+                {
+                printf("INVALID date: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
+                invalids++;
+                }
+            }
+        else if (startsWithWord("exists",validationRule))
+            continue;  // (e.g. fileName exists) Nothing to be done at this time.
+        else if (startsWithWord("float",validationRule))
+            {
+            char* end;
+            (void)strtod(mdbVar->val, &end); // Don't want float, just error
+
+            if ((end == mdbVar->val) || (*end != '\0'))
+                {
+                printf("INVALID float: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
+                invalids++;
+                }
+            }
+        else if (startsWithWord("integer",validationRule))
+            {
+            char *p0 = mdbVar->val;
+            if (*p0 == '-')
+                p0++;
+            char *p = p0;
+            while ((*p >= '0') && (*p <= '9'))
+                p++;
+            if ((*p != '\0') || (p == p0))
+                {
+                printf("INVALID integer: %s -> %s = %s\n",mdbObj->obj,mdbVar->var,mdbVar->val);
+                invalids++;
+                }
+            }
+        else if (startsWithWord("list:",validationRule))
+            {
+            validationRule = skipBeyondDelimit(validationRule,' ');
+            if (validationRule == NULL)
+                {
+                verbose(1,"ERROR in cv.ra: Invalid 'list:' for %s.\n",mdbVar->var);
+                continue;
+                }
+            int count = chopByChar(validationRule, ',', NULL, 0);
+            if (count == 1)
+                {
+                if (differentString(mdbVar->val,validationRule))
+                    {
+                    printf("INVALID list '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
+                    invalids++;
+                    }
+                }
+            else if (count > 1)
+                {
+                char **array = needMem(count*sizeof(char*));
+                chopByChar(cloneString(validationRule), ',', array, count); // Want to also trimSpaces()? No
+
+                if (stringArrayIx(mdbVar->val, array, count) == -1)
+                    {
+                    printf("INVALID list '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
+                    invalids++;
+                    }
+                }
+            else
+                verbose(1,"ERROR in cv.ra: Invalid 'validate list: %s' for term %s,\n",validationRule,mdbVar->var);
+            }
+        else if (startsWithWord("none",validationRule))
+            continue;
+        else if (startsWithWord("regex:",validationRule))
+            {
+            validationRule = skipBeyondDelimit(validationRule,' ');
+            if (validationRule == NULL)
+                {
+                verbose(1,"ERROR in cv.ra: Invalid 'regex:' for %s.\n",mdbVar->var);
+                continue;
+                }
+            // Real work ahead interpreting regex
+            regex_t regEx;
+            int err = regcomp(&regEx, validationRule, REG_NOSUB);
+            if(err != 0)  // Compile the regular expression so that it can be used.  Use: REG_EXTENDED ?
+                {
+                char buffer[128];
+                regerror(err, &regEx, buffer, sizeof buffer);
+                verbose(1,"ERROR in cv.ra: Invalid regular expression for %s - %s.  %s\n",mdbVar->var,validationRule,buffer);
+                continue;
+                }
+            err = regexec(&regEx, mdbVar->val, 0, NULL, 0);
+            if (err != 0)
+                {
+                //char buffer[128];
+                //regerror(err, &regEx, buffer, sizeof buffer);
+                printf("INVALID regex '%s' match: %s -> %s = '%s'.\n",validationRule, mdbObj->obj,mdbVar->var,mdbVar->val);
+                invalids++;
+                }
+            regfree(&regEx);
+            }
+        else
+            verbose(1,"ERROR in cv.ra: Unknown validationRule rule '%s' for term %s.\n",validationRule,mdbVar->var);
+        }
+    }
+return invalids;
 }
