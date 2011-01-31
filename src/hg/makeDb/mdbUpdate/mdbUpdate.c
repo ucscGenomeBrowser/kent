@@ -290,6 +290,13 @@ if(mdbObjs != NULL)
         count = mdbObjsLoadToDb(conn,table,mdbObjs,testIt);
     else
         count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
+
+    if (testIt)
+        {
+        int invalids = mdbObjsValidate(mdbObjs);
+        int varsCnt=mdbObjCount(mdbObjs,FALSE);
+        printf("%d invalid of %d variable%s\n",invalids,varsCnt,(varsCnt==1?"":"s"));
+        }
     }
 if(testIt)
     verbose(1, "Command would affected %d row(s) in %s.%s\n", count,db,table);
