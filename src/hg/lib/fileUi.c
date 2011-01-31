@@ -764,7 +764,9 @@ mdbObjRemoveVars(mdbFiles,"tableName"); // Remove this from mdb now so that it i
 //jsIncludeFile("ajax.js",NULL);
 
 // Print table
+printf("<DIV id='filesFound'>");
 int filesCount = filesPrintTable(db,NULL,fileList,sortOrder);
+printf("</DIV><BR>\n");
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?
 return filesCount;
