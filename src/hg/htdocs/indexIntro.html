@@ -10,6 +10,7 @@
                 <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
                     <TR><TH HEIGHT=3></TH></TR>
                     <TR><TD WIDTH=10></TD><TD>
+
                     <P>
         	    Welcome to the UCSC Genome Browser website. 
 		    This site contains the 
@@ -18,6 +19,18 @@
         	    provides portals to the 
 		    <A HREF="ENCODE/">ENCODE</A> and
 		    <A HREF="Neandertal">Neandertal</A> projects.  </P>
+
+<!--#if expr='"$SERVER_NAME" = "genome-preview.ucsc.edu" || "$SERVER_NAME" = "hgwdev-kate.cse.ucsc.edu"'-->
+<P>
+<B>WARNING: This is our preview site.</B>
+This website is a weekly mirror of our internal 
+development server for public access.  Data and tools here are under 
+construction, have not been quality reviewed, and are subject to change 
+at any time.  We provide this site for early access, with the warning that it is
+less available and stable than our public site. For 
+high-quality reviewed annotations on our production server, visit
+<A HREF="http://genome.ucsc.edu">http://genome.ucsc.edu</A>.</P>
+<!--#endif -->
         	    <P>
         	    We encourage you to explore these sequences with our tools.
         	    The 
@@ -51,8 +64,8 @@
 		    TARGET=_blank>UCSC</A>). 
 		    If you have feedback or questions concerning the tools or
 		    data on this website, feel free to contact us on our 
-		    <A HREF="contacts.html">public mailing list</A>. 
-		    </P>
+		    <A HREF="contacts.html">public mailing list</A>.</P>
+
                     </TD><TD WIDTH=15>
                 </TD></TR></TABLE>
             <BR></TD></TR></TABLE>

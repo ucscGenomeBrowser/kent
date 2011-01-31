@@ -268,62 +268,6 @@ wgEncode 1
         type narrowPeak
         # subId=1816 dateSubmitted=2010-06-21
 
-        track wgEncodeUwDgfSkmcPk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel SKMC Pk
-        longLabel SKMC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=SKMC
-        type narrowPeak
-        # subId=2045 dateSubmitted=2010-07-25
-
-        track wgEncodeUwDgfNhdfadPk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel NHDF-Ad Pk
-        longLabel NHDF-Ad DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=NHDF-Ad
-        type narrowPeak
-        # subId=2046 dateSubmitted=2010-07-25
-
-        track wgEncodeUwDgfH7esPk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel H7-hESC Pk
-        longLabel H7-hESC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=H7es
-        type narrowPeak
-        # subId=2047 dateSubmitted=2010-07-25
-
-        track wgEncodeUwDgfHaePk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel HAEpiC Pk
-        longLabel HAEpiC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=HAE
-        type narrowPeak
-        # subId=2048 dateSubmitted=2010-07-25
-
-        track wgEncodeUwDgfHmfPk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel HMF Pk
-        longLabel HMF DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=HMF
-        type narrowPeak
-        # subId=2049 dateSubmitted=2010-07-25
-
-        track wgEncodeUwDgfHcpePk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel HCPEpiC Pk
-        longLabel HCPEpiC DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=HCPE
-        type narrowPeak
-        # subId=2050 dateSubmitted=2010-07-25
-
-        track wgEncodeUwDgfHmvecdbladPk
-        parent wgEncodeUwDgfViewPeaks off
-        shortLabel HMVEC-dBl-Ad Pk
-        longLabel HMVEC-dBl-Ad DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
-        subGroups view=Peaks cellType=HMVECdBlAd
-        type narrowPeak
-        # subId=2051 dateSubmitted=2010-07-25
-
         track wgEncodeUwDgfAoafPk
         parent wgEncodeUwDgfViewPeaks off
         shortLabel AoAF Pk
@@ -386,6 +330,69 @@ wgEncode 1
         type narrowPeak
         origAssembly hg19
         # subId=3199 dateSubmitted=2011-01-08
+
+        track wgEncodeUwDgfHaePkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HAEpiC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HAEpiC cells)
+        subGroups view=Peaks cellType=HAE
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfHcpePkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HCPEpiC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HCPEpiC cells)
+        subGroups view=Peaks cellType=HCPE
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfH7esPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel H7-hESC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in H7-hESC cells)
+        subGroups view=Peaks cellType=H7es
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfHmfPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HMF Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HMF cells)
+        subGroups view=Peaks cellType=HMF
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfHmvecdbladPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HMVEC-dBl-Ad Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HMVEC-dBl-Ad cells)
+        subGroups view=Peaks cellType=HMVECdBlAd
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfNhdfadPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel NHDF-Ad Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in NHDF-Ad cells)
+        subGroups view=Peaks cellType=NHDF-Ad
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDgfSkmcPkV2
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel SKMC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in SKMC cells)
+        subGroups view=Peaks cellType=SKMC
+        type narrowPeak
+        origAssembly hg19
+        # subId=3260 dateSubmitted=2011-01-14
 
 
     track wgEncodeUwDgfViewSignal

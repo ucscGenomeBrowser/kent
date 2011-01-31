@@ -5,7 +5,7 @@ shortLabel Caltech RNA-seq
 longLabel RNA-seq from ENCODE/Wold 
 group expression
 subGroup1 view Views GeneModel=Gene_Model Signal=Raw_Signal PlusSignal=Plus_Raw_Signal MinusSignal=Minus_Raw_Signal  Splices=Splice_Sites Aligns=Alignments Paired=Paired 
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) GM12891=GM12891 GM12892=GM12892 HSMM=HSMM HUVEC=HUVEC HeLaS3=HeLaS3 HepG2=HepG2 MCF7=MCF7 NHEK=NHEK NHLF=NHLF
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) GM12891=GM12891 GM12892=GM12892 HSMM=HSMM HUVEC=HUVEC HeLaS3=HeLaS3 HepG2=HepG2 HCT116=HCT116 MCF7=MCF7 NHEK=NHEK NHLF=NHLF
 subGroup3 readType Read_Type r1x75=Single_75nt r1x75D=Single_Strand-Specific_75nt r2x75=Paired_75nt_(200_bp) r2x75400=Paired_75nt_(400_bp)
 subGroup4 insertLength Insert_Length il200=200 il400=400 ilNa=NA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
@@ -256,7 +256,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewGeneModel off
         shortLabel GM12891 2
         longLabel ENCODE Caltech RNA-seq DeNovo Gene Models from Cufflinks Replicate 2 (in GM12891 cells)
-        subGroups view=GeneModel cellType=GM12891 readType=r1x75D rep=rep2
+        subGroups view=GeneModel cellType=GM12891 readType=r1x75D rep=rep2 insertLength=ilNa
         type genePred
         # subId=3437 dateSubmitted=2011-01-21
 
@@ -623,9 +623,17 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewSplices off
         shortLabel GM12891 2
         longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in GM12891 cells)
-        subGroups view=Splices cellType=GM12891 readType=r1x75D rep=rep2
+        subGroups view=Splices cellType=GM12891 readType=r1x75D rep=rep2 insertLength=ilNa
         type bam
         # subId=3437 dateSubmitted=2011-01-21
+
+        track wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep1V2
+        parent wgEncodeCaltechRnaSeqViewSplices off
+        shortLabel HCT-116 1
+        longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in HCT-116 cells)
+        subGroups view=Splices cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep1
+        type bam
+        # subId=3474 dateSubmitted=2011-01-22
 	
 	track wgEncodeCaltechRnaSeqViewAligns
     	view Aligns
@@ -782,7 +790,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel GM12891 2
         longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in GM12891 cells)
-        subGroups view=Aligns cellType=GM12891 readType=r1x75D rep=rep2
+        subGroups view=Aligns cellType=GM12891 readType=r1x75D rep=rep2 insertLength=ilNa
         type bam
         # subId=3437 dateSubmitted=2011-01-21
 
@@ -1000,6 +1008,14 @@ html wgEncodeCaltechRnaSeq.new.html
         type bam
         color 153,38,0
         # subId=3416 dateSubmitted=2011-01-22
+
+        track wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2
+        parent wgEncodeCaltechRnaSeqViewPaired off
+        shortLabel HCT-116 1
+        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in HCT-116 cells)
+        subGroups view=Paired cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep1
+        type bam
+        # subId=3474 dateSubmitted=2011-01-22
 
 
 
@@ -1499,7 +1515,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewSignal off
         shortLabel GM12891 Sig 2
         longLabel ENCODE Caltech RNA-seq Signal Replicate 2 (in GM12891 cells)
-        subGroups view=Signal cellType=GM12891 readType=r1x75D rep=rep2
+        subGroups view=Signal cellType=GM12891 readType=r1x75D rep=rep2 insertLength=ilNa
         type bigWig 1.000000 312845.000000
         # subId=3437 dateSubmitted=2011-01-21
 

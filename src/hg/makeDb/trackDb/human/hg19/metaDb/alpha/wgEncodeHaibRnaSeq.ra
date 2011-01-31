@@ -1314,7 +1314,7 @@ subId 2974
 treatment EtOH_0.02pct
 view TranscriptGencV3
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36AlnRep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1338,7 +1338,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36AlnRep1
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36AlnRep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1362,7 +1362,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36AlnRep2
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36RawDataRep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1385,7 +1385,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36RawDataRep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawDataRep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1408,7 +1408,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36RawRep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1432,7 +1432,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36RawRep1
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36RawRep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1456,7 +1456,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36RawRep2
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36TranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1479,7 +1479,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hR1x36TranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1502,7 +1502,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36AlnRep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1526,7 +1526,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36AlnRep1
 treatment DMSO_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36AlnRep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1550,7 +1550,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36AlnRep2
 treatment DMSO_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36RawDataRep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawDataRep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1573,7 +1573,7 @@ subId 2976
 treatment DMSO_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36RawDataRep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawDataRep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1596,7 +1596,7 @@ subId 2976
 treatment DMSO_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36RawRep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep1
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1620,7 +1620,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36RawRep1
 treatment DMSO_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36RawRep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep2
 objType table
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1644,7 +1644,7 @@ tableName wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36RawRep2
 treatment DMSO_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36TranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV3Rep1
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -1667,7 +1667,7 @@ subId 2976
 treatment DMSO_4hr
 view TranscriptGencV3
 
-metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrR1x36TranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV3Rep2
 objType file
 cell ECC-1
 composite wgEncodeHaibRnaSeq
@@ -2066,7 +2066,7 @@ subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36AlnRep1
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2090,7 +2090,7 @@ tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36AlnRep1
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36AlnRep2
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2114,7 +2114,7 @@ tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36AlnRep2
 treatment BPA_100nM_4hr
 view Alignments
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36RawDataRep1
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2137,7 +2137,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36RawDataRep2
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawDataRep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2160,7 +2160,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view RawData
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36RawRep1
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2184,7 +2184,7 @@ tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36RawRep1
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36RawRep2
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2
 objType table
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2208,7 +2208,7 @@ tableName wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36RawRep2
 treatment BPA_100nM_4hr
 view RawSignal
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36TranscriptGencV3Rep1
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep1
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2231,7 +2231,7 @@ subId 2976
 treatment BPA_100nM_4hr
 view TranscriptGencV3
 
-metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hR1x36TranscriptGencV3Rep2
+metaObject wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep2
 objType file
 cell T-47D
 composite wgEncodeHaibRnaSeq
@@ -2818,4 +2818,4 @@ subId 2975
 treatment Genistein_100nM_4hr
 view TranscriptGencV3
 
-# MAGIC: -642996324
+# MAGIC: 478709308

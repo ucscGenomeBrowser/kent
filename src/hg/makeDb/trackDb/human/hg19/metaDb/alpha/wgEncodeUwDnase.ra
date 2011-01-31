@@ -874,6 +874,26 @@ subId 1554
 tableName wgEncodeUwDnaseAg09319PkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseAg09319PkRep1V2
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseAg09319PkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseAg09319PkRep1V2
+view Peaks
+
 metaObject wgEncodeUwDnaseAg09319PkRep2
 objType table
 cell AG09319
@@ -2932,6 +2952,26 @@ project wgEncode
 replicate 1
 subId 1592
 tableName wgEncodeUwDnaseH7esPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseH7esPkRep1V2
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseH7esPkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseH7esPkRep1V2
 view Peaks
 
 metaObject wgEncodeUwDnaseH7esPkRep2
@@ -8457,6 +8497,26 @@ subId 1620
 tableName wgEncodeUwDnaseHnpcePkRep2
 view Peaks
 
+metaObject wgEncodeUwDnaseHnpcePkRep2V2
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHnpcePkRep2V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHnpcePkRep2V2
+view Peaks
+
 metaObject wgEncodeUwDnaseHnpceRawDataRep1
 objType file
 cell HNPCEpiC
@@ -9411,6 +9471,26 @@ subId 1578
 tableName wgEncodeUwDnaseHrePkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseHrePkRep1V2
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrePkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrePkRep1V2
+view Peaks
+
 metaObject wgEncodeUwDnaseHrePkRep2
 objType table
 cell HRE
@@ -9429,6 +9509,26 @@ project wgEncode
 replicate 2
 subId 1567
 tableName wgEncodeUwDnaseHrePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHrePkRep2V2
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrePkRep2V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrePkRep2V2
 view Peaks
 
 metaObject wgEncodeUwDnaseHreRawDataRep1
@@ -9799,6 +9899,26 @@ subId 1622
 tableName wgEncodeUwDnaseHrpePkRep1
 view Peaks
 
+metaObject wgEncodeUwDnaseHrpePkRep1V2
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrpePkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrpePkRep1V2
+view Peaks
+
 metaObject wgEncodeUwDnaseHrpePkRep2
 objType table
 cell HRPEpiC
@@ -9817,6 +9937,26 @@ project wgEncode
 replicate 2
 subId 1621
 tableName wgEncodeUwDnaseHrpePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHrpePkRep2V2
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHrpePkRep2V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHrpePkRep2V2
 view Peaks
 
 metaObject wgEncodeUwDnaseHrpeRawDataRep1
@@ -10281,6 +10421,26 @@ project wgEncode
 replicate 1
 subId 1624
 tableName wgEncodeUwDnaseHuvecPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHuvecPkRep1V2
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-14
+fileName wgEncodeUwDnaseHuvecPkRep1V2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3261
+submittedDataVersion V2 - Fixed bug in peak calls that artificially reduced the number of peaks
+tableName wgEncodeUwDnaseHuvecPkRep1V2
 view Peaks
 
 metaObject wgEncodeUwDnaseHuvecPkRep2
@@ -14543,4 +14703,4 @@ tableName wgEncodeUwDnaseWi38RawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -563825452
+# MAGIC: 1958699889

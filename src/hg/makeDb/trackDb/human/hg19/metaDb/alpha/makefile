@@ -4,6 +4,7 @@ wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
+wgEncodeHaibMethyl27.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibRnaSeq.ra\
 wgEncodeHaibTfbs.ra \
@@ -34,7 +35,8 @@ wgEncodeGisRnaPet.ra \
 wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
 wgEncodeUwDgf.ra \
-wgEncodeDukeAffyExon.ra 
+wgEncodeDukeAffyExon.ra \
+wgEncodeUchicagoTfbs.ra 
 
 include ../../../../makefile.metaDb
 

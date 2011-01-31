@@ -360,6 +360,9 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 // (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
 // Return is case insensitive sorted on name (label or else val).
 
+struct hash *mdbCvTermHash(char *term);
+// returns a hash of hashes of a term which should be defined in cv.ra
+
 struct hash *mdbCvTermTypeHash();
 // returns a hash of hashes of mdb and controlled vocabulary (cv) term types
 // Those terms should contain label,descrition,searchable,cvDefined,hidden
@@ -383,6 +386,9 @@ enum mdbCvSearchable mdbCvSearchMethod(char *term);
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
+
+int mdbObjsValidate(struct mdbObj *mdbObjs);
+// Validates vars and vals against cv.ra.  Returns count of errors found
 
 #endif /* MDB_H */
 

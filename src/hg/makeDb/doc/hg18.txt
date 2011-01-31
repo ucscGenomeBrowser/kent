@@ -30591,7 +30591,19 @@ done | sort -k4,4 > hg18.gold.bed
     hgLoadBed hg18 numtS numtS.bed
     hgLoadBed hg18 numtSMitochondrion numtSMitochondrion.bed
     hgLoadBed hg18 numtSMitochondrionChrPlacement numtSMitochondrionChrPlacement.bed
-
+    # reload the tracks with data with updated ID (DONE 2011-01-26 Chin)
+    mkdir /cluster/data/hg18/bed/NumtS/2011-01-26
+    # cp over all new data
+    cd /cluster/data/hg18/bed/NumtS/2011-01-26
+    # load the bed files to hg18
+    hgLoadBed hg18  numtSAssembled  numtSAssembled.bed
+    hgLoadBed hg18 numtS numtS.bed
+    hgLoadBed hg18 numtSMitochondrion numtSMitochondrion.bed
+    hgLoadBed hg18 numtSMitochondrionChrPlacement numtSMitochondrionChrPlacement.bed
+    # update the ~/kent/src/hg/makeDb/trackDb/human/numtSeq.html with
+    # description_revisedMC ( numtSeq-20110126.html)
+    cp  numtSeq-20110126.html \
+       /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/human/numtSeq.html
 
 ##############################################################################
 # hg18 <-> hg19 difference tracks (WORKING - 2010-09-03 - Hiram)
