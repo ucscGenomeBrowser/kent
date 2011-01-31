@@ -738,6 +738,39 @@ struct mdbByVar *mdbByVar = NULL;
 return mdbByVar;
 }
 
+boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *varType,char *val,boolean notEqual)
+/* Adds a another var to a list of mdbByVar pairs to be used in metadata queries. */
+{
+// Does var already exist in mdbByVars?
+enum mdbVarType newVarType = (varType==NULL?vtUnknown:mdbVarTypeStringToEnum(varType));
+struct mdbByVar *mdbByVar = mdbByVars;
+for(;mdbByVar!=NULL;mdbByVar=mdbByVar->next)
+    {
+    if (sameString(mdbByVar->var,var) && mdbByVar->varType == newVarType && mdbByVar->notEqual == notEqual)
+        {
+        struct mdbLimbVal * limbVal = mdbByVar->vals;
+        for(;limbVal!=NULL;limbVal=limbVal->next)
+            {
+            if (sameString(limbVal->val,val))
+                return FALSE; // Nothing to do as this var is already there.
+            }
+        struct mdbLimbVal * newLimbVal;
+        AllocVar(newLimbVal);
+
+        newLimbVal->val    = cloneString(val);
+        slAddTail(&(mdbByVar->vals),newLimbVal);
+        return TRUE;
+        }
+    }
+
+// Not found so add it
+struct mdbByVar *newVar = mdbByVarCreate(var, varType,val);
+newVar->notEqual = notEqual;
+slAddTail(&mdbByVars,newVar); // Add to tail to avoid changing passed in pointer
+
+return TRUE;
+}
+
 struct mdbObj *mdbObjCreate(char *obj,char *var, char *varType,char *val)
 /* Creates a singular mdbObj query object based on obj and all other optional params. */
 {

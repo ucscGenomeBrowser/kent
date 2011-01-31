@@ -182,6 +182,9 @@ struct mdbObj *mdbObjCreate(char *obj,char *var, char *varType,char *val);
 struct mdbByVar *mdbByVarCreate(char *var, char *varType,char *val);
 /* Creates a singular var=val pair struct for metadata queries. */
 
+boolean mdbByVarAppend(struct mdbByVar *mdbByVars,char *var, char *varType,char *val,boolean notEqual);
+/* Adds a another var to a list of mdbByVar pairs to be used in metadata queries. */
+
 struct mdbObj *mdbObjsLoadFromHashes(struct hash *objsHash);
 // Load all mdbObjs from a file containing metadata formatted lines
 
