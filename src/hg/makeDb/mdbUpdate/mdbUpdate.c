@@ -296,7 +296,9 @@ if(mdbObjs != NULL)
         {
         int invalids = mdbObjsValidate(mdbObjs,TRUE);
         int varsCnt=mdbObjCount(mdbObjs,FALSE);
-        verbose(1, "%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+        verbose(1, "%d invalid%s of %d variable%s according to the cv.ra.\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+        if (invalids > 0)
+            verbose(1, "Variables invalid to cv.ra ARE PERMITTED in the mdb.\n");
         }
     }
 if(testIt)
