@@ -26,7 +26,8 @@ errAbort(
   "             '" MDB_DEFAULT_NAME "'.\n"
   "       -recreate   Creates or empties the table.  No further arguements needed.\n"
   "       -force      Overrides restrictions placed on shared  '" MDB_DEFAULT_NAME "'.\n"
-  "    -test    Does not actually update.  Use with -verbose=2 to see the SQL.\n"
+  "    -test    Does not actually update and does full cv validation.\n"
+  "             Use with -verbose=2 to see the SQL.\n"
   "    [{fileName}] File of formatted metadata from mdbPrint (RA or lines).\n"
   "      -replace   Remove all old variables for each object before adding new.\n"
   "  if {fileName} argument not provided, then -vars or -obj must be provided:\n"
@@ -293,9 +294,9 @@ if(mdbObjs != NULL)
 
     if (testIt)
         {
-        int invalids = mdbObjsValidate(mdbObjs);
+        int invalids = mdbObjsValidate(mdbObjs,TRUE);
         int varsCnt=mdbObjCount(mdbObjs,FALSE);
-        printf("%d invalid of %d variable%s\n",invalids,varsCnt,(varsCnt==1?"":"s"));
+        verbose(1, "%d invalid%s of %d variable%s\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
         }
     }
 if(testIt)

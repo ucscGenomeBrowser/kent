@@ -2699,8 +2699,9 @@ if (termHash != NULL)
 return term;
 }
 
-int mdbObjsValidate(struct mdbObj *mdbObjs)
-// Validates vars and vals against cv.ra.  Returns count of errors found
+int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full)
+// Validates vars and vals against cv.ra.  Returns count of errors found.
+// Full considers vars not defined in cv as invalids
 {
 struct hash *termTypeHash = mdbCvTermTypeHash();
 struct mdbObj *mdbObj = NULL;
@@ -2713,10 +2714,13 @@ for( mdbObj=mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next )
         struct hash *termHash = hashFindVal(termTypeHash,mdbVar->var);
         if (termHash == NULL) // No cv definition for term so no validation can be done
             {
-            if (sameString(mdbVar->var,"objType")
-            && (sameString(mdbVar->val,"table") || sameString(mdbVar->val,"file")))
+            if (!full)
                 continue;
-            verbose(2,"Variable '%s' not defined in cv.ra: %s -> %s = %s\n",mdbVar->var,mdbObj->obj,mdbVar->var,mdbVar->val);
+            if (sameString(mdbVar->var,"objType")
+            && (sameString(mdbVar->val,"table") || sameString(mdbVar->val,"file") || sameString(mdbVar->val,"composite")))
+                continue;
+            printf("INVALID '%s' not defined in cv.ra: %s -> %s = %s\n",mdbVar->var,mdbObj->obj,mdbVar->var,mdbVar->val);
+            invalids++;
             continue;
             }
         char *validationRule = hashFindVal(termHash,"validate");
