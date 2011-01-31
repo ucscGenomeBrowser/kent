@@ -5,7 +5,7 @@
 # DEX1n		DEX 1nM
 # DEX500p	DEX 500pM
 # DEX100p	DEX 100pM
-# EST		ESTRADIAL 10nM
+# EST		ESTRADIOL 10nM
 # BPA		BPA 100nM
 # GEN		GENISTEIN 100nM
 # DMSO		DMSO 0.02%
@@ -144,7 +144,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel ECC-1 EST 2
-        longLabel ECC-1 ESTRADIAL 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bam
         origAssembly hg19
@@ -153,7 +153,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel ECC-1 EST 1
-        longLabel ECC-1 ESTRADIAL 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bam
         origAssembly hg19
@@ -162,7 +162,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel T-47D EST 1
-        longLabel T-47D ESTRADIAL 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bam
         origAssembly hg19
@@ -189,7 +189,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2
         parent wgEncodeHudsonalphaRnaSeqViewAlignments off
         shortLabel T-47D EST 2
-        longLabel T-47D ESTRADIAL 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
         subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bam
         origAssembly hg19
@@ -412,7 +412,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep2
         parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
         shortLabel ECC-1 EST 2
-        longLabel ECC-1 ESTRADIAL 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type genepred
         origAssembly hg19
@@ -421,7 +421,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep1
         parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
         shortLabel ECC-1 EST 1
-        longLabel ECC-1 ESTRADIAL 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type genepred
         origAssembly hg19
@@ -430,7 +430,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep1
         parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
         shortLabel T-47D EST 1
-        longLabel T-47D ESTRADIAL 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type genepred
         origAssembly hg19
@@ -457,7 +457,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep2
         parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
         shortLabel T-47D EST 2
-        longLabel T-47D ESTRADIAL 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type genepred
         origAssembly hg19
@@ -698,7 +698,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
         shortLabel ECC-1 EST 2
-        longLabel ECC-1 ESTRADIAL 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bigWig 0.208881 751.294006
         origAssembly hg19
@@ -707,7 +707,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
         shortLabel ECC-1 EST 1
-        longLabel ECC-1 ESTRADIAL 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel ECC-1 ESTRADIOL 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bigWig 0.267722 963.263977
         origAssembly hg19
@@ -716,7 +716,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
         shortLabel T-47D EST 1
-        longLabel T-47D ESTRADIAL 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
         type bigWig 0.271642 1572.939941
         origAssembly hg19
@@ -743,7 +743,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2
         parent wgEncodeHudsonalphaRnaSeqViewSignal off
         shortLabel T-47D EST 2
-        longLabel T-47D ESTRADIAL 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        longLabel T-47D ESTRADIOL 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
         subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
         type bigWig 0.090113 781.908997
         origAssembly hg19
