@@ -5,7 +5,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o atomDb.o  axtInfo.o \
     axtLib.o bactigPos.o bamFile.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
-    bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed12Source.o \
+    bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o bed8Attrs.o bed12Source.o \
     bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bioImage.o \
     blastTab.o blastzNet.o blatServers.o borf.o borkPseudoHom.o botDelay.o\
     cart.o cartDb.o cdsEvidence.o cdsOrtho.o cdsPick.o cdsSpec.o \

@@ -211,7 +211,7 @@ ncbiAccXref bed
 nextItemButton *
 noColorTag bam
 noInherit *
-noScoreFilter bedGraph bed bedLogR
+noScoreFilter bedGraph bed bedLogR gvf
 notNCBI bed
 ococci bed
 offset customTracks
