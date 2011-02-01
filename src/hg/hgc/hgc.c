@@ -9044,8 +9044,10 @@ safef(query, sizeof(query),
       "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL)
+//if (row != NULL)
+if ((row != NULL) && strlen(row[0]) >= 1)
     {
+    printf("<br>---%s---\n", row[0]);fflush(stdout);
     printf("<B>Phenotype: </B><UL>");
     while (row != NULL)
     	{
@@ -9319,7 +9321,7 @@ chromEnd   = cartOptionalString(cart, "t");
 
 if (url != NULL && url[0] != 0)
     {
-    printf("<B>OMIM Gene ");fflush(stdout);
+    printf("<B>OMIM Gene: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
@@ -9331,7 +9333,7 @@ if (url != NULL && url[0] != 0)
 	if (row[0] != NULL)
 	    {
 	    title1 = cloneString(row[0]);
-    	    printf(": %s", title1);
+    	    printf(" %s", title1);
 	    }
 	if (row[1] != NULL)
 	    {
@@ -9493,6 +9495,9 @@ printf("<HR>");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
+
+#include "jl.c"
+#include "js.c"
 void doOmimGeneClass3(struct trackDb *tdb, char *item)
 /* Put up OmimGene track info. */
 {
@@ -23432,9 +23437,13 @@ else if (sameWord(table, "switchDbTss"))
     {
     doSwitchDbTss(tdb, item);
     }
-else if (sameWord(table, "omimLocationClass2"))
+else if (sameWord(table, "omimLocation"))
     {
-    doOmimGeneClass3(tdb, item);
+    doOmimLocation(tdb, item);
+    }
+else if (sameWord(table, "omimAvSnp"))
+    {
+    doOmimAvSnp(tdb, item);
     }
 else if (sameWord(table, "omimGeneClass2"))
     {
