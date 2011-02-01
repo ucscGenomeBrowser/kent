@@ -26,7 +26,8 @@ errAbort(
   "             '" MDB_DEFAULT_NAME "'.\n"
   "       -recreate   Creates or empties the table.  No further arguements needed.\n"
   "       -force      Overrides restrictions placed on shared  '" MDB_DEFAULT_NAME "'.\n"
-  "    -test    Does not actually update.  Use with -verbose=2 to see the SQL.\n"
+  "    -test    Does not actually update and does full cv validation.\n"
+  "             Use with -verbose=2 to see the SQL.\n"
   "    [{fileName}] File of formatted metadata from mdbPrint (RA or lines).\n"
   "      -replace   Remove all old variables for each object before adding new.\n"
   "  if {fileName} argument not provided, then -vars or -obj must be provided:\n"
@@ -35,6 +36,7 @@ errAbort(
   "             'var!=val' 'var!=v%%' 'var!=' 'var!=val1,val2' are all supported.\n"
   "        RECOMMENDED: Test complex selection criteria with mdbPrint first.\n"
   "    -obj={objName}     Update this single object from the command line as:\n\n"
+  "    -composite={}      Special commonly used var=val pair replaces -vars=\"composite=wgEn...\".\n"
   "    These options work on objects selected with -vars or -obj:\n"
   "       -var={varName}  Provide variable name (if no -var then must be -delete)\n"
   "       -val={value}    (Enclose in \"quotes if necessary\").\n"
@@ -72,6 +74,7 @@ static struct optionSpec optionSpecs[] = {
     {"table",   OPTION_STRING}, // default "metaDb"
     {"obj",     OPTION_STRING}, // objName or objId
     {"vars",    OPTION_STRING}, // Select set of object by vars
+    {"composite",OPTION_STRING}, // Special case of a commn var (replaces vars="composite=wgEncodeBroadHistone")
     {"var",     OPTION_STRING}, // variable
     {"val",     OPTION_STRING}, // value
     {"setVars", OPTION_STRING}, // Allows setting multiple var=val pairs
@@ -218,7 +221,7 @@ if(optionExists("obj"))
         (mdbObjs->vars && mdbObjs->vars->val!=NULL?"=":""),
         (mdbObjs->vars && mdbObjs->vars->val!=NULL?mdbObjs->vars->val:""));
     }
-else if(optionExists("vars"))
+else if(optionExists("vars") || optionExists("composite"))
     {
     if(sharedTbl && !force)
         {
@@ -226,13 +229,24 @@ else if(optionExists("vars"))
         verbose(1, "NOT SUPPORTED for shared table '%s'.\n",MDB_DEFAULT_NAME);
         usage(); // Must not have submitted formatted file also
         }
-    if(argc > 2)
+    if((argc > 2 && (!optionExists("vars") || !optionExists("composite")))
+    || (argc > 3 &&   optionExists("vars") &&  optionExists("composite")) )
         {
         sqlDisconnect(&conn);
-        verbose(1, "INCONSISTENT REQUEST: can't combine -vars with a supplied file.\n");
+        verbose(1, "INCONSISTENT REQUEST: can't combine -vars or -composite with a supplied file.\n");
         usage(); // Must not have submitted formatted file also
         }
-    struct mdbByVar * mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
+    struct mdbByVar * mdbByVars = NULL;
+    if (optionExists("vars"))
+        {
+        mdbByVars = mdbByVarsLineParse(optionVal("vars", NULL));
+        if (optionExists("composite"))
+            mdbByVarAppend(mdbByVars,"composite", NULL,optionVal("composite", NULL),FALSE);
+        }
+    else //if (optionExists("composite"))
+        {
+        mdbByVars = mdbByVarCreate("composite", NULL,optionVal("composite", NULL));
+        }
     mdbObjs = mdbObjsQueryByVars(conn,table,mdbByVars);
 
     // replace all found vars but update request
@@ -277,6 +291,15 @@ if(mdbObjs != NULL)
         count = mdbObjsLoadToDb(conn,table,mdbObjs,testIt);
     else
         count = mdbObjsSetToDb(conn,table,mdbObjs,replace,testIt);
+
+    if (testIt)
+        {
+        int invalids = mdbObjsValidate(mdbObjs,TRUE);
+        int varsCnt=mdbObjCount(mdbObjs,FALSE);
+        verbose(1, "%d invalid%s of %d variable%s according to the cv.ra.\n",invalids,(invalids==1?"":"s"),varsCnt,(varsCnt==1?"":"s"));
+        if (invalids > 0)
+            verbose(1, "Variables invalid to cv.ra ARE PERMITTED in the mdb.\n");
+        }
     }
 if(testIt)
     verbose(1, "Command would affected %d row(s) in %s.%s\n", count,db,table);

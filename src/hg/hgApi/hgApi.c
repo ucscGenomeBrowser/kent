@@ -138,11 +138,16 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
         if(ix == 0) //
             fail("Unsupported 'cmd' parameter");
 
+        char *onChange="findTracksMdbValChanged(this);";
+    #define PLUS_MINUS_BUTTON_BY_JS
+    #ifndef PLUS_MINUS_BUTTON_BY_JS
+        onChange="findTracksSearchButtonsEnable(this);";
+    #endif///ndef PLUS_MINUS_BUTTON_BY_JS
         enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
         if (searchBy == cvsSearchBySingleSelect)
             {
-            dyStringPrintf(output,"<SELECT NAME=\"%s%i\" class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'>\n",
-                            METADATA_VALUE_PREFIX, ix);
+            dyStringPrintf(output,"<SELECT NAME=\"%s%i\" class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='%s'>\n",
+                            METADATA_VALUE_PREFIX, ix, onChange);
 
             // Get options list
             struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
@@ -160,8 +165,8 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
             }
         else if (searchBy == cvsSearchByFreeText)
             {
-            dyStringPrintf(output,"<input type='text' name='%s%i' value='' class='mdbVal freeText' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:310px; width:310px; font-size:.9em;'>",
-                            METADATA_VALUE_PREFIX, ix);
+            dyStringPrintf(output,"<input type='text' name='%s%i' value='' class='mdbVal freeText' onkeyup='%s' style='max-width:310px; width:310px; font-size:.9em;'>",
+                            METADATA_VALUE_PREFIX, ix, onChange);
             }
         //else if (searchBy == cvsSearchByMultiSelect)
         //    {

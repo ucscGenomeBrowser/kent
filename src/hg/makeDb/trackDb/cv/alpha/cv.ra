@@ -9240,14 +9240,14 @@ validate list: noSequence,none
 priority 450
 # Currently this is more like a boolean, but is filled with "noSequence" in several OpenChromatin datasets.  No fastq's and hollow BAMS are provided (01/14/2011)
 
-# term project
-# type typeOfTerm
-# label Project funded by
-# description Project that funded this and a related set of experiments.
-# searchable no
-# cvDefined no
-# priority 010
-# Only one: all encode is under single project='wgEncode' (11/3/10)
+term project
+type typeOfTerm
+label Project funded by
+description Project that funded this and a related set of experiments.
+searchable no
+cvDefined no
+validate list: wgEncode   # Only one so far: all encode is under single project='wgEncode' (11/3/10)
+priority 010
 
 term protocol
 type typeOfTerm

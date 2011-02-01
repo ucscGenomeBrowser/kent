@@ -3811,6 +3811,10 @@ else if (wordCount > 0)
 	int num = 12;
         genericBedClick(conn, tdb, item, start, num);
 	}
+    else if (startsWith("gvf", type))
+        {
+        doGvf(tdb, item);
+        }
 #ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);

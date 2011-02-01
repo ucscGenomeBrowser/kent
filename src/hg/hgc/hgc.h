@@ -413,6 +413,9 @@ void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName);
 void doPgSnp(struct trackDb *tdb, char *itemName, struct customTrack *ct);
 /* print detail page for personal genome track (pgSnp) */
 
+void doGvf(struct trackDb *tdb, char *item);
+/* Show details for variants represented as GVF, stored in a bed8Attrs table */
+
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 #endif
