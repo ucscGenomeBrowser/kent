@@ -1800,11 +1800,9 @@ function loadContextMenu(img)
                             ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
                         } else {
                             var item;
-                            if(title.indexOf("display density") != -1)
-                                item = makeImgTag("toggle.png") + title;
-                            else if(title == "zoomInMore")
+                            if(title == "zoomInMore")
                                 // avoid showing menu item that says "Show details for zoomInMore..." (redmine 2447)
-                                item = makeImgTag("toggle.png") + " Show details...";
+                                item = makeImgTag("book.png") + " Show details...";
                             else
                                 item = makeImgTag("book.png") + " Show details for " + title + "...";
                             o[item] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
