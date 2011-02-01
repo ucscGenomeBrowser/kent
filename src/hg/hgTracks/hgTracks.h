@@ -1260,6 +1260,9 @@ void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
 
+void gvfMethods(struct track *tg);
+/* Load GVF variant data. */
+
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
