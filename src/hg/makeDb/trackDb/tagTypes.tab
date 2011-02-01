@@ -268,8 +268,8 @@ scoreFilter broadPeak narrowPeak bed interaction bedlogR
 scoreFilterByRange bigBed bed 
 scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR
 scoreFilterMax bed bedlogR
-scoreMax bed bedlogR
-scoreMin broadPeak narrowPeak bed bedlogR
+scoreMax bed bedlogR interaction
+scoreMin broadPeak narrowPeak bed bedlogR interaction
 searchMethod bed
 searchType bed
 selectSubject psl
