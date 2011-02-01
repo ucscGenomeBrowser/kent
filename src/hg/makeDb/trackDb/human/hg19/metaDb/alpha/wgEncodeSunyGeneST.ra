@@ -2,7 +2,7 @@ metaObject wgEncodeSunyAlbanyGeneSTGm12878Celf1RbpAssocRna
 objType table
 antibody CELF1
 cell GM12878
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -22,7 +22,7 @@ metaObject wgEncodeSunyAlbanyGeneSTGm12878Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell GM12878
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -42,7 +42,7 @@ metaObject wgEncodeSunyAlbanyGeneSTGm12878Igf2bp1RbpAssocRna
 objType table
 antibody IGF2BP1
 cell GM12878
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -62,7 +62,7 @@ metaObject wgEncodeSunyAlbanyGeneSTGm12878Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell GM12878
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -82,7 +82,7 @@ metaObject wgEncodeSunyAlbanyGeneSTGm12878RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell GM12878
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -102,7 +102,7 @@ metaObject wgEncodeSunyAlbanyGeneSTGm12878SlbpRbpAssocRna
 objType table
 antibody SLBP
 cell GM12878
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -122,7 +122,7 @@ metaObject wgEncodeSunyAlbanyGeneSTGm12878T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell GM12878
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -141,7 +141,7 @@ view RbpAssocRna
 metaObject wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna
 objType table
 cell H1-hESC
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
@@ -159,7 +159,7 @@ view RbpAssocRna
 metaObject wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna
 objType table
 cell H1-hESC
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
@@ -177,7 +177,7 @@ view RbpAssocRna
 metaObject wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna
 objType table
 cell H1-hESC
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
@@ -196,7 +196,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHelas3Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell HeLa-S3
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
@@ -216,7 +216,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHelas3Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell HeLa-S3
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
@@ -236,7 +236,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHelas3RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell HeLa-S3
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -256,7 +256,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHelas3T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell HeLa-S3
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
@@ -276,7 +276,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHepg2Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell HepG2
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
@@ -296,7 +296,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHepg2Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell HepG2
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
@@ -316,7 +316,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHepg2RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell HepG2
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -336,7 +336,7 @@ metaObject wgEncodeSunyAlbanyGeneSTHepg2T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell HepG2
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
@@ -356,7 +356,7 @@ metaObject wgEncodeSunyAlbanyGeneSTK562Celf1RbpAssocRna
 objType table
 antibody CELF1
 cell K562
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
@@ -376,7 +376,7 @@ metaObject wgEncodeSunyAlbanyGeneSTK562Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell K562
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -396,7 +396,7 @@ metaObject wgEncodeSunyAlbanyGeneSTK562Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell K562
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -416,7 +416,7 @@ metaObject wgEncodeSunyAlbanyGeneSTK562RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell K562
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -436,7 +436,7 @@ metaObject wgEncodeSunyAlbanyGeneSTK562SlbpRbpAssocRna
 objType table
 antibody SLBP
 cell K562
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
@@ -456,7 +456,7 @@ metaObject wgEncodeSunyAlbanyGeneSTK562T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell K562
-composite wgEncodeSunyAlbanyGeneST
+composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
