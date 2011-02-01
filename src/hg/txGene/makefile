@@ -24,6 +24,7 @@ DIRS = \
 	txGeneFromBed \
 	txGeneProtAndRna \
 	txGeneSeparateNoncoding \
+	txGeneValidation \
 	txGeneXref
 
 clean:

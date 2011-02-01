@@ -5,7 +5,7 @@ longLabel Brain Histone H3K4me3 ChIP-Seq from Univ. Mass. Medical School (Akbari
 visibility hide
 group regulation
 compositeTrack on
-dimensionAchecked male,female
+dimensionAchecked male,female,mixed
 dimensions dimensionX=age dimensionY=cellType dimA=sex
 dragAndDrop subTracks
 noInherit on

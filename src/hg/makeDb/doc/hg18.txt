@@ -30591,7 +30591,19 @@ done | sort -k4,4 > hg18.gold.bed
     hgLoadBed hg18 numtS numtS.bed
     hgLoadBed hg18 numtSMitochondrion numtSMitochondrion.bed
     hgLoadBed hg18 numtSMitochondrionChrPlacement numtSMitochondrionChrPlacement.bed
-
+    # reload the tracks with data with updated ID (DONE 2011-01-26 Chin)
+    mkdir /cluster/data/hg18/bed/NumtS/2011-01-26
+    # cp over all new data
+    cd /cluster/data/hg18/bed/NumtS/2011-01-26
+    # load the bed files to hg18
+    hgLoadBed hg18  numtSAssembled  numtSAssembled.bed
+    hgLoadBed hg18 numtS numtS.bed
+    hgLoadBed hg18 numtSMitochondrion numtSMitochondrion.bed
+    hgLoadBed hg18 numtSMitochondrionChrPlacement numtSMitochondrionChrPlacement.bed
+    # update the ~/kent/src/hg/makeDb/trackDb/human/numtSeq.html with
+    # description_revisedMC ( numtSeq-20110126.html)
+    cp  numtSeq-20110126.html \
+       /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/human/numtSeq.html
 
 ##############################################################################
 # hg18 <-> hg19 difference tracks (WORKING - 2010-09-03 - Hiram)
@@ -31179,4 +31191,42 @@ TMPDIR=/scratch/tmp
     md5sum *.gz > md5sum.txt
 
 #########################################################################
+# ISCA RETROSPECTIVE FROM DBVAR (DONE 1/31/11 angie)
+    # Redmine: Track #34 (dbVar for human)
+    mkdir -p /hive/data/genomes/hg18/bed/isca/2011_01_31
+    cd /hive/data/genomes/hg18/bed/isca/2011_01_31
+    wget ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd37_ISCA_-_Retrospective/gvf/nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz
+    # See notes on data contents: http://redmine.soe.ucsc.edu/issues/34#note-34
+    # and notes on data format plan: http://redmine.soe.ucsc.edu/issues/34#note-36
+    zcat nstd37_ISCA_-_Retrospective.NCBI36.submitted.all.germline.ucsc.gvf.gz \
+    | perl -wne 'next if (/^(#|browser|track)/); chomp; \
+        ($c, undef, undef, $s, $e, $score, $strand, undef, $attrs) = split("\t"); \
+        ($thickS, $thickE) = ($s, $e); \
+        ($attrCount, $attrTags, $attrVals) = (0, "", ""); \
+        foreach my $tagVal (split(";", $attrs)) { \
+          ($tag, $val) = split("=", $tagVal); \
+          if ($tag eq "ID") {$name = $val;} \
+          elsif ($tag eq "Start_range") { \
+            ($outerStart, $innerStart) = split(",", $val); \
+            $s = $outerStart if ($outerStart =~ /^\d+$/ && $outerStart < $s); \
+            $thickS = $innerStart if ($innerStart =~ /^\d+$/ && $innerStart > $thickS); \
+          } elsif ($tag eq "End_range") { \
+            ($innerEnd, $outerEnd) = split(",", $val); \
+            $thickE = $innerEnd if ($innerEnd =~ /^\d+$/ && $innerEnd < $thickE); \
+            $e = $outerEnd if ($outerEnd =~ /^\d+$/ && $outerEnd > $e); \
+          } \
+          # Escape commas so the val list parses correctly in autoSql: \
+          $val =~ s/%/%25/g;   $val =~ s/,/%2C/g; \
+          $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
+        } \
+        %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
+        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
+                      $attrCount, $attrTags, $attrVals); \
+        print join("\t", @bed8Attrs) . "\n";' \
+      > iscaRetrospective.bed
+    hgLoadBed -tab -renameSqlTable -sqlTable=$HOME/kent/src/hg/lib/bed8Attrs.sql \
+      -allowStartEqualEnd hg18 iscaRetrospective iscaRetrospective.bed
+#Loaded 11312 elements of size 11
 
+
+#############################################################################

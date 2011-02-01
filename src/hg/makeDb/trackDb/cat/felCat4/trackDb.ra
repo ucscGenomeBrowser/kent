@@ -31,30 +31,144 @@ visibility hide
 type ctgPos
 
 
-track multiz6way
-shortLabel Conservation
-longLabel 6-Way Multiz Alignment & Conservation
-group compGeno
-priority 103.4
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-# wiggle phastCons6way
-spanList 1
-autoScale Off
-windowingFunction mean
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz6wayFrames
-irows on
-summary multiz6waySummary
-speciesCodonDefault felCat4
-speciesGroups Vertebrate
-sGroup_Vertebrate canFam2 ailMel1 hg19 mm9 monDom5 
-itemFirstCharCase noChange
-treeImage phylo/felCat4_6way.gif
+#track multiz6way-old
+#shortLabel Conservation
+#longLabel 6-Way Multiz Alignment & Conservation
+#group compGeno
+#priority 103.4
+#visibility pack
+#color 0, 10, 100
+#altColor 0,90,10
+#type wigMaf 0.0 1.0
+#maxHeightPixels 100:40:11
+## wiggle phastCons6way
+#spanList 1
+#autoScale Off
+#windowingFunction mean
+#pairwiseHeight 12
+#yLineOnOff Off
+#frames multiz6wayFrames
+#irows on
+#summary multiz6waySummary
+#speciesCodonDefault felCat4
+#speciesGroups Vertebrate
+#sGroup_Vertebrate canFam2 ailMel1 hg19 mm9 monDom5 
+#itemFirstCharCase noChange
+#treeImage phylo/felCat4_6way.gif
 
 track nscanGene override
 informant Cat N-SCAN used human (hg19) as the informant for conservation.
+
+#########################
+track cons6way
+compositeTrack on
+shortLabel Conservation
+longLabel Multiz Alignment & Conservation (6 Species)
+subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
+#subGroup2 clade Clade primate=Primates  vert=Vertebrate
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
+group compGeno
+priority 103.29
+
+    track cons6wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons6way
+
+
+        track multiz6way
+        subTrack cons6wayViewalign on
+        shortLabel Multiz Align
+        longLabel Multiz Alignments & Conservation (6 species) 
+        subGroups view=align
+        noInherit on
+        irows on
+        summary multiz6waySummary
+        frames multiz6wayFrames
+        group compGeno
+        color 0, 10, 100
+        altColor 0,90,10
+        type wigMaf 0.0 1.0
+        speciesCodonDefault calJac3
+        speciesGroups Vertebrate
+        sGroup_Vertebrate canFam2 ailMel1 hg19 mm9 monDom5 
+        #speciesDefaultOff canFam2 ailMel1 monDom5
+        treeImage phylo/felCat4_6way.gif
+        itemFirstCharCase noChange
+        priority 100
+
+    track cons6wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons6way
+#    viewLimits -4:4
+#    viewLimitsMax -15.41:7.13
+
+        # PhyloP conservation
+        track phyloP6way
+        subTrack cons6wayViewphyloP on
+        subGroups view=phyloP
+        shortLabel 6 Way PhyloP Cons
+        longLabel  Basewise Conservation by PhyloP
+        noInherit on
+        #configurable on
+        type wig -3.24 1.10
+        maxHeightPixels 100:50:11
+        viewLimits -3.2:1.1
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,10,70
+        altColor 70,10,10
+        priority 1
+
+    track cons6wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons6way
+
+        # phastCons conservation
+        track phastCons6way
+        subTrack cons6wayViewphastcons on
+        subGroups view=phastcons
+        shortLabel 6 Way Cons
+        longLabel Conservation by PhastCons
+        noInherit on
+        #configurable on
+        type wig 0 1
+        viewLimits 0:1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 10
+
+    track cons6wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons6way
+
+        # Conserved Elements (Most Conserved)
+        track phastConsElements6way
+        subTrack cons6wayViewelements off
+        subGroups view=elements
+        shortLabel 6 Way El
+        longLabel Conserved Elements
+        noInherit on
+        color 170,100,50
+        type bed 5 .
+        exonArrows off
+        showTopScorers 200
+        priority 20
+
+

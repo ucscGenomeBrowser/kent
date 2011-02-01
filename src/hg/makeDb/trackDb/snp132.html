@@ -21,8 +21,8 @@ build 132, available from
 </P>
 
 <P>
-  The configuration categories reflect the following definitions (not all categories apply
-  to this assembly):
+On the track controls page, SNPs can be colored and/or filtered from the 
+display according to several attributes:
 </P>
   <UL>
 
@@ -93,6 +93,122 @@ build 132, available from
       </UL>
     </LI>
     <LI>
+      <A name="Exceptions"></A>
+      <B>Unusual Conditions (UCSC)</B>: UCSC checks for several anomalies 
+      that may indicate a problem with the mapping, and reports them in the 
+      Annotations section of the SNP details page if found:
+      <UL>
+        <LI><B>AlleleFreqSumNot1</B> - Allele frequencies do not sum
+            to 1.0 (+-0.01).  This SNP's allele frequency data are
+	    probably incomplete.</LI>
+        <LI><B>DuplicateObserved</B>,
+            <B>MixedObserved</B> - Multiple distinct insertion SNPs have 
+	    been mapped to this location, with either the same inserted 
+	    sequence (Duplicate) or different inserted sequence (Mixed).</LI>
+        <LI><B>FlankMismatchGenomeEqual</B>,
+	    <B>FlankMismatchGenomeLonger</B>,
+	    <B>FlankMismatchGenomeShorter</B> - NCBI's alignment of
+            the flanking sequences had at least one mismatch or gap
+	    near the mapped SNP position.
+            (UCSC's re-alignment of flanking sequences to the genome may
+            be informative.)</LI>
+        <LI><B>MultipleAlignments</B> - This SNP's flanking sequences 
+            align to more than one location in the reference assembly.</LI>
+        <LI><B>NamedDeletionZeroSpan</B> - A deletion (from the
+            genome) was observed but the annotation spans 0 bases.
+            (UCSC's re-alignment of flanking sequences to the genome may
+            be informative.)</LI>
+        <LI><B>NamedInsertionNonzeroSpan</B> - An insertion (into the
+            genome) was observed but the annotation spans more than 0
+            bases.  (UCSC's re-alignment of flanking sequences to the
+            genome may be informative.)</LI>
+        <LI><B>NonIntegerChromCount</B> - At least one allele
+            frequency corresponds to a non-integer (+-0.010000) count of
+            chromosomes on which the allele was observed.  The reported
+            total sample count for this SNP is probably incorrect.</LI>
+        <LI><B>ObservedContainsIupac</B> - At least one observed allele 
+            from dbSNP contains an <A HREF="../goldenPath/help/iupac.html"
+	    TARGET=_BLANK>IUPAC</A> ambiguous base (e.g. R, Y, N).</LI>
+        <LI><B>ObservedMismatch</B> - UCSC reference allele does not
+            match any observed allele from dbSNP.  This is tested only
+	    for SNPs whose class is single, in-del, insertion, deletion,
+	    mnp or mixed.</LI>
+        <LI><B>ObservedTooLong</B> - Observed allele not given (length
+            too long).</LI>
+        <LI><B>ObservedWrongFormat</B> - Observed allele(s) from dbSNP
+            have unexpected format for the given class.</LI>
+        <LI><B>RefAlleleMismatch</B> - The reference allele from dbSNP
+            does not match the UCSC reference allele, i.e. the bases in
+	    the mapped position range.</LI>
+        <LI><B>RefAlleleRevComp</B> - The reference allele from dbSNP
+            matches the reverse complement of the UCSC reference
+            allele.</LI>
+        <LI><B>SingleClassLongerSpan</B> - All observed alleles are
+            single-base, but the annotation spans more than 1 base.
+            (UCSC's re-alignment of flanking sequences to the genome may
+            be informative.)</LI>
+        <LI><B>SingleClassZeroSpan</B> - All observed alleles are
+            single-base, but the annotation spans 0 bases.  (UCSC's
+            re-alignment of flanking sequences to the genome may be
+            informative.)</LI>
+      </UL>
+      Another condition, which does not necessarily imply any problem,
+      is noted:
+      <UL>
+        <LI><B>SingleClassTriAllelic</B>, <B>SingleClassQuadAllelic</B> - 
+            Class is single and three or four different bases have been
+	    observed (usually there are only two).</LI>
+      </UL>
+    </LI>
+    <LI>
+      <A name="Bitfields"></A>
+      <B>Miscellaneous Attributes (dbSNP)</B>: several properties extracted
+         from dbSNP's SNP_bitfield table
+         (see <A HREF="ftp://ftp.ncbi.nlm.nih.gov/snp/specs/dbSNP_BitField_v5.pdf"
+               TARGET=_BLANK>dbSNP_BitField_v5.pdf</A> for details)
+      <UL>
+        <LI><B>Clinically Associated</B> - SNP is in OMIM/OMIA and/or at 
+	    least one submitter is a Locus-Specific Database.  This does
+	    not necessarily imply that the variant causes any disease,
+	    only that it has been observed in clinical studies.</LI>
+        <LI><B>Appears in OMIM/OMIA</B> - SNP is mentioned in 
+	    <A HREF="http://www.ncbi.nlm.nih.gov/omim" 
+	    TARGET=_BLANK>Online Mendelian Inheritance in Man</A> for 
+	    human SNPs, or <A HREF="http://www.ncbi.nlm.nih.gov/omia"
+	    TARGET=_BLANK>Online Mendelian Inheritance in Animals</A> for 
+	    non-human animal SNPs.  Some of these SNPs are quite common,
+	    others are known to cause disease; see OMIM/OMIA for more
+	    information.</LI>
+        <LI><B>Has Microattribution/Third-Party Annotation</B> - At least
+	    one of the SNP's submitters studied this SNP in a biomedical
+	    setting, but is not a Locus-Specific Database or OMIM/OMIA.</LI>
+        <LI><B>Submitted by Locus-Specific Database</B> - At least one of
+	    the SNP's submitters is associated with a database of variants
+	    associated with a particular gene.  These variants may or may
+	    not be known to be causative.</LI>
+        <LI><B>MAF >= 5% in Some Population</B> - Minor Allele Frequency is 
+	    at least 5% in at least one population assayed.
+	    <EM><B>Warning: this bit appears to have been set incorrectly for 
+	        many SNPs in build 132</B></EM></LI>
+        <LI><B>MAF >= 5% in All Populations</B> - Minor Allele Frequency is 
+	    at least 5% in all populations assayed.
+	    <EM><B>Warning: this bit appears to have been set incorrectly for
+	        some SNPs in build 132</B></EM></LI>
+        <LI><B>Genotype Conflict</B> - Quality check: different genotypes 
+	    have been submitted for the same individual.</LI>
+        <LI><B>Ref SNP Cluster has Nonoverlapping Alleles</B> - Quality
+	    check: this reference SNP was clustered from submitted SNPs
+	    with non-overlapping sets of observed alleles.</LI>
+        <LI><B>Some Assembly's Allele Does Not Match Observed</B> - 
+	    Quality check: the reference assembly's allele at the mapped 
+	    position is not present in this SNP's observed alleles.</LI>
+      </UL>
+    </LI>
+  </UL>
+  Several other properties don't have coloring options, but do have 
+  some filtering options:
+  <UL>
+    <LI>
       <A name="AvHet"></A>
       <B>Average heterozygosity</B>: Calculated by dbSNP as described 
       <A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" target=_blank>here</A>
@@ -110,6 +226,24 @@ build 132, available from
       <LI>Weight = 0 and weight = 10 are excluded from the data set.
       <LI>A filter on maximum weight value is supported, which defaults to 1.
       </UL>
+    </LI>
+    <LI>
+      <A name="Submitters"></A>
+      <B>Submitter handles</B>: These are short single-word identifiers of
+      labs or consortia that submitted SNPs that were clustered into this
+      reference SNP by dbSNP (e.g. 1000GENOMES, ENSEMBL, KWOK).  Some SNPs
+      have been observed by many different submitters, and some by only a
+      single submitter (although that single submitter may have tested a
+      large number of samples).
+    </LI>
+    <LI>
+      <A name="AlleleFreq"></A>
+      <B>AlleleFrequencies</B>: Some submissions to dbSNP include 
+      allele frequencies and the study's sample size 
+      (i.e. the number of distinct chromosomes which is two times the
+      number of individuals assayed, a.k.a. 2N).  dbSNP combines all
+      available frequencies and counts from submitted SNPs that are 
+      clustered together into a reference SNP.
     </LI>
   </UL>
 
@@ -136,35 +270,6 @@ reference allele is shorter than all other observed alleles, we change
 'in-del' to 'insertion'.  Likewise, if the reference allele is longer
 than all other observed alleles, we change 'in-del' to 'deletion'.
 </P>
-
-<H2>UCSC Annotations</H2>
-<P>
-UCSC checks for several unusual conditions that may indicate a problem 
-with the mapping, and reports them in the Annotations section if found:
-</P>
-  <UL>
-  <LI>The dbSNP reference allele is not the same as the UCSC reference
-      allele, i.e. the bases in the mapped position range.</LI>
-  <LI>Class is single, in-del, mnp or mixed and the UCSC reference
-      allele does not match any observed allele.</LI>
-  <LI>In NCBI's alignment of flanking sequences to the genome, part
-      of the flanking sequence around the SNP does not align to
-      the genome.</LI>
-  <LI>Class is single, but the size of the mapped SNP is not one base.</LI>
-  <LI>Class is named and indicates an insertion or deletion, but the size
-      of the mapped SNP implies otherwise.</LI>
-  <LI>Class is single and the format of observed alleles is unexpected.</LI>
-  <LI>The length of the observed allele(s) is not available because it is
-      too long.</LI>
-  <LI>Multiple distinct insertion SNPs have been mapped to this location.</LI>
-  <LI>At least one observed allele contains an ambiguous 
-      <A HREF=../goldenPath/help/iupac.html>IUPAC</A> base (e.g. R, Y, N).</LI>
-  </UL>
-
-Another condition, which does not necessarily imply any problem, is noted:
-  <UL>
-  <LI>Class is single and SNP is tri-allelic or quad-allelic.</LI>
-  </UL>
 
 <H2>UCSC Re-alignment of flanking sequences</H2>
 <P>
@@ -227,11 +332,11 @@ reference genome assemblies.
 We use our liftOver utility to identify the orthologous alleles.  
 The candidate human SNPs are a filtered list that meet the criteria:
 <UL>
-<LI>class = 'single'
-<LI>chromEnd = chromStart + 1
-<LI>align to only one location in the human reference genome
-<LI>are not aligned to a chrN_random chrom
-<LI>are biallelic (not tri or quad allelic)
+<LI>class = 'single'</LI>
+<LI>mapped position in the human reference genome is one base long</LI>
+<LI>aligned to only one location in the human reference genome</LI>
+<LI>not aligned to a chrN_random chrom</LI>
+<LI>biallelic (not tri- or quad-allelic)</LI>
 </UL>
 
 In some cases the orthologous allele is unknown; these are set to 'N'.
@@ -255,4 +360,3 @@ Sherry ST, Ward MH, Kholodov M, Baker J, Phan L, Smigielski EM, Sirotkin K.
 dbSNP: the NCBI database of genetic variation</A>.
 <em>Nucleic Acids Res. </em>2001 Jan 1;29(1):308-11.
 <P>
-&nbsp;

@@ -18,6 +18,7 @@ origAssembly hg17
 pennantIcon 17.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg17"
 
 track clonePos override
+longLabel Clone Coverage
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
@@ -1543,9 +1544,37 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp132Common override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
+track snp132Patient override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
+track snp132NonUnique override
+snpSeqFile /gbdb/hg19/snp/snp132.fa
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
 track snp132 override
-release alpha
-visibility hide
 chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
@@ -1599,6 +1628,9 @@ origAssembly hg18
 track hapmapSnps override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+longLabel HapMap SNPs (rel27, merged Phase II + Phase III genotypes)
+dataVersion rel27
+hapmapPhase III
 
 track hapmapLdPh override
 origAssembly hg18
@@ -2017,3 +2049,11 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 #include jkExperiments.ra
 
+track ncbiIncidentDb
+shortLabel NCBI Incident
+longLabel NCBI Incident database
+group map
+priority 500.3
+visibility hide
+type bedDetail 6
+url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$

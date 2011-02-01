@@ -1471,15 +1471,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1551 dateSubmitted=2010-06-17
 
-        track wgEncodeUwDnaseAg09319PkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG09319 Pk 1
-        longLabel AG09319 DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=AG09319 rep=1 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        # subId=1554 dateSubmitted=2010-06-17
-
         track wgEncodeUwDnaseSaecPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SAEC Pk 1
@@ -1579,15 +1570,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1577 dateSubmitted=2010-06-17
 
-        track wgEncodeUwDnaseHrePkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRE Pk 1
-        longLabel HRE DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=HRE rep=1 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        # subId=1578 dateSubmitted=2010-06-17
-
         track wgEncodeUwDnaseCmkPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CMK Pk 1
@@ -1625,15 +1607,6 @@ wgEncode 1
         type narrowPeak
         origAssembly hg18
         # subId=1591 dateSubmitted=2010-06-18
-
-        track wgEncodeUwDnaseH7esPkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel H7-hESC Pk 1
-        longLabel H7-hESC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=H7es rep=1 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        # subId=1592 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcpePkRep1
         parent wgEncodeUwDnaseViewaPeaks off
@@ -1699,25 +1672,6 @@ wgEncode 1
         type narrowPeak
         origAssembly hg18
         # subId=1619 dateSubmitted=2010-06-18
-
-        track wgEncodeUwDnaseHrpePkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRPEpiC Pk 1
-        longLabel HRPEpiC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=HRPE rep=1 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        # subId=1622 dateSubmitted=2010-06-18
-
-        track wgEncodeUwDnaseHuvecPkRep1
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HUVEC Pk 1
-        longLabel HUVEC DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks cellType=2HUVEC rep=1 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        color 224,75,0
-        # subId=1624 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnasePanc1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
@@ -1910,15 +1864,6 @@ wgEncode 1
         origAssembly hg18
         # subId=1566 dateSubmitted=2010-06-17
 
-        track wgEncodeUwDnaseHrePkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRE Pk 2
-        longLabel HRE DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=HRE rep=2 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        # subId=1567 dateSubmitted=2010-06-17
-
         track wgEncodeUwDnaseNhdfneoPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDF-neo Pk 2
@@ -2046,24 +1991,6 @@ wgEncode 1
         origAssembly hg18
         color 189,0,157
         # subId=1615 dateSubmitted=2010-06-19
-
-        track wgEncodeUwDnaseHnpcePkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HNPCEpiC Pk 2
-        longLabel HNPCEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=HNPCE rep=2 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        # subId=1620 dateSubmitted=2010-06-18
-
-        track wgEncodeUwDnaseHrpePkRep2
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRPEpiC Pk 2
-        longLabel HRPEpiC DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks cellType=HRPE rep=2 treatment=None
-        type narrowPeak
-        origAssembly hg18
-        # subId=1621 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseSkmcPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
@@ -2826,6 +2753,79 @@ wgEncode 1
         type narrowPeak
         origAssembly hg19
         # subId=3215 dateSubmitted=2011-01-11
+
+        track wgEncodeUwDnaseAg09319PkRep1V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel AG09319 Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in AG09319 cells)
+        subGroups view=Peaks cellType=AG09319 treatment=None rep=1
+        type narrowPeak
+        origAssembly hg18
+        # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseH7esPkRep1V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel H7-hESC Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in H7-hESC cells)
+        subGroups view=Peaks cellType=H7es treatment=None rep=1
+        type narrowPeak
+        origAssembly hg18
+        # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseHnpcePkRep2V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HNPCEpiC Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HNPCEpiC cells)
+        subGroups view=Peaks cellType=HNPCE treatment=None rep=2
+        type narrowPeak
+        origAssembly hg18
+        # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseHrePkRep2V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HRE Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HRE cells)
+        subGroups view=Peaks cellType=HRE treatment=None rep=2
+        type narrowPeak
+        origAssembly hg18
+        # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseHrePkRep1V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HRE Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HRE cells)
+        subGroups view=Peaks cellType=HRE treatment=None rep=1
+        type narrowPeak
+        origAssembly hg18
+        # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseHrpePkRep2V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HRPEpiC Pk 2
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HRPEpiC cells)
+        subGroups view=Peaks cellType=HRPE treatment=None rep=2
+        type narrowPeak
+        origAssembly hg18
+        # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseHrpePkRep1V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HRPEpiC Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HRPEpiC cells)
+        subGroups view=Peaks cellType=HRPE treatment=None rep=1
+        type narrowPeak
+        origAssembly hg18
+        # subId=3261 dateSubmitted=2011-01-14
+
+        track wgEncodeUwDnaseHuvecPkRep1V2
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HUVEC Pk 1
+        longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HUVEC cells)
+        subGroups view=Peaks cellType=HUVEC treatment=None rep=1
+        type narrowPeak
+        origAssembly hg18
+        color 224,75,0
+        # subId=3261 dateSubmitted=2011-01-14
 
 
     track wgEncodeUwDnaseViewzRaw

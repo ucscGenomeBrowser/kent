@@ -68,7 +68,7 @@ origAssembly hg19
     track wgEncodeHaibRrbsViewSites
     shortLabel Sites 
     view Sites 
-    visibility dense
+    visibility full 
     subTrack wgEncodeHaibMethylRrbs
     scoreFilter 10
     scoreFilterLimits 0:1000

@@ -2057,3 +2057,749 @@ encodeDownloadsPage.pl -db=hg19 index.html
 # 7 files.  No missing metadata  # 7 found in hgFileUi
 
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 displayed
+
+### controlId problems:
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" -count                     275 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId=" -count           90 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId!=" -count         185 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId=modelled" -count   15 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId!=modelled" -count  75 objects
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" -count                     326 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase controlId=" -count           42 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase controlId!=" -count         284 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase controlId=modelled" -count   27 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase controlId!=modelled" -count  15 objects
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" -count                     173 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire controlId=" -count           27 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire controlId!=" -count         146 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire controlId=modelled" -count   11 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire controlId!=modelled" -count  16 objects
+
+2011-01-21 Update controlId in OpenChrom datasets
+=================================================
+# Questions from me, ansers from Terry:
+>> - all of the ChIP data should have submitted Input data except NHEK and H1-hESC
+>   I don't see input for any GM line except for GM12878.
+>   QUESTION: Do these also use the "modelled" input?
+Yes.  These are fairly "normal" cell lines.  And just one minor clarification, we have different modeled input for males and females.  In our submission files (DDF), you should see things like "iff_GM12878" or "iff_generic_male" or "iff_generic_female".  These indicate the input file used for processing.
+
+>> - when available, DNase and FAIRE use models based on the input data generated.
+> See controlId explanation below.
+> QUESTION: So I should set the "controlId" to point to the available cell line's input in all Dnase and FAIRE cases?
+Yes.
+
+>> When not available, we have a composite input track from ~7 cell types (I think) that we use. 
+> QUESTION: So I should set the "controlId" to point to "modelled" in all cases that do not have a cell specific input?
+To stay consistent with our nomenclature, can you call these "generic_male" or "generic_female"?  Cell lines where the sex could not be determined used the generic_male model.
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip view=Peaks cell= controlId!=" | grep cell | sort | uniq
+cell Fibrobl
+cell GM12878
+cell GM12891
+cell GM12892
+cell GM19238
+cell GM19239
+cell GM19240
+cell Gliobla
+cell H1-hESC
+cell HUVEC
+cell HeLa-S3
+cell HepG2
+cell K562
+cell MCF-7
+cell NHEK
+cell ProgFib
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId!=" -count
+185 objects
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=Fibrobl"         -setVars="controlId=Fibrobl/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=GM12878"         -setVars="controlId=GM12878/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=K562"            -setVars="controlId=K562/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=HeLa-S3"         -setVars="controlId=HeLa-S3/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=HepG2"           -setVars="controlId=HepG2/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=HUVEC"           -setVars="controlId=HUVEC/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=Gliobla"         -setVars="controlId=Gliobla/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=MCF-7"           -setVars="controlId=MCF-7/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=Monocytes-CD14+" -setVars="controlId=Monocytes-CD14+/Input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=ProgFib"         -setVars="controlId=ProgFib/Input"         
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId!=" -count
+42 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId!=" | grep cell | sort | uniq
+objects:42  vars:771
+cell GM12891 male  iff_generic_male
+cell GM12892 f     iff_generic_female
+cell GM19238 f     iff_generic_female
+cell GM19239 m     iff_generic_male
+cell GM19240 f     iff_generic_female
+cell H1-hESC m     iff_generic_male 
+cell NHEK    f     iff_generic_female
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=GM12891" -setVars="controlId=generic_male"   
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=GM12892" -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=GM19238" -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=GM19239" -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=GM19240" -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=H1-hESC" -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChrom% composite!=wgEncodeOpenChromSynth cell=NHEK"    -setVars="controlId=generic_female"
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip controlId!=" -count
+0 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" | grep controlId | sort | uniq
+controlId Fibrobl/Input
+controlId GM12878/Input
+controlId Gliobla/Input
+controlId HUVEC/Input
+controlId HeLa-S3/Input
+controlId HepG2/Input
+controlId K562/Input
+controlId MCF-7/Input
+controlId Monocytes-CD14+/Input
+controlId ProgFib/Input
+controlId generic_female
+controlId generic_male
+
+# Chip all done.  Pick up the pieces for FAIRE and DNase
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase controlId!=" -count
+190 # was 284
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase controlId!=" | grep cell | sort | uniq
+cell 8988T
+cell A549
+cell AoSMC
+cell CLL
+cell Chorion
+cell FibroP
+cell GM18507
+cell H9ES
+cell HMEC
+cell HPDE6-E6E7
+cell HSMM
+cell HSMMtube
+cell HTR8svn
+cell Hepatocytes
+cell Huh-7
+cell Huh-7.5
+cell LNCaP
+cell Medullo
+cell Melano
+cell Myometr
+cell Osteobl
+cell PanIsletD
+cell PanIslets
+cell Stellate
+cell T-47D
+cell Urothelia
+cell iPS
+cell pHTE
+
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire controlId!=" -count
+50  # was 146
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire controlId!=" | grep cell | sort | uniq
+cell Astrocy
+cell GM18507
+cell HTR8svn
+cell Medullo
+cell NHBE
+cell PanIslets
+cell Urothelia
+
+mdbPrint hg19 -byVar -var=labVersion -val=%generic_male | grep -v Chip      
+metaVariable labVersion fseq v 1.84, iff_generic_male
+metaObject wgEncodeOpenChromDnaseA549Sig
+metaObject wgEncodeOpenChromDnaseAosmcSerumfreeSig
+metaObject wgEncodeOpenChromDnaseGm12891Sig
+metaObject wgEncodeOpenChromDnaseGm18507Sig
+metaObject wgEncodeOpenChromDnaseGm19239Sig
+metaObject wgEncodeOpenChromDnaseH1hescSig
+metaObject wgEncodeOpenChromDnaseHuh75Sig
+metaObject wgEncodeOpenChromDnaseHuh7Sig
+metaObject wgEncodeOpenChromDnaseIpsSig
+metaObject wgEncodeOpenChromDnaseLncapAndroSig
+metaObject wgEncodeOpenChromDnaseLncapSig
+metaObject wgEncodeOpenChromDnaseMyometrSig
+metaObject wgEncodeOpenChromDnasePanisdSig
+metaObject wgEncodeOpenChromDnasePanisletsSig
+metaObject wgEncodeOpenChromDnasePhteSig
+metaObject wgEncodeOpenChromFaireAstrocySig
+metaObject wgEncodeOpenChromFaireGm12891Sig
+metaObject wgEncodeOpenChromFaireGm18507Sig
+metaObject wgEncodeOpenChromFaireGm19239Sig
+metaObject wgEncodeOpenChromFaireH1hescSig
+metaObject wgEncodeOpenChromFaireNhbeSig
+metaObject wgEncodeOpenChromFairePanisletsSig
+
+mdbPrint hg19 -byVar -var=labVersion -val=%generic_female | grep -v Chip 
+metaVariable labVersion fseq v 1.84, iff_generic_female
+metaObject wgEncodeOpenChromDnase8988tSig
+metaObject wgEncodeOpenChromDnaseChorionSig
+metaObject wgEncodeOpenChromDnaseCllSig
+metaObject wgEncodeOpenChromDnaseFibropSig
+metaObject wgEncodeOpenChromDnaseGm12892Sig
+metaObject wgEncodeOpenChromDnaseGm19238Sig
+metaObject wgEncodeOpenChromDnaseGm19240Sig
+metaObject wgEncodeOpenChromDnaseH9esSig
+metaObject wgEncodeOpenChromDnaseHepatocytesSig
+metaObject wgEncodeOpenChromDnaseHmecSig
+metaObject wgEncodeOpenChromDnaseHpde6e6e7Sig
+metaObject wgEncodeOpenChromDnaseHsmmSig
+metaObject wgEncodeOpenChromDnaseHsmmtSig
+metaObject wgEncodeOpenChromDnaseHtr8Sig
+metaObject wgEncodeOpenChromDnaseMedulloSig
+metaObject wgEncodeOpenChromDnaseMelanoSig
+metaObject wgEncodeOpenChromDnaseNhekSig
+metaObject wgEncodeOpenChromDnaseOsteoblSig
+metaObject wgEncodeOpenChromDnaseStellateSig
+metaObject wgEncodeOpenChromDnaseT47dSig
+metaObject wgEncodeOpenChromDnaseUrotsaSig
+metaObject wgEncodeOpenChromDnaseUrotsaUt189Sig
+metaObject wgEncodeOpenChromFaireGm12892Sig
+metaObject wgEncodeOpenChromFaireHtr8Sig
+metaObject wgEncodeOpenChromFaireMedulloSig
+metaObject wgEncodeOpenChromFaireNhekSig
+metaObject wgEncodeOpenChromFaireUrotsaSig
+metaObject wgEncodeOpenChromFaireUrotsaUt189Sig
+
+### Some discrepancies between cell gender in cv and labVersion reported by Terry
+8988T            generic_female   Dnase
+A549             generic_male     Dnase 
+AoSMC         U* generic_male     Dnase
+Astrocy       U* generic_male     Faire
+Chorion       U  generic_female   Dnase
+CLL           U  generic_female   Dnase
+FibroP           generic_female   Dnase
+GM12891          generic_male     Dnase Faire
+GM12892          generic_female   Dnase Faire
+GM18507          generic_male     Dnase Faire
+GM19238          generic_female   Dnase
+GM19239          generic_male     Dnase Faire
+GM19240          generic_female   Dnase
+H1-hESC          generic_male     Dnase Faire
+H9ES             generic_female   Dnase
+Hepatocytes   U  generic_female   Dnase
+HMEC          U  generic_female   Dnase
+HPDE6-E6E7       generic_female   Dnase
+HSMM          U  generic_female   Dnase
+HSMMtube      U  generic_female   Dnase
+HTR8svn       U  generic_female   Dnase Faire
+Huh-7.5          generic_male     Dnase
+Huh-7            generic_male     Dnase
+iPS           U* generic_male     Dnase
+LNCaP            generic_male     Dnase
+Medullo       U  generic_female   Dnase Faire
+Melano        U  generic_female   Dnase
+Myometr       F  generic_male     Dnase
+NHBE          U* generic_male     Faire
+NHEK             generic_female   Dnase Faire
+Osteobl       U  generic_female   Dnase
+PanIsletD     U* generic_male     Dnase
+PanIslets        generic_male     Dnase Faire
+pHTE          U* generic_male     Dnase
+Stellate         generic_female   Dnase
+T-47D            generic_female   Dnase
+Urothelia        generic_female   Dnase Faire
+
+## Will update according to labVersion until Terry reports back.
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=8988T"       -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=A549"        -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=AoSMC"       -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=CLL"         -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Chorion"     -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=FibroP"      -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=GM18507"     -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=H9ES"        -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HMEC"        -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HPDE6-E6E7 " -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMM"        -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMMtube"    -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HTR8svn"     -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Hepatocytes" -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Huh-7"       -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Huh-7.5"     -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=LNCaP"       -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Medullo"     -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Melano"      -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Myometr"     -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Osteobl"     -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=PanIsletD"   -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=PanIslets"   -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Stellate"    -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=T-47D"       -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Urothelia"   -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=iPS"         -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=pHTE"        -setVars="controlId=generic_male"
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=Astrocy"   -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=GM18507"   -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=HTR8svn"   -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=Medullo"   -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE"      -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=PanIslets" -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=Urothelia" -setVars="controlId=generic_female"
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFDnase controlId!=" -count
+0 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire controlId!=" -count
+0 objects
+
+# Check in changes:
+cd .. {hg19/metaDb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra
+#missing setType
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip setType=" -count
+90 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip setType!=" -count
+185 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip setType!= antibody=Input" -count
+2 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip setType!= antibody!=Input" -count
+183 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip setType!= antibody!=Input" | grep antibody | sort | uniq
+antibody CTCF
+antibody Pol2
+antibody c-Myc
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip setType!= antibody=Input" -setVars="setType=input"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip setType!= antibody!=Input" -setVars="setType=exp"
+
+# Complete list of Open Chrom controlIds:
+mdbPrint hg19 -vars="composite=wgEncodeOpenChrom%" | grep controlId | sort | uniq
+controlId Fibrobl/Input
+controlId GM12878/Input
+controlId Gliobla/Input
+controlId HUVEC/Input
+controlId HeLa-S3/Input
+controlId HepG2/Input
+controlId K562/Input
+controlId MCF-7/Input
+controlId Monocytes-CD14+/Input
+controlId ProgFib/Input
+controlId generic_female
+controlId generic_male
+
+# Again check in changes:
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra
+
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+cd {downloadsHg19}/wgEncodeOpenChromChip/
+encodeDownloadsPage.pl -db=hg19 index.html
+cd {downloadsHg19}/wgEncodeOpenChromDnase/
+encodeDownloadsPage.pl -db=hg19 index.html
+cd {downloadsHg19}/wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+
+2011-01-24 Last submission for freeze
+=====================================
+cd {pip}/3496
+e out/trackDb.ra
+cd {tdb19}
+encodePatchTdb /hive/groups/encode/dcc/pipeline/encpipeline_prod/3496/out/trackDb.ra wgEncodeOpenChromFaire.ra
+
+# now metadata
+cd {pip}/3496
+e out/mdb.txt # no change needed
+cd ..
+mdbUpdate hg19 out/mdb.txt
+Read 7 metadata objects from hg19
+Affected 103 row(s) in hg19.metaDb_tdreszer
+
+# Check in changes:
+cd .. {hg19/metaDb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra
+
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=A459" | grep labVersion | sort | uniq
+labVersion fseq v 1.84, iff_generic_male
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=A549" -setVars="controlId=generic_male"
+
+cd {downloadsHg19}/wgEncodeOpenChromFaire/
+encodeDownloadsPage.pl -db=hg19 index.html
+# 352 files.  All have metadata  # 352 found in hgFileUi
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3496 displayed
+
+### Currently unresolved with Terry:
+1) controlId v. labVersion discrepencies
+2) Description of compo tracks
+3) hgc (and hgTrackUi filtering) of combo tracks
+4) Validation docs by cell
+
+The following we seem to be in agreement on and were all submitted using the generic_male as they should have been:
+
+AoSMC - Undetermined
+Astrocy - Undetermined
+iPS - Male (combined two males and one female)
+PanIsletD - Male (combined two males and one female)
+pHTE - Undetermined (combined one male and one undetermined)
+
+The last one of this group, NHBE, was submitted as a "male" which I believe meant it was undetermined at the time of submission.  
+But, I now see that Greg has this listed as "female" in our internal documents.  Greg - can you confirm?
+
+NHBE - Female (submitted as male for FAIRE - screw up)
+
+The following cell lines have different/incorrect sex assignments from what we have. I'm not sure if these were incompletely described 
+when blessed as a tier 3 line or what happened, but according to our documents, they should all be female:
+
+CLL - Female
+Chorion - Female
+HMEC - Female
+HTR8svn - Female
+Hepatocytes - Female
+Osteobl - Female
+
+The Melano cell line is of undetermined sex and was processed with the generic_male.  We have this incorrectly listed as generic_female in the DDF.
+
+Melano - undetermined
+
+The next two originally consisted of only female replicates, but then later a male replicate was added making this a "male".  
+So, they were processed with the generic_male, but we forgot to update the DDF for this:
+
+HSMM - Male (combined two females and one male)
+HSMMtube - Male (combined two females and one male)
+
+So, for the above three, it is an error in the DDF, but the data were submitted as they should have been.
+
+For the last one, Medullo, when we submitted the DNase, we were under the impression it was a female.  
+Later, we were told it was a male, and FAIRE was then correctly submitted as a male.  
+We had intended to go back and re-process the DNase data, but obviously we forgot.  So, FAIRE is correct, but DNase is not.
+
+Medullo - Male (submitted as female for DNaseHS - screw up)
+
+
+In summary, I believe all but two of these can be fairly easily remedied, though I do profusely apologize the confusion on these.  
+It has been a bit of a nightmare getting this information.
+
+The problem kid are FAIRE NHBE (female submitted as male) and DNase Medullo (male submitted as female).  
+We should re-submit data for both of these transvestites, as it were, so I am guessing the easiest thing to do is to pull 
+them back from further processing on your end, and we'll update these when the submission pipeline re-opens.
+
+How does this all work for you?  Greg - please chime in if I have any of the above wrong.  I am going off of information in the official cell lines doc.
+
+Terry
+Agree:
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=AoSMC"       -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=Astrocy"     -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=iPS"         -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=PanIsletD"   -setVars="controlId=generic_male"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=pHTE"        -setVars="controlId=generic_male"
+Affected 0 row(s) in hg19.metaDb_tdreszer
+# as expected!
+
+Should be Female not U  Change cv.ra
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=CLL"         -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Chorion"     -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HMEC"        -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HTR8svn"     -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=HTR8svn"     -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Hepatocytes" -setVars="controlId=generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Osteobl"     -setVars="controlId=generic_female"
+Affected 0 row(s) in hg19.metaDb_tdreszer
+# as expected!
+
+# Change labVersion and controlId from female to male Still U in cv
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase cell=Melano labVersion=%generic_female" | grep labVersion | sort | uniq
+objects:1  vars:18
+labVersion fseq v 1.84, iff_generic_female
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Melano labVersion=%generic_female" -var=labVersion -val="fseq v 1.84, iff_generic_male"
+Affected 1 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Melano"      -setVars="controlId=generic_male"
+Affected 7 row(s) in hg19.metaDb_tdreszer
+
+# should be male though replicates were mixed!  Change labVerion, controlId and cv.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMM% labVersion=%generic_female" | grep labVersion
+labVersion fseq v 1.84, iff_generic_female
+labVersion fseq v 1.84, iff_generic_female
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMM% labVersion=%generic_female" -var=labVersion -val="fseq v 1.84, iff_generic_male"
+Affected 2 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMM"        -setVars="controlId=generic_male"
+Affected 6 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=HSMMtube"    -setVars="controlId=generic_male"
+Affected 6 row(s) in hg19.metaDb_tdreszer
+
+Should be F in cv and needs resubmission?? 
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE labVersion=%generic_male" | grep labVersion
+labVersion fseq v 1.84, iff_generic_male
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE labVersion=%generic_male" -var=labVersion -val="fseq v 1.84, iff_generic_female"
+Affected 1 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE"        -setVars="controlId=generic_female"
+Affected 7 row(s) in hg19.metaDb_tdreszer
+# Oops:
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE labVersion=%generic_female" -var=labVersion -val="fseq v 1.84, iff_generic_male, should have been female"
+Affected 1 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE"        -setVars="controlId=generic_male"
+Affected 7 row(s) in hg19.metaDb_tdreszer
+
+
+# FAIRE correct need to change labVersion and controlId to male  NOTE:   DNase was incorrectly submitted  Need resubmission??
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=Medullo labVersion=%generic_female" | grep labVersion
+labVersion fseq v 1.84, iff_generic_female
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=Medullo labVersion=%generic_female" -var=labVersion -val="fseq v 1.84, iff_generic_male"
+Affected 1 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=Medullo"   -setVars="controlId=generic_male"
+Affected 7 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase cell=Medullo labVersion=%generic_female" | grep labVersion
+labVersion fseq v 1.84, iff_generic_female
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Medullo labVersion=%generic_female" -var=labVersion -val="fseq v 1.84, iff_generic_female, should have been male"
+Affected 1 row(s) in hg19.metaDb_tdreszer
+
+
+And one cell line we have marked as female your labVersion reports using generic_male
+Myometr
+
+# Check in changes:
+cd .. {hg19/metaDb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra
+# identical
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra
+
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+
+## Will update according to labVersion until Terry reports back.
+## mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Myometr"     -setVars="controlId=generic_male"
+
+
+### Currently unresolved with Terry:
+1) controlId v. labVersion discrepencies
+   - Revoke DNase/Medulo ?
+   - Revoke FAIRE/NHBE ?
+   - What up Myometr
+   - Verify that cv.ra is updated
+2) Description of compo tracks
+3) hgc (and hgTrackUi filtering) of combo tracks
+4) Validation docs by cell
+
+
+2011-01-26 More gender ambiguities
+==================================
+- Myometr 
+Terry: This is female and we processed as female, but incorrectly reported generic_male.  
+# should be female:  Change labVerion, controlId and cv.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase cell=Myometr labVersion=%generic_male" | grep labVersion
+labVersion fseq v 1.84, iff_generic_male
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Myometr labVersion=%generic_male" -var=labVersion -val="fseq v 1.84, iff_generic_female"
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase cell=Myometr" -setVars="controlId=generic_female"
+Affected 5 row(s) in hg19.metaDb_tdreszer
+## Myometr done.
+
+### HSMM, HSMMtube, Hepatocytes, iPS, PanIsletD are not M or F but mixed!  Resolution: cv change to 'B' for both.
+### AoSMC is male (according to Greg).  No changes in mdb.  Need to change cv.ra
+### NHBE - drop chrY  Resolution: female in cv, labVersion should say male.  Sigs and Peak should say male.  fastqs/bams female, No changes to data.
+### Medullo - DNase missing chrY  Resolution: male in cv, labVersion should say female.  Sigs and Peak should say female.  fastqs/bams male, No changes to data.
+### Hepatocytes - DNase missing chrY  Resolution: male in cv, labVersion should say female.  Sigs and Peak should say female.  fastqs/bams male, No chaanges to data.
+### Release note??
+
+# In cv:
+AoSMC - M
+
+CLL - F
+Chorion - F
+HMEC - F
+HTR8svn - F
+Osteobl - F
+NHBE - F
+
+Melano - U
+Astrocy - U
+
+Ambiguous:
+Hepatocytes - Mixed
+iPS - Male (combined two males and one female)
+PanIsletD - Male (combined two males and one female)
+pHTE - Male (combined one male and one undetermined)
+
+### To be changed in cv:
+AoSMC - M
+Hepatocytes - M/B Mixed
+iPS         - M/B Mixed (combined two males and one female)
+PanIsletD   - M/B Mixed (combined two males and one female)
+pHTE        - M/B Mixed (combined one male and one undetermined)
+
+2011-01-27 Fix dataTypes
+========================
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" | grep dataType | sort | uniq
+dataType ChIP-seq
+dataType ChipSeq
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" | grep dataType | sort | uniq
+dataType DNase-seq
+dataType DnaseSeq
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" | grep dataType | sort | uniq
+dataType FAIRE-seq
+dataType FaireSeq
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromChip dataType!=ChipSeq" -setVars="dataType=ChipSeq"
+Affected 7 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase dataType!=DnaseSeq" -setVars="dataType=DnaseSeq"
+Affected 40 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire dataType!=FaireSeq" -setVars="dataType=FaireSeq"
+Affected 14 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" | grep dataType | sort | uniq
+objects:275  vars:5366
+dataType ChipSeq
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" | grep dataType | sort | uniq
+objects:326  vars:5855
+dataType DnaseSeq
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" | grep dataType | sort | uniq
+objects:180  vars:3120
+dataType FaireSeq
+
+## Update bams lab version for two cross-gender experiments:
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase labVersion=%should%" | grep cell | sort | uniq
+Using table named 'hg19.metaDb_tdreszer'.
+cell Hepatocytes
+cell Medullo
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase labVersion=%should% view=RawData" | grep labVersion
+objects:4  vars:66
+labVersion input was generic_female (should have been male)
+labVersion input was generic_female (should have been male)
+labVersion input was generic_female (should have been male)
+labVersion input was generic_female (should have been male)
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromDnase labVersion=%should% view=RawData" -var=labVersion -val="aligned to female and input was generic_female (should have been male)" -test
+Affected 4 row(s) in hg19.metaDb_tdreszer
+
+## Revoke FAIRE/NHBE
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire labVersion=%should%" | grep cell | sort | uniq
+cell NHBE
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire labVersion=%should%" | grep subId | sort | uniq
+subId 1574, Alignments, Base_Overlap_Signal, Peaks, Signal
+subId 3153, RawData
+Can revoke 1574 and leave fastqs!  Do this by hand, since 1574 may have had fastqs which were resubmitted.
+hgsql hg19
+show tables like "wgEncodeOpenChromFaireNhbe%";
+| wgEncodeOpenChromFaireNhbeBaseOverlapSignal  | 
+| wgEncodeOpenChromFaireNhbePk                 | 
+| wgEncodeOpenChromFaireNhbeSig                | 
+drop table wgEncodeOpenChromFaireNhbeBaseOverlapSignal;
+drop table wgEncodeOpenChromFaireNhbePk;
+drop table wgEncodeOpenChromFaireNhbeSig;
+exit
+cd {downloads19}/wgEncodeOpenChromFaire
+ll wgEncodeOpenChromFaireNhbe*
+-rw-rw-r-- 1 braney     protein 2019197467 Jul 24  2010 wgEncodeOpenChromFaireNhbeAlnRep1.bam
+-rw-rw-r-- 1 braney     protein    6768496 Jul 24  2010 wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai
+-rw-rw-r-- 1 braney     protein        102 Aug  2 16:56 wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai.md5sum
+-rw-rw-r-- 1 braney     protein         98 Aug  2 17:14 wgEncodeOpenChromFaireNhbeAlnRep1.bam.md5sum
+-rw-rw-r-- 1 braney     protein 2115333089 Jul 24  2010 wgEncodeOpenChromFaireNhbeAlnRep2.bam
+-rw-rw-r-- 1 braney     protein    6803696 Jul 24  2010 wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai
+-rw-rw-r-- 1 braney     protein        102 Aug  2 16:56 wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai.md5sum
+-rw-rw-r-- 1 braney     protein         98 Aug  2 17:15 wgEncodeOpenChromFaireNhbeAlnRep2.bam.md5sum
+-rw-rw-r-- 1 braney     protein  726811915 Jul 24  2010 wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+-rw-rw-r-- 1 braney     protein        111 Aug  2 17:02 wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig.md5sum
+-rw-rw-r-- 3 qateam     protein    4191370 Jun 17  2010 wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
+-rw-rw-r-- 1 braney     protein        103 Aug  2 16:56 wgEncodeOpenChromFaireNhbePk.narrowPeak.gz.md5sum
+-rw-rw-r-- 1 encodeteam protein 1799213535 Jan  7 19:09 wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
+-rw-rw-r-- 1 encodeteam protein 1874957836 Jan  7 17:53 wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
+-rw-rw-r-- 1 braney     protein 1493269395 Jul 24  2010 wgEncodeOpenChromFaireNhbeSig.bigWig
+-rw-rw-r-- 1 braney     protein         97 Aug  2 17:10 wgEncodeOpenChromFaireNhbeSig.bigWig.md5sum
+mv wgEncodeOpenChromFaireNhbeAln* ../obsolete/wgEncodeOpenChromFaire
+mv wgEncodeOpenChromFaireNhbeBase* ../obsolete/wgEncodeOpenChromFaire
+mv wgEncodeOpenChromFaireNhbePk* ../obsolete/wgEncodeOpenChromFaire
+mv wgEncodeOpenChromFaireNhbeSig* ../obsolete/wgEncodeOpenChromFaire
+ll wgEncodeOpenChromFaireNhbe*
+-rw-rw-r-- 1 encodeteam protein 1799213535 Jan  7 19:09 wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
+-rw-rw-r-- 1 encodeteam protein 1874957836 Jan  7 17:53 wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
+cd /gbdb/hg19/bbi
+ll wgEncodeOpenChromFaireNhbe*
+lrwxrwxrwx 1 braney protein 121 Aug  4 20:32 wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig -> /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeOpenChromFaire/wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+lrwxrwxrwx 1 braney protein 107 Aug  4 20:32 wgEncodeOpenChromFaireNhbeSig.bigWig -> /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeOpenChromFaire/wgEncodeOpenChromFaireNhbeSig.bigWig
+# both broken as expected
+rm wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+rm wgEncodeOpenChromFaireNhbeSig.bigWig
+ll wgEncodeOpenChromFaireNhbe*
+ls: wgEncodeOpenChromFaireNhbe*: No such file or directory
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE" -count
+7 objects
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Alignments" -count
+2 objects
+38 variables
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Base_Overlap_Signal" -count
+1 object
+18 variables
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Peaks" -count
+1 object
+18 variables
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Signal" -count
+1 object
+18 variables
+
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Alignments" -delete
+Affected 38 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Base_Overlap_Signal" -delete
+Affected 18 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Peaks" -delete
+Affected 18 row(s) in hg19.metaDb_tdreszer
+mdbUpdate hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE view=Signal" -delete
+Affected 18 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire cell=NHBE" | grep view
+2 objects
+view RawData
+view RawData
+
+cd  {tdb}/hg19
+e wgEncodeOpenChromFaire.ra # remove NHBE stanzas
+gold wgEncodeOpenChromFaire.ra
+
+# Check in changes:
+gold wgEncodeOpenChromFaire.ra
+gadd wgEncodeOpenChromFaire.ra
+cd .. {hg19/metaDb/alpha}
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromChip" > wgEncodeOpenChromChip.ra
+gold wgEncodeOpenChromChip.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromDnase" > wgEncodeOpenChromDnase.ra
+gold wgEncodeOpenChromDnase.ra
+mdbPrint hg19 -vars="composite=wgEncodeOpenChromFaire" > wgEncodeOpenChromFaire.ra
+gold wgEncodeOpenChromFaire.ra
+
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg19; make alpha DBS=hg19
+
+hgsql encpipeline_prod
+select id,name,status from projects where id = 1574;
+| 1574 | DNCT UNC FAIRE-Seq NHBE 20100616 | displayed | 
+update projects set status = "revoked" where id = 1574;
+Rows matched: 1  Changed: 1  Warnings: 0
+exit
+
+cd {downloads19}/wgEncodeOpenChromChip
+encodeDownloadsPage.pl -db=hg19 index.html
+# 352 files.  All have metadata  # 352 found in hgFileUi
+cd {downloads19}/wgEncodeOpenChromDnase
+encodeDownloadsPage.pl -db=hg19 index.html
+# 435 files.  All have metadata  # 435 found in hgFileUi
+cd {downloads19}/wgEncodeOpenChromFaire
+encodeDownloadsPage.pl -db=hg19 index.html
+# 224 files.  All have metadata  # 224 found in hgFileUi
+
+
+### Next step: prepare Chip,Dnase and Faire for release 
+cd {downloads19}/wgEncodeOpenChromChip
+encodeDownloadsPage.pl -db=hg19 -checksum index.html & 
+cd {downloads19}/wgEncodeOpenChromDnase
+encodeDownloadsPage.pl -db=hg19 -checksum index.html & 
+cd {downloads19}/wgEncodeOpenChromFaire
+encodeDownloadsPage.pl -db=hg19 -checksum index.html & 
+

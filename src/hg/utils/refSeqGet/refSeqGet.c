@@ -7,6 +7,7 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "psl.h"
+#include "pslReader.h"
 #include "genePred.h"
 #include "genePredReader.h"
 #include "genbank.h"
@@ -78,18 +79,14 @@ if (rsvi != NULL)
 static void getAligns(struct sqlConnection *conn, struct hash *refSeqVerInfoTbl, char *outFile)
 /* get request alignments from database */
 {
-int off = hOffsetPastBin(sqlGetDatabase(conn), NULL, "refSeqAli");
-struct sqlResult *sr = sqlGetResult(conn, "SELECT * FROM refSeqAli");
+struct psl *psls = pslReaderLoadQuery(conn, "refSeqAli", NULL);
+slSort(psls, pslCmpQuery);
 FILE *fh = mustOpen(outFile, "w");
-char **row;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct psl *psl = pslLoad(row+off);
+struct psl *psl;
+for (psl = psls; psl != NULL; psl = psl->next)
     processPsl(fh, refSeqVerInfoTbl, psl);
-    pslFree(&psl);
-    }
 carefulClose(&fh);
-sqlFreeResult(&sr);
+pslFreeList(&psls);
 }
 
 static void processGenePred(FILE *fh, struct hash *refSeqVerInfoTbl, struct genePred *gp)
@@ -108,16 +105,14 @@ if (rsvi != NULL)
 static void getGeneAnns(struct sqlConnection *conn, struct hash *refSeqVerInfoTbl, char *outFile)
 /* get request genePred annotations from database */
 {
-struct genePredReader *gpr = genePredReaderQuery(conn, "refGene", NULL);
+struct genePred *gps = genePredReaderLoadQuery(conn, "refGene", NULL);
+slSort(&gps, genePredNameCmp);
 FILE *fh = mustOpen(outFile, "w");
 struct genePred *gp;
-while ((gp = genePredReaderNext(gpr)) != NULL)
-    {
+for (gp = gps; gp != NULL; gp = gp->next)
     processGenePred(fh, refSeqVerInfoTbl, gp);
-    genePredFree(&gp);
-    }
 carefulClose(&fh);
-genePredReaderFree(&gpr);
+genePredFreeList(&gps);
 }
 
 static void processRnaSeq(FILE *fh, struct sqlConnection *conn, struct refSeqVerInfo *rsvi)
@@ -130,16 +125,13 @@ faWriteNext(fh, seq->name, seq->dna, seq->size);
 dnaSeqFree(&seq);
 }
 
-static void getRnaSeqs(struct sqlConnection *conn, struct hash *refSeqVerInfoTbl, char *outFile)
+static void getRnaSeqs(struct sqlConnection *conn, struct refSeqVerInfo *refSeqVerInfoLst, char *outFile)
 /* get request RNA sequences from database */
 {
 FILE *fh = mustOpen(outFile, "w");
-struct hashCookie cookie = hashFirst(refSeqVerInfoTbl);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    processRnaSeq(fh, conn, hel->val);
-    }
+struct refSeqVerInfo *rsvi;
+for (rsvi = refSeqVerInfoLst; rsvi != NULL; rsvi = rsvi->next)
+    processRnaSeq(fh, conn, rsvi);
 carefulClose(&fh);
 }
 
@@ -161,17 +153,14 @@ if (isNotEmpty(protAcc) && hashLookup(doneProts, protAcc) == NULL)
 freeMem(protAcc);
 }
 
-static void getProtSeqs(struct sqlConnection *conn, struct hash *refSeqVerInfoTbl, char *outFile)
+static void getProtSeqs(struct sqlConnection *conn, struct refSeqVerInfo *refSeqVerInfoLst, char *outFile)
 /* get request prot sequences from database */
 {
 struct hash *doneProts = hashNew(16);
 FILE *fh = mustOpen(outFile, "w");
-struct hashCookie cookie = hashFirst(refSeqVerInfoTbl);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    processProtSeq(fh, conn, hel->val, doneProts);
-    }
+struct refSeqVerInfo *rsvi;
+for (rsvi = refSeqVerInfoLst; rsvi != NULL; rsvi = rsvi->next)
+    processProtSeq(fh, conn, rsvi, doneProts);
 carefulClose(&fh);
 hashFree(&doneProts);
 }
@@ -218,19 +207,16 @@ if (isCoding)
     freeMem(cds);
 }
 
-static void getMetaData(struct sqlConnection *conn, struct hash *refSeqVerInfoTbl, char *outFile)
+static void getMetaData(struct sqlConnection *conn, struct refSeqVerInfo *refSeqVerInfoLst, char *outFile)
 /* get request prot sequences from database */
 {
 struct sqlConnection *conn2 = sqlConnect(sqlGetDatabase(conn));
 static char *hdr = "#mrnaAcc\t" "protAcc\t" "geneName\t" "ncbiGeneId\t" "cds\t" "product\n";
 FILE *fh = mustOpen(outFile, "w");
 fputs(hdr, fh);
-struct hashCookie cookie = hashFirst(refSeqVerInfoTbl);
-struct hashEl *hel;
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    processMetaData(fh, conn, conn2, hel->val);
-    }
+struct refSeqVerInfo *rsvi;
+for (rsvi = refSeqVerInfoLst; rsvi != NULL; rsvi = rsvi->next)
+    processMetaData(fh, conn, conn2, rsvi);
 carefulClose(&fh);
 sqlDisconnect(&conn2);
 }
@@ -240,19 +226,20 @@ static void refSeqGet(char *db, char *aligns, char *geneAnns, char *rnaSeqs, cha
 /* refSeqGet - retrieve refseq data from the database. */
 {
 struct sqlConnection *conn = sqlConnect(db);
+struct refSeqVerInfo *refSeqVerInfoLst = NULL;
 struct hash *refSeqVerInfoTbl = (accList == NULL)
-    ? refSeqVerInfoFromDb(conn, getNM, getNR)
-    : refSeqVerInfoFromFile(conn, accList);
+    ? refSeqVerInfoFromDb(conn, getNM, getNR, &refSeqVerInfoLst)
+    : refSeqVerInfoFromFile(conn, accList, &refSeqVerInfoLst);
 if (aligns != NULL)
     getAligns(conn, refSeqVerInfoTbl, aligns);
 if (geneAnns != NULL)
     getGeneAnns(conn, refSeqVerInfoTbl, geneAnns);
 if (rnaSeqs != NULL)
-    getRnaSeqs(conn, refSeqVerInfoTbl, rnaSeqs);
+    getRnaSeqs(conn, refSeqVerInfoLst, rnaSeqs);
 if (protSeqs != NULL)
-    getProtSeqs(conn, refSeqVerInfoTbl, protSeqs);
+    getProtSeqs(conn, refSeqVerInfoLst, protSeqs);
 if (metaData != NULL)
-    getMetaData(conn, refSeqVerInfoTbl, metaData);
+    getMetaData(conn, refSeqVerInfoLst, metaData);
 }
 
 int main(int argc, char *argv[])

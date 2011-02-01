@@ -210,7 +210,8 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
-		   sameString("bam", s) || sameString("bedDetail", s));
+		   sameString("bam", s) || sameString("bedDetail", s) ||
+		   sameString("bed8Attrs", s));
 freeMem(t);
 return canPack;
 }
@@ -643,6 +644,8 @@ else if(sameWord("narrowPeak",type)
     cType = cfgPeak;
 else if(sameWord("genePred",type))
         cType = cfgGenePred;
+else if(sameWord("bedLogR",type))
+    cType = cfgBedScore;
 else if(startsWith("bed ", type))
     {
     char *words[3];

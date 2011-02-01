@@ -900,7 +900,7 @@ shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) Not Clinically Associated
 group varRep
 priority 100.093
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
@@ -923,7 +923,7 @@ shortLabel SNPs (131) Comp
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) -- Composite version
 group varRep
 priority 99.093
-visibility dense 
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 defaultGeneTracks knownGene
@@ -4242,6 +4242,15 @@ type bed 4 .
     longLabel Illumina Human Omni1-Quad
     type bed 6 +
     priority 12
+
+track iscaRetrospective
+shortLabel ISCA Retro
+longLabel International Standard Cytogenetic Array Consortium - Retrospective variants
+group varRep
+priority 110
+visibility hide
+type gvf
+noScoreFilter .
 
 searchName decipherId
 searchTable decipher
