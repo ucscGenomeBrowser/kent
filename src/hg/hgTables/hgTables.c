@@ -609,7 +609,7 @@ if (isHubTrack(table))
     struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
     hti = hubTrackTableInfo(tdb);
     }
-else if (hIsBigBed(database, table, curTrack, ctLookupName))
+else if (isBigBed(database, table, curTrack, ctLookupName))
     {
     hti = bigBedToHti(table, conn);
     }
@@ -1338,7 +1338,7 @@ hashFree(&idHash);
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
@@ -1354,7 +1354,7 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     {
     conn = hAllocConn(db);
     fieldList = bigBedGetFields(table, conn);
