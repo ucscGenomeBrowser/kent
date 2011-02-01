@@ -79,6 +79,9 @@ char *buf;
 if (newSize > ds->bufSize)
     {
     int newAllocSize = newSize + oldSize;
+    int oldSizeTimesOneAndAHalf = oldSize * 1.5;
+    if (newAllocSize < oldSizeTimesOneAndAHalf)
+        newAllocSize = oldSizeTimesOneAndAHalf;
     dyStringExpandBuf(ds,newAllocSize);
     }
 buf = ds->string;
