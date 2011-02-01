@@ -37,8 +37,6 @@ else:
     for line in randomlyOrderedLines:
         line = line.rstrip()
         grepCmd = "grep \"" + line  + "\" " + fileToCompareTo
-        grepCmd = re.sub("[[]", "\[", re.sub("[]]", "\]", grepCmd))
-        print grepCmd
         linesReturned = list(os.popen(grepCmd))
         if (len(linesReturned) == 0):
             print "Missing in ", fileToCompareTo, ": ", line
