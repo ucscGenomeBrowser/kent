@@ -31220,7 +31220,7 @@ TMPDIR=/scratch/tmp
           $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
         } \
         %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
-        @bed8Attrs = ($c, $s, $e, $name, $score, $strand, $thickS, $thickE, \
+        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
                       $attrCount, $attrTags, $attrVals); \
         print join("\t", @bed8Attrs) . "\n";' \
       > iscaRetrospective.bed

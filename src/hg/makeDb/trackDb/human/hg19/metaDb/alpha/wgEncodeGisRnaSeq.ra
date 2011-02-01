@@ -80,7 +80,7 @@ project wgEncode
 replicate 1
 rnaExtract longPolyA
 subId 2323
-view RawData2
+view RawData
 
 metaObject wgEncodeGisRnaSeqGm12878CytosolPapRawDataRep1
 objType file
@@ -184,7 +184,7 @@ project wgEncode
 replicate 1
 rnaExtract longPolyA
 subId 2323
-view RawData3
+view RawData
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapAlnRep1
 objType table
@@ -332,7 +332,7 @@ project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 2323
-view RawData2
+view RawData
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapRawData3Rep1
 objType file
@@ -352,7 +352,7 @@ project wgEncode
 replicate 1
 rnaExtract longPolyA
 subId 2323
-view RawData3
+view RawData
 
 metaObject wgEncodeGisRnaSeqK562CytosolPapRawDataRep2
 objType file
@@ -374,4 +374,4 @@ rnaExtract longPolyA
 subId 2323
 view RawData
 
-# MAGIC: -1369200778
+# MAGIC: -1374866730
