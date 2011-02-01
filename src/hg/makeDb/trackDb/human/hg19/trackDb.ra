@@ -2049,11 +2049,13 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
 #include jkExperiments.ra
 
-track ncbiIncidentDb
-shortLabel NCBI Incident
-longLabel NCBI Incident database
+track ncbiIncidentDbBB
+shortLabel BB NCBI Incident
+longLabel BB NCBI Incident database
 group map
 priority 500.3
 visibility hide
-type bedDetail 6
+type bigBed 4 +
 url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
+urlLabel NCBI Incident:
+nonBedFieldsLabel Summary information from incident database:
