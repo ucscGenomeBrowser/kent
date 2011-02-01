@@ -599,8 +599,8 @@ module PipelineBackground
       else
         project.status = "expanded"
       end
-      new_status project, project.status
     end
+    new_status project, project.status
 
   end
 

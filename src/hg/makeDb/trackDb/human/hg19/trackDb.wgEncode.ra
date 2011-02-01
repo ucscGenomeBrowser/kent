@@ -16,12 +16,22 @@ include wgEncodeOpenChromFaire.ra
 include wgEncodeOpenChromSynth.ra
 include wgEncodeDukeAffyExon.ra
 
-#HAIB Methyl RRBS (wrangler: Venkat)
+#HAIB Methyl-Seq (wrangler: Vankat) most likely never leaving alpha
+include wgEncodeHaibMethylSeq.ra
+
+#HAIB Methyl Array (wrangler:Cricket)
+#include wgEncodeHaibMethylArray.ra
+include wgEncodeHaibMethyl27.ra alpha
+
+#HAIB Methyl RRBS (wrangler: Cricket) replaces Methyl-Seq
 include wgEncodeHaibMethylRrbs.ra beta,public
 include wgEncodeHaibMethylRrbs.new.ra alpha
 
 #HAIB Genotype (CNV) (wrangler: Cricket)
-include wgEncodeHaibGenotype.ra
+include wgEncodeHaibGenotype.ra alpha
+
+#HAIB RNA-seq (wrangler: Cricket)
+include wgEncodeHaibRnaSeq.ra alpha
 
 #Broad Histone (wrangler: Tim)
 include wgEncodeBroadHistone.ra alpha,beta
@@ -37,17 +47,19 @@ include wgEncodeUwDgf.new.ra alpha
 include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.new.ra alpha
 
-include wgEncodeHaibMethylSeq.ra
-include wgEncodeHaibMethylArray.ra
 include wgEncodeGisRnaSeq.ra
 include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
 include wgEncodeUwTfbs.ra
 include wgEncodeCshlLongRnaSeq.ra
-include wgEncodeCaltechRnaSeq.ra
 include wgEncodeYaleRnaSeq.ra
 include wgEncodeBuOrchid.ra
+include wgEncodeUchicagoTfbs.ra
+
+# Caltech RNA Seq
+include wgEncodeCaltechRnaSeq.ra beta
+include wgEncodeCaltechRnaSeq.new.ra alpha
 
 track wgEncodeMapability
 compositeTrack on
@@ -251,8 +263,8 @@ include wgEncodeGencode.ra
 include wgEncodeGencodeV5.ra alpha
 
 # Riken CAGE (wrangler: cricket)
-include wgEncodeRikenCage.ra
-#include wgEncodeRikenCage.new.ra
+include wgEncodeRikenCage.ra beta
+include wgEncodeRikenCage.new.ra alpha
 
 # CSHL Small RNA (wrangler: cricket)
 include wgEncodeCshlShortRnaSeq.ra beta,public

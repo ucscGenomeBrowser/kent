@@ -394,6 +394,10 @@ char *hgdpPngFilePath(char *rsId);
 void hgdpGeoFreqTable(struct hgdpGeo *geo);
 /* Print an HTML table of populations and allele frequencies. */
 
+void printOtherSnpMappings(char *table, char *name, int start,
+			   struct sqlConnection *conn, int rowOffset);
+/* If this SNP (from any bed4+ table) is not uniquely mapped, print the other mappings. */
+
 void printCustomUrl(struct trackDb *tdb, char *itemName, boolean encode);
 /* Wrapper to call printCustomUrlWithLabel using the url setting in trackDb */
 
@@ -408,6 +412,9 @@ void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName);
 
 void doPgSnp(struct trackDb *tdb, char *itemName, struct customTrack *ct);
 /* print detail page for personal genome track (pgSnp) */
+
+void doGvf(struct trackDb *tdb, char *item);
+/* Show details for variants represented as GVF, stored in a bed8Attrs table */
 
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 

@@ -1,7 +1,13 @@
 include ../../../inc/common.mk
 
-SCRIPTS = compareRandomSample.py \
+txGVScripts = checkRandomLinesExist.py \
 	compareModifiedFileSizes.csh
 
-all:	${SCRIPTS}
-	cp ${SCRIPTS} ${DESTDIR}${BINDIR}
+all:	${txGVScripts}
+	@for T in ${txGVScripts}; do \
+	  ( rm -f ${SCRIPTS}/$$T ) ; \
+	done
+	cp ${txGVScripts} ${SCRIPTS}
+
+clean:
+

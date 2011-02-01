@@ -414,8 +414,21 @@ struct sqlConnection *hMaybeConnectArchiveCentral(void);
 /* Connect to central database for archives.
  * Free this up with hDisconnectCentralArchive(). */
 
+boolean hHostHasPrefix(char *prefix);
+/* Return TRUE if this is running on web-server with host name prefix */
+
 boolean hIsPrivateHost(void);
-/* Return TRUE if this is running on private web-server. */
+/* Return TRUE if this is running on private (development) web-server. 
+ * This was originally genome-test as well as hgwdev, however genome-test
+ * may be repurposed to direct users to the preview site instead of development site. */
+
+boolean hIsPreviewHost(void);
+/* Return TRUE if this is running on preview web-server.  The preview
+ * server is a mirror of the development server provided for public
+ * early access. */
+
+char *hBrowserName();
+/* Return browser name based on host name */
 
 boolean hTrackOnChrom(struct trackDb *tdb, char *chrom);
 /* Return TRUE if track exists on this chromosome. */

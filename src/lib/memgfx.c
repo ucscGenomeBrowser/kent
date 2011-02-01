@@ -135,10 +135,15 @@ void mgClearPixelsTrans(struct memGfx *mg)
 /* Set all pixels to transparent. */
 {
 #ifdef COLOR32
-unsigned *ptr = mg->pixels;
-unsigned *lastPtr = &mg->pixels[mg->width * mg->height];
+unsigned int *ptr = mg->pixels;
+unsigned int *lastPtr = &mg->pixels[mg->width * mg->height];
 for(; ptr < lastPtr; ptr++)
-    *ptr = 0xffffff;  // transparent white
+#ifdef MEMGFX_BIGENDIAN
+    *ptr = 0xffffff00;
+#else
+    *ptr = 0x00ffffff;  // transparent white
+#endif
+
 #else
 zeroBytes(mg->pixels, mg->width*mg->height);
 #endif
@@ -167,9 +172,15 @@ struct rgbColor mgColorIxToRgb(struct memGfx *mg, int colorIx)
 {
 #ifdef COLOR32
 static struct rgbColor rgb;
+#ifdef MEMGFX_BIGENDIAN
+rgb.r = (colorIx >> 24) & 0xff;
+rgb.g = (colorIx >> 16) & 0xff;
+rgb.b = (colorIx >> 8) & 0xff;
+#else
 rgb.r = (colorIx >> 0) & 0xff;
 rgb.g = (colorIx >> 8) & 0xff;
 rgb.b = (colorIx >> 16) & 0xff;
+#endif
 
 return rgb;
 #else

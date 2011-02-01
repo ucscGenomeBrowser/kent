@@ -418,25 +418,22 @@ safef(query, sizeof(query),
       "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
       tdb->table, item, seqName, start);
 sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct hgdpGeo geo;
-    hgdpGeoStaticLoad(row+hasBin, &geo);
-    printCustomUrl(tdb, item, TRUE);
-    bedPrintPos((struct bed *)&geo, 4, tdb);
-    printf("<B>Ancestral Allele:</B> %c<BR>\n", geo.ancestralAllele);
-    printf("<B>Derived Allele:</B> %c<BR>\n", geo.derivedAllele);
-    printf("<BR>\n");
-    printf("<TABLE><TR><TD>\n");
-    hgdpGeoFreqTable(&geo);
-    printf("</TD><TD valign=top>\n");
-    hgdpGeoImg(&geo);
-    printf("</TD></TR></TABLE>\n");
-    }
-else
+if ((row = sqlNextRow(sr)) == NULL)
     errAbort("doHgdpGeo: no match in %s for %s at %s:%d", tdb->table, item, seqName, start);
-
+struct hgdpGeo geo;
+hgdpGeoStaticLoad(row+hasBin, &geo);
 sqlFreeResult(&sr);
+printCustomUrl(tdb, item, TRUE);
+bedPrintPos((struct bed *)&geo, 4, tdb);
+printf("<B>Ancestral Allele:</B> %c<BR>\n", geo.ancestralAllele);
+printf("<B>Derived Allele:</B> %c<BR>\n", geo.derivedAllele);
+printOtherSnpMappings(tdb->table, item, start, conn, hasBin);
+printf("<BR>\n");
+printf("<TABLE><TR><TD>\n");
+hgdpGeoFreqTable(&geo);
+printf("</TD><TD valign=top>\n");
+hgdpGeoImg(&geo);
+printf("</TD></TR></TABLE>\n");
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }

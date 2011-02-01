@@ -2769,7 +2769,8 @@ char buf[256];
 FILE *f = fopen(fileName, "r");
 if ( f && (fread(buf, 1, 1, f) == 1 ) )
     ret = TRUE;
-fclose(f);
+if (f)
+    fclose(f);
 return ret;
 }
 

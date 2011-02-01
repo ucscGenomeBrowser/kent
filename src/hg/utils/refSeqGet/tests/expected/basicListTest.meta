@@ -1,6 +1,6 @@
 #mrnaAcc	protAcc	geneName	ncbiGeneId	cds	product
-NR_000010.1		SNORD4A	26773		
-NR_000014.1		SNORD42A	26809		
 NM_001129819.2	NP_001123291.1	CYB5R3	1727	398..1234	NADH-cytochrome b5 reductase 3 isoform 2
 NM_153758.2	NP_715639.1	IL19	29949	26..673	interleukin-19 isoform 1
 NM_201634.3	NP_963965.1	TCF7	6932	98..904	transcription factor 7 isoform 4
+NR_000010.1		SNORD4A	26773		
+NR_000014.1		SNORD42A	26809		

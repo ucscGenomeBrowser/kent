@@ -1178,4 +1178,7 @@ boolean printPennantIconNote(struct trackDb *tdb);
 // Returns TRUE and prints out the "pennantIcon" and note when found.
 //This is used by hgTrackUi and hgc before printing out trackDb "html"
 
+void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed);
+// Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
+
 #endif /* HUI_H */

@@ -16,7 +16,6 @@
 
 static char const rcsid[] = "$Id: hgNotYet.c,v 1.7 2009/06/25 08:43:09 markd Exp $";
 
-boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
 char *clade = NULL;
@@ -51,7 +50,6 @@ else if (hIsGsidServer())
 else
     {
     char buffer[128];
-    char *browserName = (isPrivateHost ? "TEST Genome Browser" : "Genome Browser");
 
     /* tell html routines *not* to escape htmlOut strings*/
     htmlNoEscape();
@@ -63,7 +61,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    cartWebStart(theCart, db, "%s %s%s\n", organism, buffer, browserName);
+    cartWebStart(theCart, db, "%s %s%s\n", organism, buffer, hBrowserName());
     htmlDoEscape();
     }
 hgNotYet();
@@ -75,7 +73,6 @@ char *excludeVars[] = {NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-isPrivateHost = hIsPrivateHost();
 oldVars = hashNew(10);
 cgiSpoof(&argc, argv);
 

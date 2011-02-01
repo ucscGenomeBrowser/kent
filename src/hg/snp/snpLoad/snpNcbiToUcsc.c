@@ -429,7 +429,8 @@ int rsId = 0;
 unsigned int exceptionBits = 0;
 
 // Fudge factor for checking allele frequency properties:
-#define ALLELE_FREQ_ROUNDING_ERROR 0.001
+#define ALLELE_FREQ_ROUNDING_ERROR 0.01
+#define ALLELE_N_ROUNDING_ERROR 0.01
 
 
 /******************* Reporting of errors and exceptions *********************/
@@ -507,9 +508,6 @@ enum exceptionType
     /* processAlleleFreqs() */
     NonIntegerChromCount,
     AlleleFreqSumNot1,
-    /* processBitfields() */
-    GenotypeConflict,
-    ClusterNonOverlappingAlleles,
     /* Keep this one last as a count of enum values: */
     exceptionTypeCount
     };
@@ -570,9 +568,6 @@ exceptionNames[MultipleAlignments] = "MultipleAlignments";
 /* processAlleleFreqs() */
 exceptionNames[NonIntegerChromCount] = "NonIntegerChromCount";
 exceptionNames[AlleleFreqSumNot1] = "AlleleFreqSumNot1";
-/* processBitfields() */
-exceptionNames[GenotypeConflict] = "GenotypeConflict";
-exceptionNames[ClusterNonOverlappingAlleles] = "ClusterNonOverlappingAlleles";
 
 
 /* Many of these conditions imply a problem with NCBI's alignment and/or the
@@ -647,18 +642,13 @@ safef(buf, sizeof(buf),
     "At least one allele frequency corresponds to a non-integer (+-%f) "
     "count of chromosomes on which the allele was observed."
     "  The reported total sample count for this SNP is probably incorrect.",
-      ALLELE_FREQ_ROUNDING_ERROR);
+      ALLELE_N_ROUNDING_ERROR);
 exceptionDescs[NonIntegerChromCount] = cloneString(buf);
 safef(buf, sizeof(buf),
     "Allele frequencies do not sum to 1.0 (+-%f)."
     "  This SNP's allele frequency data are probably incomplete.",
       ALLELE_FREQ_ROUNDING_ERROR);
 exceptionDescs[AlleleFreqSumNot1] = cloneString(buf);
-/* processBitfields() */
-exceptionDescs[GenotypeConflict] =
-    "Different genotypes have been submitted for the same individual.";
-exceptionDescs[ClusterNonOverlappingAlleles] =
-    "The reference SNP cluster contains submitted SNPs with non-overlapping alleles.";
 
 AllocArray(exceptionCounts, exceptionTypeCount);
 
@@ -1720,7 +1710,7 @@ double total = 0.0;
 for (i=0;  i < *pAlleleFreqCount;  i++)
     {
     double leftover = alleleNs[i] - trunc(alleleNs[i]);
-    if (leftover > ALLELE_FREQ_ROUNDING_ERROR && leftover < 1.0-ALLELE_FREQ_ROUNDING_ERROR)
+    if (leftover > ALLELE_N_ROUNDING_ERROR && leftover < 1.0-ALLELE_N_ROUNDING_ERROR)
 	writeException(NonIntegerChromCount);
     total += alleleFreqs[i];
     }
@@ -1757,10 +1747,6 @@ else
 	}
     safecpy(bitfieldsStr, size, dy->string);
     int qualCheck = bytes[BITFIELDS_QUAL_CHECK_BYTE];
-    if (qualCheck & (1 << BITFIELDS_GENOTYPE_CONFLICT))
-	writeException(GenotypeConflict);
-    if (qualCheck & (1 << BITFIELDS_NON_OV_ALLELES))
-	writeException(ClusterNonOverlappingAlleles);
     // This should be redundant w/ObservedMismatch:
     if ((qualCheck & (1 << BITFIELDS_REF_MISMATCH)) &&
 	!(exceptionBits & (1 << ObservedMismatch)))

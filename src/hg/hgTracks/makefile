@@ -9,7 +9,7 @@ A = hgTracks
 COMMONO = altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
-        expRatioTracks.o factorSource.o hgTracks.o goldTrack.o loweLabTracks.o \
+        expRatioTracks.o factorSource.o hgTracks.o goldTrack.o gvfTrack.o loweLabTracks.o \
 	mafTrack.o makeItemsTrack.o multiWig.o netTrack.o pslTrack.o rmskTrack.o \
 	sampleTracks.o searchTracks.o simpleTracks.o switchGear.o transMapTracks.o \
 	wabaTrack.o wigTrack.o cds.o \
@@ -40,7 +40,10 @@ mgsc: strip
 RENDERO = renderMain.o ${COMMONO}
 RENDERA = ./hgRenderTracks
 
-compile: compileMain ${RENDERA}
+# when it is time to deliver hgRenderTracks, remove the rm and echo below
+compile: compileMain
+	@rm -f ${RENDERA}
+	@echo "run 'make hgRenderTracks' to obtain that binary"
 
 compileMain: $O
 	${CC} -o $A $O ${MYLIBS} ${L}

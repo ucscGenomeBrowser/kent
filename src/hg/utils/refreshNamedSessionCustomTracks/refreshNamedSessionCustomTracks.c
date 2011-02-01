@@ -10,6 +10,7 @@
 #include "hui.h"
 #include "hgConfig.h"
 #include <sys/wait.h>
+#include <signal.h>
 #include "errCatch.h"
 
 #define savedSessionTable "namedSessionDb"
@@ -212,7 +213,7 @@ while (isNotEmpty(namePt))
     char *dataPt = strchr(namePt, '=');
     char *nextNamePt;
     if (dataPt == NULL)
-	errAbort("Mangled session content string %s", namePt);
+	errAbort("ERROR: Mangled session content string %s", namePt);
     *dataPt++ = 0;
     nextNamePt = strchr(dataPt, '&');
     if (nextNamePt != NULL)
@@ -277,7 +278,7 @@ if (optionExists("hardcore") && newContents->stringSize != contentLength)  // al
     {
     struct dyString *update = dyStringNew(contentLength*2);
     if (newContents->stringSize > contentLength)
-	errAbort("Uh, why is newContents (%d) longer than original (%d)??",
+	errAbort("ERROR: Uh, why is newContents (%d) longer than original (%d)",
 		 newContents->stringSize, contentLength);
     dyStringPrintf(update, "UPDATE %s set contents='", savedSessionTable);
     dyStringAppendN(update, newContents->string, newContents->stringSize);
@@ -318,7 +319,7 @@ int liveCount=0, expiredCount=0;
 setUdcCacheDir();  /* programs that use udc must call this to initialize cache dir location */
 
 if (!sameString(centralDbName, actualDbName))
-    errAbort("Central database specified in hg.conf file is %s but %s "
+    errAbort("ERROR: Central database specified in hg.conf file is %s but %s "
 	     "was specified on the command line.",
 	     actualDbName, centralDbName);
 else
@@ -363,6 +364,9 @@ if (sqlTableExists(conn, savedSessionTable))
 	}
     sqlFreeResult(&sr);
     }
+else
+    errAbort("ERROR: can not find table %s.%s on central.host: '%s'",
+	savedSessionTable, centralDbName, cfgOption("central.host"));
 
 sqlDisconnect(&conn);
 

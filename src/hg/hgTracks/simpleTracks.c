@@ -1956,8 +1956,8 @@ if (scoreColumn == NULL)
 
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
-extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,"score",&and);
-if (and == FALSE) // Cannot have both 'filterBy' score and 'scoreFilter'
+extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and); // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
+if (and == FALSE || strstrNoCase(extraWhere->string,"score in ") == NULL) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
     return NULL;
@@ -11556,7 +11556,7 @@ if (wordCount <= 0)
 type = words[0];
 
 #ifndef GBROWSE
-if (sameWord(type, "bed"))
+if (sameWord(type, "bed") || sameWord(type, "bedLogR"))
     {
     complexBedMethods(track, tdb, FALSE, wordCount, words);
     /* bed.h includes genePred.h so should be able to use these trackDb
@@ -11706,6 +11706,10 @@ else if (sameWord(type, "remote"))
 else if (sameWord(type, "interaction"))
     {
     interactionMethods(track);
+    }
+else if (sameWord(type, "gvf"))
+    {
+    gvfMethods(track);
     }
 #endif /* GBROWSE */
 }
@@ -12330,4 +12334,3 @@ for(name = nameList; name != NULL; name = name->next)
     }
 slFreeList(&nameList);
 }
-
