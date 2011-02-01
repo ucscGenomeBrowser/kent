@@ -154,18 +154,23 @@ struct binElement *el, *elList = binKeeperFind(bk, gp->txStart, gp->txEnd);
 for (el = elList; el != NULL; el = el->next)
     {
     bed = el->val;
-    /* First, check if this gp is a compatible extension of the bed, meaning
-     * that any intron found in the bed is also found in the gp, and that for the
-     * range from the start to the end of the bed, the gp contains no introns
-     * not also found in the bed. */
+    overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
+    /* If the gene prediction is a compatible extension of the bed (meaning that
+     * the bed and the gene prediction have a compatible transcript structure for
+     * the length of the bed), then add an overlap bonus of the length of the 
+     * gene prediction.  This effectively ensures that if there is a bed with a
+     * compatible extension, it will be chosen.  But, if no bed has a compatible
+     * extension, then some bed will be chosen, and that bed will be the one with
+     * the greatest number of overlapping bases. */
     if (bedCompatibleExtension(bedFromGenePred(gp), bed))
-        {
-        overlap = gpBedOverlap(gp, cdsOnly, intronsToo, bed);
-        if (overlap > bestOverlap)
-            {
-            bestOverlap = overlap;
-            bestBed = bed;
-            }
+	{
+	overlap += bedTotalBlockSize(bedFromGenePred(gp));
+	}
+    if (overlap > bestOverlap)
+	{
+	bestOverlap = overlap;
+	bestBed = bed;
+	}
         else if (overlap == bestOverlap)
             {
             /* If two beds have the same number of overlapping bases to
@@ -178,7 +183,6 @@ for (el = elList; el != NULL; el = el->next)
                 }
             }
         }
-    }
 return bestBed;
 }
 

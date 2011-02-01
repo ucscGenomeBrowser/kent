@@ -11707,6 +11707,10 @@ else if (sameWord(type, "interaction"))
     {
     interactionMethods(track);
     }
+else if (sameWord(type, "gvf"))
+    {
+    gvfMethods(track);
+    }
 #endif /* GBROWSE */
 }
 
