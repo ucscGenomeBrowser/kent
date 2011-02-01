@@ -11,6 +11,7 @@
 #include "sqlNum.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "net.h"
 #include "trackHub.h"
 #include "hubConnect.h"
 #include "hui.h"
@@ -155,24 +156,45 @@ assert(isdigit(trackName[0]));
 return atoi(trackName);
 }
 
+char *hubConnectSkipHubPrefix(char *trackName)
+/* Given something like "hub_123_myWig" return myWig.  Don't free this, it's not allocated */
+{
+assert(startsWith("hub_", trackName));
+trackName += 4;
+assert(isdigit(trackName[0]));
+trackName = strchr(trackName, '_');
+assert(trackName != NULL);
+return trackName + 1;
+}
+
+struct trackHub *trackHubFromId(int hubId)
+/* Given a hub ID number, return corresponding trackHub structure. 
+ * ErrAbort if there's a problem. */
+{
+struct sqlConnection *conn = hConnectCentral();
+struct hubConnectStatus *status = hubConnectStatusForId(conn, hubId);
+hDisconnectCentral(&conn);
+if (status == NULL)
+    errAbort("The hubId %d was not found", hubId);
+if (!isEmpty(status->errorMessage))
+    errAbort("Hub %s at %s has the error: %s", status->shortLabel, 
+	    status->hubUrl, status->errorMessage);
+char hubName[16];
+safef(hubName, sizeof(hubName), "hub_%d", hubId);
+struct trackHub *hub = trackHubOpen(status->hubUrl, hubName);
+hubConnectStatusFree(&status);
+return hub;
+}
+
 struct trackDb *hubConnectAddHubForTrackAndFindTdb(char *database, 
 	char *trackName, struct trackDb **pTdbList, struct hash *trackHash)
 /* Go find hub for trackName (which will begin with hub_), and load the tracks
  * for it, appending to end of list and adding to trackHash.  Return the
- * trackDb associated with trackName.  */
+ * trackDb associated with trackName. This will also fill in the html fields,
+ * but just for that track and it's parents. */ 
 {
 int hubId = hubIdFromTrackName(trackName);
-struct sqlConnection *conn = hConnectCentral();
-struct hubConnectStatus *hubStatus = hubConnectStatusForId(conn, hubId);
-hDisconnectCentral(&conn);
-if (hubStatus == NULL)
-    errAbort("The hubId %d was not found", hubId);
-if (!isEmpty(hubStatus->errorMessage))
-    errAbort("Hub %s at %s has the error: %s", hubStatus->shortLabel, 
-	    hubStatus->hubUrl, hubStatus->errorMessage);
-char hubName[16];
-safef(hubName, sizeof(hubName), "hub_%d", hubId);
-struct trackHub *hub = trackHubOpen(hubStatus->hubUrl, hubName);
+struct trackHub *hub = trackHubFromId(hubId);
 struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
@@ -182,7 +204,19 @@ if (pTdbList != NULL)
     *pTdbList = slCat(*pTdbList, tdbList);
 struct trackDb *tdb = hashFindVal(trackHash, trackName);
 if (tdb == NULL)
-    errAbort("Can't find track %s in %s", trackName, hubStatus->hubUrl);
+    errAbort("Can't find track %s in %s", trackName, hub->url);
+
+/* Add html for track and parents. */
+struct trackDb *parent;
+for (parent = tdb; parent != NULL; parent = parent->parent)
+    {
+    char *simpleName = hubConnectSkipHubPrefix(tdb->track);
+    char *url = trackHubRelativeUrl(hubGenome->trackDbFile, simpleName);
+    parent->html = netReadTextFileIfExists(url);
+    freez(&url);
+    }
+trackHubClose(&hub);
+
 return tdb;
 }
 
