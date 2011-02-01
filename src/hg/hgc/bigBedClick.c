@@ -16,6 +16,7 @@ static void bigBedClick(char *fileName, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic bigBed track. */
 {
+boolean showUrl = FALSE;
 char *chrom = cartString(cart, "c");
 
 /* Open BigWig file and get interval list. */
@@ -25,7 +26,10 @@ struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, chrom, winStart, winEnd
 
 /* Get bedSize if it's not already defined. */
 if (bedSize == 0)
+    {
     bedSize = bbi->definedFieldCount;
+    showUrl = TRUE;
+    }
 
 /* Find particular item in list - matching start, and item if possible. */
 struct bigBedInterval *bbMatch = NULL, *bb;
@@ -70,7 +74,7 @@ if (bbMatch != NULL)
 		bedSize, fileName, bbFieldCount);
 	}
     struct bed *bed = bedLoadN(fields, bedSize);
-    if (bedSize >= 4)
+    if (showUrl && (bedSize >= 4))
 	printCustomUrl(tdb, item, TRUE);
     bedPrintPos(bed, bedSize, tdb);
 
@@ -86,7 +90,10 @@ if (bbMatch != NULL)
 	if (restCount > restBedFields)
 	    {
 	    int i;
-	    printf("<B>Non-BED fields:</B> ");
+	    char label[20];
+	    safef(label, sizeof(label), "nonBedFieldsLabel");
+	    printf("<B>%s&nbsp;</B>",
+               trackDbSettingOrDefault(tdb, label, "Non-BED fields:"));
 	    for (i = restBedFields;  i < restCount;  i++)
 		printf("%s%s", (i > 0 ? "\t" : ""), restFields[i]);
 	    printf("<BR>\n");

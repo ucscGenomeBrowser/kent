@@ -6102,11 +6102,11 @@ lab RIKEN
 labExpId K15-DA
 labProtocolId 020WC+cage
 localization cell
-origAssembly hg19h
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 3339
 view RawData
 
-# MAGIC: -1076422211
+# MAGIC: -1076448090
