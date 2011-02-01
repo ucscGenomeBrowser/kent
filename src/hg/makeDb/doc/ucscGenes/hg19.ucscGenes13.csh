@@ -253,6 +253,7 @@ end
 #
 
 
+
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
@@ -409,8 +410,6 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 cd ..
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 #
 # testing suggestion: uncomment below
@@ -446,8 +445,23 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     endif
 end
 
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
+
+#
+# testing suggestion: uncomment below
+# mkdir -p $testingDir
+# compareModifiedFileSizes.csh $testingDir \
+#       new.evidence.wc.txt $oldGeneDir  old.evidence.wc.txt
+# cut -f1-3,5 graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.new
+# cut -f1-3,5 $oldGeneDir/graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.old
+# checkRandomLinesExist.py -s $testingDir/chr22.graph.bounds.old \
+#  -d $testingDir/chr22.graph.bounds.new
+#
+
+
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
 
 
 # Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
@@ -483,6 +497,11 @@ end
 rm -rf txFaSplit
 mkdir -p txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
+
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 
 # Fetch human protein set and table that describes if curated or not.
