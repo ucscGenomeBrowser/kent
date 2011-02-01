@@ -138,58 +138,58 @@ subId 1237
 tableName wgEncodeSunyAlbanyGeneSTGm12878T7tagRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 objType table
+antibody ELAVL1
 cell H1-hESC
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 project wgEncode
-ripTgtProtien ELAVL1
 subId 3084
-tableName wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 objType table
+antibody ripInput
 cell H1-hESC
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 project wgEncode
-ripTgtProtien ripInput
 subId 3084
-tableName wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 objType table
+antibody T7Tag
 cell H1-hESC
 composite wgEncodeSunyAlbanyGeneSt
 dataType RipChip
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-12-10
 dateUnrestricted 2011-09-10
-fileName wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 project wgEncode
-ripTgtProtien T7Tag
 subId 3084
-tableName wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyGeneSTHelas3Elavl1RbpAssocRna
@@ -472,4 +472,4 @@ subId 1237
 tableName wgEncodeSunyAlbanyGeneSTK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 975110308
+# MAGIC: 2066832246
