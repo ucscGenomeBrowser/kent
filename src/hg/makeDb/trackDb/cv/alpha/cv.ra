@@ -9243,7 +9243,7 @@ priority 450
 term project
 type typeOfTerm
 label Project funded by
-description (PROVISIONAL) Project that funded this and a related set of experiments.
+description Project that funded this and a related set of experiments.
 searchable no
 cvDefined no
 validate list: wgEncode   # Only one so far: all encode is under single project='wgEncode' (11/3/10)
