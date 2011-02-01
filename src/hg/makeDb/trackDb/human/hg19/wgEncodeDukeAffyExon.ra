@@ -33,6 +33,7 @@ superTrack wgEncodeExonArraySuper dense
     scoreFilterLimits 0:1000
     scoreFilter 1
     scoreMin 10
+    exonArrows on
 
         track wgEncodeDukeAffyExonAosmcSimpleSignalRep1
         release alpha

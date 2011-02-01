@@ -9,7 +9,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -30,7 +30,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -51,7 +51,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -72,7 +72,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep2.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -165,7 +165,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -186,7 +186,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -207,7 +207,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -228,7 +228,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -249,7 +249,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -270,7 +270,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878NucleusPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -327,7 +327,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -348,7 +348,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -369,7 +369,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -390,7 +390,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetH1hescCellPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -447,7 +447,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -468,7 +468,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -488,7 +488,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 1
@@ -507,7 +507,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapAlnRep2.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 2
@@ -526,7 +526,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 1
@@ -544,7 +544,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd1Rep2.fastq.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 2
@@ -562,7 +562,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 1
@@ -580,7 +580,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapFastqRd2Rep2.fastq.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 2
@@ -598,7 +598,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 1
@@ -617,7 +617,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapMinusRawSigRep2.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 2
@@ -636,7 +636,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 1
@@ -655,7 +655,7 @@ dateSubmitted 2011-01-17
 dateUnrestricted 2011-10-17
 fileName wgEncodeGisRnaPetHelas3CellPapPlusRawSigRep2.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 project wgEncode
 replicate 2
@@ -675,7 +675,7 @@ dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
 fileName wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -696,7 +696,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHelas3CytosolPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -751,7 +751,7 @@ dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
 fileName wgEncodeGisRnaPetHelas3CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -772,7 +772,7 @@ dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
 fileName wgEncodeGisRnaPetHelas3CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -793,7 +793,7 @@ dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -814,7 +814,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHelas3NucleusPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -835,7 +835,7 @@ dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHelas3NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -856,7 +856,7 @@ dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHelas3NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -877,7 +877,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -898,7 +898,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHepg2CytosolPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -955,7 +955,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -976,7 +976,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -997,7 +997,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1018,7 +1018,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHepg2NucleusPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1075,7 +1075,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1096,7 +1096,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1118,7 +1118,7 @@ dateUnrestricted 2010-09-04
 fileIndex wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
 fileName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1139,7 +1139,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1194,7 +1194,7 @@ dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1215,7 +1215,7 @@ dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1237,7 +1237,7 @@ dateUnrestricted 2010-08-13
 fileIndex wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam.bai
 fileName wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1258,7 +1258,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHuvecNucleusPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1315,7 +1315,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1336,7 +1336,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHuvecNucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1357,7 +1357,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -1378,7 +1378,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562ChromatinTotalClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -1416,7 +1416,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -1437,7 +1437,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization chromatin
 origAssembly hg18
 project wgEncode
@@ -1458,7 +1458,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1479,7 +1479,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapAlnRep2.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1500,7 +1500,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562CytosolPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1521,7 +1521,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562CytosolPapClustersRep2.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1612,7 +1612,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1633,7 +1633,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1654,7 +1654,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1675,7 +1675,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1696,7 +1696,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1717,7 +1717,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleolusTotalClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1772,7 +1772,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1793,7 +1793,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -1814,7 +1814,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1835,7 +1835,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1873,7 +1873,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1894,7 +1894,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
@@ -1915,7 +1915,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1936,7 +1936,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleusPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -1993,7 +1993,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -2014,7 +2014,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -2035,7 +2035,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -2056,7 +2056,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562PolysomePapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -2113,7 +2113,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -2134,7 +2134,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization polysome
 origAssembly hg18
 project wgEncode
@@ -2155,7 +2155,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -2176,7 +2176,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetNhekCytosolPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -2233,7 +2233,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -2254,7 +2254,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -2275,7 +2275,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -2296,7 +2296,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetNhekNucleusPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -2353,7 +2353,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -2374,7 +2374,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization nucleus
 origAssembly hg18
 project wgEncode
@@ -2395,7 +2395,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapAlnRep1.bam
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -2416,7 +2416,7 @@ dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetProstateCellPapClustersRep1.bed12.gz
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -2473,7 +2473,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -2494,7 +2494,7 @@ dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1.bigWig
 grant Gingeras
-lab GIS
+lab Gis
 localization cell
 origAssembly hg18
 project wgEncode
@@ -2504,4 +2504,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSig
 
-# MAGIC: -118332571
+# MAGIC: -118312411

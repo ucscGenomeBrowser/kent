@@ -10,6 +10,8 @@
 #include "encode/encodeRna.h"
 #include "encode/encodePeak.h"
 
+extern struct trackLayout tl;
+
 static char const rcsid[] = "$Id: encode.c,v 1.24 2010/05/11 01:43:27 kent Exp $";
 
 #define SMALLBUF 128
@@ -236,15 +238,38 @@ struct linkedFeatures *lf = item;
 int heightPer = tg->heightPer;
 int shortOff = heightPer/4;
 int shortHeight = heightPer - 2*shortOff;
+char *exonArrows = trackDbSettingClosestToHomeOrDefault(tg->tdb, "exonArrows", "off");
+boolean drawArrows = FALSE;
+if ((exonArrows != NULL) && sameString(exonArrows, "on"))
+    drawArrows = TRUE;
 Color rangeColor = shadesOfGray[lf->grayIx];
-Color peakColor = (tg->ixColor != blackIndex()) ? tg->ixColor : getOrangeColor();;
+Color peakColor = (tg->ixColor != blackIndex()) ? tg->ixColor : getOrangeColor();
+if (drawArrows)
+    {
+    shortOff = 0;
+    shortHeight = heightPer;
+    }
 if (lf->components)
     {
     struct simpleFeature *sf;
     drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+(heightPer/2), 1, rangeColor);
     for (sf = lf->components; sf != NULL; sf = sf->next)
+	{
 	drawScaledBox(hvg, sf->start, sf->end, scale, xOff, y+shortOff,
 		      shortHeight, rangeColor);
+	if (drawArrows)
+	    {
+	    int x1 = round((double)(sf->start-winStart)*scale) + xOff;
+	    int x2 = round((double)(sf->end-winStart)*scale) + xOff;
+	    int w = x2-x1;
+	    if (w < 1)
+		w = 1;
+
+	    clippedBarbs(hvg, x1, y + heightPer/2, w, 
+		    tl.barbHeight, tl.barbSpacing, lf->orientation,
+		    MG_WHITE, FALSE);
+	    }
+	}
     }
 else
     drawScaledBox(hvg, lf->start, lf->end, scale, xOff, y+shortOff,

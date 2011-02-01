@@ -86,7 +86,7 @@ dragAndDrop *
 endFudge bed
 ensemblIdUrl genePred
 ensArchive genePred
-exonArrows genePred bed
+exonArrows genePred bed broadPeak
 exonArrowsDense bed
 expDrawExons expRatio
 expProbeTable expRatio
