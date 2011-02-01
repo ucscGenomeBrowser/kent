@@ -4249,7 +4249,7 @@ longLabel International Standard Cytogenetic Array Consortium - Retrospective va
 group varRep
 priority 110
 visibility hide
-type bed 8 +
+type gvf
 noScoreFilter .
 
 searchName decipherId
