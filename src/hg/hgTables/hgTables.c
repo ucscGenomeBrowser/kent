@@ -545,14 +545,19 @@ char *chromTable(struct sqlConnection *conn, char *table)
 /* Get chr1_table if it exists, otherwise table.
  * You can freeMem this when done. */
 {
-char *chrom = hDefaultChrom(database);
-if (sqlTableExists(conn, table))
+if (isHubTrack(table))
     return cloneString(table);
 else
     {
-    char buf[256];
-    safef(buf, sizeof(buf), "%s_%s", chrom, table);
-    return cloneString(buf);
+    char *chrom = hDefaultChrom(database);
+    if (sqlTableExists(conn, table))
+	return cloneString(table);
+    else
+	{
+	char buf[256];
+	safef(buf, sizeof(buf), "%s_%s", chrom, table);
+	return cloneString(buf);
+	}
     }
 }
 
