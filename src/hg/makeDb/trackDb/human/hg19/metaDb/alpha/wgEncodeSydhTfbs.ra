@@ -1698,7 +1698,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdAlnRep1.bam
@@ -1720,7 +1720,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdAlnRep2.bam
@@ -1742,7 +1742,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdPk.narrowPeak.gz
@@ -1764,7 +1764,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdRawDataRep1.fastq.gz
@@ -1786,7 +1786,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdRawDataRep2.fastq.gz
@@ -1808,7 +1808,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Irf3StdSig.bigWig
@@ -2060,7 +2060,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep1.bam
@@ -2082,7 +2082,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2hStdAlnRep2.bam
@@ -2104,7 +2104,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2hStdPk.narrowPeak.gz
@@ -2126,7 +2126,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2hStdRawDataRep1.fastq.gz
@@ -2149,7 +2149,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2hStdRawDataRep2.fastq.gz
@@ -2172,7 +2172,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-03
 dateUnrestricted 2011-06-03
 fileName wgEncodeSydhTfbsGm12878Nfe2hStdSig.bigWig
@@ -2746,7 +2746,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300n15StdAlnRep1.bam
@@ -2768,7 +2768,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300n15StdAlnRep2.bam
@@ -2790,7 +2790,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300n15StdPk.narrowPeak.gz
@@ -2812,7 +2812,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300n15StdRawDataRep1.fastq.gz
@@ -2834,7 +2834,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300n15StdRawDataRep2.fastq.gz
@@ -2856,7 +2856,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId GM12878/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878P300n15StdSig.bigWig
@@ -3582,7 +3582,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep1.bam
@@ -3604,7 +3604,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5n494IggmusAlnRep2.bam
@@ -3626,7 +3626,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5n494IggmusPk.narrowPeak.gz
@@ -3648,7 +3648,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawDataRep1.fastq.gz
@@ -3670,7 +3670,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5n494IggmusRawDataRep2.fastq.gz
@@ -3692,7 +3692,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Rfx5n494IggmusSig.bigWig
@@ -4098,7 +4098,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep1.bam
@@ -4120,7 +4120,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusAlnRep2.bam
@@ -4142,7 +4142,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusPk.narrowPeak.gz
@@ -4164,7 +4164,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusRawDataRep1.fastq.gz
@@ -4186,7 +4186,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusRawDataRep2.fastq.gz
@@ -4208,7 +4208,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Stat3IggmusSig.bigWig
@@ -4477,7 +4477,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep1.bam
@@ -4499,7 +4499,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusAlnRep2.bam
@@ -4521,7 +4521,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusPk.narrowPeak.gz
@@ -4543,7 +4543,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusRawDataRep1.fastq.gz
@@ -4565,7 +4565,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusRawDataRep2.fastq.gz
@@ -4587,7 +4587,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId GM12878/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsGm12878Usf2IggmusSig.bigWig
@@ -10408,7 +10408,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1.bam
@@ -10430,7 +10430,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep2.bam
@@ -10452,7 +10452,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdPk.narrowPeak.gz
@@ -10474,7 +10474,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep1.fastq.gz
@@ -10496,7 +10496,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdRawDataRep2.fastq.gz
@@ -10518,7 +10518,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId H1-hESC/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdSig.bigWig
@@ -11862,6 +11862,155 @@ tableName wgEncodeSydhTfbsHct116Tcf4UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsHek293InputRawData
+objType file
+antibody Input
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control std
+controlId HEK293/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeSydhTfbsHek293InputRawData.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+setType input
+subId 191
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293InputUcdAln
+objType file
+antibody Input
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-13
+fileName wgEncodeSydhTfbsHek293InputUcdAln.bam
+grant Snyder
+lab UCD
+project wgEncode
+setType input
+subId 3257
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHek293InputUcdRawData
+objType file
+antibody Input
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-13
+fileName wgEncodeSydhTfbsHek293InputUcdRawData.fastq.gz
+grant Snyder
+lab UCD
+project wgEncode
+setType input
+subId 3257
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293InputUcdSig
+objType table
+antibody Input
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HEK293(b)/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-14
+dateUnrestricted 2011-10-13
+fileName wgEncodeSydhTfbsHek293InputUcdSig.bigWig
+grant Snyder
+lab UCD
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 3257
+tableName wgEncodeSydhTfbsHek293InputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep1
+objType file
+antibody Pol2
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control std
+controlId HEK293/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeSydhTfbsHek293Pol2RawDataRep1.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 192
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep2
+objType file
+antibody Pol2
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control std
+controlId HEK293/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeSydhTfbsHek293Pol2RawDataRep2.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 192
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep3
+objType file
+antibody Pol2
+cell HEK293(b)
+composite wgEncodeSydhTfbs
+control std
+controlId HEK293/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeSydhTfbsHek293Pol2RawDataRep3.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 192
+treatment None
+view RawData
+
 metaObject wgEncodeSydhTfbsHek293bElk4UcdAlnRep1
 objType file
 antibody ELK4
@@ -12259,155 +12408,6 @@ subId 3053
 tableName wgEncodeSydhTfbsHek293bPol2StdSig
 treatment None
 view Signal
-
-metaObject wgEncodeSydhTfbsHek293InputRawData
-objType file
-antibody Input
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control std
-controlId HEK293/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeSydhTfbsHek293InputRawData.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-setType input
-subId 191
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293InputUcdAln
-objType file
-antibody Input
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-14
-dateUnrestricted 2011-10-13
-fileName wgEncodeSydhTfbsHek293InputUcdAln.bam
-grant Snyder
-lab UCD
-project wgEncode
-setType input
-subId 3257
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHek293InputUcdRawData
-objType file
-antibody Input
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-14
-dateUnrestricted 2011-10-13
-fileName wgEncodeSydhTfbsHek293InputUcdRawData.fastq.gz
-grant Snyder
-lab UCD
-project wgEncode
-setType input
-subId 3257
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293InputUcdSig
-objType table
-antibody Input
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HEK293(b)/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-14
-dateUnrestricted 2011-10-13
-fileName wgEncodeSydhTfbsHek293InputUcdSig.bigWig
-grant Snyder
-lab UCD
-labVersion PeakSeq1.0
-project wgEncode
-setType input
-subId 3257
-tableName wgEncodeSydhTfbsHek293InputUcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep1
-objType file
-antibody Pol2
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control std
-controlId HEK293/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeSydhTfbsHek293Pol2RawDataRep1.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 192
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep2
-objType file
-antibody Pol2
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control std
-controlId HEK293/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeSydhTfbsHek293Pol2RawDataRep2.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 192
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHek293Pol2RawDataRep3
-objType file
-antibody Pol2
-cell HEK293(b)
-composite wgEncodeSydhTfbs
-control std
-controlId HEK293/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeSydhTfbsHek293Pol2RawDataRep3.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 3
-setType exp
-subId 192
-treatment None
-view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Ap2alphaRawDataRep1
 objType file
@@ -13102,7 +13102,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep1.bam
@@ -13124,7 +13124,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1cIggrabAlnRep2.bam
@@ -13146,7 +13146,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1cIggrabPk.narrowPeak.gz
@@ -13168,7 +13168,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1cIggrabRawDataRep1.fastq.gz
@@ -13190,7 +13190,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1cIggrabRawDataRep2.fastq.gz
@@ -13212,7 +13212,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Brca1cIggrabSig.bigWig
@@ -13629,7 +13629,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep1.bam
@@ -13651,7 +13651,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabAlnRep2.bam
@@ -13673,7 +13673,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabPk.narrowPeak.gz
@@ -13695,7 +13695,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabRawDataRep1.fastq.gz
@@ -13717,7 +13717,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabRawDataRep2.fastq.gz
@@ -13739,7 +13739,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3CebpbIggrabSig.bigWig
@@ -14725,7 +14725,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep1.bam
@@ -14747,7 +14747,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabAlnRep2.bam
@@ -14769,7 +14769,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabPk.narrowPeak.gz
@@ -14791,7 +14791,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawDataRep1.fastq.gz
@@ -14813,7 +14813,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabRawDataRep2.fastq.gz
@@ -14835,7 +14835,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabSig.bigWig
@@ -14848,6 +14848,54 @@ subId 2521
 tableName wgEncodeSydhTfbsHelas3Gtf2f1rapIggrabSig
 treatment None
 view Signal
+
+metaObject wgEncodeSydhTfbsHelas3HaRawDataRep1
+objType file
+antibody HA-E2F1
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control std
+controlId HeLa-S3/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-28
+dateUnrestricted 2010-06-28
+fileName wgEncodeSydhTfbsHelas3HaRawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 553
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHelas3HaRawDataRep2
+objType file
+antibody HA-E2F1
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control std
+controlId HeLa-S3/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-28
+dateUnrestricted 2010-06-28
+fileName wgEncodeSydhTfbsHelas3HaRawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 553
+treatment None
+view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1
 objType file
@@ -14919,122 +14967,6 @@ subId 3055
 tableName wgEncodeSydhTfbsHelas3Hae2f1StdSig
 treatment None
 view Signal
-
-metaObject wgEncodeSydhTfbsHelas3HaRawDataRep1
-objType file
-antibody HA-E2F1
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-28
-dateUnrestricted 2010-06-28
-fileName wgEncodeSydhTfbsHelas3HaRawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 553
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHelas3HaRawDataRep2
-objType file
-antibody HA-E2F1
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-28
-dateUnrestricted 2010-06-28
-fileName wgEncodeSydhTfbsHelas3HaRawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag,
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 553
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHelas3ifngInputRawData
-objType file
-accession GSE12782
-antibody Input
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileName wgEncodeSydhTfbsHelas3ifngInputRawData.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-setType input
-subId 15
-treatment IFNg30
-view RawData
-
-metaObject wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1
-objType file
-accession GSE12782
-antibody STAT1
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 13
-treatment IFNg30
-view RawData
-
-metaObject wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2
-objType file
-accession GSE12782
-antibody STAT1
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/IFNg30/Input/std
-dataType ChipSeq
-dataVersion ENCODE Nov 2008 Freeze
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 13
-treatment IFNg30
-view RawData
 
 metaObject wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep1
 objType file
@@ -16235,7 +16167,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep1.bam
@@ -16257,7 +16189,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabAlnRep2.bam
@@ -16279,7 +16211,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabPk.narrowPeak.gz
@@ -16301,7 +16233,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawDataRep1.fastq.gz
@@ -16323,7 +16255,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabRawDataRep2.fastq.gz
@@ -16345,7 +16277,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsHelas3Mxi1bhlhIggrabSig.bigWig
@@ -16550,7 +16482,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep1.bam
@@ -16572,7 +16504,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300n15IggrabAlnRep2.bam
@@ -16594,7 +16526,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300n15IggrabPk.narrowPeak.gz
@@ -16616,7 +16548,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300n15IggrabRawDataRep1.fastq.gz
@@ -16638,7 +16570,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300n15IggrabRawDataRep2.fastq.gz
@@ -16660,7 +16592,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3P300n15IggrabSig.bigWig
@@ -16742,6 +16674,102 @@ setType exp
 subId 12
 treatment None
 view RawData
+
+metaObject wgEncodeSydhTfbsHelas3Pol2StdAlnRep1
+objType file
+antibody Pol2
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control std
+controlId HeLa-S3/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileIndex wgEncodeSydhTfbsHelas3Pol2StdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep1.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1395
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHelas3Pol2StdAlnRep2
+objType file
+antibody Pol2
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control std
+controlId HeLa-S3/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileIndex wgEncodeSydhTfbsHelas3Pol2StdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep2.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1397
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHelas3Pol2StdAlnRep3
+objType file
+antibody Pol2
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control std
+controlId HeLa-S3/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileIndex wgEncodeSydhTfbsHelas3Pol2StdAlnRep3.bam.bai
+fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep3.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 1391
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHelas3Pol2StdSig
+objType table
+antibody Pol2
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control std
+controlId HeLa-S3/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsHelas3Pol2StdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3055
+tableName wgEncodeSydhTfbsHelas3Pol2StdSig
+treatment None
+view Signal
 
 metaObject wgEncodeSydhTfbsHelas3Pol2s2IggrabAlnRep1
 objType file
@@ -16871,102 +16899,6 @@ tableName wgEncodeSydhTfbsHelas3Pol2s2IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHelas3Pol2StdAlnRep1
-objType file
-antibody Pol2
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileIndex wgEncodeSydhTfbsHelas3Pol2StdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep1.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1395
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHelas3Pol2StdAlnRep2
-objType file
-antibody Pol2
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileIndex wgEncodeSydhTfbsHelas3Pol2StdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep2.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1397
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHelas3Pol2StdAlnRep3
-objType file
-antibody Pol2
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileIndex wgEncodeSydhTfbsHelas3Pol2StdAlnRep3.bam.bai
-fileName wgEncodeSydhTfbsHelas3Pol2StdAlnRep3.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 3
-setType exp
-subId 1391
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHelas3Pol2StdSig
-objType table
-antibody Pol2
-cell HeLa-S3
-composite wgEncodeSydhTfbs
-control std
-controlId HeLa-S3/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsHelas3Pol2StdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3055
-tableName wgEncodeSydhTfbsHelas3Pol2StdSig
-treatment None
-view Signal
-
 metaObject wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep1
 objType file
 antibody PRDM1_(Val90)
@@ -16975,7 +16907,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep1.bam
@@ -16997,7 +16929,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm1vIggrabAlnRep2.bam
@@ -17019,7 +16951,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm1vIggrabPk.narrowPeak.gz
@@ -17041,7 +16973,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm1vIggrabRawDataRep1.fastq.gz
@@ -17063,7 +16995,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm1vIggrabRawDataRep2.fastq.gz
@@ -17085,7 +17017,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Prdm1vIggrabSig.bigWig
@@ -17260,7 +17192,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep1.bam
@@ -17282,7 +17214,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5n494IggrabAlnRep2.bam
@@ -17304,7 +17236,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5n494IggrabPk.narrowPeak.gz
@@ -17326,7 +17258,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawDataRep1.fastq.gz
@@ -17348,7 +17280,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5n494IggrabRawDataRep2.fastq.gz
@@ -17370,7 +17302,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId HeLa-S3/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Rfx5n494IggrabSig.bigWig
@@ -18328,7 +18260,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep1.bam
@@ -18350,7 +18282,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusAlnRep2.bam
@@ -18372,7 +18304,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusPk.narrowPeak.gz
@@ -18394,7 +18326,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusRawDataRep1.fastq.gz
@@ -18416,7 +18348,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusRawDataRep2.fastq.gz
@@ -18438,7 +18370,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId HeLa-S3/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsHelas3Usf2IggmusSig.bigWig
@@ -18712,322 +18644,73 @@ tableName wgEncodeSydhTfbsHelas3Zzz3StdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHepg2bInputRawData
+metaObject wgEncodeSydhTfbsHelas3ifngInputRawData
 objType file
+accession GSE12782
 antibody Input
-cell HepG2b
+cell HeLa-S3
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
+control std
+controlId HeLa-S3/IFNg30/Input/std
 dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeSydhTfbsHepg2bInputRawData.fastq.gz
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileName wgEncodeSydhTfbsHelas3ifngInputRawData.fastq.gz
 grant Snyder
-lab UCD
+lab Yale
 origAssembly hg18
 project wgEncode
 setType input
-subId 374
-treatment None
+subId 15
+treatment IFNg30
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2bInputUcdAlnRep1
+metaObject wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1
 objType file
-antibody Input
-cell HepG2b
+accession GSE12782
+antibody STAT1
+cell HeLa-S3
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
+control std
+controlId HeLa-S3/IFNg30/Input/std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileIndex wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep1.fastq.gz
 grant Snyder
-lab UCD
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1358
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bInputUcdSig
-objType table
-antibody Input
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsHepg2bInputUcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType input
-subId 3055
-tableName wgEncodeSydhTfbsHepg2bInputUcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHepg2bTr4RawDataRep1
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 1
 setType exp
-subId 372
-treatment None
+subId 13
+treatment IFNg30
 view RawData
 
-metaObject wgEncodeSydhTfbsHepg2bTr4RawDataRep2
+metaObject wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2
 objType file
-antibody TR4
-cell HepG2b
+accession GSE12782
+antibody STAT1
+cell HeLa-S3
 composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
+control std
+controlId HeLa-S3/IFNg30/Input/std
 dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep2.fastq.gz
+dataVersion ENCODE Nov 2008 Freeze
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileName wgEncodeSydhTfbsHelas3ifngStat1RawDataRep2.fastq.gz
 grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+lab Yale
 origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 372
-treatment None
+subId 13
+treatment IFNg30
 view RawData
-
-metaObject wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1359
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2
-objType file
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-12
-dateUnrestricted 2010-03-11
-fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1362
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bTr4UcdSig
-objType table
-antibody TR4
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsHepg2bTr4UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3055
-tableName wgEncodeSydhTfbsHepg2bTr4UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1
-objType file
-antibody ZNF274
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-10
-dateUnrestricted 2011-02-10
-fileIndex wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam
-grant Snyder
-lab UCD
-project wgEncode
-replicate 1
-setType exp
-subId 1190
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2
-objType file
-antibody ZNF274
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-10
-dateUnrestricted 2011-02-10
-fileIndex wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam
-grant Snyder
-lab UCD
-project wgEncode
-replicate 2
-setType exp
-subId 1190
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdPk
-objType table
-antibody ZNF274
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-10
-dateUnrestricted 2011-02-10
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdPk.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
-project wgEncode
-setType exp
-subId 1190
-tableName wgEncodeSydhTfbsHepg2bZnf274UcdPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1
-objType file
-antibody ZNF274
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-10
-dateUnrestricted 2011-02-10
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-project wgEncode
-replicate 1
-setType exp
-subId 1190
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2
-objType file
-antibody ZNF274
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-10
-dateUnrestricted 2011-02-10
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-project wgEncode
-replicate 2
-setType exp
-subId 1190
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2bZnf274UcdSig
-objType table
-antibody ZNF274
-cell HepG2b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId HepG2b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-06
-dateUnrestricted 2011-09-06
-fileName wgEncodeSydhTfbsHepg2bZnf274UcdSig.bigWig
-grant Snyder
-lab Stanford
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 3072
-tableName wgEncodeSydhTfbsHepg2bZnf274UcdSig
-treatment None
-view Signal
 
 metaObject wgEncodeSydhTfbsHepg2CebpbForsklnRawDataRep1
 objType file
@@ -22017,141 +21700,6 @@ tableName wgEncodeSydhTfbsHepg2Rfx5n494IggrabSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep1
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/insulin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep1.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1073
-treatment insulin
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep2
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/insulin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep2.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1073
-treatment insulin
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep3
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/insulin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-15
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep3.fastq.gz
-grant Snyder
-lab Stanford
-labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
-origAssembly hg18
-project wgEncode
-replicate 3
-setType exp
-subId 1073
-treatment insulin
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/pravastatin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 242
-treatment pravastatin
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/pravastatin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 242
-treatment pravastatin
-view RawData
-
-metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3
-objType file
-antibody SREBP1
-cell HepG2
-composite wgEncodeSydhTfbs
-control std
-controlId HepG2/pravastatin/Input/std
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-replicate 3
-setType exp
-subId 242
-treatment pravastatin
-view RawData
-
 metaObject wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep1
 objType file
 antibody SREBP1
@@ -22343,6 +21891,141 @@ subId 3055
 tableName wgEncodeSydhTfbsHepg2Srebp1PravastStdSig
 treatment pravastatin
 view Signal
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep1
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/insulin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1073
+treatment insulin
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep2
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/insulin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1073
+treatment insulin
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep3
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/insulin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-15
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsHepg2Srebp1aInslnRawDataRep3.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 1073
+treatment insulin
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/pravastatin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep1.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 242
+treatment pravastatin
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/pravastatin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep2.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 242
+treatment pravastatin
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3
+objType file
+antibody SREBP1
+cell HepG2
+composite wgEncodeSydhTfbs
+control std
+controlId HepG2/pravastatin/Input/std
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeSydhTfbsHepg2Srebp1aRawDataRep3.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+replicate 3
+setType exp
+subId 242
+treatment pravastatin
+view RawData
 
 metaObject wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep1
 objType file
@@ -22891,6 +22574,323 @@ project wgEncode
 setType exp
 subId 3072
 tableName wgEncodeSydhTfbsHepg2Usf2IggrabSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHepg2bInputRawData
+objType file
+antibody Input
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeSydhTfbsHepg2bInputRawData.fastq.gz
+grant Snyder
+lab UCD
+origAssembly hg18
+project wgEncode
+setType input
+subId 374
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2bInputUcdAlnRep1
+objType file
+antibody Input
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileIndex wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1358
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2bInputUcdSig
+objType table
+antibody Input
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsHepg2bInputUcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType input
+subId 3055
+tableName wgEncodeSydhTfbsHepg2bInputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHepg2bTr4RawDataRep1
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 372
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2bTr4RawDataRep2
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileName wgEncodeSydhTfbsHepg2bTr4RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 372
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1359
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2
+objType file
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-12
+dateUnrestricted 2010-03-11
+fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1362
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2bTr4UcdSig
+objType table
+antibody TR4
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsHepg2bTr4UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3055
+tableName wgEncodeSydhTfbsHepg2bTr4UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1
+objType file
+antibody ZNF274
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileIndex wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep1.bam
+grant Snyder
+lab UCD
+project wgEncode
+replicate 1
+setType exp
+subId 1190
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2
+objType file
+antibody ZNF274
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileIndex wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdAlnRep2.bam
+grant Snyder
+lab UCD
+project wgEncode
+replicate 2
+setType exp
+subId 1190
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdPk
+objType table
+antibody ZNF274
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdPk.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
+project wgEncode
+setType exp
+subId 1190
+tableName wgEncodeSydhTfbsHepg2bZnf274UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1
+objType file
+antibody ZNF274
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
+project wgEncode
+replicate 1
+setType exp
+subId 1190
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2
+objType file
+antibody ZNF274
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-10
+dateUnrestricted 2011-02-10
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdRawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
+project wgEncode
+replicate 2
+setType exp
+subId 1190
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHepg2bZnf274UcdSig
+objType table
+antibody ZNF274
+cell HepG2b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HepG2b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-06
+dateUnrestricted 2011-09-06
+fileName wgEncodeSydhTfbsHepg2bZnf274UcdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 3072
+tableName wgEncodeSydhTfbsHepg2bZnf274UcdSig
 treatment None
 view Signal
 
@@ -24029,677 +24029,6 @@ tableName wgEncodeSydhTfbsK562Bdp1StdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsK562bE2f4RawDataRep1
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeSydhTfbsK562bE2f4RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 334
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bE2f4RawDataRep2
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeSydhTfbsK562bE2f4RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 334
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bE2f4UcdAlnRep1
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1359
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bE2f4UcdAlnRep2
-objType file
-antibody E2F4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1362
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bE2f4UcdSig
-objType table
-antibody E2F4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bE2f4UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bE2f4UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bE2f6RawDataRep1
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeSydhTfbsK562bE2f6RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 371
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bE2f6RawDataRep2
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeSydhTfbsK562bE2f6RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 371
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bE2f6UcdAlnRep1
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1359
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bE2f6UcdAlnRep2
-objType file
-antibody E2F6
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1362
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bE2f6UcdSig
-objType table
-antibody E2F6
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bE2f6UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bE2f6UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bGata1RawDataRep1
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeSydhTfbsK562bGata1RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 227
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bGata1RawDataRep2
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileName wgEncodeSydhTfbsK562bGata1RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 227
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bGata1UcdAlnRep1
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1359
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bGata1UcdAlnRep2
-objType file
-antibody GATA-1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2009-02-27
-dateUnrestricted 2009-11-27
-fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1362
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bGata1UcdSig
-objType table
-antibody GATA-1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bGata1UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bGata1UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bGata2RawDataRep1
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeSydhTfbsK562bGata2RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 460
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bGata2RawDataRep2
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileName wgEncodeSydhTfbsK562bGata2RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 460
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bGata2UcdAlnRep1
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1360
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bGata2UcdAlnRep2
-objType file
-antibody GATA-2
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-09-02
-dateUnrestricted 2010-06-02
-fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1362
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bGata2UcdSig
-objType table
-antibody GATA-2
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bGata2UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bGata2UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bInputRawData
-objType file
-antibody Input
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileName wgEncodeSydhTfbsK562bInputRawData.fastq.gz
-grant Snyder
-lab UCD
-labVersion Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-setType input
-subId 335
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bInputUcdAlnRep1
-objType file
-antibody Input
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-06-11
-dateUnrestricted 2010-03-11
-fileIndex wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
-origAssembly hg18
-project wgEncode
-replicate 1
-setType input
-subId 1358
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bInputUcdSig
-objType table
-antibody Input
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bInputUcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType input
-subId 3056
-tableName wgEncodeSydhTfbsK562bInputUcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bKap1UcdAlnRep1
-objType file
-antibody KAP1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep1.bam
-grant Snyder
-lab UCD
-project wgEncode
-replicate 1
-setType exp
-subId 2126
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bKap1UcdAlnRep2
-objType file
-antibody KAP1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep2.bam
-grant Snyder
-lab UCD
-project wgEncode
-replicate 2
-setType exp
-subId 2126
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bKap1UcdPk
-objType table
-antibody KAP1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562bKap1UcdPk.narrowPeak.gz
-grant Snyder
-lab UCD
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 2126
-tableName wgEncodeSydhTfbsK562bKap1UcdPk
-treatment None
-view Peaks
-
-metaObject wgEncodeSydhTfbsK562bKap1UcdRawDataRep1
-objType file
-antibody KAP1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
-project wgEncode
-replicate 1
-setType exp
-subId 2126
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bKap1UcdRawDataRep2
-objType file
-antibody KAP1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
-project wgEncode
-replicate 2
-setType exp
-subId 2126
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bKap1UcdSig
-objType table
-antibody KAP1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
-fileName wgEncodeSydhTfbsK562bKap1UcdSig.bigWig
-grant Snyder
-lab UCD
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 2126
-tableName wgEncodeSydhTfbsK562bKap1UcdSig
-treatment None
-view Signal
-
 metaObject wgEncodeSydhTfbsK562Brf1RawDataRep1
 objType file
 antibody BRF1
@@ -25144,720 +24473,6 @@ tableName wgEncodeSydhTfbsK562Brg1IggmusSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1360
-treatment MNaseD
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1364
-treatment MNaseD
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig
-objType table
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig
-treatment MNaseD
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep1
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-16
-dateUnrestricted 2010-10-15
-fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 1088
-treatment MNaseD
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bSetdb1RawDataRep1
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 377
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bSetdb1RawDataRep2
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 377
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1360
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2
-objType file
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-06-15
-dateUnrestricted 2010-03-15
-fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1364
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bSetdb1UcdSig
-objType table
-antibody SETDB1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bSetdb1UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bSetdb1UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bTr4RawDataRep1
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeSydhTfbsK562bTr4RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 380
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bTr4RawDataRep2
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE July 2009 Freeze
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileName wgEncodeSydhTfbsK562bTr4RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 380
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bTr4UcdAlnRep1
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1360
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bTr4UcdAlnRep2
-objType file
-antibody TR4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-06-22
-dateUnrestricted 2010-03-22
-fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1364
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bTr4UcdSig
-objType table
-antibody TR4
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bTr4UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bTr4UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bYy1RawDataRep1
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeSydhTfbsK562bYy1RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 467
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bYy1RawDataRep2
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileName wgEncodeSydhTfbsK562bYy1RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 467
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bYy1UcdAlnRep1
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1360
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bYy1UcdAlnRep2
-objType file
-antibody YY1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-09-03
-dateUnrestricted 2010-06-03
-fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1364
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bYy1UcdSig
-objType table
-antibody YY1
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bYy1UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bYy1UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bZnf263RawDataRep1
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeSydhTfbsK562bZnf263RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 205
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bZnf263RawDataRep2
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Feb 2009 Freeze
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileName wgEncodeSydhTfbsK562bZnf263RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 205
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bZnf263UcdAlnRep1
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1360
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bZnf263UcdAlnRep2
-objType file
-antibody ZNF263
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2009-02-25
-dateUnrestricted 2009-11-25
-fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1364
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bZnf263UcdSig
-objType table
-antibody ZNF263
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bZnf263UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bZnf263UcdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562bZnf274RawDataRep1
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeSydhTfbsK562bZnf274RawDataRep1.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bZnf274RawDataRep2
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileName wgEncodeSydhTfbsK562bZnf274RawDataRep2.fastq.gz
-grant Snyder
-lab UCD
-labVersion Fragmented using Bioruptor, precipitated with StaphA
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-softwareVersion PeakSeq1.0 (fdr 0.001)
-subId 860
-treatment None
-view RawData
-
-metaObject wgEncodeSydhTfbsK562bZnf274UcdAlnRep1
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1360
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bZnf274UcdAlnRep2
-objType file
-antibody ZNF274
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-11
-dateSubmitted 2010-01-05
-dateUnrestricted 2010-10-04
-fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam
-grant Snyder
-lab UCD
-labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1364
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562bZnf274UcdSig
-objType table
-antibody ZNF274
-cell K562b
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId K562b/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562bZnf274UcdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562bZnf274UcdSig
-treatment None
-view Signal
-
 metaObject wgEncodeSydhTfbsK562Ccnt2StdAlnRep1
 objType file
 antibody CCNT2
@@ -25996,7 +24611,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabAlnRep1.bam
@@ -26018,7 +24633,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabAlnRep2.bam
@@ -26040,7 +24655,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabPk.narrowPeak.gz
@@ -26062,7 +24677,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabRawDataRep1.fastq.gz
@@ -26084,7 +24699,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabRawDataRep2.fastq.gz
@@ -26106,7 +24721,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562CebpbIggrabSig.bigWig
@@ -26290,7 +24905,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd21250IggrabAlnRep1.bam
@@ -26312,7 +24927,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd21250IggrabAlnRep2.bam
@@ -26334,7 +24949,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd21250IggrabPk.narrowPeak.gz
@@ -26356,7 +24971,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd21250IggrabRawDataRep1.fastq.gz
@@ -26378,7 +24993,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd21250IggrabRawDataRep2.fastq.gz
@@ -26400,7 +25015,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Chd21250IggrabSig.bigWig
@@ -27390,7 +26005,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep1.bam
@@ -27412,7 +26027,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1rapIggrabAlnRep2.bam
@@ -27434,7 +26049,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1rapIggrabPk.narrowPeak.gz
@@ -27456,7 +26071,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawDataRep1.fastq.gz
@@ -27478,7 +26093,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1rapIggrabRawDataRep2.fastq.gz
@@ -27500,7 +26115,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Gtf2f1rapIggrabSig.bigWig
@@ -29601,7 +28216,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep1.bam
@@ -29623,7 +28238,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1bhlhIggrabAlnRep2.bam
@@ -29645,7 +28260,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1bhlhIggrabPk.narrowPeak.gz
@@ -29667,7 +28282,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawDataRep1.fastq.gz
@@ -29689,7 +28304,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1bhlhIggrabRawDataRep2.fastq.gz
@@ -29711,7 +28326,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562Mxi1bhlhIggrabSig.bigWig
@@ -30323,7 +28938,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300f4IggrabAlnRep1.bam
@@ -30345,7 +28960,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300f4IggrabAlnRep2.bam
@@ -30367,7 +28982,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300f4IggrabPk.narrowPeak.gz
@@ -30389,7 +29004,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300f4IggrabRawDataRep1.fastq.gz
@@ -30411,7 +29026,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300f4IggrabRawDataRep2.fastq.gz
@@ -30433,7 +29048,7 @@ composite wgEncodeSydhTfbs
 control IgG-rab
 controlId K562/None/Input/IgG-rab
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsK562P300f4IggrabSig.bigWig
@@ -30892,6 +29507,77 @@ subId 16
 treatment None
 view RawData
 
+metaObject wgEncodeSydhTfbsK562Pol2StdAlnRep1
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileIndex wgEncodeSydhTfbsK562Pol2StdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562Pol2StdAlnRep1.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1376
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Pol2StdAlnRep2
+objType file
+antibody Pol2
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2008-10-31
+dateUnrestricted 2009-07-31
+fileIndex wgEncodeSydhTfbsK562Pol2StdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562Pol2StdAlnRep2.bam
+grant Snyder
+lab Stanford
+labVersion remapped from hg18
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1388
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Pol2StdSig
+objType table
+antibody Pol2
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562Pol2StdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562Pol2StdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsK562Pol2s2StdAlnRep1
 objType file
 antibody Pol2(phosphoS2)
@@ -31021,77 +29707,6 @@ project wgEncode
 setType exp
 subId 1623
 tableName wgEncodeSydhTfbsK562Pol2s2StdSig
-treatment None
-view Signal
-
-metaObject wgEncodeSydhTfbsK562Pol2StdAlnRep1
-objType file
-antibody Pol2
-cell K562
-composite wgEncodeSydhTfbs
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileIndex wgEncodeSydhTfbsK562Pol2StdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsK562Pol2StdAlnRep1.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 1
-setType exp
-subId 1376
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562Pol2StdAlnRep2
-objType file
-antibody Pol2
-cell K562
-composite wgEncodeSydhTfbs
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2008-10-31
-dateUnrestricted 2009-07-31
-fileIndex wgEncodeSydhTfbsK562Pol2StdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsK562Pol2StdAlnRep2.bam
-grant Snyder
-lab Stanford
-labVersion remapped from hg18
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 1388
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsK562Pol2StdSig
-objType table
-antibody Pol2
-cell K562
-composite wgEncodeSydhTfbs
-control std
-controlId K562/None/Input/std
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-12-02
-dateUnrestricted 2011-09-01
-fileName wgEncodeSydhTfbsK562Pol2StdSig.bigWig
-grant Snyder
-lab Stanford
-project wgEncode
-setType exp
-subId 3056
-tableName wgEncodeSydhTfbsK562Pol2StdSig
 treatment None
 view Signal
 
@@ -32214,7 +30829,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep1.bam
@@ -32236,7 +30851,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusAlnRep2.bam
@@ -32258,7 +30873,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusPk.narrowPeak.gz
@@ -32280,7 +30895,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusRawDataRep1.fastq.gz
@@ -32302,7 +30917,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusRawDataRep2.fastq.gz
@@ -32324,7 +30939,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562Tal1sc12984IggmusSig.bigWig
@@ -32346,7 +30961,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusAlnRep1.bam
@@ -32368,7 +30983,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusAlnRep2.bam
@@ -32390,7 +31005,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusPk.narrowPeak.gz
@@ -32412,7 +31027,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusRawDataRep1.fastq.gz
@@ -32434,7 +31049,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusRawDataRep2.fastq.gz
@@ -32456,7 +31071,7 @@ composite wgEncodeSydhTfbs
 control IgG-mus
 controlId K562/None/Input/IgG-mus
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsK562TbpIggmusSig.bigWig
@@ -32882,6 +31497,1391 @@ tableName wgEncodeSydhTfbsK562Xrcc4StdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsK562bE2f4RawDataRep1
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeSydhTfbsK562bE2f4RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 334
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bE2f4RawDataRep2
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeSydhTfbsK562bE2f4RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 334
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bE2f4UcdAlnRep1
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1359
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bE2f4UcdAlnRep2
+objType file
+antibody E2F4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1362
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bE2f4UcdSig
+objType table
+antibody E2F4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bE2f4UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bE2f4UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bE2f6RawDataRep1
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeSydhTfbsK562bE2f6RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 371
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bE2f6RawDataRep2
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeSydhTfbsK562bE2f6RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 371
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bE2f6UcdAlnRep1
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1359
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bE2f6UcdAlnRep2
+objType file
+antibody E2F6
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1362
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bE2f6UcdSig
+objType table
+antibody E2F6
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bE2f6UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bE2f6UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bGata1RawDataRep1
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeSydhTfbsK562bGata1RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 227
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bGata1RawDataRep2
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileName wgEncodeSydhTfbsK562bGata1RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 227
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bGata1UcdAlnRep1
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1359
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bGata1UcdAlnRep2
+objType file
+antibody GATA-1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-14
+dateSubmitted 2009-02-27
+dateUnrestricted 2009-11-27
+fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1362
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bGata1UcdSig
+objType table
+antibody GATA-1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bGata1UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bGata1UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bGata2RawDataRep1
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeSydhTfbsK562bGata2RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 460
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bGata2RawDataRep2
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileName wgEncodeSydhTfbsK562bGata2RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 460
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bGata2UcdAlnRep1
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1360
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bGata2UcdAlnRep2
+objType file
+antibody GATA-2
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-09-02
+dateUnrestricted 2010-06-02
+fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1362
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bGata2UcdSig
+objType table
+antibody GATA-2
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bGata2UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bGata2UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bInputRawData
+objType file
+antibody Input
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileName wgEncodeSydhTfbsK562bInputRawData.fastq.gz
+grant Snyder
+lab UCD
+labVersion Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+setType input
+subId 335
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bInputUcdAlnRep1
+objType file
+antibody Input
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-06-11
+dateUnrestricted 2010-03-11
+fileIndex wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
+origAssembly hg18
+project wgEncode
+replicate 1
+setType input
+subId 1358
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bInputUcdSig
+objType table
+antibody Input
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bInputUcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType input
+subId 3056
+tableName wgEncodeSydhTfbsK562bInputUcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bKap1UcdAlnRep1
+objType file
+antibody KAP1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep1.bam
+grant Snyder
+lab UCD
+project wgEncode
+replicate 1
+setType exp
+subId 2126
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bKap1UcdAlnRep2
+objType file
+antibody KAP1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562bKap1UcdAlnRep2.bam
+grant Snyder
+lab UCD
+project wgEncode
+replicate 2
+setType exp
+subId 2126
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bKap1UcdPk
+objType table
+antibody KAP1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562bKap1UcdPk.narrowPeak.gz
+grant Snyder
+lab UCD
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2126
+tableName wgEncodeSydhTfbsK562bKap1UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsK562bKap1UcdRawDataRep1
+objType file
+antibody KAP1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
+project wgEncode
+replicate 1
+setType exp
+subId 2126
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bKap1UcdRawDataRep2
+objType file
+antibody KAP1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562bKap1UcdRawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
+project wgEncode
+replicate 2
+setType exp
+subId 2126
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bKap1UcdSig
+objType table
+antibody KAP1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562bKap1UcdSig.bigWig
+grant Snyder
+lab UCD
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2126
+tableName wgEncodeSydhTfbsK562bKap1UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep1
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileName wgEncodeSydhTfbsK562bSetdb1MnaseRawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using MNase and used proteinA agarose beads for ChIPs,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 1088
+treatment MNaseD
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1360
+treatment MNaseD
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-01-16
+dateUnrestricted 2010-10-15
+fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1364
+treatment MNaseD
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig
+objType table
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bSetdb1MnasedUcdSig
+treatment MNaseD
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bSetdb1RawDataRep1
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 377
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bSetdb1RawDataRep2
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileName wgEncodeSydhTfbsK562bSetdb1RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 377
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1360
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2
+objType file
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-06-15
+dateUnrestricted 2010-03-15
+fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1364
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bSetdb1UcdSig
+objType table
+antibody SETDB1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bSetdb1UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bSetdb1UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bTr4RawDataRep1
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeSydhTfbsK562bTr4RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 380
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bTr4RawDataRep2
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileName wgEncodeSydhTfbsK562bTr4RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein A agarose beads,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 380
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bTr4UcdAlnRep1
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1360
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bTr4UcdAlnRep2
+objType file
+antibody TR4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-06-22
+dateUnrestricted 2010-03-22
+fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1364
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bTr4UcdSig
+objType table
+antibody TR4
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bTr4UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bTr4UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bYy1RawDataRep1
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeSydhTfbsK562bYy1RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 467
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bYy1RawDataRep2
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileName wgEncodeSydhTfbsK562bYy1RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with protein G magnetic beads,
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 467
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bYy1UcdAlnRep1
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1360
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bYy1UcdAlnRep2
+objType file
+antibody YY1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-09-03
+dateUnrestricted 2010-06-03
+fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1364
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bYy1UcdSig
+objType table
+antibody YY1
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bYy1UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bYy1UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bZnf263RawDataRep1
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeSydhTfbsK562bZnf263RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 205
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bZnf263RawDataRep2
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Feb 2009 Freeze
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileName wgEncodeSydhTfbsK562bZnf263RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 205
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bZnf263UcdAlnRep1
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1360
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bZnf263UcdAlnRep2
+objType file
+antibody ZNF263
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2009-02-25
+dateUnrestricted 2009-11-25
+fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1364
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bZnf263UcdSig
+objType table
+antibody ZNF263
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bZnf263UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bZnf263UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsK562bZnf274RawDataRep1
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeSydhTfbsK562bZnf274RawDataRep1.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bZnf274RawDataRep2
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileName wgEncodeSydhTfbsK562bZnf274RawDataRep2.fastq.gz
+grant Snyder
+lab UCD
+labVersion Fragmented using Bioruptor, precipitated with StaphA
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+softwareVersion PeakSeq1.0 (fdr 0.001)
+subId 860
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562bZnf274UcdAlnRep1
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam.bai
+fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 1
+setType exp
+subId 1360
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bZnf274UcdAlnRep2
+objType file
+antibody ZNF274
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-11
+dateSubmitted 2010-01-05
+dateUnrestricted 2010-10-04
+fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam.bai
+fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam
+grant Snyder
+lab UCD
+labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
+origAssembly hg18
+project wgEncode
+replicate 2
+setType exp
+subId 1364
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562bZnf274UcdSig
+objType table
+antibody ZNF274
+cell K562b
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562b/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-12-02
+dateUnrestricted 2011-09-01
+fileName wgEncodeSydhTfbsK562bZnf274UcdSig.bigWig
+grant Snyder
+lab Stanford
+project wgEncode
+setType exp
+subId 3056
+tableName wgEncodeSydhTfbsK562bZnf274UcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsMcf10aesInputEtoh01bStdAln
 objType file
 antibody Input
@@ -33014,7 +33014,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1.bam
@@ -33036,7 +33036,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep2.bam
@@ -33058,7 +33058,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdPk.narrowPeak.gz
@@ -33080,7 +33080,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep1.fastq.gz
@@ -33102,7 +33102,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdRawDataRep2.fastq.gz
@@ -33124,7 +33124,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeSydhTfbsMcf10aesPol2Etoh01StdSig.bigWig
@@ -33146,7 +33146,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep1.bam
@@ -33168,7 +33168,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdAlnRep2.bam
@@ -33190,7 +33190,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdPk.narrowPeak.gz
@@ -33212,7 +33212,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep1.fastq.gz
@@ -33234,7 +33234,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdRawDataRep2.fastq.gz
@@ -33256,7 +33256,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesPol2TamStdSig.bigWig
@@ -33268,6 +33268,138 @@ setType exp
 subId 2548
 tableName wgEncodeSydhTfbsMcf10aesPol2TamStdSig
 treatment TAM_1uM_36hr
+view Signal
+
+metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
+objType file
+antibody STAT3
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control std
+controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1.bam
+grant Snyder
+lab Harvard(Weissman)
+parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2767
+treatment EtOH_0.01pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
+objType file
+antibody STAT3
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control std
+controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2.bam
+grant Snyder
+lab Harvard(Weissman)
+parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2767
+treatment EtOH_0.01pct
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk
+objType table
+antibody STAT3
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control std
+controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk.narrowPeak.gz
+grant Snyder
+lab Harvard(Weissman)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2767
+tableName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk
+treatment EtOH_0.01pct
+view Peaks
+
+metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1
+objType file
+antibody STAT3
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control std
+controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1.fastq.gz
+grant Snyder
+lab Harvard(Weissman)
+parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2767
+treatment EtOH_0.01pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2
+objType file
+antibody STAT3
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control std
+controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2.fastq.gz
+grant Snyder
+lab Harvard(Weissman)
+parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2767
+treatment EtOH_0.01pct
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig
+objType table
+antibody STAT3
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control std
+controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-27
+dateUnrestricted 2011-07-27
+fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig.bigWig
+grant Snyder
+lab Harvard(Weissman)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2767
+tableName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig
+treatment EtOH_0.01pct
 view Signal
 
 metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01bStdAlnRep1
@@ -33526,138 +33658,6 @@ tableName wgEncodeSydhTfbsMcf10aesStat3Etoh01cStdSig
 treatment EtOH_0.01pct_12hr
 view Signal
 
-metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
-objType file
-antibody STAT3
-cell MCF10A-Er-Src
-composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1.bam
-grant Snyder
-lab Harvard(Weissman)
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep1
-project wgEncode
-replicate 1
-setType exp
-subId 2767
-treatment EtOH_0.01pct
-view Alignments
-
-metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
-objType file
-antibody STAT3
-cell MCF10A-Er-Src
-composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2.bam
-grant Snyder
-lab Harvard(Weissman)
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdAlnRep2
-project wgEncode
-replicate 2
-setType exp
-subId 2767
-treatment EtOH_0.01pct
-view Alignments
-
-metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk
-objType table
-antibody STAT3
-cell MCF10A-Er-Src
-composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk.narrowPeak.gz
-grant Snyder
-lab Harvard(Weissman)
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 2767
-tableName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdPk
-treatment EtOH_0.01pct
-view Peaks
-
-metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1
-objType file
-antibody STAT3
-cell MCF10A-Er-Src
-composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep1.fastq.gz
-grant Snyder
-lab Harvard(Weissman)
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep1
-project wgEncode
-replicate 1
-setType exp
-subId 2767
-treatment EtOH_0.01pct
-view RawData
-
-metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2
-objType file
-antibody STAT3
-cell MCF10A-Er-Src
-composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawDataRep2.fastq.gz
-grant Snyder
-lab Harvard(Weissman)
-parentTable wgEncodeSydhTfbsMcf10aesStat3Etoh01StdRawSignalRep2
-project wgEncode
-replicate 2
-setType exp
-subId 2767
-treatment EtOH_0.01pct
-view RawData
-
-metaObject wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig
-objType table
-antibody STAT3
-cell MCF10A-Er-Src
-composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-27
-dateUnrestricted 2011-07-27
-fileName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig.bigWig
-grant Snyder
-lab Harvard(Weissman)
-labVersion PeakSeq1.0
-project wgEncode
-setType exp
-subId 2767
-tableName wgEncodeSydhTfbsMcf10aesStat3Etoh01StdSig
-treatment EtOH_0.01pct
-view Signal
-
 metaObject wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1
 objType file
 antibody STAT3
@@ -33666,7 +33666,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep1.bam
@@ -33688,7 +33688,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdAlnRep2.bam
@@ -33710,7 +33710,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdPk.narrowPeak.gz
@@ -33732,7 +33732,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep1.fastq.gz
@@ -33754,7 +33754,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdRawDataRep2.fastq.gz
@@ -33776,7 +33776,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMcf10aesStat3TamStdSig.bigWig
@@ -34958,7 +34958,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep1.bam
@@ -34980,7 +34980,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdAlnRep2.bam
@@ -35002,7 +35002,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdPk.narrowPeak.gz
@@ -35024,7 +35024,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep1.fastq.gz
@@ -35047,7 +35047,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdRawDataRep2.fastq.gz
@@ -35070,7 +35070,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-23
 dateUnrestricted 2011-06-23
 fileName wgEncodeSydhTfbsPbdeGata1UcdSig.bigWig
@@ -35154,7 +35154,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep1.bam
@@ -35176,7 +35176,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdAlnRep2.bam
@@ -35198,7 +35198,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdPk.narrowPeak.gz
@@ -35220,7 +35220,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep1.fastq.gz
@@ -35243,7 +35243,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdRawDataRep2.fastq.gz
@@ -35266,7 +35266,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId PBDE/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeSydhTfbsPbdePol2UcdSig.bigWig
@@ -35481,7 +35481,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep1.bam
@@ -35503,7 +35503,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdAlnRep2.bam
@@ -35525,7 +35525,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdPk.narrowPeak.gz
@@ -35547,7 +35547,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep1.fastq.gz
@@ -35570,7 +35570,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdRawDataRep2.fastq.gz
@@ -35593,7 +35593,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId SH-SY5Y/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsShsy5yGata2UcdSig.bigWig
@@ -36060,4 +36060,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -49310114
+# MAGIC: 590969466
