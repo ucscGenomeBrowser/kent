@@ -195,7 +195,7 @@ lab Yale
 origAssembly hg18
 project wgEncode
 subId 542
-treatment IFNg30m
+treatment IFNg30
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifng30PolyaAln
@@ -364,4 +364,4 @@ tableName wgEncodeYaleRnaSeqK562PolyaSig
 treatment None
 view Signal
 
-# MAGIC: -1385378009
+# MAGIC: -1385676919
