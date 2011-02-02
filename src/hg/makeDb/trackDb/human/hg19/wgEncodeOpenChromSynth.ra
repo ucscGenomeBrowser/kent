@@ -23,6 +23,7 @@ boxedCfg on
 pValueFilter 0.0
 pValueFilterLimits 0:16
 noScoreFilter .
+extraFields pvalue=[f]P-Value dnaseSignal=[f]DNase_Signal dnasePvalue=[f]DNase-seq_P-Value faireSignal=[f]FAIRE-seq_Signal fairePvalue=[f]FAIRE-seq_P-Value polIISignal=[f]Pol-II_Signal polIIPvalue=[f]Pol-II_P-Value ctcfSignal=[f]CTCF_Signal ctcfPvalue=[f]CTCF_P-Value cmycSignal=[f]c-Myc_Signal cmycPvalue=[f]c-Myc_P-Value ocCode=[i]OC_Code
 #scoreFilter 100  ## Score is all 1000
 #scoreFilterLimits 100:1000
 #scoreMin 600

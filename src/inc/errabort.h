@@ -83,6 +83,9 @@ void popWarnHandler();
 void pushWarnAbort();
 /* Push handler that will abort on warnings. */
 
+void pushSilentWarnHandler();
+/* Set warning handler to be quiet.  Do a popWarnHandler to restore. */
+
 void errAbortDebugnPushPopErr();
 /*  generate stack dump if there is a error in the push/pop functions */
 
