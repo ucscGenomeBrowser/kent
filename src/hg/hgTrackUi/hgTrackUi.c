@@ -2840,6 +2840,7 @@ int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
+setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

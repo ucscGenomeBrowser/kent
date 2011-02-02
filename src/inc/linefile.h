@@ -183,6 +183,9 @@ char *lineFileSkipToLineStartingWith(struct lineFile *lf, char *start, int maxCo
 /* Skip to next line that starts with given string.  Return NULL
  * if no such line found, otherwise return the line. */
 
+char *lineFileReadAll(struct lineFile *lf);
+/* Read remainder of lineFile and return it as a string. */
+
 boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
 				boolean *chunked, int *contentLength);
 /* Extract HTTP response header from lf into hdr, tell if it's 
