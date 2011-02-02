@@ -1231,7 +1231,7 @@ struct mdbObj *mdbObjQuery(struct sqlConnection *conn,char *table,struct mdbObj 
         if(mdbObj->vars != NULL)
             dyStringPrintf(dy, ")");
         }
-    dyStringPrintf(dy, " order by obj, var");
+    dyStringPrintf(dy, " order by binary obj, var");
     verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
@@ -1428,7 +1428,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
             dyStringPrintf(dy, ")");
         dyStringPrintf(dy, ")");
         }
-    dyStringPrintf(dy, " ORDER BY T1.obj, T1.var");
+    dyStringPrintf(dy, " ORDER BY binary T1.obj, T1.var");
     verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));

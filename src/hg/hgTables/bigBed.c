@@ -18,10 +18,23 @@
 #include "asParse.h"
 #include "bbiFile.h"
 #include "bigBed.h"
+#include "hubConnect.h"
 #include "hgTables.h"
 
 static char const rcsid[] = "$Id: bigBed.c,v 1.11 2010/05/21 23:45:38 braney Exp $";
 
+boolean isBigBed(char *database, char *table, struct trackDb *parent, 
+	struct customTrack *(*ctLookupName)(char *table))
+/* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
+{
+if (isHubTrack(table))
+    {
+    struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
+    return startsWithWord("bigBed", tdb->type);
+    }
+else
+    return hIsBigBed(database, table, parent, ctLookupName);
+}
 
 char *bigBedFileName(char *table, struct sqlConnection *conn)
 /* Return file name associated with bigBed.  This handles differences whether it's
