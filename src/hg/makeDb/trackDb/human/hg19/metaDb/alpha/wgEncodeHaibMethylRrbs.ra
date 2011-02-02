@@ -2229,7 +2229,7 @@ objType table
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
@@ -2249,7 +2249,7 @@ objType table
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
@@ -2931,7 +2931,7 @@ objType table
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep1.bed9.gz
@@ -2951,7 +2951,7 @@ objType table
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep2.bed9.gz
@@ -2971,7 +2971,7 @@ objType table
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep3.bed9.gz
@@ -3345,7 +3345,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep1.bed9.gz
@@ -3365,7 +3365,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep2.bed9.gz
@@ -3385,7 +3385,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep3.bed9.gz
@@ -3405,7 +3405,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep4.bed9.gz
@@ -3425,7 +3425,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep5.bed9.gz
@@ -3521,7 +3521,7 @@ objType table
 cell ProgFib
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsProgfibSitesRep1.bed9.gz
@@ -3541,7 +3541,7 @@ objType table
 cell ProgFib
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsProgfibSitesRep2.bed9.gz
@@ -3561,7 +3561,7 @@ objType table
 cell RPTEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsRptecSitesRep1.bed9.gz
@@ -3581,7 +3581,7 @@ objType table
 cell RPTEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsRptecSitesRep2.bed9.gz
@@ -3868,4 +3868,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 343716281
+# MAGIC: 444600469
