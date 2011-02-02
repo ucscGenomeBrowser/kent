@@ -39,6 +39,13 @@ if (format != NULL) {
     }
 }
 
+static void silentVaWarn(char *format, va_list args)
+/* Warning handler that just hides it.  Useful sometimes when high level code
+ * expects low level code may fail (as in finding a file on the net) but doesn't
+ * want user to be bothered about it. */
+{
+}
+
 #define maxWarnHandlers 20
 static WarnHandler warnArray[maxWarnHandlers] = {defaultVaWarn,};
 static int warnIx = 0;
@@ -234,6 +241,12 @@ void pushWarnAbort()
 /* Push handler that will abort on warnings. */
 {
 pushWarnHandler(warnAbortHandler);
+}
+
+void pushSilentWarnHandler()
+/* Set warning handler to be quiet.  Do a popWarnHandler to restore. */
+{
+pushWarnHandler(silentVaWarn);
 }
 
 void errAbortDebugnPushPopErr()

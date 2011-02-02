@@ -609,7 +609,7 @@ showSchemaDb(wikiDbName(), tdb, table);
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
