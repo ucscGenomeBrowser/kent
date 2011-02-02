@@ -262,11 +262,15 @@ The format of the type fields:
     substituting "bigBed" for "bed" in the type line, the same as the "type bed"
     explained above.
 
-    bigBed-specific optional field:
-        denseCoverage maxVal
-    In dense mode do a density plot based on maximum coverage seen under pixel.  The maxVal
-    corresponds to the count at which it gets as dark as it can get.  If maxVal is 0 then this
-    will be calculated from the data itself.
+
+    bigBed-specific optional fields:
+    nonBedFieldsLabel - text heading string printed on item details page before 
+	display of non-bed type fields.  Default is: "Non-BED fields:"
+    denseCoverage maxVal
+	In dense mode do a density plot based on maximum coverage seen under
+	pixel.  The maxVal Borresponds to the count at which it gets as dark
+	as it can get.  If maxVal is 0 then this will be calculated from the
+	data itself.
 
     The database loading procedure for the table can be:
 	hgBbiDbLink hg18 itemRgbBbTest /gbdb/hg18/bbi/itemRgb.hg18.bb

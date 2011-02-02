@@ -4791,7 +4791,7 @@ return FALSE;
 }
 
 
-#define BED_SHOWALL_SCORE_FILTERS
+//#define BED_SHOWALL_SCORE_FILTERS
 #ifdef BED_SHOWALL_SCORE_FILTERS
 static int scoreFiltersShowAll(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
                                boolean compositeLevel,char *name, char *title)
