@@ -28,8 +28,8 @@ maxWindowToDraw 10000000
 	visibility full
 	subTrack wgEncodeCaltechRnaSeq
 	maxHeightPixels 100:24:16
-	viewLimits 1:2
-	minLimit 0 
+	viewLimits -1000:0
+	#minLimit 0 
         autoScale off
         windowingFunction mean
 
@@ -38,7 +38,7 @@ maxWindowToDraw 10000000
                 longLabel NHEK single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel NHEK 1x75D - 1
 		subGroups view=MinusSignal cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
-		type bigWig 1.000000 69353.000000
+		type bigWig -69353.000000 1
 		color 179,0,134
 		# subId=1483 dateSubmitted=2010-06-18
 
@@ -47,7 +47,7 @@ maxWindowToDraw 10000000
                 longLabel H1-hESC single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel H1ES 1x75D - 2
 		subGroups view=MinusSignal cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
-		type bigWig 1.000000 16356.000000
+		type bigWig -16356.000000 0
 		color 0,107,27
 		# subId=1626 dateSubmitted=2010-06-19
 
@@ -56,7 +56,7 @@ maxWindowToDraw 10000000
                 longLabel GM12878 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel GM12 1x75D - 1
 		subGroups view=MinusSignal cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
-		type bigWig 1.000000 10632.000000
+		type bigWig -10632.000000 1
 		color 153,38,0
 		# subId=1631 dateSubmitted=2010-06-19
 
@@ -65,7 +65,7 @@ maxWindowToDraw 10000000
                 longLabel GM12878 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel GM12 1x75D - 2
 		subGroups view=MinusSignal cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
-		type bigWig 1.000000 21736.000000
+		type bigWig -21736.000000 1
 		color 153,38,0
 		# subId=1632 dateSubmitted=2010-06-19
 
@@ -74,7 +74,7 @@ maxWindowToDraw 10000000
                 longLabel H1-hESC single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel H1ES 1x75D - 1
 		subGroups view=MinusSignal cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
-		type bigWig 1.000000 9159.000000
+		type bigWig -9159.000000 1
 		color 0,107,27
 		# subId=1633 dateSubmitted=2010-06-19
 
@@ -83,7 +83,7 @@ maxWindowToDraw 10000000
                 longLabel HeLa-S3 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel HeLa 1x75D - 1
 		subGroups view=MinusSignal cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
-		type bigWig 1.000000 10004.000000
+		type bigWig -10004.000000 1
 		color 0,119,158
 		# subId=1634 dateSubmitted=2010-06-19
 
@@ -92,7 +92,7 @@ maxWindowToDraw 10000000
                 longLabel HeLa-S3 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel HeLa 1x75D - 2
 		subGroups view=MinusSignal cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
-		type bigWig 1.000000 12117.000000
+		type bigWig -12117.000000 1
 		color 0,119,158
 		# subId=1635 dateSubmitted=2010-06-19
 
@@ -101,7 +101,7 @@ maxWindowToDraw 10000000
                 longLabel HepG2 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel HepG 1x75D - 1
 		subGroups view=MinusSignal cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
-		type bigWig 1.000000 35894.000000
+		type bigWig -35894.000000 1
 		color 189,0,157
 		# subId=1636 dateSubmitted=2010-06-19
 
@@ -110,7 +110,7 @@ maxWindowToDraw 10000000
                 longLabel K562 single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel K562 1x75D - 1
 		subGroups view=MinusSignal cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
-		type bigWig 1.000000 38907.000000
+		type bigWig -38907.000000 1
 		color 46,0,184
 		# subId=1637 dateSubmitted=2010-06-19
 
@@ -119,7 +119,7 @@ maxWindowToDraw 10000000
                 longLabel HepG2 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel HepG 1x75D - 2
 		subGroups view=MinusSignal cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
-		type bigWig 1.000000 28660.000000
+		type bigWig -28660.000000 1
 		color 189,0,157
 		# subId=1638 dateSubmitted=2010-06-19
 
@@ -128,7 +128,7 @@ maxWindowToDraw 10000000
                 longLabel HUVEC single read RNA-seq Minus signal rep 1 from ENCODE/Caltech
 		shortLabel HUVE 1x75D - 1
 		subGroups view=MinusSignal cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
-		type bigWig 1.000000 16398.000000
+		type bigWig -16398.000000 1
 		color 224,75,0
 		# subId=1639 dateSubmitted=2010-06-19
 
@@ -137,7 +137,7 @@ maxWindowToDraw 10000000
                 longLabel HUVEC single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel HUVE 1x75D - 2
 		subGroups view=MinusSignal cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
-		type bigWig 1.000000 11715.000000
+		type bigWig -11715.000000 1
 		color 224,75,0
 		# subId=1645 dateSubmitted=2010-06-19
 
@@ -146,7 +146,7 @@ maxWindowToDraw 10000000
                 longLabel K562 single read RNA-seq Minus signal rep 2 from ENCODE/Caltech
 		shortLabel K562 1x75D - 2
 		subGroups view=MinusSignal cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
-		type bigWig 1.000000 12424.000000
+		type bigWig -12424.000000 1
 		color 46,0,184
 		# subId=1646 dateSubmitted=2010-06-19
 
