@@ -92,7 +92,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -110,7 +110,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep2.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 2
@@ -128,7 +128,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -146,7 +146,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep2.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 2
@@ -290,7 +290,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878NucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -308,7 +308,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetGm12878NucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -410,7 +410,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetH1hescCellPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cell
 project wgEncode
 replicate 1
@@ -428,7 +428,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetH1hescCellPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cell
 project wgEncode
 replicate 1
@@ -716,7 +716,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetHelas3CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -733,7 +733,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetHelas3CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis(Ruan)
+lab GIS(Ruan)
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -918,7 +918,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -936,7 +936,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -1038,7 +1038,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2NucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -1056,7 +1056,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHepg2NucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -1159,7 +1159,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis(Ruan)
+lab GIS(Ruan)
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -1176,7 +1176,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis(Ruan)
+lab GIS(Ruan)
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -1278,7 +1278,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHuvecNucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -1296,7 +1296,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetHuvecNucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -1398,7 +1398,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562ChromatinTotalFastqRep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization chromatin
 project wgEncode
 rnaExtract total
@@ -1541,7 +1541,7 @@ dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
 fileName wgEncodeGisRnaPetK562CytosolPapFastaRd1Rep2.fasta.gz
 grant Gingeras
-lab Gis(Ruan)
+lab GIS(Ruan)
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -1558,7 +1558,7 @@ dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
 fileName wgEncodeGisRnaPetK562CytosolPapFastaRd2Rep2.fasta.gz
 grant Gingeras
-lab Gis(Ruan)
+lab GIS(Ruan)
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -1575,7 +1575,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562CytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -1593,7 +1593,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562CytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -1737,7 +1737,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562NucleolusTotalFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -1754,7 +1754,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562NucleolusTotalFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis(Ruan)
+lab GIS(Ruan)
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -1855,7 +1855,7 @@ dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalFastqRep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleoplasm
 project wgEncode
 rnaExtract total
@@ -1956,7 +1956,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562NucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -1974,7 +1974,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562NucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -2076,7 +2076,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562PolysomePapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization polysome
 project wgEncode
 replicate 1
@@ -2094,7 +2094,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetK562PolysomePapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization polysome
 project wgEncode
 replicate 1
@@ -2196,7 +2196,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekCytosolPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -2214,7 +2214,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekCytosolPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cytosol
 project wgEncode
 replicate 1
@@ -2316,7 +2316,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekNucleusPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -2334,7 +2334,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetNhekNucleusPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization nucleus
 project wgEncode
 replicate 1
@@ -2436,7 +2436,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetProstateCellPapFastqRd1Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cell
 project wgEncode
 replicate 1
@@ -2454,7 +2454,7 @@ dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
 fileName wgEncodeGisRnaPetProstateCellPapFastqRd2Rep1.fastq.gz
 grant Gingeras
-lab Gis
+lab GIS
 localization cell
 project wgEncode
 replicate 1
@@ -2504,4 +2504,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSig
 
-# MAGIC: -118332571
+# MAGIC: -122271835

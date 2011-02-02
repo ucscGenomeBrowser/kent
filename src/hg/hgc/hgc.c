@@ -259,8 +259,8 @@ char mousedb[] = "mm3";
 char *onChangeAssemblyText = "onchange=\"document.orgForm.submit();\"";
 
 #define NUMTRACKS 9
-int prevColor[NUMTRACKS]; /* used to opetimize color change html commands */
-int currentColor[NUMTRACKS]; /* used to opetimize color change html commands */
+int prevColor[NUMTRACKS]; /* used to optimize color change html commands */
+int currentColor[NUMTRACKS]; /* used to optimize color change html commands */
 int maxShade = 9;	/* Highest shade in a color gradient. */
 Color shadesOfGray[10+1];	/* 10 shades of gray from white to black */
 

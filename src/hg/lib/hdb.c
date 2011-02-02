@@ -3043,7 +3043,12 @@ boolean hHostHasPrefix(char *prefix)
 if (prefix == NULL) 
     return FALSE;
 
-return startsWith(prefix, getenv("HTTP_HOST"));
+char *httpHost = getenv("HTTP_HOST");
+
+if (httpHost == NULL)
+    return FALSE;
+
+return startsWith(prefix, httpHost);
 }
 
 boolean hIsPrivateHost()

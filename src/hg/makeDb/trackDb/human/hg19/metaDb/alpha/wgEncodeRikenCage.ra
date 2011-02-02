@@ -1955,7 +1955,7 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -1976,7 +1976,7 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -1997,7 +1997,7 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -2018,7 +2018,7 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData
 objType file
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -2223,7 +2223,7 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalAln
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -2244,7 +2244,7 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -2265,7 +2265,7 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -2286,7 +2286,7 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalRawData
 objType file
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
@@ -6102,11 +6102,11 @@ lab RIKEN
 labExpId K15-DA
 labProtocolId 020WC+cage
 localization cell
-origAssembly hg19h
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 3339
 view RawData
 
-# MAGIC: -1076428355
+# MAGIC: -1076448090
