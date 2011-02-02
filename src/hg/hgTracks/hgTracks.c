@@ -54,6 +54,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 #include "searchTracks.h"
+#include "errCatch.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
@@ -3340,7 +3341,30 @@ void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
-    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+    if (isEmpty(hub->errorMessage))
+	{
+
+        /* error catching in so it won't just abort  */
+        struct errCatch *errCatch = errCatchNew();
+        if (errCatchStart(errCatch))
+	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+        errCatchEnd(errCatch);
+        if (errCatch->gotError)
+	    {
+	    struct sqlConnection *conn = hConnectCentral();
+	    char query[256];
+	    safef(query, sizeof(query),
+		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
+		, hubConnectTableName
+		, errCatch->message->string
+		, hub->id
+		);
+	    sqlUpdate(conn, query);
+	    hDisconnectCentral(&conn);
+	    }
+        errCatchFree(&errCatch);
+
+	}
     }
 hubConnectStatusFreeList(&hubList);
 }

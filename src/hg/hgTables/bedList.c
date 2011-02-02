@@ -288,7 +288,7 @@ struct region *oldNext = region->next;
 struct bed *bedList = NULL;
 region->next = NULL;
 
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     bedList = bigBedGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
 else if (isCustomTrack(table))
     bedList = customTrackGetFilteredBeds(database, table, region, lm, retFieldCount);
