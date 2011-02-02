@@ -768,6 +768,7 @@ if (bedSize >= 6)
    strand = bed->strand;
    }
 printPos(bed->chrom, bed->chromStart, bed->chromEnd, strand, TRUE, bed->name);
+
 }
 
 void interactionPrintPos( struct bed *bed, int bedSize, struct trackDb *tdb)
@@ -780,32 +781,32 @@ if (bed->blockCount == 2)
     printf("<B>Intrachromosomal interaction:</B> <br>\n");
     printf("<B>Positions:</B><br> ");
     printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-	   hgTracksPathAndSettings(), database, bed->chrom, 
-	   bed->chromStarts[0]+bed->chromStart, 
+	   hgTracksPathAndSettings(), database, bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart,
 	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("%s:%d-%d</A>    \n", 
+    printf("%s:%d-%d</A>    \n",
 	   bed->chrom,
-	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart,
 	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
     printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
 	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
 
     //printf("<BR>\n");
     printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-	   hgTracksPathAndSettings(), database, bed->chrom, 
-	   bed->chromStarts[1]+bed->chromStart, 
+	   hgTracksPathAndSettings(), database, bed->chrom,
+	   bed->chromStarts[1]+bed->chromStart,
 	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
-    printf("%s:%d-%d</A>     \n", 
+    printf("%s:%d-%d</A>     \n",
 	   bed->chrom,
-	   bed->chromStarts[1]+bed->chromStart, 
+	   bed->chromStarts[1]+bed->chromStart,
 	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1]);
     printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
 	   bed->chromStarts[1]+bed->chromStart + bed->blockSizes[1], FALSE);
 
     printf("<BR>\n");
-    printf("<B>Distance apart:</B>\n"); 
+    printf("<B>Distance apart:</B>\n");
     printLongWithCommas(stdout,
 	bed->chromStarts[1] - bed->chromStarts[0] + bed->blockSizes[0]);
 
@@ -816,15 +817,15 @@ else
     printf("<B>Interchromosomal interaction:</B> <br>\n");
     printf("<B>Positions:</B><br> ");
     printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
-	   hgTracksPathAndSettings(), database, bed->chrom, 
-	   bed->chromStarts[0]+bed->chromStart, 
+	   hgTracksPathAndSettings(), database, bed->chrom,
+	   bed->chromStarts[0]+bed->chromStart,
 	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
-    printf("%s:%d-%d</A>    \n", 
+    printf("%s:%d-%d</A>    \n",
 	   bed->chrom,
-	   bed->chromStarts[0]+bed->chromStart, 
+	   bed->chromStarts[0]+bed->chromStart,
 	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0]);
     printf("Size: %d   \n", bed->blockSizes[0]);
-    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart, 
+    printBand( bed->chrom, bed->chromStarts[0]+bed->chromStart,
 	   bed->chromStarts[0]+bed->chromStart + bed->blockSizes[0], FALSE);
 
     char buffer[10 * 1024], *otherChrom = buffer;
@@ -849,7 +850,7 @@ else
     printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
 	   hgTracksPathAndSettings(), database, otherChrom,
 	   otherStart, otherEnd);
-    printf("%s:%d-%d</A>     \n", 
+    printf("%s:%d-%d</A>     \n",
 	   otherChrom, otherStart, otherEnd);
     printf("Size: %d   \n", otherEnd - otherStart);
     printBand( otherChrom, otherStart, otherEnd, FALSE);
@@ -1385,6 +1386,77 @@ if (mf != NULL)
     }
 }
 
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **row)
+// Any extra fields defined in trackDb.  Retruns number of extra fields actually printed
+{
+// Additional fields requested in trackDb?
+char *fields = trackDbSetting(tdb, "extraFields"); // showFileds pValue=P_Value qValue=qValue
+if (fields == NULL)
+    return 0;
+
+char *historicalRecord = fields;
+int count = 0;
+char *field = cloneNextWord(&fields); // fields not harmed but pointer advanced
+while(field != NULL)
+    {
+    // parse field as "pValue=[f]P_Value" inot field="pValue" and label="[f]P_Value"
+    char *label = field;
+    char *equal = strchr(field,'=');
+    if (equal != NULL)
+        {
+        *equal = '\0';
+        label = equal + 1;
+        assert(*label!='\0');
+        }
+
+    // We have a field requested but is it in the table?
+    int ix = sqlFieldColumn(sr, field);
+    if (ix == -1)
+        warn("trackDb setting [extraFields %s] could not find %s in %s.\n", historicalRecord, field,tdb->table);
+    else
+        {
+        // parse label "[f]P_Value" into label="P Value" and type=float
+        char *type  = "string";
+        if (*label == '[')
+            {
+            if (startsWith("[i",label))
+                type = "integer";
+            else if (startsWith("[f",label))
+                type = "float";
+            label = strchr(label,']');
+            assert(label != NULL);
+            label += 1;
+            }
+
+        // Print as table rows
+        if(count == 0)
+            printf("<br><table>");
+        printf("<tr><td><B>%s:</B></td>", strSwapChar(label,'_',' ')); // No '_' in label
+        if (sameString(type,"integer"))
+            {
+            long long val = sqlLongLong(row[ix]);
+            printf("<td>%lld</td></tr>\n", val);
+            }
+        else if (sameString(type,"float"))
+            {
+            double val = sqlDouble(row[ix]);
+            printf("<td>%g</td></tr>\n", val);
+            }
+        else
+            printf("<td>%s</td></tr>\n", row[ix]);
+        count++;
+        }
+
+    // free mem and move to next field
+    freeMem(field);
+    field = cloneNextWord(&fields); // around we go
+    }
+if(count > 0)
+    printf("</table>\n");
+
+return count;
+}
+
 void genericBedClick(struct sqlConnection *conn, struct trackDb *tdb,
 		     char *item, int start, int bedSize)
 /* Handle click in generic BED track. */
@@ -1425,6 +1497,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     else
 	bedPrintPos(bed, bedSize, tdb);
+
+    extraFieldsPrint(tdb,sr,row);
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
     if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
