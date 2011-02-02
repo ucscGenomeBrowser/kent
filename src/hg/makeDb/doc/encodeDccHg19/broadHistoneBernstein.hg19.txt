@@ -3543,3 +3543,1173 @@ mv  wgEncodeBroadHistone.release1.notes ~/kent/src/hg/makeDb/doc/encodeDccHg19/
 git add, ci, push
 # make a pushQ entry: encodePushQ.56
 
+2011-01-13 Broad now in QA
+==========================
+select id,name,status from projects where name like "Broad%" and status = "displayed" order by id;
++------+------------------------------------------+-----------+
+| id   | name                                     | status    |
++------+------------------------------------------+-----------+
+| 1680 | Broad 2010-06-21 CTCF, NHEK, std         | displayed | 
+| 1683 | Broad 2010-06-21 H3K36me3, HSMMtube, std | displayed | 
+| 1684 | Broad 2010-06-21 H3K36me3, HepG2, std    | displayed | 
+| 1685 | Broad 2010-06-21 H3K27me3, NHLF, std     | displayed | 
+| 1686 | Broad 2010-06-21 Control, HSMMtube, std  | displayed | 
+| 1687 | Broad 2010-06-21 H3K4me2, HSMM, std      | displayed | 
+| 1688 | Broad 2010-06-21 H3K9me1, NHEK, std      | displayed | 
+| 1689 | Broad 2010-06-21 H3K27me3, HUVEC, std    | displayed | 
+| 1690 | Broad 2010-06-21 H3K36me3, HMEC, std     | displayed | 
+| 1691 | Broad 2010-06-21 H3K27me3, HSMM, std     | displayed | 
+| 1692 | Broad 2010-06-21 H3K9ac, HUVEC, std      | displayed | 
+| 1693 | Broad 2010-06-21 CTCF, HSMM, std         | displayed | 
+| 1694 | Broad 2010-06-21 H3K27ac, HeLa-S3, std   | displayed | 
+| 1695 | Broad 2010-06-21 H3K4me3, HUVEC, std     | displayed | 
+| 1696 | Broad 2010-06-21 H3K4me3, K562, std      | displayed | 
+| 1697 | Broad 2010-06-21 H3K4me2, NHEK, std      | displayed | 
+| 1698 | Broad 2010-06-21 Control, HUVEC, std     | displayed | 
+| 1699 | Broad 2010-06-21 H4K20me1, NHLF, std     | displayed | 
+| 1700 | Broad 2010-06-21 H4K20me1, K562, std     | displayed | 
+| 1701 | Broad 2010-06-21 H3K27ac, K562, std      | displayed | 
+| 1702 | Broad 2010-06-21 H3K9ac, HMEC, std       | displayed | 
+| 1703 | Broad 2010-06-21 H3K4me1, NHLF, std      | displayed | 
+| 1704 | Broad 2010-06-21 H2A.Z, HSMMtube, std    | displayed | 
+| 1705 | Broad 2010-06-21 H3K9ac, H1-hESC, std    | displayed | 
+| 1706 | Broad 2010-06-21 H3K4me3, HepG2, std     | displayed | 
+| 1707 | Broad 2010-06-21 CTCF, NHLF, std         | displayed | 
+| 1708 | Broad 2010-06-21 H3K9ac, NHLF, std       | displayed | 
+| 1709 | Broad 2010-06-21 CTCF, HeLa-S3, std      | displayed | 
+| 1710 | Broad 2010-06-21 Control, NHLF, std      | displayed | 
+| 1711 | Broad 2010-06-21 H4K20me1, HeLa-S3, std  | displayed | 
+| 1712 | Broad 2010-06-21 H3K27me3, K562, std     | displayed | 
+| 1713 | Broad 2010-06-21 H3K4me1, HSMM, std      | displayed | 
+| 1714 | Broad 2010-06-21 H3K4me2, K562, std      | displayed | 
+| 1715 | Broad 2010-06-21 H4K20me1, HSMM, std     | displayed | 
+| 1716 | Broad 2010-06-21 H3K4me3, HSMMtube, std  | displayed | 
+| 1717 | Broad 2010-06-21 H3K9me3, HSMM, std      | displayed | 
+| 1718 | Broad 2010-06-21 H3K27ac, HSMM, std      | displayed | 
+| 1719 | Broad 2010-06-21 Control, HepG2, std     | displayed | 
+| 1720 | Broad 2010-06-21 H3K9me1, K562, std      | displayed | 
+| 1721 | Broad 2010-06-21 H3K27me3, H1-hESC, std  | displayed | 
+| 1722 | Broad 2010-06-21 H3K36me3, HUVEC, std    | displayed | 
+| 1723 | Broad 2010-06-21 H3K4me3, NHEK, std      | displayed | 
+| 1724 | Broad 2010-06-21 H3K79me2, HSMMtube, std | displayed | 
+| 1725 | Broad 2010-06-21 H3K4me1, NHEK, std      | displayed | 
+| 1726 | Broad 2010-06-21 H3K36me3, K562, std     | displayed | 
+| 1727 | Broad 2010-06-21 Pol2(b), HUVEC, std     | displayed | 
+| 1728 | Broad 2010-06-21 H4K20me1, HSMMtube, std | displayed | 
+| 1729 | Broad 2010-06-21 H3K9me1, HUVEC, std     | displayed | 
+| 1730 | Broad 2010-06-21 H3K79me2, HSMM, std     | displayed | 
+| 1731 | Broad 2010-06-21 H3K27ac, HUVEC, std     | displayed | 
+| 1732 | Broad 2010-06-21 H3K4me2, HUVEC, std     | displayed | 
+| 1733 | Broad 2010-06-21 H3K27me3, NHEK, std     | displayed | 
+| 1734 | Broad 2010-06-21 H3K36me3, H1-hESC, std  | displayed | 
+| 1735 | Broad 2010-06-21 H3K4me1, K562, std      | displayed | 
+| 1737 | Broad 2010-06-21 Pol2(b), NHEK, std      | displayed | 
+| 1738 | Broad 2010-06-21 H3K27ac, NHLF, std      | displayed | 
+| 1739 | Broad 2010-06-21 H3K4me2, NHLF, std      | displayed | 
+| 1741 | Broad 2010-06-21 H3K27ac, HepG2, std     | displayed | 
+| 1742 | Broad 2010-06-21 CTCF, HMEC, std         | displayed | 
+| 1743 | Broad 2010-06-21 Pol2(b), HeLa-S3, std   | displayed | 
+| 1744 | Broad 2010-06-21 H3K79me2, HeLa-S3, std  | displayed | 
+| 1745 | Broad 2010-06-21 H3K4me3, H1-hESC, std   | displayed | 
+| 1746 | Broad 2010-06-21 H3K9ac, HSMMtube, std   | displayed | 
+| 1747 | Broad 2010-06-21 H3K79me2, HepG2, std    | displayed | 
+| 1748 | Broad 2010-06-21 H3K9ac, K562, std       | displayed | 
+| 1749 | Broad 2010-06-21 H3K27ac, HSMMtube, std  | displayed | 
+| 1750 | Broad 2010-06-21 H3K36me3, NHLF, std     | displayed | 
+| 1751 | Broad 2010-06-21 H3K4me3, HeLa-S3, std   | displayed | 
+| 1752 | Broad 2010-06-21 Control, K562, std      | displayed | 
+| 1753 | Broad 2010-06-21 H3K27ac, H1-hESC, std   | displayed | 
+| 1754 | Broad 2010-06-21 H3K36me3, NHEK, std     | displayed | 
+| 1755 | Broad 2010-06-21 H3K4me2, HeLa-S3, std   | displayed | 
+| 1756 | Broad 2010-06-21 H3K4me3, HSMM, std      | displayed | 
+| 1757 | Broad 2010-06-21 H3K4me2, HMEC, std      | displayed | 
+| 1758 | Broad 2010-06-21 H4K20me1, HepG2, std    | displayed | 
+| 1759 | Broad 2010-06-21 H3K4me1, HMEC, std      | displayed | 
+| 1760 | Broad 2010-06-21 Control, H1-hESC, std   | displayed | 
+| 1761 | Broad 2010-06-21 H3K4me2, HepG2, std     | displayed | 
+| 1762 | Broad 2010-06-21 H3K36me3, HSMM, std     | displayed | 
+| 1763 | Broad 2010-06-21 H4K20me1, HUVEC, std    | displayed | 
+| 1764 | Broad 2010-06-21 H3K4me1, HSMMtube, std  | displayed | 
+| 1765 | Broad 2010-06-21 H3K9ac, HepG2, std      | displayed | 
+| 1766 | Broad 2010-06-21 H3K4me2, HSMMtube, std  | displayed | 
+| 1767 | Broad 2010-06-21 CTCF, HSMMtube, std     | displayed | 
+| 1769 | Broad 2010-06-21 CTCF, K562, std         | displayed | 
+| 1770 | Broad 2010-06-21 H3K27me3, HMEC, std     | displayed | 
+| 1771 | Broad 2010-06-21 Control, HeLa-S3, std   | displayed | 
+| 1772 | Broad 2010-06-21 H3K27ac, NHEK, std      | displayed | 
+| 1773 | Broad 2010-06-21 Control, HSMM, std      | displayed | 
+| 1774 | Broad 2010-06-21 H4K20me1, H1-hESC, std  | displayed | 
+| 1775 | Broad 2010-06-21 Control, NHEK, std      | displayed | 
+| 1776 | Broad 2010-06-21 H3K27ac, HMEC, std      | displayed | 
+| 1777 | Broad 2010-06-21 H3K4me2, H1-hESC, std   | displayed | 
+| 1778 | Broad 2010-06-21 H3K4me1, HUVEC, std     | displayed | 
+| 1779 | Broad 2010-06-21 H3K4me3, NHLF, std      | displayed | 
+| 1780 | Broad 2010-06-21 H3K36me3, HeLa-S3, std  | displayed | 
+| 1781 | Broad 2010-06-21 CTCF, H1-hESC, std      | displayed | 
+| 1782 | Broad 2010-06-21 H3K9ac, HSMM, std       | displayed | 
+| 1783 | Broad 2010-06-21 H3K4me1, H1-hESC, std   | displayed | 
+| 1784 | Broad 2010-06-21 H4K20me1, NHEK, std     | displayed | 
+| 1785 | Broad 2010-06-21 H4K20me1, HMEC, std     | displayed | 
+| 1786 | Broad 2010-06-21 Control, HMEC, std      | displayed | 
+| 1787 | Broad 2010-06-21 CTCF, HepG2, std        | displayed | 
+| 1788 | Broad 2010-06-21 H3K27me3, HepG2, std    | displayed | 
+| 1789 | Broad 2010-06-21 Pol2(b), K562, std      | displayed | 
+| 1790 | Broad 2010-06-21 CTCF, HUVEC, std        | displayed | 
+| 1791 | Broad 2010-06-21 H3K9ac, HeLa-S3, std    | displayed | 
+| 1792 | Broad 2010-06-21 H2A.Z, HepG2, std       | displayed | 
+| 1793 | Broad 2010-06-21 H3K4me3, HMEC, std      | displayed | 
+| 1794 | Broad 2010-06-21 H3K9ac, NHEK, std       | displayed | 
+| 1877 | Broad_2010-07-12_NHLF                    | displayed | 
+| 1878 | Broad_2010-07-12_GM12878_CTCF            | displayed | 
+| 1879 | Broad_2010-07-12_GM12878_Control         | displayed | 
+| 1880 | Broad_2010-07-12_GM12878_H3K27ac         | displayed | 
+| 1881 | Broad_2010-07-12_GM12878_H3K27me3        | displayed | 
+| 1882 | Broad_2010-07-12_GM12878_H3K36me3        | displayed | 
+| 1883 | Broad_2010-07-12_GM12878_H3K4me1         | displayed | 
+| 1884 | Broad_2010-07-12_GM12878_H3K4me2         | displayed | 
+| 1885 | Broad_2010-07-12_GM12878_H3K4me3         | displayed | 
+| 1886 | Broad_2010-07-12_GM12878_H3K9ac          | displayed | 
+| 1887 | Broad_2010-07-12_GM12878_H4K20me1        | displayed | 
+| 1888 | Broad_2010-07-12_NH-A_CTCF               | displayed | 
+| 1889 | Broad_2010-07-12_NH-A_Control            | displayed | 
+| 1890 | Broad_2010-07-12_NH-A_H3K27ac            | displayed | 
+| 1891 | Broad_2010-07-12_NH-A_H3K27me3           | displayed | 
+| 1892 | Broad_2010-07-12_NH-A_H3K36me3           | displayed | 
+| 1893 | Broad_2010-07-12_NH-A_H3K4me1            | displayed | 
+| 1894 | Broad_2010-07-12_NH-A_H3K4me3            | displayed | 
+| 1895 | Broad_2010-07-12_H1-hESC                 | displayed | 
+| 1896 | Broad_2010-07-12_K562                    | displayed | 
+| 1897 | Broad_2010-07-12_HUVEC                   | displayed | 
+| 1898 | Broad_2010-07-12_HeLa-S3                 | displayed | 
+| 1899 | Broad_2010-07-12_HepG2                   | displayed | 
+| 1900 | Broad_2010-07-12_HMEC                    | displayed | 
+| 1901 | Broad_2010-07-12_HSMM                    | displayed | 
+| 1902 | Broad_2010-07-12_HSMMtube                | displayed | 
+| 1903 | Broad_2010-07-12_NHEK                    | displayed | 
+| 1922 | Broad_2010-07-13_HeLa-S3_Control         | displayed | 
+| 2551 | Broad 2010-10-22 HSMM-myotube H4K20me1   | displayed | 
+| 2560 | Broad 2010-10-22 HSMM-myotube CTCF       | displayed | 
+| 2561 | Broad 2010-10-22 HSMM-myotube H2A.Z      | displayed | 
+| 2562 | Broad 2010-10-22 HSMM-myotube H3K27ac    | displayed | 
+| 2563 | Broad 2010-10-22 HSMM-myotube H3K36me3   | displayed | 
+| 2564 | Broad 2010-10-22 HSMM-myotube H3K4me1    | displayed | 
+| 2565 | Broad 2010-10-22 HSMM-myotube H3K4me2    | displayed | 
+| 2566 | Broad 2010-10-22 HSMM-myotube H3K4me3    | displayed | 
+| 2567 | Broad 2010-10-22 HSMM-myotube H3K79me2   | displayed | 
+| 2568 | Broad 2010-10-22 HSMM-myotube H3K9ac     | displayed | 
+| 2569 | Broad 2010-10-22 HSMM-myotube WCE        | displayed | 
+| 2570 | Broad 2010-10-22 HeLaS3 H3K27ac          | displayed | 
+| 2571 | Broad 2010-10-22 HeLaS3 H3K36me3         | displayed | 
+| 2572 | Broad 2010-10-22 HeLaS3 H3K4me2          | displayed | 
+| 2573 | Broad 2010-10-22 HeLaS3 H3K4me3          | displayed | 
+| 2574 | Broad 2010-10-22 HeLaS3 H3K79me2         | displayed | 
+| 2575 | Broad 2010-10-22 HeLaS3 H3K9ac           | displayed | 
+| 2576 | Broad 2010-10-22 HeLaS3 H4K20me1         | displayed | 
+| 2577 | Broad 2010-10-22 HeLaS3 RNA-pol2         | displayed | 
+| 2578 | Broad 2010-10-22 HeLaS3 WCE              | displayed | 
+| 2579 | Broad 2010-10-22 HeLaS3 CTCF             | displayed | 
+| 2580 | Broad 2010-10-22 NH-A CTCF               | displayed | 
+| 2581 | Broad 2010-10-22 NH-A H3K27ac            | displayed | 
+| 2582 | Broad 2010-10-22 NH-A H3K27me3           | displayed | 
+| 2583 | Broad 2010-10-22 NH-A H3K4me1            | displayed | 
+| 2584 | Broad 2010-10-22 NH-A H3K4me3            | displayed | 
+| 2585 | Broad 2010-10-22 NH-A WCE                | displayed | 
+| 2586 | Broad 2010-10-22 H1 H3K27ac              | displayed | 
+| 2587 | Broad 2010-10-22 HepG2 H2A.Z             | displayed | 
+| 2588 | Broad 2010-10-22 HepG2 H3K79me2          | displayed | 
+| 2589 | Broad 2010-10-22 HSMM H3K79me2           | displayed | 
+| 2590 | Broad 2010-10-22 HSMM H3K9me3            | displayed | 
+| 2723 | Broad 2010-10-26 GM12878 CTCF            | displayed | 
+| 2724 | Broad 2010-10-26 GM12878 H3K4me3         | displayed | 
+| 2725 | Broad 2010-10-26 HMEC H3K9ac             | displayed | 
+| 2726 | Broad 2010-10-26 HMEC H4K20me1           | displayed | 
+| 2727 | Broad 2010-10-26 HMEC WCE                | displayed | 
+| 2728 | Broad 2010-10-26 HepG2 H3K27me3          | displayed | 
+| 2729 | Broad 2010-10-26 Huvec CTCF              | displayed | 
+| 2730 | Broad 2010-10-26 Huvec H3K27ac           | displayed | 
+| 2731 | Broad 2010-10-26 Huvec H3K27me3          | displayed | 
+| 2732 | Broad 2010-10-26 Huvec H3K36me3          | displayed | 
+| 2733 | Broad 2010-10-26 Huvec H3K4me1           | displayed | 
+| 2734 | Broad 2010-10-26 Huvec H3K4me2           | displayed | 
+| 2735 | Broad 2010-10-26 Huvec H3K4me3           | displayed | 
+| 2736 | Broad 2010-10-26 Huvec H3K9ac            | displayed | 
+| 2737 | Broad 2010-10-26 Huvec H3K9me1           | displayed | 
+| 2738 | Broad 2010-10-26 Huvec H4K20me1          | displayed | 
+| 2739 | Broad 2010-10-26 Huvec RNA-pol2          | displayed | 
+| 2740 | Broad 2010-10-26 Huvec WCE               | displayed | 
+| 2741 | Broad 2010-10-26 K562 CTCF               | displayed | 
+| 2742 | Broad 2010-10-26 K562 H3K27ac            | displayed | 
+| 2743 | Broad 2010-10-26 K562 H3K36me3           | displayed | 
+| 2744 | Broad 2010-10-26 K562 H3K4me1            | displayed | 
+| 2745 | Broad 2010-10-26 K562 H3K4me2            | displayed | 
+| 2746 | Broad 2010-10-26 K562 H3K9me1            | displayed | 
+| 2747 | Broad 2010-10-26 K562 H4K20me1           | displayed | 
+| 2748 | Broad 2010-10-26 K562 RNA-pol2           | displayed | 
+| 2749 | Broad 2010-10-26 K562 WCE                | displayed | 
+| 2750 | Broad 2010-10-26 NHEK CTCF               | displayed | 
+| 2751 | Broad 2010-10-26 NHEK H3K27ac            | displayed | 
+| 2752 | Broad 2010-10-26 NHEK H3K27me3           | displayed | 
+| 2753 | Broad 2010-10-26 NHEK H3K36me3           | displayed | 
+| 2754 | Broad 2010-10-26 NHEK H3K4me1            | displayed | 
+| 2755 | Broad 2010-10-26 NHEK H3K4me2            | displayed | 
+| 2756 | Broad 2010-10-26 NHEK H3K4me3            | displayed | 
+| 2757 | Broad 2010-10-26 NHEK H3K9ac             | displayed | 
+| 2758 | Broad 2010-10-26 NHEK H3K9me1            | displayed | 
+| 2759 | Broad 2010-10-26 NHEK H4K20me1           | displayed | 
+| 2760 | Broad 2010-10-26 NHEK RNA-pol2           | displayed | 
+| 2761 | Broad 2010-10-26 NHEK WCE                | displayed | 
+| 2762 | Broad 2010-10-26 NHLF H3K4me2            | displayed | 
+| 2796 | Broad 2010-11-05 H1 H3K4me1              | displayed | 
+| 2800 | Broad 2010-11-05 GM12878_CTCF            | displayed | 
+| 2801 | Broad 2010-11-05 GM12878_H3K27ac         | displayed | 
+| 2802 | Broad 2010-11-05 GM12878_H3K27me3        | displayed | 
+| 2803 | Broad 2010-11-05 GM12878_H3K36me3        | displayed | 
+| 2804 | Broad 2010-11-05 GM12878_H3K4me1         | displayed | 
+| 2805 | Broad 2010-11-05 GM12878_H3K4me2         | displayed | 
+| 2806 | Broad 2010-11-05 GM12878_H3K4me3         | displayed | 
+| 2807 | Broad 2010-11-05 GM12878_H3K9ac          | displayed | 
+| 2808 | Broad 2010-11-05 GM12878_H4K20me1        | displayed | 
+| 2809 | Broad 2010-11-05 GM12878_WCE             | displayed | 
+| 2810 | Broad 2010-11-05 H1_CTCF                 | displayed | 
+| 2811 | Broad 2010-11-05 H1_H3K27ac              | displayed | 
+| 2812 | Broad 2010-11-05 H1_H3K27me3             | displayed | 
+| 2813 | Broad 2010-11-05 H1_H3K36me3             | displayed | 
+| 2814 | Broad 2010-11-05 H1_H3K4me2              | displayed | 
+| 2815 | Broad 2010-11-05 H1_H3K4me3              | displayed | 
+| 2816 | Broad 2010-11-05 H1_H3K9ac               | displayed | 
+| 2817 | Broad 2010-11-05 H1_H4K20me1             | displayed | 
+| 2818 | Broad 2010-11-05 H1_WCE                  | displayed | 
+| 2819 | Broad 2010-11-05 HMEC_CTCF               | displayed | 
+| 2820 | Broad 2010-11-05 HMEC_H3K27ac            | displayed | 
+| 2821 | Broad 2010-11-05 HMEC_H3K27me3           | displayed | 
+| 2822 | Broad 2010-11-05 HMEC_H3K36me3           | displayed | 
+| 2823 | Broad 2010-11-05 HMEC_H3K4me1            | displayed | 
+| 2824 | Broad 2010-11-05 HMEC_H3K4me2            | displayed | 
+| 2825 | Broad 2010-11-05 HMEC_H3K4me3            | displayed | 
+| 2826 | Broad 2010-11-05 HMEC_H3K9ac             | displayed | 
+| 2827 | Broad 2010-11-05 HMEC_H4K20me1           | displayed | 
+| 2828 | Broad 2010-11-05 HMEC_WCE                | displayed | 
+| 2829 | Broad 2010-11-05 HSMM-myotube_CTCF       | displayed | 
+| 2830 | Broad 2010-11-05 HSMM-myotube_H2A.Z      | displayed | 
+| 2831 | Broad 2010-11-05 HSMM-myotube_H3K27ac    | displayed | 
+| 2832 | Broad 2010-11-05 HSMM-myotube_H3K36me3   | displayed | 
+| 2833 | Broad 2010-11-05 HSMM-myotube_H3K4me1    | displayed | 
+| 2834 | Broad 2010-11-05 HSMM-myotube_H3K4me2    | displayed | 
+| 2835 | Broad 2010-11-05 HSMM-myotube_H3K4me3    | displayed | 
+| 2836 | Broad 2010-11-05 HSMM-myotube_H3K79me2   | displayed | 
+| 2837 | Broad 2010-11-05 HSMM-myotube_H3K9ac     | displayed | 
+| 2838 | Broad 2010-11-05 HSMM-myotube_H4K20me1   | displayed | 
+| 2839 | Broad 2010-11-05 HSMM-myotube_WCE        | displayed | 
+| 2840 | Broad 2010-11-05 HSMM_CTCF               | displayed | 
+| 2841 | Broad 2010-11-05 HSMM_H3K27ac            | displayed | 
+| 2842 | Broad 2010-11-05 HSMM_H3K27me3           | displayed | 
+| 2843 | Broad 2010-11-05 HSMM_H3K36me3           | displayed | 
+| 2844 | Broad 2010-11-05 HSMM_H3K4me1            | displayed | 
+| 2845 | Broad 2010-11-05 HSMM_H3K4me2            | displayed | 
+| 2846 | Broad 2010-11-05 HSMM_H3K4me3            | displayed | 
+| 2847 | Broad 2010-11-05 HSMM_H3K79me2           | displayed | 
+| 2848 | Broad 2010-11-05 HSMM_H3K9ac             | displayed | 
+| 2849 | Broad 2010-11-05 HSMM_H3K9me3            | displayed | 
+| 2850 | Broad 2010-11-05 HSMM_H4K20me1           | displayed | 
+| 2851 | Broad 2010-11-05 HSMM_WCE                | displayed | 
+| 2852 | Broad 2010-11-05 HeLaS3_CTCF             | displayed | 
+| 2853 | Broad 2010-11-05 HeLaS3_H3K27ac          | displayed | 
+| 2854 | Broad 2010-11-05 HeLaS3_H3K36me3         | displayed | 
+| 2855 | Broad 2010-11-05 HeLaS3_H3K4me2          | displayed | 
+| 2856 | Broad 2010-11-05 HeLaS3_H3K4me3          | displayed | 
+| 2857 | Broad 2010-11-05 HeLaS3_H3K79me2         | displayed | 
+| 2858 | Broad 2010-11-05 HeLaS3_H3K9ac           | displayed | 
+| 2859 | Broad 2010-11-05 HeLaS3_H4K20me1         | displayed | 
+| 2860 | Broad 2010-11-05 HeLaS3_RNA-pol2         | displayed | 
+| 2861 | Broad 2010-11-05 HeLaS3_WCE              | displayed | 
+| 2862 | Broad 2010-11-05 HepG2_CTCF              | displayed | 
+| 2863 | Broad 2010-11-05 HepG2_H2A.Z             | displayed | 
+| 2864 | Broad 2010-11-05 HepG2_H3K27ac           | displayed | 
+| 2865 | Broad 2010-11-05 HepG2_H3K27me3          | displayed | 
+| 2866 | Broad 2010-11-05 HepG2_H3K36me3          | displayed | 
+| 2867 | Broad 2010-11-05 HepG2_H3K4me2           | displayed | 
+| 2868 | Broad 2010-11-05 HepG2_H3K4me3           | displayed | 
+| 2869 | Broad 2010-11-05 HepG2_H3K79me2          | displayed | 
+| 2870 | Broad 2010-11-05 HepG2_H3K9ac            | displayed | 
+| 2871 | Broad 2010-11-05 HepG2_H4K20me1          | displayed | 
+| 2872 | Broad 2010-11-05 HepG2_WCE               | displayed | 
+| 2873 | Broad 2010-11-05 Huvec_CTCF              | displayed | 
+| 2874 | Broad 2010-11-05 Huvec_H3K27ac           | displayed | 
+| 2875 | Broad 2010-11-05 Huvec_H3K27me3          | displayed | 
+| 2876 | Broad 2010-11-05 Huvec_H3K4me1           | displayed | 
+| 2877 | Broad 2010-11-05 Huvec_H3K4me2           | displayed | 
+| 2878 | Broad 2010-11-05 Huvec_H3K4me3           | displayed | 
+| 2879 | Broad 2010-11-05 Huvec_H3K9ac            | displayed | 
+| 2880 | Broad 2010-11-05 Huvec_H3K9me1           | displayed | 
+| 2881 | Broad 2010-11-05 Huvec_H4K20me1          | displayed | 
+| 2882 | Broad 2010-11-05 Huvec_RNA-pol2          | displayed | 
+| 2883 | Broad 2010-11-05 Huvec_WCE               | displayed | 
+| 2884 | Broad 2010-11-05 K562_CTCF               | displayed | 
+| 2885 | Broad 2010-11-05 K562_H3K27ac            | displayed | 
+| 2886 | Broad 2010-11-05 K562_H3K27me3           | displayed | 
+| 2887 | Broad 2010-11-05 K562_H3K36me3           | displayed | 
+| 2888 | Broad 2010-11-05 K562_H3K4me1            | displayed | 
+| 2889 | Broad 2010-11-05 K562_H3K4me2            | displayed | 
+| 2890 | Broad 2010-11-05 K562_H3K4me3            | displayed | 
+| 2891 | Broad 2010-11-05 K562_H3K9ac             | displayed | 
+| 2892 | Broad 2010-11-05 K562_H3K9me1            | displayed | 
+| 2893 | Broad 2010-11-05 K562_H4K20me1           | displayed | 
+| 2894 | Broad 2010-11-05 K562_RNA-pol2           | displayed | 
+| 2895 | Broad 2010-11-05 K562_WCE                | displayed | 
+| 2896 | Broad 2010-11-05 NH-A_CTCF               | displayed | 
+| 2897 | Broad 2010-11-05 NH-A_H3K27ac            | displayed | 
+| 2898 | Broad 2010-11-05 NH-A_H3K27me3           | displayed | 
+| 2899 | Broad 2010-11-05 NH-A_H3K36me3           | displayed | 
+| 2900 | Broad 2010-11-05 NH-A_H3K4me1            | displayed | 
+| 2901 | Broad 2010-11-05 NH-A_H3K4me3            | displayed | 
+| 2902 | Broad 2010-11-05 NH-A_WCE                | displayed | 
+| 2903 | Broad 2010-11-05 NHEK_CTCF               | displayed | 
+| 2904 | Broad 2010-11-05 NHEK_H3K27ac            | displayed | 
+| 2905 | Broad 2010-11-05 NHEK_H3K27me3           | displayed | 
+| 2906 | Broad 2010-11-05 NHEK_H3K36me3           | displayed | 
+| 2907 | Broad 2010-11-05 NHEK_H3K4me1            | displayed | 
+| 2908 | Broad 2010-11-05 NHEK_H3K4me2            | displayed | 
+| 2909 | Broad 2010-11-05 NHEK_H3K4me3            | displayed | 
+| 2910 | Broad 2010-11-05 NHEK_H3K9ac             | displayed | 
+| 2911 | Broad 2010-11-05 NHEK_H3K9me1            | displayed | 
+| 2912 | Broad 2010-11-05 NHEK_H4K20me1           | displayed | 
+| 2913 | Broad 2010-11-05 NHEK_RNA-pol2           | displayed | 
+| 2914 | Broad 2010-11-05 NHEK_WCE                | displayed | 
+| 2915 | Broad 2010-11-05 NHLF_CTCF               | displayed | 
+| 2916 | Broad 2010-11-05 NHLF_H3K27ac            | displayed | 
+| 2917 | Broad 2010-11-05 NHLF_H3K27me3           | displayed | 
+| 2918 | Broad 2010-11-05 NHLF_H3K36me3           | displayed | 
+| 2919 | Broad 2010-11-05 NHLF_H3K4me1            | displayed | 
+| 2920 | Broad 2010-11-05 NHLF_H3K4me2            | displayed | 
+| 2921 | Broad 2010-11-05 NHLF_H3K4me3            | displayed | 
+| 2922 | Broad 2010-11-05 NHLF_H3K9ac             | displayed | 
+| 2923 | Broad 2010-11-05 NHLF_H4K20me1           | displayed | 
+| 2924 | Broad 2010-11-05 NHLF_WCE                | displayed | 
+| 2969 | Broad 2010-11-12 HepG2_H3K27me3          | displayed | 
+| 2970 | Broad 2010-11-12 Huvec_H3K36me3          | displayed | 
+| 2978 | Broad 2010-11-12 GM12878_H2A.Z           | displayed | 
+| 2979 | Broad 2010-11-12 GM12878_H3K79me2        | displayed | 
+| 2980 | Broad 2010-11-12 GM12878_H3K9me3         | displayed | 
+| 2981 | Broad 2010-11-12 HSMM_H2A.Z              | displayed | 
+| 2982 | Broad 2010-11-12 HeLaS3_H3K27me3         | displayed | 
+| 2983 | Broad 2010-11-12 K562_H2A.Z              | displayed | 
+| 2984 | Broad 2010-11-12 K562_H3K79me2           | displayed | 
+| 2985 | Broad 2010-11-12 K562_H3K9me3            | displayed | 
+| 2986 | Broad 2010-11-12 NH-Osteoblast_CTCF      | displayed | 
+| 2987 | Broad 2010-11-12 NH-Osteoblast_H2A.Z     | displayed | 
+| 2988 | Broad 2010-11-12 NH-Osteoblast_H3K27ac   | displayed | 
+| 2989 | Broad 2010-11-12 NH-Osteoblast_H3K36me3  | displayed | 
+| 2990 | Broad 2010-11-12 NH-Osteoblast_H3K4me1   | displayed | 
+| 2991 | Broad 2010-11-12 NH-Osteoblast_H3K4me2   | displayed | 
+| 2992 | Broad 2010-11-12 NH-Osteoblast_H3K9me3   | displayed | 
+| 3006 | Broad 2010-11-19 NHDF_CTCF               | displayed | 
+| 3007 | Broad 2010-11-19 NHDF_H3K27ac            | displayed | 
+| 3008 | Broad 2010-11-19 NHDF_H3K27me3           | displayed | 
+| 3009 | Broad 2010-11-19 NHDF_H3K36me3           | displayed | 
+| 3010 | Broad 2010-11-19 NHDF_H3K4me2            | displayed | 
+| 3011 | Broad 2010-11-19 NHDF_H3K4me3            | displayed | 
+| 3012 | Broad 2010-11-19 NHDF_H3K9ac             | displayed | 
+| 3073 | Broad 2010-12-06 NH-Osteoblast_WCE       | displayed | 
+| 3074 | Broad 2010-12-06 NHDF_WCE                | displayed | 
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1680 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1683 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1684 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1685 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1686 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1687 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1688 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1689 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1690 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1691 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1692 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1693 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1694 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1695 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1696 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1697 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1698 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1699 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1700 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1701 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1702 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1703 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1704 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1705 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1706 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1707 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1708 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1709 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1710 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1711 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1712 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1713 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1714 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1715 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1716 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1717 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1718 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1719 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1720 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1721 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1722 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1723 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1724 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1725 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1726 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1727 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1728 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1729 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1730 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1731 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1732 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1733 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1734 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1735 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1737 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1738 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1739 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1741 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1742 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1743 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1744 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1745 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1746 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1747 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1748 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1749 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1750 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1751 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1752 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1753 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1754 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1755 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1756 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1757 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1758 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1759 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1760 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1761 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1762 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1763 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1764 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1765 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1766 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1767 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1769 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1770 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1771 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1772 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1773 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1774 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1775 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1776 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1777 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1778 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1779 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1780 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1781 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1782 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1783 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1784 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1785 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1786 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1787 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1788 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1789 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1790 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1791 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1792 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1793 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1794 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1877 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1878 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1879 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1880 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1881 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1882 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1883 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1884 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1885 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1886 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1887 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1888 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1889 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1890 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1891 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1892 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1893 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1894 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1895 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1896 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1897 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1898 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1899 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1900 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1901 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1902 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1903 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1922 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2551 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2560 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2561 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2562 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2563 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2564 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2565 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2566 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2567 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2568 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2569 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2570 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2571 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2572 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2573 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2574 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2575 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2576 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2577 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2578 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2579 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2580 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2581 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2582 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2583 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2584 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2585 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2586 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2587 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2588 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2589 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2590 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2723 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2724 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2725 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2726 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2727 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2728 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2729 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2730 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2731 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2732 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2733 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2734 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2735 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2736 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2737 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2738 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2739 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2740 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2741 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2742 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2743 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2744 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2745 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2746 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2747 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2748 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2749 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2750 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2751 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2752 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2753 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2754 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2755 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2756 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2757 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2758 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2759 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2760 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2761 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2762 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2796 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2800 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2801 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2802 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2803 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2804 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2805 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2806 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2807 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2808 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2809 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2810 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2811 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2812 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2813 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2814 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2815 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2816 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2817 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2818 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2819 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2820 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2821 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2822 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2823 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2824 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2825 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2826 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2827 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2828 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2829 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2830 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2831 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2832 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2833 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2834 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2835 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2836 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2837 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2838 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2839 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2840 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2841 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2842 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2843 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2844 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2845 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2846 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2847 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2848 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2849 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2850 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2851 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2852 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2853 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2854 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2855 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2856 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2857 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2858 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2859 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2860 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2861 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2862 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2863 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2864 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2865 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2866 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2867 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2868 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2869 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2870 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2871 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2872 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2873 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2874 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2875 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2876 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2877 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2878 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2879 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2880 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2881 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2882 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2883 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2884 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2885 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2886 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2887 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2888 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2889 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2890 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2891 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2892 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2893 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2894 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2895 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2896 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2897 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2898 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2899 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2900 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2901 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2902 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2903 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2904 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2905 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2906 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2907 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2908 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2909 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2910 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2911 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2912 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2913 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2914 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2915 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2916 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2917 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2918 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2919 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2920 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2921 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2922 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2923 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2924 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2969 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2970 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2978 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2979 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2980 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2981 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2982 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2983 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2984 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2985 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2986 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2987 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2988 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2989 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2990 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2991 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2992 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3006 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3007 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3008 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3009 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3010 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3011 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3012 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3073 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3074 reviewing
+
+2011-01-21 Broad Chromatin Modelling by HMM for hg18 
+====================================================
+Submitted to 3446
+Changed Encode.pm to accept hg18
+Changed some DDF and failed on dataType=ChipSeq requiring an antibody.  Changed to dataTypeCombined
+doEncodeValidate worked so sent it through the pipeline.  Loaded!
+# verified tables exist in hg18 and downloadable files are in hg18  Tables are "bed 9"
+show tables like "wgEncodeBroadHmm%";
++------------------------------------+
+| wgEncodeBroadHmmGm12878HMM         | 
+| wgEncodeBroadHmmH1hescHMM          | 
+| wgEncodeBroadHmmHepg2HMM           | 
+| wgEncodeBroadHmmHmecHMM            | 
+| wgEncodeBroadHmmHsmmHMM            | 
+| wgEncodeBroadHmmHuvecHMM           | 
+| wgEncodeBroadHmmK562HMM            | 
+| wgEncodeBroadHmmNhekHMM            | 
+| wgEncodeBroadHmmNhlfHMM            | 
++------------------------------------+
+select min(score),max(score) from wgEncodeBroadHmmH1hescHMM;
++------------+------------+
+| min(score) | max(score) |
++------------+------------+
+|          0 |          0 | 
++------------+------------+
+cd {downloadsHg18}/wgEncodeBroadHmm
+ll wgEncode*
+-rw-rw-r--   1 encodeteam protein 5305015 Jan 21 09:39 wgEncodeBroadHmmGm12878HMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5717187 Jan 21 09:39 wgEncodeBroadHmmH1hescHMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5097678 Jan 21 09:39 wgEncodeBroadHmmHepg2HMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5653968 Jan 21 09:39 wgEncodeBroadHmmHmecHMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5956576 Jan 21 09:39 wgEncodeBroadHmmHsmmHMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5144281 Jan 21 09:39 wgEncodeBroadHmmHuvecHMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5785441 Jan 21 09:38 wgEncodeBroadHmmK562HMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5854057 Jan 21 09:38 wgEncodeBroadHmmNhekHMM.bed.gz
+-rw-rw-r--   1 encodeteam protein 5970587 Jan 21 09:38 wgEncodeBroadHmmNhlfHMM.bed.gz
+
+edit trackDb.ra template and place it in trackDb/human/hg18/wgEncodeBroadHmm
+cd trackDb/
+make DBS=hg18
+# see them there
+
+# now metadata
+cd {pip}/3446
+mdbUpdate hg18 out/mdb.txt
+
+# Check in changes:
+cd .. {hg18/metaDb/alpha}
+mdbPrint hg18 -vars="composite=wgEncodeBroadHmm" > wgEncodeBroadHmm.ra
+Using table named 'hg18.metaDb_tdreszer'.
+objects:9  vars:135
+gadd wgEncodeBroadHmm.ra
+cd ../../ (hg18)
+gadd wgEncodeBroadHmm.ra
+gadd trackDb.wgEncode.ra
+
+git: ci, up, push
+cd ../../ (trackDb)
+make DBS=hg18; make alpha DBS=hg18
+
+
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg18; make alpha DBS=hg18
+
+cd {downloadsHg18}/wgEncodeBroadHmm
+encodeDownloadsPage.pl -db=hg18 index.html
+# 9 files.  No metadata  # 9 found in hgFileUi
+
+#neglected to add mdb ra to make file
+cd .. {hg18/metaDb/alpha}
+e makefile
+git: up, add, ci, up, push
+cd ../../../../ (trackDb)
+make DBS=hg18; make alpha DBS=hg18
+
+cd {downloadsHg18}/wgEncodeBroadHmm
+encodeDownloadsPage.pl -db=hg18 index.html
+# 9 files.  Full metadata  # 9 found in hgFileUi
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3446 displayed
+
+2011-01-24 Corrections to names
+===============================
+12345678901234567
+1 Active Promoter
+2 Weak Promoter
+3 Poised Promoter
+4 Strong Enhancer
+5 Strong Enhancer
+6 Weak Enhancer
+7 Weak Enhancer
+8 Insulator
+9 Txn Transition
+10 Txn Elongation
+11 Weak Txn
+12 Repressed
+13 Heterochrom/lo
+14 Repetitive/CNV
+15 Repetitive/CNV
+
+1) Ideally lab resubmits proper beds
+2) hardest: possibly edit bed files, then reload
+3) Easiest: update tables
+show tables like "wgEncodeBroadHmm%";
+| wgEncodeBroadHmmGm12878HMM         | 
+| wgEncodeBroadHmmH1hescHMM          | 
+| wgEncodeBroadHmmHepg2HMM           | 
+| wgEncodeBroadHmmHmecHMM            | 
+| wgEncodeBroadHmmHsmmHMM            | 
+| wgEncodeBroadHmmHuvecHMM           | 
+| wgEncodeBroadHmmK562HMM            | 
+| wgEncodeBroadHmmNhekHMM            | 
+| wgEncodeBroadHmmNhlfHMM            | 
+select distinct name from wgEncodeBroadHmmGm12878HMM order by name;
+select distinct name from wgEncodeBroadHmmH1hescHMM order by name;
+select distinct name from wgEncodeBroadHmmHepg2HMM order by name;
+select distinct name from wgEncodeBroadHmmHmecHMM order by name;
+select distinct name from wgEncodeBroadHmmHsmmHMM order by name;
+select distinct name from wgEncodeBroadHmmHuvecHMM order by name;
+select distinct name from wgEncodeBroadHmmK562HMM order by name;
+select distinct name from wgEncodeBroadHmmNhekHMM order by name;
+select distinct name from wgEncodeBroadHmmNhlfHMM order by name;
+# All are 1-15 as expected
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl
+zcat wgEncodeBroadHmmK562HMM.bed.gz | wl
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl
+
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | wl 570580
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | wl 618287
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | wl 545647
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | wl 608568
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | wl 638307
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | wl 549178
+zcat wgEncodeBroadHmmK562HMM.bed.gz | wl 621678
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | wl 627623
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | wl 640298
+
+# Could zcat wgEncodeBroadHmmNhlfHMM.bed.gz | h | grep -P "\t10\t0\t\." > wgEncodeBroadHmmNhlfHMM.bed.1 
+# Could
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | h | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./' 
+
+rm   wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
+zcat wgEncodeBroadHmmGm12878HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmGm12878HMM.bed
+
+rm   wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
+zcat wgEncodeBroadHmmH1hescHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmH1hescHMM.bed
+
+rm   wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
+zcat wgEncodeBroadHmmHepg2HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHepg2HMM.bed
+
+rm   wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
+zcat wgEncodeBroadHmmHmecHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHmecHMM.bed
+
+rm   wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
+zcat wgEncodeBroadHmmHsmmHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHsmmHMM.bed
+
+rm   wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
+zcat wgEncodeBroadHmmHuvecHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmHuvecHMM.bed
+
+rm   wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
+zcat wgEncodeBroadHmmK562HMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmK562HMM.bed
+
+rm   wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
+zcat wgEncodeBroadHmmNhekHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhekHMM.bed
+
+rm wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t1\t0\t\." | sed -e 's/\t1\t0\t\./\t1 Active Promoter\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t2\t0\t\." | sed -e 's/\t2\t0\t\./\t2 Weak Promoter\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t3\t0\t\." | sed -e 's/\t3\t0\t\./\t3 Poised Promoter\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t4\t0\t\." | sed -e 's/\t4\t0\t\./\t4 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t5\t0\t\." | sed -e 's/\t5\t0\t\./\t5 Strong Enhancer\t0\t\./'    >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t6\t0\t\." | sed -e 's/\t6\t0\t\./\t6 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t7\t0\t\." | sed -e 's/\t7\t0\t\./\t7 Weak Enhancer\t0\t\./'      >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t8\t0\t\." | sed -e 's/\t8\t0\t\./\t8 Insulator\t0\t\./'          >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t9\t0\t\." | sed -e 's/\t9\t0\t\./\t9 Txn Transition\t0\t\./'     >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t10\t0\t\." | sed -e 's/\t10\t0\t\./\t10 Txn Elongation\t0\t\./'  >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t11\t0\t\." | sed -e 's/\t11\t0\t\./\t11 Weak Txn\t0\t\./'        >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t12\t0\t\." | sed -e 's/\t12\t0\t\./\t12 Repressed\t0\t\./'       >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t13\t0\t\." | sed -e 's/\t13\t0\t\./\t13 Heterochrom\/lo\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t14\t0\t\." | sed -e 's/\t14\t0\t\./\t14 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
+zcat wgEncodeBroadHmmNhlfHMM.bed.gz | grep -P "\t15\t0\t\." | sed -e 's/\t15\t0\t\./\t15 Repetitive\/CNV\t0\t\./' >> wgEncodeBroadHmmNhlfHMM.bed
+
+
+wl *.bed
+   570580 wgEncodeBroadHmmGm12878HMM.bed
+   618287 wgEncodeBroadHmmH1hescHMM.bed
+   545647 wgEncodeBroadHmmHepg2HMM.bed
+   608568 wgEncodeBroadHmmHmecHMM.bed
+   638307 wgEncodeBroadHmmHsmmHMM.bed
+   549178 wgEncodeBroadHmmHuvecHMM.bed
+   621678 wgEncodeBroadHmmK562HMM.bed
+   627623 wgEncodeBroadHmmNhekHMM.bed
+   640298 wgEncodeBroadHmmNhlfHMM.bed
+All okay
+
+mkdir obsolete
+mv wgEncodeBroadHmmGm12878HMM.bed.gz obsolete
+mv wgEncodeBroadHmmH1hescHMM.bed.gz obsolete
+mv wgEncodeBroadHmmHepg2HMM.bed.gz obsolete
+mv wgEncodeBroadHmmHmecHMM.bed.gz obsolete
+mv wgEncodeBroadHmmHsmmHMM.bed.gz obsolete
+mv wgEncodeBroadHmmHuvecHMM.bed.gz obsolete
+mv wgEncodeBroadHmmK562HMM.bed.gz obsolete
+mv wgEncodeBroadHmmNhekHMM.bed.gz obsolete
+mv wgEncodeBroadHmmNhlfHMM.bed.gz obsolete
+
+sort < wgEncodeBroadHmmGm12878HMM.bed > s_wgEncodeBroadHmmGm12878HMM.bed
+sort < wgEncodeBroadHmmH1hescHMM.bed  > s_wgEncodeBroadHmmH1hescHMM.bed
+sort < wgEncodeBroadHmmHepg2HMM.bed   > s_wgEncodeBroadHmmHepg2HMM.bed
+sort < wgEncodeBroadHmmHmecHMM.bed    > s_wgEncodeBroadHmmHmecHMM.bed
+sort < wgEncodeBroadHmmHsmmHMM.bed    > s_wgEncodeBroadHmmHsmmHMM.bed
+sort < wgEncodeBroadHmmHuvecHMM.bed   > s_wgEncodeBroadHmmHuvecHMM.bed
+sort < wgEncodeBroadHmmK562HMM.bed    > s_wgEncodeBroadHmmK562HMM.bed
+sort < wgEncodeBroadHmmNhekHMM.bed    > s_wgEncodeBroadHmmNhekHMM.bed
+sort < wgEncodeBroadHmmNhlfHMM.bed    > s_wgEncodeBroadHmmNhlfHMM.bed
+
+mv s_wgEncodeBroadHmmGm12878HMM.bed wgEncodeBroadHmmGm12878HMM.bed
+mv s_wgEncodeBroadHmmH1hescHMM.bed  wgEncodeBroadHmmH1hescHMM.bed
+mv s_wgEncodeBroadHmmHepg2HMM.bed   wgEncodeBroadHmmHepg2HMM.bed
+mv s_wgEncodeBroadHmmHmecHMM.bed    wgEncodeBroadHmmHmecHMM.bed
+mv s_wgEncodeBroadHmmHsmmHMM.bed    wgEncodeBroadHmmHsmmHMM.bed
+mv s_wgEncodeBroadHmmHuvecHMM.bed   wgEncodeBroadHmmHuvecHMM.bed
+mv s_wgEncodeBroadHmmK562HMM.bed    wgEncodeBroadHmmK562HMM.bed
+mv s_wgEncodeBroadHmmNhekHMM.bed    wgEncodeBroadHmmNhekHMM.bed
+mv s_wgEncodeBroadHmmNhlfHMM.bed    wgEncodeBroadHmmNhlfHMM.bed
+
+wl *.bed
+   570580 wgEncodeBroadHmmGm12878HMM.bed
+   618287 wgEncodeBroadHmmH1hescHMM.bed
+   545647 wgEncodeBroadHmmHepg2HMM.bed
+   608568 wgEncodeBroadHmmHmecHMM.bed
+   638307 wgEncodeBroadHmmHsmmHMM.bed
+   549178 wgEncodeBroadHmmHuvecHMM.bed
+   621678 wgEncodeBroadHmmK562HMM.bed
+   627623 wgEncodeBroadHmmNhekHMM.bed
+   640298 wgEncodeBroadHmmNhlfHMM.bed
+All okay
+
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmGm12878HMM_tmp wgEncodeBroadHmmGm12878HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmH1hescHMM_tmp  wgEncodeBroadHmmH1hescHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHepg2HMM_tmp   wgEncodeBroadHmmHepg2HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHmecHMM_tmp    wgEncodeBroadHmmHmecHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHsmmHMM_tmp    wgEncodeBroadHmmHsmmHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmHuvecHMM_tmp   wgEncodeBroadHmmHuvecHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmK562HMM_tmp    wgEncodeBroadHmmK562HMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmNhekHMM_tmp    wgEncodeBroadHmmNhekHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1 
+/cluster/bin/x86_64/hgLoadBed -noNameIx hg18 wgEncodeBroadHmmNhlfHMM_tmp    wgEncodeBroadHmmNhlfHMM.bed -tmpDir=/data/tmp/ -noSort -tab > tryLoad.txt 2>&1
+
+select count(*) from wgEncodeBroadHmmGm12878HMM_tmp;|   570580 |
+select count(*) from wgEncodeBroadHmmH1hescHMM_tmp; |   618287 |
+select count(*) from wgEncodeBroadHmmHepg2HMM_tmp;  |   545647 |
+select count(*) from wgEncodeBroadHmmHmecHMM_tmp;   |   608568 |
+select count(*) from wgEncodeBroadHmmHsmmHMM_tmp;   |   638307 |
+select count(*) from wgEncodeBroadHmmHuvecHMM_tmp;  |   549178 |
+select count(*) from wgEncodeBroadHmmK562HMM_tmp;   |   621678 |
+select count(*) from wgEncodeBroadHmmNhekHMM_tmp;   |   627623 |
+select count(*) from wgEncodeBroadHmmNhlfHMM_tmp;   |   640298 |
+
+select * from wgEncodeBroadHmmGm12878HMM_tmp limit 1;| 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+select * from wgEncodeBroadHmmH1hescHMM_tmp limit 1; | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+select * from wgEncodeBroadHmmHepg2HMM_tmp limit 1;  | 585 | chr1  |          0 |      400 | 15 Repetitive/CNV |     0 | .      |          0 |      400 | 16777215 |
+select * from wgEncodeBroadHmmHmecHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+select * from wgEncodeBroadHmmHsmmHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+select * from wgEncodeBroadHmmHuvecHMM_tmp limit 1;  | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+select * from wgEncodeBroadHmmK562HMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+select * from wgEncodeBroadHmmNhekHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+select * from wgEncodeBroadHmmNhlfHMM_tmp limit 1;   | 585 | chr1  |          0 |      600 | 15 Repetitive/CNV |     0 | .      |          0 |      600 | 16777215 |
+
+drop table wgEncodeBroadHmmGm12878HMM;
+drop table wgEncodeBroadHmmH1hescHMM;
+drop table wgEncodeBroadHmmHepg2HMM;
+drop table wgEncodeBroadHmmHmecHMM;
+drop table wgEncodeBroadHmmHsmmHMM;
+drop table wgEncodeBroadHmmHuvecHMM;
+drop table wgEncodeBroadHmmK562HMM;
+drop table wgEncodeBroadHmmNhekHMM;
+drop table wgEncodeBroadHmmNhlfHMM;
+
+rename table wgEncodeBroadHmmGm12878HMM_tmp to wgEncodeBroadHmmGm12878HMM;
+rename table wgEncodeBroadHmmH1hescHMM_tmp  to wgEncodeBroadHmmH1hescHMM;
+rename table wgEncodeBroadHmmHepg2HMM_tmp   to wgEncodeBroadHmmHepg2HMM;
+rename table wgEncodeBroadHmmHmecHMM_tmp    to wgEncodeBroadHmmHmecHMM;
+rename table wgEncodeBroadHmmHsmmHMM_tmp    to wgEncodeBroadHmmHsmmHMM;
+rename table wgEncodeBroadHmmHuvecHMM_tmp   to wgEncodeBroadHmmHuvecHMM;
+rename table wgEncodeBroadHmmK562HMM_tmp    to wgEncodeBroadHmmK562HMM;
+rename table wgEncodeBroadHmmNhekHMM_tmp    to wgEncodeBroadHmmNhekHMM;
+rename table wgEncodeBroadHmmNhlfHMM_tmp    to wgEncodeBroadHmmNhlfHMM;
+show tables like "wgEncodeBroadHmm%";
+| wgEncodeBroadHmmGm12878HMM         | 
+| wgEncodeBroadHmmH1hescHMM          | 
+| wgEncodeBroadHmmHepg2HMM           | 
+| wgEncodeBroadHmmHmecHMM            | 
+| wgEncodeBroadHmmHsmmHMM            | 
+| wgEncodeBroadHmmHuvecHMM           | 
+| wgEncodeBroadHmmK562HMM            | 
+| wgEncodeBroadHmmNhekHMM            | 
+| wgEncodeBroadHmmNhlfHMM            | 
+select count(*) from wgEncodeBroadHmmGm12878HMM;|   570580 |
+select count(*) from wgEncodeBroadHmmH1hescHMM; |   618287 |
+select count(*) from wgEncodeBroadHmmHepg2HMM;  |   545647 |
+select count(*) from wgEncodeBroadHmmHmecHMM;   |   608568 |
+select count(*) from wgEncodeBroadHmmHsmmHMM;   |   638307 |
+select count(*) from wgEncodeBroadHmmHuvecHMM;  |   549178 |
+select count(*) from wgEncodeBroadHmmK562HMM;   |   621678 |
+select count(*) from wgEncodeBroadHmmNhekHMM;   |   627623 |
+select count(*) from wgEncodeBroadHmmNhlfHMM;   |   640298 |
+
+gzip wgEncodeBroadHmmGm12878HMM.bed
+gzip wgEncodeBroadHmmH1hescHMM.bed
+gzip wgEncodeBroadHmmHepg2HMM.bed
+gzip wgEncodeBroadHmmHmecHMM.bed
+gzip wgEncodeBroadHmmHsmmHMM.bed
+gzip wgEncodeBroadHmmHuvecHMM.bed
+gzip wgEncodeBroadHmmK562HMM.bed
+gzip wgEncodeBroadHmmNhekHMM.bed
+gzip wgEncodeBroadHmmNhlfHMM.bed
+
+# looks good in browser
+# files are okay
+

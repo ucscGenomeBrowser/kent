@@ -1304,23 +1304,7 @@ $(document).ready(function()
                             show: function(event, ui) {
                                 $('#currentTab').val(ui.panel.id);
                             },
-                            select: function(event, ui) {
-                                if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
-                                    setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
-                                }
-                                if( $('div#filesFound').length == 1) {
-                                    if( ui.panel.id == 'filesTab')
-                                        $('div#filesFound').show();
-                                    else
-                                        $('div#filesFound').hide();
-                                }
-                                if( $('div#found').length == 1) {
-                                    if( ui.panel.id != 'filesTab')
-                                        $('div#found').show();
-                                    else
-                                        $('div#found').hide();
-                                }
-                            }
+                            select: function(event, ui) { findTracksSwitchTabs(ui); }
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
@@ -1507,6 +1491,7 @@ function contextMenuHit(menuItemClicked, menuObject, cmd)
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
+    var id = selectedMenuItem.id;
     if(menuObject.shown) {
         // showWarning("Spinning: menu is still shown");
         setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 10);
@@ -1584,7 +1569,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'hgTrackUi_follow') {
 
         var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
-        var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         if (tdbHasParent(rec) && tdbIsLeaf(rec))
             url += rec.parentTrack
@@ -1623,15 +1607,16 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                });
     } else if (cmd == 'openLink' || cmd == 'followLink') {
         var href = selectedMenuItem.href;
-        var chrom = $("input[name=chromName]").val();
-        if(chrom && href.indexOf("c=" + chrom) == -1) {
-            // make sure the link contains chrom info (necessary b/c we are stripping hgsid)
-            href = href + "&c=" + chrom;
-        }
         if(cmd == 'followLink') {
             // XXXX This is blocked by Safari's popup blocker (without any warning message).
             location.assign(href);
         } else {
+            var chrom = $("input[name=chromName]").val();
+            if(chrom && id != "wikiTrack" && href.indexOf("c=" + chrom) == -1) {
+                // make sure the link contains chrom info (necessary b/c we are stripping hgsid); but don't add chrom
+                // to wikiTrack links (see redmine #2476).
+                href = href + "&c=" + chrom;
+            }
             // Remove hgsid to force a new session (see redmine ticket 1333).
             href = removeHgsid(href);
             if(window.open(href) == null) {
@@ -1639,7 +1624,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             }
         }
     } else if (cmd == 'float') {
-        var id = selectedMenuItem.id;
         if(floatingMenuItem && floatingMenuItem == id) {
             $.floatMgr.FOArray = new Array();
             floatingMenuItem = null;
@@ -1658,7 +1642,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // Change visibility settings:
         //
         // First change the select on our form:
-        var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         var selectUpdated = updateVisibility(id, cmd);
 
@@ -1789,11 +1772,12 @@ function loadContextMenu(img)
                 if(done) {
                     var o = new Object();
                     var any = false;
-                    if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
+                    if(isGene || isHgc || id == "wikiTrack") {
+                        // Add "Open details..." item
                         var displayItemFunctions = false;
                         if(rec) {
-                            if(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0) {
+                            if(rec.type.indexOf("wig") == 0 || rec.type.indexOf("bigWig") == 0 || id == "wikiTrack") {
                                 displayItemFunctions = false;
                             } else if(rec.type.indexOf("expRatio") == 0) {
                                 displayItemFunctions = title != "zoomInMore";
@@ -1808,22 +1792,20 @@ function loadContextMenu(img)
                         o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
                     }
-                    if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
-                    && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
-                        var str = selectedMenuItem.title;
-                        if(str.indexOf("Click to alter ") == 0) {
+                    if(href != undefined && href.length  > 0) {
+                        // Add "Show details..." item
+                        if(title.indexOf("Click to alter ") == 0) {
                             ; // suppress the "Click to alter..." items
                         } else if(selectedMenuItem.href.indexOf("cgi-bin/hgTracks") != -1) {
                             ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
                         } else {
-                            if(str.indexOf("display density") != -1)
-                                str = makeImgTag("toggle.png") + str;
-                            else if(str == "zoomInMore")
+                            var item;
+                            if(title == "zoomInMore")
                                 // avoid showing menu item that says "Show details for zoomInMore..." (redmine 2447)
-                                str = makeImgTag("toggle.png") + " Show details...";
+                                item = makeImgTag("book.png") + " Show details...";
                             else
-                                str = makeImgTag("book.png") + " Show details for " + str + "...";
-                            o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                                item = makeImgTag("book.png") + " Show details for " + title + "...";
+                            o[item] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
                             any = true;
                         }
                     }
@@ -2257,14 +2239,19 @@ function remoteTrackCallback(rec)
 
 function findTracksMdbVarChanged(obj)
 { // Ajax call to repopulate a metadata vals select when mdb var changes
+  // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+
+    findTracksClearFound();  // Changing values so abandon what has been found
+
     var newVar = $(obj).val();
     var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
     if(newVar != undefined && a && a[1]) {
         var num = a[1];
+        $("select.mdbVar[name='hgt_mdbVar"+num+"'][value!='"+newVar+"']").val(newVar);
         $.ajax({
                    type: "GET",
                    url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
+                   data: "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar,
                    trueSuccess: findTracksHandleNewMdbVals,
                    success: catchErrorOrDispatch,
                    error: errorHandler,
@@ -2277,45 +2264,9 @@ function findTracksMdbVarChanged(obj)
 }
 
 function findTracksHandleNewMdbVals(response, status)
-// Handle ajax response (repopulate a metadata val select)
-{   // TODO Support for returning whole control, not list of values.
-    var list = eval(response);
-    var ele = $('select[name=' + this.cmd + ']');
-    ele.empty();
-    ele.append("<option VALUE='Any'>Any</option>");
-    for (var i = 0; i < list.length; i++) {
-        var pair = list[i];
-        ele.append("<option VALUE='" + pair[1] + "'>" + pair[0] + "</option>");
-    }
-    updateMetaDataHelpLinks(this.num);
-}
+{ // Handle ajax response (repopulate a metadata val select)
+  // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
 
-// TODO: Replace findTracksMdbVarChanged() and findTracksHandleNewMdbVals()
-function findTracksMdbVarChanged2(obj)
-{ // Ajax call to repopulate a metadata vals select when mdb var changes
-    var newVar = $(obj).val();
-    var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
-    if(newVar != undefined && a && a[1]) {
-        var num = a[1];
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar,
-                   trueSuccess: findTracksHandleNewMdbVals2,
-                   success: catchErrorOrDispatch,
-                   error: errorHandler,
-                   cache: true,
-                   cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
-                   num: num
-               });
-    }
-    //findTracksSearchButtonsEnable(true);
-}
-
-function findTracksHandleNewMdbVals2(response, status)
-// Handle ajax response (repopulate a metadata val select)
-{   // TODO Support for returning whole control, not list of values.
-    //var list = eval(response);
     var td = $('td#' + this.cmd );
     if (td != undefined) {
         td.empty();
@@ -2331,6 +2282,21 @@ function findTracksHandleNewMdbVals2(response, status)
         }
     }
     updateMetaDataHelpLinks(this.num);
+}
+
+function findTracksMdbValChanged(obj)
+{ // Keep all tabs with same selects in sync  TODO: Change from name to id based identification and only have one set of inputs in form
+  // This handles the currnet case when 2 vars have the same name (e.g. advanced, files tabs)
+
+    findTracksClearFound();  // Changing values so abandon what has been found
+
+    var newVal = $(obj).val();
+    var a = /hgt_mdbVal(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+    if(newVal != undefined && a && a[1]) {
+        var num = a[1];
+        $("select.mdbVal[name='hgt_mdbVal"+num+"'][value!='"+newVal+"']").val(newVal);
+    }
+    //findTracksSearchButtonsEnable(true);
 }
 
 function searchKeydown(event)
@@ -2496,11 +2462,20 @@ function findTracksCounts()
     }
 }
 
+function findTracksClearFound()
+{// Clear found tracks and all input controls
+    var found = $('div#found');
+    if(found != undefined)
+        $(found).remove();
+    found = $('div#filesFound');
+    if(found != undefined)
+        $(found).remove();
+    return false;
+}
+
 function findTracksClear()
 {// Clear found tracks and all input controls
-    var foundTracks = $('div#found');
-    if(foundTracks != undefined)
-        $(foundTracks).remove();
+    findTracksClearFound();
     $('input[type="text"]').val(''); // This will always be found
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
@@ -2554,21 +2529,117 @@ function findTracksConfigureSet(name)
     $(thisForm).find('input.viewBtn').click();
 }
 
+function findTracksMdbSelectPlusMinus(obj, rowNum)
+{ // Now [+][-] mdb var rows with javascript rather than cgi roundtrip
+  // Will remove row or clone new one.  Complication is that 'advanced' and 'files' tab duplicate the tables!
+
+    var objId = $(obj).attr('id');
+    rowNum = objId.substring(objId.length - 1);
+    if ($(obj).val() == '+') {
+        var buttons = $("input#plusButton"+rowNum);  // Two tabs may have the exact same buttons!
+        if (buttons.length > 0) {
+            $(buttons).each(function (i) {
+                var tr = $(this).parents('tr.mdbSelect')[0];
+                if (tr != undefined)
+                    $(tr).after( $(tr).clone() );
+                findTracksMdbSelectRowsNormalize($(tr).parents('table')[0]); // magic is in this function
+            });
+            return false;
+        }
+    } else { // == '-'
+        var buttons = $("input#minusButton"+rowNum);  // Two tabs may have the exact same buttons!
+        if (buttons.length > 0) {
+            var remaining = 0;
+            $(buttons).each(function (i) {
+                var tr = $(this).parents('tr')[0];
+                var table = $(tr).parents('table')[0];
+                if (tr != undefined)
+                    $(tr).remove();
+                remaining = findTracksMdbSelectRowsNormalize(table);  // Must renormalize since 2nd of 3 rows may have been removed
+            });
+            if (remaining > 0) {
+                removeNum = remaining + 1;  // Got to remove the cart vars, though it doesn't matter which as count must not be too many.
+                setCartVars( [ "hgt_mdbVar"+removeNum, "hgt_mdbVal"+removeNum ], [ "[]","[]" ] );
+            }
+
+            findTracksClearFound();  // Changing values so abandon what has been found
+            return false;
+        }
+    }
+    return true;
+}
+
+function findTracksMdbSelectRowsNormalize(table)
+{ // Called when [-][+] buttons changed the number of mdbSelects in findTracks\
+  // Will walk through each row and get the numberings of addressable elements correct.
+    if (table != undefined) {
+        var mdbSelectRows = $(table).find('tr.mdbSelect');
+        var needMinus = (mdbSelectRows.length > 2);
+        $(table).find('tr.mdbSelect').each( function (ix) {
+            var rowNum = ix + 1;  // Each [-][+] and mdb var=val pair of selects must be numbered
+
+            // First the [-][+] buttons
+            var plusButton = $(this).find("input[value='+']")[0];
+            if (plusButton != undefined) {
+                $(plusButton).attr('id',"plusButton"+rowNum);
+                $(plusButton).unbind('click')
+                $(plusButton).click(function() { return findTracksMdbSelectPlusMinus($(plusButton), rowNum); });
+                var minusButton = $(this).find("input[value='-']")[0];
+                if (needMinus) {
+                    if (minusButton == undefined) {
+                        $(plusButton).before("<input type='button' id='minusButton"+rowNum+"' value='-' style='font-size:.7em;' title='delete this row' onclick='return findTracksMdbSelectPlusMinus(this,"+rowNum+");'>");
+                        minusButton = $(this).find("input[value='-']")[0];
+                    } else {
+                        $(minusButton).attr('id',"minusButton"+rowNum);
+                        $(minusButton).unbind('click');
+                        $(minusButton).click(function() { return findTracksMdbSelectPlusMinus($(minusButton), rowNum); });
+                    }
+                } else if (minusButton != undefined)
+                    $(minusButton).remove();
+            }
+            // Now the mdb var=val pair of selects
+            var element = $(this).find("select[name^='hgt_mdbVar']")[0];
+            if (element != undefined)
+                $(element).attr('name','hgt_mdbVar' + rowNum);
+
+            element = $(this).find("select[name^='hgt_mdbVal']")[0];
+            if (element != undefined)
+                $(element).attr('name','hgt_mdbVal' + rowNum);
+
+            // A couple more things
+            element = $(this).find("td[id^='isLike']")[0];
+            if (element != undefined)
+                $(element).attr('id','isLike' + rowNum);
+            element = $(this).find("td[id^='hgt_mdbVal']")[0];
+            if (element != undefined)
+                $(element).attr('id','hgt_mdbVal' + rowNum);
+        });
+        return mdbSelectRows.length;
+    }
+    return 0;
+}
+
+function findTracksSwitchTabs(ui)
+{ // switching tabs on findTracks page
+
+    if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
+        setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
+    }
+    if( $('div#filesFound').length == 1) {
+        if( ui.panel.id == 'filesTab')
+            $('div#filesFound').show();
+        else
+            $('div#filesFound').hide();
+    }
+    if( $('div#found').length == 1) {
+        if( ui.panel.id != 'filesTab')
+            $('div#found').show();
+        else
+            $('div#found').hide();
+    }
+}
+
 /////////////////////////////////////////////////////
-
-function delSearchSelect(obj, rowNum)
-{
-    obj = $(obj);
-    $("input[name=hgt_tsDelRow]").val(rowNum);  // NOTE: Must match TRACK_SEARCH_DEL_ROW in hg/inc/searchTracks.h
-    return true;
-}
-
-function addSearchSelect(obj, rowNum)
-{
-    obj = $(obj);
-    $("input[name=hgt_tsAddRow]").val(rowNum);  // NOTE: Must match TRACK_SEARCH_ADD_ROW in hg/inc/searchTracks.h
-    return true;
-}
 
 function updateMetaDataHelpLinks(index)
 {

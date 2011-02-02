@@ -1,0 +1,187 @@
+# UChicago TFBS (wrangler: Venkat)
+# Notes:
+#       - Track Long Label: Transcription Factor Binding Sites by ChIP-seq from ENCODE/University of Chicago
+#       - Track Short Label: UChicago TFBS
+#       - View Long Labels: [cell] [factor] TFBS [view] Rep [rep #] from ENCODE/UChicago 
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier
+#       - Short Labels: 
+#               Template: [cell] [factor] [view] [replicate #]
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
+#       - Default Tracks on: 
+#       - Display matrix:
+#               - Tier 1 and Tier 2 cell lines have distinct labels that define their tier and distinct  cell names.
+#               - Dimension X - Factor
+#                       - factor Order: Ordering is based alphabetically
+#               - Dimension Y - Cell Type
+#                       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
+
+
+
+track wgEncodeUchicagoTfbs
+compositeTrack on
+superTrack wgEncodeTfBindingSuper dense
+shortLabel UChicago TFBS
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/University of Chicago
+group regulation
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1)
+subGroup3 factor Factor eHDAC8=eGFP-HDAC8 eNR4A1=eGFP-NR4A1 eFOS=eGFP-FOS eJunB=eGFP-JunB eJunD=eGFP-JunD eGATA2=eGFP-GATA2
+subGroup4 control Control ControlGATA2=Control_eGFP-GATA2 ControlFOS=Control_eGFP-FOS Control=Control ControlHDAC8=Control_eGFP-HDAC8 ControlNR4A1=Control_eGFP-NR4A1 ControlJunD=Control_eGFP-JunD ControlJunB=Control_eGFP-JunB
+dimensions dimensionX=cellType dimensionY=factor 
+sortOrder cellType=+ factor=+ control=+ view=+
+controlledVocabulary encode/cv.ra cellType factor 
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+
+
+	track wgEncodeUchicagoTfbsPeaks
+	release alpha
+	shortLabel Peaks
+	view Peaks
+	visibility pack
+	viewUi on
+	subTrack wgEncodeUchicagoTfbs
+	signalFilter 0
+	signalFilterLimits 0:18241
+	pValueFilter 0
+	pValueFilterLimits 0:300
+	qValueFilter 0
+	qValueFilterLimits 0:300
+
+        track wgEncodeUchicagoTfbsK562EfosControlPk
+        release alpha
+        parent wgEncodeUchicagoTfbsPeaks 
+        shortLabel K562 eGFP-FOS Pk
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Peaks from ENCODE/UChicago (eGFP-FOS in K562 cells)
+        subGroups view=Peaks factor=eFOS cellType=K562 control=Control
+        type narrowPeak
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562Egata2ControlPk
+        release alpha
+        parent wgEncodeUchicagoTfbsPeaks 
+        shortLabel K562 eGFP-GATA2 Pk
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Peaks from ENCODE/UChicago (eGFP-GATA2 in K562 cells)
+        subGroups view=Peaks factor=eGATA2 cellType=K562 control=Control
+        type narrowPeak
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562Ehdac8ControlPk
+        release alpha
+        parent wgEncodeUchicagoTfbsPeaks 
+        shortLabel K562 eGFP-HDAC8 Pk
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Peaks from ENCODE/UChicago (eGFP-HDAC8 in K562 cells)
+        subGroups view=Peaks factor=eHDAC8 cellType=K562 control=Control
+        type narrowPeak
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562EjunbControlPk
+        release alpha
+        parent wgEncodeUchicagoTfbsPeaks 
+        shortLabel K562 eGFP-JunB Pk
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Peaks from ENCODE/UChicago (eGFP-JunB in K562 cells)
+        subGroups view=Peaks factor=eJunB cellType=K562 control=Control
+        type narrowPeak
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562EjundControlPk
+        release alpha
+        parent wgEncodeUchicagoTfbsPeaks 
+        shortLabel K562 eGFP-JunD Pk
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Peaks from ENCODE/UChicago (eGFP-JunD in K562 cells)
+        subGroups view=Peaks factor=eJunD cellType=K562 control=Control
+        type narrowPeak
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562Enr4a1ControlPk
+        release alpha
+        parent wgEncodeUchicagoTfbsPeaks 
+        shortLabel K562 eGFP-NR4A1 Pk
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Peaks from ENCODE/UChicago (eGFP-NR4A1 in K562 cells)
+        subGroups view=Peaks factor=eNR4A1 cellType=K562 control=Control
+        type narrowPeak
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+	
+	
+	track wgEncodeUchicagoTfbsViewSignal
+	release alpha
+	shortLabel Signal
+	view Signal
+	visibility full
+	subTrack wgEncodeUchicagoTfbs
+	viewLimits 3:40
+	minLimit 0
+	maxLimit 12768
+	autoScale 
+	maxHeightPixels 100:32:16
+	windowingFunction mean
+
+        track wgEncodeUchicagoTfbsK562EfosControlSig
+        release alpha
+        parent wgEncodeUchicagoTfbsViewSignal 
+        shortLabel K562 eGFP-FOS Sig
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Signal from ENCODE/UChicago (eGFP-FOS in K562 cells)
+        subGroups view=Signal factor=eFOS cellType=K562 control=Control
+        type bigWig -19284.970703 7497.709473
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562Egata2ControlSig
+        release alpha
+        parent wgEncodeUchicagoTfbsViewSignal 
+        shortLabel K562 eGFP-GATA2 Sig
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Signal from ENCODE/UChicago (eGFP-GATA2 in K562 cells)
+        subGroups view=Signal factor=eGATA2 cellType=K562 control=Control
+        type bigWig -3732.796387 6083.967285
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562Ehdac8ControlSig
+        release alpha
+        parent wgEncodeUchicagoTfbsViewSignal 
+        shortLabel K562 eGFP-HDAC8 Sig
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Signal from ENCODE/UChicago (eGFP-HDAC8 in K562 cells)
+        subGroups view=Signal factor=eHDAC8 cellType=K562 control=Control
+        type bigWig -3635.416016 7391.409180
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562EjunbControlSig
+        release alpha
+        parent wgEncodeUchicagoTfbsViewSignal 
+        shortLabel K562 eGFP-JunB Sig
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Signal from ENCODE/UChicago (eGFP-JunB in K562 cells)
+        subGroups view=Signal factor=eJunB cellType=K562 control=Control
+        type bigWig -11520.261719 17224.816406
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562EjundControlSig
+        release alpha
+        parent wgEncodeUchicagoTfbsViewSignal 
+        shortLabel K562 eGFP-JunD Sig
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Signal from ENCODE/UChicago (eGFP-JunD in K562 cells)
+        subGroups view=Signal factor=eJunD cellType=K562 control=Control
+        type bigWig -4305.450684 19676.619141
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+
+        track wgEncodeUchicagoTfbsK562Enr4a1ControlSig
+        release alpha
+        parent wgEncodeUchicagoTfbsViewSignal 
+        shortLabel K562 eGFP-NR4A1 Sig
+        longLabel ENCODE TFBS by Epitope-Tag ChIP-seq Signal from ENCODE/UChicago (eGFP-NR4A1 in K562 cells)
+        subGroups view=Signal factor=eNR4A1 cellType=K562 control=Control
+        type bigWig -2001.193604 1318.283081
+        color 46,0,184
+        # subId=3310 dateSubmitted=2011-01-27
+

@@ -14,7 +14,7 @@ static struct asObject *asForTableOrDie(struct sqlConnection *conn, char *table)
  * there's a problem*/
 {
 struct asObject *asObj = NULL;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     {
     asObj = bigBedAsForTable(table, conn);
     }

@@ -120,7 +120,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	     hPrintf("n/a");
 	hPrintf("</TD>");
 	}
-    hPrintf("<TD><TT>%s</TT></TD>", row[1]);
+    // enums/sets with many items can make for painfully wide rows in the table --
+    // add spaces between quoted list values:
+    if (stringIn("','", row[1]))
+	{
+	struct dyString *spaced = dyStringSub(row[1], "','", "', '");
+	hPrintf("<TD><TT>%s</TT></TD>", spaced->string);
+	}
+    else
+	hPrintf("<TD><TT>%s</TT></TD>", row[1]);
     if (!tooBig)
 	{
 	hPrintf(" <TD>");
@@ -601,7 +609,7 @@ showSchemaDb(wikiDbName(), tdb, table);
 static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);

@@ -2229,7 +2229,7 @@ objType table
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
@@ -2249,7 +2249,7 @@ objType table
 cell HSMM
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
@@ -2415,6 +2415,44 @@ project wgEncode
 replicate 2
 subId 3159
 tableName wgEncodeHaibMethylRrbsHtb11HaibSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHtr8DukeSitesRep1
+objType table
+cell HTR8svn
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Duke
+project wgEncode
+replicate 1
+subId 3239
+tableName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
+objType table
+cell HTR8svn
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-18
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bed.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Duke
+project wgEncode
+replicate 3
+subId 3239
+tableName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3
 treatment None
 view Sites
 
@@ -2893,7 +2931,7 @@ objType table
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep1.bed9.gz
@@ -2913,7 +2951,7 @@ objType table
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep2.bed9.gz
@@ -2933,7 +2971,7 @@ objType table
 cell Melano
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep3.bed9.gz
@@ -3165,7 +3203,7 @@ tableName wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
 treatment None
 view Sites
 
-metaObject wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
+metaObject wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep1
 objType table
 cell NT2-D1
 composite wgEncodeHaibMethylRrbs
@@ -3173,13 +3211,13 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2.bed9.gz
+fileName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Stanford
 origAssembly hg19
 project wgEncode
-replicate 2
+replicate 1
 subId 1223
 treatment None
 view Sites
@@ -3307,7 +3345,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep1.bed9.gz
@@ -3327,7 +3365,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep2.bed9.gz
@@ -3347,7 +3385,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep3.bed9.gz
@@ -3367,7 +3405,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep4.bed9.gz
@@ -3387,7 +3425,7 @@ objType table
 cell PanIslets
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep5.bed9.gz
@@ -3483,7 +3521,7 @@ objType table
 cell ProgFib
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsProgfibSitesRep1.bed9.gz
@@ -3503,7 +3541,7 @@ objType table
 cell ProgFib
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsProgfibSitesRep2.bed9.gz
@@ -3523,7 +3561,7 @@ objType table
 cell RPTEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsRptecSitesRep1.bed9.gz
@@ -3543,7 +3581,7 @@ objType table
 cell RPTEC
 composite wgEncodeHaibMethylRrbs
 dataType MethylRrbs
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsRptecSitesRep2.bed9.gz
@@ -3830,4 +3868,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: -168252950
+# MAGIC: 444600469

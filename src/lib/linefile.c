@@ -738,6 +738,18 @@ while (lineFileNext(lf, &line, NULL) && --maxCount >= 0)
 return NULL;
 }
 
+char *lineFileReadAll(struct lineFile *lf)
+/* Read remainder of lineFile and return it as a string. */
+{
+struct dyString *dy = dyStringNew(1024*4);
+lf->zTerm = 0;
+int size;
+char *line;
+while (lineFileNext(lf, &line, &size))
+    dyStringAppendN(dy, line, size);
+return dyStringCannibalize(&dy);
+}
+
 boolean lineFileParseHttpHeader(struct lineFile *lf, char **hdr,
 				boolean *chunked, int *contentLength)
 /* Extract HTTP response header from lf into hdr, tell if it's 

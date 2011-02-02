@@ -1,4 +1,4 @@
-# Data Agreement File for Yale ChipSeq project  $Revision: 1.1 $
+# Data Agreement File for Stanford Nucleosome project  $Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -9,13 +9,13 @@ dafVersion        2.0
 grant             Snyder
 lab               Stanford
 dataType          Nucleosome
-compositeSuffix   Nsome
+compositeSuffix   SydhNsome
 group             regulation
 variables         cell
 assembly          hg19
 
 medianFragmentLength 200
-validationSettings validateFiles.fastq:quick=10;validateFiles.bam:quick=100,mmCheckOneInN=100,mismatches=2,matchFirst=32,nMatch
+validationSettings validateFiles.fastq:quick=10;validateFiles.bam:mismatches=3,matchFirst=32,nMatch,bamPercent=99.9
 
 # Track/view definition
 view             Peaks

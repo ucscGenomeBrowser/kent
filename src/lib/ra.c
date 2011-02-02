@@ -288,6 +288,8 @@ while ((hash = raNextRecord(lf)) != NULL)
         hashAdd(bigHash, key, hash);
     }
 lineFileClose(&lf);
+if (hashNumEntries(bigHash) == 0)
+    hashFree(&bigHash);
 return bigHash;
 }
 

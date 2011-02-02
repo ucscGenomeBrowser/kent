@@ -3037,21 +3037,44 @@ else
     return slNameCloneList((struct slName *)(hel->val));
 }
 
-boolean hIsPrivateHost()
-/* Return TRUE if this is running on private web-server. */
+boolean hHostHasPrefix(char *prefix)
+/* Return TRUE if this is running on web-server with host name prefix */
 {
-static boolean gotIt = FALSE;
-static boolean priv = FALSE;
-if (!gotIt)
-    {
-    char *t = getenv("HTTP_HOST");
-    if (t != NULL && (startsWith("genome-test", t) || startsWith("hgwdev", t)))
-        priv = TRUE;
-    gotIt = TRUE;
-    }
-return priv;
+if (prefix == NULL) 
+    return FALSE;
+
+char *httpHost = getenv("HTTP_HOST");
+
+if (httpHost == NULL)
+    return FALSE;
+
+return startsWith(prefix, httpHost);
 }
 
+boolean hIsPrivateHost()
+/* Return TRUE if this is running on private (development) web-server. 
+ * This was originally genome-test as well as hgwdev, however genome-test
+ * may be repurposed to direct users to the preview site instead of development site. */
+{
+return hHostHasPrefix("hgwdev");
+}
+
+boolean hIsPreviewHost()
+/* Return TRUE if this is running on preview web-server.  The preview
+ * server is a mirror of the development server provided for public
+ * early access. */
+{
+if (cfgOption("test.preview"))
+    return TRUE;
+return hHostHasPrefix("genome-preview");
+}
+
+char *hBrowserName()
+/* Return browser name based on host name */
+{
+return (hIsPreviewHost() ? "Preview Genome Browser" : 
+        (hIsPrivateHost() ? "TEST Genome Browser" : "Genome Browser"));
+}
 
 int hOffsetPastBin(char *db, char *chrom, char *table)
 /* Return offset into a row of table that skips past bin
@@ -3570,7 +3593,7 @@ struct trackDb *trackDbPolishAfterLinkup(struct trackDb *tdbList, char *db)
 /* Do various massaging that can only be done after parent/child
  * relationships are established. */
 {
-tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
+tdbList = pruneEmpties(tdbList, db, hIsPrivateHost() || hIsPreviewHost(), 0);
 trackDbContainerMarkup(NULL, tdbList);
 rInheritFields(tdbList);
 slSort(&tdbList, trackDbCmp);
@@ -3695,9 +3718,19 @@ for (;;)
         break;
 
     ancestor->parent = loadTrackDbForTrack(conn, parentTrack);
+    if (ancestor->parent == NULL)
+        break;
+
+    if (!tdbIsSuper(ancestor->parent)) // supers link to children differently
+        ancestor->parent->subtracks = ancestor;
+    else
+        ancestor->parent->children = slRefNew(ancestor);
     ancestor = ancestor->parent;
     }
-
+if (tdbIsSuper(ancestor))
+    ancestor = ancestor->children->val;
+trackDbContainerMarkup(NULL, ancestor);
+rInheritFields(ancestor);
 hFreeConn(&conn);
 return tdb;
 }

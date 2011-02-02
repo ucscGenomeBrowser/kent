@@ -1,0 +1,868 @@
+# Myers lab RNA-seq (wrangler: cricket)
+# shortLabel	longLabel
+# DEX100n	DEX 1h 100nM
+# DEX5n		DEX 1hr 5nM
+# DEX1n		DEX 1hr 1nM
+# DEX500p	DEX 1hr 500pM
+# DEX100p	DEX 1hr 100pM
+# EST		ESTRADIOL 4hr 10nM
+# BPA		BPA 4hr 100nM
+# GEN		GENISTEIN 4hr 100nM
+# DMSO		DMSO 4hr 0.02%
+# ETOH		ETOH 1hr 0.02%
+
+track wgEncodeHaibRnaSeq
+compositeTrack on
+shortLabel HAIB RNA-seq
+longLabel RNA-seq from ENCODE/HudsonAlpha
+group expression
+subGroup1 view Views TranscriptGencV3=Gene_model RawSignal=Signal Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878<BR>&nbsp;(Tier_1) H1hESC=H1-hESC<BR>&nbsp;(Tier_1) K562=K562<BR>&nbsp;(Tier_1) HeLaS3=HeLa-S3<BR>&nbsp;(Tier_2) HepG2=HepG2<BR>&nbsp;(Tier_2) A549=A459 AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOSMC=AoSMC Astrocy=Astrocy BJ=BJ Caco2=Caco-2 Chorion=Chorion CMK=CMK HSMM=HSMM ECC1=ECC1 GM06990=GM06990 GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC  HEE=HEEpic HEK293=HEK293 HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HTR8=HTR8svn HUVEC=HUVEC IMR90=IMR90 Jurkat=Jurkat LNCaP=LNCaP MELANO=Melano MCF7=MCF-7 MCF10AES=MCF10A-Er-Src MYOMETR=Myometr NB4=NB4 NHA=NH-A NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 OVCAR3=Ovcar-3 PANC1=PANC-1 PFSK1=PFSK-1 PrEC=PrEC RPTEC=RPTEC SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA T47D=T-47D U87=U87 BCSmallIntestine0111002=BC_Small_Intestine_01-11002 BCJejunumH12817N=BC_Jejunum_H12817N
+subGroup3 rnaExtract RnaExtract pAP=longPolyA shortPolyA=shortPolyA
+subGroup4 treatment Treatment  BPA14h=BPA<BR>4hr<BR>100nM DEX100nM=DEX<BR>1hr<BR>100nM DEX5nM=DEX<BR>1hr<BR>5nM DEX1nM=DEX<BR>1hr<BR>1nM DEX500pM=DEX<BR>1hr<BR>500pM DEX100pM=DEX<BR>1hr<BR>100pM DMSO4hr=DMSO<BR>4hr<BR>0.02pct ESTRADIa4h=ESTRODIOL<BR>4hr<BR>10nM ETOH02=ETOH<BR>1hr<BR>0.02pct GEN4h=GENISTEIN<BR>4hr<BR>100nM None=None
+subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
+sortOrder cellType=+ treatment=+ rep=+ view=-
+dimensionZchecked rep1
+dimensions dimensionY=cellType dimensionX=treatment dimensionZ=rep
+fileSortOrder cell=Cell_Line treatment=Treatment obtainedBy=Obtained_By view=View replicate=Rep fileType=File_Type fileSize=Size dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
+controlledVocabulary encode/cv.ra cellType=cell rnaExtract=rnaExtract treatment=treatment obtainedBy=obtainedBy
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+maxWindowToDraw 10000000
+superTrack wgEncodeRnaSeqSuper dense
+
+
+    track wgEncodeHudsonalphaRnaSeqViewAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility hide
+    parent wgEncodeHaibRnaSeq
+    type bam
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep3
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 ETOH 3
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Alignments Rep 3 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX100p 1
+        longLabel A549 DEX 1hr 100pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX500p 1
+        longLabel A549 DEX 1hr 500pM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX1n1
+        longLabel A549 DEX 1hr 1nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX5n 1
+        longLabel A549 DEX 1hr 5nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep4
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 ETOH 4
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Alignments Rep 4 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX100p 2
+        longLabel A549 DEX 1hr 100pM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX500p 2
+        longLabel A549 DEX 1hr 500pM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX1n 2
+        longLabel A549 DEX 1hr 1nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX5n 2
+        longLabel A549 DEX 1hr 5nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 GEN 1
+        longLabel ECC-1 GENISTEIN 4hr 100nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 EST 2
+        longLabel ECC-1 ESTRADIOL 4hr 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 EST 1
+        longLabel ECC-1 ESTRADIOL 4hr 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D EST 1
+        longLabel T-47D ESTRADIOL 4hr 10nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D GEN 1
+        longLabel T-47D GENISTEIN 4hr 100nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D DMSO 2
+        longLabel T-47D DMSO 4hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D EST 2
+        longLabel T-47D ESTRADIOL 4hr 10nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D GEN 2
+        longLabel T-47D GENISTEIN 4hr 100nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 GEN 2
+        longLabel ECC-1 GENISTEIN 4hr 100nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D DMSO 1
+        longLabel T-47D DMSO 4hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D BPA 1
+        longLabel T-47D BPA 4hr 100nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 BPA 1
+        longLabel ECC-1 BPA 4hr 100nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel T-47D BPA 2
+        longLabel T-47D BPA 4hr 100nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 BPA 2
+        longLabel ECC-1 BPA 4hr 100nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 DMSO 2
+        longLabel ECC-1 DMSO 4hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel ECC-1 DMSO 1
+        longLabel ECC-1 DMSO 4hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 ETOH 1
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02AlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 ETOH 2
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep1
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX100n 1
+        longLabel A549 DEX 1h 100nM RNA-seq Alignments Rep 1 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
+        type bam
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmAlnRep2
+        parent wgEncodeHudsonalphaRnaSeqViewAlignments off
+        shortLabel A549 DEX100n 2
+        longLabel A549 DEX 1h 100nM RNA-seq Alignments Rep 2 from ENCODE/HAIB
+        subGroups view=Alignments cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep2
+        type bam
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+    track wgEncodeHudsonalphaRnaSeqViewGencV3
+    shortLabel Transcripts GencodeV3c
+    view TranscriptGencV3
+    visibility full 
+    parent wgEncodeHaibRnaSeq
+    type genepred
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep3
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 ETOH 3
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Transcripts FPKM Rep 3 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX500p 1
+        longLabel A549 DEX 1hr 500pM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX1n 1
+        longLabel A549 DEX 1hr 1nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX5n 1
+        longLabel A549 DEX 1hr 5nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep4
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 ETOH 4
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Transcripts FPKM Rep 4 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX100p 2
+        longLabel A549 DEX 1hr 100pM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX500p 2
+        longLabel A549 DEX 1hr 500pM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX1n 2
+        longLabel A549 DEX 1hr 1nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX5n 2
+        longLabel A549 DEX 1hr 5nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 GEN 1
+        longLabel ECC-1 GENISTEIN 4hr 100nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 EST 2
+        longLabel ECC-1 ESTRADIOL 4hr 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 EST 1
+        longLabel ECC-1 ESTRADIOL 4hr 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D EST 1
+        longLabel T-47D ESTRADIOL 4hr 10nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D GEN 1
+        longLabel T-47D GENISTEIN 4hr 100nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D DMSO 2
+        longLabel T-47D DMSO 4hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D EST 2
+        longLabel T-47D ESTRADIOL 4hr 10nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D GEN 2
+        longLabel T-47D GENISTEIN 4hr 100nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 GEN 2
+        longLabel ECC-1 GENISTEIN 4hr 100nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D BPA 1
+        longLabel T-47D BPA 4hr 100nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D BPA 1
+        longLabel T-47D BPA 4hr 100nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 BPA 1
+        longLabel ECC-1 BPA 4hr 100nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel T-47D BPA 2
+        longLabel T-47D BPA 4hr 100nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 BPA 2
+        longLabel ECC-1 BPA 4hr 100nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 DMSO 2
+        longLabel ECC-1 DMSO 4hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel ECC-1 DMSO 1
+        longLabel ECC-1 DMSO 4hr 0.02% RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 ETOH 1
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 ETOH 2
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX100n 1
+        longLabel A549 DEX 1h 100nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmTranscriptGencV3Rep2
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX100n 2
+        longLabel A549 DEX 1h 100nM RNA-seq Transcripts FPKM Rep 2 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep2
+        type genepred
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmTranscriptGencV3Rep1
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        shortLabel A549 DEX100p 1
+        longLabel A549 DEX 1hr 100pM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
+        subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
+        type genepred
+        origAssembly hg19
+        # subId=3274 dateSubmitted=2011-01-19
+
+    track wgEncodeHudsonalphaRnaSeqViewSignal
+    shortLabel Signal
+    view RawSignal
+    visibility full 
+    parent wgEncodeHaibRnaSeq
+    type bigWig
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep3
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 ETOH 3
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Signal Rep 3 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep3
+        type bigWig 0.115095 1155.819946
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX100p 1
+        longLabel A549 DEX 1hr 100pM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep1
+        type bigWig 0.122735 1558.979980
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX500p 1
+        longLabel A549 DEX 1hr 500pM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep1
+        type bigWig 0.117905 1144.349976
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX1n 1
+        longLabel A549 DEX 1hr 1nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
+        type bigWig 0.120431 1351.449951
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX5n 1
+        longLabel A549 DEX 1hr 5nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep1
+        type bigWig 0.149512 1237.839966
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep4
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 ETOH 4
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Signal Rep 4 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep4
+        type bigWig 0.120691 1476.140015
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100pmRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX100p 2
+        longLabel A549 DEX 1hr 100pM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100pM rep=rep2
+        type bigWig 0.140351 1194.630005
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex500pmRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX500p 2
+        longLabel A549 DEX 1hr 500pM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX500pM rep=rep2
+        type bigWig 0.108844 1106.400024
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX1n 2
+        longLabel A549 DEX 1hr 1nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep2
+        type bigWig 0.122421 1310.829956
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex5nmRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX5n 2
+        longLabel A549 DEX 1hr 5nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX5nM rep=rep2
+        type bigWig 0.157130 1170.689941
+        origAssembly hg19
+        # subId=2974 dateSubmitted=2011-01-22
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 GEN 1
+        longLabel ECC-1 GENISTEIN 4hr 100nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep1
+        type bigWig 0.248248 738.353027
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 EST 2
+        longLabel ECC-1 ESTRADIOL 4hr 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
+        type bigWig 0.208881 751.294006
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaEstradia4hRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 EST 1
+        longLabel ECC-1 ESTRADIOL 4hr 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
+        type bigWig 0.267722 963.263977
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D EST 1
+        longLabel T-47D ESTRADIOL 4hr 10nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep1
+        type bigWig 0.271642 1572.939941
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D GEN 1
+        longLabel T-47D GENISTEIN 4hr 100nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep1
+        type bigWig 0.256140 872.221008
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D DMSO 2
+        longLabel T-47D DMSO 4hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        type bigWig 0.098354 737.018005
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaEstradia4hRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D EST 2
+        longLabel T-47D ESTRADIOL 4hr 10nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=ESTRADIa4h rep=rep2
+        type bigWig 0.090113 781.908997
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaGen4hRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D GEN 2
+        longLabel T-47D GENISTEIN 4hr 100nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=GEN4h rep=rep2
+        type bigWig 0.174213 644.237976
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaGen4hRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 GEN 2
+        longLabel ECC-1 GENISTEIN 4hr 100nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=GEN4h rep=rep2
+        type bigWig 0.204548 865.341980
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaDmso4hrRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D DMSO 1
+        longLabel T-47D DMSO 4hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        type bigWig 0.138023 880.583984
+        origAssembly hg19
+        # subId=2975 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D BPA 1
+        longLabel T-47D BPA 4hr 100nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        type bigWig 0.149111 676.367004
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 BPA 1
+        longLabel ECC-1 BPA 4hr 100nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep1
+        type bigWig 0.210921 561.841003
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqT47dShortpolyaBpa14hRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel T-47D BPA 2
+        longLabel T-47D BPA 4hr 100nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=T47D rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        type bigWig 0.129285 618.044983
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaBpa14hRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 BPA 2
+        longLabel ECC-1 BPA 4hr 100nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=BPA14h rep=rep2
+        type bigWig 0.206326 724.461975
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 DMSO 2
+        longLabel ECC-1 DMSO 4hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep2
+        type bigWig 0.176215 817.461975
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqEcc1ShortpolyaDmso4hrRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel ECC-1 DMSO 1
+        longLabel ECC-1 DMSO 4hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=ECC1 rnaExtract=shortPolyA treatment=DMSO4hr rep=rep1
+        type bigWig 0.264957 963.716003
+        origAssembly hg19
+        # subId=2976 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 ETOH 1
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
+        type bigWig 0.218757 915.445007
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02RawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 ETOH 2
+        longLabel A549 ETOH 1hr 0.02% RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep2
+        type bigWig 0.228926 1241.689941
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep1
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX100n 1
+        longLabel A549 DEX 1h 100nM RNA-seq Signal Rep 1 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep1
+        type bigWig 0.217478 1051.670044
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+
+        track wgEncodeHaibRnaSeqA549ShortpolyaDex100nmRawRep2
+        parent wgEncodeHudsonalphaRnaSeqViewSignal off
+        shortLabel A549 DEX100n 2
+        longLabel A549 DEX 1h 100nM RNA-seq Signal Rep 2 from ENCODE/HAIB
+        subGroups view=RawSignal cellType=A549 rnaExtract=shortPolyA treatment=DEX100nM rep=rep2
+        type bigWig 0.124371 1297.219971
+        origAssembly hg19
+        # subId=1849 dateSubmitted=2011-01-21
+

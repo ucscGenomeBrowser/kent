@@ -7,10 +7,12 @@
 
 #	"$Id: hg19.ucscGenes13.csh,v 1.4 2010/06/08 01:57:08 cline Exp $"
 
+
 # Directories
 set genomes = /hive/data/genomes
 set dir = $genomes/hg19/bed/ucsc.13
 set scratchDir = /hive/scratch
+set testingDir = $scratchDir/ucscGenes
 
 # Databases
 set db = hg19
@@ -84,7 +86,8 @@ set multiz = multiz4way
 set taxon = 9606
 
 # Previous gene set
-set oldGeneBed = $genomes/hg19/bed/ucsc.12/ucscGenes.bed
+set oldGeneDir = $genomes/hg19/bed/ucsc.12
+set oldGeneBed = $oldGeneDir/ucscGenes.bed
 
 # Machines
 set dbHost = hgwdev
@@ -92,6 +95,7 @@ set ramFarm = memk
 set cpuFarm = swarm
 
 # Create initial dir
+set scriptDir = `pwd`
 mkdir -p $dir
 cd $dir
 
@@ -132,17 +136,17 @@ else
     echo -n "" > refToCcds.tab
 endif
 
+
+
 # Get tRNA for human (or else just an empty file)
 if ($db =~ hg* && \
   `hgsql -N $db -e "show tables;" | grep -E -c "tRNAs|chromInfo"` == 2) then
-    hgsql -N $db -e "select chrom,chromStart,chromEnd,name,score,strand from tRNAs" > trna.bed 
+    hgsql -N $db -e "select chrom,chromStart,chromEnd,name,score,strand,chromStart,chromEnd,"0","1",chromEnd-chromStart,"0" from tRNAs" > trna.bed 
 else
     echo -n "" > trna.bed
     echo -n "" > refToCcds.tab
 endif
 
-# move this endif statement past business that has been successfully completed
-endif # BRACKET
 
 # Get the blocks in this genome that are syntenic to the $xdb genome
 netFilter -syn $xdbNetDir/${db}.${xdb}.net.gz > ${db}.${xdb}.syn.net
@@ -151,12 +155,8 @@ netToBed -maxGap=0 ${db}.${xdb}.syn.net ${db}.${xdb}.syn.bed
 
 # Get the Rfams that overlap with blocks that are syntenic to $Xdb
 mkdir -p rfam
-pslToBed ${rfam}/${db}/Rfam.bestHits.psl rfam/rfam.all.bed
-bedIntersect rfam/rfam.all.bed ${db}.${xdb}.syn.bed rfam/rfam.syntenic.bed
-
-# move this exit statement to the end of the section to be done next
-exit $status # BRACKET
-
+pslToBed ${rfam}/${db}/Rfam.human.bestHits.psl rfam/rfam.all.bed
+bedIntersect -aHitAny rfam/rfam.all.bed ${db}.${xdb}.syn.bed rfam/rfam.syntenic.bed
 
  
 # Create directories full of alignments split by chromosome.
@@ -239,7 +239,20 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     endif
 end
 
+
 #  seven minutes to this point
+
+#
+# A good time for testing.  Uncomment the lines (not all at once) to 
+# compare the line count for files just built in the current version
+# and the previous version
+#
+# mkdir -p $testingDir
+# $scriptDir/compareModifiedFileSizes.csh $testingDir \
+#       new.bed.wc.txt $oldGeneDir  old.bed.wc.txt
+#
+
+
 
 # Create mrna splicing graphs.  Takes 10 seconds.
 mkdir -p bedToGraph
@@ -275,6 +288,17 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
     txgGoodEdges est/$c.txg  trim.weights 2 est est/$c.edges
 end
 
+
+#
+# A good time for testing.  Uncomment the lines (not all at once) to 
+# compare the line count for files just built in the current version
+# and the previous version
+#
+# mkdir -p $testingDir
+# $scriptDir/compareModifiedFileSizes.csh \
+#       $testingDir new.graph.wc.txt $oldGeneDir old.graph.wc.txt
+
+
 # Setup other species dir
 mkdir -p $dir/$xdb
 cd $dir/$xdb
@@ -295,6 +319,15 @@ foreach c (`awk '{print $1;}' $genomes/$xdb/chrom.sizes`)
     echo $c
     txBedToGraph refSeq/$c.bed refSeq mrna/$c.bed mrna est/$c.bed est stdout >> other.txg
 end
+
+
+#
+# testing suggestion: uncomment below
+# mkdir -p $testingDir
+# compareModifiedFileSizes.csh $testingDir \
+#       new.otherTxg.wc.txt $oldGeneDir  old.otherTxg.wc.txt
+#
+
 
 
 # Clean up all but final other.txg
@@ -377,12 +410,24 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 end
 cd ..
 
+
+#
+# testing suggestion: uncomment below
+# mkdir -p $testingDir
+# compareModifiedFileSizes.csh $testingDir \
+#       new.edges.wc.txt $oldGeneDir  old.edges.wc.txt
+# cut -f-3,5,6,8 txOrtho/uniqEdges/chr22.edges >$testingDir/chr22.subset.edges.new
+# cut -f-3,5,6,8 $oldGeneDir/txOrtho/uniqEdges/chr22.edges \
+#    >$testingDir/chr22.subset.edges.old
+# checkRandomLinesExist.py -s $testingDir/chr22.subset.edges.old \
+#    -d $testingDir/chr22.subset.edges.new
+
 # Clean up chains and nets since they are big
 cd $dir
 rm -r $xdb/chains $xdb/nets
 
 # Get exonophy. Takes about 4 seconds.
-hgsql -N $db -e "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" \
+hgsql -N $db -e "select chrom, txStart, txEnd, name, "1", strand from exoniphy order by chrom, txStart;" \
     > exoniphy.bed
 bedToTxEdges exoniphy.bed exoniphy.edges
 
@@ -399,6 +444,25 @@ foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
 	touch graphWithEvidence/$c.txg
     endif
 end
+
+
+#
+# testing suggestion: uncomment below
+# mkdir -p $testingDir
+# compareModifiedFileSizes.csh $testingDir \
+#       new.evidence.wc.txt $oldGeneDir  old.evidence.wc.txt
+# cut -f1-3,5 graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.new
+# cut -f1-3,5 $oldGeneDir/graphWithEvidence/chr22.txg > $testingDir/chr22.graph.bounds.old
+# checkRandomLinesExist.py -s $testingDir/chr22.graph.bounds.old \
+#  -d $testingDir/chr22.graph.bounds.new
+#
+
+
+
+# move this endif statement past business that has been successfully completed
+endif # BRACKET
+
+
 
 # Do  txWalk  - takes 32 seconds (mostly loading the mrnaSize.tab again and
 # again...)
@@ -424,6 +488,7 @@ txBedToGraph txWalk.bed txWalk txWalk.txg
 txgAnalyze txWalk.txg $genomes/$db/$db.2bit stdout | sort | uniq > altSplice.bed
 
 
+
 # Get txWalk transcript sequences.  This'll take about an hour
 rm -f txWalk.fa
 foreach c (`awk '{print $1;}' $genomes/$db/chrom.sizes`)
@@ -432,6 +497,11 @@ end
 rm -rf txFaSplit
 mkdir -p txFaSplit
 faSplit sequence txWalk.fa 200 txFaSplit/
+
+
+# move this exit statement to the end of the section to be done next
+exit $status # BRACKET
+
 
 
 # Fetch human protein set and table that describes if curated or not.

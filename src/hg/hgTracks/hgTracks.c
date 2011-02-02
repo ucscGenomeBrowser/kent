@@ -54,6 +54,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 #include "searchTracks.h"
+#include "errCatch.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
@@ -115,7 +116,7 @@ struct hgPositions *hgp = NULL;
 /* Other global variables. */
 struct trackHub *hubList = NULL;	/* List of all relevant hubs. */
 struct group *groupList = NULL;    /* List of all tracks. */
-char *browserName;              /* Test or public browser */
+char *browserName;              /* Test, preview, or public browser */
 char *organization;             /* UCSC */
 
 struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
@@ -2310,7 +2311,7 @@ if (withGuidelines)
         safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
         exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
         if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image.
-            exists = TRUE;                       // However, for the time being, rebuild when user presses "default tracks"
+            exists = FALSE;                       // However, for the time being, rebuild when user presses "default tracks"
 
         if (!exists)
             {
@@ -3340,7 +3341,30 @@ void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
 struct hubConnectStatus *hub, *hubList =  hubConnectStatusListFromCart(cart);
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
-    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+    if (isEmpty(hub->errorMessage))
+	{
+
+        /* error catching in so it won't just abort  */
+        struct errCatch *errCatch = errCatchNew();
+        if (errCatchStart(errCatch))
+	    addTracksFromTrackHub(hub->id, hub->hubUrl, pTrackList, pHubList);
+        errCatchEnd(errCatch);
+        if (errCatch->gotError)
+	    {
+	    struct sqlConnection *conn = hConnectCentral();
+	    char query[256];
+	    safef(query, sizeof(query),
+		"update %s set errorMessage=\"%s\", lastNotOkTime=now() where id=%d"
+		, hubConnectTableName
+		, errCatch->message->string
+		, hub->id
+		);
+	    sqlUpdate(conn, query);
+	    hDisconnectCentral(&conn);
+	    }
+        errCatchFree(&errCatch);
+
+	}
     }
 hubConnectStatusFreeList(&hubList);
 }
@@ -3737,7 +3761,7 @@ if (!tdbIsSuper(tdb))
 return (tdb->visibility != tvHide);
 }
 
-static void groupTracks(struct trackHub *hubList, struct track **pTrackList, 
+static void groupTracks(struct trackHub *hubList, struct track **pTrackList,
 	struct group **pGroupList, int vis)
 /* Make up groups and assign tracks to groups.
  * If vis is -1, restore default groups to tracks. */
@@ -5593,6 +5617,10 @@ if (cartVarExists(cart, "chromInfoPage"))
     cartRemove(cart, "chromInfoPage");
     chromInfoPage();
     }
+else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
+    {
+    doSearchTracks(groupList);
+    }
 else if (sameWord(configPageCall, "configure") ||
     sameWord(configPageCall, "configure tracks and display"))
     {
@@ -5649,10 +5677,6 @@ else if (cartVarExists(cart, configShowEncodeGroups))
         if (startsWith("encode", grp->name))
             collapseGroup(grp->name, FALSE);
     configPageSetTrackVis(-2);
-    }
-else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
-    {
-    doSearchTracks(groupList);
     }
 else
     {

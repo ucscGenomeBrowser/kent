@@ -39,7 +39,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	    "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
 	    "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
 	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
-	    "hgt.jump", "hgt.refresh",
+	    "hgt.jump", "hgt.refresh", "hgt.setWidth",
 	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1",
              TRACK_SEARCH,         TRACK_SEARCH_ADD_ROW,     TRACK_SEARCH_DEL_ROW, TRACK_SEARCH_PAGER,
             NULL };
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 uglyTime(NULL);
-browserName = (hIsPrivateHost() ? "Test Browser" : "Genome Browser");
+browserName = hBrowserName();
 organization = "UCSC";
 
 /* change title if this is for GSID */

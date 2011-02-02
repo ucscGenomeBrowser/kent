@@ -4,16 +4,22 @@ wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
+wgEncodeHaibMethyl27.ra \
 wgEncodeHaibMethylRrbs.ra \
+wgEncodeHaibRnaSeq.ra\
 wgEncodeHaibTfbs.ra \
+wgEncodeHaibGenotype.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
+wgEncodeOpenChromSynth.ra \
 wgEncodeSunyAlbanyTiling.ra \
-wgEncodeSunyGeneST.ra \
+wgEncodeSunyAlbanyGeneSt.ra \
+wgEncodeSunyRipSeq.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhTfbs.ra \
+wgEncodeUncBsuProt.ra \
 wgEncodeUwAffyExonArray.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwDnase.ra \
@@ -29,7 +35,8 @@ wgEncodeGisRnaPet.ra \
 wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
 wgEncodeUwDgf.ra \
-wgEncodeDukeAffyExon.ra 
+wgEncodeDukeAffyExon.ra \
+wgEncodeUchicagoTfbs.ra 
 
 include ../../../../makefile.metaDb
 

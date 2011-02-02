@@ -55,7 +55,7 @@ struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct 
 /* Look up through self and parents, looking for someone responsible for handling
  * where the downloads are. */
 {
-if (!sameWord(tdb->type,"downloadsOnly") && !sameString(tdb->table, tdb->track))
+if (!sameWord(tdb->type,"downloadsOnly") && !sameString(tdb->table, tdb->track) && trackHash)
     {
     tdb = hashFindVal(trackHash, tdb->table);
     if (tdb == NULL)
@@ -69,7 +69,7 @@ static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char
 // Returns an HTML string for a downloads link
 {
 // If has fileSortOrder, then link to new hgFileUi
-if (trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
+if (!nameIsFile && trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
     {
     char * link = needMem(PATH_LEN); // 512 should be enough
     safef(link,PATH_LEN,"<A HREF='%s?g=%s' title='Downloadable Files...'>%s</A>", //  NOTE: TARGET=ucscDownloads   ??
@@ -79,11 +79,11 @@ if (trackDbSetting(tdb, FILE_SORT_ORDER) != NULL)
 else if(trackDbSetting(tdb, "wgEncode") != NULL)  // Downloads directory if this is ENCODE
     {
     struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    char *actualName = (sameWord(dirKeeper->type,"downloadsOnly")?dirKeeper->track:tdb->table);
+    char *compositeDir = (sameWord(dirKeeper->type,"downloadsOnly")?dirKeeper->track:dirKeeper->table);
     struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download %s' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
-            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS, actualName, (nameIsFile?name:""), nameIsFile?"file":"files",name);
+            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),  // This may not be wise!!!
+            ENCODE_DCC_DOWNLOADS, compositeDir, (nameIsFile?name:""), nameIsFile?"file":"files",name);
     return dyStringCannibalize(&dyLink);
     }
 return NULL;
@@ -3290,7 +3290,7 @@ if( name == NULL )
 
 setting = cloneString(setting);
 char *filters[10];
-int filterCount = chopLine(setting, filters);
+int filterCount = chopByWhiteRespectDoubleQuotes(setting, filters, ArraySize(filters));
 int ix;
 for(ix=0;ix<filterCount;ix++)
     {
@@ -3309,23 +3309,26 @@ for(ix=0;ix<filterCount;ix++)
         filterBy->useIndex = TRUE;
         }
     filterBy->valueAndLabel = (strchr(filter,'|') != NULL);
+    // Remove any double quotes now and rely upon commmas for delimiting
+    stripString(filter, "\"");
     filterBy->slValues = slNameListFromComma(filter);
-    if(filterBy->valueAndLabel)
+    if (filterBy->valueAndLabel)
         {
         struct slName *val = filterBy->slValues;
         for(;val!=NULL;val=val->next)
             {
             char * lab =strchr(val->name,'|');
-            if(lab == NULL)
+            if (lab == NULL)
                 {
                 warn("Using filterBy but only some values contain labels in form of value|label.");
                 filterBy->valueAndLabel = FALSE;
                 break;
                 }
-            *lab++ = 0;
+            *lab++ = 0;  // The label is found inside the filters->svValues as the next string
             strSwapChar(lab,'_',' '); // Title does not have underscores
             }
         }
+
     slAddTail(&filterBySet,filterBy); // Keep them in order (only a few)
 
     if(cart != NULL)
@@ -3751,7 +3754,8 @@ slSort(tdbRefList, trackDbRefCmp);
 return cartPriorities;
 }
 
-static void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
+void cfgByCfgType(eCfgType cType,char *db, struct cart *cart, struct trackDb *tdb,char *prefix, char *title, boolean boxed)
+// Methods for putting up type specific cfgs used by composites/subtracks in hui.c and exported for common use
 {
 switch(cType)
     {
@@ -3918,15 +3922,16 @@ if (useDragAndDrop)
         dyStringAppendC(dyHtml,' ');
     dyStringPrintf(dyHtml, "tableWithDragAndDrop");
     }
+printf(" class='subtracks");
 if (dyStringLen(dyHtml) > 0)
     {
-    printf(" class='subtracks bglevel1 %s'",dyStringContents(dyHtml));
+    printf(" bglevel1 %s'",dyStringContents(dyHtml));
     colorIx = COLOR_BG_ALTDEFAULT_IX;
     }
 if (sortOrder != NULL)
-    puts("><THEAD class=sortable>");
+    puts("'><THEAD class=sortable>");
 else
-    puts("><THEAD>");
+    puts("'><THEAD>");
 
 boolean doColorPatch = trackDbSettingOn(parentTdb, "showSubtrackColorOnUi");
 int colspan = 3;
@@ -4741,14 +4746,13 @@ void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, ch
 {
 char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
-
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 if(filterBySet != NULL)
     {
-    if(!tdbIsComposite(tdb) && !tdbIsCompositeChild(tdb))
+    if(!tdbIsComposite(tdb))
         jsIncludeFile("hui.js",NULL);
 
-    filterBySetCfgUi(tdb,filterBySet);
+    filterBySetCfgUi(tdb,filterBySet);   // Note filterBy boxes don't need to be double "boxed"
     filterBySetFree(&filterBySet);
     return; // Cannot have both 'filterBy' score and 'scoreFilter'
     }

@@ -50,7 +50,7 @@ project wgEncode
 rnaExtract polyA
 subId 2084
 tableName wgEncodeYaleRnaSeqK562Ama50PolyaAln
-treatment aAma50ug_9hr
+treatment Alpha-amanitin_50ug_9hr
 view Alignments
 
 metaObject wgEncodeYaleRnaSeqK562Ama50PolyaRawData
@@ -68,7 +68,7 @@ origAssembly hg19
 project wgEncode
 rnaExtract polyA
 subId 2084
-treatment aAma50ug_9hr
+treatment Alpha-amanitin_50ug_9hr
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ama50PolyaSig
@@ -87,7 +87,7 @@ project wgEncode
 rnaExtract polyA
 subId 2084
 tableName wgEncodeYaleRnaSeqK562Ama50PolyaSig
-treatment aAma50ug_9hr
+treatment Alpha-amanitin_50ug_9hr
 view Signal
 
 metaObject wgEncodeYaleRnaSeqK562Ifna30mPolyaRawData
@@ -104,7 +104,7 @@ lab Yale
 origAssembly hg18
 project wgEncode
 subId 540
-treatment IFNa30m
+treatment IFNa30
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifna30PolyaAln
@@ -126,6 +126,23 @@ subId 2007
 tableName wgEncodeYaleRnaSeqK562Ifna30PolyaAln
 treatment IFNa30
 view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ifna30PolyaRawData
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+fileName wgEncodeYaleRnaSeqK562Ifna30PolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+subId 540
+treatment IFNa30
+view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifna6hPolyaAln
 objType table
@@ -178,7 +195,7 @@ lab Yale
 origAssembly hg18
 project wgEncode
 subId 542
-treatment IFNg30m
+treatment IFNg30
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifng30PolyaAln
@@ -200,6 +217,23 @@ subId 2007
 tableName wgEncodeYaleRnaSeqK562Ifng30PolyaAln
 treatment IFNg30
 view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ifng30PolyaRawData
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-09-24
+dateUnrestricted 2010-06-24
+fileName wgEncodeYaleRnaSeqK562Ifng30PolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg18
+project wgEncode
+subId 542
+treatment IFNg30
+view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
 objType table
@@ -330,4 +364,4 @@ tableName wgEncodeYaleRnaSeqK562PolyaSig
 treatment None
 view Signal
 
-# MAGIC: -1028851776
+# MAGIC: -1385676919

@@ -1,0 +1,174 @@
+track wgEncodeLicrTfbs
+compositeTrack on
+shortLabel LICR TFBS
+longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/LICR
+group regulation
+subGroup1 view Views Peaks=Peaks Signal=Signal
+subGroup2 cellType Cell_Line BMarrow=BoneMarrow Cbellum=Cerebellum Cortex=Cortex
+subGroup3 factor Factor CTCF=CTCF POL2=Pol2 Input=Input
+subGroup4 sex Sex M=M
+subGroup5 age Age adult8wks=adult-8wks
+subGroup6 strain Strain C57BL6=C57BL/6
+subGroup7 control Control std=std
+dimensions dimensionX=cellType dimensionY=factor dimensionZ=sex
+sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
+controlledVocabulary encode/cv.ra cellType factor sex age strain control
+dragAndDrop subTracks
+visibilityViewDefaults  Peaks=dense Signal=full
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+
+	#####Peak Tracks###########
+	track wgEncodeLicrTfbsViewPeaks
+	release alpha
+	shortLabel Peaks
+	view Peaks
+	visibility dense
+	#viewUi on
+	subTrack wgEncodeLicrTfbs
+	signalFilter 0
+	signalFilterLimits 0:18241
+	pValueFilter 0
+	pValueFilterLimits 0:300
+	qValueFilter 0
+	qValueFilterLimits 0:300
+
+		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdPk
+		release alpha
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel BoneMarrow CTCF Pk
+		longLabel ENCODE LICR TFBS Peaks (CTCF in BoneMarrow cells)
+		subGroups view=Peaks age=adult8wks factor=CTCF cellType=BMarrow control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3157 dateSubmitted=2011-01-05
+
+
+		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdPk
+		release alpha
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel BoneMarrow Pol2 Pk
+		longLabel ENCODE LICR TFBS Peaks (Pol2 in BoneMarrow cells)
+		subGroups view=Peaks age=adult8wks factor=POL2 cellType=BMarrow control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3391 dateSubmitted=2011-01-19
+
+		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdPk
+		release alpha
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Cerebellum CTCF Pk
+		longLabel ENCODE LICR TFBS Peaks (CTCF in Cerebellum cells)
+		subGroups view=Peaks age=adult8wks factor=CTCF cellType=Cbellum control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3393 dateSubmitted=2011-01-19
+
+		track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdPk
+		release alpha
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Cortex CTCF Pk
+		longLabel ENCODE LICR TFBS Peaks (CTCF in Cortex cells)
+		subGroups view=Peaks age=adult8wks factor=CTCF cellType=Cortex control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3395 dateSubmitted=2011-01-19
+
+
+		track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdPk
+		release alpha
+		parent wgEncodeLicrTfbsViewPeaks off
+		shortLabel Cortex Pol2 Pk
+		longLabel ENCODE LICR TFBS Peaks (Pol2 in Cortex cells)
+		subGroups view=Peaks age=adult8wks factor=POL2 cellType=Cortex control=std sex=M strain=C57BL6
+		type broadPeak
+		color 153,38,0
+		# subId=3406 dateSubmitted=2011-01-20
+
+	#######	Signal Tracks###########
+	track wgEncodeLicrTfbsViewSignal
+	release alpha
+	shortLabel Signal
+	view Signal
+	visibility full
+	#viewUi on
+	subTrack wgEncodeLicrTfbs
+	viewLimits 2:15
+	autoScale off
+	maxHeightPixels 100:16:16
+	windowingFunction mean
+
+		track wgEncodeLicrTfbsBmarrowCtcfMAdult8wksC57bl6StdSig
+		release alpha
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel BoneMarrow CTCF Sig
+		longLabel ENCODE LICR TFBS Signal (CTCF in BoneMarrow cells)
+		subGroups view=Signal age=adult8wks factor=CTCF cellType=BMarrow control=std sex=M strain=C57BL6
+		type bigWig 0.150000 40.070000
+		color 153,38,0
+		# subId=3157 dateSubmitted=2011-01-05
+
+
+		track wgEncodeLicrTfbsCbellumInputMAdult8wksC57bl6StdSig
+		release alpha
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Cerebellum Input Sig
+		longLabel ENCODE LICR TFBS Signal (Input in Cerebellum cells)
+		subGroups view=Signal age=adult8wks factor=Input cellType=Cbellum control=std sex=M strain=C57BL6
+		type bigWig 0.140000 41.009998
+		color 153,38,0
+		# subId=3275 dateSubmitted=2011-01-18
+
+		track wgEncodeLicrTfbsBmarrowPol2MAdult8wksC57bl6StdSig
+		release alpha
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel BoneMarrow Pol2 Sig
+		longLabel ENCODE LICR TFBS Signal (Pol2 in BoneMarrow cells)
+		subGroups view=Signal age=adult8wks factor=POL2 cellType=BMarrow control=std sex=M strain=C57BL6
+		type bigWig 0.120000 46.389999
+		color 153,38,0
+		# subId=3391 dateSubmitted=2011-01-19
+
+		track wgEncodeLicrTfbsCbellumCtcfMAdult8wksC57bl6StdSig
+		release alpha
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Cerebellum CTCF Sig
+		longLabel ENCODE LICR TFBS Signal (CTCF in Cerebellum cells)
+		subGroups view=Signal age=adult8wks factor=CTCF cellType=Cbellum control=std sex=M strain=C57BL6
+		type bigWig 0.110000 29.299999
+		color 153,38,0
+		# subId=3393 dateSubmitted=2011-01-19
+
+		track wgEncodeLicrTfbsCortexCtcfMAdult8wksC57bl6StdSig
+		release alpha
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Cortex CTCF Sig
+		longLabel ENCODE LICR TFBS Signal (CTCF in Cortex cells)
+		subGroups view=Signal age=adult8wks factor=CTCF cellType=Cortex control=std sex=M strain=C57BL6
+		type bigWig 0.130000 58.930000
+		color 153,38,0
+		# subId=3395 dateSubmitted=2011-01-19
+
+
+		track wgEncodeLicrTfbsCortexInputMAdult8wksC57bl6StdSig
+		release alpha
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Cortex Input Sig
+		longLabel ENCODE LICR TFBS Signal (Input in Cortex cells)
+		subGroups view=Signal age=adult8wks factor=Input cellType=Cortex control=std sex=M strain=C57BL6
+		type bigWig 0.130000 61.080002
+		color 153,38,0
+		# subId=3398 dateSubmitted=2011-01-20
+
+		track wgEncodeLicrTfbsCortexPol2MAdult8wksC57bl6StdSig
+		release alpha
+		parent wgEncodeLicrTfbsViewSignal off
+		shortLabel Cortex Pol2 Sig
+		longLabel ENCODE LICR TFBS Signal (Pol2 in Cortex cells)
+		subGroups view=Signal age=adult8wks factor=POL2 cellType=Cortex control=std sex=M strain=C57BL6
+		type bigWig 0.110000 40.849998
+		color 153,38,0
+		# subId=3406 dateSubmitted=2011-01-20
+

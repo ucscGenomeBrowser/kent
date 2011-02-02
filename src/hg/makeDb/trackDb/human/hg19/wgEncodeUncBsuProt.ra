@@ -2,9 +2,8 @@
 
 track wgEncodeUncBsuProt
 compositeTrack on
-shortLabel UNC/BSU Proteogenomics
+shortLabel UNC/BSU ProtGeno
 longLabel ENCODE UNC/BSU Proteogenomics
-release alpha
 group expression
 subGroup1 cellType Cell_Line GM12878=GM12878, K562=K562
 subGroup2 localization Localization nucleus=nucleus membraneFraction=membraneFraction
@@ -21,16 +20,14 @@ wgEncode 1
 
 	
 	track wgEncodeUncBsuProtSignal
-	release alpha
 	shortLabel Signal
 	view Signal
 	visibility full
 	parent wgEncodeUncBsuProt
 
-        	track wgEncodeuncBsuProtGm12878NucleusSig
-        	release alpha
+        	track wgEncodeUncBsuProtGm12878NucleusSig
         	parent wgEncodeUncBsuProtSignal
-        	shortLabel GM12878 Sig
+        	shortLabel GM12878 nucleus
         	longLabel ENCODE Proteogenomic Mapping Hits (in GM12878 cells)
         	subGroups view=Signal cellType=GM12878 localization=nucleus
 		visibility full
@@ -40,10 +37,9 @@ wgEncode 1
         	# subId=3160 dateSubmitted=2011-01-05
 
 
-        	track wgEncodeuncBsuProtK562MembranefractionSig
-        	release alpha
+        	track wgEncodeUncBsuProtK562MembranefractionSig
         	parent wgEncodeUncBsuProtSignal
-        	shortLabel K562 Sig
+        	shortLabel K562 membrane
         	longLabel ENCODE Proteogenomic Mapping Hits (in K562 cells)
         	subGroups view=Signal cellType=K562 localization=membraneFraction
 		visibility full

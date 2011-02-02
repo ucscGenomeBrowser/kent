@@ -986,7 +986,7 @@ if (! doJoin)
     struct sqlConnection *conn = hAllocConn(dtfList->database);
     struct dyString *dy = dyStringNew(0);
     
-    if (hIsBigBed(database, dtfList->table, NULL, ctLookupName))
+    if (isBigBed(database, dtfList->table, NULL, ctLookupName))
 	makeBigBedOrderedCommaFieldList(dtfList, dy);
     else if (isCustomTrack(dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);

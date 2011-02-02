@@ -147,11 +147,22 @@ struct lineFile *netLineFileMayOpen(char *url);
 /* Same as netLineFileOpen, but warns and returns
  * null rather than aborting on problems. */
 
+struct lineFile *netLineFileSilentOpen(char *url);
+/* Open a lineFile on a URL.  Just return NULL without any user
+ * visible warning message if there's a problem. */
+
 struct dyString *netSlurpFile(int sd);
-/* Slurp file into dynamic string and return. */
+/* Slurp file into dynamic string and return.  Result will include http headers and
+ * the like. */
 
 struct dyString *netSlurpUrl(char *url);
-/* Go grab all of URL and return it as dynamic string. */
+/* Go grab all of URL and return it as dynamic string.  Result will include http headers
+ * and the like. This will errAbort if there's a problem. */
+
+char *netReadTextFileIfExists(char *url);
+/* Read entire URL and return it as a string.  URL should be text (embedded zeros will be
+ * interpreted as end of string).  If the url doesn't exist or has other problems,
+ * returns NULL. Does *not* include http headers. */
 
 struct lineFile *netHttpLineFileMayOpen(char *url, struct netParsedUrl **npu);
 /* Parse URL and open an HTTP socket for it but don't send a request yet. */

@@ -47,7 +47,7 @@ controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 noInherit on
 configurable on
 useScore 0
-priority 0
+priority 2
 type bed 3
 wgEncode 1
 dataVersion through the ENCODE Jan 2011 Freeze
@@ -234,7 +234,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel DNse HeLa IFNa Pk
+        shortLabel HeLa IFNa DNse Pk
         longLabel HeLa-S3, IFNa - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HELA treatment=IFNa4h
         type narrowPeak
@@ -364,7 +364,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseLncapAndroPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel DNse LNCaP and Pk
+        shortLabel LNCaP andro DN Pk
         longLabel LNCaP, androgen - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=LNCaP treatment=ANDRO
         type narrowPeak
@@ -521,7 +521,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Urothl ec DNse Pk
-        longLabel Urothelia, with UT189 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Urothelia, UT189 E.coli - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=UROtsa treatment=UT189
         type narrowPeak
         # subId=3218 dateSubmitted=2011-01-11
@@ -710,7 +710,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNse HeLa IFNa FD
+        shortLabel HeLa IFNa DNse FD
         longLabel HeLa-S3, IFNa - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 0.761900
@@ -840,7 +840,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseLncapAndroSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel DNse LNCaP and FD
+        shortLabel LNCaP andro DN FD
         longLabel LNCaP, androgen - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=LNCaP treatment=ANDRO
         type bigWig 0.000000 1.231700
@@ -1186,7 +1186,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel DNse HeLa IFNa BO
+        shortLabel HeLa IFNa DNse BO
         longLabel HeLa-S3, IFNa - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 224.000000
@@ -1316,7 +1316,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         track wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel DNse LNCaP and BO
+        shortLabel LNCaP andro DN BO
         longLabel LNCaP, androgen - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=LNCaP treatment=ANDRO
         type bigWig 0.000000 220.000000
@@ -1473,7 +1473,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Urothl ec DNse OS
-        longLabel ENCODE Open Chromatin, Duke DNaseI HS Overlap Signal (Urothelia,UT189)
+        longLabel Urothelia, UT189 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=UROtsa treatment=UT189
         type bigWig 0.000000 210.000000
         # subId=3218 dateSubmitted=2011-01-11
