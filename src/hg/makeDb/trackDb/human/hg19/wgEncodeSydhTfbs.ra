@@ -4204,3 +4204,12 @@ wgEncode 1
         color 0,107,27
         # subId=3405 dateSubmitted=2011-01-20
 
+        track wgEncodeSydhTfbsThek293InputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel T-REx-HEK293 Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in T-REx-HEK293 cells)
+        subGroups view=Signal factor=zInputucd cellType=tHEK293 control=UCD treatment=aNone
+        type bigWig 1.000000 27995.000000
+        # subId=3499 dateSubmitted=2011-02-03
+

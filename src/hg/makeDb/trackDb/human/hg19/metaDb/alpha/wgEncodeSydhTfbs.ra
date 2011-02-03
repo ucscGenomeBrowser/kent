@@ -35608,6 +35608,68 @@ tableName wgEncodeSydhTfbsShsy5yGata2UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsThek293InputUcdAln
+objType file
+antibody Input
+cell T-REx-HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId T-REx-HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsThek293InputUcdAln.bam
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 3499
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsThek293InputUcdRawData
+objType file
+antibody Input
+cell T-REx-HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId T-REx-HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsThek293InputUcdRawData.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 3499
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsThek293InputUcdSig
+objType table
+antibody Input
+cell T-REx-HEK293
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId T-REx-HEK293/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsThek293InputUcdSig.bigWig
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 3499
+tableName wgEncodeSydhTfbsThek293InputUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsTrexhek293Znf263UcdAlnRep1
 objType file
 antibody ZNF263
@@ -36061,4 +36123,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 979659184
+# MAGIC: -1280037352
