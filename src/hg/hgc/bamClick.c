@@ -181,19 +181,21 @@ char position[512];
 safef(position, sizeof(position), "%s:%d-%d", seqName, winStart, winEnd);
 struct hash *pairHash = isPaired ? hashNew(0) : NULL;
 struct bamTrackData btd = {start, item, pairHash};
-char *fileName;
-if (isCustomTrack(tdb->table))
+char *fileName = trackDbSetting(tdb, "bigDataUrl");
+if (fileName == NULL)
     {
-    fileName = trackDbSetting(tdb, "bigDataUrl");
-    if (fileName == NULL)
-	errAbort("doBamDetails: can't find bigDataUrl for custom track %s", tdb->track);
+    if (isCustomTrack(tdb->table))
+	{
+	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tdb->track);
+	}
+    else
+	{
+	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
+	fileName = bamFileNameFromTable(conn, tdb->table, seqName);
+	hFreeConn(&conn);
+	}
     }
-else
-    {
-    struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-    fileName = bamFileNameFromTable(conn, tdb->table, seqName);
-    hFreeConn(&conn);
-    }
+
 bamFetch(fileName, position, oneBam, &btd);
 if (isPaired)
     {

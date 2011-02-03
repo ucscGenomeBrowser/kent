@@ -464,18 +464,19 @@ parseIntRangeSetting(tg->tdb, "aliQualRange", &aliQualShadeMin, &aliQualShadeMax
 parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
 struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
 			   aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
-char *fileName;
-if (tg->customPt)
+char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
+if (fileName == NULL)
     {
-    fileName = trackDbSetting(tg->tdb, "bigDataUrl");
-    if (fileName == NULL)
+    if (tg->customPt)
+	{
 	errAbort("bamLoadItemsCore: can't find bigDataUrl for custom track %s", tg->track);
-    }
-else
-    {
-    struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
-    fileName = bamFileNameFromTable(conn, tg->table, chromName);
-    hFreeConn(&conn);
+	}
+    else
+	{
+	struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+	fileName = bamFileNameFromTable(conn, tg->table, chromName);
+	hFreeConn(&conn);
+	}
     }
 
 char posForBam[512];
