@@ -9,6 +9,7 @@
 #include "linefile.h"
 #include "gff.h"
 #include "obscure.h"
+#include "dystring.h"
 
 static char const rcsid[] = "$Id: gff.c,v 1.24 2009/02/05 20:53:24 hiram Exp $";
 
@@ -92,14 +93,17 @@ errAbort("%s Bad line %d of %s:\n", msg, line, fileName);
 static char *gffTnName(char *seqName, char *groupName)
 /* Make name that encorperates seq and group names.... */
 {
-static char nameBuf[512];
+static struct dyString *nameBuf = NULL;
+if (nameBuf == NULL)
+    nameBuf = dyStringNew(0);
+dyStringClear(nameBuf);
 if (startsWith("gene-", groupName))
     groupName += 5;
 if (startsWith("cc_", groupName))
     groupName += 3;
-strcpy(nameBuf, groupName);
+dyStringAppend(nameBuf, groupName);
 
-return nameBuf;
+return nameBuf->string;
 }
 
 static boolean isGtfGroup(char *group)
