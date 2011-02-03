@@ -29,9 +29,8 @@ maxWindowToDraw 10000000
         type bigWig
 	subTrack wgEncodeCaltechRnaSeq
 	maxHeightPixels 100:24:16
+        autoScale on
 	viewLimits -15:0
-	#minLimit 0 
-        autoScale off
         windowingFunction maximum
 
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
@@ -160,7 +159,7 @@ maxWindowToDraw 10000000
 	maxHeightPixels 100:24:16
 	viewLimits 1:10
 	minLimit 0 
-        autoScale off
+        autoScale on 
         windowingFunction mean
 
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
@@ -289,7 +288,7 @@ maxWindowToDraw 10000000
 	maxHeightPixels 100:24:16
 	viewLimits 1:10
 	minLimit 0 
-        autoScale off
+        autoScale on  
         windowingFunction mean
 
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
