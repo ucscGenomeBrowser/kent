@@ -10595,6 +10595,68 @@ tableName wgEncodeSydhTfbsH1hescInputIggrabSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsH1hescInputStdAln
+objType file
+antibody Input
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsH1hescInputStdAln.bam
+grant Snyder
+lab Stanford
+project wgEncode
+setType input
+subId 3501
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsH1hescInputStdRawData
+objType file
+antibody Input
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsH1hescInputStdRawData.fastq.gz
+grant Snyder
+lab Stanford
+project wgEncode
+setType input
+subId 3501
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsH1hescInputStdSig
+objType table
+antibody Input
+cell H1-hESC
+composite wgEncodeSydhTfbs
+control std
+controlId H1-hESC/None/Input/std
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsH1hescInputStdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 3501
+tableName wgEncodeSydhTfbsH1hescInputStdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsH1hescInputUcdAln
 objType file
 antibody Input
@@ -33007,6 +33069,68 @@ tableName wgEncodeSydhTfbsMcf10aesInputEtoh01cStdSig
 treatment EtOH_0.01pct_12hr
 view Signal
 
+metaObject wgEncodeSydhTfbsMcf10aesInputUcdAln
+objType file
+antibody Input
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsMcf10aesInputUcdAln.bam
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 3497
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsMcf10aesInputUcdRawData
+objType file
+antibody Input
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsMcf10aesInputUcdRawData.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 3497
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsMcf10aesInputUcdSig
+objType table
+antibody Input
+cell MCF10A-Er-Src
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsMcf10aesInputUcdSig.bigWig
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 3497
+tableName wgEncodeSydhTfbsMcf10aesInputUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsMcf10aesPol2Etoh01StdAlnRep1
 objType file
 antibody Pol2
@@ -35608,6 +35732,68 @@ tableName wgEncodeSydhTfbsShsy5yGata2UcdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhTfbsShsy5yInputUcdAln
+objType file
+antibody Input
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsShsy5yInputUcdAln.bam
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 3498
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsShsy5yInputUcdRawData
+objType file
+antibody Input
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsShsy5yInputUcdRawData.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+project wgEncode
+setType input
+subId 3498
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsShsy5yInputUcdSig
+objType table
+antibody Input
+cell SH-SY5Y
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId SH-SY5Y/None/Input/UCDavis
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-03
+dateUnrestricted 2011-11-03
+fileName wgEncodeSydhTfbsShsy5yInputUcdSig.bigWig
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 3498
+tableName wgEncodeSydhTfbsShsy5yInputUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsThek293InputUcdAln
 objType file
 antibody Input
@@ -36123,4 +36309,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1280037352
+# MAGIC: 1358479016

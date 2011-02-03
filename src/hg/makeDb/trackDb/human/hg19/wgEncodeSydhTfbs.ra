@@ -4213,3 +4213,31 @@ wgEncode 1
         type bigWig 1.000000 27995.000000
         # subId=3499 dateSubmitted=2011-02-03
 
+        track wgEncodeSydhTfbsShsy5yInputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel SH-SY5Y Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in SH-SY5Y cells)
+        subGroups view=Signal factor=zInputucd cellType=SHSY5Y control=UCD treatment=aNone
+        type bigWig 1.000000 9027.000000
+        # subId=3498 dateSubmitted=2011-02-03
+
+        track wgEncodeSydhTfbsH1hescInputStdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel H1-hESC Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in H1-hESC cells)
+        subGroups view=Signal factor=zInputstd cellType=H1hESC control=std treatment=aNone
+        type bigWig 1.000000 16832.000000
+        color 0,107,27
+        # subId=3501 dateSubmitted=2011-02-03
+
+        track wgEncodeSydhTfbsMcf10aesInputUcdSig
+        release alpha
+        parent wgEncodeSydhTfbsViewSignal off
+        shortLabel MCF10A-Er-Src Input Sig
+        longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Input in MCF10A-Er-Src cells)
+        subGroups view=Signal factor=zInputucd cellType=MCF10AES control=UCD treatment=aNone
+        type bigWig 1.000000 35209.000000
+        # subId=3497 dateSubmitted=2011-02-03
+
