@@ -34,17 +34,17 @@ if (!ajax)
 printf("<B style='font-family:serif; font-size:200%%;'>%s</B>\n", tdb->longLabel);
 
 // If Composite, link to the hgTrackUi.  But if downloadsOnly then link to any superTrack.
-#define LINK_TO_PARENT "%s<B style='font-family:serif; font-size:100%%;'>(<A HREF='%s?%s=%u&c=%s&g=%s' title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>"
+#define LINK_TO_PARENT "%s<B style='font-family:serif; font-size:100%%;'>(<A HREF='%s?%s=%u&c=%s&g=%s' title='Link to %s track settings'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>"
 if (tdbIsComposite(tdb))
     {
     char *encodedTrackName = cgiEncode(tdb->track);
-    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName,"Browser tracks");
+    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName,tdb->shortLabel,"Track settings");
     freeMem(encodedTrackName);
     }
 else if (tdb->parent) //Print link for parent track
     {
     char *encodedTrackName = cgiEncode(tdb->parent->track);
-    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName, tdb->parent->shortLabel);
+    printf(LINK_TO_PARENT,"&nbsp;&nbsp;", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chrom, encodedTrackName, tdb->parent->shortLabel, tdb->parent->shortLabel);
     freeMem(encodedTrackName);
     }
 puts("<BR><BR>");
