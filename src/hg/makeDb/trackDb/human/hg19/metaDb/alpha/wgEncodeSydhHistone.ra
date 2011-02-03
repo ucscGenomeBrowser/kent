@@ -1385,7 +1385,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
@@ -1407,7 +1407,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
@@ -1429,7 +1429,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
@@ -1451,7 +1451,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
@@ -1473,7 +1473,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
@@ -1495,7 +1495,7 @@ composite wgEncodeSydhHistone
 control UCDavis
 controlId U2OS/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
@@ -1639,4 +1639,4 @@ tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1317384122
+# MAGIC: -1887714798
