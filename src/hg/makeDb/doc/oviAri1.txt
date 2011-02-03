@@ -270,15 +270,19 @@ close (FH);
 oviAri1.serverGenome = /hive/data/genomes/oviAri1/oviAri1.2bit
 oviAri1.clusterGenome = /scratch/data/oviAri1/oviAri1.2bit
 oviAri1.ooc = /scratch/data/oviAri1/oviAri1.11.ooc
-oviAri1.lift = /scratch/data/oviAri1/oviAri1.nonBridged.lft
+oviAri1.lift = no
+oviAri1.perChromTables = no
 oviAri1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-oviAri1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}  
+oviAri1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 oviAri1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
 oviAri1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
 oviAri1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+oviAri1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 oviAri1.downloadDir = oviAri1
-oviAri1.genbank.mrna.xeno.loadDesc = yes
-oviAri1.refseq.mrna.native.load = no
+oviAri1.refseq.mrna.native.load  = yes
+oviAri1.refseq.mrna.xeno.load = yes
+oviAri1.refseq.mrna.xeno.loadDesc  = yes
+
 
 
     cvs ci -m "Added oviAri1" etc/genbank.conf

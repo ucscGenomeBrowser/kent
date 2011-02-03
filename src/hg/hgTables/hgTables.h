@@ -747,10 +747,13 @@ void doSummaryStatsBigWig(struct sqlConnection *conn);
 /* Put up page showing summary stats for bigWig track. */
 
 /* ----------- BigBed business in bigBed.c -------------------- */
+boolean isBigBed(char *database, char *table, struct trackDb *parent, 
+	struct customTrack *(*ctLookupName)(char *table));
+/* Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed. */
 
 char *bigBedFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigBed.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
+ * a custom or built-in track or hub.  Do a freeMem on returned string when done. */
 
 struct hTableInfo *bigBedToHti(char *table, struct sqlConnection *conn);
 /* Get fields of bigBed into hti structure. */

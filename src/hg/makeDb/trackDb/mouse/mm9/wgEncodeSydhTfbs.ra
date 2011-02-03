@@ -96,7 +96,7 @@ wgEncode 1
 	        subGroups view=Peaks factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
-	        # subId=1857 dateSubmitted=2010-07-09
+		# subId=3502 dateSubmitted=2011-02-03		
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
@@ -105,7 +105,7 @@ wgEncode 1
 	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
-	        # subId=2539 dateSubmitted=2010-10-20
+		# subId=3502 dateSubmitted=2011-02-03
 
 	        track wgEncodeSydhTfbsMelRad21IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off

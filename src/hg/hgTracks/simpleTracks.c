@@ -7733,13 +7733,17 @@ return getSeqColorDefault(lf->name, hvg, tg->ixColor);
 
 Color interactionColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
+struct linkedFeatures *lf = item;
+return  tg->colorShades[lf->grayIx];
+
+#ifdef NOTNOW  // leaving this in the code in case we want chrom color again
+
 char *name = tg->itemName(tg, item);
 struct linkedFeatures *lf = item;
 if (slCount(lf->components) == 2)
     return MG_BLACK;
-//errAbort("name %s\n", name);
-//errAbort("name %s chrom %s\n", b->name, b->chrom);
 return getSeqColorDefault(name, hvg, tg->ixColor);
+#endif
 }
 
 void interactionLeftLabels(struct track *tg, int seqStart, int seqEnd,
@@ -7788,7 +7792,6 @@ else
     *ptr = 0;
     }
 
-//return linkedFeaturesName(tg, item);
 return cloneString(name);
 }
 
@@ -7799,19 +7802,14 @@ tg->drawItems = linkedFeaturesDraw;
 tg->drawItemAt = linkedFeaturesDrawAt;
 tg->mapItemName = linkedFeaturesName;
 tg->totalHeight = tgFixedTotalHeightNoOverflow;
-//tg->totalHeight = linkedFeaturesHeight;
 tg->itemHeight = tgFixedItemHeight;
-//tg->itemHeight = linkedFeaturesItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
 tg->nextPrevExon = linkedFeaturesNextPrevItem;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->loadItems = interactionLoad;
-//tg->itemName = cactusName;
 tg->itemName = interactionName;
-//tg->itemName = linkedFeaturesName;
-//tg->mapItemName = refGeneMapName;
 tg->itemColor = interactionColor;
 tg->itemNameColor = linkedFeaturesNameColor;
 //tg->drawLeftLabels = interactionLeftLabels;

@@ -1,0 +1,438 @@
+track wgEncodeSunyRipSeq      
+compositeTrack on
+shortLabel SUNY RIP-seq
+longLabel RIP-seq from ENCODE/SUNY Albany
+group expression
+subGroup1 view Views Peaks=Peaks Signal=Signal Alignments=Alignments 
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
+subGroup3 factor Target_Protien ELAVL1=ELAVL1 PABPC1=PABPC1 ripInput=RIP_Input T7Tag=T7_Tag
+subGroup4 rep Replicate rep1=1 rep2=2 Pooled=Pooled 
+dimensions dimY=factor dimX=cellType dimZ=rep
+dimensionZchecked rep1,Pooled
+sortOrder cellType=+ factor=+ rep=+ view=+ 
+controlledVocabulary encode/cv.ra cellType=cell factor=Antibody 
+dragAndDrop subTracks
+priority 0
+type bed 3
+wgEncode 1
+noInherit on
+#superTrack wgEncodeRnaSeqSuper dense
+
+    track wgEncodeSunyRipSeqViewAlignments
+    shortLabel Alignments
+    view Alignments
+    subTrack wgEncodeSunyRipSeq
+    visibility hide 
+    type bam
+    pairEndsByName on
+    showNames on
+    bamColorMode off
+    bamGrayMode aliQual
+    baseColorDefault diffBases
+    baseColorUseSequence lfExtra
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 100
+    maxWindowToDraw 1000000
+
+        track wgEncodeSunyRipSeqGm12878RipinputAlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 ripInput 1
+        longLabel GM12878 ripInput RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=ripInput cellType=GM12878 rep=rep1
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878RipinputAlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 ripInput 2
+        longLabel GM12878 ripInput RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=ripInput cellType=GM12878 rep=rep2
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Elavl1AlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 ELAVL1 1
+        longLabel GM12878 ELAVL1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=ELAVL1 cellType=GM12878 rep=rep1
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Elavl1AlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 ELAVL1 2
+        longLabel GM12878 ELAVL1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=ELAVL1 cellType=GM12878 rep=rep2
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Pabpc1AlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 PABPC1 1
+        longLabel GM12878 PABPC1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=PABPC1 cellType=GM12878 rep=rep1
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Pabpc1AlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 PABPC1 2
+        longLabel GM12878 PABPC1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=PABPC1 cellType=GM12878 rep=rep2
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878T7tagAlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 T7Tag 1
+        longLabel GM12878 T7Tag RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=T7Tag cellType=GM12878 rep=rep1
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878T7tagAlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel GM12878 T7Tag 2
+        longLabel GM12878 T7Tag RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=T7Tag cellType=GM12878 rep=rep2
+        type bam
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562RipinputAlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 ripInput 1
+        longLabel K562 ripInput RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=ripInput cellType=K562 rep=rep1
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562RipinputAlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 ripInput 2
+        longLabel K562 ripInput RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=ripInput cellType=K562 rep=rep2
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Elavl1AlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 ELAVL1 1
+        longLabel K562 ELAVL1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=ELAVL1 cellType=K562 rep=rep1
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Elavl1AlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 ELAVL1 2
+        longLabel K562 ELAVL1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=ELAVL1 cellType=K562 rep=rep2
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Pabpc1AlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 PABPC1 1
+        longLabel K562 PABPC1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=PABPC1 cellType=K562 rep=rep1
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Pabpc1AlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 PABPC1 2
+        longLabel K562 PABPC1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=PABPC1 cellType=K562 rep=rep2
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562T7tagAlnRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 T7Tag 1
+        longLabel K562 T7Tag RIP-seq Alignments Rep 1 from ENCODE/SUNY
+        subGroups view=Alignments factor=T7Tag cellType=K562 rep=rep1
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562T7tagAlnRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewAlignments off
+        shortLabel K562 T7Tag 2
+        longLabel K562 T7Tag RIP-seq Alignments Rep 2 from ENCODE/SUNY
+        subGroups view=Alignments factor=T7Tag cellType=K562 rep=rep2
+        type bam
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+    track wgEncodeSunyRipSeqViewSignal
+    shortLabel Signal
+    view Signal
+    visibility full 
+    subTrack wgEncodeSunyRipSeq
+    viewLimits 0:500
+    autoScale on
+    transformFunc NONE
+    windowingFunction mean
+    maxHeightPixels 100:24:16
+
+        track wgEncodeSunyRipSeqGm12878RipinputSigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel GM12878 ripInput Sig 1
+        longLabel GM12878 ripInput RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=ripInput cellType=GM12878 rep=rep1
+        type bigWig 0.000000 83164.492188
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878RipinputSigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel GM12878 ripInput Sig 2
+        longLabel GM12878 ripInput RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=ripInput cellType=GM12878 rep=rep2
+        type bigWig 0.000000 106078.593750
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Elavl1SigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal on
+        shortLabel GM12878 ELAVL1 Sig 1
+        longLabel GM12878 ELAVL1 RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=ELAVL1 cellType=GM12878 rep=rep1
+        type bigWig 0.000000 53896.902344
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Elavl1SigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel GM12878 ELAVL1 Sig 2
+        longLabel GM12878 ELAVL1 RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=ELAVL1 cellType=GM12878 rep=rep2
+        type bigWig 0.000000 55258.855469
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Pabpc1SigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal on
+        shortLabel GM12878 PABPC1 Sig 1
+        longLabel GM12878 PABPC1 RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=PABPC1 cellType=GM12878 rep=rep1
+        type bigWig 0.000000 49859.886719
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878Pabpc1SigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel GM12878 PABPC1 Sig 2
+        longLabel GM12878 PABPC1 RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=PABPC1 cellType=GM12878 rep=rep2
+        type bigWig 0.000000 51724.476562
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878T7tagSigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel GM12878 T7Tag Sig 1
+        longLabel GM12878 T7Tag RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=T7Tag cellType=GM12878 rep=rep1
+        type bigWig 0.000000 67823.984375
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqGm12878T7tagSigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel GM12878 T7Tag Sig 2
+        longLabel GM12878 T7Tag RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=T7Tag cellType=GM12878 rep=rep2
+        type bigWig 0.000000 100213.273438
+        color 153,38,0
+        # subId=3408 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562RipinputSigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel K562 ripInput Sig 1
+        longLabel K562 ripInput RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=ripInput cellType=K562 rep=rep1
+        type bigWig 0.000000 88877.484375
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562RipinputSigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel K562 ripInput Sig 2
+        longLabel K562 ripInput RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=ripInput cellType=K562 rep=rep2
+        type bigWig 0.000000 88306.453125
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Elavl1SigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal on 
+        shortLabel K562 ELAVL1 Sig 1
+        longLabel K562 ELAVL1 RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=ELAVL1 cellType=K562 rep=rep1
+        type bigWig 0.000000 64478.648438
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Elavl1SigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel K562 ELAVL1 Sig 2
+        longLabel K562 ELAVL1 RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=ELAVL1 cellType=K562 rep=rep2
+        type bigWig 0.000000 65775.945312
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Pabpc1SigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal on
+        shortLabel K562 PABPC1 Sig 1
+        longLabel K562 PABPC1 RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=PABPC1 cellType=K562 rep=rep1
+        type bigWig 0.000000 53101.386719
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562Pabpc1SigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel K562 PABPC1 Sig 2
+        longLabel K562 PABPC1 RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=PABPC1 cellType=K562 rep=rep2
+        type bigWig 0.000000 57200.070312
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562T7tagSigRep1
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel K562 T7Tag Sig 1
+        longLabel K562 T7Tag RIP-seq Signal Rep 1 from ENCODE/SUNY
+        subGroups view=Signal factor=T7Tag cellType=K562 rep=rep1
+        type bigWig 0.000000 74535.296875
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+        track wgEncodeSunyRipSeqK562T7tagSigRep2
+        release alpha
+        parent wgEncodeSunyRipSeqViewSignal off
+        shortLabel K562 T7Tag Sig 2
+        longLabel K562 T7Tag RIP-seq Signal Rep 2 from ENCODE/SUNY
+        subGroups view=Signal factor=T7Tag cellType=K562 rep=rep2
+        type bigWig 0.000000 51895.449219
+        color 46,0,184
+        # subId=3407 dateSubmitted=2011-01-20
+
+    track wgEncodeSunyRipSeqViewPeaks      
+    shortLabel Peaks      
+    view Peaks 
+    visibility full 
+    subTrack wgEncodeSunyRipSeq
+    scoreFilter 0
+    scoreFilterLimits 0:1000
+
+        track wgEncodeSunyRipSeqGm12878RipinputPk
+        release alpha
+        parent wgEncodeSunyRipSeqViewPeaks off
+        shortLabel GM12878 ripInput Pk
+        longLabel GM12878 ripInput RIP-seq Analysis from ENCODE/SUNY
+        subGroups view=Peaks factor=ripInput cellType=GM12878 rep=Pooled
+        type bed 9
+        color 153,38,0
+        # subId=3306 dateSubmitted=2011-01-19
+
+        track wgEncodeSunyRipSeqGm12878Elavl1Pk
+        release alpha
+        parent wgEncodeSunyRipSeqViewPeaks on
+        shortLabel GM12878 ELAVL1 Pk
+        longLabel GM12878 ELAVL1 RIP-seq Analysis from ENCODE/SUNY
+        subGroups view=Peaks factor=ELAVL1 cellType=GM12878 rep=Pooled
+        type bed 9
+        color 153,38,0
+        # subId=3306 dateSubmitted=2011-01-19
+
+        track wgEncodeSunyRipSeqGm12878Pabpc1Pk
+        release alpha
+        parent wgEncodeSunyRipSeqViewPeaks on
+        shortLabel GM12878 PABPC1 Pk
+        longLabel GM12878 PABPC1 RIP-seq Analysis from ENCODE/SUNY
+        subGroups view=Peaks factor=PABPC1 cellType=GM12878 rep=Pooled
+        type bed 9
+        color 153,38,0
+        # subId=3306 dateSubmitted=2011-01-19
+
+        track wgEncodeSunyRipSeqK562RipinputPk
+        release alpha
+        parent wgEncodeSunyRipSeqViewPeaks off
+        shortLabel K562 ripInput Pk
+        longLabel K562 ripInput RIP-seq Analysis from ENCODE/SUNY
+        subGroups view=Peaks factor=ripInput cellType=K562 rep=Pooled
+        type bed 9
+        color 46,0,184
+        # subId=3291 dateSubmitted=2011-01-18
+
+        track wgEncodeSunyRipSeqK562Elavl1Pk
+        release alpha
+        parent wgEncodeSunyRipSeqViewPeaks on 
+        shortLabel K562 ELAVL1 Pk
+        longLabel K562 ELAVL1 RIP-seq Analysis from ENCODE/SUNY
+        subGroups view=Peaks factor=ELAVL1 cellType=K562 rep=Pooled
+        type bed 9
+        color 46,0,184
+        # subId=3291 dateSubmitted=2011-01-18
+
+        track wgEncodeSunyRipSeqK562Pabpc1Pk
+        release alpha
+        parent wgEncodeSunyRipSeqViewPeaks on
+        shortLabel K562 PABPC1 Pk
+        longLabel K562 PABPC1 RIP-seq Analysis from ENCODE/SUNY
+        subGroups view=Peaks factor=PABPC1 cellType=K562 rep=Pooled
+        type bed 9
+        color 46,0,184
+        # subId=3291 dateSubmitted=2011-01-18
+
+
