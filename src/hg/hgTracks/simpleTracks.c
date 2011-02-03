@@ -10901,6 +10901,9 @@ tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
+#include "j3.c"
+
+
 char *omimGeneName(struct track *tg, void *item)
 /* set name for omimGene track */
 {
@@ -12313,6 +12316,8 @@ registerTrackHandlerOnFamily("hapmapSnps", hapmapMethods);
 registerTrackHandlerOnFamily("hapmapSnpsPhaseII", hapmapMethods);
 registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
+//registerTrackHandler("omimGeneClass3", omimGeneClass3Methods);
+registerTrackHandler("omimComposite", omimGeneClass3Methods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
 }
