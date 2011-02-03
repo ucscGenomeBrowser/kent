@@ -4421,7 +4421,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
@@ -4444,7 +4444,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
@@ -4467,7 +4467,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
@@ -4488,7 +4488,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
@@ -4510,7 +4510,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
@@ -4531,7 +4531,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
@@ -4552,7 +4552,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
@@ -5914,4 +5914,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 1170034751
+# MAGIC: -927006803

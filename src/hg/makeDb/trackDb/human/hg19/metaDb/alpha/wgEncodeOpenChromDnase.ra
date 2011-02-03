@@ -4,7 +4,7 @@ cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileIndex wgEncodeOpenChromDnase8988tAlnRep1.bam.bai
@@ -24,7 +24,7 @@ cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileIndex wgEncodeOpenChromDnase8988tAlnRep2.bam.bai
@@ -44,7 +44,7 @@ cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnase8988tBaseOverlapSignal.bigWig
@@ -62,7 +62,7 @@ cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnase8988tPk.narrowPeak.gz
@@ -80,7 +80,7 @@ cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnase8988tRawDataRep1.fastq.gz
@@ -98,7 +98,7 @@ cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnase8988tRawDataRep2.fastq.gz
@@ -116,7 +116,7 @@ cell 8988T
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnase8988tSig.bigWig
@@ -515,7 +515,7 @@ cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileIndex wgEncodeOpenChromDnaseCllAlnRep1.bam.bai
@@ -536,7 +536,7 @@ cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileIndex wgEncodeOpenChromDnaseCllAlnRep2.bam.bai
@@ -557,7 +557,7 @@ cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileIndex wgEncodeOpenChromDnaseCllAlnRep3.bam.bai
@@ -578,7 +578,7 @@ cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnaseCllBaseOverlapSignal.bigWig
@@ -597,7 +597,7 @@ cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnaseCllPk.narrowPeak.gz
@@ -616,7 +616,7 @@ cell CLL
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-01
 dateUnrestricted 2011-08-01
 fileName wgEncodeOpenChromDnaseCllSig.bigWig
@@ -882,7 +882,7 @@ cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileIndex wgEncodeOpenChromDnaseGlioblaAlnRep1.bam.bai
@@ -902,7 +902,7 @@ cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileIndex wgEncodeOpenChromDnaseGlioblaAlnRep2.bam.bai
@@ -922,7 +922,7 @@ cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromDnaseGlioblaBaseOverlapSignal.bigWig
@@ -940,7 +940,7 @@ cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromDnaseGlioblaPk.narrowPeak.gz
@@ -958,7 +958,7 @@ cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromDnaseGlioblaRawDataRep1.fastq.gz
@@ -976,7 +976,7 @@ cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromDnaseGlioblaRawDataRep2.fastq.gz
@@ -994,7 +994,7 @@ cell Gliobla
 composite wgEncodeOpenChromDnase
 controlId Gliobla/Input
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromDnaseGlioblaSig.bigWig
@@ -3110,7 +3110,7 @@ cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileIndex wgEncodeOpenChromDnaseHmecAlnRep1.bam.bai
@@ -3131,7 +3131,7 @@ cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileIndex wgEncodeOpenChromDnaseHmecAlnRep2.bam.bai
@@ -3152,7 +3152,7 @@ cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromDnaseHmecBaseOverlapSignal.bigWig
@@ -3171,7 +3171,7 @@ cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromDnaseHmecPk.narrowPeak.gz
@@ -3190,7 +3190,7 @@ cell HMEC
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromDnaseHmecSig.bigWig
@@ -3605,7 +3605,7 @@ cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileIndex wgEncodeOpenChromDnaseHtr8AlnRep1.bam.bai
@@ -3625,7 +3625,7 @@ cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileIndex wgEncodeOpenChromDnaseHtr8AlnRep2.bam.bai
@@ -3645,7 +3645,7 @@ cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeOpenChromDnaseHtr8BaseOverlapSignal.bigWig
@@ -3663,7 +3663,7 @@ cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeOpenChromDnaseHtr8Pk.narrowPeak.gz
@@ -3681,7 +3681,7 @@ cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeOpenChromDnaseHtr8RawDataRep1.fastq.gz
@@ -3699,7 +3699,7 @@ cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeOpenChromDnaseHtr8RawDataRep2.fastq.gz
@@ -3717,7 +3717,7 @@ cell HTR8svn
 composite wgEncodeOpenChromDnase
 controlId generic_female
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-02
 dateUnrestricted 2011-08-02
 fileName wgEncodeOpenChromDnaseHtr8Sig.bigWig
@@ -5530,7 +5530,7 @@ cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileIndex wgEncodeOpenChromDnasePanisdAlnRep1.bam.bai
@@ -5552,7 +5552,7 @@ cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileIndex wgEncodeOpenChromDnasePanisdAlnRep2.bam.bai
@@ -5574,7 +5574,7 @@ cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileIndex wgEncodeOpenChromDnasePanisdAlnRep3.bam.bai
@@ -5596,7 +5596,7 @@ cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeOpenChromDnasePanisdBaseOverlapSignal.bigWig
@@ -5616,7 +5616,7 @@ cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeOpenChromDnasePanisdPk.narrowPeak.gz
@@ -5636,7 +5636,7 @@ cell PanIsletD
 composite wgEncodeOpenChromDnase
 controlId generic_male
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeOpenChromDnasePanisdSig.bigWig
@@ -6505,4 +6505,4 @@ tableName wgEncodeOpenChromDnaseUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1775695773
+# MAGIC: 338833007
