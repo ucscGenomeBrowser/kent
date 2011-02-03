@@ -1025,10 +1025,10 @@ html wgEncodeCaltechRnaSeq.new.html
 	visibility full
 	subTrack wgEncodeCaltechRnaSeq
 	maxHeightPixels 100:24:16
-	viewLimits 1:2
+	viewLimits -1000:0
 	minLimit 0 
-        autoScale off
-        windowingFunction mean
+        autoScale off 
+        windowingFunction maximum
 
         track wgEncodeCaltechRnaSeqHelas3R1x75dIlnaMinusSignalRep1V2
         parent wgEncodeCaltechRnaSeqViewMinusSignal off
