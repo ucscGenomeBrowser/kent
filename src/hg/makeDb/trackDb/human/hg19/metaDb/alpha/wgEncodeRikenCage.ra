@@ -1955,8 +1955,8 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaAln
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam
@@ -1976,8 +1976,8 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters.bigWig
@@ -1997,8 +1997,8 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters.bigWig
@@ -2018,8 +2018,8 @@ metaObject wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData
 objType file
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData.fastq.gz
@@ -2223,8 +2223,8 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalAln
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3NucleolusTotalAln.bam
@@ -2244,8 +2244,8 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalMinusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters.bigWig
@@ -2265,8 +2265,8 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalPlusClusters
 objType table
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters.bigWig
@@ -2286,8 +2286,8 @@ metaObject wgEncodeRikenCageHelas3NucleolusTotalRawData
 objType file
 cell HeLa-S3
 composite wgEncodeRikenCage
-dataType CAGE
-dataVersion post ENCODE June 2010 Freeze
+dataType Cage
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-29
 dateUnrestricted 2011-07-29
 fileName wgEncodeRikenCageHelas3NucleolusTotalRawData.fastq.gz
@@ -6102,11 +6102,11 @@ lab RIKEN
 labExpId K15-DA
 labProtocolId 020WC+cage
 localization cell
-origAssembly hg19h
+origAssembly hg19
 project wgEncode
 replicate 2
 rnaExtract longPolyA
 subId 3339
 view RawData
 
-# MAGIC: -1076428355
+# MAGIC: -405233226

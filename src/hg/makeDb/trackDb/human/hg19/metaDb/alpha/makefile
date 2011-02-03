@@ -14,7 +14,7 @@ wgEncodeOpenChromDnase.ra \
 wgEncodeOpenChromFaire.ra \
 wgEncodeOpenChromSynth.ra \
 wgEncodeSunyAlbanyTiling.ra \
-wgEncodeSunyGeneST.ra \
+wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeSunyRipSeq.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \

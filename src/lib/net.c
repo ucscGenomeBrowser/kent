@@ -1225,8 +1225,8 @@ return FALSE;
 
 struct lineFile *netLineFileMayOpen(char *url)
 /* Return a lineFile attached to url. http skips header.
- * Supports some compression formats.
- * Return NULL if there's a problem. */
+ * Supports some compression formats.  Prints warning message, but
+ * does not abort, just returning NULL if there's a problem. */
 {
 int sd = netUrlOpen(url);
 if (sd < 0)
@@ -1267,6 +1267,29 @@ else
 	freeMem(newUrl); 
     return lf;
     }
+}
+
+struct lineFile *netLineFileSilentOpen(char *url)
+/* Open a lineFile on a URL.  Just return NULL without any user
+ * visible warning message if there's a problem. */
+{
+pushSilentWarnHandler();
+struct lineFile *lf = netLineFileMayOpen(url);
+popWarnHandler();
+return lf;
+}
+
+char *netReadTextFileIfExists(char *url)
+/* Read entire URL and return it as a string.  URL should be text (embedded zeros will be
+ * interpreted as end of string).  If the url doesn't exist or has other problems,
+ * returns NULL. */
+{
+struct lineFile *lf = netLineFileSilentOpen(url);
+if (lf == NULL)
+    return NULL;
+char *text = lineFileReadAll(lf);
+lineFileClose(&lf);
+return text;
 }
 
 

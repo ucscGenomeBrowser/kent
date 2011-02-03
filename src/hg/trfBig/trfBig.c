@@ -4,7 +4,8 @@
 #include "fa.h"
 #include "nib.h"
 #include "portable.h"
-#include "cheapcgi.h"
+#include "options.h"
+#include "verbose.h"
 
 static char const rcsid[] = "$Id: trfBig.c,v 1.20 2009/12/24 05:10:49 markd Exp $";
 
@@ -13,6 +14,19 @@ char *trfExe = "trf";	/* trf executable name. */
 boolean doBed = FALSE;	/* Output .bed file. */
 char *tempDir = ".";	/* By default use current dir. */
 int maxPeriod = 2000;    /* Maximum size of repeat. */
+bool keep = FALSE;       /* Don't delete tmp files */
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] =
+{
+    {"bed", OPTION_BOOLEAN},
+    {"bedAt", OPTION_STRING},
+    {"tempDir", OPTION_STRING},
+    {"trf", OPTION_STRING},
+    {"maxPeriod", OPTION_INT},
+    {"keep", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -23,13 +37,15 @@ errAbort(
   "   trfBig inFile outFile\n"
   "This will repeatedly run trf to mask tandem repeats in infile\n"
   "and put masked results in outFile.  inFile and outFile can be .fa\n"
-  "or .nib format. Outfile can be .bed as well\n"
+  "or .nib format. Outfile can be .bed as well. Sequence output is hard\n"
+  "masked, lowercase.\n"
   "\n"
   "   -bed creates a bed file in current dir\n"
   "   -bedAt=path.bed - create a bed file at explicit location\n"
   "   -tempDir=dir Where to put temp files.\n"
   "   -trf=trfExe explicitly specifies trf executable name\n"
-  "   -maxPeriod=N  Maximum period size of repeat (default %d)\n",
+  "   -maxPeriod=N  Maximum period size of repeat (default %d)\n"
+  "   -keep  don't delete tmp files\n",
   maxPeriod);
 }
 
@@ -86,7 +102,7 @@ list = listDirX(tempDir, wild, TRUE);
 for (el = list; el != NULL; el = el->next)
     {
     remove(el->name);
-    uglyf("Removed %s\n", el->name);
+    verbose(1, "Removed %s\n", el->name);
     }
 slFreeList(&list);
 }
@@ -100,10 +116,16 @@ sprintf(trfRootName, "%s.2.7.7.80.10.50.%d", faFile, maxPeriod);
 void trfSysCall(char *faFile)
 /* Invoke trf program on file. */
 {
+// need to execute in trf directory, as tmp files go to current directory
+char faBase[FILENAME_LEN], faExt[FILENAME_LEN];
+splitPath(faFile, NULL, faBase, faExt);
+
 char command[1024];
-safef(command, sizeof(command), "cd %s; %s %s 2 7 7 80 10 50 %d -m %s", 
-      tempDir, trfExe, faFile, maxPeriod, doBed ? "-d" : "");
-uglyf("faFile %s, command %s\n", faFile, command);
+safef(command, sizeof(command), "cd %s && %s %s%s 2 7 7 80 10 50 %d -m %s", 
+      tempDir, trfExe, faBase, faExt, maxPeriod, doBed ? "-d" : "");
+verbose(1, "command %s\n", command);
+fflush(stdout);
+fflush(stderr);
 
 /* Run the system command, expecting a return code of 1, as trf
    returns the number of successfully processed sequences. */
@@ -148,8 +170,8 @@ struct dnaSeq  *maskedSeq = NULL;
 
 if (doBed)
     {
-    if (cgiVarExists("bedAt"))
-       strcpy(bedFileName, cgiString("bedAt"));
+    if (optionExists("bedAt"))
+        strcpy(bedFileName, optionVal("bedAt", NULL));
     else
 	{
 	splitPath(output, dir, seqName, ext);
@@ -244,20 +266,24 @@ else
     {
     errAbort("Sorry, both input and output must be in same format.");
     }
-sprintf(trfTemp, "%s*", tempFile);
-removeWild(trfTemp);
+if (!keep)
+    {
+    sprintf(trfTemp, "%s*", tempFile);
+    removeWild(trfTemp);
+    }
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
-trfExe = cgiUsualString("trf", trfExe);
-doBed = cgiBoolean("bed") || cgiVarExists("bedAt");
-tempDir = cgiUsualString("tempDir", tempDir);
-maxPeriod = cgiUsualInt("maxPeriod", maxPeriod);
+trfExe = optionVal("trf", trfExe);
+doBed = optionExists("bed") || optionExists("bedAt");
+tempDir = optionVal("tempDir", tempDir);
+maxPeriod = optionInt("maxPeriod", maxPeriod);
+keep = optionExists("keep");
 trfBig(argv[1], argv[2]);
 return 0;
 }
