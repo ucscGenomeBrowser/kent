@@ -33136,8 +33136,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33158,8 +33158,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33180,8 +33180,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33202,8 +33202,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33224,8 +33224,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33246,8 +33246,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33268,8 +33268,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33290,8 +33290,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33312,8 +33312,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33334,8 +33334,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33356,8 +33356,8 @@ objType file
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33378,8 +33378,8 @@ objType table
 antibody Pol2
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33400,8 +33400,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33422,8 +33422,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33444,8 +33444,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33466,8 +33466,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33488,8 +33488,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33510,8 +33510,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/EtOH_0.01pct/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
@@ -33788,8 +33788,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33810,8 +33810,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33832,8 +33832,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33854,8 +33854,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33876,8 +33876,8 @@ objType file
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -33898,8 +33898,8 @@ objType table
 antibody STAT3
 cell MCF10A-Er-Src
 composite wgEncodeSydhTfbs
-control std
-controlId MCF10A-Er-Src/TAM_1uM_36hr/Input/std
+control UCDavis
+controlId MCF10A-Er-Src/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
@@ -36309,4 +36309,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1358479016
+# MAGIC: -861307916

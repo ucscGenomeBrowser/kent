@@ -657,7 +657,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=std treatment=TAM
+        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=UCD treatment=TAM
         type narrowPeak
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -666,7 +666,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=std treatment=TAM
+        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=UCD treatment=TAM
         type narrowPeak
         # subId=2548 dateSubmitted=2010-10-20
 
@@ -675,7 +675,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src STAT3 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=std treatment=ETOH01
+        subGroups view=Peaks factor=STAT3 cellType=MCF10AES control=UCD treatment=ETOH01
         type narrowPeak
         # subId=2767 dateSubmitted=2010-10-27
 
@@ -684,7 +684,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewPeaks off
         shortLabel MCF10A-Er-Src Pol2 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Peaks (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=std treatment=ETOH01
+        subGroups view=Peaks factor=POL2 cellType=MCF10AES control=UCD treatment=ETOH01
         type narrowPeak
         # subId=2768 dateSubmitted=2010-10-27
 
@@ -2091,7 +2091,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=std treatment=TAM
+        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=UCD treatment=TAM
         type bigWig 1.000000 15726.000000
         # subId=2547 dateSubmitted=2010-10-20
 
@@ -2100,7 +2100,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=POL2 cellType=MCF10AES control=std treatment=TAM
+        subGroups view=Signal factor=POL2 cellType=MCF10AES control=UCD treatment=TAM
         type bigWig 1.000000 74444.000000
         # subId=2548 dateSubmitted=2010-10-20
 
@@ -2110,7 +2110,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src STAT3 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (STAT3 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=std treatment=ETOH01
+        subGroups view=Signal factor=STAT3 cellType=MCF10AES control=UCD treatment=ETOH01
         type bigWig 1.000000 19260.000000
         # subId=2767 dateSubmitted=2010-10-27
 
@@ -2119,7 +2119,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel MCF10A-Er-Src Pol2 Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (Pol2 in MCF10A-Er-Src cells)
-        subGroups view=Signal factor=POL2 cellType=MCF10AES control=std treatment=ETOH01
+        subGroups view=Signal factor=POL2 cellType=MCF10AES control=UCD treatment=ETOH01
         type bigWig 1.000000 59340.000000
         # subId=2768 dateSubmitted=2010-10-27
 
