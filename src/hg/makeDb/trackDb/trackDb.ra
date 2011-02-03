@@ -3122,7 +3122,7 @@ track ncbiIncidentDb
 shortLabel NCBI Incident
 longLabel NCBI Incident database
 group map
-priority 500.3
+priority 27
 visibility hide
 type bigBed 4 +
 url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
