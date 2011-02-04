@@ -2216,7 +2216,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileIndex wgEncodeOpenChromFaireK562NabutAlnRep1.bam.bai
@@ -2237,7 +2237,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileIndex wgEncodeOpenChromFaireK562NabutAlnRep2.bam.bai
@@ -2258,7 +2258,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig
@@ -2277,7 +2277,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutPk.narrowPeak.gz
@@ -2296,7 +2296,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep1.fastq.gz
@@ -2315,7 +2315,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep2.fastq.gz
@@ -2334,7 +2334,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutSig.bigWig
@@ -2353,7 +2353,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep1.bam.bai
@@ -2374,7 +2374,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileIndex wgEncodeOpenChromFaireK562OhureaAlnRep2.bam.bai
@@ -2395,7 +2395,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig
@@ -2414,7 +2414,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaPk.narrowPeak.gz
@@ -2433,7 +2433,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep1.fastq.gz
@@ -2452,7 +2452,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep2.fastq.gz
@@ -2471,7 +2471,7 @@ cell K562
 composite wgEncodeOpenChromFaire
 controlId K562/Input
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-27
 dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaSig.bigWig
@@ -3376,4 +3376,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1137305389
+# MAGIC: -1086757158

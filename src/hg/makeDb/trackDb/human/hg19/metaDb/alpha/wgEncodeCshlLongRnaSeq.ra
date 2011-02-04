@@ -1,5 +1,6 @@
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAllRawSigRep1
 objType table
+bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -22,6 +23,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAllRawSigRep2
 objType table
+bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -44,6 +46,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep1
 objType table
+bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -66,6 +69,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaAlnRep2
 objType table
+bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -88,6 +92,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -109,6 +114,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -130,6 +136,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -151,6 +158,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -172,6 +180,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -194,6 +203,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -216,6 +226,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 021WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -238,6 +249,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqA549CellLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 022WC
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -555,6 +567,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAllRawSigRep2
 objType table
+bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -600,6 +613,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep2
 objType table
+bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -644,6 +658,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -687,6 +702,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -731,6 +747,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -776,6 +793,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 018WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1070,6 +1088,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAllRawSigRep1
 objType table
+bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1092,6 +1111,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAllRawSigRep2
 objType table
+bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1114,6 +1134,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep1
 objType table
+bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1136,6 +1157,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaAlnRep2
 objType table
+bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1158,6 +1180,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1179,6 +1202,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1200,6 +1224,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1221,6 +1246,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1242,6 +1268,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1264,6 +1291,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1286,6 +1314,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 037WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1308,6 +1337,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqBjCellLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 038WC
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1602,6 +1632,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAllRawSigRep1
 objType table
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1647,6 +1678,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep1
 objType table
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1692,6 +1724,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1735,6 +1768,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1778,6 +1812,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -1823,6 +1858,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 003WC
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2348,6 +2384,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAllRawSigRep1
 objType table
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2370,6 +2407,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAllRawSigRep2
 objType table
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2392,6 +2430,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep1
 objType table
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2414,6 +2453,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep2
 objType table
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2432,10 +2472,12 @@ replicate 2
 rnaExtract longNonPolyA
 subId 3131
 tableName wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaAlnRep2
+tlocalization cytosol
 view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2457,6 +2499,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2478,6 +2521,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2499,6 +2543,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2520,6 +2565,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2542,6 +2588,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2564,6 +2611,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 003C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2586,6 +2634,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878CytosolLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 004C
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2880,6 +2929,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep1
 objType table
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2902,6 +2952,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAllRawSigRep2
 objType table
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2924,6 +2975,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep1
 objType table
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2946,6 +2998,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaAlnRep2
 objType table
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2968,6 +3021,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -2989,6 +3043,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3010,6 +3065,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3031,6 +3087,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3052,6 +3109,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3074,6 +3132,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3096,6 +3155,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 003N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3118,6 +3178,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqGm12878NucleusLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 004N
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3956,6 +4017,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAllRawSigRep2
 objType table
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -3978,6 +4040,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaAlnRep2
 objType table
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4000,6 +4063,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4021,6 +4085,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4042,6 +4107,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4064,6 +4130,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqH1hescCytosolLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 006C
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4222,6 +4289,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAllRawSigRep2
 objType table
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4244,6 +4312,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaAlnRep2
 objType table
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4266,6 +4335,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4287,6 +4357,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4308,6 +4379,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4330,6 +4402,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqH1hescNucleusLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 006N
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4488,6 +4561,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAllRawSigRep1
 objType table
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4510,6 +4584,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAllRawSigRep2
 objType table
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4532,6 +4607,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep1
 objType table
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4554,6 +4630,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaAlnRep2
 objType table
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4576,6 +4653,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4597,6 +4675,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4618,6 +4697,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4639,6 +4719,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4660,6 +4741,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4682,6 +4764,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4704,6 +4787,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 011WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -4726,6 +4810,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CellLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 012WC
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5020,6 +5105,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAllRawSigRep1
 objType table
+bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5042,6 +5128,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAllRawSigRep2
 objType table
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5064,6 +5151,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep1
 objType table
+bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5086,6 +5174,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaAlnRep2
 objType table
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5108,6 +5197,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5129,6 +5219,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5150,6 +5241,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5171,6 +5263,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5192,6 +5285,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5214,6 +5308,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5236,6 +5331,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 011C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5258,6 +5354,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3CytosolLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 012C
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5552,6 +5649,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAllRawSigRep1
 objType table
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5574,6 +5672,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAllRawSigRep2
 objType table
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5596,6 +5695,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep1
 objType table
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5618,6 +5718,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaAlnRep2
 objType table
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5640,6 +5741,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5661,6 +5763,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5682,6 +5785,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5703,6 +5807,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5724,6 +5829,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5746,6 +5852,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5768,6 +5875,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 011N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -5790,6 +5898,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHelas3NucleusLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 012N
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6107,6 +6216,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep2
 objType table
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6152,6 +6262,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2
 objType table
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6196,6 +6307,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6239,6 +6351,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6283,6 +6396,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6328,6 +6442,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 014WC
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6622,6 +6737,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAllRawSigRep1
 objType table
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6644,6 +6760,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAllRawSigRep2
 objType table
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6666,6 +6783,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep1
 objType table
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6688,6 +6806,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaAlnRep2
 objType table
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6710,6 +6829,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6731,6 +6851,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6752,6 +6873,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6773,6 +6895,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6794,6 +6917,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6816,6 +6940,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6838,6 +6963,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 013C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -6860,6 +6986,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2CytosolLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 014C
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7154,6 +7281,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep1
 objType table
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7176,6 +7304,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAllRawSigRep2
 objType table
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7198,6 +7327,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep1
 objType table
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7220,6 +7350,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaAlnRep2
 objType table
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7242,6 +7373,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7263,6 +7395,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7284,6 +7417,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7305,6 +7439,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7326,6 +7461,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7348,6 +7484,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7370,6 +7507,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 013N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -7392,6 +7530,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHepg2NucleusLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 014N
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8502,6 +8641,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAllRawSigRep1
 objType table
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8524,6 +8664,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAllRawSigRep2
 objType table
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8546,6 +8687,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep1
 objType table
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8568,6 +8710,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaAlnRep2
 objType table
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8590,6 +8733,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8611,6 +8755,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8632,6 +8777,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8653,6 +8799,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8674,6 +8821,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8696,6 +8844,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8718,6 +8867,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 009WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -8740,6 +8890,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCellLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 010WC
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9034,6 +9185,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAllRawSigRep3
 objType table
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9056,6 +9208,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAllRawSigRep4
 objType table
+bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9078,6 +9231,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep3
 objType table
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9100,6 +9254,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaAlnRep4
 objType table
+bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9122,6 +9277,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd1Rep3
 objType file
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9143,6 +9299,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd1Rep4
 objType file
+bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9164,6 +9321,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd2Rep3
 objType file
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9185,6 +9343,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaFastqRd2Rep4
 objType file
+bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9206,6 +9365,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep3
 objType table
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9228,6 +9388,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaMinusRawSigRep4
 objType table
+bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9250,6 +9411,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep3
 objType table
+bioRep 029C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9272,6 +9434,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecCytosolLongnonpolyaPlusRawSigRep4
 objType table
+bioRep 030C
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9566,6 +9729,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAllRawSigRep3
 objType table
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9588,6 +9752,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAllRawSigRep4
 objType table
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9610,6 +9775,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep3
 objType table
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9632,6 +9798,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaAlnRep4
 objType table
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9654,6 +9821,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaFastqRd1Rep3
 objType file
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9675,6 +9843,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaFastqRd1Rep4
 objType file
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9696,6 +9865,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaFastqRd2Rep3
 objType file
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9717,6 +9887,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaFastqRd2Rep4
 objType file
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9738,6 +9909,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep3
 objType table
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9760,6 +9932,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaMinusRawSigRep4
 objType table
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9782,6 +9955,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep3
 objType table
+bioRep 029N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -9804,6 +9978,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqHuvecNucleusLongnonpolyaPlusRawSigRep4
 objType table
+bioRep 030N
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10850,7 +11025,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep3
 objType table
-bioRep 025CH
+bioRep 025CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10861,7 +11036,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH
+labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -10873,7 +11048,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep4
 objType table
-bioRep 026CH
+bioRep 026CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10884,7 +11059,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH
+labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -10896,7 +11071,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3
 objType table
-bioRep 025CH
+bioRep 025CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10907,7 +11082,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3.bam
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH
+labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -10919,7 +11094,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4
 objType table
-bioRep 026CH
+bioRep 026CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10930,7 +11105,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4.bam
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH
+labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -10942,7 +11117,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep3
 objType file
-bioRep 025CH
+bioRep 025CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10953,7 +11128,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH
+labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -10964,7 +11139,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep4
 objType file
-bioRep 026CH
+bioRep 026CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10975,7 +11150,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH
+labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -10986,7 +11161,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep3
 objType file
-bioRep 025CH
+bioRep 025CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -10997,7 +11172,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH
+labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -11008,7 +11183,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep4
 objType file
-bioRep 026CH
+bioRep 026CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11019,7 +11194,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH
+labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -11030,7 +11205,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3
 objType table
-bioRep 025CH
+bioRep 025CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11041,7 +11216,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH
+labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -11053,7 +11228,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4
 objType table
-bioRep 026CH
+bioRep 026CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11064,7 +11239,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH
+labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -11076,7 +11251,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3
 objType table
-bioRep 025CH
+bioRep 025CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11087,7 +11262,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9185
-labProtocolId 025CH
+labProtocolId 025CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -11099,7 +11274,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
 objType table
-bioRep 026CH
+bioRep 026CHt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11110,7 +11285,7 @@ fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9186
-labProtocolId 026CH
+labProtocolId 026CHt
 localization chromatin
 origAssembly hg19
 project wgEncode
@@ -11122,6 +11297,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAllRawSigRep1
 objType table
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11144,6 +11320,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAllRawSigRep2
 objType table
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11166,6 +11343,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep1
 objType table
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11188,6 +11366,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaAlnRep2
 objType table
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11210,6 +11389,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11231,6 +11411,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11252,6 +11433,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11273,6 +11455,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11294,6 +11477,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11316,6 +11500,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11338,6 +11523,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 001C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11360,6 +11546,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 002C
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11673,7 +11860,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep3
 objType table
-bioRep 025NL
+bioRep 025NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11684,7 +11871,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL
+labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11696,7 +11883,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep4
 objType table
-bioRep 026NL
+bioRep 026NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11707,7 +11894,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL
+labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11719,7 +11906,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3
 objType table
-bioRep 025NL
+bioRep 025NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11730,7 +11917,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3.bam
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL
+labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11742,7 +11929,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4
 objType table
-bioRep 026NL
+bioRep 026NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11753,7 +11940,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4.bam
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL
+labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11765,7 +11952,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep3
 objType file
-bioRep 025NL
+bioRep 025NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11776,7 +11963,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL
+labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11787,7 +11974,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep4
 objType file
-bioRep 026NL
+bioRep 026NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11798,7 +11985,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL
+labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11809,7 +11996,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep3
 objType file
-bioRep 025NL
+bioRep 025NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11820,7 +12007,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL
+labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11831,7 +12018,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep4
 objType file
-bioRep 026NL
+bioRep 026NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11842,7 +12029,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL
+labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11853,7 +12040,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3
 objType table
-bioRep 025NL
+bioRep 025NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11864,7 +12051,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL
+labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11876,7 +12063,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4
 objType table
-bioRep 026NL
+bioRep 026NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11887,7 +12074,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL
+labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11899,7 +12086,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3
 objType table
-bioRep 025NL
+bioRep 025NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11910,7 +12097,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9187
-labProtocolId 025NL
+labProtocolId 025NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11922,7 +12109,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4
 objType table
-bioRep 026NL
+bioRep 026NLt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11933,7 +12120,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9188
-labProtocolId 026NL
+labProtocolId 026NLt
 localization nucleolus
 origAssembly hg19
 project wgEncode
@@ -11945,7 +12132,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep3
 objType table
-bioRep 025NP
+bioRep 025NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11956,7 +12143,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP
+labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -11968,7 +12155,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep4
 objType table
-bioRep 026NP
+bioRep 026NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -11979,7 +12166,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP
+labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -11991,7 +12178,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3
 objType table
-bioRep 025NP
+bioRep 025NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12002,7 +12189,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3.bam
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP
+labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12014,7 +12201,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4
 objType table
-bioRep 026NP
+bioRep 026NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12025,7 +12212,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4.bam
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP
+labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12037,7 +12224,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep3
 objType file
-bioRep 025NP
+bioRep 025NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12048,7 +12235,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP
+labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12059,7 +12246,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep4
 objType file
-bioRep 026NP
+bioRep 026NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12070,7 +12257,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP
+labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12081,7 +12268,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep3
 objType file
-bioRep 025NP
+bioRep 025NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12092,7 +12279,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep3.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP
+labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12103,7 +12290,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep4
 objType file
-bioRep 026NP
+bioRep 026NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12114,7 +12301,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep4.fastq.gz
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP
+labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12125,7 +12312,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3
 objType table
-bioRep 025NP
+bioRep 025NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12136,7 +12323,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP
+labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12148,7 +12335,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4
 objType table
-bioRep 026NP
+bioRep 026NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12159,7 +12346,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP
+labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12171,7 +12358,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3
 objType table
-bioRep 025NP
+bioRep 025NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12182,7 +12369,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9189
-labProtocolId 025NP
+labProtocolId 025NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12194,7 +12381,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4
 objType table
-bioRep 026NP
+bioRep 026NPt
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12205,7 +12392,7 @@ fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4.bigWig
 grant Gingeras
 lab CSHL
 labExpId LID9190
-labProtocolId 026NP
+labProtocolId 026NPt
 localization nucleoplasm
 origAssembly hg19
 project wgEncode
@@ -12217,6 +12404,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAllRawSigRep1
 objType table
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12239,6 +12427,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAllRawSigRep2
 objType table
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12261,6 +12450,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep1
 objType table
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12283,6 +12473,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaAlnRep2
 objType table
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12305,6 +12496,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12326,6 +12518,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12347,6 +12540,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12368,6 +12562,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12389,6 +12584,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12411,6 +12607,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12433,6 +12630,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 001N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -12455,6 +12653,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqK562NucleusLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 002N
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14109,6 +14308,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAllRawSigRep3
 objType table
+bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14131,6 +14331,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAllRawSigRep4
 objType table
+bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14153,6 +14354,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep3
 objType table
+bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14175,6 +14377,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaAlnRep4
 objType table
+bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14197,6 +14400,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaFastqRd1Rep3
 objType file
+bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14218,6 +14422,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaFastqRd1Rep4
 objType file
+bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14239,6 +14444,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaFastqRd2Rep3
 objType file
+bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14260,6 +14466,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaFastqRd2Rep4
 objType file
+bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14281,6 +14488,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep3
 objType table
+bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14303,6 +14511,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaMinusRawSigRep4
 objType table
+bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14325,6 +14534,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep3
 objType table
+bioRep 027C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14347,6 +14557,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekCytosolLongnonpolyaPlusRawSigRep4
 objType table
+bioRep 028C
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14641,6 +14852,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAllRawSigRep3
 objType table
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14663,6 +14875,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAllRawSigRep4
 objType table
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14685,6 +14898,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep3
 objType table
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14707,6 +14921,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaAlnRep4
 objType table
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14729,6 +14944,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaFastqRd1Rep3
 objType file
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14750,6 +14966,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaFastqRd1Rep4
 objType file
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14771,6 +14988,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaFastqRd2Rep3
 objType file
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14792,6 +15010,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaFastqRd2Rep4
 objType file
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14813,6 +15032,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep3
 objType table
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14835,6 +15055,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaMinusRawSigRep4
 objType table
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14857,6 +15078,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep3
 objType table
+bioRep 027N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -14879,6 +15101,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqNhekNucleusLongnonpolyaPlusRawSigRep4
 objType table
+bioRep 028N
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15717,6 +15940,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAllRawSigRep1
 objType table
+bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15739,6 +15963,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAllRawSigRep2
 objType table
+bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15761,6 +15986,7 @@ view AllRawSig
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep1
 objType table
+bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15783,6 +16009,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaAlnRep2
 objType table
+bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15805,6 +16032,7 @@ view Alignments
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaFastqRd1Rep1
 objType file
+bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15826,6 +16054,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaFastqRd1Rep2
 objType file
+bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15847,6 +16076,7 @@ view FastqRd1
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaFastqRd2Rep1
 objType file
+bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15868,6 +16098,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaFastqRd2Rep2
 objType file
+bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15889,6 +16120,7 @@ view FastqRd2
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep1
 objType table
+bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15911,6 +16143,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaMinusRawSigRep2
 objType table
+bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15933,6 +16166,7 @@ view MinusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep1
 objType table
+bioRep 019WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -15955,6 +16189,7 @@ view PlusRawSig
 
 metaObject wgEncodeCshlLongRnaSeqSknshraCellLongnonpolyaPlusRawSigRep2
 objType table
+bioRep 020WC
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType RnaSeq
@@ -16247,4 +16482,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: -1652088890
+# MAGIC: 583258706

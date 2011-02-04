@@ -40,7 +40,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 ripInput 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (ripInput in GM12878 cells)
+        longLabel GM12878 ripInput RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=ripInput cellType=GM12878 rep=rep1
         type bam
         color 153,38,0
@@ -50,7 +50,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 ripInput 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (ripInput in GM12878 cells)
+        longLabel GM12878 ripInput RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=ripInput cellType=GM12878 rep=rep2
         type bam
         color 153,38,0
@@ -60,7 +60,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 ELAVL1 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (ELAVL1 in GM12878 cells)
+        longLabel GM12878 ELAVL1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=ELAVL1 cellType=GM12878 rep=rep1
         type bam
         color 153,38,0
@@ -70,7 +70,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 ELAVL1 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (ELAVL1 in GM12878 cells)
+        longLabel GM12878 ELAVL1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=ELAVL1 cellType=GM12878 rep=rep2
         type bam
         color 153,38,0
@@ -80,7 +80,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 PABPC1 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (PABPC1 in GM12878 cells)
+        longLabel GM12878 PABPC1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=PABPC1 cellType=GM12878 rep=rep1
         type bam
         color 153,38,0
@@ -90,7 +90,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 PABPC1 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (PABPC1 in GM12878 cells)
+        longLabel GM12878 PABPC1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=PABPC1 cellType=GM12878 rep=rep2
         type bam
         color 153,38,0
@@ -100,7 +100,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 T7Tag 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (T7Tag in GM12878 cells)
+        longLabel GM12878 T7Tag RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=T7Tag cellType=GM12878 rep=rep1
         type bam
         color 153,38,0
@@ -110,7 +110,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel GM12878 T7Tag 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (T7Tag in GM12878 cells)
+        longLabel GM12878 T7Tag RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=T7Tag cellType=GM12878 rep=rep2
         type bam
         color 153,38,0
@@ -120,7 +120,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 ripInput 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (ripInput in K562 cells)
+        longLabel K562 ripInput RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=ripInput cellType=K562 rep=rep1
         type bam
         color 46,0,184
@@ -130,7 +130,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 ripInput 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (ripInput in K562 cells)
+        longLabel K562 ripInput RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=ripInput cellType=K562 rep=rep2
         type bam
         color 46,0,184
@@ -140,7 +140,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 ELAVL1 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (ELAVL1 in K562 cells)
+        longLabel K562 ELAVL1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=ELAVL1 cellType=K562 rep=rep1
         type bam
         color 46,0,184
@@ -150,7 +150,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 ELAVL1 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (ELAVL1 in K562 cells)
+        longLabel K562 ELAVL1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=ELAVL1 cellType=K562 rep=rep2
         type bam
         color 46,0,184
@@ -160,7 +160,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 PABPC1 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (PABPC1 in K562 cells)
+        longLabel K562 PABPC1 RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=PABPC1 cellType=K562 rep=rep1
         type bam
         color 46,0,184
@@ -170,7 +170,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 PABPC1 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (PABPC1 in K562 cells)
+        longLabel K562 PABPC1 RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=PABPC1 cellType=K562 rep=rep2
         type bam
         color 46,0,184
@@ -180,7 +180,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 T7Tag 1
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 1 (T7Tag in K562 cells)
+        longLabel K562 T7Tag RIP-seq Alignments Rep 1 from ENCODE/SUNY
         subGroups view=Alignments factor=T7Tag cellType=K562 rep=rep1
         type bam
         color 46,0,184
@@ -190,7 +190,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewAlignments off
         shortLabel K562 T7Tag 2
-        longLabel ENCODE SUNY RIP-seq Alignments Replicate 2 (T7Tag in K562 cells)
+        longLabel K562 T7Tag RIP-seq Alignments Rep 2 from ENCODE/SUNY
         subGroups view=Alignments factor=T7Tag cellType=K562 rep=rep2
         type bam
         color 46,0,184
@@ -211,7 +211,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel GM12878 ripInput Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (ripInput in GM12878 cells)
+        longLabel GM12878 ripInput RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=GM12878 rep=rep1
         type bigWig 0.000000 83164.492188
         color 153,38,0
@@ -221,7 +221,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel GM12878 ripInput Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (ripInput in GM12878 cells)
+        longLabel GM12878 ripInput RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=GM12878 rep=rep2
         type bigWig 0.000000 106078.593750
         color 153,38,0
@@ -231,7 +231,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal on
         shortLabel GM12878 ELAVL1 Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (ELAVL1 in GM12878 cells)
+        longLabel GM12878 ELAVL1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=GM12878 rep=rep1
         type bigWig 0.000000 53896.902344
         color 153,38,0
@@ -241,7 +241,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel GM12878 ELAVL1 Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (ELAVL1 in GM12878 cells)
+        longLabel GM12878 ELAVL1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=GM12878 rep=rep2
         type bigWig 0.000000 55258.855469
         color 153,38,0
@@ -251,7 +251,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal on
         shortLabel GM12878 PABPC1 Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (PABPC1 in GM12878 cells)
+        longLabel GM12878 PABPC1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=GM12878 rep=rep1
         type bigWig 0.000000 49859.886719
         color 153,38,0
@@ -261,7 +261,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel GM12878 PABPC1 Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (PABPC1 in GM12878 cells)
+        longLabel GM12878 PABPC1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=GM12878 rep=rep2
         type bigWig 0.000000 51724.476562
         color 153,38,0
@@ -271,7 +271,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel GM12878 T7Tag Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (T7Tag in GM12878 cells)
+        longLabel GM12878 T7Tag RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=GM12878 rep=rep1
         type bigWig 0.000000 67823.984375
         color 153,38,0
@@ -281,7 +281,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel GM12878 T7Tag Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (T7Tag in GM12878 cells)
+        longLabel GM12878 T7Tag RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=GM12878 rep=rep2
         type bigWig 0.000000 100213.273438
         color 153,38,0
@@ -291,7 +291,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 ripInput Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (ripInput in K562 cells)
+        longLabel K562 ripInput RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=K562 rep=rep1
         type bigWig 0.000000 88877.484375
         color 46,0,184
@@ -301,7 +301,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 ripInput Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (ripInput in K562 cells)
+        longLabel K562 ripInput RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ripInput cellType=K562 rep=rep2
         type bigWig 0.000000 88306.453125
         color 46,0,184
@@ -311,7 +311,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal on 
         shortLabel K562 ELAVL1 Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (ELAVL1 in K562 cells)
+        longLabel K562 ELAVL1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=K562 rep=rep1
         type bigWig 0.000000 64478.648438
         color 46,0,184
@@ -321,7 +321,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 ELAVL1 Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (ELAVL1 in K562 cells)
+        longLabel K562 ELAVL1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=ELAVL1 cellType=K562 rep=rep2
         type bigWig 0.000000 65775.945312
         color 46,0,184
@@ -331,7 +331,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal on
         shortLabel K562 PABPC1 Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (PABPC1 in K562 cells)
+        longLabel K562 PABPC1 RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=K562 rep=rep1
         type bigWig 0.000000 53101.386719
         color 46,0,184
@@ -341,7 +341,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 PABPC1 Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (PABPC1 in K562 cells)
+        longLabel K562 PABPC1 RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=PABPC1 cellType=K562 rep=rep2
         type bigWig 0.000000 57200.070312
         color 46,0,184
@@ -351,7 +351,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 T7Tag Sig 1
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 1 (T7Tag in K562 cells)
+        longLabel K562 T7Tag RIP-seq Signal Rep 1 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=K562 rep=rep1
         type bigWig 0.000000 74535.296875
         color 46,0,184
@@ -361,7 +361,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewSignal off
         shortLabel K562 T7Tag Sig 2
-        longLabel ENCODE SUNY RIP-seq Signal Replicate 2 (T7Tag in K562 cells)
+        longLabel K562 T7Tag RIP-seq Signal Rep 2 from ENCODE/SUNY
         subGroups view=Signal factor=T7Tag cellType=K562 rep=rep2
         type bigWig 0.000000 51895.449219
         color 46,0,184
@@ -379,7 +379,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewPeaks off
         shortLabel GM12878 ripInput Pk
-        longLabel ENCODE SUNY RIP-seq Analysis (ripInput in GM12878 cells)
+        longLabel GM12878 ripInput RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ripInput cellType=GM12878 rep=Pooled
         type bed 9
         color 153,38,0
@@ -389,7 +389,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewPeaks on
         shortLabel GM12878 ELAVL1 Pk
-        longLabel ENCODE SUNY RIP-seq Analysis (ELAVL1 in GM12878 cells)
+        longLabel GM12878 ELAVL1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ELAVL1 cellType=GM12878 rep=Pooled
         type bed 9
         color 153,38,0
@@ -399,7 +399,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewPeaks on
         shortLabel GM12878 PABPC1 Pk
-        longLabel ENCODE SUNY RIP-seq Analysis (PABPC1 in GM12878 cells)
+        longLabel GM12878 PABPC1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=PABPC1 cellType=GM12878 rep=Pooled
         type bed 9
         color 153,38,0
@@ -409,7 +409,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewPeaks off
         shortLabel K562 ripInput Pk
-        longLabel ENCODE SUNY RIP-seq Analysis (ripInput in K562 cells)
+        longLabel K562 ripInput RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ripInput cellType=K562 rep=Pooled
         type bed 9
         color 46,0,184
@@ -419,7 +419,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewPeaks on 
         shortLabel K562 ELAVL1 Pk
-        longLabel ENCODE SUNY RIP-seq Analysis (ELAVL1 in K562 cells)
+        longLabel K562 ELAVL1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=ELAVL1 cellType=K562 rep=Pooled
         type bed 9
         color 46,0,184
@@ -429,7 +429,7 @@ noInherit on
         release alpha
         parent wgEncodeSunyRipSeqViewPeaks on
         shortLabel K562 PABPC1 Pk
-        longLabel ENCODE SUNY RIP-seq Analysis (PABPC1 in K562 cells)
+        longLabel K562 PABPC1 RIP-seq Analysis from ENCODE/SUNY
         subGroups view=Peaks factor=PABPC1 cellType=K562 rep=Pooled
         type bed 9
         color 46,0,184
