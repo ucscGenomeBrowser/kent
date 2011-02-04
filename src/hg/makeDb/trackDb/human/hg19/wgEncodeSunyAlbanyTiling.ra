@@ -15,6 +15,7 @@ priority 0
 type bed 3
 wgEncode 1
 origAssembly hg19
+noInherit on
 
     track wgEncodeSunyAlbanyTilingView
     shortLabel SunyAlbanyTiling
@@ -26,8 +27,8 @@ origAssembly hg19
     pValueFilterLimits 0:5
     scoreFilter 2
     scoreFilterLimits 1:800
-    scoreMin 95
-
+    minGrayLevel 100
+    type broadPeak
 
     	track wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
     	release alpha,beta
