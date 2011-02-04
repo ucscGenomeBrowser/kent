@@ -206,7 +206,7 @@ fromGtfRegressTest:
 # GFF bug regressions
 #  - none right now
 fromGffRegressTest:
-###	${doFromGxfTest} id=$@ what=fromGff inBase=regress.gff opts="-cdsStatFld -exonFramesFld -exonSelectWord=exon -ignoreUnconverted"
+	${doFromGxfTest} id=$@ what=fromGff inBase=regress.gff opts="-exonSelectWord=exon"
 
 # ce2 sangerGene GFF bugs
 #   - single exon CDS genes with frame column not being set (from ce2/sangerGene)

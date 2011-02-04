@@ -88,7 +88,6 @@ track blatCi1 override
 priority 111
 
 track agilentCgh
-release alpha, beta
 shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
 compositeTrack on
@@ -96,11 +95,9 @@ group regulation
 priority 79.5
 visibility hide
 noInherit on
-html agilentCghAlpha
 type bed 3
 
     track agilentCgh1x1m
-    release alpha, beta
     parent agilentCgh
     shortLabel Ag CGH 1x1M
     longLabel Agilent SurePrint G3 Rat CGH Microarray 1x1M AMADID 027065
@@ -108,12 +105,10 @@ type bed 3
     exonArrows on
     nextItemButton off
     noScoreFilter .
-    html agilentCghAlpha
     type bed 4 .
     priority 1
 
     track agilentCgh4x180k
-    release alpha, beta
     parent agilentCgh
     shortLabel Ag CGH 4x180K
     longLabel Agilent SurePrint G3 Rat CGH Microarray 4x180K AMADID 027064
@@ -121,12 +116,10 @@ type bed 3
     exonArrows on
     nextItemButton off
     noScoreFilter .
-    html agilentCghAlpha
     type bed 4 .
     priority 2
 
     track agilentCgh244a
-    release alpha, beta
     parent agilentCgh
     shortLabel Ag CGH 1x244K
     longLabel Agilent SurePrint HD Rat CGH Microarray 1x244K AMADID 015223
@@ -134,12 +127,10 @@ type bed 3
     exonArrows on
     nextItemButton off
     noScoreFilter .
-    html agilentCghAlpha
     type bed 6 .
     priority 3
 
     track agilentCgh105a
-    release alpha, beta
     parent agilentCgh
     shortLabel Ag CGH 2x105K
     longLabel Agilent SurePrint HD Rat CGH Microarray 2x105K AMADID 015235
@@ -147,38 +138,8 @@ type bed 3
     exonArrows on
     nextItemButton off
     noScoreFilter .
-    html agilentCghAlpha
     type bed 6 .
     priority 4
-
-track agilentCgh
-release public
-shortLabel Agilent CGH
-longLabel Agilent CGH Microarray probesets
-compositeTrack on
-group regulation
-priority 79.5
-visibility hide
-exonArrows on
-nextItemButton off
-noScoreFilter .
-type bed 6 .
-
-    track agilentCgh244a
-    release public
-    parent agilentCgh
-    shortLabel Ag CGH 1x244K
-    longLabel Agilent SurePrint HD Rat CGH Microarray 1x244K AMADID 015223
-    color 0,128,0
-    priority 1
-
-    track agilentCgh105a
-    release public
-    parent agilentCgh
-    shortLabel Ag CGH 2x105K
-    longLabel Agilent SurePrint HD Rat CGH Microarray 2x105K AMADID 015235
-    color 255,128,0
-    priority 2
 
 track affyRAE230
 shortLabel Affy RAE230

@@ -303,7 +303,7 @@ struct trackDb *trackDbFromRa(char *raFile, char *releaseTag);
  * then only load tracks that mesh with release. */
 
 struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag);
-/* Load track info from ra file already opened as lineFile into list.  If releaseTag is 
+/* Load track info from ra file already opened as lineFile into list.  If releaseTag is
  * non-NULL then only load tracks that mesh with release. */
 
 void trackDbPolish(struct trackDb *bt);
@@ -494,5 +494,12 @@ boolean trackDbUpdateOldTag(char **pTag, char **pVal);
 
 boolean trackDbCheckValidRelease(char *tag);
 /* check to make sure release tag is valid */
+
+struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expression);
+// Return local settings that match expression else NULL.  In alpha order.
+
+struct slName *trackDbSettingsWildMatch(struct trackDb *tdb, char *expression);
+// Return settings in tdb tree that match expression else NULL.  In alpha order, no duplicates.
+
 #endif /* TRACKDB_H */
 
