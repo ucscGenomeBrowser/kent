@@ -19,9 +19,9 @@ char *varType = gvf->attrVals[ix];
 if (sameString(varType, "CNV"))
     return MG_BLACK;
 else if (sameString(varType, "Gain"))
-    return hvGfxFindColorIx(hvg, 0xcc, 0x66, 0x00);
-else if (sameString(varType, "Loss"))
     return hvGfxFindColorIx(hvg, 0x00, 0x00, 0xff);
+else if (sameString(varType, "Loss"))
+    return hvGfxFindColorIx(hvg, 0xff, 0x00, 0x00);
 else if (sameString(varType, "Insertion"))
     return hvGfxFindColorIx(hvg, 0xff, 0xcc, 0x00);
 else if (sameString(varType, "Complex"))
