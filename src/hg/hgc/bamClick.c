@@ -196,7 +196,7 @@ if (fileName == NULL)
 	}
     }
 
-bamFetch(fileName, position, oneBam, &btd);
+bamFetch(fileName, position, oneBam, &btd, NULL);
 if (isPaired)
     {
     char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "20000");
@@ -208,7 +208,7 @@ if (isPaired)
 	btd.pairHash = newPairHash;
 	safef(position, sizeof(position), "%s:%d-%d", seqName,
 	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName, position, oneBam, &btd);
+	bamFetch(fileName, position, oneBam, &btd, NULL);
 	}
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(btd.pairHash);

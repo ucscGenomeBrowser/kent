@@ -482,7 +482,7 @@ if (fileName == NULL)
 char posForBam[512];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
 if (!isPaired)
-    bamFetch(fileName, posForBam, addBam, &btd);
+    bamFetch(fileName, posForBam, addBam, &btd, NULL);
 else
     {
     char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
@@ -490,7 +490,7 @@ else
     if (pairSearchRange > 0)
 	safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 	      max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-    bamFetch(fileName, posForBam, addBamPaired, &btd);
+    bamFetch(fileName, posForBam, addBamPaired, &btd, NULL);
     struct hashEl *hel;
     struct hashCookie cookie = hashFirst(btd.pairHash);
     while ((hel = hashNext(&cookie)) != NULL)
