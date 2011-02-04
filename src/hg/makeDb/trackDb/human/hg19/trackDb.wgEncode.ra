@@ -76,7 +76,7 @@ include wgEncodeBuOrchid.ra
 include wgEncodeUchicagoTfbs.ra
 
 # Caltech RNA Seq
-include wgEncodeCaltechRnaSeq.ra beta
+include wgEncodeCaltechRnaSeq.ra beta,public
 include wgEncodeCaltechRnaSeq.new.ra alpha
 
 track wgEncodeMapability
