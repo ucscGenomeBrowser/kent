@@ -9,6 +9,7 @@ wgEncodeAffyRnaChip.ra \
 wgEncodeUwDgf.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeUwDnase.ra \
+wgEncodeCaltechRnaSeq.ra \
 
 include ../../../../makefile.metaDb
 

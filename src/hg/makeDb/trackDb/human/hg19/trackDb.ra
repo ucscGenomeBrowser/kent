@@ -2141,3 +2141,16 @@ type bed 3 .
     type bed 4 .
     priority 10
 
+track tfbsConsSites
+shortLabel TFBS Conserved
+longLabel HMR Conserved Transcription Factor Binding Sites
+priority 0
+group regulation
+visibility hide
+type bed 6 +
+scoreMin 671
+scoreMax 1000
+spectrum on
+urlLabel Transfac matrix link:
+url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
+
