@@ -778,6 +778,15 @@ void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *field
 void showSchemaBigBed(char *table);
 /* Show schema on bigBed. */
 
+/* BAM stuff from bam.c */
+
+boolean isBamTable(char *table);
+/* Return TRUE if table corresponds to a BAM file. */
+
+char *bamFileName(char *table, struct sqlConnection *conn);
+/* Return file name associated with BAM.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
 /* Get custom track list. */

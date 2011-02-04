@@ -1,10 +1,13 @@
 /* freen - My Pet Freen. */
 #include "common.h"
 #include "linefile.h"
+#include "localmem.h"
 #include "hash.h"
 #include "options.h"
 #include "obscure.h"
-#include "jsHelper.h"
+#include "samAlignment.h"
+#include "dnaseq.h"
+#include "bamFile.h"
 
 void usage()
 {
@@ -12,14 +15,17 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-void freen(char *input)
+void freen(char *url, char *chrom, int start, int end)
 /* Test some hair-brained thing. */
 {
-size_t size;
-char *buf;
-readInGulp(input, &buf, &size);
-char *untagged = stripRegEx(buf, "<[^>]*>", REG_ICASE);
-puts(untagged);
+struct lm *lm = lmInit(0);
+struct samAlignment *el, *list;
+list = bamFetchSamAlignment(url, chrom, start, end, lm);
+printf("Got %d aligmnents\n", slCount(list));
+for (el = list; el != NULL; el = el->next)
+    {
+    samAlignmentTabOut(el, stdout);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -27,8 +33,8 @@ int main(int argc, char *argv[])
 {
 // optionInit(&argc, argv, options);
 
-if (argc != 2)
+if (argc != 5)
     usage();
-freen(argv[1]);
+freen(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]));
 return 0;
 }

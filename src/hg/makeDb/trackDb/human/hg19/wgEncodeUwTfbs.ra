@@ -36,7 +36,7 @@ shortLabel UW TFBS
 longLabel Transcription Factor Binding Sites by ChIP-seq from ENCODE/University of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)  HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF  BJ=BJ Caco2=Caco-2 H7es=H7-HESC HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
+subGroup2 cellType Cell_Line 1GM12878=GM12878&nbsp;(Tier_1) 1K562=K562&nbsp;(Tier_1)  2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF  BJ=BJ Caco2=Caco-2 H7es=H7-HESC HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCF=HCF HCPE=HCPEpIC HCT116=HCT-116 HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
 subGroup3 factor Factor CTCF=CTCF  zInput=Input
 subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
@@ -74,7 +74,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot      
         shortLabel GM12878 CTCF Ht 1
         longLabel GM12878 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12878 rep=1
+        subGroups view=Hot factor=CTCF cellType=1GM12878 rep=1
         type broadPeak
         origAssembly hg18
         color 153,38,0
@@ -85,7 +85,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot      
         shortLabel K562 CTCF Ht 1
         longLabel K562 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=K562 rep=1
+        subGroups view=Hot factor=CTCF cellType=1K562 rep=1
         type broadPeak
         origAssembly hg18
         color 46,0,184
@@ -166,7 +166,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HeLa-S3 CTCF Ht 1
         longLabel HeLa-S3 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HELA rep=1
+        subGroups view=Hot factor=CTCF cellType=2HELA rep=1
         type broadPeak
         origAssembly hg18
         color 0,119,158
@@ -177,7 +177,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HepG2 CTCF Ht 1
         longLabel HepG2 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HEPG2 rep=1
+        subGroups view=Hot factor=CTCF cellType=2HEPG2 rep=1
         type broadPeak
         origAssembly hg18
         color 189,0,157
@@ -218,7 +218,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HUVEC CTCF Ht 1
         longLabel HUVEC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HUVEC rep=1
+        subGroups view=Hot factor=CTCF cellType=2HUVEC rep=1
         type broadPeak
         origAssembly hg18
         color 224,75,0
@@ -280,7 +280,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot 
         shortLabel K562 CTCF Ht 2
         longLabel K562 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=K562 rep=2
+        subGroups view=Hot factor=CTCF cellType=1K562 rep=2
         type broadPeak
         origAssembly hg18
         color 46,0,184
@@ -291,7 +291,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot 
         shortLabel GM12878 CTCF Ht 2
         longLabel GM12878 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=GM12878 rep=2
+        subGroups view=Hot factor=CTCF cellType=1GM12878 rep=2
         type broadPeak
         origAssembly hg18
         color 153,38,0
@@ -352,7 +352,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot off
         shortLabel HeLa-S3 CTCF Ht 2
         longLabel HeLa-S3 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HELA rep=2
+        subGroups view=Hot factor=CTCF cellType=2HELA rep=2
         type broadPeak
         origAssembly hg18
         color 0,119,158
@@ -363,7 +363,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot off
         shortLabel HepG2 CTCF Ht 2
         longLabel HepG2 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HEPG2 rep=2
+        subGroups view=Hot factor=CTCF cellType=2HEPG2 rep=2
         type broadPeak
         origAssembly hg18
         color 189,0,157
@@ -384,7 +384,7 @@ noInherit on
         parent wgEncodeUwTfbsViewHot off
         shortLabel HUVEC CTCF Ht 2
         longLabel HUVEC CTCF TFBS Hotspots Rep 2 from ENCODE/UW
-        subGroups view=Hot factor=CTCF cellType=HUVEC rep=2
+        subGroups view=Hot factor=CTCF cellType=2HUVEC rep=2
         type broadPeak
         origAssembly hg18
         color 224,75,0
@@ -754,7 +754,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks 
         shortLabel GM12878 CTCF Pk 1
         longLabel GM12878 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12878 rep=1
+        subGroups view=Peaks factor=CTCF cellType=1GM12878 rep=1
         type narrowPeak
         origAssembly hg18
         color 153,38,0
@@ -765,7 +765,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks 
         shortLabel K562 CTCF Pk 1
         longLabel K562 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=K562 rep=1
+        subGroups view=Peaks factor=CTCF cellType=1K562 rep=1
         type narrowPeak
         origAssembly hg18
         color 46,0,184
@@ -846,7 +846,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HeLa-S3 CTCF Pk 1
         longLabel HeLa-S3 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HELA rep=1
+        subGroups view=Peaks factor=CTCF cellType=2HELA rep=1
         type narrowPeak
         origAssembly hg18
         color 0,119,158
@@ -857,7 +857,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HepG2 CTCF Pk 1
         longLabel HepG2 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HEPG2 rep=1
+        subGroups view=Peaks factor=CTCF cellType=2HEPG2 rep=1
         type narrowPeak
         origAssembly hg18
         color 189,0,157
@@ -898,7 +898,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HUVEC CTCF Pk 1
         longLabel HUVEC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HUVEC rep=1
+        subGroups view=Peaks factor=CTCF cellType=2HUVEC rep=1
         type narrowPeak
         origAssembly hg18
         color 224,75,0
@@ -960,7 +960,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks  
         shortLabel K562 CTCF Pk 2
         longLabel K562 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=K562 rep=2
+        subGroups view=Peaks factor=CTCF cellType=1K562 rep=2
         type narrowPeak
         origAssembly hg18
         color 46,0,184
@@ -971,7 +971,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks 
         shortLabel GM12878 CTCF Pk 2
         longLabel GM12878 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=GM12878 rep=2
+        subGroups view=Peaks factor=CTCF cellType=1GM12878 rep=2
         type narrowPeak
         origAssembly hg18
         color 153,38,0
@@ -1032,7 +1032,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HeLa-S3 CTCF Pk 2
         longLabel HeLa-S3 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HELA rep=2
+        subGroups view=Peaks factor=CTCF cellType=2HELA rep=2
         type narrowPeak
         origAssembly hg18
         color 0,119,158
@@ -1043,7 +1043,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HepG2 CTCF Pk 2
         longLabel HepG2 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HEPG2 rep=2
+        subGroups view=Peaks factor=CTCF cellType=2HEPG2 rep=2
         type narrowPeak
         origAssembly hg18
         color 189,0,157
@@ -1064,7 +1064,7 @@ noInherit on
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HUVEC CTCF Pk 2
         longLabel HUVEC CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
-        subGroups view=Peaks factor=CTCF cellType=HUVEC rep=2
+        subGroups view=Peaks factor=CTCF cellType=2HUVEC rep=2
         type narrowPeak
         origAssembly hg18
         color 224,75,0
@@ -1438,7 +1438,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig
         shortLabel GM12878 CTCF Sg 1
         longLabel GM12878 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12878 rep=1
+        subGroups view=zRSig factor=CTCF cellType=1GM12878 rep=1
         type bigWig 1.000000 2723.000000
         origAssembly hg18
         color 153,38,0
@@ -1449,7 +1449,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig
         shortLabel K562 CTCF Sg 1
         longLabel K562 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=K562 rep=1
+        subGroups view=zRSig factor=CTCF cellType=1K562 rep=1
         type bigWig 1.000000 8445.000000
         origAssembly hg18
         color 46,0,184
@@ -1530,7 +1530,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLa-S3 CTCF Sg 1
         longLabel HeLa-S3 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HELA rep=1
+        subGroups view=zRSig factor=CTCF cellType=2HELA rep=1
         type bigWig 1.000000 4129.000000
         origAssembly hg18
         color 0,119,158
@@ -1541,7 +1541,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 CTCF Sg 1
         longLabel HepG2 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HEPG2 rep=1
+        subGroups view=zRSig factor=CTCF cellType=2HEPG2 rep=1
         type bigWig 1.000000 2546.000000
         origAssembly hg18
         color 189,0,157
@@ -1582,7 +1582,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC CTCF Sg 1
         longLabel HUVEC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HUVEC rep=1
+        subGroups view=zRSig factor=CTCF cellType=2HUVEC rep=1
         type bigWig 1.000000 2691.000000
         origAssembly hg18
         color 224,75,0
@@ -1644,7 +1644,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig 
         shortLabel K562 CTCF Sg 2
         longLabel K562 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=K562 rep=2
+        subGroups view=zRSig factor=CTCF cellType=1K562 rep=2
         type bigWig 1.000000 8080.000000
         origAssembly hg18
         color 46,0,184
@@ -1655,7 +1655,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig 
         shortLabel GM12878 CTCF Sg 2
         longLabel GM12878 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=GM12878 rep=2
+        subGroups view=zRSig factor=CTCF cellType=1GM12878 rep=2
         type bigWig 1.000000 7099.000000
         origAssembly hg18
         color 153,38,0
@@ -1716,7 +1716,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLa-S3 CTCF Sg 2
         longLabel HeLa-S3 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HELA rep=2
+        subGroups view=zRSig factor=CTCF cellType=2HELA rep=2
         type bigWig 1.000000 3763.000000
         origAssembly hg18
         color 0,119,158
@@ -1727,7 +1727,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 CTCF Sg 2
         longLabel HepG2 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HEPG2 rep=2
+        subGroups view=zRSig factor=CTCF cellType=2HEPG2 rep=2
         type bigWig 1.000000 5725.000000
         origAssembly hg18
         color 189,0,157
@@ -1748,7 +1748,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC CTCF Sg 2
         longLabel HUVEC CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
-        subGroups view=zRSig factor=CTCF cellType=HUVEC rep=2
+        subGroups view=zRSig factor=CTCF cellType=2HUVEC rep=2
         type bigWig 1.000000 1952.000000
         origAssembly hg18
         color 224,75,0
@@ -1945,7 +1945,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig
         shortLabel GM12878 Inp Sg 1
         longLabel GM12878 Input TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=GM12878 rep=1
+        subGroups view=zRSig factor=zInput cellType=1GM12878 rep=1
         type bigWig 1.000000 8963.000000
         origAssembly hg18
         color 153,38,0
@@ -1987,7 +1987,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig
         shortLabel K562 Inp Sg 1
         longLabel K562 Input TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=K562 rep=1
+        subGroups view=zRSig factor=zInput cellType=1K562 rep=1
         type bigWig 1.000000 13124.000000
         origAssembly hg18
         color 46,0,184
@@ -1998,7 +1998,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC Inp Sg 1
         longLabel HUVEC Input TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HUVEC rep=1
+        subGroups view=zRSig factor=zInput cellType=2HUVEC rep=1
         type bigWig 1.000000 8683.000000
         origAssembly hg18
         color 224,75,0
@@ -2062,7 +2062,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLa-S3 Inp Sg 1
         longLabel HeLa-S3 Input TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HELA rep=1
+        subGroups view=zRSig factor=zInput cellType=2HELA rep=1
         type bigWig 1.000000 10388.000000
         origAssembly hg18
         color 0,119,158
@@ -2073,7 +2073,7 @@ noInherit on
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 Inp Sg 1
         longLabel HepG2 Input TFBS Raw Signal Rep 1 from ENCODE/UW
-        subGroups view=zRSig factor=zInput cellType=HEPG2 rep=1
+        subGroups view=zRSig factor=zInput cellType=2HEPG2 rep=1
         type bigWig 1.000000 7679.000000
         origAssembly hg18
         color 189,0,157
