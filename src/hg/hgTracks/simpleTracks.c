@@ -1957,6 +1957,9 @@ if (scoreColumn == NULL)
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
 extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and); // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
+#ifdef ALL_SCORE_FILTERS_LOGIC
+extraWhere = dyAddAllScoreFilters(cart,tdb,extraWhere,&and); // All *Filter style filters
+#endif///def ALL_SCORE_FILTERS_LOGIC
 if (and == FALSE || strstrNoCase(extraWhere->string,"score in ") == NULL) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
@@ -12332,3 +12335,4 @@ for(name = nameList; name != NULL; name = name->next)
     }
 slFreeList(&nameList);
 }
+                                                                                        
