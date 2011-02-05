@@ -23,13 +23,12 @@ boxedCfg on
 pValueFilter 0.0
 pValueFilterLimits 0:16
 noScoreFilter .
-extraFields pvalue=[f]P-Value dnaseSignal=[f]DNase_Signal dnasePvalue=[f]DNase-seq_P-Value faireSignal=[f]FAIRE-seq_Signal fairePvalue=[f]FAIRE-seq_P-Value polIISignal=[f]Pol-II_Signal polIIPvalue=[f]Pol-II_P-Value ctcfSignal=[f]CTCF_Signal ctcfPvalue=[f]CTCF_P-Value cmycSignal=[f]c-Myc_Signal cmycPvalue=[f]c-Myc_P-Value ocCode=[i]OC_Code
+extraFields pValue=[f]P-Value_(-log_10) dnaseSignal=[f]DNaseI_HS_Signal dnasePvalue=[f]DNaseI_HS-Value_(-log_10) faireSignal=[f]FAIRE-seq_Signal fairePvalue=[f]FAIRE-seq_P-Value_(-log_10) polIISignal=[f]Pol-II_Signal polIIPvalue=[f]Pol-II_P-Value_(-log_10) ctcfSignal=[f]CTCF_Signal ctcfPvalue=[f]CTCF_P-Value_(-log_10) cmycSignal=[f]c-Myc_Signal cmycPvalue=[f]c-Myc_P-Value_(-log_10) ocCode=[i]OC_Code
+filterBy ocCode:OC_Code=+1&#58;_Validated,2&#58;_DNase-only,3&#58;_FAIRE-only,4&#58;_ChIP-only
 #scoreFilter 100  ## Score is all 1000
 #scoreFilterLimits 100:1000
 #scoreMin 600
-## These not working
-##pvalueFilter 0.0
-##pvalueFilterLimits 0:16
+## These are working but not wanted:
 ##dnasePvalueFilter 0.0
 ##dnasePvalueFilterLimits 0:16
 ##fairePvalueFilter 0.0
