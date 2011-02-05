@@ -8,7 +8,7 @@
 #define SAMALIGNMENT_NUM_COLS 12
 
 struct samAlignment
-/* The fields of a SAM short read alignment.  Follows conventions in SAM docs out of Sanger */
+/* The fields of a SAM short read alignment, the text version of BAM. */
     {
     struct samAlignment *next;  /* Next in singly linked list. */
     char *qName;	/* Query template name - name of a read */

@@ -2803,3 +2803,27 @@ encodeDownloadsPage.pl -db=hg19 -checksum index.html &
 cd {downloads19}/wgEncodeOpenChromFaire
 encodeDownloadsPage.pl -db=hg19 -checksum index.html & 
 
+2011-02-02 Open Chrom Synth should see extraFields in hgc.
+==========================================================
+Added extraFields setting to trackDb, tagTypes and hgc.c code.
+wgEncodeOpenChromSynthGm12878Pk change column pvalue pValue float unsigned;
+Query OK, 231402 rows affected (9.18 sec)
+
+alter table wgEncodeOpenChromSynthH1hescPk change column pvalue pValue float unsigned;
+Query OK, 254605 rows affected (9.18 sec)
+
+alter table wgEncodeOpenChromSynthHelas3Pk change column pvalue pValue float unsigned;
+Query OK, 258525 rows affected (9.18 sec)
+
+alter table wgEncodeOpenChromSynthHepg2Pk change column pvalue pValue float unsigned NOT NULL;
+Query OK, 193323 rows affected (6.48 sec)
+
+alter table wgEncodeOpenChromSynthHuvecPk change column pvalue pValue float unsigned NOT NULL;
+Query OK, 280454 rows affected (9.93 sec)
+
+alter table wgEncodeOpenChromSynthK562Pk change column pvalue pValue float unsigned NOT NULL;
+Query OK, 277149 rows affected (9.72 sec)
+
+alter table wgEncodeOpenChromSynthNhekPk change column pvalue pValue float unsigned NOT NULL;
+Query OK, 276778 rows affected (9.89 sec)
+

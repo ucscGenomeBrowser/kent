@@ -6,3 +6,11 @@ html gold
 track gap override
 html gap
 
+track ctgPos2
+shortLabel Scaffolds
+longLabel Assembly Scaffolds
+group map
+priority 10
+visibility hide
+type ctgPos
+

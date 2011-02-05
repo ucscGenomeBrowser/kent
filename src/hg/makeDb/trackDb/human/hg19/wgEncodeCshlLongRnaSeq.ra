@@ -2678,6 +2678,16 @@ noInherit on
 	pairEndsByName on
 	type bam
     	subTrack wgEncodeCshlLongRnaSeq
+	showNames on
+	bamColorMode off
+	bamGrayMode aliQual
+	baseColorDefault diffBases
+	baseColorUseSequence lfExtra
+	indelDoubleInsert on
+	indelQueryInsert on
+	showDiffBasesAllScales .
+	showDiffBasesMaxZoom 100
+	maxWindowToDraw 1000000
 
 		track wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
     		release alpha
