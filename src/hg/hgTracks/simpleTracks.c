@@ -11615,6 +11615,10 @@ else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
     }
+else if (sameWord(type, "snake"))
+    {
+    snakeMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "chain"))
     {
     chainMethods(track, tdb, wordCount, words);
