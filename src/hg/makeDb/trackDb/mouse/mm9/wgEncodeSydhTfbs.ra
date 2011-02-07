@@ -38,7 +38,7 @@ subGroup4 control Control IGGmus=IgG-mus IGGrab=IgG-rab IGGrat=IgG-rat IGGYale=I
 subGroup5 treatment Treatment None=None DMSO20=DMSO_2.0pct 
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
 dimensionZchecked None,DMSO20
-filterComposite dimZ=multi
+#filterComposite dimZ=multi
 sortOrder cellType=+ factor=+ treatment=+ control=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
