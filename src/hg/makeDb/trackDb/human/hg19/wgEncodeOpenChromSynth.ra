@@ -45,7 +45,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth
         shortLabel K562 OpChr Syn
-        longLabel K562 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel K562 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=K562
         type bed 9 +
         origAssembly hg19
@@ -55,7 +55,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth
         shortLabel GM12878 OpChr Syn
-        longLabel GM12878 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel GM12878 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=GM12878
         type bed 9 +
         origAssembly hg19
@@ -65,7 +65,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel H1-hESC OpChr Syn
-        longLabel H1-hESC - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel H1-hESC Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=H1hESC
         type bed 9 +
         origAssembly hg19
@@ -75,7 +75,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel HepG2 OpChr Syn
-        longLabel HepG2 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel HepG2 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=HEPG2
         type bed 9 +
         origAssembly hg19
@@ -85,7 +85,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel HeLa-S3 OpChr Syn
-        longLabel HeLa-S3 - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel HeLa-S3 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=HELA
         type bed 9 +
         origAssembly hg19
@@ -95,7 +95,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel HUVEC OpChr Syn
-        longLabel HUVEC - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel HUVEC Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=HUVEC
         type bed 9 +
         origAssembly hg19
@@ -105,7 +105,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel NHEK OpChr Syn
-        longLabel NHEK - Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel NHEK Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=NHEK
         type bed 9 +
         origAssembly hg19
