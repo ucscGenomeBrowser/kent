@@ -8264,7 +8264,7 @@ labPiFull Roderic Guigo
 grantPi Guigo
 organism human
 
-term GIS(Ruan)
+term GIS-Ruan
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
@@ -9307,11 +9307,11 @@ validate cv
 priority 150
 
 term run
-type run
+type typeOfTerm
 label Sequencing Run
 description Sequencing run
 searchable select
-cvDefined yes
+cvDefined no
 validate none
 priority 500
 

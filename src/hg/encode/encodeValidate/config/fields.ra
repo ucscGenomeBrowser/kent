@@ -26,6 +26,13 @@ file ddf
 type string
 required no
 
+# This is free text
+# It is used to tie together fastq files with BAM files
+field run
+file ddf
+type string
+required no
+
 # This is the specific growth protocol used for the cell line
 # It is verified against the list of protocols in the cell line
 field growthProtocol
