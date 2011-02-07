@@ -4549,7 +4549,7 @@ lab  Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1_SC-101058(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
+validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
 
 term FOXA2_(SC-6554)
 tag FOXA2SC6554
@@ -5353,7 +5353,7 @@ lab Myers
 lots C0909
 targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
-validation NANOG_SC-33759(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_NANOG_SC-33759_validation_Myers.pdf
+validation (NANOG_SC-33759)(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_NANOG_SC-33759_validation_Myers.pdf
 
 
 
@@ -5712,7 +5712,7 @@ lab Myers
 lots F2609
 targetId GeneCards:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
-validation POU5F1_SC-9081(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_POU5F1_SC-9081_validation_Myers.pdf
+validation (POU5F1_SC-9081)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_POU5F1_SC-9081_validation_Myers.pdf
 
 term POU2F2
 tag POU2F2

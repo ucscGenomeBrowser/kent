@@ -2005,6 +2005,38 @@ function handleTrackUi(response, status)
     // make sure all links (e.g. help links) open up in a new window
     response = response.replace(/<a /ig, "<a target='_blank' ");
 
+    // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
+    // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
+    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
+    var jsFiles = response.match(shlurpPattern);
+    response = response.replace(shlurpPattern,"");
+    //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
+    shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
+    var cssFiles = response.match(shlurpPattern);
+    response = response.replace(shlurpPattern,"");
+    //alert(response);
+                                    /*in open ?  Will load ofcss work this way?
+                                    $(cssFiles).each(function (i) {
+                                        bix = "<LINK rel='STYLESHEET' href='".length;
+                                        eix = this.lastIndexOf("' TYPE='text/css' />");
+                                        file = this.substring(bix,eix);
+                                        $.getScript(file); // Should protect against already loaded files.
+                                        //warn(file)
+                                    });
+                                    */
+                                    /* in open ?
+                                    $(jsFiles).each(function (i) {
+                                        bix = "<script type='text/javascript' SRC='".length;
+                                        eix = this.lastIndexOf("'></script>");
+                                        file = this.substring(bix,eix);
+                                        warn(file)
+                                        $.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
+                                    });
+                                    */
+    // Larry I could not get this to work.  When the response has js files in it, then the model never opens.
+    // but when I shlurp them out, it opens fine.  However, the js files should get loaded.  If I use getScript() then
+    // I can't close the modal dialog and get errors like c.ui.dialog is undefined from jquery-ui.js
+
     $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
