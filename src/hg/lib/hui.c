@@ -2562,10 +2562,10 @@ enum
 
 typedef struct _membersForAll {
     int abcCount;
-    int dimMax;
-    boolean filters;
-    dimensions_t *dimensions;
-    members_t* members[27];
+    int dimMax;               // Arrays of "members" structs will be ordered as [view][dimX][dimY][dimA]... with first 3 in fixed spots and rest as found (and non-empty)
+    boolean filters;          // ABCs use filterComp boxes (as upposed to check boxes
+    dimensions_t *dimensions; // One struct describing "deimensions" setting"  (e.g. dimX:cell dimY:antibody dimA:treatment)
+    members_t* members[27];   // One struct for each dimension describing groups in dimension (e.g. cell: GM12878,K562)
     char* checkedTags[27];  // FIXME: Should move checkedTags into membersForAll->members[ix]->selected;
     char letters[27];
 } membersForAll_t;
@@ -2581,6 +2581,12 @@ safef(settingName, sizeof(settingName), "%s.filterComp.%s",parentTdb->track,memb
 struct slName *options = cartOptionalSlNameList(cart,settingName);
 if(options != NULL)
     {
+    if (sameWord(options->name,"All")) // filterComp returns "All" which means every option selected
+        {
+        slNameFreeList(&options);
+        options = slNameListFromStringArray(members->tags, members->count);
+        assert(options != NULL);
+        }
     struct slName *option;
     for(option=options;option!=NULL;option=option->next)
         {

@@ -48,9 +48,17 @@ enum snp125ColorSource {
     snp125ColorSourceMolType,
     snp125ColorSourceExceptions,
     snp125ColorSourceBitfields,
+    snp125ColorSourceAlleleFreq,
 };
 
 #define SNP125_DEFAULT_COLOR_SOURCE snp125ColorSourceFunc
+
+enum snp125ColorSource snp125ColorSourceFromCart(struct cart *cart, struct trackDb *tdb);
+/* Look up color source in cart, keeping backwards compatibility with old cart var names. */
+
+char *snp125ColorSourceToLabel(struct trackDb *tdb, enum snp125ColorSource cs);
+/* Due to availability of different color sources in several different versions,
+ * this is not just an array lookup, hence the encapsulation. Don't modify return value. */
 
 extern char *snp125ColorSourceLabels[];
 extern char *snp125ColorSourceOldVar;
