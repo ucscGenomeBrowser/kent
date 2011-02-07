@@ -364,29 +364,29 @@ switch (colorSourceCart)
 			     snp125LocTypeLabels, snp125LocTypeDefault, snp125LocTypeArraySize);
 	break;
     case snp125ColorSourceClass:
-	snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
-			     snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
+    snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
+			 snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
 	break;
     case snp125ColorSourceValid:
-	snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
-			     snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
+    snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
+			 snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
 	break;
     case snp125ColorSourceFunc:
 	funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
-	snp125PrintColorSpec(tdb->track, "func", snp125FuncOldColorVars, TRUE,
-			     snp125FuncLabels, snp125FuncDefault, funcArraySize);
+    snp125PrintColorSpec(tdb->track, "func", snp125FuncOldColorVars, TRUE,
+			 snp125FuncLabels, snp125FuncDefault, funcArraySize);
 	break;
     case snp125ColorSourceMolType:
-	snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
-			     snp125MolTypeLabels, snp125MolTypeDefault, snp125MolTypeArraySize);
+    snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
+			 snp125MolTypeLabels, snp125MolTypeDefault, snp125MolTypeArraySize);
 	break;
     case snp125ColorSourceExceptions:
-	snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
-			  snp132ExceptionLabels, snp132ExceptionDefault, snp132ExceptionArraySize);
+    snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
+			 snp132ExceptionLabels, snp132ExceptionDefault, snp132ExceptionArraySize);
 	break;
     case snp125ColorSourceBitfields:
-	snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
-			     snp132BitfieldLabels, snp132BitfieldDefault, snp132BitfieldArraySize);
+    snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
+			 snp132BitfieldLabels, snp132BitfieldDefault, snp132BitfieldArraySize);
 	break;
     case snp125ColorSourceAlleleFreq:
 	printf("<P>Items are be colored by allele frequency on a red-blue spectrum, "
@@ -2562,14 +2562,21 @@ cartSaveSession(cart);
 printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
 /* Print link for parent track */
-struct trackDb *parentTdb = tdb->parent;
-if (parentTdb && !ajax)
+if (!ajax)
     {
-    char *encodedMapName = cgiEncode(parentTdb->track);
-    printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-		chromosome, encodedMapName, parentTdb->shortLabel);
-    freeMem(encodedMapName);
+    if (tdb->parent)
+        {
+        char *encodedMapName = cgiEncode(tdb->parent->track);
+        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
+                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                    chromosome, encodedMapName, tdb->parent->shortLabel);
+        freeMem(encodedMapName);
+        }
+    else
+        {
+        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure\" title='Full track configuration page'><IMG height=12 src='../images/ab_up.gif'>Full track list</A>)</B>",
+                    hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome);
+        }
     }
     puts("<BR><BR>");
 
