@@ -2990,6 +2990,74 @@ type bed 4
 hgsid on
 url http://www.ncbi.nlm.nih.gov/omim/
 
+track omimComposite
+compositeTrack on
+shortLabel OMIM Comp
+group phenDis
+visibility pack
+type bed 4
+hgsid on
+
+track omimLocation
+parent omimComposite
+shortLabel OMIM Locations
+longLabel OMIM Locations
+group phenDis
+priority 10
+visibility pack
+color 0, 100, 100
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
+track omimLocationClass2
+shortLabel OMIM Loc Class 2
+parent omimComposite
+longLabel OMIM-Associated Phenotype Class 2 Locations
+group phenDis
+priority 8
+visibility dense
+color 120, 100, 0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
+track omimGeneClass2
+shortLabel OMIM Class 2
+parent omimComposite
+longLabel OMIM-Associated Phenotype Class 2 Genes
+group phenDis
+priority 7
+visibility dense
+color 240, 100, 0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
+track omimGeneClass3
+shortLabel OMIM Class 3
+parent omimComposite
+longLabel OMIM-Associated Phenotype Class 3 Genes
+group phenDis
+priority 2
+visibility dense
+color 240, 0, 0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
+track omimAvSnp
+shortLabel OMIM AV SNP
+longLabel OMIM Allelic Variant SNP
+group phenDis
+parent omimComposite
+priority 3
+visibility dense
+color 255,0,0
+type bed 4
+hgsid on
+url http://www.omim.org/entry/
+
 searchTable wgRnaOld
 searchMethod fuzzy
 searchType bed

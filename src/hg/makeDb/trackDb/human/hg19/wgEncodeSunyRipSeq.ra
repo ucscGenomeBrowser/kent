@@ -2,7 +2,7 @@ track wgEncodeSunyRipSeq
 compositeTrack on
 shortLabel SUNY RIP-seq
 longLabel RIP-seq from ENCODE/SUNY Albany
-group expression
+group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal Alignments=Alignments 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
 subGroup3 factor Target_Protien ELAVL1=ELAVL1 PABPC1=PABPC1 ripInput=RIP_Input T7Tag=T7_Tag
@@ -200,12 +200,13 @@ noInherit on
     shortLabel Signal
     view Signal
     visibility full 
+    type bigWig
     subTrack wgEncodeSunyRipSeq
-    viewLimits 0:500
+    maxHeightPixels 100:24:16
     autoScale on
+    viewLimits 0:500
     transformFunc NONE
     windowingFunction mean
-    maxHeightPixels 100:24:16
 
         track wgEncodeSunyRipSeqGm12878RipinputSigRep1
         release alpha
@@ -371,9 +372,11 @@ noInherit on
     shortLabel Peaks      
     view Peaks 
     visibility full 
+    type bed 9
     subTrack wgEncodeSunyRipSeq
     scoreFilter 0
     scoreFilterLimits 0:1000
+    minGrayLevel 11
 
         track wgEncodeSunyRipSeqGm12878RipinputPk
         release alpha

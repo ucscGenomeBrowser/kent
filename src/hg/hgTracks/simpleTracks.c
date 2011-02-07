@@ -1957,6 +1957,9 @@ if (scoreColumn == NULL)
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
 extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and); // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
+#ifdef ALL_SCORE_FILTERS_LOGIC
+extraWhere = dyAddAllScoreFilters(cart,tdb,extraWhere,&and); // All *Filter style filters
+#endif///def ALL_SCORE_FILTERS_LOGIC
 if (and == FALSE || strstrNoCase(extraWhere->string,"score in ") == NULL) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
@@ -5149,7 +5152,7 @@ char *decipherId = NULL;
 
 /* color scheme:
 	RED:	If the entry is a deletion (mean ratio < 0)
-	GREEN:	If the entry is a duplication (mean ratio > 0)
+	BLUE:	If the entry is a duplication (mean ratio > 0)
 */
 safef(cond_str, sizeof(cond_str),"name='%s' ", bedItem->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
@@ -5163,7 +5166,7 @@ if (decipherId != NULL)
             {
 	    if (sameWord(row[0], "1"))
 	    	{
-	    	col = MG_GREEN;
+	    	col = MG_BLUE;
 	    	}
 	    else
 		{
@@ -10899,6 +10902,9 @@ tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
+#include "j3.c"
+
+
 char *omimGeneName(struct track *tg, void *item)
 /* set name for omimGene track */
 {
@@ -11612,6 +11618,10 @@ else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
     }
+else if (sameWord(type, "snake"))
+    {
+    snakeMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "chain"))
     {
     chainMethods(track, tdb, wordCount, words);
@@ -12311,6 +12321,8 @@ registerTrackHandlerOnFamily("hapmapSnps", hapmapMethods);
 registerTrackHandlerOnFamily("hapmapSnpsPhaseII", hapmapMethods);
 registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
+//registerTrackHandler("omimGeneClass3", omimGeneClass3Methods);
+registerTrackHandler("omimComposite", omimGeneClass3Methods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
 }
@@ -12332,3 +12344,4 @@ for(name = nameList; name != NULL; name = name->next)
     }
 slFreeList(&nameList);
 }
+

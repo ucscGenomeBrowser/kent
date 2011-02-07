@@ -244,19 +244,20 @@ origAssembly hg19
             color 189,0,157
             # subId=1613 dateSubmitted=2010-06-18
 
-        track wgEncodeSunyAlbanyGeneSTH1hescRipinputRbpAssocRna
+        track wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
         release alpha
-        parent wgEncodeSunyAlbanyGeneStView on
+        parent wgEncodeSunyAlbanyGeneStView off
         shortLabel H1-hESC ripInput
         longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (ripInput in H1-hESC cells)
         subGroups view=RbpAssocRna factor=ripInput cellType=H1hESC
         type broadPeak
         color 0,107,27
-        # subId=3084 dateSubmitted=2010-12-10
+        # subId=3084 dateSubmitted=2010-12-10 
 
-        track wgEncodeSunyAlbanyGeneSTH1hescT7tagRbpAssocRna
+
+        track wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
         release alpha
-        parent wgEncodeSunyAlbanyGeneStView on
+        parent wgEncodeSunyAlbanyGeneStView off
         shortLabel H1-hESC T7Tag
         longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (T7Tag in H1-hESC cells)
         subGroups view=RbpAssocRna factor=T7Tag cellType=H1hESC
@@ -264,9 +265,9 @@ origAssembly hg19
         color 0,107,27
         # subId=3084 dateSubmitted=2010-12-10
 
-        track wgEncodeSunyAlbanyGeneSTH1hescElavl1RbpAssocRna
+        track wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
         release alpha
-        parent wgEncodeSunyAlbanyGeneStView on
+        parent wgEncodeSunyAlbanyGeneStView off
         shortLabel H1-hESC ELAVL1
         longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (ELAVL1 in H1-hESC cells)
         subGroups view=RbpAssocRna factor=ELAVL1 cellType=H1hESC

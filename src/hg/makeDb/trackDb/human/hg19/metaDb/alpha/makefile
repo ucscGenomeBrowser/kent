@@ -4,6 +4,9 @@ wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeBuOrchid.ra \
 wgEncodeGencode.ra \
+wgEncodeGisChiaPet.ra \
+wgEncodeGisDnaPet.ra \
+wgEncodeGisRnaSeq.ra \
 wgEncodeHaibMethyl27.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibRnaSeq.ra\
@@ -28,8 +31,6 @@ wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
 wgEncodeRikenCage.ra \
 wgEncodeHaibMethylSeq.ra \
-wgEncodeGisRnaSeq.ra \
-wgEncodeGisDnaPet.ra \
 wgEncodeUwTfbs.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeYaleRnaSeq.ra \
