@@ -22,6 +22,7 @@
 #include "chainCart.h"
 #include "chainDb.h"
 #include "gvUi.h"
+#include "grp.h"
 #include "oregannoUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
@@ -227,6 +228,10 @@ static void snp125PrintColorSpec(char *track, char *attribute, char *vars[], boo
 /* Print a table displaying snp125 attribute color selects. */
 {
 int i;
+printf("If a SNP has more than one of these attributes, the stronger color will override the\n"
+       "weaker color. The order of colors, from strongest to weakest, is red,\n"
+       "green, blue, gray, and black.\n"
+       "<BR><BR>\n");
 printf("<TABLE border=0 cellspacing=0 cellpadding=1>\n");
 for (i=0; i < varCount; i++)
     {
@@ -309,12 +314,6 @@ stripChar(defaultButtonVar, ' ');
 snp125ResetColorVarsIfNecessary(tdb, defaultButtonVar, version);
 
 printf("<BR><B>SNP Feature for Color Specification:</B>\n");
-char cartVar[512];
-safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
-char *snp125ColorSourceDefault = snp125ColorSourceLabels[SNP125_DEFAULT_COLOR_SOURCE];
-char *colorSourceCart = cartUsualString(cart, cartVar,
-					cartUsualString(cart, snp125ColorSourceOldVar,
-							snp125ColorSourceDefault));
 char **labels = snp132ColorSourceLabels;
 int arraySize = snp132ColorSourceArraySize;
 if (version <= 127)
@@ -327,8 +326,6 @@ else if (version <= 131)
     labels = snp128ColorSourceLabels;
     arraySize = snp128ColorSourceArraySize;
     }
-if (stringArrayIx(colorSourceCart, labels, arraySize) < 0)
-    colorSourceCart = snp125ColorSourceDefault;
 
 // It would be preferable for Javascript to handle changing the color selection
 // menus when the color source selection changes, but for now we do a submit that
@@ -341,7 +338,11 @@ safef(autoSubmit, sizeof(autoSubmit), "onchange=\""
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
-cgiMakeDropListFull(cartVar, labels, labels, arraySize, colorSourceCart, autoSubmit);
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
+enum snp125ColorSource colorSourceCart = snp125ColorSourceFromCart(cart, tdb);
+char *colorSourceSelected = snp125ColorSourceToLabel(tdb, colorSourceCart);
+cgiMakeDropListFull(cartVar, labels, labels, arraySize, colorSourceSelected, autoSubmit);
 printf("&nbsp;\n");
 char javascript[2048];
 safef(javascript, sizeof(javascript),
@@ -352,39 +353,50 @@ printf("<BR><BR>\n"
        "The selected &quot;Feature for Color Specification&quot; above has the\n"
        "selection of colors below for each attribute. Only the color\n"
        "options for the feature selected above will be used to color items;\n"
-       "color options for other features will not be shown. If a SNP has more\n"
-       "than one of these attributes, the stronger color will override the\n"
-       "weaker color. The order of colors, from strongest to weakest, is red,\n"
-       "green, blue, gray, and black.\n"
-       "<BR><BR>\n");
+       "color options for other features will not be shown.\n");
 
-if (sameString(colorSourceCart, "Location Type"))
+if (version > 127 && colorSourceCart == snp125ColorSourceLocType)
+    colorSourceCart = SNP125_DEFAULT_COLOR_SOURCE;
+switch (colorSourceCart)
     {
-    if (version <= 127)
+    int funcArraySize;
+    case snp125ColorSourceLocType:
 	snp125PrintColorSpec(tdb->track, "locType", snp125LocTypeOldColorVars, TRUE,
 			     snp125LocTypeLabels, snp125LocTypeDefault, snp125LocTypeArraySize);
-    }
-else if (sameString(colorSourceCart, "Class"))
+	break;
+    case snp125ColorSourceClass:
     snp125PrintColorSpec(tdb->track, "class", snp125ClassOldColorVars, TRUE,
 			 snp125ClassLabels, snp125ClassDefault, snp125ClassArraySize);
-else if (sameString(colorSourceCart, "Validation"))
+	break;
+    case snp125ColorSourceValid:
     snp125PrintColorSpec(tdb->track, "valid", snp125ValidOldColorVars, TRUE,
 			 snp125ValidLabels, snp125ValidDefault, snp125ValidArraySize);
-else if (sameString(colorSourceCart, "Function"))
-    {
-    int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+	break;
+    case snp125ColorSourceFunc:
+	funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
     snp125PrintColorSpec(tdb->track, "func", snp125FuncOldColorVars, TRUE,
 			 snp125FuncLabels, snp125FuncDefault, funcArraySize);
-    }
-else if (sameString(colorSourceCart, "Molecule Type"))
+	break;
+    case snp125ColorSourceMolType:
     snp125PrintColorSpec(tdb->track, "molType", snp125MolTypeOldColorVars, TRUE,
 			 snp125MolTypeLabels, snp125MolTypeDefault, snp125MolTypeArraySize);
-else if (sameString(colorSourceCart, "Unusual Conditions (UCSC)"))
+	break;
+    case snp125ColorSourceExceptions:
     snp125PrintColorSpec(tdb->track, "exceptions", snp132ExceptionVarName, FALSE,
 			 snp132ExceptionLabels, snp132ExceptionDefault, snp132ExceptionArraySize);
-else if (sameString(colorSourceCart, "Miscellaneous Attributes (dbSNP)"))
+	break;
+    case snp125ColorSourceBitfields:
     snp125PrintColorSpec(tdb->track, "bitfields", snp132BitfieldVarName, FALSE,
 			 snp132BitfieldLabels, snp132BitfieldDefault, snp132BitfieldArraySize);
+	break;
+    case snp125ColorSourceAlleleFreq:
+	printf("<P>Items are be colored by allele frequency on a red-blue spectrum, "
+	       "with red representing rare alleles and blue representing common alleles. "
+	       "Items with no allele frequency data are colored black.</P>");
+	break;
+    default:
+	errAbort("Unrecognized value of enum snp125ColorSource (%d)", colorSourceCart);
+    }
 jsEndCollapsibleSection();
 }
 
@@ -2551,14 +2563,30 @@ cartSaveSession(cart);
 printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
 /* Print link for parent track */
-struct trackDb *parentTdb = tdb->parent;
-if (parentTdb && !ajax)
+if (!ajax)
     {
-    char *encodedMapName = cgiEncode(parentTdb->track);
-    printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
-		chromosome, encodedMapName, parentTdb->shortLabel);
-    freeMem(encodedMapName);
+    if (tdb->parent)
+        {
+        char *encodedMapName = cgiEncode(tdb->parent->track);
+        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
+                    hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
+                    chromosome, encodedMapName, tdb->parent->shortLabel);
+        freeMem(encodedMapName);
+        }
+    else
+        {
+        struct grp *grp, *grps = hLoadGrps(database);
+        for (grp = grps; grp != NULL; grp = grp->next)
+            {
+            if (sameString(grp->name,tdb->grp))
+                {
+                printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
+                        hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,tdb->grp,tdb->grp,grp->label,grp->label,endsWith(grp->label," Tracks")?"":" tracks");
+                break;
+                }
+            }
+        grpFreeList(&grps);
+        }
     }
     puts("<BR><BR>");
 

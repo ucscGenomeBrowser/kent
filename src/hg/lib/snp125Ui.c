@@ -1,8 +1,8 @@
 /* snp125Ui.c - enums & char arrays for snp UI features and shared util code */
 #include "snp125Ui.h"
+#include "snp125.h"
 #include "common.h"
 
-static char const rcsid[] = "$Id: snp125Ui.c,v 1.33 2010/05/28 18:48:07 angie Exp $";
 
 char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount)
 /* Look for a setting that specifies a table with orthologous alleles.
@@ -71,6 +71,7 @@ char *snp132ColorSourceLabels[] = {
     "Molecule Type",
     "Unusual Conditions (UCSC)",
     "Miscellaneous Attributes (dbSNP)",
+    "Allele Frequencies",
 };
 
 int snp132ColorSourceArraySize   = ArraySize(snp132ColorSourceLabels);
@@ -587,3 +588,40 @@ if (startsWith("snp125", oldVar))
 return ptr;
 }
 
+enum snp125ColorSource snp125ColorSourceFromCart(struct cart *cart, struct trackDb *tdb)
+/* Look up color source in cart, keeping backwards compatibility with old cart var names. */
+{
+char cartVar[512];
+safef(cartVar, sizeof(cartVar), "%s.colorSource", tdb->track);
+char *snp125ColorSourceDefault = snp125ColorSourceLabels[SNP125_DEFAULT_COLOR_SOURCE];
+char *colorSourceCart = cartUsualString(cart, cartVar,
+					cartUsualString(cart, snp125ColorSourceOldVar,
+							snp125ColorSourceDefault));
+int cs = stringArrayIx(colorSourceCart, snp125ColorSourceLabels, snp125ColorSourceArraySize);
+int version = snpVersion(tdb->table);
+if (version >= 132)
+    // The enum begins with locType, which is not in the array, so add 1 to enum:
+    cs = 1 + stringArrayIx(colorSourceCart, snp132ColorSourceLabels, snp132ColorSourceArraySize);
+if (cs < 0)
+    cs = SNP125_DEFAULT_COLOR_SOURCE;
+return (enum snp125ColorSource)cs;
+}
+
+char *snp125ColorSourceToLabel(struct trackDb *tdb, enum snp125ColorSource cs)
+/* Due to availability of different color sources in several different versions,
+ * this is not just an array lookup, hence the encapsulation. Don't modify return value. */
+{
+int version = snpVersion(tdb->table);
+if (version >= 132)
+    {
+    if (cs < 1 || cs >= snp132ColorSourceArraySize+1)
+	errAbort("Bad color source for build 132 or later (%d)", cs);
+    return snp132ColorSourceLabels[cs-1];
+    }
+else
+    {
+    if (cs < 0 || cs >= snp125ColorSourceArraySize)
+	errAbort("Bad color source for build 131 or earlier (%d)", cs);
+    return snp125ColorSourceLabels[cs];
+    }
+}
