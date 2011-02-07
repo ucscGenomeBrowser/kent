@@ -361,7 +361,13 @@ void _htmStartWithHead(FILE *f, char *head, char *title, boolean printDocType, i
  * and CGI returned .htmls need, including optional head info */
 {
 if (printDocType)
-    fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
+#define TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+#ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+   fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">\n", f);
+#else///ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+    // FIXME: This should be done and fixes atleast one IE problem (use of :hover CSS pseudoclass)
+   fputs("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n",f);
+#endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
 fputs("<HTML>", f);
 fprintf(f,"<HEAD>\n%s<TITLE>%s</TITLE>\n", head, title);
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");

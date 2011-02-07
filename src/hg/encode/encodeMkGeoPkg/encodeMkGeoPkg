@@ -204,13 +204,14 @@ sub readMd5 {
 
 my $now = time();
 my $wd = cwd();
+my ($release, $mySqlDatabase);
 my $ok = GetOptions("instance=s",
                     "configDir=s",
                     "verbose=i",
                     "geoUser=s",
                     "downloadDir=s",
-                    "release=s",
-                    "database=s",
+                    "release:s" => \$release,
+                    "database:s" => \$mySqlDatabase,
                     "soft"
                     );
 # parse options
@@ -226,11 +227,12 @@ if (not defined $opt_geoUser) {
 if (not defined $opt_downloadDir) {
     $opt_downloadDir = "/hive/groups/encode/dcc/analysis/ftp/pipeline/";
 }
-if (not defined $opt_release){
-    $opt_release = "";
+if (not defined $release){
+    $release = "";
 }
-if (not defined $opt_database) {
-    $opt_database = "mysqlbeta";
+
+if (not defined $mySqlDatabase) {
+    $mySqlDatabase = "mysqlbeta";
 }
 my $configPath;
 if (defined $opt_configDir) {
@@ -253,8 +255,6 @@ HgAutomate::verbose(4, "Config directory path: \'$configPath\'\n");
 my $database  = $ARGV[0];
 my $compositeName = $ARGV[1];
 my $instrument = $ARGV[2];
-my $release = $ARGV[3];
-my $mySqlDatabase = $ARGV[4];
 
 # some counters we use
 my $i;
@@ -317,6 +317,7 @@ while(scalar(keys %objsSet) > 0) {
 
     my %metadata;
     # get the experimental variables for that object
+
     %metadata = getObjMetadata($dbHandle, $firstObject, $mySqlDatabase);
     my @currentMetadata = {%metadata};
     my @currentExpVars;
@@ -327,6 +328,7 @@ while(scalar(keys %objsSet) > 0) {
 
     # get other objs with the same metadata
     for $o (keys %objsSet) {
+
         %metadata = getObjMetadata($dbHandle, $o, $mySqlDatabase);
         my $match = 1;
         for($i = 0; $i < scalar(@expVars); ++$i) {
