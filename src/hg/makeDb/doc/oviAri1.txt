@@ -395,7 +395,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 
 ############################################################################
-# oviAri1 Sheep BLASTZ/CHAIN/NET (working 04-16-2010 - Chin)
+# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE 2011-02-04 - Chin)
 
 #  request to copy /hive/data/staging.oviAri1 over to /scratch/data/oviAri1
     screen # use a screen to manage this multi-day job
@@ -482,7 +482,7 @@ limit vmemoryuse 163840m
      cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
      ./netSynteny.csh > & netSynteny_tcsh.log 
 
-   #   and the swap
+   #   and the swap (working 2011-02-04)
     mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -490,6 +490,9 @@ limit vmemoryuse 163840m
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    309m19.204s
+    cat fb.oviAri1.chainBosTau4Link.txt
+    # 1164717810 bases of 1201271277 (96.957%) in intersection
 
 #########################################################################
 #  SWAP mm9 lastz (DONE - 2010-04-12 - Chin)
@@ -673,7 +676,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (??? Pending the ISg status 2010-04-29)
+# all.joiner update, downloads and in pushQ - (DONE 2011-02-07 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=oviAri1 -all all.joiner
