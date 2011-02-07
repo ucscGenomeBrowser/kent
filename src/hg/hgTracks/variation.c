@@ -37,13 +37,6 @@ static struct slName *snp125FuncFilter = NULL;
 static struct slName *snp132ExceptionFilter = NULL;
 static struct slName *snp132BitfieldFilter = NULL;
 
-void filterSnpMapItems(struct track *tg, boolean (*filter)
-		       (struct track *tg, void *item))
-/* Filter out items from track->itemList. */
-{
-filterSnpItems(tg, filter);
-}
-
 void filterSnpItems(struct track *tg, boolean (*filter)
 		    (struct track *tg, void *item))
 /* Filter out items from track->itemList. */
@@ -368,6 +361,17 @@ slReverse(&newList);
 tg->items = newList;
 }
 
+struct orthoBed
+/* Abbreviated version of orthoAlleles: bed4 plus chimp allele */
+    {
+    struct orthoBed *next;       /* Next in singly linked list. */
+    char            *chrom;      /* Human chromosome or FPC contig */
+    unsigned         chromStart; /* Start position in chromosome */
+    unsigned         chromEnd;   /* End position in chromosome */
+    char            *name;       /* Name of item */
+    char            *chimp;      /* Chimp allele */
+    };
+
 struct orthoBed *orthoBedLoad(char **row)
 /* Load a bed from row fetched with select * from bed
  * from database.  Dispose of this with bedFree(). */
@@ -477,12 +481,55 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color of snp track item -- which we stash in the weight column (only the bed4
- * fields of snp are used at draw time). */
+static float snp132MajorAlleleFreq(const struct snp132Ext *snp)
+/* Some SNPs have >2 alleles, so minor allele frequency is harder to define.
+ * So instead, I'm using major allele frequency -- (1 - major) can be a proxy for minor. */
 {
-struct snp125 *snp = item;
-return (Color)(snp->weight);
+float majorAlF = 0.0;
+int i;
+for (i = 0;  i < snp->alleleFreqCount;  i++)
+    if (snp->alleleFreqs[i] > majorAlF)
+	majorAlF = snp->alleleFreqs[i];
+return majorAlF;
+}
+
+static Color snp132ColorByAlleleFreq(struct snp132Ext *snp, struct hvGfx *hvg)
+/* If snp has allele freq data, return a shade from red (rare) to blue (common);
+ * otherwise return black. */
+{
+static boolean colorsInited = FALSE;
+static Color redToBlue[EXPR_DATA_SHADES];
+static struct rgbColor red = {255, 0, 0};
+static struct rgbColor blue = {0, 0, 255};
+if (!colorsInited)
+    hvGfxMakeColorGradient(hvg, &red, &blue, EXPR_DATA_SHADES, redToBlue);
+if (snp->alleleFreqCount > 0)
+    {
+    float majorAlF = snp132MajorAlleleFreq(snp);
+    // >2 common alleles (e.g. at VNTR sites) can cause low major allele freq;
+    // cap at 0.5 to avoid overflow in the shade calculation.
+    if (majorAlF < 0.5)
+	majorAlF = 0.5;
+    if (majorAlF > 1.0)
+	majorAlF = 1.0;
+    // Shade on a scale of 100% (red) to 50% (blue):
+    int shadeIndex = (int)((1.0 - 2.0*(majorAlF - 0.5)) * (EXPR_DATA_SHADES-1));
+    return redToBlue[shadeIndex];
+    }
+return MG_BLACK;
+}
+
+Color snp125Color(struct track *tg, void *item, struct hvGfx *hvg)
+/* Return color of snp track item -- stashed in the weight column for set/enum 
+ * attributes that were used for sorting at draw time.  Allele frequency shading
+ * must be done at draw time because it uses hvg.  Aside from allele frequencies
+ * and overloaded weight, only the bed4 fields of snp are used at draw time). */
+{
+struct snp132Ext *snp = item;
+if (snp125ColorSource == snp125ColorSourceAlleleFreq)
+    return snp132ColorByAlleleFreq(snp, hvg);
+else
+    return (Color)(snp->weight);
 }
 
 int snp125ColorCmpRaw(const Color ca, const char *aName, const Color cb, const char *bName)
@@ -530,12 +577,7 @@ return snp125ColorCmpRaw(ca, a->name, cb, b->name);
 int snp125ColorCmpDesc(const void *va, const void *vb)
 /* Compare to sort based on color -- red first, black last */
 {
-const struct snp125 *a = *((struct snp125 **)va);
-const struct snp125 *b = *((struct snp125 **)vb);
-const Color ca = (Color)(a->weight);
-const Color cb = (Color)(b->weight);
-
-return snp125ColorCmpRaw(cb, b->name, ca, a->name);
+return snp125ColorCmp(vb, va);
 }
 
 static enum snp125Color *snp125ColorsFromCart(char *track, char *attribute,
@@ -587,13 +629,7 @@ snp125LocTypeFilter = snp125FilterFromCart(cart, track, "locType", &snp125LocTyp
 snp132ExceptionFilter = snp125FilterFromCart(cart, track, "exceptions", &snp132ExceptionFilterOn);
 snp132BitfieldFilter = snp125FilterFromCart(cart, track, "bitfields", &snp132BitfieldFilterOn);
 
-safef(cartVar, sizeof(cartVar), "%s.colorSource", track);
-char *snp125ColorSourceDefault = snp125ColorSourceLabels[SNP125_DEFAULT_COLOR_SOURCE];
-char *colorSourceCart = cartUsualString(cart, cartVar,
-					cartUsualString(cart, snp125ColorSourceOldVar,
-							snp125ColorSourceDefault));
-snp125ColorSource = stringArrayIx(colorSourceCart, snp125ColorSourceLabels,
-				  snp125ColorSourceArraySize);
+snp125ColorSource = snp125ColorSourceFromCart(cart, tdb);
 snp125MolTypeCart = snp125ColorsFromCart(track, "molType", snp125MolTypeOldColorVars, TRUE,
 					 snp125MolTypeDefault, snp125MolTypeArraySize);
 snp125ClassCart = snp125ColorsFromCart(track, "class", snp125ClassOldColorVars, TRUE,
@@ -666,7 +702,9 @@ switch (thisSnpColor)
 }
 
 static void snp125ColorItems(struct track *tg, int version)
-/* Use cart settings and snp properties to assign a color to snp -- and stash it in snp->weight. */
+/* Use cart settings and snp properties to assign a color to snp -- and stash it in snp->weight.
+ * Note: we can't do the allele frequency shading here because that uses hvg for the shades,
+ * and hvg isn't passed in until draw time. */
 {
 struct snp132Ext *snp;
 for (snp = tg->items;  snp != NULL;  snp = snp->next)
@@ -752,6 +790,7 @@ for (snp = tg->items;  snp != NULL;  snp = snp->next)
 		}
 	    }
 	    break;
+	case snp125ColorSourceAlleleFreq:
 	default:
 	    color = snp125ColorBlack;
 	    break;
@@ -778,6 +817,47 @@ hFreeConn(&conn);
 tg->items = itemList;
 }
 
+static int bedCmpStartName(const void *va, const void *vb)
+/* Compare two bed4's by chromStart (chrom assumed to be same) and name. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int diff = a->chromStart - b->chromStart;
+if (diff == 0)
+    diff = strcmp(a->name, b->name);
+return diff;
+}
+
+static int snp132AlFreqCmp(const void *va, const void *vb)
+/* Compare two SNPs by allele frequency: (no info/)rare first, common last. */
+{
+const struct snp132Ext *a = *((struct snp132Ext **)va);
+const struct snp132Ext *b = *((struct snp132Ext **)vb);
+if (a->alleleFreqCount == 0 && b->alleleFreqCount == 0)
+    return bedCmpStartName(va, vb);
+else if (a->alleleFreqCount == 0 && b->alleleFreqCount != 0)
+    return -1;
+else if (a->alleleFreqCount == 0 && b->alleleFreqCount != 0)
+    return 1;
+else
+    {
+    float majorAlFA = snp132MajorAlleleFreq(a);
+    float majorAlFB = snp132MajorAlleleFreq(b);
+    if (majorAlFA > majorAlFB)
+	return -1;
+    else if (majorAlFA < majorAlFB)
+	return 1;
+    else
+	return bedCmpStartName(va, vb);
+    }
+}
+
+static int snp132AlFreqCmpDesc(const void *va, const void *vb)
+/* Compare two SNPs by allele frequency: common first, (no info/)rare last. */
+{
+return snp132AlFreqCmp(vb, va);
+}
+
 void loadSnp125(struct track *tg)
 /* load snps from table, ortho alleles from snpXXXOrthoXXX table, filter and color. */
 {
@@ -793,19 +873,21 @@ snp125SetupFiltersAndColorsFromCart(tg->tdb);
 filterSnp125Items(tg, version);
 snp125ColorItems(tg, version);
 
+// If in dense or squish mode, sort items by color or allele frequency:
+boolean sortByAF = (snp125ColorSource == snp125ColorSourceAlleleFreq);
 if (tg->visibility == tvDense)
-    slSort(&tg->items, snp125ColorCmp);
+    slSort(&tg->items, sortByAF ? snp132AlFreqCmp : snp125ColorCmp);
 else if (tg->visibility == tvSquish)
-    slSort(&tg->items, snp125ColorCmpDesc);
+    slSort(&tg->items, sortByAF ? snp132AlFreqCmpDesc : snp125ColorCmpDesc);
 else
     {
     slSort(&tg->items, snpOrthoCmp);
     setSnp125ExtendedNameExtra(tg);
     enum trackVisibility newVis = limitVisibility(tg);
     if (newVis == tvDense)
-	slSort(&tg->items, snp125ColorCmp);
+	slSort(&tg->items, sortByAF ? snp132AlFreqCmp : snp125ColorCmp);
     else if (newVis == tvSquish)
-	slSort(&tg->items, snp125ColorCmpDesc);
+	slSort(&tg->items, sortByAF ? snp132AlFreqCmpDesc : snp125ColorCmpDesc);
     }
 }
 
@@ -823,8 +905,8 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 bedLoadItem(tg, "snpMap", (ItemLoader)snpMapLoad);
 if (!startsWith("hg",database))
     return;
-filterSnpMapItems(tg, snpMapSourceFilterItem);
-filterSnpMapItems(tg, snpMapTypeFilterItem);
+filterSnpItems(tg, snpMapSourceFilterItem);
+filterSnpItems(tg, snpMapTypeFilterItem);
 }
 
 void loadSnp(struct track *tg)
@@ -1019,7 +1101,7 @@ int w = x2-x1;
 
 if (w < 1)
     w = 1;
-hvGfxBox(hvg, x1, y, w, heightPer, (Color)(s->weight));
+hvGfxBox(hvg, x1, y, w, heightPer, color);
 /* Clip here so that text will tend to be more visible... */
 if (tg->drawName && vis != tvSquish)
     mapBoxHc(hvg, s->chromStart, s->chromEnd, x1, y, w, heightPer,
@@ -1107,6 +1189,7 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y, w;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+snp125ColorSource = snp125ColorSourceFromCart(cart, tg->tdb);
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
