@@ -338,7 +338,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=2974 dateSubmitted=2011-01-22
 
         track wgEncodeHaibRnaSeqA549ShortpolyaDex1nmTranscriptGencV3Rep1
-        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 on
         shortLabel A549 DEX1n 1
         longLabel A549 DEX 1hr 1nM RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=DEX1nM rep=rep1
@@ -545,7 +545,7 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=2976 dateSubmitted=2011-01-21
 
         track wgEncodeHaibRnaSeqA549ShortpolyaEtoh02TranscriptGencV3Rep1
-        parent wgEncodeHudsonalphaRnaSeqViewGencV3 off
+        parent wgEncodeHudsonalphaRnaSeqViewGencV3 on
         shortLabel A549 ETOH 1
         longLabel A549 ETOH 1hr 0.02% RNA-seq Transcripts FPKM Rep 1 from ENCODE/HAIB
         subGroups view=TranscriptGencV3 cellType=A549 rnaExtract=shortPolyA treatment=ETOH02 rep=rep1
