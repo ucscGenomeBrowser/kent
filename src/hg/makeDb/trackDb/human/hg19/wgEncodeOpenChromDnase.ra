@@ -67,7 +67,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Chorion DNase Pk
-        longLabel Chorion - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Chorion Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=CHORN treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -77,7 +77,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Medullo DNase Pk
-        longLabel Medullo - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Medullo Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=MEDULLO treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -87,7 +87,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM12891 DNase Pk
-        longLabel GM12891 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel GM12891 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=GM12891 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -97,7 +97,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM12892 DNase Pk
-        longLabel GM12892 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel GM12892 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=GM12892 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -107,7 +107,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19238 DNase Pk
-        longLabel GM19238 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel GM19238 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=GM19238 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -117,7 +117,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel GM12878 DNase Pk
-        longLabel GM12878 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel GM12878 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=GM12878 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -128,7 +128,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel H1-hESC DNase Pk
-        longLabel H1-hESC - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel H1-hESC Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=H1 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -139,7 +139,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa-S3 DNase Pk
-        longLabel HeLa-S3 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HeLa-S3 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HELA treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -150,7 +150,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19239 DNase Pk
-        longLabel GM19239 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel GM19239 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=GM19239 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -160,7 +160,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM18507 DNase Pk
-        longLabel GM18507 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel GM18507 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=GM18507 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -170,7 +170,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel GM19240 DNase Pk
-        longLabel GM19240 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel GM19240 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=GM19240 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -180,7 +180,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel H9-hESC DNase Pk
-        longLabel H9-hESC - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel H9-hESC Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=H9 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -190,7 +190,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HepG2 DNase Pk
-        longLabel HepG2 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HepG2 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HEPG2 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -201,7 +201,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HUVEC DNase Pk
-        longLabel HUVEC - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HUVEC Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HUVEC treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -212,7 +212,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel NHEK DNase Pk
-        longLabel NHEK - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel NHEK Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=NHEK treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -223,7 +223,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
         shortLabel K562 DNase Pk
-        longLabel K562 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel K562 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=K562 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -235,7 +235,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HeLa IFNa DNse Pk
-        longLabel HeLa-S3, IFNa - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HeLa-S3 IFNa Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HELA treatment=IFNa4h
         type narrowPeak
         origAssembly hg18
@@ -246,7 +246,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel MCF-7 DNase Pk
-        longLabel MCF-7 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel MCF-7 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=MCF7 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -257,7 +257,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel ProgFib DNase Pk
-        longLabel ProgFib - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel ProgFib Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=PROG treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -267,7 +267,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel FibroP DNase Pk
-        longLabel FibroP - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel FibroP Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=FIBROP treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -277,7 +277,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Fibrobl DNase Pk
-        longLabel Fibrobl - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Fibrobl Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=FIBRO treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -287,7 +287,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMM DNase Pk
-        longLabel HSMM - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HSMM Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HSMM treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -297,7 +297,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Myometr DNase Pk
-        longLabel Myometr - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Myometr Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=MYOMETR treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -307,7 +307,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PanIsle DNase Pk
-        longLabel PanIslets - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel PanIslets Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=PANI treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -317,7 +317,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel AoSMC sf DNase Pk
-        longLabel AoSMC, Serum Free - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel AoSMC Serum Free Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=AOSMC treatment=SERUMFREE
         type narrowPeak
         origAssembly hg18
@@ -327,7 +327,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HSMMtube DNase Pk
-        longLabel HSMMtube - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HSMMtube Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HSMMt treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -337,7 +337,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Melano DNase Pk
-        longLabel Melano - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Melano Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=MELANO treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -347,7 +347,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel pHTE DNase Pk
-        longLabel pHTE - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel pHTE Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=pHTE treatment=AANONE
         type narrowPeak
         # subId=2513 dateSubmitted=2010-10-18
@@ -356,7 +356,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Osteobl DNase Pk
-        longLabel Osteobl - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Osteobl Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=Osteobl treatment=AANONE
         type narrowPeak
         # subId=2506 dateSubmitted=2010-10-16
@@ -365,7 +365,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel LNCaP andro DN Pk
-        longLabel LNCaP, androgen - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel LNCaP androgen Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=LNCaP treatment=ANDRO
         type narrowPeak
         color 0,119,158
@@ -375,7 +375,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel LNCaP DNase Pk
-        longLabel LNCaP - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel LNCaP Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=LNCaP treatment=AANONE
         type narrowPeak
         color 0,119,158
@@ -385,7 +385,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel A549 DNase Pk
-        longLabel A549 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel A549 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=A549 treatment=AANONE
         type narrowPeak
         # subId=2493 dateSubmitted=2010-10-15
@@ -394,7 +394,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HTR8svn DNase Pk
-        longLabel HTR8svn - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HTR8svn Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HTR8 treatment=AANONE
         type narrowPeak
         # subId=2793 dateSubmitted=2010-11-02
@@ -403,7 +403,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel 8988T DNase Pk
-        longLabel 8988T - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel 8988T Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=8988T treatment=AANONE
         type narrowPeak
         # subId=2786 dateSubmitted=2010-11-01
@@ -412,7 +412,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel DNse PanIsletD Pk
-        longLabel PanIsletD - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel PanIsletD Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=PanIsD treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -422,7 +422,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HMEC DNase Pk
-        longLabel HMEC - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HMEC Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HMEC treatment=AANONE
         type narrowPeak
         # subId=2764 dateSubmitted=2010-10-27
@@ -431,7 +431,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Gliobla DNase Pk
-        longLabel Gliobla - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Gliobla Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=Gliobla treatment=AANONE
         type narrowPeak
         # subId=2514 dateSubmitted=2010-10-20
@@ -440,7 +440,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel CLL DNase Pk
-        longLabel CLL - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel CLL Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=CLL treatment=AANONE
         type narrowPeak
         # subId=2787 dateSubmitted=2010-11-01
@@ -449,7 +449,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Hepato DNase Pk
-        longLabel Hepatocytes - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Hepatocytes Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=Hepatocytes treatment=AANONE
         type narrowPeak
         # subId=3063 dateSubmitted=2010-12-06
@@ -458,7 +458,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HPDE6 DNase Pk
-        longLabel HPDE6-E6E7 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel HPDE6-E6E7 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=HPDE6E6E7 treatment=AANONE
         type narrowPeak
         # subId=3064 dateSubmitted=2010-12-06
@@ -467,7 +467,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel iPS DNase Pk
-        longLabel iPS - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel iPS Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=iPS treatment=AANONE
         type narrowPeak
         # subId=3065 dateSubmitted=2010-12-06
@@ -476,7 +476,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Huh-7 DNase Pk
-        longLabel Huh-7 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Huh-7 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=Huh7 treatment=AANONE
         type narrowPeak
         # subId=3075 dateSubmitted=2010-12-07
@@ -485,7 +485,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Huh-7.5 DNase Pk
-        longLabel Huh-7.5 - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Huh-7.5 Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=Huh7.5 treatment=AANONE
         type narrowPeak
         # subId=3076 dateSubmitted=2010-12-07
@@ -494,7 +494,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Stellate DNase Pk
-        longLabel Stellate - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Stellate Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=Stellate treatment=AANONE
         type narrowPeak
         # subId=3077 dateSubmitted=2010-12-06
@@ -503,7 +503,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel T-47D DNase Pk
-        longLabel T-47D - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel T-47D Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=T47D treatment=AANONE
         type narrowPeak
         # subId=3078 dateSubmitted=2010-12-06
@@ -512,7 +512,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Urothelia DNse Pk
-        longLabel Urothelia - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Urothelia Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=UROtsa treatment=AANONE
         type narrowPeak
         # subId=3217 dateSubmitted=2011-01-11
@@ -521,7 +521,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Urothl ec DNse Pk
-        longLabel Urothelia, UT189 E.coli - Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
+        longLabel Urothelia UT189 E.coli Open Chromatin by DNaseI HS Peaks from ENCODE/Duke
         subGroups view=Peaks cellType=UROtsa treatment=UT189
         type narrowPeak
         # subId=3218 dateSubmitted=2011-01-11
@@ -543,7 +543,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Chorion DNase DS
-        longLabel Chorion - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Chorion Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=CHORN treatment=AANONE
         type bigWig 0.000000 1.413200
         origAssembly hg18
@@ -553,7 +553,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Medullo DNase DS
-        longLabel Medullo - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Medullo Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 1.186600
         origAssembly hg18
@@ -563,7 +563,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM12891 DNase DS
-        longLabel GM12891 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel GM12891 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 1.893100
         origAssembly hg18
@@ -573,7 +573,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM12892 DNase DS
-        longLabel GM12892 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel GM12892 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 1.880000
         origAssembly hg18
@@ -583,7 +583,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19238 DNase DS
-        longLabel GM19238 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel GM19238 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=GM19238 treatment=AANONE
         type bigWig 0.000000 2.042500
         origAssembly hg18
@@ -593,7 +593,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel GM12878 DNase DS
-        longLabel GM12878 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel GM12878 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=GM12878 treatment=AANONE
         type bigWig 0.000000 1.097700
         origAssembly hg18
@@ -604,7 +604,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel H1-hESC DNase DS
-        longLabel H1-hESC - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel H1-hESC Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=H1 treatment=AANONE
         type bigWig 0.000000 2.243700
         origAssembly hg18
@@ -615,7 +615,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa-S3 DNase DS
-        longLabel HeLa-S3 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HeLa-S3 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HELA treatment=AANONE
         type bigWig 0.000000 2.024200
         origAssembly hg18
@@ -626,7 +626,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19239 DNase DS
-        longLabel GM19239 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel GM19239 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 1.811800
         origAssembly hg18
@@ -636,7 +636,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM18507 DNase DS
-        longLabel GM18507 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel GM18507 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 1.676800
         origAssembly hg18
@@ -646,7 +646,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel GM19240 DNase DS
-        longLabel GM19240 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel GM19240 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=GM19240 treatment=AANONE
         type bigWig 0.000000 1.867200
         origAssembly hg18
@@ -656,7 +656,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel H9-hESC DNase DS
-        longLabel H9ES - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel H9ES Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=H9 treatment=AANONE
         type bigWig 0.000000 1.603000
         origAssembly hg18
@@ -666,7 +666,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HepG2 DNase DS
-        longLabel HepG2 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HepG2 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HEPG2 treatment=AANONE
         type bigWig 0.000000 2.203900
         origAssembly hg18
@@ -677,7 +677,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HUVEC DNase DS
-        longLabel HUVEC - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HUVEC Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HUVEC treatment=AANONE
         type bigWig 0.000000 2.605700
         origAssembly hg18
@@ -688,7 +688,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel NHEK DNase DS
-        longLabel NHEK - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel NHEK Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=NHEK treatment=AANONE
         type bigWig 0.000000 1.748600
         origAssembly hg18
@@ -699,7 +699,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
         shortLabel K562 DNase DS
-        longLabel K562 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel K562 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=K562 treatment=AANONE
         type bigWig 0.000000 3.111200
         origAssembly hg18
@@ -711,7 +711,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HeLa IFNa DNse FD
-        longLabel HeLa-S3, IFNa - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HeLa-S3 IFNa Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 0.761900
         origAssembly hg18
@@ -722,7 +722,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel MCF-7 DNase DS
-        longLabel MCF-7 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel MCF-7 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=MCF7 treatment=AANONE
         type bigWig 0.000000 0.624200
         origAssembly hg18
@@ -733,7 +733,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel ProgFib DNase DS
-        longLabel ProgFib - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel ProgFib Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=PROG treatment=AANONE
         type bigWig 0.000000 1.924100
         origAssembly hg18
@@ -743,7 +743,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel FibroP DNase DS
-        longLabel FibroP - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel FibroP Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=FIBROP treatment=AANONE
         type bigWig 0.000000 1.562600
         origAssembly hg18
@@ -753,7 +753,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Fibrobl DNase DS
-        longLabel Fibrobl - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Fibrobl Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=FIBRO treatment=AANONE
         type bigWig 0.000000 1.250700
         origAssembly hg18
@@ -763,7 +763,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMM DNase DS
-        longLabel HSMM - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HSMM Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HSMM treatment=AANONE
         type bigWig 0.000000 2.424300
         origAssembly hg18
@@ -773,7 +773,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Myometr DNase DS
-        longLabel Myometr - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Myometr Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=MYOMETR treatment=AANONE
         type bigWig 0.000000 1.229800
         origAssembly hg18
@@ -783,7 +783,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PanIsle DNase DS
-        longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (PanIslets cells)
+        longLabel ENCODE Open Chromatin Duke DNaseI HS F-Seq Signal (PanIslets cells)
         subGroups view=SIG cellType=PANI treatment=AANONE
         type bigWig 0.000000 1.691300
         origAssembly hg18
@@ -793,7 +793,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel AoSMC sf DNase DS
-        longLabel AoSMC, SerumFree - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel AoSMC SerumFree Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=AOSMC treatment=SERUMFREE
         type bigWig 0.000000 0.726900
         origAssembly hg18
@@ -803,7 +803,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HSMMtube DNase DS
-        longLabel HSMMtube - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HSMMtube Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HSMMt treatment=AANONE
         type bigWig 0.000000 1.594200
         origAssembly hg18
@@ -813,7 +813,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Melano DNase DS
-        longLabel Melano - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Melano Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=MELANO treatment=AANONE
         type bigWig 0.000000 1.470500
         origAssembly hg18
@@ -823,7 +823,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel pHTE DNase DS
-        longLabel pHTE - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel pHTE Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=pHTE treatment=AANONE
         type bigWig 0.000000 2.165800
         # subId=2513 dateSubmitted=2010-10-18
@@ -832,7 +832,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Osteobl DNase DS
-        longLabel Osteobl - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Osteobl Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=Osteobl treatment=AANONE
         type bigWig 0.000000 3.150400
         # subId=2506 dateSubmitted=2010-10-16
@@ -841,7 +841,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel LNCaP andro DN FD
-        longLabel LNCaP, androgen - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel LNCaP androgen Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=LNCaP treatment=ANDRO
         type bigWig 0.000000 1.231700
         color 0,119,158
@@ -851,7 +851,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel LNCaP DNase DS
-        longLabel LNCaP - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel LNCaP Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=LNCaP treatment=AANONE
         type bigWig 0.000000 2.732500
         color 0,119,158
@@ -861,7 +861,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel A549 DNase DS
-        longLabel A549 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel A549 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=A549 treatment=AANONE
         type bigWig 0.000000 0.892200
         # subId=2493 dateSubmitted=2010-10-15
@@ -870,7 +870,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HTR8svn DNase DS
-        longLabel HTR8svn - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HTR8svn Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HTR8 treatment=AANONE
         type bigWig 0.000000 0.930700
         # subId=2793 dateSubmitted=2010-11-02
@@ -879,7 +879,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel 8988T DNase DS
-        longLabel 8988T - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel 8988T Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=8988T treatment=AANONE
         type bigWig 0.000000 1.842900
         # subId=2786 dateSubmitted=2010-11-01
@@ -888,7 +888,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel DNse PanIsletD FD
-        longLabel PanIsletD - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel PanIsletD Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=PanIsD treatment=AANONE
         type bigWig 0.000000 1.462100
         origAssembly hg18
@@ -898,7 +898,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HMEC DNase DS
-        longLabel HMEC - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel HMEC Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=HMEC treatment=AANONE
         type bigWig 0.000000 2.710200
         # subId=2764 dateSubmitted=2010-10-27
@@ -907,7 +907,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Gliobla DNase DS
-        longLabel Gliobla - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Gliobla Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 1.195300
         # subId=2514 dateSubmitted=2010-10-20
@@ -916,7 +916,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel CLL DNase DS
-        longLabel CLL - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel CLL Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=CLL treatment=AANONE
         type bigWig 0.000000 0.697500
         # subId=2787 dateSubmitted=2010-11-01
@@ -925,7 +925,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Hepato DNase DS
-        longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (Hepatocytes)
+        longLabel ENCODE Open Chromatin Duke DNaseI HS F-Seq Signal (Hepatocytes)
         subGroups view=SIG cellType=Hepatocytes treatment=AANONE
         type bigWig 0.000000 1.185800
         # subId=3063 dateSubmitted=2010-12-06
@@ -934,7 +934,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HPDE6 DNase DS
-        longLabel ENCODE Open Chromatin, Duke DNaseI HS F-Seq Signal (HPDE6-E6E7)
+        longLabel ENCODE Open Chromatin Duke DNaseI HS F-Seq Signal (HPDE6-E6E7)
         subGroups view=SIG cellType=HPDE6E6E7 treatment=AANONE
         type bigWig 0.000000 0.568300
         # subId=3064 dateSubmitted=2010-12-06
@@ -943,7 +943,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel iPS DNase DS
-        longLabel iPS - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel iPS Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=iPS treatment=AANONE
         type bigWig 0.000000 2.048100
         # subId=3065 dateSubmitted=2010-12-06
@@ -952,7 +952,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Huh-7 DNase DS
-        longLabel Huh-7 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Huh-7 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=Huh7 treatment=AANONE
         type bigWig 0.000000 2.031400
         # subId=3075 dateSubmitted=2010-12-07
@@ -961,7 +961,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Huh-7.5 DNase DS
-        longLabel Huh-7.5 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Huh-7.5 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=Huh7.5 treatment=AANONE
         type bigWig 0.000000 2.919900
         # subId=3076 dateSubmitted=2010-12-07
@@ -970,7 +970,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Stellate DNase DS
-        longLabel Stellate - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Stellate Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=Stellate treatment=AANONE
         type bigWig 0.000000 1.116200
         # subId=3077 dateSubmitted=2010-12-06
@@ -979,7 +979,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel T-47D DNase DS
-        longLabel T-47D - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel T-47D Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=T47D treatment=AANONE
         type bigWig 0.000000 1.376400
         # subId=3078 dateSubmitted=2010-12-06
@@ -988,7 +988,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Urothelia DNse DS
-        longLabel Urothelia - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Urothelia Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=UROtsa treatment=AANONE
         type bigWig 0.000000 0.851700
         # subId=3217 dateSubmitted=2011-01-11
@@ -997,7 +997,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Urothl ec DNse DS
-        longLabel Urothelia, UT189 - Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
+        longLabel Urothelia UT189 Open Chromatin by DNaseI HS Density Signal from ENCODE/Duke
         subGroups view=SIG cellType=UROtsa treatment=UT189
         type bigWig 0.000000 0.981900
         # subId=3218 dateSubmitted=2011-01-11
@@ -1019,7 +1019,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Chorion DNase OS
-        longLabel Chorion - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Chorion Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=CHORN treatment=AANONE
         type bigWig 0.000000 286.000000
         origAssembly hg18
@@ -1029,7 +1029,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Medullo DNase OS
-        longLabel Medullo - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Medullo Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 242.000000
         origAssembly hg18
@@ -1039,7 +1039,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM12891 DNase OS
-        longLabel GM12891 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel GM12891 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 209.000000
         origAssembly hg18
@@ -1049,7 +1049,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM12892 DNase OS
-        longLabel GM12892 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel GM12892 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 220.000000
         origAssembly hg18
@@ -1059,7 +1059,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19238 DNase OS
-        longLabel GM19238 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel GM19238 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=GM19238 treatment=AANONE
         type bigWig 0.000000 231.000000
         origAssembly hg18
@@ -1069,7 +1069,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel GM12878 DNase OS
-        longLabel GM12878 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel GM12878 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=GM12878 treatment=AANONE
         type bigWig 0.000000 627.000000
         origAssembly hg18
@@ -1080,7 +1080,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel H1-hESC DNase OS
-        longLabel H1-hESC - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel H1-hESC Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=H1 treatment=AANONE
         type bigWig 0.000000 264.000000
         origAssembly hg18
@@ -1091,7 +1091,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa-S3 DNase OS
-        longLabel HeLa-S3 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HeLa-S3 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HELA treatment=AANONE
         type bigWig 0.000000 265.000000
         origAssembly hg18
@@ -1102,7 +1102,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19239 DNase OS
-        longLabel GM19239 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel GM19239 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 209.000000
         origAssembly hg18
@@ -1112,7 +1112,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM18507 DNase OS
-        longLabel GM18507 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel GM18507 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 253.000000
         origAssembly hg18
@@ -1122,7 +1122,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel GM19240 DNase OS
-        longLabel GM19240 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel GM19240 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=GM19240 treatment=AANONE
         type bigWig 0.000000 253.000000
         origAssembly hg18
@@ -1132,7 +1132,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel H9-hESC DNase OS
-        longLabel H9-hESC - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel H9-hESC Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=H9 treatment=AANONE
         type bigWig 0.000000 269.000000
         origAssembly hg18
@@ -1142,7 +1142,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HepG2 DNase OS
-        longLabel HepG2 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HepG2 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HEPG2 treatment=AANONE
         type bigWig 0.000000 274.000000
         origAssembly hg18
@@ -1153,7 +1153,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HUVEC DNase OS
-        longLabel HUVEC - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HUVEC Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HUVEC treatment=AANONE
         type bigWig 0.000000 198.000000
         origAssembly hg18
@@ -1164,7 +1164,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel NHEK DNase OS
-        longLabel NHEK - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel NHEK Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=NHEK treatment=AANONE
         type bigWig 0.000000 194.000000
         origAssembly hg18
@@ -1175,7 +1175,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
         shortLabel K562 DNase OS
-        longLabel K562 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel K562 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=K562 treatment=AANONE
         type bigWig 0.000000 256.000000
         origAssembly hg18
@@ -1187,7 +1187,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HeLa IFNa DNse BO
-        longLabel HeLa-S3, IFNa - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HeLa-S3 IFNa Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 224.000000
         origAssembly hg18
@@ -1198,7 +1198,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel MCF-7 DNase OS
-        longLabel MCF-7 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel MCF-7 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=MCF7 treatment=AANONE
         type bigWig 0.000000 198.000000
         origAssembly hg18
@@ -1209,7 +1209,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel ProgFib DNase OS
-        longLabel ProgFib - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel ProgFib Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=PROG treatment=AANONE
         type bigWig 0.000000 231.000000
         origAssembly hg18
@@ -1219,7 +1219,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel FibroP DNase OS
-        longLabel FibroP - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel FibroP Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=FIBROP treatment=AANONE
         type bigWig 0.000000 430.000000
         origAssembly hg18
@@ -1229,7 +1229,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Fibrobl DNase OS
-        longLabel Fibrobl - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Fibrobl Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=FIBRO treatment=AANONE
         type bigWig 0.000000 318.000000
         origAssembly hg18
@@ -1239,7 +1239,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMM DNase OS
-        longLabel HSMM - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HSMM Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HSMM treatment=AANONE
         type bigWig 0.000000 341.000000
         origAssembly hg18
@@ -1249,7 +1249,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Myometr DNase OS
-        longLabel Myometr - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Myometr Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=MYOMETR treatment=AANONE
         type bigWig 0.000000 209.000000
         origAssembly hg18
@@ -1259,7 +1259,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PanIsle DNase OS
-        longLabel PanIslets - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel PanIslets Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=PANI treatment=AANONE
         type bigWig 0.000000 357.000000
         origAssembly hg18
@@ -1269,7 +1269,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel AoSMC sf DNase OS
-        longLabel AoSMC, Serum Free - Open Chromatin by DNaseI HS Overlap Signal frm ENCODE/Duke
+        longLabel AoSMC Serum Free Open Chromatin by DNaseI HS Overlap Signal frm ENCODE/Duke
         subGroups view=SIGBO cellType=AOSMC treatment=SERUMFREE
         type bigWig 0.000000 151.000000
         origAssembly hg18
@@ -1279,7 +1279,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HSMMtube DNase OS
-        longLabel HSMMtube - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HSMMtube Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HSMMt treatment=AANONE
         type bigWig 0.000000 328.000000
         origAssembly hg18
@@ -1289,7 +1289,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Melano DNase OS
-        longLabel Melano - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Melano Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=MELANO treatment=AANONE
         type bigWig 0.000000 412.000000
         origAssembly hg18
@@ -1299,7 +1299,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel pHTE DNase OS
-        longLabel pHTE - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel pHTE Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=pHTE treatment=AANONE
         type bigWig 0.000000 317.000000
         # subId=2513 dateSubmitted=2010-10-18
@@ -1308,7 +1308,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Osteobl DNase OS
-        longLabel Osteobl - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Osteobl Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=Osteobl treatment=AANONE
         type bigWig 0.000000 604.000000
         # subId=2506 dateSubmitted=2010-10-16
@@ -1317,7 +1317,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel LNCaP andro DN BO
-        longLabel LNCaP, androgen - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel LNCaP androgen Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=LNCaP treatment=ANDRO
         type bigWig 0.000000 220.000000
         color 0,119,158
@@ -1327,7 +1327,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel LNCaP DNase OS
-        longLabel LNCaP - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel LNCaP Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=LNCaP treatment=AANONE
         type bigWig 0.000000 517.000000
         color 0,119,158
@@ -1337,7 +1337,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel A549 DNase OS
-        longLabel A549 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel A549 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=A549 treatment=AANONE
         type bigWig 0.000000 204.000000
         # subId=2493 dateSubmitted=2010-10-15
@@ -1346,7 +1346,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HTR8svn DNase OS
-        longLabel HTR8svn - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HTR8svn Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HTR8 treatment=AANONE
         type bigWig 0.000000 187.000000
         # subId=2793 dateSubmitted=2010-11-02
@@ -1355,7 +1355,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel 8988T DNase OS
-        longLabel 8988T - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel 8988T Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=8988T treatment=AANONE
         type bigWig 0.000000 286.000000
         # subId=2786 dateSubmitted=2010-11-01
@@ -1364,7 +1364,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel DNse PanIsletD BO
-        longLabel PanIsletD - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel PanIsletD Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=PanIsD treatment=AANONE
         type bigWig 0.000000 415.000000
         origAssembly hg18
@@ -1374,7 +1374,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HMEC DNase OS
-        longLabel HMEC - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HMEC Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HMEC treatment=AANONE
         type bigWig 0.000000 495.000000
         # subId=2764 dateSubmitted=2010-10-27
@@ -1383,7 +1383,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Gliobla DNase OS
-        longLabel Gliobla - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Gliobla Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 228.000000
         # subId=2514 dateSubmitted=2010-10-20
@@ -1392,7 +1392,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel CLL DNase OS
-        longLabel CLL - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel CLL Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=CLL treatment=AANONE
         type bigWig 0.000000 302.000000
         # subId=2787 dateSubmitted=2010-11-01
@@ -1401,7 +1401,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Hepato DNase OS
-        longLabel Hepatocytes - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Hepatocytes Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=Hepatocytes treatment=AANONE
         type bigWig 0.000000 242.000000
         # subId=3063 dateSubmitted=2010-12-06
@@ -1410,7 +1410,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HPDE6 DNase OS
-        longLabel HPDE6-E6E7 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel HPDE6-E6E7 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=HPDE6E6E7 treatment=AANONE
         type bigWig 0.000000 185.000000
         # subId=3064 dateSubmitted=2010-12-06
@@ -1419,7 +1419,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel iPS DNase OS
-        longLabel iPS - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel iPS Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=iPS treatment=AANONE
         type bigWig 0.000000 440.000000
         # subId=3065 dateSubmitted=2010-12-06
@@ -1428,7 +1428,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Huh-7 DNase OS
-        longLabel Huh-7 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Huh-7 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=Huh7 treatment=AANONE
         type bigWig 0.000000 209.000000
         # subId=3075 dateSubmitted=2010-12-07
@@ -1437,7 +1437,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Huh-7.5 DNase OS
-        longLabel Huh-7.5 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Huh-7.5 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=Huh7.5 treatment=AANONE
         type bigWig 0.000000 286.000000
         # subId=3076 dateSubmitted=2010-12-07
@@ -1446,7 +1446,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Stellate DNase OS
-        longLabel Stellate - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Stellate Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=Stellate treatment=AANONE
         type bigWig 0.000000 209.000000
         # subId=3077 dateSubmitted=2010-12-06
@@ -1455,7 +1455,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel T-47D DNase OS
-        longLabel T-47D - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel T-47D Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=T47D treatment=AANONE
         type bigWig 0.000000 251.000000
         # subId=3078 dateSubmitted=2010-12-06
@@ -1464,7 +1464,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Urothelia DNse OS
-        longLabel Urothelia - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Urothelia Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=UROtsa treatment=AANONE
         type bigWig 0.000000 196.000000
         # subId=3217 dateSubmitted=2011-01-11
@@ -1473,7 +1473,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Urothl ec DNse OS
-        longLabel Urothelia, UT189 - Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
+        longLabel Urothelia UT189 Open Chromatin by DNaseI HS Overlap Signal from ENCODE/Duke
         subGroups view=SIGBO cellType=UROtsa treatment=UT189
         type bigWig 0.000000 210.000000
         # subId=3218 dateSubmitted=2011-01-11

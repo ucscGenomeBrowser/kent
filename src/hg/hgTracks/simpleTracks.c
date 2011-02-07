@@ -5152,7 +5152,7 @@ char *decipherId = NULL;
 
 /* color scheme:
 	RED:	If the entry is a deletion (mean ratio < 0)
-	GREEN:	If the entry is a duplication (mean ratio > 0)
+	BLUE:	If the entry is a duplication (mean ratio > 0)
 */
 safef(cond_str, sizeof(cond_str),"name='%s' ", bedItem->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
@@ -5166,7 +5166,7 @@ if (decipherId != NULL)
             {
 	    if (sameWord(row[0], "1"))
 	    	{
-	    	col = MG_GREEN;
+	    	col = MG_BLUE;
 	    	}
 	    else
 		{
@@ -10902,6 +10902,177 @@ tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
+char *omimGeneClass3Name(struct track *tg, void *item)
+/* set name for omimGeneClass3 track */
+{
+struct bed *el = item;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+char *geneLabel = NULL;
+
+char *omimGeneClass3Label = cartUsualString(cart, "omimGeneClass3.label", "OMIM ID");
+
+return("testXXX");
+if (sameWord(omimGeneClass3Label, "OMIM ID"))
+    {
+    geneLabel = el->name;
+    }
+else
+    {
+    if (sameWord(omimGeneClass3Label, "UCSC gene symbol"))
+	{
+	/* get the gene symbol of the exact KG that matches not only ID but also genomic position */
+	safef(query, sizeof(query),
+	"select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGeneClass3 o where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
+	el->name, el->chromStart, el->chromEnd);
+	geneLabel = sqlQuickString(conn, query);
+	}
+    else
+    	{
+	safef(query, sizeof(query),
+	"select geneSymbol from omimGeneClass3Map where omimId='%s'", el->name);
+	geneLabel = sqlQuickString(conn, query);
+	}
+
+    if (geneLabel == NULL)
+	{
+	geneLabel = el->name;
+	}
+    }
+hFreeConn(&conn);
+return(cloneString(geneLabel));
+}
+
+Color omimGeneClass3Color(struct track *tg, void *item, struct hvGfx *hvg)
+/* set the color for omimGeneClass3 track items */
+{
+struct bed *el = item;
+char *result;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+
+/* set the color to red if the entry is listed in morbidmap */
+safef(query, sizeof(query), "select omimId from omimDisorderMap where omimId=%s", el->name);
+result = sqlQuickString(conn, query);
+hFreeConn(&conn);
+if (result != NULL)
+    {
+    return hvGfxFindColorIx(hvg, 255, 0, 0);
+    }
+else
+    {
+    return hvGfxFindColorIx(hvg, 0, 200, 200);
+    }
+}
+
+/* reserve space no more than 20 unique OMIM entries */
+#define OMIM_MAX_DESC_LEN 256
+char omimGeneClass3Buffer[20 * OMIM_MAX_DESC_LEN];
+
+char *omimGeneClass3DiseaseList(struct track *tg, struct bed *item)
+/* Return list of diseases associated with a OMIM entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+int i=0;
+
+conn = hAllocConn(database);
+
+safef(query,sizeof(query),
+        "select distinct disorder from omimDisorderMap, omimGeneClass3 where name='%s' and name=cast(omimId as char) order by disorder", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* show up to 20 max entries */
+chp = omimGeneClass3Buffer;
+while ((row != NULL) && i<20)
+    {
+    /* omimMorbidMap description field some times have trailing blanks. */
+    eraseTrailingSpaces(row[0]);
+    if (i != 0)
+	{
+	safef(chp, 3, "; ");
+	chp++;chp++;
+	}
+    safecpy(chp, OMIM_MAX_DESC_LEN, row[0]);
+    chp = chp+strlen(row[0]);
+    row = sqlNextRow(sr);
+    i++;
+    }
+
+if ((i == 20) && (row != NULL))
+    {
+    safef(chp, 5, " ...");
+    chp++;chp++;chp++;chp++;
+    }
+
+*chp = '\0';
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(omimGeneClass3Buffer);
+}
+
+static void omimGeneClass3DrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *sPhenotypes;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+sPhenotypes = omimGeneClass3DiseaseList(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, omimGeneClass3Color(tg, item, hvg));
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, sPhenotypes)-2, y,
+		    mgFontStringWidth(font, sPhenotypes),
+                    heightPer, MG_BLACK, font, sPhenotypes);
+        }
+
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
+    }
+
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-')
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = hvGfxContrastingColor(hvg, color);
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		dir, textColor, TRUE);
+	}
+    }
+}
+
+void omimGeneClass3Methods (struct track *tg)
+{
+//tg->itemColor 	  = omimGeneClass3Color;
+//tg->itemNameColor = omimGeneClass3Color;
+//tg->itemName      = omimGeneClass3Name;
+tg->drawItemAt    = omimGeneClass3DrawAt;
+}
+
 char *omimGeneName(struct track *tg, void *item)
 /* set name for omimGene track */
 {
@@ -12318,6 +12489,8 @@ registerTrackHandlerOnFamily("hapmapSnps", hapmapMethods);
 registerTrackHandlerOnFamily("hapmapSnpsPhaseII", hapmapMethods);
 registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
+//registerTrackHandler("omimGeneClass3", omimGeneClass3Methods);
+registerTrackHandler("omimComposite", omimGeneClass3Methods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
 }
