@@ -225,8 +225,9 @@ origTrackLine customTracks
 otherDb *
 otherDbTable bed
 otherOrg netAlign chain
-pValueFilter bed narrowPeak broadPeak
-pValueFilterLimits bed narrowPeak broadPeak
+*Filter bed narrowPeak broadPeak
+*FilterLimits bed narrowPeak broadPeak
+*FilterByRange bed narrowPeak broadPeak
 pairEndsByName bam
 pairedEndUrlFormat bed
 pairwise wigMaf

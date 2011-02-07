@@ -4713,3 +4713,38 @@ gzip wgEncodeBroadHmmNhlfHMM.bed
 # looks good in browser
 # files are okay
 
+2011-01-31 Swap out bigWigs that Brian update to version 4
+==========================================================
+cd /hive/users/braney/bigWigConvert.wgEncodeBroadHistone
+ls -1 *.bigWig | wl  151
+cd {downLoads}/wgEncodeBroadHistone
+ls -1 *.bigWig | wl  151
+mv *.bigWig ../obsolete/wgEncodeBroadHistone
+
+cd /hive/users/braney/bigWigConvert.wgEncodeBroadHistone
+mv wgEncodeBroadHistoneGm12878ControlStdSig.bigWig.new.bigWig      /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878ControlStdSig.bigWig
+mv wgEncodeBroadHistoneGm12878CtcfStdSig.bigWig.new.bigWig         /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878CtcfStdSig.bigWig
+mv wgEncodeBroadHistoneGm12878H2azStdSig.bigWig.new.bigWig         /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H2azStdSig.bigWig
+mv wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig.new.bigWig      /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig
+mv wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig.new.bigWig     /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig
+mv wgEncodeBroadHistoneGm12878H3k36me3StdSig.bigWig.new.bigWig     /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeBroadHistone/wgEncodeBroadHistoneGm12878H3k36me3StdSig.bigWig
+...
+cd {downLoads}/wgEncodeBroadHistone
+ls -1 *.bigWig | wl  151
+cd release1/
+ls -1 *.bigWig | wl  151
+# These are links to obsolete bigWigs
+rm *.bigWig
+ls ../*.bigWig .
+ls -1 *.bigWig | wl  151
+
+# Check that bigWigs work in browser.  This will check that /gbdb/hg19/bbi link is okay too
+AOKAY
+
+# check metadata by building index.html
+../
+encodeDownloadsPage.pl -db=hg19 index.html
+1251 files all with metadata.  # 1251 file in hgFileUi too
+encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+
+

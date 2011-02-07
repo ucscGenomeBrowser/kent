@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#The fields of a SAM short read alignment.  Follows conventions in SAM docs out of Sanger
+#The fields of a SAM short read alignment, the text version of BAM.
 CREATE TABLE samAlignment (
     qName varchar(255) not null,	# Query template name - name of a read
     flag smallint unsigned not null,	# Flags.  0x10 set for reverse complement.  See SAM docs for others.

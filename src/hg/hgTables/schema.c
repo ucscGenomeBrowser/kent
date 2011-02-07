@@ -597,6 +597,8 @@ hPrintf("Binary file of type %s stored at %s<BR>\n",
 	type, trackDbSetting(tdb, "bigDataUrl"));
 if (sameString(type, "bigBed"))
     showSchemaBigBed(table);
+else if (sameString(type, "bam"))
+    showSchemaBam(table);
 }
 
 static void showSchemaWiki(struct trackDb *tdb, char *table)
@@ -611,6 +613,8 @@ static void showSchema(char *db, struct trackDb *tdb, char *table)
 {
 if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table);
+else if (isBamTable(table))
+    showSchemaBam(table);
 else if (isCustomTrack(table))
     showSchemaCt(db, table);
 else if (isHubTrack(table))
