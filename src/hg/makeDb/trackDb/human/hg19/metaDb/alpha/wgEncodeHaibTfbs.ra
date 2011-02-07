@@ -27867,7 +27867,7 @@ objType file
 antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -27914,7 +27914,7 @@ objType table
 antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32533,7 +32533,7 @@ objType file
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32556,7 +32556,7 @@ objType file
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32579,7 +32579,7 @@ objType table
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32603,7 +32603,7 @@ objType table
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -36757,4 +36757,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 2001240748
+# MAGIC: 2001240802
