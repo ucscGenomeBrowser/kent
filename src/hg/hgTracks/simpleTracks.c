@@ -5152,7 +5152,7 @@ char *decipherId = NULL;
 
 /* color scheme:
 	RED:	If the entry is a deletion (mean ratio < 0)
-	GREEN:	If the entry is a duplication (mean ratio > 0)
+	BLUE:	If the entry is a duplication (mean ratio > 0)
 */
 safef(cond_str, sizeof(cond_str),"name='%s' ", bedItem->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
@@ -5166,7 +5166,7 @@ if (decipherId != NULL)
             {
 	    if (sameWord(row[0], "1"))
 	    	{
-	    	col = MG_GREEN;
+	    	col = MG_BLUE;
 	    	}
 	    else
 		{
