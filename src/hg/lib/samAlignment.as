@@ -1,5 +1,5 @@
 table samAlignment
-"The fields of a SAM short read alignment.  Follows conventions in SAM docs out of Sanger"
+"The fields of a SAM short read alignment, the text version of BAM."
     (
     string qName;	"Query template name - name of a read"
     ushort flag;	"Flags.  0x10 set for reverse complement.  See SAM docs for others."

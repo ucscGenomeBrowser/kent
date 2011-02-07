@@ -594,6 +594,10 @@ if (startsWithWord("bigBed", tdb->type))
     {
     hti = bigBedToHti(tdb->track, NULL);
     }
+else if (startsWithWord("bam", tdb->type))
+    {
+    hti = bamToHti(tdb->table);
+    }
 else
     {
     AllocVar(hti);
@@ -617,6 +621,10 @@ if (isHubTrack(table))
 else if (isBigBed(database, table, curTrack, ctLookupName))
     {
     hti = bigBedToHti(table, conn);
+    }
+else if (isBamTable(table))
+    {
+    hti = bamToHti(table);
     }
 else if (isCustomTrack(table))
     {
@@ -1082,9 +1090,11 @@ else
 boolean htiIsPositional(struct hTableInfo *hti)
 /* Return TRUE if hti looks like it's from a positional table. */
 {
-return isCustomTrack(hti->rootName) ||
+return isCustomTrack(hti->rootName) || hti->isPos;
+#ifdef OLD
     ((hti->startField[0] && hti->endField[0]) &&
 	(hti->chromField[0] || sameString(hti->rootName, "gl")));
+#endif /* OLD */
 }
 
 char *getIdField(char *db, struct trackDb *track, char *table,
@@ -1345,6 +1355,8 @@ void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, 
 {
 if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
+else if (isBamTable(table))
+    bamTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1364,6 +1376,10 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     conn = hAllocConn(db);
     fieldList = bigBedGetFields(table, conn);
     hFreeConn(&conn);
+    }
+else if (isBamTable(table))
+    {
+    fieldList = bamGetFields(table);
     }
 else if (isCustomTrack(table))
     {
