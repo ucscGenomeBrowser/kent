@@ -32,6 +32,7 @@
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "ctgPos.h"
+#include "hubConnect.h"
 #include "customTrack.h"
 #include "hgFind.h"
 #endif /* GBROWSE */
@@ -3680,9 +3681,17 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
-    theTdbs = hTrackDb(db);
-    if (tdbList != NULL)
-        *tdbList = theTdbs;
+    if (isHubTrack(track))
+        {
+	struct hash *hash = hashNew(0);
+	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
+	}
+    else
+	{
+	theTdbs = hTrackDb(db);
+	if (tdbList != NULL)
+	    *tdbList = theTdbs;
+	}
     }
 else
     theTdbs = *tdbList;
