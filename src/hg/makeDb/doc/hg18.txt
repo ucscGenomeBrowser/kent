@@ -29783,7 +29783,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 12/7/10)
+# NHGRI GWAS CATALOG (DONE 2/1/11)
+# Updated 12/7/10
 # Updated 11/1/10
 # Updated 10/6/10
 # Updated 9/1/10
@@ -29862,7 +29863,7 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4562 elements of size 22
+#Loaded 4991 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
@@ -29876,7 +29877,7 @@ see doc/builds.txt for specific details.
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#250 ambigStrand.txt
+#269 ambigStrand.txt
 
 
 #############################################################################
@@ -31220,7 +31221,7 @@ TMPDIR=/scratch/tmp
           $attrTags .= "$tag,";  $attrVals .= "$val,";  $attrCount++; \
         } \
         %attrs = map { ($key, $val) = split("="); $key => $val } split(";", $attrs); \
-        @bed8Attrs = ($c, $s, $e, $name, $score, $strand, $thickS, $thickE, \
+        @bed8Attrs = ($c, $s-1, $e, $name, $score, $strand, $thickS-1, $thickE, \
                       $attrCount, $attrTags, $attrVals); \
         print join("\t", @bed8Attrs) . "\n";' \
       > iscaRetrospective.bed

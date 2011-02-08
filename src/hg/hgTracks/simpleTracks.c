@@ -1749,10 +1749,12 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     {
     char mouseOverText[256];
     boolean bigExon = FALSE;
+    boolean revStrand = (lf->orientation == -1);
     exon = ref->val;
     if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
 	bigExon = TRUE;
     if (next && (exon->end > winEnd))
+	/* right overhang (but left side of screen in reserve-strand-display) */
 	{
 	if (exon->start < winEnd)
 	    {
@@ -1766,12 +1768,15 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)",
-              (revCmplDisp ? "Prev" : "Next"), exonIx+1, numExons);
+	if (!revStrand)
+	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
+	else
+	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     else if (!next && (exon->start < winStart))
+	/* left overhang */
 	{
 	if (exon->end > winStart)
 	    {
@@ -1785,8 +1790,10 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)",
-              (revCmplDisp ? "Next" : "Prev"), numExons-exonIx, numExons);
+	if (!revStrand)
+	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
+	else
+	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
@@ -1957,6 +1964,9 @@ if (scoreColumn == NULL)
 struct dyString *extraWhere = newDyString(128);
 boolean and = FALSE;
 extraWhere = dyAddFilterByClause(cart,tdb,extraWhere,NULL,&and); // gets trackDb 'filterBy' clause, which may filter by 'score', 'name', etc
+#ifdef ALL_SCORE_FILTERS_LOGIC
+extraWhere = dyAddAllScoreFilters(cart,tdb,extraWhere,&and); // All *Filter style filters
+#endif///def ALL_SCORE_FILTERS_LOGIC
 if (and == FALSE || strstrNoCase(extraWhere->string,"score in ") == NULL) // Cannot have both 'filterBy' score and 'scoreFilter'
     extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,SCORE_FILTER,"0:1000",scoreColumn,&and);
 if (sameString(extraWhere->string, ""))
@@ -5149,7 +5159,7 @@ char *decipherId = NULL;
 
 /* color scheme:
 	RED:	If the entry is a deletion (mean ratio < 0)
-	GREEN:	If the entry is a duplication (mean ratio > 0)
+	BLUE:	If the entry is a duplication (mean ratio > 0)
 */
 safef(cond_str, sizeof(cond_str),"name='%s' ", bedItem->name);
 decipherId = sqlGetField(database, "decipher", "name", cond_str);
@@ -5163,7 +5173,7 @@ if (decipherId != NULL)
             {
 	    if (sameWord(row[0], "1"))
 	    	{
-	    	col = MG_GREEN;
+	    	col = MG_BLUE;
 	    	}
 	    else
 		{
@@ -7733,13 +7743,17 @@ return getSeqColorDefault(lf->name, hvg, tg->ixColor);
 
 Color interactionColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
+struct linkedFeatures *lf = item;
+return  tg->colorShades[lf->grayIx];
+
+#ifdef NOTNOW  // leaving this in the code in case we want chrom color again
+
 char *name = tg->itemName(tg, item);
 struct linkedFeatures *lf = item;
 if (slCount(lf->components) == 2)
     return MG_BLACK;
-//errAbort("name %s\n", name);
-//errAbort("name %s chrom %s\n", b->name, b->chrom);
 return getSeqColorDefault(name, hvg, tg->ixColor);
+#endif
 }
 
 void interactionLeftLabels(struct track *tg, int seqStart, int seqEnd,
@@ -7788,7 +7802,6 @@ else
     *ptr = 0;
     }
 
-//return linkedFeaturesName(tg, item);
 return cloneString(name);
 }
 
@@ -7799,19 +7812,14 @@ tg->drawItems = linkedFeaturesDraw;
 tg->drawItemAt = linkedFeaturesDrawAt;
 tg->mapItemName = linkedFeaturesName;
 tg->totalHeight = tgFixedTotalHeightNoOverflow;
-//tg->totalHeight = linkedFeaturesHeight;
 tg->itemHeight = tgFixedItemHeight;
-//tg->itemHeight = linkedFeaturesItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
 tg->nextPrevExon = linkedFeaturesNextPrevItem;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 tg->loadItems = interactionLoad;
-//tg->itemName = cactusName;
 tg->itemName = interactionName;
-//tg->itemName = linkedFeaturesName;
-//tg->mapItemName = refGeneMapName;
 tg->itemColor = interactionColor;
 tg->itemNameColor = linkedFeaturesNameColor;
 //tg->drawLeftLabels = interactionLeftLabels;
@@ -10901,6 +10909,177 @@ tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
+char *omimGeneClass3Name(struct track *tg, void *item)
+/* set name for omimGeneClass3 track */
+{
+struct bed *el = item;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+char *geneLabel = NULL;
+
+char *omimGeneClass3Label = cartUsualString(cart, "omimGeneClass3.label", "OMIM ID");
+
+return("testXXX");
+if (sameWord(omimGeneClass3Label, "OMIM ID"))
+    {
+    geneLabel = el->name;
+    }
+else
+    {
+    if (sameWord(omimGeneClass3Label, "UCSC gene symbol"))
+	{
+	/* get the gene symbol of the exact KG that matches not only ID but also genomic position */
+	safef(query, sizeof(query),
+	"select x.geneSymbol from kgXref x, omimToKnownCanonical c, knownGene k, omimGeneClass3 o where c.omimId='%s' and c.kgId=x.kgId and k.name=x.kgId and o.name=c.omimId and o.chrom=k.chrom and k.txStart=%d and k.txEnd=%d",
+	el->name, el->chromStart, el->chromEnd);
+	geneLabel = sqlQuickString(conn, query);
+	}
+    else
+    	{
+	safef(query, sizeof(query),
+	"select geneSymbol from omimGeneClass3Map where omimId='%s'", el->name);
+	geneLabel = sqlQuickString(conn, query);
+	}
+
+    if (geneLabel == NULL)
+	{
+	geneLabel = el->name;
+	}
+    }
+hFreeConn(&conn);
+return(cloneString(geneLabel));
+}
+
+Color omimGeneClass3Color(struct track *tg, void *item, struct hvGfx *hvg)
+/* set the color for omimGeneClass3 track items */
+{
+struct bed *el = item;
+char *result;
+char query[256];
+struct sqlConnection *conn = hAllocConn(database);
+
+/* set the color to red if the entry is listed in morbidmap */
+safef(query, sizeof(query), "select omimId from omimDisorderMap where omimId=%s", el->name);
+result = sqlQuickString(conn, query);
+hFreeConn(&conn);
+if (result != NULL)
+    {
+    return hvGfxFindColorIx(hvg, 255, 0, 0);
+    }
+else
+    {
+    return hvGfxFindColorIx(hvg, 0, 200, 200);
+    }
+}
+
+/* reserve space no more than 20 unique OMIM entries */
+#define OMIM_MAX_DESC_LEN 256
+char omimGeneClass3Buffer[20 * OMIM_MAX_DESC_LEN];
+
+char *omimGeneClass3DiseaseList(struct track *tg, struct bed *item)
+/* Return list of diseases associated with a OMIM entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+int i=0;
+
+conn = hAllocConn(database);
+
+safef(query,sizeof(query),
+        "select distinct disorder from omimDisorderMap, omimGeneClass3 where name='%s' and name=cast(omimId as char) order by disorder", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* show up to 20 max entries */
+chp = omimGeneClass3Buffer;
+while ((row != NULL) && i<20)
+    {
+    /* omimMorbidMap description field some times have trailing blanks. */
+    eraseTrailingSpaces(row[0]);
+    if (i != 0)
+	{
+	safef(chp, 3, "; ");
+	chp++;chp++;
+	}
+    safecpy(chp, OMIM_MAX_DESC_LEN, row[0]);
+    chp = chp+strlen(row[0]);
+    row = sqlNextRow(sr);
+    i++;
+    }
+
+if ((i == 20) && (row != NULL))
+    {
+    safef(chp, 5, " ...");
+    chp++;chp++;chp++;chp++;
+    }
+
+*chp = '\0';
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(omimGeneClass3Buffer);
+}
+
+static void omimGeneClass3DrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *sPhenotypes;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+sPhenotypes = omimGeneClass3DiseaseList(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, omimGeneClass3Color(tg, item, hvg));
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, sPhenotypes)-2, y,
+		    mgFontStringWidth(font, sPhenotypes),
+                    heightPer, MG_BLACK, font, sPhenotypes);
+        }
+
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
+    }
+
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-')
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = hvGfxContrastingColor(hvg, color);
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		dir, textColor, TRUE);
+	}
+    }
+}
+
+void omimGeneClass3Methods (struct track *tg)
+{
+//tg->itemColor 	  = omimGeneClass3Color;
+//tg->itemNameColor = omimGeneClass3Color;
+//tg->itemName      = omimGeneClass3Name;
+tg->drawItemAt    = omimGeneClass3DrawAt;
+}
+
 char *omimGeneName(struct track *tg, void *item)
 /* set name for omimGene track */
 {
@@ -11614,6 +11793,10 @@ else if (sameWord(type, "psl"))
     {
     pslMethods(track, tdb, wordCount, words);
     }
+else if (sameWord(type, "snake"))
+    {
+    snakeMethods(track, tdb, wordCount, words);
+    }
 else if (sameWord(type, "chain"))
     {
     chainMethods(track, tdb, wordCount, words);
@@ -11706,6 +11889,10 @@ else if (sameWord(type, "remote"))
 else if (sameWord(type, "interaction"))
     {
     interactionMethods(track);
+    }
+else if (sameWord(type, "gvf"))
+    {
+    gvfMethods(track);
     }
 #endif /* GBROWSE */
 }
@@ -12309,6 +12496,8 @@ registerTrackHandlerOnFamily("hapmapSnps", hapmapMethods);
 registerTrackHandlerOnFamily("hapmapSnpsPhaseII", hapmapMethods);
 registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
+//registerTrackHandler("omimGeneClass3", omimGeneClass3Methods);
+registerTrackHandler("omimComposite", omimGeneClass3Methods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
 }
@@ -12330,3 +12519,4 @@ for(name = nameList; name != NULL; name = name->next)
     }
 slFreeList(&nameList);
 }
+

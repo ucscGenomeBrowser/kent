@@ -545,14 +545,19 @@ char *chromTable(struct sqlConnection *conn, char *table)
 /* Get chr1_table if it exists, otherwise table.
  * You can freeMem this when done. */
 {
-char *chrom = hDefaultChrom(database);
-if (sqlTableExists(conn, table))
+if (isHubTrack(table))
     return cloneString(table);
 else
     {
-    char buf[256];
-    safef(buf, sizeof(buf), "%s_%s", chrom, table);
-    return cloneString(buf);
+    char *chrom = hDefaultChrom(database);
+    if (sqlTableExists(conn, table))
+	return cloneString(table);
+    else
+	{
+	char buf[256];
+	safef(buf, sizeof(buf), "%s_%s", chrom, table);
+	return cloneString(buf);
+	}
     }
 }
 
@@ -589,6 +594,10 @@ if (startsWithWord("bigBed", tdb->type))
     {
     hti = bigBedToHti(tdb->track, NULL);
     }
+else if (startsWithWord("bam", tdb->type))
+    {
+    hti = bamToHti(tdb->table);
+    }
 else
     {
     AllocVar(hti);
@@ -609,9 +618,13 @@ if (isHubTrack(table))
     struct trackDb *tdb = hashMustFindVal(fullTrackAndSubtrackHash, table);
     hti = hubTrackTableInfo(tdb);
     }
-else if (hIsBigBed(database, table, curTrack, ctLookupName))
+else if (isBigBed(database, table, curTrack, ctLookupName))
     {
     hti = bigBedToHti(table, conn);
+    }
+else if (isBamTable(table))
+    {
+    hti = bamToHti(table);
     }
 else if (isCustomTrack(table))
     {
@@ -1077,9 +1090,11 @@ else
 boolean htiIsPositional(struct hTableInfo *hti)
 /* Return TRUE if hti looks like it's from a positional table. */
 {
-return isCustomTrack(hti->rootName) ||
+return isCustomTrack(hti->rootName) || hti->isPos;
+#ifdef OLD
     ((hti->startField[0] && hti->endField[0]) &&
 	(hti->chromField[0] || sameString(hti->rootName, "gl")));
+#endif /* OLD */
 }
 
 char *getIdField(char *db, struct trackDb *track, char *table,
@@ -1338,8 +1353,10 @@ hashFree(&idHash);
 void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, char *fields)
 /* Do tab-separated output on fields of a single table. */
 {
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
+else if (isBamTable(table))
+    bamTabOut(db, table, conn, fields, f);
 else if (isCustomTrack(table))
     {
     doTabOutCustomTracks(db, table, conn, fields, f);
@@ -1354,11 +1371,15 @@ struct slName *fullTableFields(char *db, char *table)
 char dtBuf[256];
 struct sqlConnection *conn;
 struct slName *fieldList = NULL, *dtfList = NULL, *field, *dtf;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     {
     conn = hAllocConn(db);
     fieldList = bigBedGetFields(table, conn);
     hFreeConn(&conn);
+    }
+else if (isBamTable(table))
+    {
+    fieldList = bamGetFields(table);
     }
 else if (isCustomTrack(table))
     {

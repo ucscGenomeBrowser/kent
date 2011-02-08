@@ -84,6 +84,8 @@ use vars qw/
     $opt_geoUser
     $opt_soft
     $opt_downloadDir
+    $opt_release
+    $opt_database
     /;
 
 sub usage {
@@ -103,8 +105,11 @@ exit 1;
 # Function
 
 sub getObjMetadata {
-    my ($db, $obj) = @_;
+    my ($db, $obj, $mysql) = @_;
     my $results = $db->execute("SELECT var, val FROM metaDb WHERE obj = '$obj'");
+    if ($mysql eq "mysqlbeta"){ 
+        my $results = $db->execute("SELECT var, val FROM metaDb_public WHERE obj = '$obj'");
+    }
     my %metadata = ();
     if($results) {
         while(my @row = $results->fetchrow_array()) {
@@ -118,9 +123,12 @@ sub getObjMetadata {
 }
 
 sub getObjsMatching {
-    my ($db, $var, $val) = @_;
+    my ($db, $var, $val, $mysql) = @_;
     # get the list of objects matching var=val
     my $results = $db->execute("SELECT obj FROM metaDb WHERE var = \"$var\" and val = \"$val\"");
+    if ($mysql eq "mysqlbeta"){ 
+        my $results = $db->execute("SELECT obj FROM metaDb_public WHERE var = \"$var\" and val = \"$val\"");
+    }
     my @objects = ();
     if($results) {
         while(my @row = $results->fetchrow_array()) {
@@ -172,7 +180,8 @@ sub isRaw {
             $type eq "Fastq" or
             $type eq "FastqRd1" or
             $type eq "FastqRd2" or
-            $type eq "RawData");
+            $type eq "RawData"
+	    );
 }
 
 sub readMd5 {
@@ -195,11 +204,14 @@ sub readMd5 {
 
 my $now = time();
 my $wd = cwd();
+my ($release, $mySqlDatabase);
 my $ok = GetOptions("instance=s",
                     "configDir=s",
                     "verbose=i",
                     "geoUser=s",
                     "downloadDir=s",
+                    "release:s" => \$release,
+                    "database:s" => \$mySqlDatabase,
                     "soft"
                     );
 # parse options
@@ -214,6 +226,13 @@ if (not defined $opt_geoUser) {
 }
 if (not defined $opt_downloadDir) {
     $opt_downloadDir = "/hive/groups/encode/dcc/analysis/ftp/pipeline/";
+}
+if (not defined $release){
+    $release = "";
+}
+
+if (not defined $mySqlDatabase) {
+    $mySqlDatabase = "mysqlbeta";
 }
 my $configPath;
 if (defined $opt_configDir) {
@@ -246,6 +265,9 @@ my $o;
 
 # get the project dir
 my $compositeDir = "$opt_downloadDir$database/$compositeName";
+if (defined $release){
+    $compositeDir = "$compositeDir/$release";
+}
 
 # read the cv.ra file
 my %cvTerms = Encode::getControlledVocab($configPath);
@@ -254,14 +276,14 @@ my %cvTerms = Encode::getControlledVocab($configPath);
 my %checksums = readMd5($compositeDir . "/md5sum.txt");
 
 # connect to the database and read the metadata table for the obj
-my $dbHandle = HgDb->new(DB => $database);
+my $dbHandle = HgDb->new(DB => $database, HOST => $mySqlDatabase);
 
 # read the experimental variables from expVars.ra
 my @expVars = Encode::getExpVars($configPath, $compositeName);
 my $numDim = scalar(@expVars);
 
 # get the list of objects of this composite and store it in a set (hash)
-my %objsSet = map { $_ => 0 } getObjsMatching($dbHandle, "composite", $compositeName);
+my %objsSet = map { $_ => 0 } getObjsMatching($dbHandle, "composite", $compositeName, $mySqlDatabase);
 my @objects = keys %objsSet;
 
 print STDERR "Number of objects in composite track: ", scalar(keys %objsSet), "\n";
@@ -295,7 +317,8 @@ while(scalar(keys %objsSet) > 0) {
 
     my %metadata;
     # get the experimental variables for that object
-    %metadata = getObjMetadata($dbHandle, $firstObject);
+
+    %metadata = getObjMetadata($dbHandle, $firstObject, $mySqlDatabase);
     my @currentMetadata = {%metadata};
     my @currentExpVars;
     for my $i (@expVars) {
@@ -305,7 +328,8 @@ while(scalar(keys %objsSet) > 0) {
 
     # get other objs with the same metadata
     for $o (keys %objsSet) {
-        %metadata = getObjMetadata($dbHandle, $o);
+
+        %metadata = getObjMetadata($dbHandle, $o, $mySqlDatabase);
         my $match = 1;
         for($i = 0; $i < scalar(@expVars); ++$i) {
             defined $metadata{$expVars[$i]} or die "can't find field for experimental variable '" . $expVars[$i] . "' in obj " . $o;

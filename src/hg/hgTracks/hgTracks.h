@@ -778,6 +778,10 @@ void cytoBandIdeoMethods(struct track *tg);
 void cytoBandMethods(struct track *tg);
 /* Make track for simple repeats. */
 
+void snakeMethods(struct track *track, struct trackDb *tdb,
+                                int wordCount, char *words[]);
+/* Make track group for snake alignment. */
+
 void chainMethods(struct track *track, struct trackDb *tdb,
                                 int wordCount, char *words[]);
 /* Make track group for chain alignment. */
@@ -1259,6 +1263,9 @@ void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
 
 void pgSnpCtMethods (struct track *tg);
 /* Load pgSnp track from custom tracks */
+
+void gvfMethods(struct track *tg);
+/* Load GVF variant data. */
 
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific vis

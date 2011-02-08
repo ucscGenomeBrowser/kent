@@ -17,6 +17,8 @@ type interaction
 useScore 1
 canPack 1
 wgEncode 1
+scoreMin 200
+scoreMax 1000
 scoreFilter 200
 scoreFilterLimits 200:1000
 

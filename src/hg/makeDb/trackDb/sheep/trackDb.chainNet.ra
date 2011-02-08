@@ -1,0 +1,23 @@
+#	"$Id: trackDb.chainNet.ra,v 1.6 2010/02/08 19:28:28 rhead Exp $";
+
+track chainNetBosTau4 override
+priority 205.3
+chainMinScore 3000
+chainLinearGap medium
+
+track chainNetEquCab2 override
+priority 210.3
+
+track chainNetMm9 override
+priority 360.3
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg19 override
+priority 470.3
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetMonDom5 override
+priority 540.3
+chainMinScore 5000
+chainLinearGap loose
+

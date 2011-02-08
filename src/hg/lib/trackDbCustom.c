@@ -210,7 +210,8 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
-		   sameString("bam", s) || sameString("bedDetail", s));
+		   sameString("bam", s) || sameString("bedDetail", s) ||
+		   sameString("bed8Attrs", s));
 freeMem(t);
 return canPack;
 }
@@ -267,7 +268,7 @@ else
 }
 
 struct trackDb *trackDbFromOpenRa(struct lineFile *lf, char *releaseTag)
-/* Load track info from ra file already opened as lineFile into list.  If releaseTag is 
+/* Load track info from ra file already opened as lineFile into list.  If releaseTag is
  * non-NULL then only load tracks that mesh with release. */
 {
 char *raFile = lf->fileName;
@@ -415,6 +416,58 @@ if (tdb == NULL)
 if (tdb->settingsHash == NULL)
     tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
 return hashFindVal(tdb->settingsHash, name);
+}
+
+struct slName *trackDbLocalSettingsWildMatch(struct trackDb *tdb, char *expression)
+// Return local settings that match expression else NULL.  In alpha order.
+{
+if (tdb == NULL)
+    errAbort("Program error: null tdb passed to trackDbSetting.");
+if (tdb->settingsHash == NULL)
+    tdb->settingsHash = trackDbSettingsFromString(tdb->settings);
+
+struct slName *slFoundVars = NULL;
+struct hashCookie brownie = hashFirst(tdb->settingsHash);
+struct hashEl* el = NULL;
+while ((el = hashNext(&brownie)) != NULL)
+    {
+    if (wildMatch(expression, el->name))
+        slNameAddHead(&slFoundVars, el->name);
+    }
+
+if (slFoundVars != NULL)
+    slNameSort(&slFoundVars);
+
+return slFoundVars;
+}
+
+struct slName *trackDbSettingsWildMatch(struct trackDb *tdb, char *expression)
+// Return settings in tdb tree that match expression else NULL.  In alpha order, no duplicates.
+{
+struct trackDb *generation;
+struct slName *slFoundVars = NULL;
+for (generation = tdb; generation != NULL; generation = generation->parent)
+    {
+    struct slName *slFoundHere = trackDbLocalSettingsWildMatch(generation,expression);
+    if (slFoundHere != NULL)
+        {
+        if (slFoundVars == NULL)
+            slFoundVars = slFoundHere;
+        else
+            {
+            struct slName *one = NULL;
+            while ((one = slPopHead(&slFoundHere)) != NULL)
+                {
+                slNameStore(&slFoundVars, one->name); // Will only store if it is not already found!  This means closest to home will work
+                slNameFree(&one);
+                }
+            }
+        }
+    }
+if (slFoundVars != NULL)
+    slNameSort(&slFoundVars);
+
+return slFoundVars;
 }
 
 boolean trackDbSettingOn(struct trackDb *tdb, char *name)
@@ -643,6 +696,8 @@ else if(sameWord("narrowPeak",type)
     cType = cfgPeak;
 else if(sameWord("genePred",type))
         cType = cfgGenePred;
+else if(sameWord("bedLogR",type))
+    cType = cfgBedScore;
 else if(startsWith("bed ", type))
     {
     char *words[3];

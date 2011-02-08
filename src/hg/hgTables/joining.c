@@ -346,6 +346,17 @@ slFreeList(&fieldList);
 hFreeConn(&conn);
 }
 
+static void makeBamOrderedCommaFieldList(struct joinerDtf *dtfList,
+	struct dyString *dy)
+/* Make comma-separated field list in same order as fields are in
+ * big bed. */
+{
+struct slName *fieldList = bamGetFields(dtfList->table);
+makeOrderedCommaFieldList(fieldList, dtfList, dy);
+slFreeList(&fieldList);
+}
+
+
 struct tableJoiner
 /* List of fields in a single table. */
     {
@@ -986,8 +997,10 @@ if (! doJoin)
     struct sqlConnection *conn = hAllocConn(dtfList->database);
     struct dyString *dy = dyStringNew(0);
     
-    if (hIsBigBed(database, dtfList->table, NULL, ctLookupName))
+    if (isBigBed(database, dtfList->table, NULL, ctLookupName))
 	makeBigBedOrderedCommaFieldList(dtfList, dy);
+    else if (isBamTable(dtfList->table))
+        makeBamOrderedCommaFieldList(dtfList, dy);
     else if (isCustomTrack(dtfList->table))
         makeCtOrderedCommaFieldList(dtfList, dy);
     else

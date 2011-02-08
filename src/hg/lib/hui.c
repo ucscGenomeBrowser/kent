@@ -93,7 +93,7 @@ static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *
 	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-char *htmlString = htmlStringForDownloadsLink(database,tdb,name,FALSE,trackHash);
+char *htmlString = htmlStringForDownloadsLink(database,trackDbTopLevelSelfOrParent(tdb),name,FALSE,trackHash);
 if (htmlString == NULL)
     return FALSE;
 
@@ -2562,10 +2562,10 @@ enum
 
 typedef struct _membersForAll {
     int abcCount;
-    int dimMax;
-    boolean filters;
-    dimensions_t *dimensions;
-    members_t* members[27];
+    int dimMax;               // Arrays of "members" structs will be ordered as [view][dimX][dimY][dimA]... with first 3 in fixed spots and rest as found (and non-empty)
+    boolean filters;          // ABCs use filterComp boxes (as upposed to check boxes
+    dimensions_t *dimensions; // One struct describing "deimensions" setting"  (e.g. dimX:cell dimY:antibody dimA:treatment)
+    members_t* members[27];   // One struct for each dimension describing groups in dimension (e.g. cell: GM12878,K562)
     char* checkedTags[27];  // FIXME: Should move checkedTags into membersForAll->members[ix]->selected;
     char letters[27];
 } membersForAll_t;
@@ -2581,6 +2581,12 @@ safef(settingName, sizeof(settingName), "%s.filterComp.%s",parentTdb->track,memb
 struct slName *options = cartOptionalSlNameList(cart,settingName);
 if(options != NULL)
     {
+    if (sameWord(options->name,"All")) // filterComp returns "All" which means every option selected
+        {
+        slNameFreeList(&options);
+        options = slNameListFromStringArray(members->tags, members->count);
+        assert(options != NULL);
+        }
     struct slName *option;
     for(option=options;option!=NULL;option=option->next)
         {
@@ -3471,7 +3477,7 @@ if(dyStringLen(dyClause) == 0)
 return dyStringCannibalize(&dyClause);
 }
 
-void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet)
+void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet, boolean onOneLine)
 /* Does the UI for a list of filterBy structure */
 {
 if(filterBySet == NULL)
@@ -3480,9 +3486,9 @@ if(filterBySet == NULL)
 #define FILTERBY_HELP_LINK  "<A HREF=\"../goldenPath/help/multiView.html\" TARGET=ucscHelp>help</A>"
 int count = slCount(filterBySet);
 if(count == 1)
-    puts("<BR><TABLE cellpadding=3><TR valign='top'>");
+    puts("<TABLE cellpadding=3><TR valign='top'>");
 else
-    printf("<BR><B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
+    printf("<B>Filter items by:</B> (select multiple categories and items - %s)<TABLE cellpadding=3><TR valign='top'>\n",FILTERBY_HELP_LINK);
 
 filterBy_t *filterBy = NULL;
 jsIncludeFile("ui.core.js",NULL);
@@ -3494,10 +3500,14 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     {
     puts("<TD>");
     if(count == 1)
-        printf("<B>Filter by %s</B> (select multiple items - %s)<BR>\n",filterBy->title,FILTERBY_HELP_LINK);
+        printf("<B>Filter by %s</B> (select multiple items - %s)",filterBy->title,FILTERBY_HELP_LINK);
     else
-        printf("<B>%s</B><BR>\n",filterBy->title);
+        printf("<B>%s</B>",filterBy->title);
 
+    if (onOneLine && count > 1)
+        printf("<BR>\n");
+    else
+        printf(":\n");
     // TODO: Scroll long lists
     //#define FILTER_COMPOSITE_OPEN_SIZE 16
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
@@ -4689,10 +4699,11 @@ if(min)
     if(deMin != NULL)
         *min = atoi(deMin);
     }
-if(min && limitMin && *min != NO_VALUE && *min < *limitMin) *min = *limitMin; // defaults within range
-if(min && limitMax && *min != NO_VALUE && *min > *limitMax) *min = *limitMax;
-if(max && limitMax && *max != NO_VALUE && *max > *limitMax) *max = *limitMax;
-if(max && limitMin && *max != NO_VALUE && *max < *limitMin) *max = *limitMin;
+// Defaulting min and max within limits.  Sorry for the horizontal ifs, but stacking the group makes them easier to follow
+if (min && limitMin && *limitMin != NO_VALUE && (*min == NO_VALUE || *min < *limitMin)) *min = *limitMin;
+if (min && limitMax && *limitMax != NO_VALUE &&                      *min > *limitMax)  *min = *limitMax;
+if (max && limitMax && *limitMax != NO_VALUE && (*max == NO_VALUE || *max > *limitMax)) *max = *limitMax;
+if (max && limitMin && *limitMin != NO_VALUE &&                      *max < *limitMin)  *max = *limitMin;
 }
 
 static void getScoreFloatRangeFromCart(struct cart *cart, struct trackDb *tdb, char *scoreName,
@@ -4735,28 +4746,189 @@ if(min)
     if(deMin != NULL)
         *min = strtod(deMin,NULL);
     }
-if(min && limitMin && (int)(*min) != NO_VALUE && *min < *limitMin) *min = *limitMin; // defaults within range
-if(min && limitMax && (int)(*min) != NO_VALUE && *min > *limitMax) *min = *limitMax;
-if(max && limitMax && (int)(*max) != NO_VALUE && *max > *limitMax) *max = *limitMax;
-if(max && limitMin && (int)(*max) != NO_VALUE && *max < *limitMin) *max = *limitMin;
+// Defaulting min and max within limits.  Sorry for the horizontal ifs, but stacking the group makes them easier to follow
+if (min && limitMin && (int)(*limitMin) != NO_VALUE && ((int)(*min) == NO_VALUE || *min < *limitMin)) *min = *limitMin;
+if (min && limitMax && (int)(*limitMax) != NO_VALUE &&                             *min > *limitMax)  *min = *limitMax;
+if (max && limitMax && (int)(*limitMax) != NO_VALUE && ((int)(*max) == NO_VALUE || *max > *limitMax)) *max = *limitMax;
+if (max && limitMin && (int)(*limitMin) != NO_VALUE &&                             *max < *limitMin)  *max = *limitMin;
 }
+
+static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
+                               boolean compositeLevel,char *name, char *title, char *label,
+                               char *scoreName, boolean isFloat)
+/* Shows a score filter control with minimum value and optional range */
+{
+char *setting = trackDbSetting(tdb, scoreName);
+if(setting)
+    {
+    if(*opened == FALSE)
+        {
+        boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+        puts("<TABLE>");
+        *opened = TRUE;
+        }
+    printf("<TR><TD align='right'><B>%s:</B><TD align='left'>",label);
+    char varName[256];
+    char altLabel[256];
+    safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
+    boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
+    // NOTE: could determine isFloat = (strchr(setting,'.') != NULL);  However, historical trackDb settings of pValueFilter did not always contain '.'
+    if (isFloat)
+        {
+        double minLimit=NO_VALUE,maxLimit=NO_VALUE;
+        double minVal=minLimit,maxVal=maxLimit;
+        colonPairToDoubles(setting,&minVal,&maxVal);
+        getScoreFloatRangeFromCart(cart,tdb,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
+        cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
+        if(filterByRange)
+            {
+            printf("<TD align='left'>to<TD align='left'>");
+            safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
+            safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
+            cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
+            }
+        safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
+        if(minLimit != NO_VALUE && maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
+        else if(minLimit != NO_VALUE)
+            printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
+        else if(maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
+        else
+            printf("<TD align='left'%s",altLabel);
+        }
+    else
+        {
+        int minLimit=NO_VALUE,maxLimit=NO_VALUE;
+        int minVal=minLimit,maxVal=maxLimit;
+        colonPairToInts(setting,&minVal,&maxVal);
+        getScoreIntRangeFromCart(cart,tdb,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
+        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, filterByRange ? _MIN:"");
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
+        cgiMakeIntVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
+        if(filterByRange)
+            {
+            printf("<TD align='left'>to<TD align='left'>");
+            safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
+            safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
+            cgiMakeIntVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
+            }
+        safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
+        if(minLimit != NO_VALUE && maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (%d to %d)",altLabel,minLimit, maxLimit);
+        else if(minLimit != NO_VALUE)
+            printf("<TD align='left'%s> (minimum %d)",altLabel,minLimit);
+        else if(maxLimit != NO_VALUE)
+            printf("<TD align='left'%s> (maximum %d)",altLabel,maxLimit);
+        else
+            printf("<TD align='left'%s",altLabel);
+        }
+    puts("</TR>");
+    return TRUE;
+    }
+return FALSE;
+}
+
+
+#ifdef ALL_SCORE_FILTERS_LOGIC
+static int numericFiltersShowAll(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
+                               boolean compositeLevel,char *name, char *title)
+// Shows all *Filter style filters.  Note that these are in random order and have no graceful title
+{
+int count = 0;
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+if (filterSettings)
+    {
+    puts("<BR>");
+    struct slName *filter = NULL;
+    struct slPair *extras = NULL;
+    char *extraFields = trackDbSetting(tdb, "extraFields");  // TODo: seems like there should be a cleaner way
+    if (extraFields != NULL)
+        extras = slPairFromString(extraFields);
+
+    while ((filter = slPopHead(&filterSettings)) != NULL)
+        {
+        if (differentString(filter->name,"noScoreFilter") && differentString(filter->name,"scoreFilter")) // TODO: scoreFilter could be included
+            {
+            char *field = cloneString(filter->name);
+            int ix = strlen(field) - strlen("Filter");
+            assert(ix > 0);
+            field[ix] = '\0';
+            // Could lookup extraFields  // TODO: Should we be using extra fields?  Could this be sorted by the order in extraFields?
+            if (extras != NULL)
+                {
+                char *foundLabel = slPairFindVal(extras, field);
+                if (foundLabel != NULL)
+                    { // Found label so replace field
+                    freeMem(field);
+                    field = strchr(foundLabel,']');
+                    if (field == NULL)
+                        field = cloneString(foundLabel);
+                    else
+                        field = cloneString(field + 1);
+                    strSwapChar(field,'_',' ');
+                    }
+                }
+            char label[128];
+            safef(label,sizeof(label),"Minimum %s",field);
+            freeMem(field);
+            // Determine floating point or integer
+            char *setting = trackDbSetting(tdb, filter->name);
+            boolean isFloat = (strchr(setting,'.') != NULL);
+            showScoreFilter(cart,tdb,opened,boxed,compositeLevel,name,title,label,filter->name,isFloat);
+            count++;
+            }
+        slNameFree(&filter);
+        }
+    }
+if (count > 0)
+    puts("</TABLE>");
+return count;
+}
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title,  int maxScore, boolean boxed)
 /* Put up UI for filtering bed track based on a score */
 {
 char option[256];
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
+boolean skipScoreFilter = FALSE;
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
+
+#ifdef ALL_SCORE_FILTERS_LOGIC
+// Numeric filters are first
+boolean isBoxOpened = FALSE;
+if (numericFiltersShowAll(cart, tdb, &isBoxOpened, boxed, compositeLevel, name, title) > 0)
+    skipScoreFilter = TRUE;
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
+// Add any multi-selects next
 if(filterBySet != NULL)
     {
-    if(!tdbIsComposite(tdb))
+    if(!tdbIsComposite(tdb) && cartOptionalString(cart, "ajax") == NULL)
         jsIncludeFile("hui.js",NULL);
 
-    filterBySetCfgUi(tdb,filterBySet);   // Note filterBy boxes don't need to be double "boxed"
+    if (!isBoxOpened)   // Note filterBy boxes are not double "boxed", if there are no other filters
+        printf("<BR>");
+    filterBySetCfgUi(tdb,filterBySet,TRUE);
     filterBySetFree(&filterBySet);
-    return; // Cannot have both 'filterBy' score and 'scoreFilter'
+    skipScoreFilter = TRUE;
     }
 
+// For no good reason scoreFilter is incompatible with filterBy and or numericFilters
+// FIXME scoreFilter should be implemented inside numericFilters and is currently specificly excluded to avoid unexpected changes
+if (skipScoreFilter)
+    {
+    #ifdef ALL_SCORE_FILTERS_LOGIC
+    if (isBoxOpened)
+        cfgEndBox(boxed);
+    #endif///def ALL_SCORE_FILTERS_LOGIC
+
+    return; // Cannot have both '*filter' and 'scoreFilter'
+    }
 
 boolean scoreFilterOk = (trackDbSettingClosestToHome(tdb, NO_SCORE_FILTER) == NULL);
 boolean glvlScoreMin = (trackDbSettingClosestToHome(tdb, GRAY_LEVEL_SCORE_MIN) != NULL);
@@ -4908,54 +5080,6 @@ if (normScoreAvailable)
 cfgEndBox(boxed);
 }
 
-static boolean showScoreFilter(struct cart *cart, struct trackDb *tdb, boolean *opened, boolean boxed,
-                               boolean compositeLevel,char *name, char *title, char *label,
-                               char *scoreName,char *defaults,char *limitsDefault)
-/* Shows a score filter control with minimum value and optional range */
-{
-char *setting = trackDbSettingClosestToHomeOrDefault(tdb, scoreName,defaults);//"0.0");
-if(setting)
-    {
-    if(*opened == FALSE)
-        {
-        boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-        puts("<TABLE>");
-        *opened = TRUE;
-        }
-    printf("<TR><TD align='right'><B>%s:</B><TD align='left'>",label);
-    char varName[256];
-    char altLabel[256];
-    safef(varName, sizeof(varName), "%s%s", scoreName, _BY_RANGE);
-    boolean filterByRange = trackDbSettingClosestToHomeOn(tdb, varName);
-    double minLimit=NO_VALUE,maxLimit=NO_VALUE;
-    colonPairToDoubles(limitsDefault,&minLimit,&maxLimit);
-    double minVal=minLimit,maxVal=maxLimit;
-    colonPairToDoubles(setting,&minVal,&maxVal);
-    getScoreFloatRangeFromCart(cart,tdb,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
-    safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
-    safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
-    cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
-    if(filterByRange) // TODO: Test this range stuff which is not yet used
-        {
-        printf("<TD align='left'>to<TD align='left'>");
-        safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MAX);
-        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Maximum ":""), label);
-        cgiMakeDoubleVarWithLimits(varName,maxVal, altLabel, 0,minLimit, maxLimit);
-        }
-    safef(altLabel, sizeof(altLabel), "%s", (filterByRange?"": "colspan=3"));
-    if(minLimit != NO_VALUE && maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (%g to %g)",altLabel,minLimit, maxLimit);
-    else if(minLimit != NO_VALUE)
-        printf("<TD align='left'%s> (minimum %g)",altLabel,minLimit);
-    else if(maxLimit != NO_VALUE)
-        printf("<TD align='left'%s> (maximum %g)",altLabel,maxLimit);
-    else
-        printf("<TD align='left'%s",altLabel);
-    puts("</TR>");
-    return TRUE;
-    }
-return FALSE;
-}
 struct dyString *dyAddFilterAsInt(struct cart *cart, struct trackDb *tdb,
        struct dyString *extraWhere,char *filter,char *defaultLimits, char*field, boolean *and)
 /* creates the where clause condition to support numeric int filter range.
@@ -5129,14 +5253,51 @@ if(setting)
 return extraWhere;
 }
 
+#ifdef ALL_SCORE_FILTERS_LOGIC
+struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and)
+/* creates the where clause condition to gather together all random double filters
+   Filters are expected to follow
+        {fiterName}: trackDb min or min:max - default value(s);
+        {filterName}Min or {filterName}: min (user supplied) cart variable;
+        {filterName}Max: max (user supplied) cart variable;
+        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+            uses:  defaultLimits: function param if no tdb limits settings found)
+   The 'and' param and dyString in/out allows stringing multiple where clauses together */
+{
+struct slName *filterSettings = trackDbSettingsWildMatch(tdb, "*Filter");
+if (filterSettings)
+    {
+    struct slName *filter = NULL;
+    while ((filter = slPopHead(&filterSettings)) != NULL)
+        {
+        if (differentString(filter->name,"noScoreFilter") && differentString(filter->name,"scoreFilter")) // TODO: scoreFilter could be included
+            {
+            char *field = cloneString(filter->name);
+            int ix = strlen(field) - strlen("filter");
+            assert(ix > 0);
+            field[ix] = '\0';
+            char *setting = trackDbSetting(tdb, filter->name);
+            // How to determine float or int ?  If actual tracDb setting has decimal places, then float!
+            if (strchr(setting,'.') == NULL)
+                extraWhere = dyAddFilterAsInt(cart,tdb,extraWhere,filter->name,"0:1000",field,and);
+            else
+                extraWhere = dyAddFilterAsDouble(cart,tdb,extraWhere,filter->name,NULL,field,and);
+            }
+        slNameFree(&filter);
+        }
+    }
+return extraWhere;
+}
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 boolean opened = FALSE;
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (-log 10)",QVALUE_FILTER,NULL,NULL);//,"0.0",NULL);
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (-log 10)",PVALUE_FILTER,NULL,NULL);//,"0.0",NULL);
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,NULL,NULL);//,"0.0",NULL);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (-log 10)",QVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (-log 10)",PVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,TRUE);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
 if(setting)
@@ -5233,7 +5394,8 @@ if (cartOptionalString(cart, "ajax") == NULL)
     filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
     if(filterBySet != NULL)
         {
-        filterBySetCfgUi(tdb,filterBySet);
+        printf("<BR>");
+        filterBySetCfgUi(tdb,filterBySet,FALSE);
         filterBySetFree(&filterBySet);
         }
     }
