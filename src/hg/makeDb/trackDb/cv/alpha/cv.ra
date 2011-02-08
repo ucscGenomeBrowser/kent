@@ -9307,11 +9307,11 @@ validate cv
 priority 150
 
 term run
-type run
+type typeOfTerm
 label Sequencing Run
 description Sequencing run
 searchable select
-cvDefined yes
+cvDefined no
 validate none
 priority 500
 
