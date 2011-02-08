@@ -15,10 +15,11 @@ void encodeExpStaticLoad(char **row, struct encodeExp *ret)
 
 ret->ix = sqlSigned(row[0]);
 ret->organism = row[1];
-ret->lab = row[2];
-ret->dataType = row[3];
-ret->cellType = row[4];
-ret->vars = row[5];
+ret->accession = row[2];
+ret->lab = row[3];
+ret->dataType = row[4];
+ret->cellType = row[5];
+ret->vars = row[6];
 }
 
 struct encodeExp *encodeExpLoadByQuery(struct sqlConnection *conn, char *query)
@@ -53,8 +54,8 @@ void encodeExpSaveToDb(struct sqlConnection *conn, struct encodeExp *el, char *t
  * If worried about this use encodeExpSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s')", 
-	tableName,  el->ix,  el->organism,  el->lab,  el->dataType,  el->cellType,  el->vars);
+dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->ix,  el->organism,  el->accession,  el->lab,  el->dataType,  el->cellType,  el->vars);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -69,18 +70,20 @@ void encodeExpSaveToDbEscaped(struct sqlConnection *conn, struct encodeExp *el, 
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *organism, *lab, *dataType, *cellType, *vars;
+char  *organism, *accession, *lab, *dataType, *cellType, *vars;
 organism = sqlEscapeString(el->organism);
+accession = sqlEscapeString(el->accession);
 lab = sqlEscapeString(el->lab);
 dataType = sqlEscapeString(el->dataType);
 cellType = sqlEscapeString(el->cellType);
 vars = sqlEscapeString(el->vars);
 
-dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s')", 
-	tableName,  el->ix,  organism,  lab,  dataType,  cellType,  vars);
+dyStringPrintf(update, "insert into %s values ( %d,'%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->ix,  organism,  accession,  lab,  dataType,  cellType,  vars);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&organism);
+freez(&accession);
 freez(&lab);
 freez(&dataType);
 freez(&cellType);
@@ -96,10 +99,11 @@ struct encodeExp *ret;
 AllocVar(ret);
 ret->ix = sqlSigned(row[0]);
 ret->organism = cloneString(row[1]);
-ret->lab = cloneString(row[2]);
-ret->dataType = cloneString(row[3]);
-ret->cellType = cloneString(row[4]);
-ret->vars = cloneString(row[5]);
+ret->accession = cloneString(row[2]);
+ret->lab = cloneString(row[3]);
+ret->dataType = cloneString(row[4]);
+ret->cellType = cloneString(row[5]);
+ret->vars = cloneString(row[6]);
 return ret;
 }
 
@@ -109,7 +113,7 @@ struct encodeExp *encodeExpLoadAll(char *fileName)
 {
 struct encodeExp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -127,7 +131,7 @@ struct encodeExp *encodeExpLoadAllByChar(char *fileName, char chopper)
 {
 struct encodeExp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[6];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -150,6 +154,7 @@ if (ret == NULL)
     AllocVar(ret);
 ret->ix = sqlSignedComma(&s);
 ret->organism = sqlStringComma(&s);
+ret->accession = sqlStringComma(&s);
 ret->lab = sqlStringComma(&s);
 ret->dataType = sqlStringComma(&s);
 ret->cellType = sqlStringComma(&s);
@@ -166,6 +171,7 @@ struct encodeExp *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->organism);
+freeMem(el->accession);
 freeMem(el->lab);
 freeMem(el->dataType);
 freeMem(el->cellType);
@@ -193,6 +199,10 @@ fprintf(f, "%d", el->ix);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->organism);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->accession);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -229,6 +239,14 @@ fputc('"',f);
 fputc(':',f);
 fputc('"',f);
 fprintf(f, "%s", el->organism);
+fputc('"',f);
+fputc(',',f);
+fputc('"',f);
+fprintf(f,"accession");
+fputc('"',f);
+fputc(':',f);
+fputc('"',f);
+fprintf(f, "%s", el->accession);
 fputc('"',f);
 fputc(',',f);
 fputc('"',f);
@@ -274,10 +292,11 @@ static char *sqlCreate =
 "CREATE TABLE %s (\n"
 "    ix int not null AUTO_INCREMENT,     # auto-increment ID\n"
 "    organism varchar(255) not null,     # human | mouse\n"
+"    accession varchar(255) not null,    # wgEncodeE[H|M]00000N\n"
 "    lab varchar(255) not null,  # lab name from ENCODE cv.ra\n"
 "    dataType varchar(255) not null,     # dataType from ENCODE cv.ra\n"
 "    cellType varchar(255) not null,     # cellType from ENCODE cv.ra\n"
-"    vars varchar(255) not null, # RA of experiment-defining variables, defined per dataType\n"
+"    vars text,                          # typeOfTerm=term list of experiment-defining variables\n"
 "              #Indices\n"
 "    PRIMARY KEY(ix)\n"
 ")";
@@ -288,3 +307,67 @@ sqlRemakeTable(conn, tableName, dyStringContents(dy));
 //dyStringFree(&dy);
 }
 
+struct encodeExp *encodeExpFromRa(struct hash *ra)
+/* Load an encodeExp from a .ra */
+{
+struct encodeExp *ret;
+
+AllocVar(ret);
+ret->organism = cloneString(hashMustFindVal(ra, "organism"));
+ret->lab = cloneString(hashMustFindVal(ra, "lab"));
+ret->dataType = cloneString(hashMustFindVal(ra, "dataType"));
+ret->cellType = cloneString(hashMustFindVal(ra, "cellType"));
+
+char *vars = hashFindVal(ra, "vars");
+ret->vars = (vars != NULL ? cloneString(vars) : NULL);
+return ret;
+}
+
+struct hash *encodeExpToRa(struct encodeExp *el)
+/* Create a .ra from an encodeExp */
+{
+struct hash *ra = hashNew(0);
+hashAdd(ra, "organism", el->organism);
+hashAdd(ra, "lab", el->lab);
+hashAdd(ra, "dataType", el->dataType);
+hashAdd(ra, "cellType", el->cellType);
+if (el->vars != NULL)
+    hashAdd(ra, "vars", el->vars);
+return ra;
+}
+
+static char *encodeExpAccession(struct encodeExp *el)
+/* Make accession string from prefix + organism + id */
+{
+char org = 'H';
+#define BUF_SIZE 32
+char accession[BUF_SIZE];
+if (sameString(el->organism, "human"))
+    org = 'H';
+else if (sameString(el->organism, "mouse"))
+    org = 'M';
+else
+    errAbort("Invalid organism %s", el->organism);
+safef(accession, BUF_SIZE, "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, el->ix);
+return cloneString(accession);
+}
+
+void encodeExpSave(struct sqlConnection *conn, struct encodeExp *el, char *tableName)
+/* Save encodeExp as a row to the table specified by tableName. Update accession using
+ * index assigned with autoincrement */
+{
+struct dyString *query;
+char *accession;
+
+encodeExpSaveToDb(conn, el, tableName, 2048);
+query = newDyString(1024);
+dyStringPrintf(query, "select max(ix) from %s", tableName);
+el->ix = sqlQuickNum(conn, query->string);
+freeDyString(&query);
+query = newDyString(1024);
+accession = encodeExpAccession(el);
+dyStringPrintf(query, "update %s set accession=\'%s\' where ix=%d", 
+                        tableName, accession, el->ix);
+sqlUpdate(conn, query->string);
+freeDyString(&query);
+}

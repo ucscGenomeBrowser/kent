@@ -6,7 +6,7 @@
 #define ENCODEEXP_H
 
 #include "jksql.h"
-#define ENCODEEXP_NUM_COLS 6
+#define ENCODEEXP_NUM_COLS 7
 
 struct encodeExp
 /* ENCODE experiments */
@@ -14,10 +14,11 @@ struct encodeExp
     struct encodeExp *next;  /* Next in singly linked list. */
     int ix;	/* auto-increment ID */
     char *organism;	/* human | mouse */
+    char *accession;	/* wgEncodeE[H|M]00000N */
     char *lab;	/* lab name from ENCODE cv.ra */
     char *dataType;	/* dataType from ENCODE cv.ra */
     char *cellType;	/* cellType from ENCODE cv.ra */
-    char *vars;	/* RA of experiment-defining variables, defined per dataType */
+    char *vars;	/* typeOfTerm=term list of experiment-defining variables */
     };
 
 void encodeExpStaticLoad(char **row, struct encodeExp *ret);
@@ -91,10 +92,24 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-#define DEFAULT_ENCODE_EXP_TABLE        "encodeExp"
+#define ENCODE_EXP_TABLE        "encodeExp"
+#define ENCODE_EXP_DATABASE     "hgFixed"
+#define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName);
 /* Create an encodeExp table */
 
+struct encodeExp *encodeExpFromRa(struct hash *ra);
+/* Load an encodeExp from a Ra */
+
+struct hash *encodeExpToRa(struct encodeExp *el);
+/* Create a .ra from an encodeExp */
+
+void encodeExpSave(struct sqlConnection *conn, struct encodeExp *el, char *tableName);
+/* Save encodeExp as a row to the table specified by tableName. Update accession using
+ * index assigned with autoincrement */
+
 #endif /* ENCODEEXP_H */
+
+
 

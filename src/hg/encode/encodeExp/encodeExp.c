@@ -19,24 +19,24 @@ errAbort(
   "   encodeExp <action> [arg]\n"
   "actions:\n"
   "   create 	create table (default %sNew)\n"
-  "   fileAdd expFile.ra    add experiments to table from file\n"
+  "   fileAdd expFile.ra        add experiments to table from file\n"
   "   fileDump expFile.ra	output experiment table to file\n"
   "   metaFind db	find unassigned experiments in metaDb and create .ra to stdout\n"
   "   metaCheck db	find objects in metaDb incorrect or missing expId\n"
-  "   id ix	generate id from ix (wgEncodeE<H|M>00000<ix>)\n"
   "options:\n"
-  "   -table	specify table name (default %s)",
-  DEFAULT_ENCODE_EXP_TABLE, DEFAULT_ENCODE_EXP_TABLE
+  "   -table	specify table name (default %s)"
+  "   -composite	limit to specified composite track (affects metaFind and metaCheck)",
+  ENCODE_EXP_TABLE, ENCODE_EXP_TABLE
   );
 }
 
-#define EXP_DATABASE    "hgFixed"
-
 char *table = NULL;
+char *composite = NULL;
 struct sqlConnection *conn = NULL;
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
+   {"composite", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -47,16 +47,41 @@ verbose(2, "Creating table %s\n", table);
 encodeExpTableCreate(conn, table);
 }
 
-void expAdd(char *file)
-/* Add rows from .ra file */
+void expFileAdd(char *file)
+/* Add rows from .ra file. Exit on err -- bad format or not unique */
 {
-verbose(2, "Adding rows from %s\n", file);
+struct hash *ra = NULL;
+struct lineFile *lf = lineFileOpen(file, TRUE);
+
+/* TODO: Read in table to check for uniqueness */
+verbose(2, "Adding experiments from file: %s\n", file);
+while ((ra = raNextRecord(lf)) != NULL)
+    {
+    struct encodeExp *exp = encodeExpFromRa(ra);
+    encodeExpSave(conn, exp, table);
+    }
 }
 
-void expDump(char *file)
+void expFileDump(char *file)
 /* Output rows to .ra file */
 {
+struct encodeExp *exp, *exps;
+char query[256];
+
 verbose(2, "Dumping table to %s\n", file);
+FILE *f  = mustOpen(file, "w");
+safef(query, 256, "select * from %s order by ix", table);
+exps = encodeExpLoadByQuery(conn, query);
+while ((exp = slPopHead(&exps)) != NULL)
+    {
+    /* TODO -> lib */
+    fprintf(f, "accession %s\n", exp->accession);
+    fprintf(f, "organism %s\n", exp->organism);
+    fprintf(f, "lab %s\n", exp->lab);
+    fprintf(f, "dataType %s\n", exp->dataType);
+    fprintf(f, "vars %s\n", exp->vars);
+    fprintf(f, "\n");
+    }
 }
 
 void expFind(char *assembly)
@@ -71,28 +96,28 @@ void expCheck(char *assembly)
 verbose(2, "Checking experiments %s metaDb\n", assembly);
 }
 
-void expId(int id)
-/* Output full experiment identifier for id */
+#ifdef TODO
+void makeAccession(int ix)
 {
-verbose(2, "Experiment ID for %d\n", id);
+/* Make accession for an id */
+printf("%s%c%06d", ENCODE_EXP_ACC_PREFIX,[H|M], ix);
 }
+#endif
 
-void encodeExp(char *command, char *file, char *assembly, int id)
+void encodeExp(char *command, char *file, char *assembly)
 /* manage ENCODE experiments table */
 {
-conn = sqlConnect(EXP_DATABASE);
+conn = sqlConnect(ENCODE_EXP_DATABASE);
 if (sameString(command, "create"))
     expCreate();
 else if (sameString(command, "fileAdd"))
-    expAdd(file);
+    expFileAdd(file);
 else if (sameString(command, "fileDump"))
-    expDump(file);
+    expFileDump(file);
 else if (sameString(command, "metaFind"))
     expFind(assembly);
 else if (sameString(command, "metaCheck"))
     expCheck(assembly);
-else if sameString(command, "id")
-    expId(id);
 else
     {
     fprintf(stderr, "ERROR: Unknown command %s\n\n", command);
@@ -110,11 +135,11 @@ if (argc < 2)
 char *command = argv[1];
 char *assembly = NULL;
 char *file = NULL;
-int id = 0;
 
 table = optionVal("table", sameString(command, "create") ?
-                        DEFAULT_ENCODE_EXP_TABLE "New": 
-                        DEFAULT_ENCODE_EXP_TABLE);
+                        ENCODE_EXP_TABLE "New": 
+                        ENCODE_EXP_TABLE);
+verboseSetLevel(2);
 verbose(3, "Experiment table name: %s\n", table);
 if (startsWith("meta", command))
     {
@@ -136,16 +161,6 @@ if (startsWith("file", command))
     else
         file = argv[2];
     }
-if (startsWith("id", command))
-    {
-    if (argc < 3)
-        {
-        fprintf(stderr, "ERROR: Missing id\n\n");
-        usage();
-        }
-    else
-        id = atoi(argv[2]);
-    }
-encodeExp(command, file, assembly, id);
+encodeExp(command, file, assembly);
 return 0;
 }
