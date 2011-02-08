@@ -3342,7 +3342,7 @@ for(ix=0;ix<filterCount;ix++)
                 color = strchr(val->name,'}'); // There could be a closing '}'
                 if (color != NULL)
                     *color = 0;
-                {
+                }
 
             // now chip the label off the end of value name
             char * lab =strchr(val->name,'|');
