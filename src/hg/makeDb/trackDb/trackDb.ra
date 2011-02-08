@@ -1583,6 +1583,7 @@ visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp132Seq
+snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1596,6 +1597,7 @@ visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp132Seq
+snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1609,6 +1611,7 @@ visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp132Seq
+snpExceptionDesc snp132ExceptionDesc
 defaultGeneTracks knownGene
 defaultMaxWeight 3
 maxWindowToDraw 10000000
@@ -3117,3 +3120,14 @@ searchPriority 50
 searchTable ccdsGene
 searchType genePred
 searchPriority 1.1
+
+track ncbiIncidentDb
+shortLabel NCBI Incident
+longLabel NCBI Incident database
+group map
+priority 27
+visibility hide
+type bigBed 4 +
+url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id=$$
+urlLabel NCBI Incident:
+nonBedFieldsLabel Summary information from incident database:

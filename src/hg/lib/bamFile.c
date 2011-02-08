@@ -7,6 +7,7 @@
 #include "hdb.h"
 #include "hgConfig.h"
 #include "udc.h"
+#include "samAlignment.h"
 #include "bamFile.h"
 
 static char const rcsid[] = "$Id: bamFile.c,v 1.22 2010/03/04 05:14:13 angie Exp $";
@@ -197,10 +198,13 @@ if (fh != NULL)
 return FALSE;
 }
 
-void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData)
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+	samfile_t **pSamFile)
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
- * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. */
+ * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
+ * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
+ * the benefit of the callback function, with the open samFile.  */
 {
 char *bamFileName = samtoolsFileName(fileOrUrl);
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
@@ -221,7 +225,8 @@ if (fh == NULL)
     warn("failed to open %s%s", fileOrUrl, urlWarning->string);
     return;
     }
-
+if (pSamFile != NULL)
+    *pSamFile = fh;
 int chromId, start, end;
 int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
 if (ret != 0 && startsWith("chr", position))
@@ -281,15 +286,15 @@ if (retClippedQLen != NULL)
     *retClippedQLen = (core->l_qseq - low - high);
 }
 
-char *bamGetQuerySequence(const bam1_t *bam, boolean useStrand)
-/* Return the nucleotide sequence encoded in bam.  The BAM format 
+
+void bamUnpackQuerySequence(const bam1_t *bam, boolean useStrand, char *qSeq)
+/* Fill in qSeq with the nucleotide sequence encoded in bam.  The BAM format 
  * reverse-complements query sequence when the alignment is on the - strand,
  * so if useStrand is given we rev-comp it back to restore the original query 
  * sequence. */
 {
 const bam1_core_t *core = &bam->core;
 int qLen = core->l_qseq;
-char *qSeq = needMem(qLen+1);
 uint8_t *packedQSeq = bam1_seq(bam);
 int i;
 for (i = 0; i < qLen; i++)
@@ -297,6 +302,18 @@ for (i = 0; i < qLen; i++)
 qSeq[i] = '\0';
 if (useStrand && bamIsRc(bam))
     reverseComplement(qSeq, qLen);
+}
+
+char *bamGetQuerySequence(const bam1_t *bam, boolean useStrand)
+/* Allocate and return the nucleotide sequence encoded in bam.  The BAM format 
+ * reverse-complements query sequence when the alignment is on the - strand,
+ * so if useStrand is given we rev-comp it back to restore the original query 
+ * sequence. */
+{
+const bam1_core_t *core = &bam->core;
+int qLen = core->l_qseq;
+char *qSeq = needMem(qLen+1);
+bamUnpackQuerySequence(bam, useStrand, qSeq);
 return qSeq;
 }
 
@@ -317,12 +334,11 @@ for (i = 0;  i < core->l_qseq;  i++)
 return arr;
 }
 
-char *bamGetCigar(const bam1_t *bam)
-/* Return a BAM-enhanced CIGAR string, decoded from the packed encoding in bam. */
+static void bamUnpackCigar(const bam1_t *bam, struct dyString *dyCigar)
+/* Unpack CIGAR string into dynamic string */
 {
 unsigned int *cigarPacked = bam1_cigar(bam);
 const bam1_core_t *core = &bam->core;
-struct dyString *dyCigar = dyStringNew(min(8, core->n_cigar*4));
 int i;
 for (i = 0;  i < core->n_cigar;  i++)
     {
@@ -331,6 +347,14 @@ for (i = 0;  i < core->n_cigar;  i++)
     dyStringPrintf(dyCigar, "%d", n);
     dyStringAppendC(dyCigar, op);
     }
+}
+
+char *bamGetCigar(const bam1_t *bam)
+/* Return a BAM-enhanced CIGAR string, decoded from the packed encoding in bam. */
+{
+const bam1_core_t *core = &bam->core;
+struct dyString *dyCigar = dyStringNew(min(8, core->n_cigar*4));
+bamUnpackCigar(bam, dyCigar);
 return dyStringCannibalize(&dyCigar);
 }
 
@@ -585,6 +609,136 @@ while (s < bam->data + bam->data_len)
 	}
     }
 return val;
+}
+
+void bamUnpackAux(const bam1_t *bam, struct dyString *dy)
+/* Unpack the tag:type:val part of bam into dy */
+{
+// adapted from part of bam.c bam_format1:
+uint8_t *s = bam1_aux(bam);
+boolean firstTime = TRUE;
+while (s < bam->data + bam->data_len)
+    {
+    if (firstTime)
+        firstTime = FALSE;
+    else
+        dyStringAppendC(dy, '\t');
+    dyStringAppendC(dy, *s++);
+    dyStringAppendC(dy, *s++);
+    dyStringAppendC(dy, ':');
+    dyStringAppendC(dy, s[0]);
+    dyStringAppendC(dy, ':');
+    uint8_t type = *s++;
+    if (type == 'A') { dyStringPrintf(dy, "%c", *s); ++s; }
+    else if (type == 'C') { dyStringPrintf(dy, "%u", *s); ++s; }
+    else if (type == 'c') { dyStringPrintf(dy, "%d", *s); ++s; }
+    else if (type == 'S') { dyStringPrintf(dy, "%u", *(uint16_t*)s); s += 2; }
+    else if (type == 's') { dyStringPrintf(dy, "%d", *(int16_t*)s); s += 2; }
+    else if (type == 'I') { dyStringPrintf(dy, "%u", *(uint32_t*)s); s += 4; }
+    else if (type == 'i') { dyStringPrintf(dy, "%d", *(int32_t*)s); s += 4; }
+    else if (type == 'f') { dyStringPrintf(dy, "%g", *(float*)s); s += 4; }
+    else if (type == 'd') { dyStringPrintf(dy, "%lg", *(double*)s); s += 8; }
+    else if (type == 'Z' || type == 'H')
+	{
+	dyStringAppend(dy, (char *)s);
+	s += strlen((char *)s) + 1;
+	}
+    }
+}
+
+
+struct bamToSamHelper
+/* Helper structure to help get sam alignments out of a BAM file */
+    {
+    struct lm *lm;	/* Local memory pool to allocate into */
+    char *chrom;	/* Chromosome name */
+    struct dyString *dy;	/* Dynamic temporary string */
+    samfile_t *samFile;	/* Open sam/bam file header. */
+    struct samAlignment *samList;	/* List of alignments. */
+    };
+
+static void addToChars(char *s, int size, char amount)
+/* Add amount to each char in s of given size. */
+{
+int i;
+for (i=0; i<size; ++i)
+    s[i] += amount;
+}
+
+static boolean isAllSameChar(char *s, int size, char c)
+/* Return TRUE if first size chars of s are 0 */
+{
+int i;
+for (i=0; i<size; ++i)
+    if (s[i] != c)
+	return FALSE;
+return TRUE;
+}
+
+
+int bamAddOneSamAlignment(const bam1_t *bam, void *data)
+/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
+ * into a linkedFeaturesSeries item, and either store it until we find its mate
+ * or add it to tg->items. */
+{
+struct bamToSamHelper *helper = (struct bamToSamHelper *)data;
+struct lm *lm = helper->lm;
+struct samAlignment *sam;
+lmAllocVar(lm, sam);
+const bam1_core_t *core = &bam->core;
+struct dyString *dy = helper->dy;
+sam->qName = lmCloneString(lm, bam1_qname(bam));
+sam->flag = core->flag;
+sam->rName = helper->chrom;
+sam->pos = core->pos + 1;
+sam->mapQ = core->qual;
+dyStringClear(dy);
+bamUnpackCigar(bam, dy);
+sam->cigar = lmCloneStringZ(lm, dy->string, dy->stringSize);
+if (core->mtid >= 0)
+    {
+    if (core->tid == core->mtid)
+	sam->rNext = "=";
+    else
+	sam->rNext = lmCloneString(lm, helper->samFile->header->target_name[core->mtid]);
+    }
+else
+    sam->rNext = "*";
+sam->pNext = core->mpos + 1;
+sam->tLen = core->isize;
+sam->seq = lmAlloc(lm, core->l_qseq + 1);
+bamUnpackQuerySequence(bam, FALSE, sam->seq);
+char *bamQual = (char *)bam1_qual(bam);
+if (isAllSameChar(bamQual, core->l_qseq, -1))
+    sam->qual = "*";
+else
+    {
+    sam->qual = lmCloneStringZ(lm, bamQual, core->l_qseq);
+    addToChars(sam->qual, core->l_qseq, 33);
+    }
+dyStringClear(dy);
+bamUnpackAux(bam, dy);
+sam->tagTypeVals = lmCloneStringZ(lm, dy->string, dy->stringSize);
+slAddHead(&helper->samList, sam);
+return 0;
+}
+
+struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm)
+/* Fetch region as a list of samAlignments - which is more or less an unpacked
+ * bam record.  Results is allocated out of lm, since it tends to be large... */
+{
+struct bamToSamHelper helper;
+helper.lm = lm;
+helper.chrom = chrom;
+helper.dy = dyStringNew(0);
+helper.samList = NULL;
+char posForBam[256];
+safef(posForBam, sizeof(posForBam), "%s:%d-%d", chrom, start, end);
+bamFetch(fileOrUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile);
+dyStringFree(&helper.dy);
+slReverse(&helper.samList);
+return helper.samList;
 }
 
 #endif//def USE_BAM

@@ -26,6 +26,7 @@ var mapIsUpdateable = true;
 var currentMapItem;
 var floatingMenuItem;
 var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
+var supportZoomCodon = false;
 
 function initVars(img)
 {
@@ -1483,12 +1484,12 @@ function mapMouseDown(e)
     }
 }
 
-function contextMenuHit(menuItemClicked, menuObject, cmd)
+function contextMenuHit(menuItemClicked, menuObject, cmd, args)
 {
-    setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
+    setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd, args); }, 1);
 }
 
-function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
+function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
 {
 // dispatcher for context menu hits
     var id = selectedMenuItem.id;
@@ -1562,6 +1563,29 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                     }
                 }
             }
+    } else if (cmd == 'zoomCodon' || cmd == 'zoomExon') {
+        var num, ajaxCmd, errorMsg;
+        if(cmd == 'zoomCodon') {
+            num = prompt("Please enter the codon number to jump to:");
+            ajaxCmd = 'codonPos';
+            errorMsg = num + " is an invalid codon for this gene";
+        } else {
+            num = prompt("Please enter the exon number to jump to:");
+            ajaxCmd = 'exonPos';
+            errorMsg = num + " is an invalid exon number for this gene";
+        }
+        if(num) {
+            $.ajax({
+                       type: "GET",
+                       url: "../cgi-bin/hgApi",
+                       data: "db=" + getDb() +  "&cmd=" + ajaxCmd + "&num=" + num + "&table=" + args.table + "&name=" + args.name,
+                       trueSuccess: handleZoomCodon,
+                       success: catchErrorOrDispatch,
+                       error: errorHandler,
+                       errorMsg: errorMsg,
+                       cache: true
+                   });
+        }
     } else if (cmd == 'hgTrackUi_popup') {
 
         hgTrackUiPopUp( selectedMenuItem.id, false );  // Launches the popup but shields the ajax with a waitOnFunction
@@ -1787,6 +1811,37 @@ function loadContextMenu(img)
                         }
                         if(displayItemFunctions) {
                             o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                            if(supportZoomCodon && rec.type.indexOf("genePred") != -1) {
+                                // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc003tqk.2&hgg_prot=P00533&hgg_chrom=chr7&hgg_start=55086724&hgg_end=55275030&hgg_type=knownGene&db=hg19&c=chr7
+                                var name, table;
+                                var reg = new RegExp("hgg_gene=([^&]+)");
+                                var a = reg.exec(href);
+                                if(a && a[1]) {
+                                    name = a[1];
+                                    reg = new RegExp("hgg_type=([^&]+)");
+                                    a = reg.exec(href);
+                                    if(a && a[1]) {
+                                        table = a[1];
+                                    }
+                                } else {
+                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086724&t=55275031&g=refGene&i=NM_005228&c=chr7
+                                    // http://hgwdev-larrym.cse.ucsc.edu/cgi-bin/hgc?o=55086713&t=55270769&g=wgEncodeGencodeManualV4&i=ENST00000455089&c=chr7
+                                    var reg = new RegExp("i=([^&]+)");
+                                    var a = reg.exec(href);
+                                    if(a && a[1]) {
+                                        name = a[1];
+                                        reg = new RegExp("g=([^&]+)");
+                                        a = reg.exec(href);
+                                        if(a && a[1]) {
+                                            table = a[1];
+                                        }
+                                    }
+                                }
+                                if(name && table) {
+                                    o[makeImgTag("magnify.png") + " Zoom to codon"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "zoomCodon", {name: name, table: table}); return true; }};
+                                    o[makeImgTag("magnify.png") + " Zoom to exon"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "zoomExon", {name: name, table: table}); return true; }};
+                                }
+                            }
                             o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
                         }
                         o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
@@ -2004,6 +2059,38 @@ function handleTrackUi(response, status)
 
     // make sure all links (e.g. help links) open up in a new window
     response = response.replace(/<a /ig, "<a target='_blank' ");
+
+    // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
+    // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
+    var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
+    var jsFiles = response.match(shlurpPattern);
+    response = response.replace(shlurpPattern,"");
+    //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
+    shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
+    var cssFiles = response.match(shlurpPattern);
+    response = response.replace(shlurpPattern,"");
+    //alert(response);
+                                    /*in open ?  Will load ofcss work this way?
+                                    $(cssFiles).each(function (i) {
+                                        bix = "<LINK rel='STYLESHEET' href='".length;
+                                        eix = this.lastIndexOf("' TYPE='text/css' />");
+                                        file = this.substring(bix,eix);
+                                        $.getScript(file); // Should protect against already loaded files.
+                                        //warn(file)
+                                    });
+                                    */
+                                    /* in open ?
+                                    $(jsFiles).each(function (i) {
+                                        bix = "<script type='text/javascript' SRC='".length;
+                                        eix = this.lastIndexOf("'></script>");
+                                        file = this.substring(bix,eix);
+                                        warn(file)
+                                        $.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
+                                    });
+                                    */
+    // Larry I could not get this to work.  When the response has js files in it, then the model never opens.
+    // but when I shlurp them out, it opens fine.  However, the js files should get loaded.  If I use getScript() then
+    // I can't close the modal dialog and get errors like c.ui.dialog is undefined from jquery-ui.js
 
     $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
@@ -2720,5 +2807,19 @@ function reloadFloatingItem()
 // currently dead (experimental code)
     if(floatingMenuItem) {
         $('#img_data_' + floatingMenuItem).parent().makeFloat({x:"current",y:"current", speed: 'fast', alwaysVisible: true, alwaysTop: true});
+    }
+}
+
+function handleZoomCodon(response, status)
+{
+    // XXXX use formal json interface
+    if(response.length > 1) {
+        setPosition(response, 3);
+        if(document.TrackForm)
+            document.TrackForm.submit();
+        else
+            document.TrackHeaderForm.submit();
+    } else {
+        alert(this.errorMsg);
     }
 }

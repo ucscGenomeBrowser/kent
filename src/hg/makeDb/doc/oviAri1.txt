@@ -270,15 +270,19 @@ close (FH);
 oviAri1.serverGenome = /hive/data/genomes/oviAri1/oviAri1.2bit
 oviAri1.clusterGenome = /scratch/data/oviAri1/oviAri1.2bit
 oviAri1.ooc = /scratch/data/oviAri1/oviAri1.11.ooc
-oviAri1.lift = /scratch/data/oviAri1/oviAri1.nonBridged.lft
+oviAri1.lift = no
+oviAri1.perChromTables = no
 oviAri1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-oviAri1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}  
+oviAri1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 oviAri1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
 oviAri1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
 oviAri1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+oviAri1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 oviAri1.downloadDir = oviAri1
-oviAri1.genbank.mrna.xeno.loadDesc = yes
-oviAri1.refseq.mrna.native.load = no
+oviAri1.refseq.mrna.native.load  = yes
+oviAri1.refseq.mrna.xeno.load = yes
+oviAri1.refseq.mrna.xeno.loadDesc  = yes
+
 
 
     cvs ci -m "Added oviAri1" etc/genbank.conf
@@ -313,8 +317,9 @@ oviAri1.refseq.mrna.native.load = no
     ssh hgwdev
     cd /cluster/data/genbank
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad oviAri1 &
-    #    logFile: var/dbload/hgwdev/logs/2010.04.19-08:17:28.dbload.log
-    #   real    37m49.454s
+    #   logFile: var/dbload/hgwdev/logs/2011.02.03-13:09:50.dbload.log
+    #   real    31m57.999s
+
 
 
     # enable daily alignment and update of hgwdev
@@ -330,12 +335,12 @@ oviAri1.refseq.mrna.native.load = no
 # reset position to RHO location as found from blat of hg19 RHO gene
 #	(DONE - 2010-04-15 - Chin)
     hgsql -e \
-'update dbDb set defaultPos="chr13:57394166-57402412" where name="oviAri1";' \
+'update dbDb set defaultPos="chr19:53,315,047-53,326,013" where name="oviAri1";' \
 	hgcentraltest
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#	(working 2010-04-15 - Chin)
+#	(DONE 2011-02-03 - Chin)
 # NOTE - create oviAri1 entry in all.joiner since this is a new species
     mkdir /hive/data/genomes/oviAri1/bed/ctgPos2
     cd /hive/data/genomes/oviAri1/bed/ctgPos2
@@ -369,6 +374,8 @@ close (FH);
 '_EOF_'
     # << happy emacs
 
+chmod 775 agpToCtgPos2.pl
+
 export S=../../genbank/Primary_Assembly/assembled_chromosomes
 cut -f2 ${S}/chr2acc | while read ACC
 do
@@ -378,9 +385,17 @@ do
 done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
     hgLoadSqlTab oviAri1 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+    # add the track ctgPos2 to src/hg/makeDb/trackDb/sheep/trackDb.ra
+    # at src/makeDb/trackdb do "make update DBS=oviAri1" or/and "make alpha"
+    # based on result of
+    # hgsql -N -e "select type from ctgPos2;" oviAri1 | sort | uniq
+    # W
+    # prepare the src/hg/makeDb/trackDb/sheep/ctgPos2.html 
+
+
 
 ############################################################################
-# oviAri1 Sheep BLASTZ/CHAIN/NET (working 04-16-2010 - Chin)
+# oviAri1 Sheep BLASTZ/CHAIN/NET (DONE 2011-02-04 - Chin)
 
 #  request to copy /hive/data/staging.oviAri1 over to /scratch/data/oviAri1
     screen # use a screen to manage this multi-day job
@@ -467,7 +482,7 @@ limit vmemoryuse 163840m
      cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
      ./netSynteny.csh > & netSynteny_tcsh.log 
 
-   #   and the swap
+   #   and the swap (working 2011-02-04)
     mkdir /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
     cd /hive/data/genomes/oviAri1/bed/blastz.bosTau4.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
@@ -475,6 +490,9 @@ limit vmemoryuse 163840m
         -swap -noLoadChainSplit -syntenicNet \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    # real    309m19.204s
+    cat fb.oviAri1.chainBosTau4Link.txt
+    # 1164717810 bases of 1201271277 (96.957%) in intersection
 
 #########################################################################
 #  SWAP mm9 lastz (DONE - 2010-04-12 - Chin)
@@ -658,7 +676,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr hardMaskedFa
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (??? Pending the ISg status 2010-04-29)
+# all.joiner update, downloads and in pushQ - (DONE 2011-02-07 - Chin)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=oviAri1 -all all.joiner

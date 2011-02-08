@@ -324,8 +324,10 @@ boolean showItemRgb = FALSE;
 showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" */
 
 struct slName *fieldList;
-if (hIsBigBed(database, table, curTrack, ctLookupName))
+if (isBigBed(database, table, curTrack, ctLookupName))
     fieldList = bigBedGetFields(table, conn);
+else if (isBamTable(table))
+    fieldList = bamGetFields(table);
 else
     fieldList = sqlListFields(conn, table);
 
@@ -951,10 +953,14 @@ if (isWig)
 else
     {
     struct sqlFieldType *ftList;
-    if (hIsBigBed(database, table, curTrack, ctLookupName))
+    if (isBigBed(database, table, curTrack, ctLookupName))
         {
         ftList = bigBedListFieldsAndTypes(table, conn);
         }
+    else if (isBamTable(table))
+        {
+	ftList = bamListFieldsAndTypes();
+	}
     else
         {
         ftList = sqlListFieldsAndTypes(conn, table);
@@ -1030,9 +1036,14 @@ else if (ct->wiggle)
         numericFilter("ct", table, filterDataValueVar, filterDataValueVar,"");
         }
     }
-else if (hIsBigBed(db, table, curTrack, ctLookupName))
+else if (isBigBed(db, table, curTrack, ctLookupName))
     {
     struct sqlFieldType *ftList = bigBedListFieldsAndTypes(table, NULL);
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
+else if (isBamTable(table))
+    {
+    struct sqlFieldType *ftList = bamListFieldsAndTypes();
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
 else
