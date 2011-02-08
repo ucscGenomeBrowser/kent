@@ -8694,9 +8694,9 @@ projectName BU
 term Ruan
 tag ruan
 type grant
-description Ruan
+description Ruan        PROVISIONAL
 grantInst Genome Institute of Singapore
-projectName Chia PET??
+projectName ChIA-PET
 
 term Hubbard
 tag hubbard
