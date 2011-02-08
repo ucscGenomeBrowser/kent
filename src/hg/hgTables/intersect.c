@@ -15,6 +15,7 @@
 #include "jsHelper.h"
 #include "hgTables.h"
 #include "customTrack.h"
+#include "hubConnect.h"
 #include "wikiTrack.h"
 
 static char const rcsid[] = "$Id: intersect.c,v 1.54 2010/06/03 18:53:59 kent Exp $";
@@ -41,6 +42,8 @@ static boolean canIntersect(char *db, char *table)
 /* Return true if table exists and is positional. */
 {
 if (isCustomTrack(table) && ctLookupName(table) != NULL)
+    return TRUE;
+if (isHubTrack(table))
     return TRUE;
 if (sameWord(table, WIKI_TRACK_TABLE))
     return TRUE;
