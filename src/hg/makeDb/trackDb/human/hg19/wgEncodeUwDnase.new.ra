@@ -53,7 +53,7 @@ sortOrder cellType=+ rep=+ view=+
 dragAndDrop subTracks
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
-priority 0
+priority 4
 type bed 3 +
 dataVersion through the ENCODE Jun 2010 Freeze
 wgEncode 1
