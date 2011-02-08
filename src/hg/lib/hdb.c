@@ -4938,4 +4938,37 @@ if (fileName == NULL)
 return fileName;
 }
 
+void printUpdateTime(char *database, struct trackDb *tdb,
+    struct customTrack *ct)
+/* display table update time */
+{
+struct sqlConnection *conn = NULL;
+char *tableName = NULL;
+if (isCustomTrack(tdb->track))
+    {
+    if (ct)
+	{
+	conn =  hAllocConn(CUSTOM_TRASH);
+	tableName = ct->dbTableName;
+	}
+    }
+else
+    {
+    tableName = hTableForTrack(database, tdb->table);
+    conn = hAllocConnTrack(database, tdb);
+    }
+if (tableName)
+    {
+    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+    if (date != NULL)
+	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+    }
+hFreeConn(&conn);
+}
 
+void printBbiUpdateTime(time_t *timep)
+/* for bbi files, print out the timep value */
+{
+    printf ("<B>Data last updated:&nbsp;%s</B><BR>\n",
+	sqlUnixTimeToDate(timep, FALSE));
+}

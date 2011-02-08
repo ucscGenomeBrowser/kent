@@ -99,6 +99,8 @@ if (bbMatch != NULL)
 	    printf("<BR>\n");
 	    }
 	}
+    time_t timep = bbiUpdateTime(bbi);
+    printBbiUpdateTime(&timep);
     }
 else
     {

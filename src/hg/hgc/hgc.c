@@ -2842,23 +2842,13 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-char *tableName;
-
 if (!isCustomTrack(tdb->track))
     {
     extraUiLinks(database,tdb,trackHash);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
-    if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
-	{
-	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-
-	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-	if (date != NULL)
-	    printf("<B>Data last updated:</B> %s<BR>\n", date);
-	hFreeConn(&conn);
-	}
+    printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
     }
 char *html = getHtmlFromSelfOrParent(tdb);
@@ -19726,13 +19716,7 @@ else
 	    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
 		TRUE, NULL);
 	if (ct->dbTrack)
-	    {
-	    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-	    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
-	    if (date != NULL)
-		printf("<B>Data last updated:</B> %s<BR>\n", date);
-	    hFreeConn(&conn);
-	    }
+	    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 	printTrackHtml(ct->tdb);
 	return;
 	}
@@ -19754,13 +19738,7 @@ else
     }
 printTrackUiLink(ct->tdb);
 if (ct->dbTrack)
-    {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
-    if (date != NULL)
-	printf("<B>Data last updated:</B> %s<BR>\n", date);
-    hFreeConn(&conn);
-    }
+    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 printTrackHtml(ct->tdb);
 }
 
@@ -22464,7 +22442,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName = NULL, *tableName;
+char *escName = NULL;
 int hasAttr = 0;
 int i;
 int start = cartInt(cart, "o");
@@ -22561,14 +22539,7 @@ printf("</DL>\n");
 printTBSchemaLink(tdb);
 printDataVersion(tdb);
 printOrigAssembly(tdb);
-if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
-    {
-    struct sqlConnection *conn = hAllocConn(database);
-    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-    if (date != NULL)
-        printf("<B>Data last updated:</B> %s<BR>\n", date);
-    hFreeConn(&conn);
-    }
+printUpdateTime(database, tdb, NULL);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();

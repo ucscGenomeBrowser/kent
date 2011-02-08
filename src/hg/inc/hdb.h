@@ -857,4 +857,11 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
 char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
 /* Return file name from bigDataUrl or little table. */
 
+void printUpdateTime(char *database, struct trackDb *tdb,
+    struct customTrack *ct);
+/* display table update time, or in case of bbi file, file stat time */
+
+void printBbiUpdateTime(time_t *timep);
+/* for bbi files, print out the timep value */
+
 #endif /* HDB_H */
