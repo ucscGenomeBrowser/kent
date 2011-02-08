@@ -8,7 +8,10 @@ static char const rcsid[] = "$Id: variation.c,v 1.148 2010/06/07 16:54:21 angie 
 
 static double snp125AvHetCutoff = SNP125_DEFAULT_MIN_AVHET;
 static int snp125WeightCutoff = SNP125_DEFAULT_MAX_WEIGHT;
-static int snp132MinSubmitters = 0;
+static int snp132MinSubmitters = SNP132_DEFAULT_MIN_SUBMITTERS;
+static float snp132MinMinorAlFreq = SNP132_DEFAULT_MIN_MINOR_AL_FREQ;
+static float snp132MaxMinorAlFreq = SNP132_DEFAULT_MAX_MINOR_AL_FREQ;
+static int snp132MinAlFreq2N = SNP132_DEFAULT_MIN_AL_FREQ_2N;
 
 // Globals for caching cart coloring and filtering settings for snp125+ tracks:
 static enum snp125ColorSource snp125ColorSource = SNP125_DEFAULT_COLOR_SOURCE;
@@ -117,6 +120,46 @@ struct snp132Ext *el = item;
 if (el->submitterCount < snp132MinSubmitters)
     return FALSE;
 return TRUE;
+}
+
+static float snp132MajorAlleleFreq(const struct snp132Ext *snp)
+/* Some SNPs have >2 alleles, so minor allele frequency is harder to define.
+ * So instead, I'm using major allele frequency -- (1 - major) can be a proxy for minor. */
+{
+float majorAlF = 0.0;
+int i;
+for (i = 0;  i < snp->alleleFreqCount;  i++)
+    if (snp->alleleFreqs[i] > majorAlF)
+	majorAlF = snp->alleleFreqs[i];
+return majorAlF;
+}
+
+static boolean snp132MinorAlFreqFilterItem(void *item)
+/* Return TRUE if item passes filter, i.e. has a minor allele frequency >= threshold
+ * (but if the range has not been changed from defaults, don't require that item has
+ * any allele frequency data). */
+{
+if (snp132MinMinorAlFreq == SNP132_DEFAULT_MIN_MINOR_AL_FREQ &&
+    snp132MaxMinorAlFreq == SNP132_DEFAULT_MAX_MINOR_AL_FREQ)
+    return TRUE;
+struct snp132Ext *el = item;
+float majorAlFreq = snp132MajorAlleleFreq(el);
+return (((1.0 - majorAlFreq) >= snp132MinMinorAlFreq) &&
+	((1.0 - majorAlFreq) <= snp132MaxMinorAlFreq));
+}
+
+static boolean snp132MinAlFreq2NFilterItem(void *item)
+/* Return TRUE if item passes filter, i.e. has a 2N chromosome count > threshold
+ * (but if threshold is 0, don't require that item has any allele frequency data). */
+{
+if (snp132MinAlFreq2N == 0)
+    return TRUE;
+struct snp132Ext *el = item;
+int twoN = 0;
+int i;
+for (i = 0;  i < el->alleleFreqCount;  i++)
+    twoN += (int)(round(el->alleleNs[i]));
+return (twoN >= snp132MinAlFreq2N);
 }
 
 boolean snpSourceFilterItem(struct track *tg, void *item)
@@ -353,6 +396,8 @@ for (el = tg->items; el != NULL; el = next)
 	(version >= 128 || snp125LocTypeFilterItem(el)) &&
 	(version < 132 ||
 	 (snp132MinSubmittersFilterItem(el) &&
+	  snp132MinorAlFreqFilterItem(el) &&
+	  snp132MinAlFreq2NFilterItem(el) &&
 	  snp132ExceptionFilterItem(el) &&
 	  snp132BitfieldFilterItem(el))))
         slAddHead(&newList, el);
@@ -479,18 +524,6 @@ while (snpItem!=NULL && orthoItem!=NULL)
 freeDyString(&extra);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-}
-
-static float snp132MajorAlleleFreq(const struct snp132Ext *snp)
-/* Some SNPs have >2 alleles, so minor allele frequency is harder to define.
- * So instead, I'm using major allele frequency -- (1 - major) can be a proxy for minor. */
-{
-float majorAlF = 0.0;
-int i;
-for (i = 0;  i < snp->alleleFreqCount;  i++)
-    if (snp->alleleFreqs[i] > majorAlF)
-	majorAlF = snp->alleleFreqs[i];
-return majorAlF;
 }
 
 static Color snp132ColorByAlleleFreq(struct snp132Ext *snp, struct hvGfx *hvg)
@@ -620,6 +653,12 @@ snp125WeightCutoff = cartUsualInt(cart, cartVar,
 			     cartUsualInt(cart, "snp125WeightCutoff", defaultMaxWeight));
 safef(cartVar, sizeof(cartVar), "%s.minSubmitters", track);
 snp132MinSubmitters = cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_SUBMITTERS);
+safef(cartVar, sizeof(cartVar), "%s.minMinorAlFreq", track);
+snp132MinMinorAlFreq = cartUsualDouble(cart, cartVar, SNP132_DEFAULT_MIN_MINOR_AL_FREQ);
+safef(cartVar, sizeof(cartVar), "%s.maxMinorAlFreq", track);
+snp132MaxMinorAlFreq = cartUsualDouble(cart, cartVar, SNP132_DEFAULT_MAX_MINOR_AL_FREQ);
+safef(cartVar, sizeof(cartVar), "%s.minAlFreq2N", tdb->track);
+snp132MinAlFreq2N = cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_AL_FREQ_2N);
 
 snp125MolTypeFilter = snp125FilterFromCart(cart, track, "molType", &snp125MolTypeFilterOn);
 snp125ClassFilter = snp125FilterFromCart(cart, track, "class", &snp125ClassFilterOn);

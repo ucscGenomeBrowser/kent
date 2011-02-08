@@ -206,7 +206,10 @@ void snp125PrintFilterControls(char *track, char *attributeLabel, char *attribut
 /* Print two or more rows (attribute name header and row(s) of checkboxes)
  * of a table displaying snp125 attribute filter checkboxes. */
 {
-printf("<TR><TD><B>%s:</B>&nbsp;\n", attributeLabel);
+char anchor[256];
+safecpy(anchor, sizeof(anchor), attributeVar);
+anchor[0] = toupper(anchor[0]);
+printf("<TR><TD><B><A HREF=\"#%s\">%s</A>:</B>&nbsp;\n", anchor, attributeLabel);
 char cartVar[256];
 safef(cartVar, sizeof(cartVar), "%s.include_%s", track, attributeVar);
 jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
@@ -221,6 +224,93 @@ if (! foundInCart)
 cgiMakeCheckboxGroupWithVals(cartVar, labels, values, menuSize, selectedAttributes,
 			     SNP125_FILTER_COLUMNS);
 printf("</TD></TR>\n");
+}
+
+static void snp125PrintFilterControlSection(struct trackDb *tdb, int version)
+/* Print a collapsible section of filtering controls on SNP properties, first numeric
+ * and then enum/set. */
+{
+char cartVar[512];
+printf("<TR><TD colspan=2><A name=\"filterControls\"></TD></TR>\n");
+jsBeginCollapsibleSection(cart, tdb->track, "filterByAttribute", "Filtering Options", FALSE);
+
+printf("<BR>\n");
+safef(cartVar, sizeof(cartVar), "%s.minAvHet", tdb->track);
+double minAvHet = cartUsualDouble(cart, cartVar,
+			     // Check old cart var name:
+			     cartUsualDouble(cart, "snp125AvHetCutoff", SNP125_DEFAULT_MIN_AVHET));
+printf("<B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
+cgiMakeDoubleVar(cartVar, minAvHet, 6);
+printf("<BR>\n");
+
+safef(cartVar, sizeof(cartVar), "%s.maxWeight", tdb->track);
+int defaultMaxWeight = SNP125_DEFAULT_MAX_WEIGHT;
+char *setting = trackDbSetting(tdb, "defaultMaxWeight");
+if (isNotEmpty(setting))
+    defaultMaxWeight = atoi(setting);
+int maxWeight = cartUsualInt(cart, cartVar,
+			     // Check old cart var name:
+			     cartUsualInt(cart, "snp125WeightCutoff", defaultMaxWeight));
+printf("<B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
+cgiMakeIntVar(cartVar, maxWeight, 4);
+printf("&nbsp;<EM>Range: 1, 2 or 3; SNPs with higher weights are less reliable</EM><BR>\n");
+
+if (version >= 132)
+    {
+    printf("<B>Minimum number of distinct "
+	   "<A HREF=\"#Submitters\">Submitters</A>:</B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.minSubmitters", tdb->track);
+    cgiMakeIntVar(cartVar, cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_SUBMITTERS), 4);
+    printf("<BR>\n");
+    printf("<B><A HREF=\"#AlleleFreq\">Minor Allele Frequency</A> range:</B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.minMinorAlFreq", tdb->track);
+    float maf = cartUsualDouble(cart, cartVar, SNP132_DEFAULT_MIN_MINOR_AL_FREQ);
+    cgiMakeDoubleVarInRange(cartVar, maf, NULL, 4, "0.0", "0.5");
+    printf(" to ");
+    safef(cartVar, sizeof(cartVar), "%s.maxMinorAlFreq", tdb->track);
+    maf = cartUsualDouble(cart, cartVar, SNP132_DEFAULT_MAX_MINOR_AL_FREQ);
+    cgiMakeDoubleVarInRange(cartVar, maf, NULL, 4, "0.0", "0.5");
+    printf(" <em>Range: 0.0 - 0.5</em>\n");
+    printf("<BR>\n");
+    printf("<B>Minimum chromosome sample count (2N) for "
+	   "<A HREF=\"#AlleleFreq\">Allele Frequency</A> data:</B>&nbsp;");
+    safef(cartVar, sizeof(cartVar), "%s.minAlFreq2N", tdb->track);
+    cgiMakeIntVar(cartVar, cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_AL_FREQ_2N), 4);
+    printf("<BR>\n");
+    }
+
+printf("<BR>\n");
+
+printf("<B>Filter by attribute:</B><BR>\n");
+printf("Check the boxes below to include SNPs with those attributes.  "
+       "In order to be displayed, a SNP must pass the filter for each "
+       "category.  \n"
+       "Some assemblies may not contain any SNPs that have some of the "
+       "listed attributes.\n"
+       "<BR><BR>\n");
+
+printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
+if (version <= 127)
+    snp125PrintFilterControls(tdb->track, "Location Type", "locType", snp125LocTypeLabels,
+			 snp125LocTypeDataName, snp125LocTypeArraySize);
+snp125PrintFilterControls(tdb->track, "Class", "class", snp125ClassLabels,
+			  snp125ClassDataName, snp125ClassArraySize);
+snp125PrintFilterControls(tdb->track, "Validation", "valid", snp125ValidLabels,
+			  snp125ValidDataName, snp125ValidArraySize);
+int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
+snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
+			  snp125FuncDataName, funcArraySize);
+snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
+			  snp125MolTypeDataName, snp125MolTypeArraySize);
+if (version >= 132)
+    {
+    snp125PrintFilterControls(tdb->track, "Unusual Conditions (UCSC)", "exceptions",
+		      snp132ExceptionLabels, snp132ExceptionVarName, snp132ExceptionArraySize);
+    snp125PrintFilterControls(tdb->track, "Miscellaneous Attributes (dbSNP)", "bitfields",
+		      snp132BitfieldLabels, snp132BitfieldDataName, snp132BitfieldArraySize);
+    }
+printf("</TABLE>\n");
+jsEndCollapsibleSection();
 }
 
 static void snp125PrintColorSpec(char *track, char *attribute, char *vars[], boolean varsAreOld,
@@ -306,7 +396,7 @@ void snp125PrintColorControlSection(struct trackDb *tdb, int version)
  * and then a color for each possible value of the selected attribute. */
 {
 printf("<TR><TD colspan=2><A name=\"colorSpec\"></TD></TR>\n");
-jsBeginCollapsibleSection(cart, tdb->track, "colorByAttribute", "Color by Attribute", FALSE);
+jsBeginCollapsibleSection(cart, tdb->track, "colorByAttribute", "Coloring Options", FALSE);
 
 char defaultButtonVar[512];
 safef(defaultButtonVar, sizeof(defaultButtonVar), "%s_coloring", SNP125_DEFAULTS);
@@ -430,71 +520,8 @@ puts("<TABLE border=0 cellspacing=0 cellpadding=0>");
 
 snp125OfferGeneTracksForFunction(tdb);
 
-printf("<TR><TD colspan=2><BR></TD></TR>\n");
-printf("<TR><TD colspan=2><A name=\"filterControls\"></TD></TR>\n");
-
-safef(cartVar, sizeof(cartVar), "%s.minAvHet", tdb->track);
-double minAvHet = cartUsualDouble(cart, cartVar,
-			     // Check old cart var name:
-			     cartUsualDouble(cart, "snp125AvHetCutoff", SNP125_DEFAULT_MIN_AVHET));
-printf("<TR><TD colspan=2><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
-cgiMakeDoubleVar(cartVar, minAvHet, 6);
-printf("</TD></TR>\n");
-
-safef(cartVar, sizeof(cartVar), "%s.maxWeight", tdb->track);
-int defaultMaxWeight = SNP125_DEFAULT_MAX_WEIGHT;
-char *setting = trackDbSetting(tdb, "defaultMaxWeight");
-if (isNotEmpty(setting))
-    defaultMaxWeight = atoi(setting);
-int maxWeight = cartUsualInt(cart, cartVar,
-			     // Check old cart var name:
-			     cartUsualInt(cart, "snp125WeightCutoff", defaultMaxWeight));
-printf("<TR><TD colspan=2><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
-cgiMakeIntVar(cartVar, maxWeight, 4);
-printf("&nbsp;<EM>Range: 1, 2 or 3; SNPs with higher weights are less reliable</EM><BR>\n");
-printf("</TD></TR>\n");
-
-if (version >= 132)
-    {
-    printf("<TR><TD colspan=2><B>Minimum number of distinct "
-	   "<A HREF=\"#Submitters\">Submitters</A>:</B>&nbsp;");
-    safef(cartVar, sizeof(cartVar), "%s.minSubmitters", tdb->track);
-    cgiMakeIntVar(cartVar, cartUsualInt(cart, cartVar, SNP132_DEFAULT_MIN_SUBMITTERS), 4);
-    printf("</TD></TR>\n");
-    }
-
-printf("<TR><TD colspan=2><BR></TD></TR>\n");
-
-jsBeginCollapsibleSection(cart, tdb->track, "filterByAttribute", "Filter by Attribute", FALSE);
-printf("Check the boxes below to include SNPs with those attributes.  "
-       "In order to be displayed, a SNP must pass the filter for each "
-       "category.  \n"
-       "Some assemblies may not contain any SNPs that have some of the "
-       "listed attributes.\n"
-       "<BR><BR>\n");
-
-printf("<TABLE border=0 cellspacing=0 cellpadding=0>\n");
-if (version <= 127)
-    snp125PrintFilterControls(tdb->track, "Location Type", "locType", snp125LocTypeLabels,
-			 snp125LocTypeDataName, snp125LocTypeArraySize);
-snp125PrintFilterControls(tdb->track, "Class", "class", snp125ClassLabels,
-			  snp125ClassDataName, snp125ClassArraySize);
-snp125PrintFilterControls(tdb->track, "Validation", "valid", snp125ValidLabels,
-			  snp125ValidDataName, snp125ValidArraySize);
-int funcArraySize = (version < 130) ? snp125FuncArraySize : (snp125FuncArraySize - 1);
-snp125PrintFilterControls(tdb->track, "Function", "func", snp125FuncLabels,
-			  snp125FuncDataName, funcArraySize);
-snp125PrintFilterControls(tdb->track, "Molecule Type", "molType", snp125MolTypeLabels,
-			  snp125MolTypeDataName, snp125MolTypeArraySize);
-if (version >= 132)
-    {
-    snp125PrintFilterControls(tdb->track, "Unusual Conditions (UCSC)", "exceptions",
-		      snp132ExceptionLabels, snp132ExceptionVarName, snp132ExceptionArraySize);
-    snp125PrintFilterControls(tdb->track, "Miscellaneous Attributes (dbSNP)", "bitfields",
-		      snp132BitfieldLabels, snp132BitfieldDataName, snp132BitfieldArraySize);
-    }
-printf("</TABLE>\n");
-jsEndCollapsibleSection();
+puts("<TR><TD colspan=2><BR></TD></TR>");
+snp125PrintFilterControlSection(tdb, version);
 puts("<TR><TD colspan=2><BR></TD></TR>");
 
 snp125PrintColorControlSection(tdb, version);
