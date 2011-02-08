@@ -3315,23 +3315,48 @@ for(ix=0;ix<filterCount;ix++)
         filterBy->useIndex = TRUE;
         }
     filterBy->valueAndLabel = (strchr(filter,'|') != NULL);
+    filterBy->colorFollows  = FALSE; // A color could be declared at the end of a filter value like "Level_2{#FF0099}"
+    char *color = strchr(filter,'{');
+    if (color != NULL)
+        filterBy->colorFollows = (*(color + 1) == '#');
     // Remove any double quotes now and rely upon commmas for delimiting
     stripString(filter, "\"");
     filterBy->slValues = slNameListFromComma(filter);
-    if (filterBy->valueAndLabel)
+    if (filterBy->valueAndLabel || filterBy->colorFollows)
         {
         struct slName *val = filterBy->slValues;
         for(;val!=NULL;val=val->next)
             {
+            // chip the color off the end of value name
+            color = strchr(val->name,'{');
+            if (color == NULL && filterBy->colorFollows)
+                {
+                warn("Using filterBy but only some values contain colors in form of value{#color} or value|label{#color}.");
+                filterBy->colorFollows = FALSE;
+                break;
+                }
+            else if (color != NULL && filterBy->colorFollows)
+                {
+                assert(*(color + 1) == '#');
+                *color++ = 0;  // The color is found inside the filters->svValues as the next string beyond value or label
+                color = strchr(val->name,'}'); // There could be a closing '}'
+                if (color != NULL)
+                    *color = 0;
+                }
+
+            // now chip the label off the end of value name
             char * lab =strchr(val->name,'|');
-            if (lab == NULL)
+            if (lab == NULL && filterBy->valueAndLabel)
                 {
                 warn("Using filterBy but only some values contain labels in form of value|label.");
                 filterBy->valueAndLabel = FALSE;
                 break;
                 }
-            *lab++ = 0;  // The label is found inside the filters->svValues as the next string
-            strSwapChar(lab,'_',' '); // Title does not have underscores
+            if (lab != NULL && filterBy->valueAndLabel)
+                {
+                *lab++ = 0;  // The label is found inside the filters->svValues as the next string
+                strSwapChar(lab,'_',' '); // Title does not have underscores
+                }
             }
         }
 
@@ -3504,10 +3529,10 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     else
         printf("<B>%s</B>",filterBy->title);
 
-    if (onOneLine && count > 1)
+    //if (onOneLine && count > 1) // NOTE: onOneLine doesn't work because filterBy with multiple selected will align above title!
         printf("<BR>\n");
-    else
-        printf(":\n");
+    //else
+    //    printf(":\n");
     // TODO: Scroll long lists
     //#define FILTER_COMPOSITE_OPEN_SIZE 16
     // TODO: columnCount (Number of filterBoxes per row) should be configurable through tdb setting
@@ -3528,15 +3553,20 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             freeMem(name);
             }
         }
-    else if(filterBy->valueAndLabel)
-        {
-        for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
-            printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name,slValue->name+strlen(slValue->name)+1);
-        }
     else
         {
         for(slValue=filterBy->slValues;slValue!=NULL;slValue=slValue->next)
-            printf("<OPTION%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name)?" SELECTED":""),slValue->name);
+            {
+            char *label = (filterBy->valueAndLabel? slValue->name + strlen(slValue->name)+1: slValue->name);
+            printf("<OPTION");
+            if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,slValue->name))
+                printf(" SELECTED");
+            if (filterBy->valueAndLabel)
+                printf(" value='%s'",slValue->name);
+            if (filterBy->colorFollows)
+                printf(" style='background-color: %s;'",label + strlen(label)+1);
+            printf(">%s</OPTION>\n",label);
+            }
         }
     }
     printf("</SELECT>\n");
@@ -4780,7 +4810,7 @@ if(setting)
         colonPairToDoubles(setting,&minVal,&maxVal);
         getScoreFloatRangeFromCart(cart,tdb,scoreName,&minLimit,&maxLimit,&minVal,&maxVal);
         safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
-        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), label);
+        safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange?"Minimum ":""), htmlEncodeText(htmlTextStripTags(label),FALSE));
         cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
         if(filterByRange)
             {
@@ -5295,8 +5325,8 @@ void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *t
 {
 boolean compositeLevel = isNameAtCompositeLevel(tdb,name);
 boolean opened = FALSE;
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (-log 10)",QVALUE_FILTER,TRUE);
-showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (-log 10)",PVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Q-Value (<code>-log<sub>10</sub></code>)",QVALUE_FILTER,TRUE);
+showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum P-Value (<code>-log<sub>10</sub></code>)",PVALUE_FILTER,TRUE);
 showScoreFilter(cart,tdb,&opened,boxed,compositeLevel,name,title,"Minimum Signal value",     SIGNAL_FILTER,TRUE);
 
 char *setting = trackDbSettingClosestToHomeOrDefault(tdb, SCORE_FILTER,NULL);//"0:1000");
