@@ -38,6 +38,7 @@
 #include "pcrResult.h"
 #include "dgv.h"
 #include "transMapStuff.h"
+#include "bbiFile.h"
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
@@ -2720,6 +2721,13 @@ if (ct)
     cartSaveSession(cart);
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
+    if (ct->bbiFile)
+	{
+	time_t timep = bbiUpdateTime(ct->bbiFile);
+	printBbiUpdateTime(&timep);
+	}
+    else
+	printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
     }
 
 if (!ct)
@@ -2731,18 +2739,13 @@ if (!ct)
 
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
+   /* this old prohibition on avoiding wigMaf types is probably
+    * out of date.  The more general case is probably to do something
+    * special for composite tracks of all types.
+    */
 
-   if (hTableOrSplitExists(database, tdb->table))
-        {
-        /* Print update time of the table (or one of the components if split) */
-        char *tableName = hTableForTrack(database, tdb->table);
-	struct sqlConnection *conn = hAllocConnProfile(getTrackProfileName(tdb), database);
-
-	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-	if (date != NULL && !startsWith("wigMaf", tdb->type))
-	    printf("<B>Data last updated:</B> %s<BR>\n", date);
-	hFreeConn(&conn);
-	}
+    if (!startsWith("wigMaf", tdb->type))
+	printUpdateTime(database, tdb, NULL);
     }
 
 if (tdb->html != NULL && tdb->html[0] != 0)
