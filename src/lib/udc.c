@@ -1445,3 +1445,18 @@ void udcSetCacheTimeout(int timeout)
 {
 cacheTimeout = timeout;
 }
+
+time_t udcUpdateTime(struct udcFile *udc)
+/* return udc->updateTime */
+{
+if (sameString("transparent", udc->protocol))
+    {
+    struct stat status;
+    int ret = stat(udc->url, &status);
+    if (ret < 0)
+	return 0;
+    else
+	return  status.st_mtime;
+    }
+return udc->updateTime;
+}
