@@ -15,6 +15,7 @@ visibilityViewDefaults  Signal=full Alignments=hide
 priority 0
 type bigWig 0 16392
 noInherit on
+viewLimits 0:12
 wgEncode 1
 
         track wgEncodeSydhNsomeGM12878D000005701
