@@ -13,6 +13,7 @@
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
+#include "hubConnect.h"
 #include "searchTracks.h"
 #ifndef GBROWSE
 #include "axtInfo.h"
@@ -350,7 +351,6 @@ else
 	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
 		   "class=\"topbar\">\n",
-		// uiState, tdb->grp, table, table);
 		uiState, tdb->grp, tdb->track, tdb->table);
 	else
 	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1\" "

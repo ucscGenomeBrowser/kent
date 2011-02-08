@@ -1,7 +1,5 @@
 /* bam - stuff to handle BAM stuff in table browser. */
 
-#ifdef USE_BAM
-
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -323,6 +321,4 @@ hTableEnd();
 freeMem(fileName);
 hFreeConn(&conn);
 }
-
-#endif /* USE_BAM */
 

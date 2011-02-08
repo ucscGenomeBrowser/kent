@@ -1,16 +1,14 @@
-/* bam -- interface to binary alignment format files using Heng Li's samtools lib. */
-
-#ifdef USE_BAM
+/* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
 
 #include "common.h"
-#include "htmshell.h"
 #include "hdb.h"
+#include "bamFile.h"
+
+#ifdef USE_BAM
+#include "htmshell.h"
 #include "hgConfig.h"
 #include "udc.h"
 #include "samAlignment.h"
-#include "bamFile.h"
-
-static char const rcsid[] = "$Id: bamFile.c,v 1.22 2010/03/04 05:14:13 angie Exp $";
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
@@ -741,4 +739,134 @@ slReverse(&helper.samList);
 return helper.samList;
 }
 
-#endif//def USE_BAM
+#else
+// If we're not compiling with samtools, make stub routines so compile won't fail:
+
+char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
+/* Return file name from table.  If table has a seqName column, then grab the
+ * row associated with bamSeqName (which is not nec. in chromInfo, e.g.
+ * bam file might have '1' not 'chr1'). */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamFileNameFromTable");
+return NULL;
+}
+
+boolean bamFileExists(char *bamFileName)
+/* Return TRUE if we can successfully open the bam file and its index file. */
+{
+warn(COMPILE_WITH_SAMTOOLS, "bamFileExists");
+return FALSE;
+}
+
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+	samfile_t **pSamFile)
+/* Open the .bam file, fetch items in the seq:start-end position range,
+ * and call callbackFunc on each bam item retrieved from the file plus callbackData.
+ * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl.
+ * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
+ * the benefit of the callback function, with the open samFile.  */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamFetch");
+}
+
+struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm)
+/* Fetch region as a list of samAlignments - which is more or less an unpacked
+ * bam record.  Results is allocated out of lm, since it tends to be large... */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamFetchSamAlignment");
+return NULL;
+}
+
+boolean bamIsRc(const bam1_t *bam)
+/* Return TRUE if alignment is on - strand. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamIsRc");
+return FALSE;
+}
+
+void bamGetSoftClipping(const bam1_t *bam, int *retLow, int *retHigh, int *retClippedQLen)
+/* If retLow is non-NULL, set it to the number of "soft-clipped" (skipped) bases at
+ * the beginning of the query sequence and quality; likewise for retHigh at end.
+ * For convenience, retClippedQLen is the original query length minus soft clipping
+ * (and the length of the query sequence that will be returned). */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamGetSoftClipping");
+}
+
+char *bamGetQuerySequence(const bam1_t *bam, boolean useStrand)
+/* Return the nucleotide sequence encoded in bam.  The BAM format
+ * reverse-complements query sequence when the alignment is on the - strand,
+ * so if useStrand is given we rev-comp it back to restore the original query
+ * sequence. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamGetQuerySequence");
+return NULL;
+}
+
+UBYTE *bamGetQueryQuals(const bam1_t *bam, boolean useStrand)
+/* Return the base quality scores encoded in bam as an array of ubytes. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamGetQueryQuals");
+return NULL;
+}
+
+char *bamGetCigar(const bam1_t *bam)
+/* Return a BAM-enhanced CIGAR string, decoded from the packed encoding in bam. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamGetCigar");
+return NULL;
+}
+
+void bamShowCigarEnglish(const bam1_t *bam)
+/* Print out cigar in English e.g. "20 (mis)Match, 1 Deletion, 3 (mis)Match" */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamShowCigarEnglish");
+}
+
+void bamShowFlagsEnglish(const bam1_t *bam)
+/* Print out flags in English, e.g. "Mate is on '-' strand; Properly paired". */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamShowFlagsEnglish");
+}
+
+int bamGetTargetLength(const bam1_t *bam)
+/* Tally up the alignment's length on the reference sequence from
+ * bam's packed-int CIGAR representation. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamGetTargetLength");
+return 0;
+}
+
+struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset,
+			 boolean useStrand, char **retQSeq)
+/* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the
+ * query sequence into which ffAli needle pointers point. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamToFfAli");
+return NULL;
+}
+
+bam1_t *bamClone(const bam1_t *bam)
+/* Return a newly allocated copy of bam. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamClone");
+return NULL;
+}
+
+void bamShowTags(const bam1_t *bam)
+/* Print out tags in HTML: bold key, no type indicator for brevity. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamShowTags");
+}
+
+char *bamGetTagString(const bam1_t *bam, char *tag, char *buf, size_t bufSize)
+/* If bam's tags include the given 2-character tag, place the value into
+ * buf (zero-terminated, trunc'd if nec) and return a pointer to buf,
+ * or NULL if tag is not present. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamGetTagString");
+return NULL;
+}
+
+#endif//ndef USE_BAM

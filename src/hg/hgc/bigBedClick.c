@@ -99,6 +99,11 @@ if (bbMatch != NULL)
 	    printf("<BR>\n");
 	    }
 	}
+    if (isCustomTrack(tdb->track))
+	{
+	time_t timep = bbiUpdateTime(bbi);
+	printBbiUpdateTime(&timep);
+	}
     }
 else
     {
