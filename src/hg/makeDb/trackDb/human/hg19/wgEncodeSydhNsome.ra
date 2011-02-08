@@ -1,6 +1,7 @@
 
 track wgEncodeSydhNsome
 compositeTrack on
+release alpha
 shortLabel Stanford Nucleosome
 longLabel ENCODE Stanford Snyder Nucleosome
 group regulation
