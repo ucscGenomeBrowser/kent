@@ -2739,12 +2739,9 @@ if (!ct)
 
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
-   /* this old prohibition on avoiding wigMaf types is probably
-    * out of date.  The more general case is probably to do something
-    * special for composite tracks of all types.
-    */
 
-    if (!startsWith("wigMaf", tdb->type))
+    /* it would be interesting to do something for composites */
+    if (!tdbIsComposite(tdb))
 	printUpdateTime(database, tdb, NULL);
     }
 
