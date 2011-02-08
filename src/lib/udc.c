@@ -257,7 +257,7 @@ return size;
 }
 
 static boolean udcInfoViaTransparent(char *url, struct udcRemoteFileInfo *retInfo)
-/* Fill in *retTime with last modified time for file specified in url.
+/* Fill in *retInfo with last modified time for file specified in url.
  * Return FALSE if file does not even exist. */
 {
 internalErr();	/* Should not get here. */
