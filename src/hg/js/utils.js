@@ -1630,3 +1630,21 @@ function setCheckboxList(list, value)
         $("input[name='" + names[i] + "']").attr('checked', value);
     }
 }
+
+function calculateHgTracksWidth()
+{
+// return appropriate width for hgTracks image given users current window width
+    return $(window).width() - 20;
+}
+
+function hgTracksSetWidth()
+{
+    var winWidth = calculateHgTracksWidth();
+    if($("#imgTbl").length == 0) {
+        // XXXX what's this code for?
+        $("#TrackForm").append('<input type="hidden" name="pix" value="' + winWidth + '"/>');
+        //$("#TrackForm").submit();
+    } else {
+        $("input[name=pix]").val(winWidth);
+    }
+}
