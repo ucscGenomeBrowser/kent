@@ -41,6 +41,9 @@ void htmTextOut(FILE *f, char *s);
 void htmlTextOut(char *s);
 /* Print out string, if necessary replacing > with &gt; and the like */
 
+char *htmlTextStripTags(char *s);
+/* Returns a cloned string with all html tags stripped out */
+
 char *htmlEncodeText(char *s, boolean tagsOkay);
 /* Returns a cloned string with quotes replaced by html codes.
    Changes ',",\n and if not tagsOkay >,<,& to code equivalents.

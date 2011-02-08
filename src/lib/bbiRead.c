@@ -729,3 +729,9 @@ else if (bbi->version == 1)
 return res;
 }
 
+time_t bbiUpdateTime(struct bbiFile *bbi)
+/* return bbi->udc->updateTime */
+{
+struct udcFile *udc = bbi->udc;
+return udcUpdateTime(udc);
+}
