@@ -37,6 +37,8 @@
 #include "hgFind.h"
 #endif /* GBROWSE */
 #include "hui.h"
+#include "bigBed.h"
+#include "bigWig.h"
 
 static char const rcsid[] = "$Id: hdb.c,v 1.433 2010/05/21 16:39:57 angie Exp $";
 
@@ -4951,6 +4953,25 @@ if (isCustomTrack(tdb->track))
 	conn =  hAllocConn(CUSTOM_TRASH);
 	tableName = ct->dbTableName;
 	}
+    }
+else if (startsWith("big", tdb->type))
+    {
+    char *tableName = hTableForTrack(database, tdb->table);
+    struct sqlConnection *conn =  hAllocConnTrack(database, tdb);
+    char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
+    hFreeConn(&conn);
+    struct bbiFile *bbi = NULL;
+    if (startsWith("bigBed", tdb->type))
+	bbi = bigBedFileOpen(bbiFileName);
+    if (startsWith("bigWig", tdb->type))
+	bbi = bigWigFileOpen(bbiFileName);
+    time_t timep = 0;
+    if (bbi)
+	{
+	timep = bbiUpdateTime(bbi);
+	bbiFileClose(&bbi);
+	}
+    printBbiUpdateTime(&timep);
     }
 else
     {
