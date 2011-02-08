@@ -1046,7 +1046,7 @@ grant Ruan
 lab GIS-Ruan
 labVersion CHM040
 project wgEncode
-replicate 2
+replicate 1
 subId 3279
 submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040T_hg19.chromInteractons.bed
 tableName wgEncodeGisChiaPetMCF7D000005614
