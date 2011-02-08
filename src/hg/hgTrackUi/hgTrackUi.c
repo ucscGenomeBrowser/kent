@@ -22,6 +22,7 @@
 #include "chainCart.h"
 #include "chainDb.h"
 #include "gvUi.h"
+#include "grp.h"
 #include "oregannoUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
@@ -2574,8 +2575,17 @@ if (!ajax)
         }
     else
         {
-        printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure\" title='Full track configuration page'><IMG height=12 src='../images/ab_up.gif'>Full track list</A>)</B>",
-                    hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome);
+        struct grp *grp, *grps = hLoadGrps(database);
+        for (grp = grps; grp != NULL; grp = grp->next)
+            {
+            if (sameString(grp->name,tdb->grp))
+                {
+                printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&hgTracksConfigPage=configure&hgtgroup_%s_close=0#%sGroup\" title='%s tracks in track configuration page'><IMG height=12 src='../images/ab_up.gif'>All %s%s</A>)</B>",
+                        hgTracksName(), cartSessionVarName(), cartSessionId(cart),chromosome,tdb->grp,tdb->grp,grp->label,grp->label,endsWith(grp->label," Tracks")?"":" tracks");
+                break;
+                }
+            }
+        grpFreeList(&grps);
         }
     }
     puts("<BR><BR>");
