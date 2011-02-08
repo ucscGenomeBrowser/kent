@@ -21,6 +21,7 @@ wgEncodeSunyAlbanyGeneSt.ra \
 wgEncodeSunyRipSeq.ra \
 wgEncodeSunySwitchgear.ra \
 wgEncodeSydhHistone.ra \
+wgEncodeSydhNsome.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUncBsuProt.ra \
 wgEncodeUwAffyExonArray.ra \
