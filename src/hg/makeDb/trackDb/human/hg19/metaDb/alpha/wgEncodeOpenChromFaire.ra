@@ -3064,23 +3064,6 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsPk
 view Peaks
 
-metaObject wgEncodeOpenChromFairePanisletsRawData
-objType file
-cell PanIslets
-composite wgEncodeOpenChromFaire
-controlId generic_male
-dataType FaireSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-14
-dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsRawData.fastq.gz
-grant Crawford
-lab UNC
-origAssembly hg18
-project wgEncode
-subId 686
-view RawData
-
 metaObject wgEncodeOpenChromFairePanisletsRawDataRep1
 objType file
 cell PanIslets
@@ -3376,4 +3359,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -1086757158
+# MAGIC: -60498279
