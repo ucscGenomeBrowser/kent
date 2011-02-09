@@ -32,6 +32,8 @@ lab Yale
 origAssembly hg18
 project wgEncode
 subId 539
+rnaExtract polyA
+treatment None
 view RawData
 
 metaObject wgEncodeYaleRnaSeqGm12878PolyaSig
@@ -159,23 +161,7 @@ dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqK562Ifna30PolyaRawData.fastq.gz
 grant Snyder
 lab Yale
-origAssembly hg18
-project wgEncode
-subId 540
-treatment IFNa30
-view RawData
-
-metaObject wgEncodeYaleRnaSeqK562Ifna30mPolyaRawData
-objType file
-cell K562
-composite wgEncodeYaleRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-24
-dateUnrestricted 2010-06-24
-fileName wgEncodeYaleRnaSeqK562Ifna30mPolyaRawData.fastq.gz
-grant Snyder
-lab Yale
+rnaExtract polyA
 origAssembly hg18
 project wgEncode
 subId 540
@@ -236,6 +222,7 @@ origAssembly hg18
 project wgEncode
 subId 541
 treatment IFNa6h
+rnaExtract polyA
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifng30PolyaAln
@@ -292,23 +279,7 @@ origAssembly hg18
 project wgEncode
 subId 542
 treatment IFNg30
-view RawData
-
-metaObject wgEncodeYaleRnaSeqK562Ifng30mPolyaRawData
-objType file
-cell K562
-composite wgEncodeYaleRnaSeq
-dataType RnaSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-09-24
-dateUnrestricted 2010-06-24
-fileName wgEncodeYaleRnaSeqK562Ifng30mPolyaRawData.fastq.gz
-grant Snyder
-lab Yale
-origAssembly hg18
-project wgEncode
-subId 542
-treatment IFNg30
+rnaExtract polyA
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
@@ -365,6 +336,7 @@ origAssembly hg18
 project wgEncode
 subId 543
 treatment IFNg6h
+rnaExtract polyA
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562NonpolyaAln
@@ -381,7 +353,7 @@ grant Snyder
 lab Yale
 origAssembly hg18
 project wgEncode
-rnaExtract nonPolyA
+rnaExtract nonPolyARRna
 subId 2007
 tableName wgEncodeYaleRnaSeqK562NonpolyaAln
 treatment None
@@ -400,7 +372,7 @@ grant Snyder
 lab Yale
 origAssembly hg18
 project wgEncode
-rnaExtract nonPolyA
+rnaExtract nonPolyARRna
 subId 3113
 tableName wgEncodeYaleRnaSeqK562NonpolyaRaw
 treatment None
@@ -420,6 +392,8 @@ lab Yale
 origAssembly hg18
 project wgEncode
 subId 276
+treatment None
+rnaExtract nonPolyARRna
 view RawData
 
 metaObject wgEncodeYaleRnaSeqK562PolyaAln
@@ -478,4 +452,4 @@ tableName wgEncodeYaleRnaSeqK562PolyaSig
 treatment None
 view Signal
 
-# MAGIC: -1890657486
+# MAGIC: -883916654
