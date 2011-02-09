@@ -2062,37 +2062,52 @@ function handleTrackUi(response, status)
 
     // TODO: Shlurp up any javascript files from the response and load them with $.getScript()
     // example <script type='text/javascript' SRC='../js/tdreszer/jquery.contextmenu-1296177766.js'></script>
+    var cleanHtml = response;
     var shlurpPattern=/\<script type=\'text\/javascript\' SRC\=\'.*\'\>\<\/script\>/gi;
-    var jsFiles = response.match(shlurpPattern);
-    response = response.replace(shlurpPattern,"");
+    var jsFiles = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
+    shlurpPattern=/\<script type=\'text\/javascript\'>.*\<\/script\>/gi;
+    var jsEmbeded = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
     //<LINK rel='STYLESHEET' href='../style/ui.dropdownchecklist-1276528376.css' TYPE='text/css' />
     shlurpPattern=/\<LINK rel=\'STYLESHEET\' href\=\'.*\' TYPE=\'text\/css\' \/\>/gi;
-    var cssFiles = response.match(shlurpPattern);
-    response = response.replace(shlurpPattern,"");
-    //alert(response);
-                                    /*in open ?  Will load ofcss work this way?
-                                    $(cssFiles).each(function (i) {
-                                        bix = "<LINK rel='STYLESHEET' href='".length;
-                                        eix = this.lastIndexOf("' TYPE='text/css' />");
-                                        file = this.substring(bix,eix);
-                                        $.getScript(file); // Should protect against already loaded files.
-                                        //warn(file)
-                                    });
-                                    */
-                                    /* in open ?
-                                    $(jsFiles).each(function (i) {
-                                        bix = "<script type='text/javascript' SRC='".length;
-                                        eix = this.lastIndexOf("'></script>");
-                                        file = this.substring(bix,eix);
-                                        warn(file)
-                                        $.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
-                                    });
-                                    */
-    // Larry I could not get this to work.  When the response has js files in it, then the model never opens.
-    // but when I shlurp them out, it opens fine.  However, the js files should get loaded.  If I use getScript() then
-    // I can't close the modal dialog and get errors like c.ui.dialog is undefined from jquery-ui.js
+    var cssFiles = cleanHtml.match(shlurpPattern);
+    cleanHtml = cleanHtml.replace(shlurpPattern,"");
 
-    $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
+    $('#hgTrackUiDialog').html("<div id='pop'>" + cleanHtml + "</div>");
+
+    // Strategy for poups with js:
+    // - jsFiles and CSS should not be included in html.  Here they are shluped out.
+    // - The resulting files ought to be loadable dynamically (with getScript()), but this was not working nicely with the modal dialog
+    //   Therefore include files must be included with hgTracks CGI !
+    // - embedded js should not be in the popup box.
+    // - Somethings should be in a popup.ready() function, and this is emulated below, as soon as the cleanHtml is added
+    //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
+
+    /* //in open ?  Will load of css work this way?
+    $(cssFiles).each(function (i) {
+        bix = "<LINK rel='STYLESHEET' href='".length;
+        eix = this.lastIndexOf("' TYPE='text/css' />");
+        file = this.substring(bix,eix);
+        $.getScript(file); // Should protect against already loaded files.
+    }); */
+    /* //in open ?  Loads fine, but then dialog gets confused
+    $(jsFiles).each(function (i) {
+        bix = "<script type='text/javascript' SRC='".length;
+        eix = this.lastIndexOf("'></script>");
+        file = this.substring(bix,eix);
+        //$.getScript(file,function(data) { warn(data.substring(0,20) + " loaded")});
+    });*/
+
+    if( ! popUpTrackDescriptionOnly ) {
+        var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
+        popSaveAllVars = getAllVars( $('#hgTrackUiDialog'), subtrack );  // Saves the vars that may get changed by the popup cfg.
+
+        // -- popup.ready() -- Here is the place to do things that might otherwise go into a $('#pop').ready() routine!
+        $('#hgTrackUiDialog').find('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
+            $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy') });
+        });
+    }
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
@@ -2111,10 +2126,11 @@ function handleTrackUi(response, status)
                                         hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
                                }},
-                               open: function() {
-                                    var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
-                                    popSaveAllVars = getAllVars( $('#pop'), subtrack );
-                               },
+                               // popup.ready() doesn't seem to work in open.  So there is no need for open at this time.
+                               //open: function() {
+                               //     var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
+                               //     popSaveAllVars = getAllVars( $('#pop'), subtrack );
+                               //},
                                close: function() {
                                    $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
                                 popUpTrackName = ""; //set to defaults

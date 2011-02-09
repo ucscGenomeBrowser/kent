@@ -2258,28 +2258,6 @@ setType exp
 subId 642
 view RawData
 
-metaObject wgEncodeOpenChromChipHelas3CmycRawDataRep2V2
-objType file
-antibody c-Myc
-cell HeLa-S3
-composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateResubmitted 2009-10-05
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CmycRawDataRep2V2.fastq.gz
-grant Crawford
-lab UT-A
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 642
-submittedDataVersion V2 - new sequences generated
-view RawData
-
 metaObject wgEncodeOpenChromChipHelas3CmycSig
 objType table
 antibody c-Myc
@@ -2432,28 +2410,6 @@ project wgEncode
 replicate 2
 setType exp
 subId 493
-view RawData
-
-metaObject wgEncodeOpenChromChipHelas3CtcfRawDataRep2V2
-objType file
-antibody CTCF
-cell HeLa-S3
-composite wgEncodeOpenChromChip
-controlId HeLa-S3/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateResubmitted 2009-09-10
-dateSubmitted 2009-03-21
-dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CtcfRawDataRep2V2.fastq.gz
-grant Crawford
-lab UT-A
-origAssembly hg18
-project wgEncode
-replicate 2
-setType exp
-subId 493
-submittedDataVersion V2 - new sequences generated
 view RawData
 
 metaObject wgEncodeOpenChromChipHelas3CtcfSig
@@ -3373,25 +3329,6 @@ setType exp
 subId 1542
 tableName wgEncodeOpenChromChipHuvecCmycPk
 view Peaks
-
-metaObject wgEncodeOpenChromChipHuvecCmycRawData
-objType file
-antibody c-Myc
-cell HUVEC
-composite wgEncodeOpenChromChip
-controlId HUVEC/Input
-dataType ChipSeq
-dataVersion ENCODE Sep 2009 Freeze
-dateSubmitted 2009-10-01
-dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipHuvecCmycRawData.fastq.gz
-grant Crawford
-lab UT-A
-origAssembly hg18
-project wgEncode
-setType exp
-subId 635
-view RawData
 
 metaObject wgEncodeOpenChromChipHuvecCmycRawDataRep1
 objType file
@@ -4421,7 +4358,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam.bai
@@ -4444,7 +4381,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileIndex wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam.bai
@@ -4467,7 +4404,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
@@ -4488,7 +4425,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
@@ -4510,7 +4447,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
@@ -4531,7 +4468,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
@@ -4552,7 +4489,7 @@ cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
 dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
@@ -5404,25 +5341,6 @@ subId 2495
 tableName wgEncodeOpenChromChipMcf7Pol2Sig
 view Signal
 
-metaObject wgEncodeOpenChromChipMcf7RawData
-objType file
-antibody Input
-cell MCF-7
-composite wgEncodeOpenChromChip
-controlId MCF-7/Input
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2009-12-22
-dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipMcf7RawData.fastq.gz
-grant Crawford
-lab UT-A
-origAssembly hg18
-project wgEncode
-setType input
-subId 866
-view RawData
-
 metaObject wgEncodeOpenChromChipMonocd14InputAln
 objType file
 antibody Input
@@ -5914,4 +5832,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -927006803
+# MAGIC: -1425910042

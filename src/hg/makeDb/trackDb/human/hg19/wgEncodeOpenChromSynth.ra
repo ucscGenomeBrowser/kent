@@ -24,7 +24,7 @@ pValueFilter 0.0
 pValueFilterLimits 0:16
 noScoreFilter .
 extraFields pValue=[f]Fisher's_Combined_P-Value_(<code>-log<sub>10</sub></code>) dnaseSignal=[f]DNaseI_HS_Signal dnasePvalue=[f]DNaseI_HS_P-Value_(<code>-log<sub>10</sub></code>) faireSignal=[f]FAIRE_Signal fairePvalue=[f]FAIRE_P-Value_(<code>-log<sub>10</sub></code>) polIISignal=[f]Pol-II_Signal polIIPvalue=[f]Pol-II_P-Value_(<code>-log<sub>10</sub></code>) ctcfSignal=[f]CTCF_Signal ctcfPvalue=[f]CTCF_P-Value_(<code>-log<sub>10</sub></code>) cmycSignal=[f]c-Myc_Signal cmycPvalue=[f]c-Myc_P-Value_(<code>-log<sub>10</sub></code>) ocCode=[i]Open_Chromatin_(OC)_Code
-filterBy ocCode:Open_Chromatin_(OC)_Code=+1&#58;_Validated,2&#58;_DNase-only,3&#58;_FAIRE-only,4&#58;_ChIP-only
+filterBy ocCode:Open_Chromatin_(OC)_Code=+1&#58;_Validated{#000000},2&#58;_DNase-only{#009900},3&#58;_FAIRE-only{#990000},4&#58;_ChIP-only{#FF00FF}
 #scoreFilter 100  ## Score is all 1000
 #scoreFilterLimits 100:1000
 #scoreMin 600
