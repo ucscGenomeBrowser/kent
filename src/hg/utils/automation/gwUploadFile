@@ -1,6 +1,8 @@
 #!/bin/env python
 #
-import os, sys, traceback, stat, re, getopt, string, inspect, mwclient
+import sys, os, traceback, stat, re, getopt, string, inspect
+sys.path.append("/hive/data/outside/ncbi/incidentDb/")
+import mwclient
 
 def usage():
     sys.stderr.write('''gwUploadFile.py -- given a file, load into genomewiki specified image name
@@ -115,4 +117,5 @@ try:
 	sys.stderr.write('Used:', page.name.encode('utf-8'), '; namespace', page.namespace)
     sys.exit(0)
 except Exception, ex:
+    print ex
     sys.exit(255)
