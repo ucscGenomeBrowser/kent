@@ -15,6 +15,8 @@
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
 #       - Short Labels: 
 #               Template: [cell] [view] 
+#               - Cell: Abbreviations for cells
+#                       - SK-N-SH_RA = SKRA
 #               - Views: For consistency sake view will be:
 #			- Hot Spots = Hspt
 #                       - Peaks = Pk
@@ -62,7 +64,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraHotspots
         parent wgEncodeUwDgfViewHotspots off
-        shortLabel SK-N-SH_RA Hspt
+        shortLabel SKRA Hspt
         longLabel SK-N-SH_RA DNaseI DGF Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKNSHRA
         type broadPeak
@@ -236,7 +238,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraPk
         parent wgEncodeUwDgfViewPeaks off
-        shortLabel SK-N-SH_RA Pk
+        shortLabel SKRA Pk
         longLabel SK-N-SH_RA DNaseI DGF Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA
         type narrowPeak
@@ -417,7 +419,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraSig
         parent wgEncodeUwDgfViewSignal off
-        shortLabel SK-N-SH_RA Sig
+        shortLabel SKRA Sig
         longLabel SK-N-SH_RA DNaseI DGF Per-base Signal from ENCODE/UW
         subGroups view=Signal cellType=SKNSHRA
         type bigWig 1.000000 6713.000000
@@ -591,7 +593,7 @@ wgEncode 1
 
         track wgEncodeUwDgfSknshraRaw
         parent wgEncodeUwDgfViewzRaw off
-        shortLabel SK-N-SH_RA Raw
+        shortLabel SKRA Raw
         longLabel SK-N-SH_RA DNaseI DGF Raw Signal from ENCODE/UW
         subGroups view=zRaw cellType=SKNSHRA
         type bigWig 1.000000 36298.000000

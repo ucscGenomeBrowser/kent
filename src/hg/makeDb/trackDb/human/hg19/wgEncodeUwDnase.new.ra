@@ -22,6 +22,8 @@
 #		Template: [cell] [treatment] [view] [replicate #]
 #		- Cell Line: Cell Line abbreviations (Not HMVEC)
 #			- Monocytes-CD14+ = Mono-CD14+
+#                       - SK-N-SH_RA = SKRA
+#                       - WERI-Rb-1 = WERIRb1
 #		- Treatment: Treatment abbreviations
 #			- 4-hydroxytamoxifen = OHTAM ??
 #		- Views: For consistency sake view will be
@@ -379,7 +381,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSknshraHotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SK-N-SH_RA Hspt 1 
+        shortLabel SKRA Hspt 1 
         longLabel SK-N-SH_RA DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=SKNSHRA rep=1 treatment=None
         type broadPeak
@@ -697,7 +699,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSknshraHotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SK-N-SH_RA Hspt 2 
+        shortLabel SKRA Hspt 2 
         longLabel SK-N-SH_RA DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=SKNSHRA rep=2 treatment=None
         type broadPeak
@@ -1297,7 +1299,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1HotspotsRep2
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WERI-Rb-1 Hspt 2
+        shortLabel WERIRb1 Hspt 2
         longLabel WERI-Rb-1 DNaseI HS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot cellType=WERIRb1 treatment=None rep=2
         type broadPeak
@@ -1306,7 +1308,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1HotspotsRep1
         parent wgEncodeUwDnaseViewHot off
-        shortLabel WERI-Rb-1 Hspt 1
+        shortLabel WERIRb1 Hspt 1
         longLabel WRI-Rb-1 DNaseI HS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot cellType=WERIRb1 treatment=None rep=1
         type broadPeak
@@ -1718,7 +1720,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSknshraPkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SK-N-SH_RA Pk 1
+        shortLabel SKRA Pk 1
         longLabel SK-N-SH_RA DNaseI HS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA rep=1 treatment=None
         type narrowPeak
@@ -2009,7 +2011,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSknshraPkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SK-N-SH_RA Pk 2
+        shortLabel SKRA Pk 2
         longLabel SK-N-SH_RA DNaseI HS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA rep=2 treatment=None
         type narrowPeak
@@ -2609,7 +2611,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1PkRep2
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WERI-Rb-1 Pk 2
+        shortLabel WERIRb1 Pk 2
         longLabel WERI-Rb-1 DNaseI HS Peaks Rep 2 from ENCODE/UW
         subGroups view=Peaks cellType=WERIRb1 treatment=None rep=2
         type narrowPeak
@@ -2618,7 +2620,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1PkRep1
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel WERI-Rb-1 Pk 1
+        shortLabel WERIRb1 Pk 1
         longLabel WERI-Rb-1 DNaseI HS Peaks Rep 1 from ENCODE/UW
         subGroups view=Peaks cellType=WERIRb1 treatment=None rep=1
         type narrowPeak
@@ -3151,7 +3153,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSknshraRawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SK-N-SH_RA Sig 1
+        shortLabel SKRA Sig 1
         longLabel SK-N-SH_RA DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=SKNSHRA rep=1 treatment=None
         type bigWig 1.000000 4202.000000
@@ -3469,7 +3471,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseSknshraRawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SK-N-SH_RA Sig 2
+        shortLabel SKRA Sig 2
         longLabel SK-N-SH_RA DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=SKNSHRA rep=2 treatment=None
         type bigWig 1.000000 12022.000000
@@ -4069,7 +4071,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1RawRep2
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WERI-Rb-1 Sig 2
+        shortLabel WERIRb1 Sig 2
         longLabel WERI-Rb-1 DNaseI HS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig cellType=WERIRb1 treatment=None rep=2
         type bigWig 1.000000 38425.000000
@@ -4078,7 +4080,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWerirb1RawRep1
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel WERI-Rb-1 Sig 1
+        shortLabel WERIRb1 Sig 1
         longLabel WERI-Rb-1 DNaseI HS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig cellType=WERIRb1 treatment=None rep=1
         type bigWig 1.000000 22121.000000
