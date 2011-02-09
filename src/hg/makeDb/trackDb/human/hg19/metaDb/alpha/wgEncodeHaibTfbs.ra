@@ -26863,7 +26863,7 @@ composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2011-02-07
+dateSubmitted 2011-02-07
 fileName wgEncodeHaibTfbsK562ControlV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -36757,4 +36757,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1933970828
+# MAGIC: -1178996323

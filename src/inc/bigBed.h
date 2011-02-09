@@ -70,5 +70,6 @@ struct asObject *bigBedAs(struct bbiFile *bbi);
 
 boolean bigBedFileCheckSigs(char *fileName);
 /* check file signatures at beginning and end of file */
+
 #endif /* BIGBED_H */
 

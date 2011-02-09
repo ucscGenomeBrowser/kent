@@ -132,4 +132,7 @@ void udcSetCacheTimeout(int timeout);
 /* Set cache timeout (if local cache files are newer than this many seconds,
  * we won't ping the remote server to check the file size and update time). */
 
+time_t udcUpdateTime(struct udcFile *udc);
+/* return udc->updateTime */
+
 #endif /* UDC_H */

@@ -5599,10 +5599,11 @@ jsIncludeFile("lowetooltip.js", NULL);
 if(advancedJavascriptFeaturesEnabled(cart))
     {
 webIncludeResourceFile("jquery.contextmenu.css");
+webIncludeResourceFile("ui.dropdownchecklist.css");
 webIncludeResourceFile("jquery-ui.css");
-#ifdef CONTEXT_MENU
 jsIncludeFile("jquery.contextmenu.js", NULL);
-#endif/// def CONTEXT_MENU
+jsIncludeFile("ui.core.js", NULL);
+jsIncludeFile("ui.dropdownchecklist.js", NULL);
     }
 jsIncludeFile("jquery-ui.js", NULL);
 

@@ -45,7 +45,7 @@ rm -f release.list
 ftp -n -v -i ftp.sanger.ac.uk  < ftp.decipher.rsp > ls.check
 
 #	fetch the release directory names from the ls.check result file
-grep "decipher_" ls.check | sort > release.list
+grep "decipher-" ls.check | sort > release.list
 chmod o+w release.list
 
 #	verify we are getting a proper list
@@ -66,7 +66,7 @@ if [ "${WC}" -gt 1 ]; then
 "ftp://ftp.sanger.ac.uk/pub/\n"`comm -13 prev.release.list release.list`"/" \
     | mail -s "DECIPHER update watch" ${EMAIL}
 
-FN=`cat release.diff |grep decipher_|sed -e 's/decipher_/\tdecipher_/'|cut -f 2`
+FN=`cat release.diff |grep decipher-|sed -e 's/decipher-/\tdecipher-/'|cut -f 2`
 
 today=`date +%F`
 mkdir -p $today
@@ -85,7 +85,7 @@ bye" > ftp.decipher.rsp
 # download the new data file
 ftp -n -v -i ftp.sanger.ac.uk  < ftp.decipher.rsp > ftp.log
 
-rm -f `cat j.fn.txt`
+#rm -f `cat j.fn.txt`
 
 # unpack the gpg encrypted file
 gpg --passphrase "${gpgpass}"  "${FN}"
