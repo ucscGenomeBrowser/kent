@@ -1567,11 +1567,11 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
         var num, ajaxCmd, errorMsg;
         if(cmd == 'zoomCodon') {
             num = prompt("Please enter the codon number to jump to:");
-            ajaxCmd = 'codonPos';
+            ajaxCmd = 'codonToPos';
             errorMsg = num + " is an invalid codon for this gene";
         } else {
             num = prompt("Please enter the exon number to jump to:");
-            ajaxCmd = 'exonPos';
+            ajaxCmd = 'exonToPos';
             errorMsg = num + " is an invalid exon number for this gene";
         }
         if(num) {
