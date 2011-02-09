@@ -208,6 +208,12 @@
             sourceSelect.children().each(function(index) { // when the select has groups
                 var opt = $(this);
                 if (opt.is("option")) {
+                    if (self.options.supportColors == false
+                    && $(opt).css("color") != "rgb(0, 0, 0)"
+                    && $(opt).css("color") != "rgb(255, 255, 255)") {
+                        self.options.supportColors = true;
+                        //warn("supporting colors :"+$(opt).css("color"));
+                    }
                     self._appendOption(opt, dropContainerDiv, index, false);
                 } else {
                     var text = opt.attr("label");
@@ -250,9 +256,12 @@
             var disabled = option.attr("disabled");
             var excluded = option.hasClass("excluded");
             var item = self._createDropItem(index, value, text, selected, disabled, excluded, indent);
-            var txtColor = option.css('color');
-            if (txtColor != undefined && item != undefined) {
-                item.css('color',txtColor);
+            if (self.options.supportColors && item != undefined) {
+                if (option.css('background-color') != "transparent")
+                    item.css('background-color',"transparent");
+                var txtColor = option.css('color');
+                if (txtColor != undefined)
+                    item.css('color',txtColor);
             }
             container.append(item);
         },
@@ -357,7 +366,8 @@
             controlLabel.html(selectedText);
             var newheight = selectedText.split('<BR>').length * 20;
             controlLabel.css('height',newheight);
-            //controlLabel.css('color','black');  // It is now set with spans in the selectedText to enable adding a text color option
+            if (this.options.supportColors == false)
+                controlLabel.css('color','black');  // with supportColors, colors are set with spans in the selectedText to enable adding a text color option
             controlLabel.attr('title','Click to select...');
             controlLabel.parent().css('height',newheight);
         },
@@ -371,6 +381,7 @@
         },
         // Formats the text that is shown in the control
         _formatText: function(selectOptions, firstItemChecksAll, allSelected) {
+            var self = this;
             var formattedText = "";
             if (firstItemChecksAll && allSelected) {
                 // just set the text from the first item
@@ -379,10 +390,13 @@
                 // concatenate the text from the checked items
                 selectOptions.each(function() {
                     if ($(this).attr("selected")) {
-                        var txtColor = $(this).css("color");
-                        if (txtColor == undefined)
-                            txtColor = "#000000"; // black
-                        formattedText += "<span style='color:"+txtColor+";'>" + $(this).text() + '</span><BR>';
+                        if (self.options.supportColors) {
+                            var txtColor = $(this).css("color");
+                            if (txtColor == undefined)
+                                txtColor = "rgb(0,0,0)"; // black
+                            formattedText += "<span style='color:"+txtColor+";'>" + $(this).text() + '</span><BR>';
+                        } else
+                            formattedText += $(this).text() + '<BR>';
                     }
                 });
                 if (formattedText.length > 0) {
@@ -564,7 +578,8 @@
             maxDropHeight: null,
             firstItemChecksAll: false,
             minWidth: 50,
-            bgiframe: false
+            bgiframe: false,
+            supportColors: false
         }
     });
 
