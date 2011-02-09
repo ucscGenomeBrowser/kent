@@ -2468,7 +2468,7 @@ noInherit on
     view zRSig
     visibility full
     parent wgEncodeUwHistone
-    viewLimits 1:100
+    viewLimits 1:10
     minLimit -1
     maxLimit 16000.0
     autoScale off
