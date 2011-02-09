@@ -250,12 +250,6 @@ else
     printf("<P>No data overlapping current position.</P>");
     }
 
-if (bbi)
-    {
-    time_t timep = bbiUpdateTime(bbi);
-    printBbiUpdateTime(&timep);
-    }
-
 lmCleanup(&lm);
 bbiFileClose(&bbi);
 }

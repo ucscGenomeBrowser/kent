@@ -2791,27 +2791,19 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
        trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
-static boolean printDataVersion(struct trackDb *tdb)
+static void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
-boolean ret = FALSE;
 metadataForTable(database,tdb,NULL);
 const char *version = metadataFindValue(tdb,"dataVersion");
 if(version != NULL)
-    {
     printf("<B>Data version:</B> %s <BR>\n", version);
-    ret = TRUE;
-    }
 else
     {
     version = trackDbSetting(tdb,"dataVersion");
     if (version != NULL)
-	{
         printf("<B>Data version:</B> %s <BR>\n", version);
-	ret = TRUE;
-	}
     }
-return ret;
 }
 
 void printDataRestrictionDate(struct trackDb *tdb)
@@ -2826,11 +2818,11 @@ if (restrictionDate != NULL)
     }
 }
 
-static boolean printOrigAssembly(struct trackDb *tdb)
+static void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
 {
-return trackDbPrintOrigAssembly(tdb, database);
+trackDbPrintOrigAssembly(tdb, database);
 }
 
 static char *getHtmlFromSelfOrParent(struct trackDb *tdb)
@@ -2851,13 +2843,11 @@ void printTrackHtml(struct trackDb *tdb)
 {
 if (!isCustomTrack(tdb->track))
     {
-    boolean otherDates = FALSE;
     extraUiLinks(database,tdb,trackHash);
     printTrackUiLink(tdb);
-    otherDates = printDataVersion(tdb);
-    otherDates |= printOrigAssembly(tdb);
-    if (!otherDates)
-	printUpdateTime(database, tdb, NULL);
+    printDataVersion(tdb);
+    printOrigAssembly(tdb);
+    printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
     }
 char *html = getHtmlFromSelfOrParent(tdb);
@@ -22546,8 +22536,8 @@ printf("</DL>\n");
 
 /* split code from printTrackHtml */
 printTBSchemaLink(tdb);
-(void) printDataVersion(tdb);
-(void) printOrigAssembly(tdb);
+printDataVersion(tdb);
+printOrigAssembly(tdb);
 printUpdateTime(database, tdb, NULL);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
