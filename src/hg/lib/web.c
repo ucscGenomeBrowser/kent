@@ -13,6 +13,7 @@
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
+#include "hubConnect.h"
 #include "searchTracks.h"
 #ifndef GBROWSE
 #include "axtInfo.h"
@@ -149,7 +150,13 @@ if (withHtmlHeader)
     {
     char *newString, *ptr1, *ptr2;
 
+#define TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+#ifdef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
+#else///ifndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
+    // FIXME: This should be done and fixes atleast one IE problem (use of :hover CSS pseudoclass)
+    puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
+#endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     puts(
 	"<HTML>" "\n"
 	"<HEAD>" "\n"
@@ -344,7 +351,6 @@ else
 	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1&"
 		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
 		   "class=\"topbar\">\n",
-		// uiState, tdb->grp, table, table);
 		uiState, tdb->grp, tdb->track, tdb->table);
 	else
 	    printf("       <A HREF=\"../cgi-bin/hgTables%s&hgta_doMainPage=1\" "

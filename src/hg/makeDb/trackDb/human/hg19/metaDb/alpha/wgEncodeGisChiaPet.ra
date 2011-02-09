@@ -1,0 +1,2208 @@
+metaObject wgEncodeGisChiaPetHeLaS3D000005563
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005563
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005563.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 1r78
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA001-PE-R00078.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 235689818
+metaObject wgEncodeGisChiaPetHeLaS3D000005564
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005564
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005564.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 1r78
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA001-PE-R00078.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 303060834
+metaObject wgEncodeGisChiaPetHeLaS3D000005565
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005565
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005565.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 2r35
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA002-PE-R00035.l(1).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 236214048
+metaObject wgEncodeGisChiaPetHeLaS3D000005566
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005566
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005566.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 2r35
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA002-PE-R00035.l(1).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 303585064
+metaObject wgEncodeGisChiaPetHeLaS3D000005567
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005567
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005567.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 3r56
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA003-PE-R00056.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 236738528
+metaObject wgEncodeGisChiaPetHeLaS3D000005568
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005568
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005568.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 3r56
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025.GA003-PE-R00056.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 304109544
+metaObject wgEncodeGisChiaPetHeLaS3D000005569
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005569
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005569.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 1r78
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025_1r78.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -561475039
+metaObject wgEncodeGisChiaPetHeLaS3D000005570
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005570
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005570.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 2r35
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025_2r35.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -561476320
+metaObject wgEncodeGisChiaPetHeLaS3D000005571
+objType file
+docId wgEncodeGisChiaPetHeLaS3D000005571
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005571.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+run 3r56
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025_3r56.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -561475978
+metaObject wgEncodeGisChiaPetHeLaS3D000005572
+objType table
+docId wgEncodeGisChiaPetHeLaS3D000005572
+antibody Pol2
+assembly hg19
+cell HeLa-S3
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-01-20
+dateUnrestricted 2011-10-19
+fileName wgEncodeGisChiaPetHeLaS3D000005572.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH025
+project wgEncode
+replicate 1
+subId 3266
+submitPath gisChIA-PET_RNAPII_HeLa/IHH025T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetHeLaS3D000005572
+type bed 12
+view Interactions
+
+# MAGIC: 1215212167
+metaObject wgEncodeGisChiaPetHCT116D000005584
+objType file
+docId wgEncodeGisChiaPetHCT116D000005584
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005584.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 3r32
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA003-PE-R00032.l(5).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 1703915872
+metaObject wgEncodeGisChiaPetHCT116D000005585
+objType file
+docId wgEncodeGisChiaPetHCT116D000005585
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005585.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 3r32
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA003-PE-R00032.l(5).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 1771286888
+metaObject wgEncodeGisChiaPetHCT116D000005586
+objType file
+docId wgEncodeGisChiaPetHCT116D000005586
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005586.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 4r32
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA004-PE-R00032.l(5-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 1704440337
+metaObject wgEncodeGisChiaPetHCT116D000005587
+objType file
+docId wgEncodeGisChiaPetHCT116D000005587
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005587.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 4r32
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA004-PE-R00032.l(5-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 1771811353
+metaObject wgEncodeGisChiaPetHCT116D000005588
+objType file
+docId wgEncodeGisChiaPetHCT116D000005588
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005588.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 5r51
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA005-PE-R00051.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 1704964706
+metaObject wgEncodeGisChiaPetHCT116D000005589
+objType file
+docId wgEncodeGisChiaPetHCT116D000005589
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005589.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 5r51
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524.GA005-PE-R00051.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 1772335722
+metaObject wgEncodeGisChiaPetHCT116D000005590
+objType file
+docId wgEncodeGisChiaPetHCT116D000005590
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005590.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 3r32
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524_3r32.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -437784735
+metaObject wgEncodeGisChiaPetHCT116D000005591
+objType file
+docId wgEncodeGisChiaPetHCT116D000005591
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005591.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 4r32
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524_4r32.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -437784408
+metaObject wgEncodeGisChiaPetHCT116D000005592
+objType file
+docId wgEncodeGisChiaPetHCT116D000005592
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005592.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+run 5r51
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524_5r51.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -437784072
+metaObject wgEncodeGisChiaPetHCT116D000005593
+objType table
+docId wgEncodeGisChiaPetHCT116D000005593
+antibody Pol2
+assembly hg19
+cell HCT-116
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-04
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetHCT116D000005593.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHH524
+project wgEncode
+replicate 1
+subId 3267
+submitPath gisChIA-PET_RNAPII_HCT116/CHH524T.chromInteractons.bed
+tableName wgEncodeGisChiaPetHCT116D000005593
+type bed 12
+view Interactions
+
+# MAGIC: -880786785
+metaObject wgEncodeGisChiaPetNB4D000005594
+objType file
+docId wgEncodeGisChiaPetNB4D000005594
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005594.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 2r53
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA002-PE-R00053.l(1).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 2144984488
+metaObject wgEncodeGisChiaPetNB4D000005595
+objType file
+docId wgEncodeGisChiaPetNB4D000005595
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005595.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 2r53
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA002-PE-R00053.l(1).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -2082611792
+metaObject wgEncodeGisChiaPetNB4D000005596
+objType file
+docId wgEncodeGisChiaPetNB4D000005596
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005596.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 6r12
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00012.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 2145509124
+metaObject wgEncodeGisChiaPetNB4D000005597
+objType file
+docId wgEncodeGisChiaPetNB4D000005597
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005597.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 6r12
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00012.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -2082087156
+metaObject wgEncodeGisChiaPetNB4D000005598
+objType file
+docId wgEncodeGisChiaPetNB4D000005598
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005598.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 6r14
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00014.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 2146033428
+metaObject wgEncodeGisChiaPetNB4D000005599
+objType file
+docId wgEncodeGisChiaPetNB4D000005599
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005599.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 6r14
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009.GA006-PE-R00014.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -2081562852
+metaObject wgEncodeGisChiaPetNB4D000005600
+objType file
+docId wgEncodeGisChiaPetNB4D000005600
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005600.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 2r53
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009_2r53.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 539101026
+metaObject wgEncodeGisChiaPetNB4D000005601
+objType file
+docId wgEncodeGisChiaPetNB4D000005601
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005601.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 6r12
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009_6r12.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 539101524
+metaObject wgEncodeGisChiaPetNB4D000005602
+objType file
+docId wgEncodeGisChiaPetNB4D000005602
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005602.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+run 6r14
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009_6r14.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 539101791
+metaObject wgEncodeGisChiaPetNB4D000005603
+objType table
+docId wgEncodeGisChiaPetNB4D000005603
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005603.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN009
+project wgEncode
+replicate 1
+subId 3268
+submitPath gisChIA-PET_RNAPII_NB4_1/IHN009T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetNB4D000005603
+type bed 12
+view Interactions
+
+# MAGIC: 1926590319
+metaObject wgEncodeGisChiaPetK562D000005622
+objType file
+docId wgEncodeGisChiaPetK562D000005622
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005622.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK004
+project wgEncode
+replicate 1
+run 1r119
+subId 3276
+submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA001-PE-R00119.l(3-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 1600263111
+metaObject wgEncodeGisChiaPetK562D000005623
+objType file
+docId wgEncodeGisChiaPetK562D000005623
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005623.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK004
+project wgEncode
+replicate 1
+run 1r119
+subId 3276
+submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA001-PE-R00119.l(3-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 1667634127
+metaObject wgEncodeGisChiaPetK562D000005624
+objType file
+docId wgEncodeGisChiaPetK562D000005624
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005624.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK004
+project wgEncode
+replicate 1
+run 5r35
+subId 3276
+submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA005-PE-R00035.l(7).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 1600771862
+metaObject wgEncodeGisChiaPetK562D000005625
+objType file
+docId wgEncodeGisChiaPetK562D000005625
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005625.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK004
+project wgEncode
+replicate 1
+run 5r35
+subId 3276
+submitPath gisChIA-PET_RNAPII_K562_1/CHK004.GA005-PE-R00035.l(7).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 1668142878
+metaObject wgEncodeGisChiaPetK562D000005626
+objType file
+docId wgEncodeGisChiaPetK562D000005626
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005626.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHK004
+project wgEncode
+replicate 1
+run 1r119
+subId 3276
+submitPath gisChIA-PET_RNAPII_K562_1/CHK004_1r119.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -538817614
+metaObject wgEncodeGisChiaPetK562D000005627
+objType file
+docId wgEncodeGisChiaPetK562D000005627
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005627.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHK004
+project wgEncode
+replicate 1
+run 5r35
+subId 3276
+submitPath gisChIA-PET_RNAPII_K562_1/CHK004_5r35.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -538832851
+metaObject wgEncodeGisChiaPetK562D000005628
+objType table
+docId wgEncodeGisChiaPetK562D000005628
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005628.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK004
+project wgEncode
+replicate 1
+subId 3276
+submitPath gisChIA-PET_RNAPII_K562_1/CHK004T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetK562D000005628
+type bed 12
+view Interactions
+
+# MAGIC: -1032279896
+metaObject wgEncodeGisChiaPetMCF7D000005608
+objType file
+docId wgEncodeGisChiaPetMCF7D000005608
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005608.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM040
+project wgEncode
+replicate 1
+run 1r114
+subId 3279
+submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA001-PE-R00114.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -579182156
+metaObject wgEncodeGisChiaPetMCF7D000005609
+objType file
+docId wgEncodeGisChiaPetMCF7D000005609
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005609.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM040
+project wgEncode
+replicate 1
+run 1r114
+subId 3279
+submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA001-PE-R00114.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -511811140
+metaObject wgEncodeGisChiaPetMCF7D000005610
+objType file
+docId wgEncodeGisChiaPetMCF7D000005610
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005610.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM040
+project wgEncode
+replicate 1
+run 4r32
+subId 3279
+submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA004-PE-R00032.l(3).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -580246370
+metaObject wgEncodeGisChiaPetMCF7D000005611
+objType file
+docId wgEncodeGisChiaPetMCF7D000005611
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005611.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM040
+project wgEncode
+replicate 1
+run 4r32
+subId 3279
+submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040.GA004-PE-R00032.l(3).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -512875354
+metaObject wgEncodeGisChiaPetMCF7D000005612
+objType file
+docId wgEncodeGisChiaPetMCF7D000005612
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005612.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHM040
+project wgEncode
+replicate 1
+run 1r114
+subId 3279
+submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040_1r114.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1845662074
+metaObject wgEncodeGisChiaPetMCF7D000005613
+objType file
+docId wgEncodeGisChiaPetMCF7D000005613
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005613.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHM040
+project wgEncode
+replicate 1
+run 4r32
+subId 3279
+submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040_4r32.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1845646777
+metaObject wgEncodeGisChiaPetMCF7D000005614
+objType table
+docId wgEncodeGisChiaPetMCF7D000005614
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005614.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM040
+project wgEncode
+replicate 1
+subId 3279
+submitPath gisChIA-PET_RNAPII_MCF7_1/CHM040T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetMCF7D000005614
+type bed 12
+view Interactions
+
+# MAGIC: 2141648580
+metaObject wgEncodeGisChiaPetNB4D000005615
+objType file
+docId wgEncodeGisChiaPetNB4D000005615
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005615.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN010
+project wgEncode
+replicate 2
+run 2r53
+subId 3280
+submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA002-PE-R00053.l(2).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 2141052257
+metaObject wgEncodeGisChiaPetNB4D000005616
+objType file
+docId wgEncodeGisChiaPetNB4D000005616
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005616.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN010
+project wgEncode
+replicate 2
+run 2r53
+subId 3280
+submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA002-PE-R00053.l(2).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -2086544023
+metaObject wgEncodeGisChiaPetNB4D000005617
+objType file
+docId wgEncodeGisChiaPetNB4D000005617
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005617.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN010
+project wgEncode
+replicate 2
+run 3r30
+subId 3280
+submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA003-PE-R00030.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 2141576700
+metaObject wgEncodeGisChiaPetNB4D000005618
+objType file
+docId wgEncodeGisChiaPetNB4D000005618
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005618.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN010
+project wgEncode
+replicate 2
+run 3r30
+subId 3280
+submitPath gisChIA-PET_RNAPII_NB4_2/IHN010.GA003-PE-R00030.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -2086019580
+metaObject wgEncodeGisChiaPetNB4D000005619
+objType file
+docId wgEncodeGisChiaPetNB4D000005619
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005619.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHN010
+project wgEncode
+replicate 2
+run 2r53
+subId 3280
+submitPath gisChIA-PET_RNAPII_NB4_2/IHN010_2r53.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 539104386
+metaObject wgEncodeGisChiaPetNB4D000005620
+objType file
+docId wgEncodeGisChiaPetNB4D000005620
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005620.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHN010
+project wgEncode
+replicate 2
+run 3r30
+subId 3280
+submitPath gisChIA-PET_RNAPII_NB4_2/IHN010_3r30.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 539103117
+metaObject wgEncodeGisChiaPetNB4D000005621
+objType table
+docId wgEncodeGisChiaPetNB4D000005621
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetNB4D000005621.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHN010
+project wgEncode
+replicate 2
+subId 3280
+submitPath gisChIA-PET_RNAPII_NB4_2/IHN010T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetNB4D000005621
+type bed 12
+view Interactions
+
+# MAGIC: 1926688617
+metaObject wgEncodeGisChiaPetMCF7D000005629
+objType file
+docId wgEncodeGisChiaPetMCF7D000005629
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005629.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM053
+project wgEncode
+replicate 2
+run 4r39
+subId 3281
+submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA004-PE-R00039.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -576838317
+metaObject wgEncodeGisChiaPetMCF7D000005630
+objType file
+docId wgEncodeGisChiaPetMCF7D000005630
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005630.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM053
+project wgEncode
+replicate 2
+run 4r39
+subId 3281
+submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA004-PE-R00039.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -511040204
+metaObject wgEncodeGisChiaPetMCF7D000005631
+objType file
+docId wgEncodeGisChiaPetMCF7D000005631
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005631.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM053
+project wgEncode
+replicate 2
+run 5r35
+subId 3281
+submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA005-PE-R00035.l(2).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -577886968
+metaObject wgEncodeGisChiaPetMCF7D000005632
+objType file
+docId wgEncodeGisChiaPetMCF7D000005632
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005632.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM053
+project wgEncode
+replicate 2
+run 5r35
+subId 3281
+submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053.GA005-PE-R00035.l(2).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -510515952
+metaObject wgEncodeGisChiaPetMCF7D000005633
+objType file
+docId wgEncodeGisChiaPetMCF7D000005633
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005633.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHM053
+project wgEncode
+replicate 2
+run 4r39
+subId 3281
+submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053_4r39.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1845648873
+metaObject wgEncodeGisChiaPetMCF7D000005634
+objType file
+docId wgEncodeGisChiaPetMCF7D000005634
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005634.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHM053
+project wgEncode
+replicate 2
+run 5r35
+subId 3281
+submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053_5r35.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1845649188
+metaObject wgEncodeGisChiaPetMCF7D000005635
+objType table
+docId wgEncodeGisChiaPetMCF7D000005635
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005635.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHM053
+project wgEncode
+replicate 2
+subId 3281
+submitPath gisChIA-PET_RNAPII_MCF7_2/CHM053T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetMCF7D000005635
+type bed 12
+view Interactions
+
+# MAGIC: 2141796080
+metaObject wgEncodeGisChiaPetK562D000005636
+objType file
+docId wgEncodeGisChiaPetK562D000005636
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005636.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK016
+project wgEncode
+replicate 2
+run 1r132
+subId 3282
+submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA001-PE-R00132.l(7).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 1602360200
+metaObject wgEncodeGisChiaPetK562D000005637
+objType file
+docId wgEncodeGisChiaPetK562D000005637
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005637.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK016
+project wgEncode
+replicate 2
+run 1r132
+subId 3282
+submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA001-PE-R00132.l(7).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 1669731216
+metaObject wgEncodeGisChiaPetK562D000005638
+objType file
+docId wgEncodeGisChiaPetK562D000005638
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005638.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK016
+project wgEncode
+replicate 2
+run 3r62
+subId 3282
+submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA003-PE-R00062.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: 1602869029
+metaObject wgEncodeGisChiaPetK562D000005639
+objType file
+docId wgEncodeGisChiaPetK562D000005639
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005639.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK016
+project wgEncode
+replicate 2
+run 3r62
+subId 3282
+submitPath gisChIA-PET_RNAPII_K562_2/CHK016.GA003-PE-R00062.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: 1670240045
+metaObject wgEncodeGisChiaPetK562D000005640
+objType file
+docId wgEncodeGisChiaPetK562D000005640
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005640.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHK016
+project wgEncode
+replicate 2
+run 1r132
+subId 3282
+submitPath gisChIA-PET_RNAPII_K562_2/CHK016_1r132.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -538817107
+metaObject wgEncodeGisChiaPetK562D000005641
+objType file
+docId wgEncodeGisChiaPetK562D000005641
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005641.bam
+grant Ruan
+lab GIS-Ruan
+labVersion CHK016
+project wgEncode
+replicate 2
+run 3r62
+subId 3282
+submitPath gisChIA-PET_RNAPII_K562_2/CHK016_3r62.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: -538832458
+metaObject wgEncodeGisChiaPetK562D000005642
+objType table
+docId wgEncodeGisChiaPetK562D000005642
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetK562D000005642.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion CHK016
+project wgEncode
+replicate 2
+subId 3282
+submitPath gisChIA-PET_RNAPII_K562_2/CHK016T_L9.chromInteractons.bed
+tableName wgEncodeGisChiaPetK562D000005642
+type bed 12
+view Interactions
+
+# MAGIC: -1032247306
+metaObject wgEncodeGisChiaPetMCF7D000005643
+objType file
+docId wgEncodeGisChiaPetMCF7D000005643
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005643.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM001
+project wgEncode
+replicate 1
+run 1r56
+subId 3284
+submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00056.s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -569904927
+metaObject wgEncodeGisChiaPetMCF7D000005644
+objType file
+docId wgEncodeGisChiaPetMCF7D000005644
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005644.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM001
+project wgEncode
+replicate 1
+run 1r56
+subId 3284
+submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00056.s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -502533911
+metaObject wgEncodeGisChiaPetMCF7D000005645
+objType file
+docId wgEncodeGisChiaPetMCF7D000005645
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005645.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM001
+project wgEncode
+replicate 1
+run 1r63
+subId 3284
+submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00063.s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -569380632
+metaObject wgEncodeGisChiaPetMCF7D000005646
+objType file
+docId wgEncodeGisChiaPetMCF7D000005646
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005646.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM001
+project wgEncode
+replicate 1
+run 1r63
+subId 3284
+submitPath gisChIA-PET_ER_MCF7_1/IHM001.GA001-PE-R00063.s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -502009616
+metaObject wgEncodeGisChiaPetMCF7D000005647
+objType file
+docId wgEncodeGisChiaPetMCF7D000005647
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005647.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHM001
+project wgEncode
+replicate 1
+run 1r56
+subId 3284
+submitPath gisChIA-PET_ER_MCF7_1/IHM001_1r56.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852060447
+metaObject wgEncodeGisChiaPetMCF7D000005648
+objType file
+docId wgEncodeGisChiaPetMCF7D000005648
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005648.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHM001
+project wgEncode
+replicate 1
+run 1r63
+subId 3284
+submitPath gisChIA-PET_ER_MCF7_1/IHM001_1r63.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852060705
+metaObject wgEncodeGisChiaPetMCF7D000005649
+objType table
+docId wgEncodeGisChiaPetMCF7D000005649
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005649.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM001
+project wgEncode
+replicate 1
+subId 3284
+submitPath gisChIA-PET_ER_MCF7_1/IHM001T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetMCF7D000005649
+type bed 12
+view Interactions
+
+# MAGIC: -2146630410
+metaObject wgEncodeGisChiaPetMCF7D000005650
+objType file
+docId wgEncodeGisChiaPetMCF7D000005650
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005650.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH015
+project wgEncode
+replicate 2
+run 1r56
+subId 3285
+submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00056.s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -569643094
+metaObject wgEncodeGisChiaPetMCF7D000005651
+objType file
+docId wgEncodeGisChiaPetMCF7D000005651
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005651.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH015
+project wgEncode
+replicate 2
+run 1r56
+subId 3285
+submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00056.s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -502272078
+metaObject wgEncodeGisChiaPetMCF7D000005652
+objType file
+docId wgEncodeGisChiaPetMCF7D000005652
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005652.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH015
+project wgEncode
+replicate 2
+run 1r63
+subId 3285
+submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00063.s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -569118799
+metaObject wgEncodeGisChiaPetMCF7D000005653
+objType file
+docId wgEncodeGisChiaPetMCF7D000005653
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005653.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH015
+project wgEncode
+replicate 2
+run 1r63
+subId 3285
+submitPath gisChIA-PET_ER_MCF7_2/IHH015.GA001-PE-R00063.s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -501747783
+metaObject wgEncodeGisChiaPetMCF7D000005654
+objType file
+docId wgEncodeGisChiaPetMCF7D000005654
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005654.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHH015
+project wgEncode
+replicate 2
+run 1r56
+subId 3285
+submitPath gisChIA-PET_ER_MCF7_2/IHH015_1r56.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852060392
+metaObject wgEncodeGisChiaPetMCF7D000005655
+objType file
+docId wgEncodeGisChiaPetMCF7D000005655
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005655.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHH015
+project wgEncode
+replicate 2
+run 1r63
+subId 3285
+submitPath gisChIA-PET_ER_MCF7_2/IHH015_1r63.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852060650
+metaObject wgEncodeGisChiaPetMCF7D000005656
+objType table
+docId wgEncodeGisChiaPetMCF7D000005656
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005656.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHH015
+project wgEncode
+replicate 2
+subId 3285
+submitPath gisChIA-PET_ER_MCF7_2/IHH015T_hg19.chromInteractons.bed
+tableName wgEncodeGisChiaPetMCF7D000005656
+type bed 12
+view Interactions
+
+# MAGIC: -2146614338
+metaObject wgEncodeGisChiaPetMCF7D000005657
+objType file
+docId wgEncodeGisChiaPetMCF7D000005657
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005657.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 2r35
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA002-PE-R00035.s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -567807614
+metaObject wgEncodeGisChiaPetMCF7D000005658
+objType file
+docId wgEncodeGisChiaPetMCF7D000005658
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005658.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 2r35
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA002-PE-R00035.s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -500436598
+metaObject wgEncodeGisChiaPetMCF7D000005659
+objType file
+docId wgEncodeGisChiaPetMCF7D000005659
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005659.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 3r31
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00031.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -567282877
+metaObject wgEncodeGisChiaPetMCF7D000005660
+objType file
+docId wgEncodeGisChiaPetMCF7D000005660
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005660.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 3r31
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00031.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -501484764
+metaObject wgEncodeGisChiaPetMCF7D000005661
+objType file
+docId wgEncodeGisChiaPetMCF7D000005661
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005661.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 3r36
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00036.l(1-8).s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -568331467
+metaObject wgEncodeGisChiaPetMCF7D000005662
+objType file
+docId wgEncodeGisChiaPetMCF7D000005662
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005662.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 3r36
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA003-PE-R00036.l(1-8).s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -500960451
+metaObject wgEncodeGisChiaPetMCF7D000005663
+objType file
+docId wgEncodeGisChiaPetMCF7D000005663
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005663.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 5r2
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA005-PE-R00002.s1.fastq.txt.gz
+type fastq
+view FastqRd1
+
+# MAGIC: -567811604
+metaObject wgEncodeGisChiaPetMCF7D000005664
+objType file
+docId wgEncodeGisChiaPetMCF7D000005664
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005664.fastq.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 5r2
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096.GA005-PE-R00002.s2.fastq.txt.gz
+type fastq
+view FastqRd2
+
+# MAGIC: -500440588
+metaObject wgEncodeGisChiaPetMCF7D000005665
+objType file
+docId wgEncodeGisChiaPetMCF7D000005665
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005665.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 2r35
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096_2r35.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852062125
+metaObject wgEncodeGisChiaPetMCF7D000005666
+objType file
+docId wgEncodeGisChiaPetMCF7D000005666
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005666.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 3r31
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096_3r31.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852062440
+metaObject wgEncodeGisChiaPetMCF7D000005667
+objType file
+docId wgEncodeGisChiaPetMCF7D000005667
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005667.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 3r36
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096_3r36.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852062716
+metaObject wgEncodeGisChiaPetMCF7D000005668
+objType file
+docId wgEncodeGisChiaPetMCF7D000005668
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005668.bam
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+run 5r2
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096_5r2.unfiltered.hg19.bam
+type bam
+view Alignments
+
+# MAGIC: 1852058879
+metaObject wgEncodeGisChiaPetMCF7D000005669
+objType table
+docId wgEncodeGisChiaPetMCF7D000005669
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion "ENCODE Jan 2011 Freeze"
+dateSubmitted 2011-02-05
+dateUnrestricted 2011-11-04
+fileName wgEncodeGisChiaPetMCF7D000005669.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion IHM096
+project wgEncode
+replicate 3
+subId 3286
+submitPath gisChIA-PET_ER_MCF7_3/IHM096T.chromInteractons.bed
+tableName wgEncodeGisChiaPetMCF7D000005669
+type bed 12
+view Interactions
+
+# MAGIC: -2146499635

@@ -1035,6 +1035,19 @@ struct dyString *dyAddFilterAsDouble(struct cart *cart, struct trackDb *tdb,
             uses:  defaultLimits: function param if no tdb limits settings found)
    The 'and' param allows stringing multiple where clauses together */
 
+#define ALL_SCORE_FILTERS_LOGIC
+#ifdef ALL_SCORE_FILTERS_LOGIC
+struct dyString *dyAddAllScoreFilters(struct cart *cart, struct trackDb *tdb, struct dyString *extraWhere,boolean *and);
+/* creates the where clause condition to gather together all random double filters
+   Filters are expected to follow
+        {fiterName}: trackDb min or min:max - default value(s);
+        {filterName}Min or {filterName}: min (user supplied) cart variable;
+        {filterName}Max: max (user supplied) cart variable;
+        {filterName}Limits: trackDb allowed range "0.0:10.0" Optional
+            uses:  defaultLimits: function param if no tdb limits settings found)
+   The 'and' param and dyString in/out allows stringing multiple where clauses together */
+#endif///def ALL_SCORE_FILTERS_LOGIC
+
 void encodePeakCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
 /* Put up UI for filtering wgEnocde peaks based on score, Pval and Qval */
 
@@ -1113,6 +1126,7 @@ typedef struct _filterBy {
     char*htmlName;            // Name used in HTML/CGI
     boolean useIndex;         // The returned values should be indexes
     boolean valueAndLabel;    // If values list is value|label, then label is shown to the user
+    boolean colorFollows;     // If values list is value|label{#color, then bg color follows value and label
     struct slName *slValues;  // Values that can be filtered on (All is always implied)
     struct slName *slChoices; // Values that have been chosen
 } filterBy_t;
@@ -1126,7 +1140,7 @@ void filterBySetFree(filterBy_t **filterBySet);
 char *filterBySetClause(filterBy_t *filterBySet);
 /* returns the "column1 in (...) and column2 in (...)" clause for a set of filterBy structs */
 
-void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet);
+void filterBySetCfgUi(struct trackDb *tdb, filterBy_t *filterBySet, boolean onOneLine);
 /* Does the UI for a list of filterBy structure */
 
 struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,

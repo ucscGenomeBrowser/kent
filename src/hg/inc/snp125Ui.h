@@ -23,6 +23,9 @@ char *snp125OldColorVarToNew(char *oldVar, char *attribute);
 #define SNP125_DEFAULT_MAX_WEIGHT 1
 #define SNP125_DEFAULT_MIN_AVHET 0.0
 #define SNP132_DEFAULT_MIN_SUBMITTERS 0
+#define SNP132_DEFAULT_MIN_MINOR_AL_FREQ 0.0
+#define SNP132_DEFAULT_MAX_MINOR_AL_FREQ 0.5
+#define SNP132_DEFAULT_MIN_AL_FREQ_2N 0
 
 extern boolean snp125ExtendedNames;
 
@@ -48,9 +51,17 @@ enum snp125ColorSource {
     snp125ColorSourceMolType,
     snp125ColorSourceExceptions,
     snp125ColorSourceBitfields,
+    snp125ColorSourceAlleleFreq,
 };
 
 #define SNP125_DEFAULT_COLOR_SOURCE snp125ColorSourceFunc
+
+enum snp125ColorSource snp125ColorSourceFromCart(struct cart *cart, struct trackDb *tdb);
+/* Look up color source in cart, keeping backwards compatibility with old cart var names. */
+
+char *snp125ColorSourceToLabel(struct trackDb *tdb, enum snp125ColorSource cs);
+/* Due to availability of different color sources in several different versions,
+ * this is not just an array lookup, hence the encapsulation. Don't modify return value. */
 
 extern char *snp125ColorSourceLabels[];
 extern char *snp125ColorSourceOldVar;

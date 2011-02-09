@@ -166,6 +166,12 @@ struct asObject *asForTable(struct sqlConnection *conn, char *table);
 struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 /* Return named column. */
 
+struct slName *asColNames(struct asObject *as);
+/* Get list of column names. */
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
+/* Convert asObject to list of sqlFieldTypes */
+
 char *connectingTableForTrack(char *rawTable);
 /* Return table name to use with all.joiner for track.
  * You can freeMem this when done. */
@@ -777,6 +783,46 @@ void bigBedTabOut(char *db, char *table, struct sqlConnection *conn, char *field
 
 void showSchemaBigBed(char *table);
 /* Show schema on bigBed. */
+
+/* More stuff in bigBed.c that makes use of autoSql files. */
+
+struct slName *asColNames(struct asObject *as);
+/* Get list of column names. */
+
+struct sqlFieldType *sqlFieldTypesFromAs(struct asObject *as);
+/* Convert asObject to list of sqlFieldTypes */
+
+/* BAM stuff from bam.c */
+
+struct asObject *bamAsObj();
+/* Return asObject describing fields of BAM */
+
+boolean isBamTable(char *table);
+/* Return TRUE if table corresponds to a BAM file. */
+
+char *bamFileName(char *table, struct sqlConnection *conn);
+/* Return file name associated with BAM.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+
+struct slName *bamGetFields(char *table);
+/* Get fields of bam as simple name list. */
+
+struct sqlFieldType *bamListFieldsAndTypes();
+/* Get fields of bigBed as list of sqlFieldType. */
+
+struct hTableInfo *bamToHti(char *table);
+/* Get standard fields of BAM into hti structure. */
+
+void showSchemaBam(char *table);
+/* Show schema on bam. */
+
+void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
+
+struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn, 
+	char *db, char *table, struct region *regionList, struct lm *lm, 
+	int *retFieldCount);
+/* Get list of beds from BAM, in all regions, that pass filtering. */
 
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();

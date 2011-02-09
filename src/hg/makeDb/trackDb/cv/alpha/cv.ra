@@ -8264,11 +8264,11 @@ labPiFull Roderic Guigo
 grantPi Guigo
 organism human
 
-term GIS(Ruan)
+term GIS-Ruan
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia)
+description Ruan - Genome Institute of Singapore (Chia) PROVISIONAL
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8694,9 +8694,9 @@ projectName BU
 term Ruan
 tag ruan
 type grant
-description Ruan
+description Ruan        PROVISIONAL
 grantInst Genome Institute of Singapore
-projectName Chia PET??
+projectName ChIA-PET
 
 term Hubbard
 tag hubbard
@@ -8801,9 +8801,9 @@ projectName PSU
 term White
 tag white
 type grant
-description White
+description White PROVISIONAL
 grantInst University of Chicago
-projectName
+projectName UChicago
 
 term Giddings
 tag giddings
@@ -9307,11 +9307,11 @@ validate cv
 priority 150
 
 term run
-type run
+type typeOfTerm
 label Sequencing Run
 description Sequencing run
 searchable select
-cvDefined yes
+cvDefined no
 validate none
 priority 500
 

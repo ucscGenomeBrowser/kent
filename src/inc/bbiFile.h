@@ -355,4 +355,7 @@ bits64 bbiWriteSummaryAndIndex(struct bbiSummary *summaryList,
 boolean bbiFileCheckSigs(char *fileName, bits32 sig, char *typeName);
 /* check file signatures at beginning and end of file */
 
+time_t bbiUpdateTime(struct bbiFile *bbi);
+/* return bbi->udc->updateTime */
+
 #endif /* BBIFILE_H */

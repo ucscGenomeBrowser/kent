@@ -250,6 +250,10 @@
             var disabled = option.attr("disabled");
             var excluded = option.hasClass("excluded");
             var item = self._createDropItem(index, value, text, selected, disabled, excluded, indent);
+            var bgColor = option.css('background-color');
+            if (bgColor != undefined && item != undefined) {
+                item.css('background-color',bgColor);
+            }
             container.append(item);
         },
         // Synchronizes the items checked and the source select
