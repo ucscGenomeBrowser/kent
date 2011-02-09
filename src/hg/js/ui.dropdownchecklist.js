@@ -250,9 +250,9 @@
             var disabled = option.attr("disabled");
             var excluded = option.hasClass("excluded");
             var item = self._createDropItem(index, value, text, selected, disabled, excluded, indent);
-            var bgColor = option.css('background-color');
-            if (bgColor != undefined && item != undefined) {
-                item.css('background-color',bgColor);
+            var txtColor = option.css('color');
+            if (txtColor != undefined && item != undefined) {
+                item.css('color',txtColor);
             }
             container.append(item);
         },
@@ -357,7 +357,7 @@
             controlLabel.html(selectedText);
             var newheight = selectedText.split('<BR>').length * 20;
             controlLabel.css('height',newheight);
-            controlLabel.css('color','black');
+            //controlLabel.css('color','black');  // It is now set with spans in the selectedText to enable adding a text color option
             controlLabel.attr('title','Click to select...');
             controlLabel.parent().css('height',newheight);
         },
@@ -371,22 +371,25 @@
         },
         // Formats the text that is shown in the control
         _formatText: function(selectOptions, firstItemChecksAll, allSelected) {
-            var text = "";
+            var formattedText = "";
             if (firstItemChecksAll && allSelected) {
                 // just set the text from the first item
-                text += selectOptions.filter(":first").text();
+                formattedText += selectOptions.filter(":first").text();
             } else {
                 // concatenate the text from the checked items
                 selectOptions.each(function() {
                     if ($(this).attr("selected")) {
-                        text += $(this).text() + '<BR>';
+                        var txtColor = $(this).css("color");
+                        if (txtColor == undefined)
+                            txtColor = "#000000"; // black
+                        formattedText += "<span style='color:"+txtColor+";'>" + $(this).text() + '</span><BR>';
                     }
                 });
-                if (text.length > 0) {
-                    text = text.substring(0, text.length - '<BR>'.length);
+                if (formattedText.length > 0) {
+                    formattedText = formattedText.substring(0, formattedText.length - '<BR>'.length);
                 }
             }
-            return text;
+            return formattedText;
         },
         // Shows and hides the drop container
         _toggleDropContainer: function() {

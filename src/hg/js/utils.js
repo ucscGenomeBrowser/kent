@@ -563,8 +563,12 @@ function getAllVars(obj,subtrackName)
                     urlData[name+"_sel"] = 1;
                     urlData[name]        = val;
                 }
-            } else
-                urlData[name] = val;
+            } else {
+                if ($.isArray( val ) && val.length > 1) {
+                    urlData[name] = "[" + val.toString() + "]";
+                } else
+                    urlData[name] = val;
+            }
         }
     });
     return urlData;
@@ -602,8 +606,17 @@ function varHashToQueryString(varHash)
         if(count++ > 0) {
             retVal += "&";
         }
+        var val = varHash[aVar];
         // XXXX encode var=val ?
-        retVal += aVar + "=" + varHash[aVar];
+        if (val.indexOf('[') == 0 && val.lastIndexOf(']') == (val.length - 1)) {
+            var vals = val.substr(1,val.length - 2).split(',');
+            $(vals).each(function (ix) {
+                if (ix > 0)
+                    retVal += "&";
+                retVal += aVar + "=" + this;
+            });
+        } else
+            retVal += aVar + "=" + val;
     }
     return retVal;
 }
