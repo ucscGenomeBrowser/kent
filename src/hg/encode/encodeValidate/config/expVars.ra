@@ -12,6 +12,10 @@ expVar4 insertLength
 expVar5 replicate
 expVar6 rnaExtract
 
+composite wgEncodeGisChiaPet
+expVar1 cell
+expVar2 antibody
+
 composite wgEncodeCshlLongRnaSeq
 expVar1 cell
 expVar2 localization
