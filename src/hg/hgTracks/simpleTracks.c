@@ -1749,10 +1749,12 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     {
     char mouseOverText[256];
     boolean bigExon = FALSE;
+    boolean revStrand = (lf->orientation == -1);
     exon = ref->val;
     if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
 	bigExon = TRUE;
     if (next && (exon->end > winEnd))
+	/* right overhang (but left side of screen in reserve-strand-display) */
 	{
 	if (exon->start < winEnd)
 	    {
@@ -1766,12 +1768,15 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)",
-              (revCmplDisp ? "Prev" : "Next"), exonIx+1, numExons);
+	if (!revStrand)
+	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
+	else
+	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     else if (!next && (exon->start < winStart))
+	/* left overhang */
 	{
 	if (exon->end > winStart)
 	    {
@@ -1785,8 +1790,10 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)",
-              (revCmplDisp ? "Next" : "Prev"), numExons-exonIx, numExons);
+	if (!revStrand)
+	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
+	else
+	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}

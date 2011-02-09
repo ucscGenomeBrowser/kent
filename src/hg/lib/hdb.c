@@ -32,10 +32,13 @@
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "ctgPos.h"
+#include "hubConnect.h"
 #include "customTrack.h"
 #include "hgFind.h"
 #endif /* GBROWSE */
 #include "hui.h"
+#include "bigBed.h"
+#include "bigWig.h"
 
 static char const rcsid[] = "$Id: hdb.c,v 1.433 2010/05/21 16:39:57 angie Exp $";
 
@@ -3680,9 +3683,17 @@ struct trackDb *tdbForTrack(char *db, char *track,struct trackDb **tdbList)
 struct trackDb *theTdbs = NULL;
 if (tdbList == NULL || *tdbList == NULL)
     {
-    theTdbs = hTrackDb(db);
-    if (tdbList != NULL)
-        *tdbList = theTdbs;
+    if (isHubTrack(track))
+        {
+	struct hash *hash = hashNew(0);
+	theTdbs = hubConnectAddHubForTrackAndFindTdb(db, track, tdbList, hash);
+	}
+    else
+	{
+	theTdbs = hTrackDb(db);
+	if (tdbList != NULL)
+	    *tdbList = theTdbs;
+	}
     }
 else
     theTdbs = *tdbList;
@@ -4929,4 +4940,56 @@ if (fileName == NULL)
 return fileName;
 }
 
+void printUpdateTime(char *database, struct trackDb *tdb,
+    struct customTrack *ct)
+/* display table update time */
+{
+struct sqlConnection *conn = NULL;
+char *tableName = NULL;
+if (isCustomTrack(tdb->track))
+    {
+    if (ct)
+	{
+	conn =  hAllocConn(CUSTOM_TRASH);
+	tableName = ct->dbTableName;
+	}
+    }
+else if (startsWith("big", tdb->type))
+    {
+    char *tableName = hTableForTrack(database, tdb->table);
+    struct sqlConnection *conn =  hAllocConnTrack(database, tdb);
+    char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
+    hFreeConn(&conn);
+    struct bbiFile *bbi = NULL;
+    if (startsWith("bigBed", tdb->type))
+	bbi = bigBedFileOpen(bbiFileName);
+    if (startsWith("bigWig", tdb->type))
+	bbi = bigWigFileOpen(bbiFileName);
+    time_t timep = 0;
+    if (bbi)
+	{
+	timep = bbiUpdateTime(bbi);
+	bbiFileClose(&bbi);
+	}
+    printBbiUpdateTime(&timep);
+    }
+else
+    {
+    tableName = hTableForTrack(database, tdb->table);
+    conn = hAllocConnTrack(database, tdb);
+    }
+if (tableName)
+    {
+    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+    if (date != NULL)
+	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+    }
+hFreeConn(&conn);
+}
 
+void printBbiUpdateTime(time_t *timep)
+/* for bbi files, print out the timep value */
+{
+    printf ("<B>Data last updated:&nbsp;%s</B><BR>\n",
+	sqlUnixTimeToDate(timep, FALSE));
+}

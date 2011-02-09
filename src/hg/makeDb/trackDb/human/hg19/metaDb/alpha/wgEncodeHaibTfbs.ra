@@ -7002,7 +7002,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1654
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3494
@@ -7024,7 +7024,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1654
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 softwareVersion MACS
@@ -7048,7 +7048,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1654
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3494
@@ -7070,7 +7070,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1654
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3494
@@ -11511,7 +11511,7 @@ lab HudsonAlpha
 labExpId SL1662
 origAssembly hg19
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3099
@@ -11534,7 +11534,7 @@ lab HudsonAlpha
 labExpId SL1662
 origAssembly hg19
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 softwareVersion MACS
@@ -11558,7 +11558,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1662
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3015
@@ -11580,7 +11580,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1662
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3021
@@ -13047,7 +13047,7 @@ lab HudsonAlpha
 labExpId SL1664
 origAssembly hg19
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3096
@@ -13070,7 +13070,7 @@ lab HudsonAlpha
 labExpId SL1664
 origAssembly hg19
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 softwareVersion MACS
@@ -13094,7 +13094,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1664
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3015
@@ -13116,7 +13116,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1664
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3027
@@ -14112,7 +14112,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1519
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 1
 setType exp
 subId 2210
@@ -14134,7 +14134,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1519
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 1
 setType exp
 softwareVersion MACS
@@ -14158,7 +14158,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1519
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 1
 setType exp
 subId 3026
@@ -16136,7 +16136,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1883
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 2
 setType exp
 subId 2426
@@ -16158,7 +16158,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1883
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 2
 setType exp
 softwareVersion MACS
@@ -16182,7 +16182,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1883
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 2
 setType exp
 subId 3015
@@ -16204,7 +16204,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1883
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 2
 setType exp
 subId 3021
@@ -18855,7 +18855,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1657
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 1
 setType exp
 subId 2211
@@ -18877,7 +18877,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1657
 project wgEncode
-protocol PCR1x
+protocol v041610.2
 replicate 1
 setType exp
 softwareVersion MACS
@@ -20034,7 +20034,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1787
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 2
 setType exp
 subId 2202
@@ -20056,7 +20056,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1787
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 2
 setType exp
 softwareVersion MACS
@@ -20080,7 +20080,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1787
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 2
 setType exp
 subId 3015
@@ -20102,7 +20102,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1787
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 2
 setType exp
 subId 3021
@@ -21419,7 +21419,7 @@ lab HudsonAlpha
 labExpId SL632
 origAssembly hg18
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3097
@@ -21443,7 +21443,7 @@ lab HudsonAlpha
 labExpId SL632
 origAssembly hg18
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 softwareVersion MACS
@@ -21469,7 +21469,7 @@ labExpId SL632
 labVersion SL632
 origAssembly hg18
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 867
@@ -21515,7 +21515,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL632
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3036
@@ -21612,7 +21612,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1786
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3066
@@ -21634,7 +21634,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1786
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 softwareVersion MACS
@@ -21658,7 +21658,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1786
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3066
@@ -21680,7 +21680,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1786
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3027
@@ -21794,7 +21794,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1788
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3161
@@ -21816,7 +21816,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1788
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 softwareVersion MACS
@@ -21840,7 +21840,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1788
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3161
@@ -21862,7 +21862,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1788
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3161
@@ -22696,7 +22696,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1481
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3264
@@ -22718,7 +22718,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1481
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 softwareVersion MACS
@@ -22742,7 +22742,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1481
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3264
@@ -22764,7 +22764,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1481
 project wgEncode
-protocol PCR1x
+protocol v041610.1
 replicate 1
 setType exp
 subId 3264
@@ -26863,7 +26863,7 @@ composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2011-02-07
+dateSubmitted 2011-02-07
 fileName wgEncodeHaibTfbsK562ControlV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -27867,7 +27867,7 @@ objType file
 antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -27914,7 +27914,7 @@ objType table
 antibody ETS1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32533,7 +32533,7 @@ objType file
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32556,7 +32556,7 @@ objType file
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32579,7 +32579,7 @@ objType table
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32603,7 +32603,7 @@ objType table
 antibody USF-1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1780
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -36757,4 +36757,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: 2001240748
+# MAGIC: -1178996323

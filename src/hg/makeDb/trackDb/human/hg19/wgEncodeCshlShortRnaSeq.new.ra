@@ -148,7 +148,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel BJ cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in BJ cell)
+        longLabel BJ cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=BJ localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -157,7 +157,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqBjCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel BJ cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in BJ cell)
+        longLabel BJ cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=BJ localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -166,7 +166,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in K562 cell)
+        longLabel K562 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -176,7 +176,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel GM12 nucl sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in GM12878 nucleus)
+        longLabel GM12878 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -186,7 +186,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cyto sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in K562 cytosol)
+        longLabel K562 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -196,7 +196,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel GM12 nucl sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in GM12878 nucleus)
+        longLabel GM12878 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -206,7 +206,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel GM12 cyto sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in GM12878 cytosol)
+        longLabel GM12878 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -216,7 +216,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel GM12 cyto sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in GM12878 cytosol)
+        longLabel GM12878 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -226,7 +226,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel GM12 cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in GM12878 cell)
+        longLabel GM12878 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -236,7 +236,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel GM12 cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in GM12878 cell)
+        longLabel GM12878 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -246,7 +246,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucl sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in K562 nucleus)
+        longLabel K562 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -256,7 +256,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nucl sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in K562 nucleus)
+        longLabel K562 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -266,7 +266,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cyto sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in K562 cytosol)
+        longLabel K562 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -276,7 +276,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in K562 cell)
+        longLabel K562 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -286,7 +286,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK nucl sm A 3
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 3 (small in NHEK nucleus)
+        longLabel NHEK nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep3
         type bam
         origAssembly hg19
@@ -296,7 +296,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel MCF7 cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in MCF-7 cell)
+        longLabel MCF-7 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -305,7 +305,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel SKSH cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in SK-N-SH_RA cell)
+        longLabel SK-N-SH_RA cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -314,7 +314,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel SKSH cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in SK-N-SH_RA cell)
+        longLabel SK-N-SH_RA cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -323,7 +323,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cyto sm A 4
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 4 (small in NHEK cytosol)
+        longLabel NHEK cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep4
         type bam
         origAssembly hg19
@@ -333,7 +333,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cyto sm A 3
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 3 (small in NHEK cytosol)
+        longLabel NHEK cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep3
         type bam
         origAssembly hg19
@@ -343,7 +343,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK nucl sm A 4
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 4 (small in NHEK nucleus)
+        longLabel NHEK nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep4
         type bam
         origAssembly hg19
@@ -353,7 +353,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in NHEK cell)
+        longLabel NHEK cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -363,7 +363,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel NHEK cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in NHEK cell)
+        longLabel NHEK cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -373,7 +373,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel MCF7 cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in MCF-7 cell)
+        longLabel MCF-7 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -382,7 +382,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nplm sm A 4
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 4 (small in K562 nucleoplasm)
+        longLabel K562 nucleoplasm small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep4
         type bam
         origAssembly hg19
@@ -392,7 +392,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nplm sm A 3
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 3 (small in K562 nucleoplasm)
+        longLabel K562 nucleoplasm small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep3
         type bam
         origAssembly hg19
@@ -402,7 +402,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nlos sm A 4
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 4 (small in K562 nucleolus)
+        longLabel K562 nucleolus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep4
         type bam
         origAssembly hg19
@@ -412,7 +412,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 nlos sm A 3
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 3 (small in K562 nucleolus)
+        longLabel K562 nucleolus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep3
         type bam
         origAssembly hg19
@@ -422,7 +422,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chrm sm A 4
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 4 (small in K562 chromatin)
+        longLabel K562 chromatin small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep4
         type bam
         origAssembly hg19
@@ -432,7 +432,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel K562 chrm sm A 3
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 3 (small in K562 chromatin)
+        longLabel K562 chromatin small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep3
         type bam
         origAssembly hg19
@@ -442,7 +442,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC nucl sm A 3
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 3 (small in HUVEC nucleus)
+        longLabel HUVEC nucleus small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep3
         type bam
         origAssembly hg19
@@ -452,7 +452,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cyto sm A 4
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 4 (small in HUVEC cytosol)
+        longLabel HUVEC cytosol small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep4
         type bam
         origAssembly hg19
@@ -462,7 +462,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalAlnRep3
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cyto sm A 3
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 3 (small in HUVEC cytosol)
+        longLabel HUVEC cytosol small RNA-seq Alignments Rep 3 from ENCODE/CSHL
         subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep3
         type bam
         origAssembly hg19
@@ -472,7 +472,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in HUVEC cell)
+        longLabel HUVEC cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -482,7 +482,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in HUVEC cell)
+        longLabel HUVEC cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -492,7 +492,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG nucl sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in HepG2 nucleus)
+        longLabel HepG2 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -502,7 +502,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG nucl sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in HepG2 nucleus)
+        longLabel HepG2 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -512,7 +512,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cyto sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in HepG2 cytosol)
+        longLabel HepG2 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -522,7 +522,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cyto sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in HepG2 cytosol)
+        longLabel HepG2 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -532,7 +532,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in HepG2 cell)
+        longLabel HepG2 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -542,7 +542,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HepG cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in HepG2 cell)
+        longLabel HepG2 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -552,7 +552,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa nucl sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in HeLa-S3 nucleus)
+        longLabel HeLa-S3 nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -562,7 +562,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cyto sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in HeLa-S3 cytosol)
+        longLabel HeLa-S3 cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -572,7 +572,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa nucl sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in HeLa-S3 nucleus)
+        longLabel HeLa-S3 nucleus small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -582,7 +582,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cyto sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in HeLa-S3 cytosol)
+        longLabel HeLa-S3 cytosol small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -592,7 +592,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in HeLa-S3 cell)
+        longLabel HeLa-S3 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -602,7 +602,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HeLa cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in HeLa-S3 cell)
+        longLabel HeLa-S3 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -612,7 +612,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1ES nucl sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in H1-hESC nucleus)
+        longLabel H1-hESC nucleus small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=H1hESC localization=nucleus rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -622,7 +622,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1ES cyto sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in H1-hESC cytosol)
+        longLabel H1-hESC cytosol small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=H1hESC localization=cytosol rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -632,7 +632,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1ES cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in H1-hESC cell)
+        longLabel H1-hESC cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -642,7 +642,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel H1ES cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in H1-hESC cell)
+        longLabel H1-hESC cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -652,7 +652,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel AG04 cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in AG04450 cell)
+        longLabel AG04450 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -661,7 +661,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel AG04 cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in AG04450 cell)
+        longLabel AG04450 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -670,7 +670,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalAlnRep4
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel HUVEC nucl sm A 4
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 4 (small in HUVEC nucleus)
+        longLabel HUVEC nucleus small RNA-seq Alignments Rep 4 from ENCODE/CSHL
         subGroups view=Alignments cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep4
         type bam
         origAssembly hg19
@@ -680,7 +680,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep2
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm A 2
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 2 (small in A549 cell)
+        longLabel A549 cell small RNA-seq Alignments Rep 2 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
         type bam
         origAssembly hg19
@@ -689,7 +689,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqA549CellShorttotalAlnRep1
         parent wgEncodeCshlShortRnaSeqViewAlignments off
         shortLabel A549 cell sm A 1
-        longLabel ENCODE CSHL RNA-seq Alignments Rep 1 (small in A549 cell)
+        longLabel A549 cell small RNA-seq Alignments Rep 1 from ENCODE/CSHL
         subGroups view=Alignments cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
         type bam
         origAssembly hg19
@@ -810,7 +810,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel BJ cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in BJ cell)
+        longLabel BJ cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1923500.000000
         origAssembly hg19
@@ -819,7 +819,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqBjCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel BJ cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in BJ cell)
+        longLabel BJ cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 5947156.000000
         origAssembly hg19
@@ -828,7 +828,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in K562 cell)
+        longLabel K562 cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2003121.000000
         origAssembly hg19
@@ -838,7 +838,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel GM12 nucl sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in GM12878 nucleus)
+        longLabel GM12878 nucleus small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 9536975.000000
         origAssembly hg19
@@ -848,7 +848,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 cyto sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in K562 cytosol)
+        longLabel K562 cytosol small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 3546408.000000
         origAssembly hg19
@@ -858,7 +858,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel GM12 nucl sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in GM12878 nucleus)
+        longLabel GM12878 nucleus small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 4227276.000000
         origAssembly hg19
@@ -868,7 +868,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel GM12 cyto sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in GM12878 cytosol)
+        longLabel GM12878 cytosol small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 4319529.000000
         origAssembly hg19
@@ -878,7 +878,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel GM12 cyto sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in GM12878 cytosol)
+        longLabel GM12878 cytosol small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 5676517.000000
         origAssembly hg19
@@ -888,7 +888,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel GM12 cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in GM12878 cell)
+        longLabel GM12878 cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 4146497.000000
         origAssembly hg19
@@ -898,7 +898,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel GM12 cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in GM12878 cell)
+        longLabel GM12878 cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 3646991.000000
         origAssembly hg19
@@ -908,7 +908,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nucl sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in K562 nucleus)
+        longLabel K562 nucleus small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2051665.000000
         origAssembly hg19
@@ -918,7 +918,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel K562 nucl sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in K562 nucleus)
+        longLabel K562 nucleus small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 2509548.000000
         origAssembly hg19
@@ -928,7 +928,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel K562 cyto sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in K562 cytosol)
+        longLabel K562 cytosol small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 2803742.000000
         origAssembly hg19
@@ -938,7 +938,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel K562 cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in K562 cell)
+        longLabel K562 cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1822368.000000
         origAssembly hg19
@@ -948,7 +948,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK nucl sm - 3
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 3 (small in NHEK nucleus)
+        longLabel NHEK nucleus small RNA-seq Minus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 4703154.000000
         origAssembly hg19
@@ -958,7 +958,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel MCF7 cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in MCF-7 cell)
+        longLabel MCF-7 cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 620692.000000
         origAssembly hg19
@@ -967,7 +967,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel SKSH cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in SK-N-SH_RA cell)
+        longLabel SK-N-SH_RA cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 3559664.000000
         origAssembly hg19
@@ -976,7 +976,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel SKSH cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in SK-N-SH_RA cell)
+        longLabel SK-N-SH_RA cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 3043844.000000
         origAssembly hg19
@@ -985,7 +985,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cyto sm - 4
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 4 (small in NHEK cytosol)
+        longLabel NHEK cytosol small RNA-seq Minus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 2890950.000000
         origAssembly hg19
@@ -995,7 +995,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cyto sm - 3
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 3 (small in NHEK cytosol)
+        longLabel NHEK cytosol small RNA-seq Minus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 3782447.000000
         origAssembly hg19
@@ -1005,7 +1005,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK nucl sm - 4
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 4 (small in NHEK nucleus)
+        longLabel NHEK nucleus small RNA-seq Minus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 8210747.000000
         origAssembly hg19
@@ -1015,7 +1015,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in NHEK cell)
+        longLabel NHEK cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 2150370.000000
         origAssembly hg19
@@ -1025,7 +1025,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel NHEK cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in NHEK cell)
+        longLabel NHEK cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1465668.000000
         origAssembly hg19
@@ -1035,7 +1035,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel MCF7 cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in MCF-7 cell)
+        longLabel MCF-7 cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1184608.000000
         origAssembly hg19
@@ -1044,7 +1044,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nplm sm - 4
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 4 (small in K562 nucleoplasm)
+        longLabel K562 nucleoplasm small RNA-seq Minus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 3143187.000000
         origAssembly hg19
@@ -1054,7 +1054,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nplm sm - 3
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 3 (small in K562 nucleoplasm)
+        longLabel K562 nucleoplasm small RNA-seq Minus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 2388836.000000
         origAssembly hg19
@@ -1064,7 +1064,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nlos sm - 4
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 4 (small in K562 nucleolus)
+        longLabel K562 nucleolus small RNA-seq Minus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 941876.000000
         origAssembly hg19
@@ -1074,7 +1074,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nlos sm - 3
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 3 (small in K562 nucleolus)
+        longLabel K562 nucleolus small RNA-seq Minus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 939926.000000
         origAssembly hg19
@@ -1084,7 +1084,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 chrm sm - 4
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 4 (small in K562 chromatin)
+        longLabel K562 chromatin small RNA-seq Minus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 671800.000000
         origAssembly hg19
@@ -1094,7 +1094,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 chrm sm - 3
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 3 (small in K562 chromatin)
+        longLabel K562 chromatin small RNA-seq Minus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 1152525.000000
         origAssembly hg19
@@ -1104,7 +1104,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC nucl sm - 3
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 3 (small in HUVEC nucleus)
+        longLabel HUVEC nucleus small RNA-seq Minus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 3801872.000000
         origAssembly hg19
@@ -1114,7 +1114,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cyto sm - 4
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 4 (small in HUVEC cytosol)
+        longLabel HUVEC cytosol small RNA-seq Minus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 2161085.000000
         origAssembly hg19
@@ -1124,7 +1124,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalMinusRawRep3
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cyto sm - 3
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 3 (small in HUVEC cytosol)
+        longLabel HUVEC cytosol small RNA-seq Minus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 656964.000000
         origAssembly hg19
@@ -1134,7 +1134,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in HUVEC cell)
+        longLabel HUVEC cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 3671413.000000
         origAssembly hg19
@@ -1144,7 +1144,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in HUVEC cell)
+        longLabel HUVEC cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 9282113.000000
         origAssembly hg19
@@ -1154,7 +1154,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG nucl sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in HepG2 nucleus)
+        longLabel HepG2 nucleus small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1005346.000000
         origAssembly hg19
@@ -1164,7 +1164,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG nucl sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in HepG2 nucleus)
+        longLabel HepG2 nucleus small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1568039.000000
         origAssembly hg19
@@ -1174,7 +1174,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cyto sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in HepG2 cytosol)
+        longLabel HepG2 cytosol small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2304483.000000
         origAssembly hg19
@@ -1184,7 +1184,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cyto sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in HepG2 cytosol)
+        longLabel HepG2 cytosol small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1902102.000000
         origAssembly hg19
@@ -1194,7 +1194,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in HepG2 cell)
+        longLabel HepG2 cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1321262.000000
         origAssembly hg19
@@ -1204,7 +1204,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HepG cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in HepG2 cell)
+        longLabel HepG2 cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1206534.000000
         origAssembly hg19
@@ -1214,7 +1214,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa nucl sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in HeLa-S3 nucleus)
+        longLabel HeLa-S3 nucleus small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 7836018.000000
         origAssembly hg19
@@ -1224,7 +1224,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa cyto sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in HeLa-S3 cytosol)
+        longLabel HeLa-S3 cytosol small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2337266.000000
         origAssembly hg19
@@ -1234,7 +1234,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa nucl sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in HeLa-S3 nucleus)
+        longLabel HeLa-S3 nucleus small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 9209262.000000
         origAssembly hg19
@@ -1244,7 +1244,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa cyto sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in HeLa-S3 cytosol)
+        longLabel HeLa-S3 cytosol small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 3180380.000000
         origAssembly hg19
@@ -1254,7 +1254,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in HeLa-S3 cell)
+        longLabel HeLa-S3 cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2126399.000000
         origAssembly hg19
@@ -1264,7 +1264,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HeLa cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in HeLa-S3 cell)
+        longLabel HeLa-S3 cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 2422335.000000
         origAssembly hg19
@@ -1274,7 +1274,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel H1ES nucl sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in H1-hESC nucleus)
+        longLabel H1-hESC nucleus small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=H1hESC localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 5206543.000000
         origAssembly hg19
@@ -1284,7 +1284,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel H1ES cyto sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in H1-hESC cytosol)
+        longLabel H1-hESC cytosol small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=H1hESC localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 8090327.000000
         origAssembly hg19
@@ -1294,7 +1294,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel H1ES cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in H1-hESC cell)
+        longLabel H1-hESC cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 13772296.000000
         origAssembly hg19
@@ -1304,7 +1304,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel H1ES cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in H1-hESC cell)
+        longLabel H1-hESC cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 15677126.000000
         origAssembly hg19
@@ -1314,7 +1314,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel AG04 cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in AG04450 cell)
+        longLabel AG04450 cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2108017.000000
         origAssembly hg19
@@ -1323,7 +1323,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel AG04 cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in AG04450 cell)
+        longLabel AG04450 cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1741127.000000
         origAssembly hg19
@@ -1332,7 +1332,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalMinusRawRep4
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel HUVEC nucl sm - 4
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 4 (small in HUVEC nucleus)
+        longLabel HUVEC nucleus small RNA-seq Minus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 1938277.000000
         origAssembly hg19
@@ -1342,7 +1342,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep2
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel A549 cell sm - 2
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 2 (small in A549 cell)
+        longLabel A549 cell small RNA-seq Minus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1785282.000000
         origAssembly hg19
@@ -1351,7 +1351,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqA549CellShorttotalMinusRawRep1
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel A549 cell sm - 1
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal Rep 1 (small in A549 cell)
+        longLabel A549 cell small RNA-seq Minus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=MinusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 2036815.000000
         origAssembly hg19
@@ -1472,7 +1472,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel BJ cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in BJ cell)
+        longLabel BJ cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 6896581.000000
         origAssembly hg19
@@ -1481,7 +1481,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqBjCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel BJ cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in BJ cell)
+        longLabel BJ cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=BJ localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 3537517.000000
         origAssembly hg19
@@ -1490,7 +1490,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in K562 cell)
+        longLabel K562 cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1897902.000000
         origAssembly hg19
@@ -1500,7 +1500,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel GM12 nucl sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in GM12878 nucleus)
+        longLabel GM12878 nucleus small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 647158.000000
         origAssembly hg19
@@ -1510,7 +1510,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 cyto sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in K562 cytosol)
+        longLabel K562 cytosol small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 3541956.000000
         origAssembly hg19
@@ -1520,7 +1520,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on 
         shortLabel GM12 nucl sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in GM12878 nucleus)
+        longLabel GM12878 nucleus small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 805250.000000
         origAssembly hg19
@@ -1530,7 +1530,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel GM12 cyto sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in GM12878 cytosol)
+        longLabel GM12878 cytosol small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 4329828.000000
         origAssembly hg19
@@ -1540,7 +1540,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CytosolShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on 
         shortLabel GM12 cyto sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in GM12878 cytosol)
+        longLabel GM12878 cytosol small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=GM12878 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1613718.000000
         origAssembly hg19
@@ -1550,7 +1550,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel GM12 cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in GM12878 cell)
+        longLabel GM12878 cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1645247.000000
         origAssembly hg19
@@ -1560,7 +1560,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqGm12878CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on 
         shortLabel GM12 cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in GM12878 cell)
+        longLabel GM12878 cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=GM12878 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1639543.000000
         origAssembly hg19
@@ -1570,7 +1570,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nucl sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in K562 nucleus)
+        longLabel K562 nucleus small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 697712.000000
         origAssembly hg19
@@ -1580,7 +1580,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on 
         shortLabel K562 nucl sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in K562 nucleus)
+        longLabel K562 nucleus small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 842350.000000
         origAssembly hg19
@@ -1590,7 +1590,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CytosolShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on 
         shortLabel K562 cyto sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in K562 cytosol)
+        longLabel K562 cytosol small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1944213.000000
         origAssembly hg19
@@ -1600,7 +1600,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on 
         shortLabel K562 cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in K562 cell)
+        longLabel K562 cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1375703.000000
         origAssembly hg19
@@ -1610,7 +1610,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK nucl sm + 3
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 3 (small in NHEK nucleus)
+        longLabel NHEK nucleus small RNA-seq Plus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 5253015.000000
         origAssembly hg19
@@ -1620,7 +1620,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel MCF7 cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in MCF-7 cell)
+        longLabel MCF-7 cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 9000205.000000
         origAssembly hg19
@@ -1629,7 +1629,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel SKSH cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in SK-N-SH_RA cell)
+        longLabel SK-N-SH_RA cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 5728503.000000
         origAssembly hg19
@@ -1638,7 +1638,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqSknshraCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel SKSH cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in SK-N-SH_RA cell)
+        longLabel SK-N-SH_RA cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=SKNSHRA localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 4415282.000000
         origAssembly hg19
@@ -1647,7 +1647,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cyto sm + 4
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 4 (small in NHEK cytosol)
+        longLabel NHEK cytosol small RNA-seq Plus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 4016030.000000
         origAssembly hg19
@@ -1657,7 +1657,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCytosolShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cyto sm + 3
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 3 (small in NHEK cytosol)
+        longLabel NHEK cytosol small RNA-seq Plus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=NHEK localization=cytosol rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 3745979.000000
         origAssembly hg19
@@ -1667,7 +1667,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekNucleusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK nucl sm + 4
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 4 (small in NHEK nucleus)
+        longLabel NHEK nucleus small RNA-seq Plus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=NHEK localization=nucleus rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 4491850.000000
         origAssembly hg19
@@ -1677,7 +1677,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in NHEK cell)
+        longLabel NHEK cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 3814080.000000
         origAssembly hg19
@@ -1687,7 +1687,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqNhekCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel NHEK cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in NHEK cell)
+        longLabel NHEK cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=NHEK localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2170371.000000
         origAssembly hg19
@@ -1697,7 +1697,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqMcf7CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel MCF7 cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in MCF-7 cell)
+        longLabel MCF-7 cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=MCF7 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 13069436.000000
         origAssembly hg19
@@ -1706,7 +1706,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nplm sm + 4
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 4 (small in K562 nucleoplasm)
+        longLabel K562 nucleoplasm small RNA-seq Plus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 1228583.000000
         origAssembly hg19
@@ -1716,7 +1716,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nplm sm + 3
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 3 (small in K562 nucleoplasm)
+        longLabel K562 nucleoplasm small RNA-seq Plus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=nucleoplasm rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 889514.000000
         origAssembly hg19
@@ -1726,7 +1726,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nlos sm + 4
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 4 (small in K562 nucleolus)
+        longLabel K562 nucleolus small RNA-seq Plus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 1283816.000000
         origAssembly hg19
@@ -1736,7 +1736,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562NucleolusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nlos sm + 3
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 3 (small in K562 nucleolus)
+        longLabel K562 nucleolus small RNA-seq Plus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=nucleolus rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 1901395.000000
         origAssembly hg19
@@ -1746,7 +1746,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 chrm sm + 4
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 4 (small in K562 chromatin)
+        longLabel K562 chromatin small RNA-seq Plus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 2708620.000000
         origAssembly hg19
@@ -1756,7 +1756,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqK562ChromatinShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 chrm sm + 3
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 3 (small in K562 chromatin)
+        longLabel K562 chromatin small RNA-seq Plus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=K562 localization=chromatin rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 1791016.000000
         origAssembly hg19
@@ -1766,7 +1766,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC nucl sm + 3
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 3 (small in HUVEC nucleus)
+        longLabel HUVEC nucleus small RNA-seq Plus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 2075138.000000
         origAssembly hg19
@@ -1776,7 +1776,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cyto sm + 4
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 4 (small in HUVEC cytosol)
+        longLabel HUVEC cytosol small RNA-seq Plus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 2933030.000000
         origAssembly hg19
@@ -1786,7 +1786,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCytosolShorttotalPlusRawRep3
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cyto sm + 3
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 3 (small in HUVEC cytosol)
+        longLabel HUVEC cytosol small RNA-seq Plus Strand Raw Signal Rep 3 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HUVEC localization=cytosol rnaExtract=shortTotal rep=rep3
         type bigWig 1.000000 3443574.000000
         origAssembly hg19
@@ -1796,7 +1796,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in HUVEC cell)
+        longLabel HUVEC cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 3823736.000000
         origAssembly hg19
@@ -1806,7 +1806,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in HUVEC cell)
+        longLabel HUVEC cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HUVEC localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1171450.000000
         origAssembly hg19
@@ -1816,7 +1816,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG nucl sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in HepG2 nucleus)
+        longLabel HepG2 nucleus small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 6063104.000000
         origAssembly hg19
@@ -1826,7 +1826,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG nucl sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in HepG2 nucleus)
+        longLabel HepG2 nucleus small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HepG2 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 8130421.000000
         origAssembly hg19
@@ -1836,7 +1836,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cyto sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in HepG2 cytosol)
+        longLabel HepG2 cytosol small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 6777459.000000
         origAssembly hg19
@@ -1846,7 +1846,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CytosolShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cyto sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in HepG2 cytosol)
+        longLabel HepG2 cytosol small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HepG2 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 7864551.000000
         origAssembly hg19
@@ -1856,7 +1856,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in HepG2 cell)
+        longLabel HepG2 cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 7019355.000000
         origAssembly hg19
@@ -1866,7 +1866,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHepg2CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HepG cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in HepG2 cell)
+        longLabel HepG2 cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HepG2 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 8320745.000000
         origAssembly hg19
@@ -1876,7 +1876,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa nucl sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in HeLa-S3 nucleus)
+        longLabel HeLa-S3 nucleus small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 1345811.000000
         origAssembly hg19
@@ -1886,7 +1886,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa cyto sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in HeLa-S3 cytosol)
+        longLabel HeLa-S3 cytosol small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 4564489.000000
         origAssembly hg19
@@ -1896,7 +1896,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3NucleusShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa nucl sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in HeLa-S3 nucleus)
+        longLabel HeLa-S3 nucleus small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HeLaS3 localization=nucleus rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 290391.000000
         origAssembly hg19
@@ -1906,7 +1906,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CytosolShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa cyto sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in HeLa-S3 cytosol)
+        longLabel HeLa-S3 cytosol small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HeLaS3 localization=cytosol rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 3223305.000000
         origAssembly hg19
@@ -1916,7 +1916,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in HeLa-S3 cell)
+        longLabel HeLa-S3 cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 8168482.000000
         origAssembly hg19
@@ -1926,7 +1926,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHelas3CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HeLa cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in HeLa-S3 cell)
+        longLabel HeLa-S3 cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HeLaS3 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 3201336.000000
         origAssembly hg19
@@ -1936,7 +1936,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescNucleusShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel H1ES nucl sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in H1-hESC nucleus)
+        longLabel H1-hESC nucleus small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=H1hESC localization=nucleus rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 2851215.000000
         origAssembly hg19
@@ -1946,7 +1946,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCytosolShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel H1ES cyto sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in H1-hESC cytosol)
+        longLabel H1-hESC cytosol small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=H1hESC localization=cytosol rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 448478.000000
         origAssembly hg19
@@ -1956,7 +1956,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel H1ES cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in H1-hESC cell)
+        longLabel H1-hESC cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 893102.000000
         origAssembly hg19
@@ -1966,7 +1966,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqH1hescCellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on 
         shortLabel H1ES cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in H1-hESC cell)
+        longLabel H1-hESC cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=H1hESC localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 1064486.000000
         origAssembly hg19
@@ -1976,7 +1976,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel AG04 cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in AG04450 cell)
+        longLabel AG04450 cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 3606106.000000
         origAssembly hg19
@@ -1985,7 +1985,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqAg04450CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel AG04 cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in AG04450 cell)
+        longLabel AG04450 cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=AG04450 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 4359540.000000
         origAssembly hg19
@@ -1994,7 +1994,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqHuvecNucleusShorttotalPlusRawRep4
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel HUVEC nucl sm + 4
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 4 (small in HUVEC nucleus)
+        longLabel HUVEC nucleus small RNA-seq Plus Strand Raw Signal Rep 4 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=HUVEC localization=nucleus rnaExtract=shortTotal rep=rep4
         type bigWig 1.000000 2777483.000000
         origAssembly hg19
@@ -2004,7 +2004,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep2
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel A549 cell sm + 2
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 2 (small in A549 cell)
+        longLabel A549 cell small RNA-seq Plus Strand Raw Signal Rep 2 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep2
         type bigWig 1.000000 10015626.000000
         origAssembly hg19
@@ -2013,7 +2013,7 @@ superTrack wgEncodeRnaSeqSuper dense
         track wgEncodeCshlShortRnaSeqA549CellShorttotalPlusRawRep1
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel A549 cell sm + 1
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal Rep 1 (small in A549 cell)
+        longLabel A549 cell small RNA-seq Plus Strand Raw Signal Rep 1 from ENCODE/CSHL
         subGroups view=PlusRawSignal cellType=A549 localization=cell rnaExtract=shortTotal rep=rep1
         type bigWig 1.000000 7092993.000000
         origAssembly hg19

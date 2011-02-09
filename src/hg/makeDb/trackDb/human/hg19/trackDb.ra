@@ -2151,6 +2151,7 @@ url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$
 
 
 track snakeMm9
+release alpha
 table chainMm9
 shortLabel snakeMm9
 longLabel snakeMm9

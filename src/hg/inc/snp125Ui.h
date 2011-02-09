@@ -23,6 +23,9 @@ char *snp125OldColorVarToNew(char *oldVar, char *attribute);
 #define SNP125_DEFAULT_MAX_WEIGHT 1
 #define SNP125_DEFAULT_MIN_AVHET 0.0
 #define SNP132_DEFAULT_MIN_SUBMITTERS 0
+#define SNP132_DEFAULT_MIN_MINOR_AL_FREQ 0.0
+#define SNP132_DEFAULT_MAX_MINOR_AL_FREQ 0.5
+#define SNP132_DEFAULT_MIN_AL_FREQ_2N 0
 
 extern boolean snp125ExtendedNames;
 

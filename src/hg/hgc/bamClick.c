@@ -7,10 +7,10 @@
 #include "hdb.h"
 #include "bamFile.h"
 #include "hgc.h"
-#ifdef KNETFILE_HOOKS
+#if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
-#endif//def KNETFILE_HOOKS
+#endif//def USE_BAM && KNETFILE_HOOKS
 
 static char const rcsid[] = "$Id: bamClick.c,v 1.21 2010/05/11 01:43:28 kent Exp $";
 
