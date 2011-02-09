@@ -215,7 +215,7 @@ else if(sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
     char *table = cgiString("table");
     int num = cgiInt("num");
     struct sqlConnection *conn = hAllocConn(database);
-    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s'", table, name);
+    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s'", sqlEscapeString(table), sqlEscapeString(name));
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -227,11 +227,12 @@ else if(sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
         else
             found = exonToPos(gp, num, &start, &end);
         if(found)
-            // change to using JSON.
-            dyStringPrintf(output, "%s:%d-%d", gp->chrom, start + 1, end);
+            dyStringPrintf(output, "{\"pos\": \"%s:%d-%d\"}", gp->chrom, start + 1, end);
+        else
+            dyStringPrintf(output, "{\"error\": \"%d is an invalid %s for this gene\"}", num, sameString(cmd, "codonToPos") ? "codon" : "exon");
         }
     else
-        errAbort("Couldn't find name: %s", name);
+        dyStringPrintf(output, "{\"error\": \"Couldn't find item: %s\"}", name);
     sqlFreeResult(&sr);
     hFreeConn(&conn);
     }

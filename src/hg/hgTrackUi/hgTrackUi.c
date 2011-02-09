@@ -2740,9 +2740,7 @@ if (!ct)
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
 
-    /* it would be interesting to do something for composites */
-    if (!tdbIsComposite(tdb))
-	printUpdateTime(database, tdb, NULL);
+    printUpdateTime(database, tdb, NULL);
     }
 
 if (tdb->html != NULL && tdb->html[0] != 0)

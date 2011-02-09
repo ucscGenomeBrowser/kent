@@ -646,14 +646,16 @@ char *trackDbOrigAssembly(struct trackDb *tdb)
 return (trackDbSetting(tdb, "origAssembly"));
 }
 
-void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database)
+boolean trackDbPrintOrigAssembly(struct trackDb *tdb, char *database)
 /* Print lift information from trackDb, if any */
 {
+boolean ret = FALSE;
 char *origAssembly = trackDbOrigAssembly(tdb);
 if (origAssembly)
     {
     if (differentString(origAssembly, database))
         {
+	ret = TRUE;
 	printf("<B>Data coordinates converted via <A TARGET=_BLANK "
 	       "HREF=\"../goldenPath/help/hgTracksHelp.html#Liftover\">liftOver</A> from:</B> ");
         char *freeze = hFreezeFromDb(origAssembly);
@@ -665,6 +667,7 @@ if (origAssembly)
 	    printf("%s (%s)<BR>\n", freeze, origAssembly);
         }
     }
+return ret;
 }
 
 eCfgType cfgTypeFromTdb(struct trackDb *tdb, boolean warnIfNecessary)
