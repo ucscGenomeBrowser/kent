@@ -363,7 +363,7 @@ char *trackDbInclude(char *raFile, char *line, char **releaseTag);
 char *trackDbOrigAssembly(struct trackDb *tdb);
 /* return setting from trackDb, if any */
 
-boolean trackDbPrintOrigAssembly(struct trackDb *tdb, char *database);
+void trackDbPrintOrigAssembly(struct trackDb *tdb, char *database);
 /* Print lift information from trackDb, if any */
 
 // Not all track types have separate configuration
