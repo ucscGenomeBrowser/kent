@@ -1564,15 +1564,13 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                 }
             }
     } else if (cmd == 'zoomCodon' || cmd == 'zoomExon') {
-        var num, ajaxCmd, errorMsg;
+        var num, ajaxCmd;
         if(cmd == 'zoomCodon') {
             num = prompt("Please enter the codon number to jump to:");
             ajaxCmd = 'codonToPos';
-            errorMsg = num + " is an invalid codon for this gene";
         } else {
             num = prompt("Please enter the exon number to jump to:");
             ajaxCmd = 'exonToPos';
-            errorMsg = num + " is an invalid exon number for this gene";
         }
         if(num) {
             $.ajax({
@@ -1582,7 +1580,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                        trueSuccess: handleZoomCodon,
                        success: catchErrorOrDispatch,
                        error: errorHandler,
-                       errorMsg: errorMsg,
                        cache: true
                    });
         }
@@ -2828,14 +2825,14 @@ function reloadFloatingItem()
 
 function handleZoomCodon(response, status)
 {
-    // XXXX use formal json interface
-    if(response.length > 1) {
-        setPosition(response, 3);
+    var json = eval("(" + response + ")");
+    if(json.pos) {
+        setPosition(json.pos, 3);
         if(document.TrackForm)
             document.TrackForm.submit();
         else
             document.TrackHeaderForm.submit();
     } else {
-        alert(this.errorMsg);
+        alert(json.error);
     }
 }
