@@ -3539,7 +3539,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
-    printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
+    printf("<OPTION%s%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""),(filterBy->colorFollows?" style='color: #000000;'":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
         {
