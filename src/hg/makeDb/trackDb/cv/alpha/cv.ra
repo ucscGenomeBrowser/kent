@@ -8829,7 +8829,8 @@ projectName UNC-Giddings
 #       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
 #
 #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
-#           cv: must be defined term in cv (e.g. cell=GM12878)  # could be "cv or control" or "cv or None" to say control terms also acceptable
+#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.  
+#               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
 #         date: must be date in YYYY-MM-DD format
 #       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
 #        float: must be floating point number
@@ -8839,7 +8840,7 @@ projectName UNC-Giddings
 #     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
 #    # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances.  (e.g. sortable column order in hgFileUi)
+#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances, with lower numbers implying greater priority.  
 #       At beginnning:
 #         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
 #       Experiment defining:
