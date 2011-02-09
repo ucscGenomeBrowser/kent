@@ -3308,54 +3308,6 @@ tableName wgEncodeHaibTfbsEcc1Foxa1c20V0416102Dmso2RawRep2
 treatment DMSO_0.02pct
 view RawSignal
 
-metaObject wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep1
-objType file
-antibody GR
-cell ECC-1
-composite wgEncodeHaibTfbs
-controlId SL1035
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-fileIndex wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL1035
-origAssembly hg19
-project wgEncode
-protocol v041610.2
-replicate 1
-setType input
-subId 3123
-treatment EtOH_0.02pct
-view Alignments
-
-metaObject wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep2
-objType file
-antibody GR
-cell ECC-1
-composite wgEncodeHaibTfbs
-controlId SL1087
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2011-01-19
-dateUnrestricted 2011-10-19
-fileIndex wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL1087
-origAssembly hg19
-project wgEncode
-protocol v041610.2
-replicate 2
-setType input
-subId 3123
-treatment EtOH_0.02pct
-view Alignments
-
 metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1
 objType file
 antibody GR
@@ -3543,6 +3495,54 @@ subId 3021
 tableName wgEncodeHaibTfbsEcc1GrV0416102DexaRawRep2
 treatment DEX_100nM
 view RawSignal
+
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep1
+objType file
+antibody GR
+cell ECC-1
+composite wgEncodeHaibTfbs
+controlId SL1035
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileIndex wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1035
+origAssembly hg19
+project wgEncode
+protocol v041610.2
+replicate 1
+setType input
+subId 3123
+treatment EtOH_0.02pct
+view Alignments
+
+metaObject wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep2
+objType file
+antibody GR
+cell ECC-1
+composite wgEncodeHaibTfbs
+controlId SL1087
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-19
+dateUnrestricted 2011-10-19
+fileIndex wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1GrV0416102Etoh02AlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1087
+origAssembly hg19
+project wgEncode
+protocol v041610.2
+replicate 2
+setType input
+subId 3123
+treatment EtOH_0.02pct
+view Alignments
 
 metaObject wgEncodeHaibTfbsEcc1GrV0416102Etoh02RawDataRep1
 objType file
@@ -26863,7 +26863,7 @@ composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2011-02-07
+dateSubmitted 2011-02-07
 fileName wgEncodeHaibTfbsK562ControlV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
@@ -36757,4 +36757,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1933970828
+# MAGIC: -1178996195

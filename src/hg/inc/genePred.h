@@ -290,5 +290,14 @@ void gpPartOutAsBed(struct genePred *gp, int start, int end, FILE *f,
 	char *type, int id, int minSize);
 /* Write out part of gp as bed12. */
 
+boolean codonToPos(struct genePred *gp, unsigned num, int *start, int *end);
+// map 1-based codon to genomic coordinates. If the codon crosses an exon junction, we return just the beginning (LHS) of the codon.
+// Returns true if we find the codon in given gene predition; start and end are set to appropriate three base region.
+
+boolean exonToPos(struct genePred *gp, unsigned num, int *start, int *end);
+// map 1-based exon number to genomic coordinates.
+// Returns true if we find the exon in given gene predition; start and end are set to appropriate region.
+
+
 #endif /* GENEPRED_H */
 

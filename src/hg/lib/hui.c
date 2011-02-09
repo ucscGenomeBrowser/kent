@@ -3339,7 +3339,7 @@ for(ix=0;ix<filterCount;ix++)
                 {
                 assert(*(color + 1) == '#');
                 *color++ = 0;  // The color is found inside the filters->svValues as the next string beyond value or label
-                color = strchr(val->name,'}'); // There could be a closing '}'
+                color = strchr(color,'}'); // There could be a closing '}'
                 if (color != NULL)
                     *color = 0;
                 }
@@ -3539,7 +3539,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
-    printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
+    printf("<OPTION%s%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""),(filterBy->colorFollows?" style='color: #000000;'":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
         {
@@ -3549,7 +3549,13 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             char varName[32];
             safef(varName, sizeof(varName), "%d",ix);
             char *name = strSwapChar(cloneString(slValue->name),'_',' ');
-                printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName)?" SELECTED":""),varName,name);
+            printf("<OPTION");
+            if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName))
+                printf(" SELECTED");
+            printf(" value='%s'",varName);
+            if (filterBy->colorFollows)
+                printf(" style='color: %s;'",slValue->name + strlen(slValue->name)+1);
+            printf(">%s</OPTION>\n",name);
             freeMem(name);
             }
         }
@@ -3564,7 +3570,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             if (filterBy->valueAndLabel)
                 printf(" value='%s'",slValue->name);
             if (filterBy->colorFollows)
-                printf(" style='background-color: %s;'",label + strlen(label)+1);
+                printf(" style='color: %s;'",label + strlen(label)+1);
             printf(">%s</OPTION>\n",label);
             }
         }
