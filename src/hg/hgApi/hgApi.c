@@ -51,8 +51,6 @@ makeIndent(tabs, sizeof(tabs), indent);
 dyStringPrintf(json, "\n%s}", tabs);
 }
 
-#define MDB_VAL_TRUNC_AT 64
-
 int main(int argc, char *argv[])
 {
 struct dyString *output = newDyString(10000);
@@ -206,6 +204,36 @@ else if(!strcmp(cmd, "tableMetadata"))
         }
         else
             dyStringAppend(output,"No track variable found");
+    }
+else if(sameString(cmd, "codonToPos") || sameString(cmd, "exonToPos"))
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    struct genePred *gp;
+    char *name = cgiString("name");
+    char *table = cgiString("table");
+    int num = cgiInt("num");
+    struct sqlConnection *conn = hAllocConn(database);
+    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where name = '%s'", table, name);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+        {
+        gp = genePredLoad(row);
+        boolean found;
+        int start, end;
+        if(sameString(cmd, "codonToPos"))
+            found = codonToPos(gp, num, &start, &end);
+        else
+            found = exonToPos(gp, num, &start, &end);
+        if(found)
+            // change to using JSON.
+            dyStringPrintf(output, "%s:%d-%d", gp->chrom, start + 1, end);
+        }
+    else
+        errAbort("Couldn't find name: %s", name);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
 else
     {
