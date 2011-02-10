@@ -15424,6 +15424,28 @@ tableName wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep1
+objType file
+antibody HDAC2_(SC-6296)
+cell H1-hESC
+composite wgEncodeHaibTfbs
+controlId SL1398
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-10
+dateUnrestricted 2011-11-10
+fileName wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL3935
+project wgEncode
+protocol v041610.2
+replicate 1
+setType exp
+subId 3505
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep2
 objType file
 antibody HDAC2_(SC-6296)
@@ -19469,6 +19491,28 @@ subId 3036
 tableName wgEncodeHaibTfbsHelas3GabpPcr1xRawRep2
 treatment None
 view RawSignal
+
+metaObject wgEncodeHaibTfbsHelas3NrsfPcr1xAlnRep1
+objType file
+antibody NRSF
+cell HeLa-S3
+composite wgEncodeHaibTfbs
+controlId SL592
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-10
+dateUnrestricted 2011-11-10
+fileName wgEncodeHaibTfbsHelas3NrsfPcr1xAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL679
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3505
+treatment None
+view Alignments
 
 metaObject wgEncodeHaibTfbsHelas3NrsfPcr1xAlnRep2
 objType file
@@ -36735,4 +36779,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -131100399
+# MAGIC: -2008302236
