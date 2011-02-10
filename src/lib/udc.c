@@ -176,7 +176,7 @@ if (ci == NULL || ci->socket <= 0)
 	{
 	char *newUrl = NULL;
 	int newSd = 0;
-	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, rangeUrl, &newSd, &newUrl))
 	    return -1;
 	if (newUrl)  // not sure redirection will work with byte ranges as it is now
 	    {

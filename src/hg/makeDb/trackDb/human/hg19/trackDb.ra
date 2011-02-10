@@ -1763,6 +1763,7 @@ url http://h-invitational.jp/hinv/spsoup/transcript_view?hit_id=$$
     color 30,130,210
 
 track gc5BaseBw
+release alpha
 shortLabel GC percent
 longLabel GC percent as bigWig file
 group x

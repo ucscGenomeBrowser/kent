@@ -1564,15 +1564,13 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                 }
             }
     } else if (cmd == 'zoomCodon' || cmd == 'zoomExon') {
-        var num, ajaxCmd, errorMsg;
+        var num, ajaxCmd;
         if(cmd == 'zoomCodon') {
             num = prompt("Please enter the codon number to jump to:");
-            ajaxCmd = 'codonPos';
-            errorMsg = num + " is an invalid codon for this gene";
+            ajaxCmd = 'codonToPos';
         } else {
             num = prompt("Please enter the exon number to jump to:");
-            ajaxCmd = 'exonPos';
-            errorMsg = num + " is an invalid exon number for this gene";
+            ajaxCmd = 'exonToPos';
         }
         if(num) {
             $.ajax({
@@ -1582,7 +1580,6 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                        trueSuccess: handleZoomCodon,
                        success: catchErrorOrDispatch,
                        error: errorHandler,
-                       errorMsg: errorMsg,
                        cache: true
                    });
         }
@@ -1742,6 +1739,8 @@ function loadContextMenu(img)
 {
     var menu = img.contextMenu(
         function() {
+            popUpBoxCleanup();   // Popup box is not getting closed properly so must do it here
+
             var menu = [];
             var selectedImg = makeImgTag("greenChecksm.png");
             var blankImg    = makeImgTag("invisible16.png");
@@ -1758,9 +1757,11 @@ function loadContextMenu(img)
                 // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                 // Move functionality to a hidden variable?
                 var select = $("select[name=" + id + "]");
-                var cur = select.val();
+                if (select.length > 1)  // Not really needed if $('#hgTrackUiDialog').html(""); has worked
+                    select =  [ $(select)[0] ];
+                var cur = $(select).val();
                 if(cur) {
-                    select.children().each(function(index, o) {
+                    $(select).children().each(function(index, o) {
                                                var title = $(this).val();
                                                var str = blankImg + " " + title;
                                                if(title == cur)
@@ -1983,6 +1984,17 @@ function updateTrackImg(trackName,extraData,loadingId)
 var popUpTrackName = "";
 var popUpTrackDescriptionOnly = false;
 var popSaveAllVars = null;
+
+function popUpBoxCleanup()
+{  // Clean out the popup box on close
+    if ($('#hgTrackUiDialog').html().length > 0 ) {
+        $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
+        popUpTrackName = ""; //set to defaults
+        popUpTrackDescriptionOnly = false;
+        popSaveAllVars = null;
+    }
+}
+
 function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
@@ -2132,12 +2144,10 @@ function handleTrackUi(response, status)
                                //     popSaveAllVars = getAllVars( $('#pop'), subtrack );
                                //},
                                close: function() {
-                                   $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
-                                popUpTrackName = ""; //set to defaults
-                                popUpTrackDescriptionOnly = false;
-                                popSaveAllVars = null;
+                                   popUpBoxCleanup();
                                }
                            });
+    // FIXME: Why are open and close no longer working!!!
     if(popUpTrackDescriptionOnly) {
         var myWidth =  $(window).width() - 300;
         if(myWidth > 900)
@@ -2828,14 +2838,14 @@ function reloadFloatingItem()
 
 function handleZoomCodon(response, status)
 {
-    // XXXX use formal json interface
-    if(response.length > 1) {
-        setPosition(response, 3);
+    var json = eval("(" + response + ")");
+    if(json.pos) {
+        setPosition(json.pos, 3);
         if(document.TrackForm)
             document.TrackForm.submit();
         else
             document.TrackHeaderForm.submit();
     } else {
-        alert(this.errorMsg);
+        alert(json.error);
     }
 }
