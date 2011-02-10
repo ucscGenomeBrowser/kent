@@ -2827,3 +2827,396 @@ Query OK, 277149 rows affected (9.72 sec)
 alter table wgEncodeOpenChromSynthNhekPk change column pvalue pValue float unsigned NOT NULL;
 Query OK, 276778 rows affected (9.89 sec)
 
+2011-02-09 Package up 4 composites for QA
+=========================================
+cd (downloadsHg19)/wgEncodeOpenChromSynth
+mkdir release1
+cd release1/
+cp ../index.html .
+cp ../files.txt .
+cp ../md5sum.txt .
+ln ../*.gz .
+ll ../ | grep -v \.gz$ | grep -v \.html | grep -v \.txt 
+lrwxrwxrwx  1 tdreszer   protein      38 Jan 19 14:58 supplemental -> ../wgEncodeOpenChromDnase/supplemental
+# Need suplemental !
+ln -sf ../../wgEncodeOpenChromDnase/supplemental supplemental
+ls -1 | wl  
+11 # expect 7 + 3 + 1 = 11
+cd ..
+~/bin/scripts/encodeMkChangeNotes hg19 release1 - > release1/wgEncodeOpenChromSynth.release1.notes
+cp release1/wgEncodeOpenChromSynth.release1.notes ~/kent/src/hg/makeDb/doc/encodeDccHg19/ 
+
+cd ../wgEncodeOpenChromChip/
+mkdir release1
+cd release1/
+cp ../index.html .
+cp ../files.txt .
+cp ../md5sum.txt .
+ln -sf ../../wgEncodeOpenChromDnase/supplemental supplemental
+ln ../*.gz .
+ln ../*.bam .
+ln ../*.bam.bai .
+ln ../*.bigWig .
+# Don't link bigWig.md5sum's
+ll ../ | grep -v \.gz$ | grep -v \.bam* | grep -v \.bigWig | grep -v \.md5sum | grep -v \.html | grep -v \.txt 
+# Nothing missing
+ls -1 | wl  
+356 # expect 352 + 3 + 1 = 356
+cd ..
+~/bin/scripts/encodeMkChangeNotes hg19 release1 - > release1/wgEncodeOpenChromChip.release1.notes
+could not find gbdb path in table hg19.wgEncodeOpenChromChipMcf7CmycVehAlnRep1
+table wgEncodeOpenChromChipMcf7CmycVehAlnRep1 does not exist, from filetype bam
+...
+# Okay, no bam tables for this composite!
+e release1/wgEncodeOpenChrom*.release1.notes # remove BAM warnings that are not relevant
+cp release1/wgEncodeOpenChrom*.release1.notes ~/kent/src/hg/makeDb/doc/encodeDccHg19/ 
+
+cd ../wgEncodeOpenChromDnase/
+mkdir release1
+cd release1/
+cp ../index.html .
+cp ../files.txt .
+cp ../md5sum.txt .
+ln -sf ../supplemental supplemental
+ln ../*.gz .
+ln ../*.bam .
+ln ../*.bam.bai .
+ln ../*.bigWig .
+ll ../ | grep -v \.gz$ | grep -v \.bam* | grep -v \.bigWig | grep -v \.md5sum | grep -v \.html | grep -v \.txt 
+# Nothing missing
+ls -1 | wl  
+439 # expect 435 + 3 + 1 = 439
+cd ..
+~/bin/scripts/encodeMkChangeNotes hg19 release1 - > release1/wgEncodeOpenChromDnase.release1.notes
+e release1/wgEncodeOpenChrom*.release1.notes # remove BAM warnings that are not relevant
+cp release1/wgEncodeOpenChrom*.release1.notes ~/kent/src/hg/makeDb/doc/encodeDccHg19/ 
+
+cd ../wgEncodeOpenChromFaire/
+mkdir release1
+cd release1/
+cp ../index.html .
+cp ../files.txt .
+cp ../md5sum.txt .
+ln -sf ../../wgEncodeOpenChromDnase/supplemental supplemental
+ln ../*.gz .
+ln ../*.bam .
+ln ../*.bam.bai .
+ln ../*.bigWig .
+ll ../ | grep -v \.gz$ | grep -v \.bam* | grep -v \.bigWig | grep -v \.md5sum | grep -v \.html | grep -v \.txt 
+# Nothing missing
+ls -1 | wl  
+228 # expect 224 + 3 + 1 = 228
+cd ..
+~/bin/scripts/encodeMkChangeNotes hg19 release1 - > release1/wgEncodeOpenChromFaire.release1.notes
+e release1/wgEncodeOpenChrom*.release1.notes # remove BAM warnings that are not relevant
+cp release1/wgEncodeOpenChrom*.release1.notes ~/kent/src/hg/makeDb/doc/encodeDccHg19/ 
+
+cd ~/kent/src/hg/makeDb/doc/encodeDccHg19/
+gadd wgEncodeOpenChrom*.release1.notes
+gci -m "Readying Open Chrom composites for QA"
+git up, push
+
+y=hg18 n=hg19     Dnase    FAIRE   CTCF  c-Myc  Pol2  Inp
+GM12878 Tier1     y        y       y     y      y     y       
+H1-hESC Tier1     y        y       y     y      y            
+K562 Tier1        y        y       y     y      y     y
+ K562 NaBu                 n
+ K562 urea                 n
+HeLa-S3 Tier2     y        y       y     y      y     y       
+HeLa-S3 IFNα      y        y
+HeLa-S3 IFNγ               y                             
+HepG2 Tier2       y        y       y     y      y     y       
+HUVEC Tier2       y        y       y     y      y     y
+ A549             n        n
+ Astrocy                   n
+AoSMC Serum Free  y
+ AoSMC none       n
+Chorion           y
+Cll               n 
+Fibrobl           y                n                  n    
+FibroP            y                
+ Gliobla          n        n       n            n     n
+GM12891           y        n       y
+GM12892           y        n       y
+GM18507           y        y                              
+GM19238           y                y                      
+GM19239           y        y       y                       
+GM19240           y                y                      
+H9-hESC           y
+ Hepatocytes      n
+ HMEC             n
+ HPDE6-E6E7       n
+HSMM              y
+HSMMtube          y
+ HTR8svn          n        n
+ Huh-7            n
+ Huh-7.5          n
+ iPS              n
+ LNCaP            n
+ LNCaP androgen   n
+LHSR              y?       y
+LHSR androgen     y?       y
+MCF-7             y                y     y      n     y
+ MCF-7 Hypox               n
+ MCF-7 estrogen                    n      n
+ MCF-7 vehiclen                    n      n
+Medullo           y        n                              
+Melano            y
+Monocytes-CD14+                                       n
+Myometr           y                                      
+NHBE                       y                     
+NHEK              y        y       y
+ Osteobl          n
+ PA-TU-8988T      n
+PanIslets         y        y
+ PanIsletD        n
+ pHTE             n
+ProgFib           y                y            y     y
+ Stellate         n
+ T-47D            n
+ Urothelia        n        n
+ Urothelia UT189  n        n
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1517 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1518 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1515 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1516 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1606 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1607 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1608 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1609 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1611 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1612 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1650 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1651 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1652 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1653 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1654 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1655 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1656 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1657 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1678 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1679 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1834 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1833 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1832 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2514 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1580 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1546 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1545 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1542 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1543 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1544 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1540 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1541 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1537 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1538 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1539 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1536 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1532 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1533 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1534 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1530 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1531 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1529 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1528 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1527 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1525 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1526 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1519 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1513 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1509 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1507 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1508 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1504 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1505 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1506 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1501 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1500 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1499 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1496 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1497 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1498 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1494 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1495 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1490 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1491 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1487 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1488 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1489 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1479 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1480 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1478 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1412 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1229 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2096 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2487 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2488 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2449 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2480 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2482 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2481 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2492 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2493 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2494 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2495 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2499 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2501 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2502 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2503 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2504 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2505 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2506 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2513 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2515 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2516 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2764 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2771 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2772 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2785 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2786 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2787 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2793 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3063 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3064 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3065 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3075 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3076 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3077 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3078 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3141 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3153 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3217 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3218 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3241 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3242 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3271 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3272 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3277 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3278 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3378 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3379 approved
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3496 approved
+
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1517 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1518 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1515 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1516 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1606 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1607 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1608 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1609 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1611 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1612 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1650 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1651 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1652 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1653 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1654 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1655 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1656 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1657 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1678 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1679 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1834 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1833 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1832 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2514 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1580 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1546 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1545 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1542 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1543 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1544 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1540 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1541 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1537 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1538 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1539 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1536 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1532 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1533 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1534 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1530 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1531 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1529 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1528 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1527 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1525 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1526 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1519 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1513 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1509 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1507 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1508 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1504 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1505 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1506 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1501 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1500 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1499 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1496 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1497 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1498 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1494 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1495 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1490 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1491 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1487 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1488 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1489 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1479 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1480 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1478 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1412 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1229 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2096 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2487 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2488 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2449 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2480 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2482 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2481 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2492 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2493 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2494 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2495 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2499 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2501 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2502 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2503 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2504 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2505 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2506 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2513 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2515 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2516 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2764 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2771 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2772 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2785 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2786 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2787 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2793 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3063 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3064 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3065 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3075 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3076 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3077 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3078 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3141 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3153 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3217 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3218 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3241 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3242 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3271 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3272 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3273 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3277 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3278 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3378 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3379 reviewing
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 3496 reviewing
