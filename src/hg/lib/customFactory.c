@@ -891,6 +891,8 @@ if (wordCount == 7)
     char *ctDb = ctGenomeOrCurrent(track);
     isPgSnp = rowIsPgSnp(row, ctDb);
     }
+if (type != NULL && sameType(type, fac->name) && !isPgSnp) 
+    errAbort("Type of track is pgSnp but the fields were not correct");
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isPgSnp);
