@@ -1372,4 +1372,8 @@ time_t dateToSeconds(const char *date,const char*format);
 boolean dateIsOld(const char *date,const char*format);
 // Is this string date older than now?
 
+char *dateAddTo(char *date,char *format,int addYears,int addMonths,int addDays);
+/* Add years,months,days to a formatted date and returns the new date as a cloned string
+*  format is a strptime/strftime format: %F = yyyy-mm-dd */
+
 #endif /* COMMON_H */

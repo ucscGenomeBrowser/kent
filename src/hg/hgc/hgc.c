@@ -2791,7 +2791,7 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
        trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
-void printDataVersion(struct trackDb *tdb)
+static void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
 metadataForTable(database,tdb,NULL);
@@ -2818,11 +2818,10 @@ if (restrictionDate != NULL)
     }
 }
 
-void printOrigAssembly(struct trackDb *tdb)
+static void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
 {
-trackDbOrigAssembly(tdb);
 trackDbPrintOrigAssembly(tdb, database);
 }
 
@@ -19737,8 +19736,7 @@ else
     bedPrintPos(bed, ct->fieldCount, NULL);
     }
 printTrackUiLink(ct->tdb);
-if (ct->dbTrack)
-    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
+printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 printTrackHtml(ct->tdb);
 }
 

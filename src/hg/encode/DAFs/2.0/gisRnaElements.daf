@@ -1,0 +1,42 @@
+# Data Agreement File for GIS RNA Elements $Revision: 1.0 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files view    cell    localization    rnaExtract      labProtocolId   labExpId	bioRep	 origAssembly    replicate
+#
+#files          a list of files that will be concatenated together
+#view           the view of the data as described below
+#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
+#rnaExtract     the features of rnaExtract (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
+#labProtocolId  Transcriptome specific lab protocol ID, can be comma separated list for pooled
+#labExpId       optional lab internal identifiers, can be comma sepated list for pooled
+#bioRep         Transcriptome specific bioRep ID, can be comma separated list for pooled
+#origAssembly   optional Specifies if this is new data (hg19) or remapped data (hg18)
+#replicate      the replicate number, note that it will only work if the view has (hasReplicates yes)
+#
+#NOTE:  The optional columns do not have to be in the DDF for validation
+
+
+# Lab and general info
+dafVersion        2.0
+grant             Gingeras
+lab               GIS
+dataType          RnaPet
+compositeSuffix   GisRnaPet
+group             expression
+variables         cell, localization, rnaExtract
+assembly          hg19
+validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=3,mmPerPair
+noAutoCreate      yes
+
+
+#Views
+#pooled replicates
+view             TSS
+type             gtf
+hasReplicates    no  
+required         yes
+downloadOnly     yes

@@ -3896,6 +3896,24 @@ searchType bed
 shortCircuit 1
 searchPriority 15
 
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+shortCircuit 1
+searchPriority 15
+
+searchTable numtS
+searchMethod exact
+searchType bed
+shortCircuit 1
+searchPriority 15
+
+searchTable numtSAssembled
+searchMethod exact
+searchType bed
+shortCircuit 1
+searchPriority 15
+
 
 track cactusMaf
 shortLabel cactusMaf

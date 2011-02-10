@@ -57,7 +57,7 @@ if (version)
     printf("<P><B>Data version:</B> %s<BR>\n", version);
 
 // Print lift information from trackDb, if any
-trackDbPrintOrigAssembly(tdb, db);
+(void) trackDbPrintOrigAssembly(tdb, db);
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {

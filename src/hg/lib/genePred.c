@@ -1803,3 +1803,101 @@ if (size > minSize)
     fprintf(f, "\n");
     }
 }
+
+boolean codonToPos(struct genePred *gp, unsigned num, int *start, int *end)
+{
+// map 1-based codon to genomic coordinates. If the codon crosses an exon junction, we return just the beginning (LHS) of the codon.
+// Returns true if we find the codon in given gene predition; start and end are set to appropriate three base region.
+
+int pos = -1;
+int i;
+int offset = -1;  // current 1-based offset in bases (not codons)
+if(gp->strand[0] == '+')
+    {
+    for(i = 0; i < gp->exonCount; i++)
+        {
+        if(gp->exonEnds[i] > gp->cdsStart && gp->exonStarts[i] < gp->cdsEnd)
+            {
+            int start, end;
+            if(offset == -1 && gp->cdsStart <= gp->exonEnds[i])
+                {
+                // start counting
+                start = gp->cdsStart;
+                offset = 1;
+                }
+            else
+                start = gp->exonStarts[i];
+            if(gp->cdsEnd < gp->exonEnds[i])
+                end = gp->cdsEnd;
+            else
+                end = gp->exonEnds[i];
+            int next = offset + end - start;
+            if(next > (num * 3 - 2))
+                {
+                pos = start + (((num - 1) * 3 + 1) - offset);
+                break;
+                }
+            else
+                offset = next;
+            }
+        }
+    }
+else
+    {
+    for(i = gp->exonCount - 1; i >= 0; i--)
+        {
+        if(gp->exonStarts[i] < gp->cdsEnd && gp->exonEnds[i] >= gp->cdsEnd)
+            {
+            int start, end; // start here is really the RHS, and end is the LHS
+            if(offset == -1 && gp->cdsEnd >= gp->exonStarts[i])
+                {
+                // start counting
+                start = gp->cdsEnd;
+                offset = 1;
+                }
+            else
+                start = gp->exonEnds[i];
+            if(gp->cdsStart > gp->exonStarts[i])
+                end = gp->cdsStart;
+            else
+                end = gp->exonStarts[i];
+            int next = offset + start - end;
+            if(next > num * 3)
+                {
+                pos = start - (num*3 - offset) - 1;
+                break;
+                }
+            else
+                offset = next;
+            }
+        }
+    }
+if(pos == -1)
+    return FALSE;
+else
+    {
+    *start = pos;
+    *end = pos + 3;
+    return TRUE;
+    }
+}
+
+boolean exonToPos(struct genePred *gp, unsigned num, int *start, int *end)
+{
+// map 1-based exon number to genomic coordinates.
+// Returns true if we find the exon in given gene predition; start and end are set to appropriate region.
+
+if(num == 0 || num > gp->exonCount)
+    return FALSE;
+else if(gp->strand[0] == '+')
+    {
+    *start = gp->exonStarts[num - 1];
+    *end = gp->exonEnds[num - 1];
+    }
+else
+    {
+    *start = gp->exonStarts[gp->exonCount - num];
+    *end = gp->exonEnds[gp->exonCount - num];
+    }
+return TRUE;
+}
