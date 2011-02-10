@@ -1048,6 +1048,7 @@ char *sep = NULL;
 char *headerName = NULL;
 char *headerVal = NULL;
 boolean redirect = FALSE;
+boolean byteRangeUsed = (strstr(url,";byterange=") != NULL);
 
 boolean mustUseProxy = FALSE;  /* User must use proxy 305 error*/
 char *proxyLocation = NULL;
@@ -1108,9 +1109,19 @@ while(TRUE)
 	    {
 	    mustUseProxyAuth = TRUE;
 	    }
-	else if (!(sameString(code, "200") || sameString(code, "206")))
+	else if (byteRangeUsed)
 	    {
-	    warn("%s: %s %s\n", url, code, line);
+	    if (!sameString(code, "206"))
+		{
+		if (sameString(code, "200"))
+		    warn("Byte-range request was ignored by server. ");
+		warn("Expected Partial Content 206. %s: %s %s\n", url, code, line);
+		return FALSE;
+		}
+	    }
+	else if (!sameString(code, "200"))
+	    {
+	    warn("Expected 200 %s: %s %s\n", url, code, line);
 	    return FALSE;
 	    }
 	line = buf;  /* restore it */
