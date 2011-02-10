@@ -8268,7 +8268,7 @@ term GIS-Ruan
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia) PROVISIONAL
+description Ruan - Genome Institute of Singapore (Chia) 
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8694,7 +8694,7 @@ projectName BU
 term Ruan
 tag ruan
 type grant
-description Ruan        PROVISIONAL
+description Ruan        
 grantInst Genome Institute of Singapore
 projectName ChIA-PET
 
@@ -8801,7 +8801,7 @@ projectName PSU
 term White
 tag white
 type grant
-description White PROVISIONAL
+description White 
 grantInst University of Chicago
 projectName UChicago
 
