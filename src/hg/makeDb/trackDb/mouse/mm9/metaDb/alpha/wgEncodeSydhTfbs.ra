@@ -2136,6 +2136,7 @@ control IgG-Yale
 controlId MEL/DMSO_2.0pct/Input/IgG-Yale
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2011-02-03
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk.narrowPeak.gz
@@ -2146,7 +2147,7 @@ project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 1857
+subId 3502
 tableName wgEncodeSydhTfbsMelCtcfDmso20IggyalePk
 treatment DMSO_2.0pct
 view Peaks
@@ -3905,6 +3906,7 @@ control IgG-rab
 controlId MEL/None/Input/IgG-rab
 dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2011-02-03
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk.narrowPeak.gz
@@ -3915,7 +3917,7 @@ project wgEncode
 setType exp
 sex M
 strain Unknown
-subId 2539
+subId 3502
 tableName wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 treatment DMSO_2.0pct
 view Peaks
@@ -4439,4 +4441,4 @@ tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: 953884916
+# MAGIC: -335216564

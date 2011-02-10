@@ -14276,3 +14276,17 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 
 
 #############################################################################
+# BUILD DECIPHER WITH NEW HG19 RELEASE (Done Fan, 2/8/11)
+
+# The decipher track is built by an automated process.  The following two scripts:
+
+#   kent/src/utils/decipher/checkDecipher.sh
+#   kent/src/utils/decipher/buildDecipher 
+
+#are used to automatically detect update on DECIPHER ftp sites and then
+#download and build the decipher track.
+
+# checkDecipher.sh is invoked by a cron job, it will call buildDecipher to build 
+# the decipher track after the new data are downloaded.
+
+#############################################################################

@@ -38,7 +38,7 @@ subGroup4 control Control IGGmus=IgG-mus IGGrab=IgG-rab IGGrat=IgG-rat IGGYale=I
 subGroup5 treatment Treatment None=None DMSO20=DMSO_2.0pct 
 dimensions dimensionX=cellType dimensionY=factor dimZ=treatment
 dimensionZchecked None,DMSO20
-filterComposite dimZ=multi
+#filterComposite dimZ=multi
 sortOrder cellType=+ factor=+ treatment=+ control=+ view=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody treatment=treatment
@@ -96,7 +96,7 @@ wgEncode 1
 	        subGroups view=Peaks factor=CTCFC20 cellType=MEL control=IGGYale treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
-	        # subId=1857 dateSubmitted=2010-07-09
+		# subId=3502 dateSubmitted=2011-02-03		
 
 	        track wgEncodeSydhTfbsMelRad21Dmso20IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
@@ -105,7 +105,7 @@ wgEncode 1
 	        subGroups view=Peaks factor=RAD21 cellType=MEL control=IGGrab treatment=DMSO20
 	        type narrowPeak
 	        color 46,0,184
-	        # subId=2539 dateSubmitted=2010-10-20
+		# subId=3502 dateSubmitted=2011-02-03
 
 	        track wgEncodeSydhTfbsMelRad21IggrabPk
 	        parent wgEncodeSydhTfbsViewPeaks off
