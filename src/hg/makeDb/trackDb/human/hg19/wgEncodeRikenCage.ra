@@ -11,6 +11,7 @@ subGroup5 rep Rep rep0=0 rep1=1 rep2=2 rep3=3 rep4=4
 dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dimensionB=rep
 dimensionCchecked longPolyA,longNonPolyA,total
 dimensionBchecked rep0,rep1,rep2,rep3,rep4
+fileSortOrder cell=Cell_Line labProtocolId=<i>Protocol<BR>ID</i>  localization=Localization rnaExtract=RNA<BR>Extract view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
 dragAndDrop subTracks
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
@@ -526,13 +527,13 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=1806 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562NucleolusTotalPlusClusters
-        parent wgEncodeRikenCageViewPlusClusters on
-        shortLabel K562 nlos tot + 0
-        longLabel K562 nucleolus Total CAGE Plus strand start sites from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
-        type bigWig 0.040000 4464.319824
-        color 46,0,184
+        #track wgEncodeRikenCageK562NucleolusTotalPlusClusters
+        #parent wgEncodeRikenCageViewPlusClusters on
+        #shortLabel K562 nlos tot + 0
+        #longLabel K562 nucleolus Total CAGE Plus strand start sites from ENCODE/RIKEN
+        #subGroups view=PlusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
+        #type bigWig 0.040000 4464.319824
+        #color 46,0,184
         # subId=1807 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
@@ -609,14 +610,14 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
 
-        track wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
-        parent wgEncodeRikenCageViewPlusClusters on
-        shortLabel K562 nlos tot 1
-        longLabel K562 nucleolus total CAGE Plus strand start sites replicate 1 from ENCODE/RIKEN
-        subGroups view=PlusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
-        type bigWig 0.050000 38081.750000
-        origAssembly hg19
-        color 46,0,184
+        #track wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
+        #parent wgEncodeRikenCageViewPlusClusters on
+        #shortLabel K562 nlos tot 0
+        #longLabel K562 nucleolus total CAGE Plus strand start sites from ENCODE/RIKEN
+        #subGroups view=PlusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
+        #type bigWig 0.050000 38081.750000
+        #origAssembly hg19
+        #color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
 
 
@@ -700,13 +701,13 @@ superTrack wgEncodeRnaSeqSuper dense
         color 46,0,184
         # subId=1806 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562NucleolusTotalMinusClusters
-        parent wgEncodeRikenCageViewMinusClusters on
-        shortLabel K562 nlos tot - 0
-        longLabel K562 nucleolus Total CAGE Minus strand start sites from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
-        type bigWig 0.040000 4464.319824
-        color 46,0,184
+        #track wgEncodeRikenCageK562NucleolusTotalMinusClusters
+        #parent wgEncodeRikenCageViewMinusClusters on
+        #shortLabel K562 nlos tot - 0
+        #longLabel K562 nucleolus Total CAGE Minus strand start sites from ENCODE/RIKEN
+        #subGroups view=MinusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
+        #type bigWig 0.040000 4464.319824
+        #color 46,0,184
         # subId=1807 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562NucleoplasmTotalMinusClusters
@@ -1211,14 +1212,14 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
 
-        track wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
-        parent wgEncodeRikenCageViewMinusClusters on
-        shortLabel K562 nlos tot 1
-        longLabel K562 nucleolus total CAGE Minus strand start sites rep 1 from ENCODE/RIKEN
-        subGroups view=MinusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
-        type bigWig 0.050000 19662.699219
-        origAssembly hg19
-        color 46,0,184
+        #track wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
+        #parent wgEncodeRikenCageViewMinusClusters on
+        #shortLabel K562 nlos tot 0
+        #longLabel K562 nucleolus total CAGE Minus strand start sites from ENCODE/RIKEN
+        #subGroups view=MinusRawSignal cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
+        #type bigWig 0.050000 19662.699219
+        #origAssembly hg19
+        #color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
 
 
@@ -1310,13 +1311,13 @@ superTrack wgEncodeRnaSeqSuper dense
         # subId=1806 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562NucleolusTotalAln
-        parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 nlos tot A 0
-        longLabel K562 nucleolus Total CAGE Alignments from ENCODE/RIKEN
-        subGroups view=Alignments cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
-        type bam
-        color 46,0,184
+       # track wgEncodeRikenCageK562NucleolusTotalAln
+       # parent wgEncodeRikenCageViewAlignments off
+       # shortLabel K562 nlos tot A 0
+       # longLabel K562 nucleolus Total CAGE Alignments from ENCODE/RIKEN
+       # subGroups view=Alignments cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
+       # type bam
+       # color 46,0,184
         # subId=1807 dateSubmitted=2010-06-21
 
 
@@ -1822,14 +1823,14 @@ superTrack wgEncodeRnaSeqSuper dense
         color 0,119,158
         # subId=2783 dateSubmitted=2010-10-29
 
-        track wgEncodeRikenCageK562NucleolusTotalAlnRep1
-        parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 nlos tot A 1
-        longLabel K562 nucleolus total CAGE Alignments rep 1 from ENCODE/RIKEN
-        subGroups view=Alignments cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
-        type bam
-        origAssembly hg19
-        color 46,0,184
+        #track wgEncodeRikenCageK562NucleolusTotalAlnRep1
+        #parent wgEncodeRikenCageViewAlignments off
+        #shortLabel K562 nlos tot A 0
+        #longLabel K562 nucleolus total CAGE Alignments from ENCODE/RIKEN
+        #subGroups view=Alignments cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep0
+        #type bam
+        #origAssembly hg19
+        #color 46,0,184
         # subId=2929 dateSubmitted=2010-11-09
 
 
