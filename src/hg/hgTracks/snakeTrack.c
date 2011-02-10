@@ -252,7 +252,7 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 		x2 = round((double)((int)e-winStart)*scale) + xOff + 8;
 		x3 = round((double)((int)sf->end-winStart)*scale) + xOff;
 		w = x2-x1;
-       hvGfxLine(hvg, x1, y, x2, y, color);
+       //hvGfxLine(hvg, x1, y, x2, y, color);
 		hvGfxLine(hvg, x1, midY, x2, midY, color);
 		hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
 		hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
@@ -788,8 +788,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	qs = chain.qStart;
 	}
     char buffer[1024];
-    snprintf(buffer, sizeof(buffer), "%s %c %dk", 
-    	chain.qName, chain.qStrand, qs/1000);
+    snprintf(buffer, sizeof(buffer), "%s", chain.qName);
+    //snprintf(buffer, sizeof(buffer), "%s %c %dk", 
+    	//chain.qName, chain.qStrand, qs/1000);
     lf->name = cloneString(buffer);
     //snprintf(lf->name, sizeof(lf->name), "%s %c %dk", 
     //	chain.qName, chain.qStrand, qs/1000);
