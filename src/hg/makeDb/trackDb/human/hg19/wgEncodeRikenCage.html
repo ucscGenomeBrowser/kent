@@ -1,3 +1,8 @@
+<H2>Release Notes</H2>
+<P>
+This is release 1 on hg19. The <A TARGET=_BLANK HREF="/cgi-bin/hgTrackUi?g=wgEncodeRikenCage"> data on hg18</A> was remapped and indicated in this release as replicate 0. The new data for this track was done with a different process and in some cases replaced the data from hg18. The new data has standard replicate numbers.
+</P>
+
 <H2>Description</H2>
 <P>
 This track shows 5' cap analysis gene expression (CAGE) tags and clusters in 
@@ -25,13 +30,13 @@ you wish to hide.</P>
 
 <P>This track contains the following views:
 <DL>
-<DT><I>Plus</I> and <I>Minus</I> <I>Clusters</I>
+<DT><I>Plus</I> and <I>Minus</I> <I>Signals</I>
 <DD>These views display clusters of overlapping read mappings on the
 forward and reverse genomic strands.
 <DT><i>Alignments</i></DT>
 <DD>The Alignments view shows reads mapped to the genome and indicates where
 bases may mismatch. Every mapped read is displayed, i.e. uncollapsed. 
-The alignment file follows the standard SAM format of Bowtie output with the following additions: The custom tag XP. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format.
+The alignment file follows the standard SAM format of Bowtie output. The custom tag XP can be ignored. See the <a href="http://bowtie-bio.sourceforge.net/manual.shtml#sam-bowtie-output" target=_blank>Bowtie Manual</a> for more information about the SAM Bowtie output (including other tags) and the <a href="http://samtools.sourceforge.net/SAM1.pdf#page=4" target=_blank>SAM Format Specification</a> for more information on the SAM/BAM file format.
  Where mapping quality is not available for this track a score of 255 is used in accordance with the SAM Format Specification. Also, where the sequence quality scores are not available, all scores are displayed as 40.
 </dd></dl>
 
