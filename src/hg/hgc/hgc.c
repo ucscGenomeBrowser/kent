@@ -19736,8 +19736,7 @@ else
     bedPrintPos(bed, ct->fieldCount, NULL);
     }
 printTrackUiLink(ct->tdb);
-if (ct->dbTrack)
-    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
+printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 printTrackHtml(ct->tdb);
 }
 
