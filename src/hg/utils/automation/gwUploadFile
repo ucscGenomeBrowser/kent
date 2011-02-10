@@ -5,16 +5,18 @@ sys.path.append("/hive/data/outside/ncbi/incidentDb/")
 import mwclient
 
 def usage():
-    sys.stderr.write('''gwUploadFile.py -- given a file, load into genomewiki specified image name
+    sys.stderr.write('''gwUploadFile -- given a file, load into genomewiki as the specified image name
 usage:
-    gwUploadFile.py [options] <file.bb> <imageName>
-        load file.bb into genome wiki under image name: Image:imageName
+    gwUploadFile [options] <file.bb> <ImageName>
+        load file.bb into genome wiki under image name: Image:ImageName
 options:
-    --site=genomewiki.ucsc.edu -- use to specify a different site
-    --debug  -- show full stack trace on error exits
-    -h  -- displays this help message
+    -s, --site=genomewiki.ucsc.edu -- use to specify a different site
+    -d, --debug  -- show full stack trace on error exits
+    -h, --help  -- displays this help message
     -V, --version -- displays version of this program
 
+Note: Using imageName will upper case the first letter to: ImageName
+      in the wiki because the wiki does that for names.
 Note: requires a .gwLogin file for login name and password to genomewiki
       either in current directory ./.gwLogin or in your HOME/.gwLogin
       A single line file with two words: UserName passWd
@@ -29,11 +31,11 @@ def loginCredentials():
     gwLogin = ".gwLogin"
     try:
 	fh = open(gwLogin, 'r')
-    except IOError:
+    except Exception:
 	gwLogin = home + "/.gwLogin"
 	try:
 	    fh = open(gwLogin, 'r')
-	except IOError:
+	except Exception:
 	    raise "ERROR: can not read ./.gwLogin or HOME/.gwLogin password file"
     mode = stat.S_IMODE(os.lstat(gwLogin)[stat.ST_MODE])
     for level in "GRP", "OTH":
@@ -53,11 +55,11 @@ def loginCredentials():
 def parseOptions():
     # return: file, pageName, site
     try:
-	opts, args = getopt.gnu_getopt(sys.argv[1:],
-	    'hV', ['debug', 'help', 'version', 'site='])
+	opts, args = getopt.getopt(sys.argv[1:],
+	    'dhs:V', ['debug', 'help', 'version', 'site='])
     except Exception:
 	usage()
-	raise "ERROR: Unrecognized option"
+	raise "ERROR: unrecognized option"
     if len(args) != 2:
 	usage()
 	raise
@@ -67,23 +69,26 @@ def parseOptions():
 	if o in ("-h", "--help"):
 	    usage()
 	    raise
-	elif o in ("-debug", "--debug"):
+	elif o in ("-d", "--debug"):
 	    sys.tracebacklimit = 10
 	    sys.stderr.write('# setting tracebacklimit to 10\n')
 	elif o in ("-V", "--version"):
-	    sys.stderr.write('gwUploadFile version 1.0')
-	elif o in ("-site", "--site"):
+	    sys.stderr.write('# gwUploadFile version 1.0\n')
+	elif o in ("-s", "--site"):
 	    site = a
 	else:
 	    assert False, "unrecognized option"
     file = args[0]
     pageName = args[1]
+    # force upper case on the first letter since this is what genomewiki
+    #	would be doing in any case
+    PageName = pageName[0].capitalize() + pageName[1:]
     try:
 	fh = open(file, 'r')
     except Exception:
-	raise "ERROR: can not read file: '%s'" % (file, )
+	raise "ERROR: can not read file to upload: '%s'" % (file, )
     fh.close()
-    return file, pageName, site
+    return file, PageName, site
 
 ######################################################################
 #
@@ -97,17 +102,21 @@ try:
     sys.stderr.write("# siteUrl: %s\n" % (siteUrl, ))
     sys.stderr.write("# traceBackLimit: %d\n" % (sys.tracebacklimit, ))
     site = mwclient.Site(siteUrl,path='/')
-    site.login(loginName, passWd)
+    try:
+	site.login(loginName, passWd)
+    except Exception:
+	sys.stderr.write("ERROR: can not login as user '%s'\n" % (loginName, ))
+	raise
     try:
 	fh = open(file, 'rb')
-    except IOError:
-	sys.stderr.write("ERROR: can not read specified file: %s" % (file, ))
-	sys.exit(255)
+    except Exception:
+	sys.stderr.write("ERROR: can not read file to upload: '%s'\n" % (file, ))
+	raise
     try:
 	site.upload(fh, pageName, 'test upload', ignore=True)
-    except:
-	sys.stderr.write("ERROR: upload returned some kind of error")
-	sys.exit(255)
+    except Exception:
+	sys.stderr.write('ERROR: upload returned some kind of error')
+	raise
     fh.close()
     # Printing imageusage information
     image = site.Images[pageName]
@@ -115,7 +124,7 @@ try:
     sys.stderr.write('Image', image.name.encode('utf-8'), 'usage:')
     for page in image.imageusage():
 	sys.stderr.write('Used:', page.name.encode('utf-8'), '; namespace', page.namespace)
-    sys.exit(0)
 except Exception, ex:
+    sys.stderr.write('ERROR: some kind of problem in main\n');
     print ex
     sys.exit(255)
