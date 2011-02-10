@@ -5432,7 +5432,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep1
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -5457,7 +5457,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep2
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -5482,7 +5482,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xPkRep1
 objType table
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -5508,7 +5508,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xPkRep2
 objType table
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -5534,7 +5534,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878EbfRawDataRep1
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -5558,7 +5558,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878EbfRawDataRep2
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6521,7 +6521,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep1
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6546,7 +6546,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep2
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6571,7 +6571,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep1
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6597,7 +6597,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep2
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6623,7 +6623,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep1
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6646,7 +6646,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep2
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6669,7 +6669,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878Irf4RawDataRep1
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6693,7 +6693,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878Irf4RawDataRep2
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -36758,4 +36758,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2061979730
+# MAGIC: -1087310690
