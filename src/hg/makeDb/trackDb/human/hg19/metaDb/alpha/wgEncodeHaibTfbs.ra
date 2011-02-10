@@ -29746,7 +29746,7 @@ objType file
 antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -29769,7 +29769,7 @@ objType file
 antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -29792,7 +29792,7 @@ objType table
 antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -29816,7 +29816,7 @@ objType table
 antibody Pol2-4H8
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -31914,7 +31914,7 @@ objType file
 antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -31937,7 +31937,7 @@ objType file
 antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -31960,7 +31960,7 @@ objType table
 antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -31984,7 +31984,7 @@ objType table
 antibody TAF1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32740,7 +32740,7 @@ objType file
 antibody YY1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -32787,7 +32787,7 @@ objType table
 antibody YY1
 cell K562
 composite wgEncodeHaibTfbs
-controlId SL1613
+controlId SL2455
 dataType ChipSeq
 dataVersion ENCODE Jan 2011. Freeze
 dateSubmitted 2010-10-25
@@ -36757,4 +36757,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1178996195
+# MAGIC: -1178995645
