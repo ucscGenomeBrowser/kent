@@ -132,11 +132,21 @@ int netUrlOpenSockets(char *url, int *retCtrlSocket);
 
 struct hash;
 
+int netUrlHeadExt(char *url, char *method, struct hash *hash);
+/* Go get head and return status.  Return negative number if
+ * can't get head. If hash is non-null, fill it with header
+ * lines with upper cased keywords for case-insensitive lookup,
+ * including hopefully CONTENT-TYPE: . */
+
 int netUrlHead(char *url, struct hash *hash);
 /* Go get head and return status.  Return negative number if
  * can't get head. If hash is non-null, fill it with header
  * lines with upper cased keywords for case-insensitive lookup, 
  * including hopefully CONTENT-TYPE: . */
+
+long long netUrlSizeByRangeResponse(char *url);
+/* Use byteRange as a work-around alternate method to get file size (content-length).  
+ * Return negative number if can't get. */
 
 struct lineFile *netLineFileOpen(char *url);
 /* Return a lineFile attached to url.  This one
