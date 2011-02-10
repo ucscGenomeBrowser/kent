@@ -20694,29 +20694,6 @@ tableName wgEncodeHaibTfbsHepg2ControlPcr1xRawRep1
 treatment None
 view RawSignal
 
-metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2
-objType table
-antibody Control
-cell HepG2
-composite wgEncodeHaibTfbs
-controlId SL1401
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-fileName wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL1401
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-subId 3026
-tableName wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2
-treatment None
-view RawSignal
-
 metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawRep3
 objType table
 antibody Control
@@ -36758,4 +36735,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1087310690
+# MAGIC: -131100399

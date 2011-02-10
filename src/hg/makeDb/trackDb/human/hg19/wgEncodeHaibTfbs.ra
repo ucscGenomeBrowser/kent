@@ -4322,16 +4322,6 @@ noInherit on
         color 153,38,0
         # subId=3035 dateSubmitted=2011-01-20
 
-        track wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2
-        release alpha
-        parent wgEncodeHaibTfbsViewRawSignal off
-        shortLabel HepG2 Control Raw 2
-        longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Raw Signal Rep 2 (Control in HepG2 cells)
-        subGroups view=RawSignal factor=zControl cellType=HEPG2 protocol=PCR1x treatment=None rep=rep2
-        type bigWig 0.261423 98.883301
-        color 189,0,157
-        # subId=3026 dateSubmitted=2010-11-29
-
         track wgEncodeHaibTfbsHepg2Hey1V0416101RawRep2
         release alpha
         parent wgEncodeHaibTfbsViewRawSignal off
