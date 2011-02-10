@@ -15434,6 +15434,7 @@ dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-21
 dateUnrestricted 2011-10-21
+fileIndex wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
@@ -36757,4 +36758,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -1178995645
+# MAGIC: -2061979730
