@@ -1,4 +1,4 @@
-# Data Agreement File for PET Ditag project $Revision: 1.8 $
+# Data Agreement File for GIS RNA Elements $Revision: 1.0 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -33,44 +33,10 @@ validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=3,mmPerPair
 noAutoCreate      yes
 
 
-# Track/view definition
-view             PlusRawSig
-longLabelPrefix  GIS RNA PET Plus Raw Signal 
-type             bigWig
-hasReplicates    yes
-required         yes
-
-view             MinusRawSig
-longLabelPrefix  GIS RNA PET Minus Raw Signal 
-type             bigWig
-hasReplicates    yes
-required         yes
-
-view             Alignments
-longLabelPrefix  GIS RNA PET Alignments
-type             bam
-hasReplicates    yes
-required         yes
-
-view             Clusters
-longLabelPrefix  GIS RNA PET Clusters
-type             bed 12
-hasReplicates    yes
-required         no
-
-view             FastqRd1
-type             fastq  
-hasReplicates    yes
-required         yes
-
-view             FastqRd2
-type             fastq  
-hasReplicates    yes
-required         yes
-
-# Optional extra elements view
+#Views
+#pooled replicates
 view             TSS
 type             gtf
-hasReplicates    yes
-required         no 
+hasReplicates    no  
+required         yes
 downloadOnly     yes

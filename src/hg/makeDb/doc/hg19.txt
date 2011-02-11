@@ -14290,3 +14290,22 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
 # the decipher track after the new data are downloaded.
 
 #############################################################################
+# NCBI Incident database (DONE - 2011-02-10 - Hiram)
+    # this procedure is run as a cron job in Hiram's account:
+
+    #	43 09 * * * /hive/data/outside/ncbi/incidentDb/runUpdate.sh makeItSo
+
+    # using the two scrips there: runUpdate.sh and update.sh
+    # which are checked into the source tree as files:
+    #	src/hg/utils/automation/ncbiIncidentUpdate.sh
+    #	src/hg/utils/automation/ncbiRunIncidentUpdate.sh
+
+    # they fetch the XML files from NCBI, convert them to SQL text
+    # files, construct a bigBed file, and pushes it to genomewiki if
+    # it is an update from previous
+
+    # the table in the dataBase is: ncbiIncidentDb
+    # which is the URL to the bb file, a single row:
+    # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
+
+#############################################################################
