@@ -2825,12 +2825,13 @@ cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
+dateResubmitted 2011-02-11
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2843,12 +2844,13 @@ cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
+dateResubmitted 2011-02-11
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2861,8 +2863,9 @@ cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
+dateResubmitted 2011-02-11
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
@@ -2879,8 +2882,9 @@ cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
+dateResubmitted 2011-02-11
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
 grant Crawford
 lab UNC(Lieb)
@@ -2939,8 +2943,9 @@ cell NHBE
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
 dataVersion post ENCODE Jan 2011 Freeze
-dateSubmitted 2011-02-11
-dateUnrestricted 2011-11-11
+dateResubmitted 2011-02-11
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeSig.bigWig
 grant Crawford
 lab UNC(Lieb)
@@ -3449,4 +3454,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 1224365520
+# MAGIC: 149053699
