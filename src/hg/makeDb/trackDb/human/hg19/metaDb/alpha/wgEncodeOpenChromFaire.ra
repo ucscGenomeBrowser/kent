@@ -2819,6 +2819,78 @@ subId 2501
 tableName wgEncodeOpenChromFaireMedulloSig
 view Signal
 
+metaObject wgEncodeOpenChromFaireNhbeAlnRep1
+objType file
+cell NHBE
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-11
+dateUnrestricted 2011-11-11
+fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3507
+view Alignments
+
+metaObject wgEncodeOpenChromFaireNhbeAlnRep2
+objType file
+cell NHBE
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-11
+dateUnrestricted 2011-11-11
+fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3507
+view Alignments
+
+metaObject wgEncodeOpenChromFaireNhbeBaseOverlapSignal
+objType table
+cell NHBE
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-11
+dateUnrestricted 2011-11-11
+fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion baseAlignCounts.pl v 1
+origAssembly hg18
+project wgEncode
+subId 3507
+tableName wgEncodeOpenChromFaireNhbeBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireNhbePk
+objType table
+cell NHBE
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-11
+dateUnrestricted 2011-11-11
+fileName wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
+grant Crawford
+lab UNC(Lieb)
+labVersion p-value cutoff: 0.1
+origAssembly hg18
+project wgEncode
+subId 3507
+tableName wgEncodeOpenChromFaireNhbePk
+view Peaks
+
 metaObject wgEncodeOpenChromFaireNhbeRawDataRep1
 objType file
 cell NHBE
@@ -2860,6 +2932,24 @@ replicate 2
 subId 3153
 treatment None
 view RawData
+
+metaObject wgEncodeOpenChromFaireNhbeSig
+objType table
+cell NHBE
+composite wgEncodeOpenChromFaire
+dataType FaireSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-11
+dateUnrestricted 2011-11-11
+fileName wgEncodeOpenChromFaireNhbeSig.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion fseq v 1.84, iff_generic_female
+origAssembly hg18
+project wgEncode
+subId 3507
+tableName wgEncodeOpenChromFaireNhbeSig
+view Signal
 
 metaObject wgEncodeOpenChromFaireNhekAlnRep1
 objType file
@@ -3359,4 +3449,4 @@ tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: -60498279
+# MAGIC: 1224365520
