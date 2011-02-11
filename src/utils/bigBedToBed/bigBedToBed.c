@@ -6,6 +6,7 @@
 #include "localmem.h"
 #include "udc.h"
 #include "bigBed.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: bigBedToBed.c,v 1.7 2009/09/08 19:50:24 kent Exp $";
 
@@ -94,5 +95,7 @@ udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (argc != 3)
     usage();
 bigBedToBed(argv[1], argv[2]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }
