@@ -7,6 +7,7 @@
 #include "bigBed.h"
 #include "asParse.h"
 #include "udc.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: bigBedSummary.c,v 1.7 2009/09/08 19:50:24 kent Exp $";
 
@@ -113,5 +114,7 @@ else
 	usage();
     bigBedSummary(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]), sqlUnsigned(argv[5]));
     }
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

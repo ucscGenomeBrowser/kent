@@ -7,6 +7,7 @@
 #include "options.h"
 #include "udc.h"
 #include "bigWig.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: bigWigToWig.c,v 1.1 2009/11/13 00:26:28 kent Exp $";
 
@@ -75,5 +76,7 @@ clStart = optionInt("start", clStart);
 clEnd = optionInt("end", clEnd);
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 bigWigToWig(argv[1], argv[2]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }
