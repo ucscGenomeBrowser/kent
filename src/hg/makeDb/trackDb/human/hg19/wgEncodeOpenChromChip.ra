@@ -18,7 +18,7 @@
 
 track wgEncodeOpenChromChip
 compositeTrack on
-superTrack wgEncodeTfBindingSuper full
+superTrack wgEncodeTfBindingSuper dense
 shortLabel UTA TFBS
 longLabel Open Chromatin TFBS by ChIP-seq from ENCODE/UTA
 group regulation
@@ -415,7 +415,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
 
     track wgEncodeOpenChromChipViewSignal
-    shortLabel Signal (F-Seq Density)
+    shortLabel ChIP F-Seq Density Signal
     view SIG
     visibility full
     parent wgEncodeOpenChromChip

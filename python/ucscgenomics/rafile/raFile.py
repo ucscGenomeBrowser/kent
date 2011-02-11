@@ -1,20 +1,25 @@
-#
-# Holds raDict class which is an internal representation of
-# the data held in the RA file. Essentially just a dict that
-# also has a list to preserve the computationally arbitrary
-# order we want an RA entry to be in.
-#
-
 import sys
 import re
 
 class _OrderedDict(object):
+    """
+    Abstract class containing all shared functionality between the RaFile and
+    RaEntry classes.
+
+    Contains a dictionary to hold each entry, as well as a list to hold the
+    computationally arbitrary ordering we wish to preserve between reads and
+    writes.  
+    """
 
     def __init__(self):
         self._dictionary = dict()
         self._ordering = list()
 
     def add(self, key, value):
+        """
+        Add a key-value pair to the dictionary, and put its key in the list.
+        """
+
         key = key.strip()
 
         if (key in self._dictionary):
@@ -28,6 +33,10 @@ class _OrderedDict(object):
         self._ordering.append(key)
         
     def remove(self, key):
+        """
+        Remove a key-value pair from the dictionary, and the key from the list.
+        """
+
         key = key.strip()
 
         if (key not in self._dictionary):
@@ -40,20 +49,54 @@ class _OrderedDict(object):
         self._ordering.remove(key)
 
     def getValue(self, key):
+        """
+        Return the value associated with a key in the dictionary.
+        """
+
         if (key not in self._dictionary):
-            raise KeyError()
+            return None
 
         return self._dictionary[key]
 
+    def getKeyAt(self, index):
+        """
+        Return the key associated with the index in this list
+        """
+
+        if (index > len(self._ordering)):
+            raise IndexError()
+
+        return self._ordering[index]
+
+    def getValueAt(self, index):
+        """
+        Return the value associated with an index in the list.
+        """
+
+        if (index > len(self._ordering)):
+            raise IndexError()
+
+        return self._dictionary[self._ordering[index]]
+
+    def count(self):
+        """
+        Return the length of the list.
+        """
+
+        return len(self._ordering)
+
+
 class RaFile(_OrderedDict):
-
-    def addComment(self, comment):
-        if not comment.startswith('#'):
-            raise Exception()
-
-        self._ordering.append(comment)
+    """
+    Stores an Ra file in a set of entries, one for each stanza in the file.
+    """
 
     def read(self, filePath, keyField):
+        """
+        Reads an rafile, separating it by keyField, and internalizes it.
+
+        keyField must be the first field in each entry.
+        """
 
         file = open(filePath, 'r')
         raEntry = RaEntry()
@@ -63,9 +106,9 @@ class RaFile(_OrderedDict):
 
             line = line.strip()
 
-            # remove all commented lines
+            # put all commented lines in the list only
             if (line.startswith('#')):
-                self.addComment(line)
+                self._ordering.append(line)
                 continue
 
             # a blank line indicates we need to move to the next entry
@@ -101,10 +144,21 @@ class RaFile(_OrderedDict):
         file.close()
 
     def write(self):
+        """
+        Write out the entire RaFile.
+        """
+
         print self
 
     def writeEntry(self, key):
+        """
+        Write out a single stanza, specified by key
+        """
+
         print self.getValue(key)
+
+    def __iter__(self):
+        return self
 
     def __str__(self):
         str = ''
@@ -116,6 +170,18 @@ class RaFile(_OrderedDict):
         return str
 
 class RaEntry(_OrderedDict):
+    """
+    Holds an individual entry in the RaFile.
+    """
+
+    def __init__(self):
+        
+
+    def next(self):
+        
+
+    def __iter__(self):
+        return self
 
     def __str__(self):
         str = ''

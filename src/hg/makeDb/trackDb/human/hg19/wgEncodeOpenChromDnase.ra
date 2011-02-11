@@ -783,7 +783,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PanIsle DNase DS
-        longLabel ENCODE Open Chromatin Duke DNaseI HS F-Seq Signal (PanIslets cells)
+        longLabel ENCODE Open Chromatin Duke DNaseI HS Density Signal (PanIslets cells)
         subGroups view=SIG cellType=PANI treatment=AANONE
         type bigWig 0.000000 1.691300
         origAssembly hg18
@@ -925,7 +925,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Hepato DNase DS
-        longLabel ENCODE Open Chromatin Duke DNaseI HS F-Seq Signal (Hepatocytes)
+        longLabel ENCODE Open Chromatin Duke DNaseI HS Density Signal (Hepatocytes)
         subGroups view=SIG cellType=Hepatocytes treatment=AANONE
         type bigWig 0.000000 1.185800
         # subId=3063 dateSubmitted=2010-12-06
@@ -934,7 +934,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HPDE6 DNase DS
-        longLabel ENCODE Open Chromatin Duke DNaseI HS F-Seq Signal (HPDE6-E6E7)
+        longLabel ENCODE Open Chromatin Duke DNaseI HS Density Signal (HPDE6-E6E7)
         subGroups view=SIG cellType=HPDE6E6E7 treatment=AANONE
         type bigWig 0.000000 0.568300
         # subId=3064 dateSubmitted=2010-12-06

@@ -1963,7 +1963,7 @@ fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labExpId J56
-labProtocolId GEN1+cage
+labProtocolId 
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -1984,7 +1984,7 @@ fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labExpId J56
-labProtocolId GEN1+cage
+labProtocolId 
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -2005,7 +2005,7 @@ fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labExpId J56
-labProtocolId GEN1+cage
+labProtocolId 
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -2026,7 +2026,7 @@ fileName wgEncodeRikenCageHelas3CytosolLongnonpolyaRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 labExpId J56
-labProtocolId GEN1+cage
+labProtocolId 
 localization cytosol
 origAssembly hg18
 parentTable wgEncodeRikenCageHelas3CytosolLongnonpolyaRawSignal
@@ -2231,7 +2231,7 @@ fileName wgEncodeRikenCageHelas3NucleolusTotalAln.bam
 grant Gingeras
 lab RIKEN
 labExpId J58
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -2252,7 +2252,7 @@ fileName wgEncodeRikenCageHelas3NucleolusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labExpId J58
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -2273,7 +2273,7 @@ fileName wgEncodeRikenCageHelas3NucleolusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labExpId J58
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg18
 project wgEncode
@@ -2294,7 +2294,7 @@ fileName wgEncodeRikenCageHelas3NucleolusTotalRawData.fastq.gz
 grant Gingeras
 lab RIKEN
 labExpId J58
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg18
 parentTable wgEncodeRikenCageHelas3NucleolusTotalRawSignal
@@ -4551,28 +4551,6 @@ rnaExtract longPolyA
 subId 2383
 view RawData
 
-metaObject wgEncodeRikenCageK562NucleolusTotalAln
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateSubmitted 2009-02-19
-dateUnrestricted 2009-11-19
-fileIndex wgEncodeRikenCageK562NucleolusTotalAln.bam.bai
-fileName wgEncodeRikenCageK562NucleolusTotalAln.bam
-grant Gingeras
-lab RIKEN
-labVersion Delve version 0.9
-localization nucleolus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1807
-tableName wgEncodeRikenCageK562NucleolusTotalAln
-view Alignments
-
 metaObject wgEncodeRikenCageK562NucleolusTotalAlnRep1
 objType table
 cell K562
@@ -4585,36 +4563,15 @@ fileName wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam
 grant Gingeras
 lab RIKEN
 labExpId I33
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 1
+replicate 0
 rnaExtract total
 subId 2929
 tableName wgEncodeRikenCageK562NucleolusTotalAlnRep1
 view Alignments
-
-metaObject wgEncodeRikenCageK562NucleolusTotalMinusClusters
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateSubmitted 2009-02-19
-dateUnrestricted 2009-11-19
-fileName wgEncodeRikenCageK562NucleolusTotalMinusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleolus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1807
-tableName wgEncodeRikenCageK562NucleolusTotalMinusClusters
-view MinusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
 objType table
@@ -4628,36 +4585,15 @@ fileName wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1.bigWig
 grant Gingeras
 lab RIKEN
 labExpId I33
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 1
+replicate 0
 rnaExtract total
 subId 2929
 tableName wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
 view MinusRawSignal
-
-metaObject wgEncodeRikenCageK562NucleolusTotalPlusClusters
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateSubmitted 2009-02-19
-dateUnrestricted 2009-11-19
-fileName wgEncodeRikenCageK562NucleolusTotalPlusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleolus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1807
-tableName wgEncodeRikenCageK562NucleolusTotalPlusClusters
-view PlusRawSignal
 
 metaObject wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
 objType table
@@ -4671,33 +4607,15 @@ fileName wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1.bigWig
 grant Gingeras
 lab RIKEN
 labExpId I33
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 1
+replicate 0
 rnaExtract total
 subId 2929
 tableName wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
 view PlusRawSignal
-
-metaObject wgEncodeRikenCageK562NucleolusTotalRawData
-objType file
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2009-02-19
-dateUnrestricted 2009-11-19
-fileName wgEncodeRikenCageK562NucleolusTotalRawData.fastq.gz
-grant Gingeras
-lab RIKEN
-localization nucleolus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 2433
-view RawData
 
 metaObject wgEncodeRikenCageK562NucleolusTotalRawDataRep1
 objType file
@@ -4711,11 +4629,11 @@ fileName wgEncodeRikenCageK562NucleolusTotalRawDataRep1.fastq.gz
 grant Gingeras
 lab RIKEN
 labExpId I33
-labProtocolId GEN1+cage
+labProtocolId 
 localization nucleolus
 origAssembly hg19
 project wgEncode
-replicate 1
+replicate 0
 rnaExtract total
 subId 2929
 view RawData
@@ -6109,4 +6027,4 @@ rnaExtract longPolyA
 subId 3339
 view RawData
 
-# MAGIC: -405233226
+# MAGIC: -537280939

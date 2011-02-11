@@ -5432,7 +5432,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep1
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -5457,7 +5457,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep2
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -5482,7 +5482,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xPkRep1
 objType table
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -5508,7 +5508,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878EbfPcr1xPkRep2
 objType table
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -5534,7 +5534,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878EbfRawDataRep1
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -5558,7 +5558,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878EbfRawDataRep2
 objType file
-antibody EBF
+antibody EBF1_(C-8)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6521,7 +6521,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep1
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6546,7 +6546,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep2
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6571,7 +6571,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep1
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6597,7 +6597,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xPkRep2
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6623,7 +6623,7 @@ view Peaks
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep1
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6646,7 +6646,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xRawRep2
 objType table
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -6669,7 +6669,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsGm12878Irf4RawDataRep1
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
@@ -6693,7 +6693,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878Irf4RawDataRep2
 objType file
-antibody IRF4
+antibody IRF4_(M-17)
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL517
@@ -15424,6 +15424,28 @@ tableName wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep1
+objType file
+antibody HDAC2_(SC-6296)
+cell H1-hESC
+composite wgEncodeHaibTfbs
+controlId SL1398
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-10
+dateUnrestricted 2011-11-10
+fileName wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL3935
+project wgEncode
+protocol v041610.2
+replicate 1
+setType exp
+subId 3505
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsH1hescHdac2sc6296V0416102AlnRep2
 objType file
 antibody HDAC2_(SC-6296)
@@ -19470,6 +19492,28 @@ tableName wgEncodeHaibTfbsHelas3GabpPcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsHelas3NrsfPcr1xAlnRep1
+objType file
+antibody NRSF
+cell HeLa-S3
+composite wgEncodeHaibTfbs
+controlId SL592
+dataType ChipSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-10
+dateUnrestricted 2011-11-10
+fileName wgEncodeHaibTfbsHelas3NrsfPcr1xAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL679
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 3505
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsHelas3NrsfPcr1xAlnRep2
 objType file
 antibody NRSF
@@ -20691,29 +20735,6 @@ replicate 1
 setType input
 subId 3036
 tableName wgEncodeHaibTfbsHepg2ControlPcr1xRawRep1
-treatment None
-view RawSignal
-
-metaObject wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2
-objType table
-antibody Control
-cell HepG2
-composite wgEncodeHaibTfbs
-controlId SL1401
-dataType ChipSeq
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-11-29
-dateUnrestricted 2011-08-28
-fileName wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2.bigWig
-grant Myers
-lab HudsonAlpha
-labExpId SL1401
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-subId 3026
-tableName wgEncodeHaibTfbsHepg2ControlPcr1xRawRep2
 treatment None
 view RawSignal
 
@@ -36758,4 +36779,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2061979730
+# MAGIC: -2008302236
