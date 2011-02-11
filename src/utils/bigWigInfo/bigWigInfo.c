@@ -92,5 +92,7 @@ udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (argc != 2)
     usage();
 bigWigInfo(argv[1]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

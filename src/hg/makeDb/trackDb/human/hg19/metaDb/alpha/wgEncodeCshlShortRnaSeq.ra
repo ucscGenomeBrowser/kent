@@ -568,6 +568,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortAln
@@ -591,6 +592,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
@@ -614,6 +616,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1403
 tableName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
@@ -636,6 +639,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1017
 view RawData
@@ -840,6 +844,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
@@ -862,6 +867,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
@@ -884,6 +890,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1404
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
@@ -905,6 +912,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -926,6 +934,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
@@ -1131,6 +1140,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
@@ -1153,6 +1163,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
@@ -1175,6 +1186,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1402
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
@@ -1196,6 +1208,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -1217,6 +1230,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
@@ -3424,6 +3438,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortAln
@@ -3446,6 +3461,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
@@ -3468,6 +3484,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1409
 tableName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
@@ -3489,6 +3506,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1000
 view RawData
@@ -3510,6 +3528,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562CellShortTransfrags
@@ -3715,6 +3734,7 @@ labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortAln
@@ -3737,6 +3757,7 @@ labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
@@ -3759,6 +3780,7 @@ labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1405
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
@@ -3780,6 +3802,7 @@ labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -3801,6 +3824,7 @@ labVersion Produced by Hannon Lab
 localization chromatin
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
@@ -4006,6 +4030,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortAln
@@ -4028,6 +4053,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
@@ -4050,6 +4076,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1406
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
@@ -4071,6 +4098,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -4092,6 +4120,7 @@ labVersion Produced by Hannon Lab
 localization cytosol
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
@@ -4297,6 +4326,7 @@ labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortAln
@@ -4319,6 +4349,7 @@ labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
@@ -4341,6 +4372,7 @@ labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1408
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
@@ -4362,6 +4394,7 @@ labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -4383,6 +4416,7 @@ labVersion Produced by Hannon Lab
 localization nucleolus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
@@ -4588,6 +4622,7 @@ labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
@@ -4610,6 +4645,7 @@ labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
@@ -4632,6 +4668,7 @@ labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1411
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
@@ -4653,6 +4690,7 @@ labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -4674,6 +4712,7 @@ labVersion Produced by Hannon Lab
 localization nucleoplasm
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
@@ -4879,6 +4918,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortAln
@@ -4901,6 +4941,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
@@ -4923,6 +4964,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1407
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
@@ -4944,6 +4986,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -4965,6 +5008,7 @@ labVersion Produced by Hannon Lab
 localization nucleus
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
@@ -5170,6 +5214,7 @@ labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortAln
@@ -5192,6 +5237,7 @@ labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
@@ -5214,6 +5260,7 @@ labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1410
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
@@ -5235,6 +5282,7 @@ labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -5256,6 +5304,7 @@ labVersion Produced by Hannon Lab
 localization polysome
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
@@ -6006,6 +6055,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1965
 tableName wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
@@ -6029,6 +6079,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalAln
@@ -6051,6 +6102,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
@@ -6073,6 +6125,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
@@ -6094,6 +6147,7 @@ labVersion Produced by Hannon Lab
 localization cell
 origAssembly hg18
 project wgEncode
+replicate 0
 rnaExtract shortTotal
 subId 535
 view RawData
@@ -6280,4 +6334,4 @@ rnaExtract shortTotal
 subId 3377
 view RawData
 
-# MAGIC: -386200622
+# MAGIC: 139306534

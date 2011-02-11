@@ -288,6 +288,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type narrowPeak
         # subId=3496 dateSubmitted=2011-01-22
 
+        track wgEncodeOpenChromFaireNhbePk
+        release alpha
+        parent wgEncodeOpenChromFaireViewPeaks off
+        shortLabel NHBE FAIRE Pk
+        longLabel NHBE Open Chromatin by FAIRE Peaks from ENCODE/UNC
+        subGroups view=Peaks cellType=NHBE treatment=AANONE
+        type narrowPeak
+        # subId=3507 dateSubmitted=2011-02-11
+
 
     track wgEncodeOpenChromFaireViewSignal
     shortLabel FAIRE F-Seq Density Signal
@@ -528,6 +537,15 @@ dataVersion through the ENCODE Jan 2011 Freeze
         type bigWig 0.000000 0.403700
         # subId=3496 dateSubmitted=2011-01-22
 
+        track wgEncodeOpenChromFaireNhbeSig
+        release alpha
+        parent wgEncodeOpenChromFaireViewSignal off
+        shortLabel NHBE FAIRE DS
+        longLabel NHBE Open Chromatin by FAIRE Density Signal from ENCODE/UNC
+        subGroups view=SIG cellType=NHBE treatment=AANONE
+        type bigWig 0.000000 0.366700
+        # subId=3507 dateSubmitted=2011-02-11
+
 
     track wgEncodeOpenChromFaireViewSigBo
     shortLabel Overlap Signal
@@ -767,4 +785,13 @@ dataVersion through the ENCODE Jan 2011 Freeze
         subGroups view=SIGBO cellType=A549 treatment=AANONE
         type bigWig 0.000000 1563.000000
         # subId=3496 dateSubmitted=2011-01-22
+
+        track wgEncodeOpenChromFaireNhbeBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromFaireViewSigBo off
+        shortLabel NHBE FAIRE OS
+        longLabel NHBE Open Chromatin by FAIRE Overlap Signal from ENCODE/UNC
+        subGroups view=SIGBO cellType=NHBE treatment=AANONE
+        type bigWig 0.000000 1478.000000
+        # subId=3507 dateSubmitted=2011-02-11
 
