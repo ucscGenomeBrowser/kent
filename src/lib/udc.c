@@ -176,7 +176,7 @@ if (ci == NULL || ci->socket <= 0)
 	{
 	char *newUrl = NULL;
 	int newSd = 0;
-	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
+	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, rangeUrl, &newSd, &newUrl))
 	    return -1;
 	if (newUrl)  // not sure redirection will work with byte ranges as it is now
 	    {
@@ -257,7 +257,7 @@ return size;
 }
 
 static boolean udcInfoViaTransparent(char *url, struct udcRemoteFileInfo *retInfo)
-/* Fill in *retTime with last modified time for file specified in url.
+/* Fill in *retInfo with last modified time for file specified in url.
  * Return FALSE if file does not even exist. */
 {
 internalErr();	/* Should not get here. */
@@ -1444,4 +1444,19 @@ void udcSetCacheTimeout(int timeout)
  * we won't ping the remote server to check the file size and update time). */
 {
 cacheTimeout = timeout;
+}
+
+time_t udcUpdateTime(struct udcFile *udc)
+/* return udc->updateTime */
+{
+if (sameString("transparent", udc->protocol))
+    {
+    struct stat status;
+    int ret = stat(udc->url, &status);
+    if (ret < 0)
+	return 0;
+    else
+	return  status.st_mtime;
+    }
+return udc->updateTime;
 }

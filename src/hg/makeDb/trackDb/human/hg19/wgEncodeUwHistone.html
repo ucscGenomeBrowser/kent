@@ -1,7 +1,7 @@
 <H2>Description</H2>
 
 <P>This track is produced as part of the ENCODE Project.
-This track displays maps of histone modifications genome-wide in different
+This track displays genome-wide maps of histone modifications in different
 <A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">cell lines</A>,
 using ChIP-seq high-throughput sequencing.
 
@@ -45,7 +45,7 @@ raw tag density (<I>Raw Signal</I>), which is shown in the track as density of t
 mapping within a 150 bp sliding window (at a 20 bp step across the genome).
 ChIP-seq affinity zones (<I>HotSpots</I>) were identified using the
 HotSpot algorithm described in Sabo <EM>et al.</EM> (2004).
-1.0% false discovery rate thresholds (FDR 0.01) were computed for each cell type by
+One percent false discovery rate thresholds (FDR 0.01) were computed for each cell type by
 applying the HotSpot algorithm to an equivalent number of random
 uniquely mapping 36mers. ChIP-Seq affinity  (<I>Peaks</I>)
 were identified as signal peaks within FDR 1.0% hypersensitive
@@ -61,9 +61,9 @@ coefficient >0.9.
 
 <h2>Release Notes</h2>
 <p>
-There are 4 bam files found in the
-<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/"
- TARGET=_BLANK>FTP site</A> that contain mis-mappings to chrY, with long
+Release 1 (Feb 2011) of this track has 4 bam files found in the
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeUwHistone/"
+ TARGET=_BLANK>downloads page</A> that contain mis-mappings to chrY, with long
  stretches of n's in the alignments. The associated processed data files will contain small
  number of mis-mapping to chrY. The files directly affected are:
  <ul>
@@ -86,7 +86,7 @@ There are 4 bam files found in the
 <H2>References</H2>
 
 <P>Sabo PJ, Hawrylycz M, Wallace JC, Humbert R, Yu M, Shafer A, Kawamoto J,
-Hall R, Mack J, Dorschner MO, McArthur M, Stamatoyannopoulos JA.
+Hall R, Mack J, Dorschner MO, <span style="font-style: italic;">et al</span>.
 <A TARGET=_BLANK HREF="http://www.pnas.org/content/101/48/16837">Discovery of functional noncoding elements by digital analysis of chromatin structure.</A>
 <EM>PNAS</EM>. 2004;101:16837-16842.</P>
 

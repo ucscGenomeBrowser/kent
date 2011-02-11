@@ -1,7 +1,5 @@
 /* bam - stuff to handle BAM stuff in table browser. */
 
-#ifdef USE_BAM
-
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -113,7 +111,6 @@ void samAlignmentToRow(struct samAlignment *sam, char *numBuf, char *row[SAMALIG
 {
 char *numPt = numBuf;
 char *numBufEnd = numBuf + BAM_NUM_BUF_SIZE;
-
 row[0] = sam->qName;
 row[1] = numPt; numPt += sprintf(numPt, "%u", sam->flag); numPt += 1;
 row[2] = sam->rName;
@@ -287,6 +284,32 @@ slReverse(&bedList);
 return bedList;
 }
 
+struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count)
+/* Return some semi-random qName based IDs from a BAM file. */
+{
+/* Read 10000 items from bam file,  or if they ask for a big list, then 4x what they ask for. */
+char *fileName = bamFileName(table, conn);
+samfile_t *fh = bamOpen(fileName, NULL);
+struct lm *lm = lmInit(0);
+int orderedCount = count * 4;
+if (orderedCount < 10000)
+    orderedCount = 10000;
+struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, orderedCount, lm);
+
+/* Shuffle list and extract qNames from first count of them. */
+shuffleList(&samList, 1);
+struct slName *randomIdList = NULL;
+int i;
+for (i=0, sam = samList; i<count && sam != NULL; ++i, sam = sam->next)
+     slNameAddHead(&randomIdList, sam->qName);
+
+/* Clean up and go home. */
+lmCleanup(&lm);
+bamClose(&fh);
+freez(&fileName);
+return randomIdList;
+}
+
 void showSchemaBam(char *table)
 /* Show schema on bam. */
 {
@@ -317,12 +340,44 @@ for (col = as->columnList; col != NULL; col = col->next)
     }
 hTableEnd();
 
-/* In a perfect world would print sample rows here.  Maybe later.... */
+/* Put up another section with sample rows. */
+webNewSection("Sample Rows");
+hTableStart();
+
+/* Print field names as column headers for example */
+hPrintf("<TR>");
+int colIx = 0;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    hPrintf("<TH>%s</TH>", col->name);
+    ++colIx;
+    }
+hPrintf("</TR>\n");
+
+/* Fetch sample rows. */
+samfile_t *fh = bamOpen(fileName, NULL);
+struct lm *lm = lmInit(0);
+struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, 10, lm);
+
+/* Print sample lines. */
+char *row[SAMALIGNMENT_NUM_COLS];
+char numBuf[BAM_NUM_BUF_SIZE];
+for (sam=samList; sam != NULL; sam = sam->next)
+    {
+    samAlignmentToRow(sam, numBuf, row);
+    hPrintf("<TR>");
+    for (colIx=0; colIx<colCount; ++colIx)
+        {
+	writeHtmlCell(row[colIx]);
+	}
+    hPrintf("</TR>\n");
+    }
+hTableEnd();
 
 /* Clean up and go home. */
+bamClose(&fh);
+lmCleanup(&lm);
 freeMem(fileName);
 hFreeConn(&conn);
 }
-
-#endif /* USE_BAM */
 

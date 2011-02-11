@@ -4,9 +4,9 @@
 track wgEncodeOpenChromSynth
 release alpha
 compositeTrack on
-superTrack wgEncodeDNAseSuper full
+superTrack wgEncodeDNAseSuper pack
 shortLabel Open Chrom Synth
-longLabel Open Chromatin Synthesis by Dnase, FAIRE and ChIP-seq from ENCODE/Duke/UNC/UTA
+longLabel Open Chromatin Synthesis by DNaseI HS, FAIRE and ChIP from ENCODE/Duke/UNC/UTA
 group regulation
 subGroup1 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC HEPG2=HepG2 HELA=HeLa-S3 HUVEC=HUVEC K562=K562 NHEK=NHEK
 dimensions dimensionX=cellType
@@ -23,8 +23,8 @@ boxedCfg on
 pValueFilter 0.0
 pValueFilterLimits 0:16
 noScoreFilter .
-extraFields pValue=[f]P-Value_(-log_10) dnaseSignal=[f]DNaseI_HS_Signal dnasePvalue=[f]DNaseI_HS-Value_(-log_10) faireSignal=[f]FAIRE-seq_Signal fairePvalue=[f]FAIRE-seq_P-Value_(-log_10) polIISignal=[f]Pol-II_Signal polIIPvalue=[f]Pol-II_P-Value_(-log_10) ctcfSignal=[f]CTCF_Signal ctcfPvalue=[f]CTCF_P-Value_(-log_10) cmycSignal=[f]c-Myc_Signal cmycPvalue=[f]c-Myc_P-Value_(-log_10) ocCode=[i]OC_Code
-filterBy ocCode:OC_Code=+1&#58;_Validated,2&#58;_DNase-only,3&#58;_FAIRE-only,4&#58;_ChIP-only
+extraFields pValue=[f]Fisher's_Combined_P-Value_(<code>-log<sub>10</sub></code>) dnaseSignal=[f]DNaseI_HS_Signal dnasePvalue=[f]DNaseI_HS_P-Value_(<code>-log<sub>10</sub></code>) faireSignal=[f]FAIRE_Signal fairePvalue=[f]FAIRE_P-Value_(<code>-log<sub>10</sub></code>) polIISignal=[f]Pol-II_Signal polIIPvalue=[f]Pol-II_P-Value_(<code>-log<sub>10</sub></code>) ctcfSignal=[f]CTCF_Signal ctcfPvalue=[f]CTCF_P-Value_(<code>-log<sub>10</sub></code>) cmycSignal=[f]c-Myc_Signal cmycPvalue=[f]c-Myc_P-Value_(<code>-log<sub>10</sub></code>) ocCode=[i]Open_Chromatin_(OC)_Code
+filterBy ocCode:Open_Chromatin_(OC)_Code=+1&#58;_Validated{#000000},2&#58;_DNase-only{#009900},3&#58;_FAIRE-only{#990000},4&#58;_ChIP-only{#FF00FF}
 #scoreFilter 100  ## Score is all 1000
 #scoreFilterLimits 100:1000
 #scoreMin 600
@@ -45,7 +45,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth
         shortLabel K562 OpChr Syn
-        longLabel K562 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel K562 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=K562
         type bed 9 +
         origAssembly hg19
@@ -55,7 +55,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth
         shortLabel GM12878 OpChr Syn
-        longLabel GM12878 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel GM12878 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=GM12878
         type bed 9 +
         origAssembly hg19
@@ -63,9 +63,9 @@ dataVersion through the ENCODE Jan 2011 Freeze
 
         track wgEncodeOpenChromSynthH1hescPk
         release alpha
-        parent wgEncodeOpenChromSynth off
+        parent wgEncodeOpenChromSynth
         shortLabel H1-hESC OpChr Syn
-        longLabel H1-hESC Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel H1-hESC Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=H1hESC
         type bed 9 +
         origAssembly hg19
@@ -75,7 +75,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel HepG2 OpChr Syn
-        longLabel HepG2 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel HepG2 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=HEPG2
         type bed 9 +
         origAssembly hg19
@@ -85,7 +85,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel HeLa-S3 OpChr Syn
-        longLabel HeLa-S3 Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel HeLa-S3 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=HELA
         type bed 9 +
         origAssembly hg19
@@ -95,7 +95,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel HUVEC OpChr Syn
-        longLabel HUVEC Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel HUVEC Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=HUVEC
         type bed 9 +
         origAssembly hg19
@@ -105,7 +105,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromSynth off
         shortLabel NHEK OpChr Syn
-        longLabel NHEK Open Chromatin Synthesis by Dnase/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
+        longLabel NHEK Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=NHEK
         type bed 9 +
         origAssembly hg19

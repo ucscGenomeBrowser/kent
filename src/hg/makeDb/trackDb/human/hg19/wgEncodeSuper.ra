@@ -9,7 +9,7 @@ track wgEncodeDNAseSuper
 superTrack on
 group regulation
 shortLabel ENC DNase/FAIRE
-longLabel ENCODE Dnase HS and Open Chromatin
+longLabel ENCODE Open Chromatin by DNaseI HS and FAIRE
 wgEncode 1
 
 track wgEncodeHistoneSuper

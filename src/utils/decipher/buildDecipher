@@ -2,12 +2,12 @@
 
 cp $1  decipherRaw.txt -p
 
-hgsql hg18 -e 'delete from decipherRaw'
+hgsql hg19 -e 'delete from decipherRaw'
 
-hgsql hg18 -e \
+hgsql hg19 -e \
 'load data local infile "decipherRaw.txt" into table decipherRaw ignore 1 lines'
 
-hgsql hg18 -N -e 'select "chr", chr, start-1, end, id from decipherRaw ' |\
+hgsql hg19 -N -e 'select "chr", chr, start-1, end, id from decipherRaw ' |\
 sed -e 's/chr\t/chr/' |sort -u>j.tmp
 
 # fix some out of range of entries
@@ -16,17 +16,17 @@ sed -e 's/115090019/114142980/' >decipher.bed
 rm j.tmp
 
 # Load decipher table
-hgLoadBed hg18 decipher decipher.bed
+hgLoadBed hg19 decipher decipher.bed
 
 # Create knownToDecipher table
-hgMapToGene -all hg18 decipher knownGene knownToDecipher
+hgMapToGene -all hg19 decipher knownGene knownToDecipher
 
 # Create knownCanonToDecipher table
 
-hgsql hg18 -N -e \
+hgsql hg19 -N -e \
 'select d.* from knownToDecipher d, knownCanonical c where c.transcript=d.name' >knownCanonToDecipher.tab
 
-hgsql hg18 -e 'delete from knownCanonToDecipher'
-hgsql hg18 -e 'load data local infile "knownCanonToDecipher.tab" into table knownCanonToDecipher'
+hgsql hg19 -e 'delete from knownCanonToDecipher'
+hgsql hg19 -e 'load data local infile "knownCanonToDecipher.tab" into table knownCanonToDecipher'
 
 

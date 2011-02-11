@@ -250,7 +250,6 @@ else
     printf("<P>No data overlapping current position.</P>");
     }
 
-
 lmCleanup(&lm);
 bbiFileClose(&bbi);
 }

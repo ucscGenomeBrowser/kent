@@ -1,7 +1,9 @@
-/* bamFILE -- interface to binary alignment format files using Heng Li's samtools lib. */
+/* bamFile -- interface to binary alignment format files using Heng Li's samtools lib. */
 
 #ifndef BAMFILE_H
 #define BAMFILE_H
+
+#ifdef USE_BAM
 
 // bam.h is incomplete without _IOLIB set to 1, 2 or 3.  2 is used by Makefile.generic:
 #ifndef _IOLIB
@@ -9,6 +11,20 @@
 #endif
 #include "bam.h"
 #include "sam.h"
+
+#else // no USE_BAM
+typedef struct { } bam1_t;
+typedef struct { } samfile_t;
+typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
+
+#define COMPILE_WITH_SAMTOOLS "%s: in order to use this functionality you must " \
+    "install the samtools library (<A HREF=\"http://samtools.sourceforge.net\" " \
+    "TARGET=_BLANK>http://samtools.sourceforge.net</A>) and recompile kent/src with " \
+    "USE_BAM=1 in your environment " \
+    "(see <A HREF=\"http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables\" " \
+    "TARGET=_BLANK>http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables</A>)."
+
+#endif// USE_BAM
 
 #ifndef SAMALIGNMENT_H
 #include "samAlignment.h"
@@ -43,6 +59,17 @@ struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int star
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm);
+/* Read next count alignments in SAM format, allocated in lm.  May return less than
+ * count at end of file. */
+
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
+/* Return an open bam file, dealing with FUSE caching if need be. 
+ * Return parameter if NON-null will return the file name after FUSing */
+
+void bamClose(samfile_t **pSamFile);
+/* Close down a samefile_t */
+
 boolean bamIsRc(const bam1_t *bam);
 /* Return TRUE if alignment is on - strand. */
 
@@ -51,6 +78,7 @@ INLINE int bamUnpackCigarElement(unsigned int packed, char *retOp)
  * array of BAM-enhanced-CIGAR ASCII characters (operations), store operation 
  * char into *retOp (retOp must not be NULL) and return the number of bases. */
 {
+#ifdef USE_BAM
 // decoding lifted from samtools bam.c bam_format1(), long may it remain stable:
 #define BAM_DOT_C_OPCODE_STRING "MIDNSHP"
 int n = packed>>BAM_CIGAR_SHIFT;
@@ -62,6 +90,10 @@ if (opcode >= strlen(BAM_DOT_C_OPCODE_STRING))
 	     opcode, (unsigned long)(strlen(BAM_DOT_C_OPCODE_STRING)-1));
 *retOp = BAM_DOT_C_OPCODE_STRING[opcode];
 return n;
+#else // no USE_BAM
+errAbort(COMPILE_WITH_SAMTOOLS, "bamUnpackCigarElement");
+return 0;
+#endif// USE_BAM
 }
 
 void bamGetSoftClipping(const bam1_t *bam, int *retLow, int *retHigh, int *retClippedQLen);
