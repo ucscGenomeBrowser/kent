@@ -166,4 +166,7 @@ void rangeFromMinMaxMeanStd(double minVal, double maxVal, double mean, double st
 /* Given some basic statistical properties, set a range that will be good on a wide
  * range of biological data. */
 
+void printVmPeak();
+/* print to stderr peak Vm memory usage (if /proc/ business exists) */
+
 #endif /* OBSCURE_H */
