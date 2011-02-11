@@ -6,6 +6,7 @@
 #include "localmem.h"
 #include "udc.h"
 #include "bigWig.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: bigWigToBedGraph.c,v 1.5 2009/09/08 19:50:25 kent Exp $";
 
@@ -75,5 +76,7 @@ udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 if (argc != 3)
     usage();
 bigWigToBedGraph(argv[1], argv[2]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

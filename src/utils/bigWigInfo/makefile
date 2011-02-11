@@ -4,11 +4,15 @@ L += ${SOCKETLIB} -lm -lz
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkweb.a
 
+A = bigWigInfo
 O = bigWigInfo.o
 
 bigWigInfo: $O ${MYLIBS}
-	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/bigWigInfo $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/bigWigInfo${EXE}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A} $O ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 clean:
-	rm -f $O
+	rm -f $O ${A}${EXE}
