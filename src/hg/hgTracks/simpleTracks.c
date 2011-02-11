@@ -11013,6 +11013,91 @@ void omimGeneClass3Methods (struct track *tg)
 tg->drawItemAt    = omimGeneClass3DrawAt;
 }
 
+#define OMIM_MAX_DESC_LEN 256
+char omimAvSnpBuffer[OMIM_MAX_DESC_LEN];
+
+char *omimAvSnpAaReplacement(struct track *tg, struct bed *item)
+/* Return replacement string associated with a OMIM AV entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+
+omimAvSnpBuffer[0] = '\0';
+
+conn = hAllocConn(database);
+safef(query,sizeof(query),
+        "select replStr, dbSnpId from omimAvRepl where avId='%s'", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+chp = omimAvSnpBuffer;
+if (row != NULL) 
+    {
+    safef(omimAvSnpBuffer, sizeof(omimAvSnpBuffer), "%s, %s", row[0], row[1]);
+    }
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(omimAvSnpBuffer);
+}
+
+static void omimAvSnpDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *sPhenotypes;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+sPhenotypes = omimAvSnpAaReplacement(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, sPhenotypes)-2, y,
+		    mgFontStringWidth(font, sPhenotypes),
+                    heightPer, MG_BLACK, font, sPhenotypes);
+        }
+
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
+    }
+
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-')
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = hvGfxContrastingColor(hvg, color);
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		dir, textColor, TRUE);
+	}
+    }
+}
+
+void omimAvSnpMethods (struct track *tg)
+{
+tg->drawItemAt    = omimAvSnpDrawAt;
+}
+
 char *omimGeneName(struct track *tg, void *item)
 /* set name for omimGene track */
 {
@@ -12430,6 +12515,7 @@ registerTrackHandlerOnFamily("hapmapSnpsPhaseII", hapmapMethods);
 registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
 registerTrackHandler("omimGeneClass3", omimGeneClass3Methods);
+registerTrackHandler("omimAvSnp", omimAvSnpMethods);
 registerTrackHandler("omimComposite", omimGeneClass3Methods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
