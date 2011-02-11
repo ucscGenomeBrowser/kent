@@ -1116,4 +1116,7 @@ void doOutMicroarrayNames(struct trackDb *tdb);
 
 #define uglyw warn	/* Warn for debugging purposes. */
 
+int bigFileMaxOutput();
+/*	return maxOut value (cart variable defined on curTable)	*/
+
 #endif /* HGTABLES_H */
