@@ -14,11 +14,10 @@ controlledVocabulary encode/cv.ra cellType=cell
 priority 0
 type bed 9 .
 itemRgb on
+#filterBy name:State="1 Active Promoter"{#FF0000,"2 Weak Promoter"{#FF6969,"3 Poised Promoter"{#CF0BC6,"4 Strong Enhancer"{#FACA00,"5 Strong Enhancer"{#FACA00,"6 Weak Enhancer"{#FFFC04,"7 Weak Enhancer"{#FFFC04,"8 Insulator"{#0ABEFE,"9 Txn Transition"{#00B050,"10 Txn Elongation"{#00B050,"11 Weak Txn"{#99FF66,"12 Repressed"{#7F7F7F,"13 Heterochrom/lo"{#D3D3D3,"14 Repetitive/CNV"{#D3D3D3,"15 Repetitive/CNV"{#DCDCDC
 filterBy name:State="1 Active Promoter","2 Weak Promoter","3 Poised Promoter","4 Strong Enhancer","5 Strong Enhancer","6 Weak Enhancer","7 Weak Enhancer","8 Insulator","9 Txn Transition","10 Txn Elongation","11 Weak Txn","12 Repressed","13 Heterochrom/lo","14 Repetitive/CNV","15 Repetitive/CNV"
 ###configurable on
 ### configurable on would be nice but doesn't work without view (which column/cell gets the link?)
-configureByPopup off
-#      CAN'T GET JS TO WORK IN HGTRACKS at this point
 wgEncode 1
 dataVersion through the ENCODE Jan 2011 Freeze
 

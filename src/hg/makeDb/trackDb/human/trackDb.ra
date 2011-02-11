@@ -44,6 +44,7 @@ priority 29.6
 visibility hide
 color 0,0,0
 type bed 4
+html decipherOld
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 
 track caseControl

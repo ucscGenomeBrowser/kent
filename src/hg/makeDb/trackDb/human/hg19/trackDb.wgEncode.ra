@@ -49,7 +49,7 @@ include wgEncodeHaibRnaSeq.ra alpha
 include wgEncodeHaibTfbs.ra
 
 #Broad Histone (wrangler: Tim)
-include wgEncodeBroadHistone.ra alpha,beta
+include wgEncodeBroadHistone.ra
 
 #UW Histone (wrangler:Venkat)
 include wgEncodeUwHistone.ra alpha,beta
