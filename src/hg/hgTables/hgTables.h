@@ -824,6 +824,9 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	int *retFieldCount);
 /* Get list of beds from BAM, in all regions, that pass filtering. */
 
+struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count);
+/* Return some semi-random qName based IDs from a BAM file. */
+
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
