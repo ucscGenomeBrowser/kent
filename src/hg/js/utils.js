@@ -609,6 +609,7 @@ function varHashToQueryString(varHash)
         var val = varHash[aVar];
         // XXXX encode var=val ?
         if (typeof(val) == 'string'
+        && val.length > 2
         && val.indexOf('[') == 0
         && val.lastIndexOf(']') == (val.length - 1)) {
             var vals = val.substr(1,val.length - 2).split(',');
