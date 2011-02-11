@@ -1239,7 +1239,7 @@ superTrack wgEncodeRnaSeqSuper dense
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 1000000
+    maxWindowToDraw 100000
 
 
         track wgEncodeRikenCageNhekCytosolLongnonpolyaAln
