@@ -52,7 +52,7 @@ include wgEncodeHaibTfbs.ra
 include wgEncodeBroadHistone.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.ra alpha,beta
+include wgEncodeUwHistone.ra
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.ra beta,public

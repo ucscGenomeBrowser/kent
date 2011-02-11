@@ -11,6 +11,7 @@ wgEncodeHaibMethylRrbs.ra \
 wgEncodeUwDnase.ra \
 wgEncodeCaltechRnaSeq.ra \
 wgEncodeBroadHistone.ra \
+wgEncodeUwHistone.ra \
 
 include ../../../../makefile.metaDb
 
