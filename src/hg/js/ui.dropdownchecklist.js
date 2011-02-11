@@ -454,9 +454,12 @@
                 $.ui.dropdownchecklist.drop = instance;
                 $(document).bind("click", hide);
                 //self.sourceSelect.trigger("focus");
-                if(filterCompositeExcludeOptions(self.sourceSelect)) {
-                    self._updateOptions();
+                try {
+                    if(filterCompositeExcludeOptions(self.sourceSelect)) {
+                        self._updateOptions();
+                    }
                 }
+                catch (err) {} // OK if filterCompositeExcludeOptions is not defined.
             }
             if (dropWrapper.drop) {
                 hide();
