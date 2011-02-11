@@ -59,6 +59,17 @@ struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int star
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm);
+/* Read next count alignments in SAM format, allocated in lm.  May return less than
+ * count at end of file. */
+
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
+/* Return an open bam file, dealing with FUSE caching if need be. 
+ * Return parameter if NON-null will return the file name after FUSing */
+
+void bamClose(samfile_t **pSamFile);
+/* Close down a samefile_t */
+
 boolean bamIsRc(const bam1_t *bam);
 /* Return TRUE if alignment is on - strand. */
 

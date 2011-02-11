@@ -9789,18 +9789,14 @@ char *chrom, *chromStart, *chromEnd;
 char *omimId;
 char *avId;
 char *dbSnpId;
-char *snpId;
 char *chp;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
-chp = strstr(itemName, "_");
-*chp = '\0';
 avId = strdup(itemName);
-chp++;
-snpId = strdup(chp);
+
 chp = strstr(itemName, "#");
 *chp = '\0';
 omimId = strdup(itemName);
@@ -9846,7 +9842,7 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    dbSnpId = strdup("-");
+    dbSnpId = cloneString("-");
     printf("<BR>\n");
     safef(query, sizeof(query),
     	  "select dbSnpId from omimAvRepl where avId='%s'", avId);
@@ -19736,8 +19732,7 @@ else
     bedPrintPos(bed, ct->fieldCount, NULL);
     }
 printTrackUiLink(ct->tdb);
-if (ct->dbTrack)
-    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
+printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 printTrackHtml(ct->tdb);
 }
 
