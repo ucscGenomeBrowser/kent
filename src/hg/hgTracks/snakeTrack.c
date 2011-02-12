@@ -58,7 +58,6 @@ sr = sqlGetResult(conn, query->string);
 
 /* Loop through making up simple features and adding them
  * to the corresponding linkedFeature. */
-//printf("read chain\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     lf = hashFindVal(hash, row[0]);
@@ -79,7 +78,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    sf->qStart = pChain->qSize - sf->qEnd;
 	    sf->qEnd = pChain->qSize - temp;
 	    }
-	//printf("%d \n",sf->qStart);
 	sf->grayIx = lf->orientation;
 	slAddHead(&lf->components, sf);
 	}
@@ -90,7 +88,6 @@ dyStringFree(&query);
 
 int snakeItemHeight(struct track *tg, void *item)
 {
-//printf("snakeItemHeight\n");
 //return 40;
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 struct simpleFeature  *sf;
@@ -114,13 +111,11 @@ for (sf =  lf->components; sf ;  sf = sf->next)
 	continue;
     if (s < winStart) s = winStart;
     */
-    //printf("bounds %d %d\n",winStart, winEnd);
     
     if (((oldOrient) && (oldOrient != orient))
 	||  ((oldOrient == 1) && (tEnd) && (s < tEnd))
 	||  ((oldOrient == -1) && (tStart) && (e > tStart)))
 	{
-	//printf("plus \n");
 	size += lineHeight;
 	}
     oldOrient = orient;
@@ -212,12 +207,16 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 
     qs = sf->qStart;
     s = sf->start; e = sf->end;
+    /*
     if (qs < lastQEnd )
 	continue;
+	*/
 
     qe = sf->qEnd;
+    /*
     if ((e < winStart) || (s > winEnd))
 	continue;
+	*/
 
     if (s < winStart) s = winStart;
     
@@ -343,26 +342,26 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 
 	y += lineHeight;
 	}
-	else if ((oldOrient) && ((qStart) && (sf->qStart - qStart) < 500000))
-	    {
-		int x1, x2, w;
+    else if ((oldOrient) && ((qStart) && (sf->qStart - qStart) < 500000))
+	{
+	    int x1, x2, w;
 
-		x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		x2 = round((double)((int)sf->start -winStart)*scale) + xOff;
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		if (x2 > x1)
-		    {
-		    w = x2-x1;
-		    clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    }
-		else
-		    {
-		    w = x1-x2;
-		    clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    }
-	    }
+	    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
+	    x2 = round((double)((int)sf->start -winStart)*scale) + xOff;
+	    hvGfxLine(hvg, x1, midY, x2, midY, color);
+	    if (x2 > x1)
+		{
+		w = x2-x1;
+		clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
+			 oldOrient, color, FALSE);
+		}
+	    else
+		{
+		w = x1-x2;
+		clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
+			 oldOrient, color, FALSE);
+		}
+	}
     color =	    lfChromColor(tg, item, hvg);
 
     drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
@@ -397,7 +396,6 @@ return strcmp(a->name, b->name);
 }
 
 int snakeHeight(struct track *tg, enum trackVisibility vis)
-/* set up size of sequence logo */
 {
 int height = 0;
 struct slList *item = tg->items, *nextItem;
@@ -459,7 +457,7 @@ struct sqlConnection *conn;
 //double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
-struct simpleFeature *lastSf = NULL;
+//struct simpleFeature *lastSf = NULL;
 int maxOverLeft = 0, maxOverRight = 0;
 int overLeft, overRight;
 
@@ -536,6 +534,7 @@ if (hash->size)
 	end = seqEnd + extra;
 	doQuery(conn, fullName, lm,  hash, start, end,  isSplit, -1);
 
+#ifdef NOTNOW
 	for (lf = tg->items; lf != NULL; lf = lf->next)
 	    {
 	    struct chain *pChain = lf->extra;
@@ -606,6 +605,7 @@ if (hash->size)
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 	    }
+#endif
 	}
     }
 if (1)
