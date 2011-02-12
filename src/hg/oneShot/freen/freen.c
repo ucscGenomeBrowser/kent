@@ -15,13 +15,15 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-void freen(char *url, char *chrom, int start, int end)
+void freen(char *url)
 /* Test some hair-brained thing. */
 {
 struct lm *lm = lmInit(0);
+samfile_t *fh = bamOpen(url, NULL);
 struct samAlignment *el, *list;
-list = bamFetchSamAlignment(url, chrom, start, end, lm);
+list = bamReadNextSamAlignments(fh, 10, lm);
 printf("Got %d aligmnents\n", slCount(list));
+bamClose(&fh);
 for (el = list; el != NULL; el = el->next)
     {
     samAlignmentTabOut(el, stdout);
@@ -33,8 +35,8 @@ int main(int argc, char *argv[])
 {
 // optionInit(&argc, argv, options);
 
-if (argc != 5)
+if (argc != 2)
     usage();
-freen(argv[1], argv[2], atoi(argv[3]), atoi(argv[4]));
+freen(argv[1]);
 return 0;
 }

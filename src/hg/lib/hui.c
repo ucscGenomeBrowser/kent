@@ -3339,7 +3339,7 @@ for(ix=0;ix<filterCount;ix++)
                 {
                 assert(*(color + 1) == '#');
                 *color++ = 0;  // The color is found inside the filters->svValues as the next string beyond value or label
-                color = strchr(val->name,'}'); // There could be a closing '}'
+                color = strchr(color,'}'); // There could be a closing '}'
                 if (color != NULL)
                     *color = 0;
                 }
@@ -3539,7 +3539,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
     #define FILTER_BY_FORMAT "<SELECT id='fbc%d' name='%s.filterBy.%s' multiple style='display: none;' class='filterComp filterBy'><BR>\n"
     printf(FILTER_BY_FORMAT,ix,tdb->track,filterBy->column);
     ix++;
-    printf("<OPTION%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":"") );
+    printf("<OPTION%s%s>All</OPTION>\n",(filterBy->slChoices == NULL || slNameInList(filterBy->slChoices,"All")?" SELECTED":""),(filterBy->colorFollows?" style='color: #000000;'":"") );
     struct slName *slValue;
     if(filterBy->useIndex)
         {
@@ -3549,7 +3549,13 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             char varName[32];
             safef(varName, sizeof(varName), "%d",ix);
             char *name = strSwapChar(cloneString(slValue->name),'_',' ');
-                printf("<OPTION%s value=%s>%s</OPTION>\n",(filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName)?" SELECTED":""),varName,name);
+            printf("<OPTION");
+            if (filterBy->slChoices != NULL && slNameInList(filterBy->slChoices,varName))
+                printf(" SELECTED");
+            printf(" value='%s'",varName);
+            if (filterBy->colorFollows)
+                printf(" style='color: %s;'",slValue->name + strlen(slValue->name)+1);
+            printf(">%s</OPTION>\n",name);
             freeMem(name);
             }
         }
@@ -3564,7 +3570,7 @@ for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
             if (filterBy->valueAndLabel)
                 printf(" value='%s'",slValue->name);
             if (filterBy->colorFollows)
-                printf(" style='background-color: %s;'",label + strlen(label)+1);
+                printf(" style='color: %s;'",label + strlen(label)+1);
             printf(">%s</OPTION>\n",label);
             }
         }
@@ -3666,77 +3672,6 @@ if(hierarchy && hierarchy->count>0)
     }
 for(;indent>0;indent--)
     puts ("&nbsp;&nbsp;&nbsp;");
-}
-
-static int daysOfMonth(struct tm *tp)
-{
-int days=0;
-switch(tp->tm_mon)
-    {
-    case 3:
-    case 5:
-    case 8:
-    case 10:    days = 30;   break;
-    case 1:     days = 28;
-                if( (tp->tm_year % 4) == 0
-                && ((tp->tm_year % 20) != 0 || (tp->tm_year % 100) == 0) )
-                    days = 29;
-                break;
-    default:    days = 31;   break;
-    }
-return days;
-}
-
-static void dateAdd(struct tm *tp,int addYears,int addMonths,int addDays)
-/* Add years,months,days to a date */
-{
-tp->tm_mday  += addDays;
-tp->tm_mon   += addMonths;
-tp->tm_year  += addYears;
-int dom=28;
-while( (tp->tm_mon >11  || tp->tm_mon <0)
-    || (tp->tm_mday>dom || tp->tm_mday<1) )
-    {
-    if(tp->tm_mon>11)   // First month: tm.tm_mon is 0-11 range
-        {
-        tp->tm_year += (tp->tm_mon / 12);
-        tp->tm_mon  = (tp->tm_mon % 12);
-        }
-    else if(tp->tm_mon<0)
-        {
-        tp->tm_year += (tp->tm_mon / 12) - 1;
-        tp->tm_mon  =  (tp->tm_mon % 12) + 12;
-        }
-    else
-        {
-        dom = daysOfMonth(tp);
-        if(tp->tm_mday>dom)
-            {
-            tp->tm_mday -= dom;
-            tp->tm_mon  += 1;
-            dom = daysOfMonth(tp);
-            }
-        else if(tp->tm_mday < 1)
-            {
-            tp->tm_mon  -= 1;
-            dom = daysOfMonth(tp);
-            tp->tm_mday += dom;
-            }
-        }
-    }
-}
-static char *dateAddToAndFormat(char *date,char *format,int addYears,int addMonths,int addDays)
-/* Add years,months,days to a formatted date and returns the new date as a string on the stack
-*  format is a strptime/strftime format: %F = yyyy-mm-dd */
-{
-char *newDate = needMem(12);
-struct tm tp;
-if(strptime (date,format, &tp))
-    {
-    dateAdd(&tp,addYears,addMonths,addDays); // tp.tm_year only contains years since 1900
-    strftime(newDate,12,format,&tp);
-    }
-return newDate;  // newDate is never freed!
 }
 
 // FIXME FIXME Should be able to use membersForAll struct to set default sort order from subGroups
@@ -3846,7 +3781,7 @@ if(metadataForTable(db,trackDb,NULL) != NULL)
     {
     addMonths = FALSE;
     date = cloneString((char *)metadataFindValue(trackDb,"dateUnrestricted"));
-    if(date == NULL)
+    if(date == NULL)  // TODO: The logic to calculate date based upon dateSubmitted should be removed.  However, I don't think we can do it until the mdb is used for all hg18 composites.
         {
         date = cloneString((char *)metadataFindValue(trackDb,"dateSubmitted"));
         addMonths = TRUE;
@@ -3865,7 +3800,7 @@ if (date != NULL)
     {
     date = strSwapChar(date, ' ', 0);   // Truncate time
     if(addMonths)
-        date = dateAddToAndFormat(date, "%F", 0, 9, 0);
+        date = dateAddTo(date, "%F", 0, 9, 0);
     }
 return date;
 }
@@ -4241,9 +4176,17 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     printf("&nbsp;");
 
     // Do we have a restricted until date?
-    char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
-    if (dateDisplay)
-        printf("</TD>\n<TD align='center'>&nbsp;%s&nbsp;", dateDisplay);
+    if (restrictions)
+        {
+        char *dateDisplay = encodeRestrictionDateDisplay(db,subtrack);
+        if (dateDisplay)
+            {
+            if (dateIsOld(dateDisplay,"%F"))
+                printf("</TD>\n<TD align='center' nowrap style='color: #BBBBBB;'>&nbsp;%s&nbsp;", dateDisplay);
+            else
+                printf("</TD>\n<TD align='center'>&nbsp;%s&nbsp;", dateDisplay);
+            }
+        }
 
     // End of row and free ourselves of this subtrack
     puts("</TD></TR>\n");

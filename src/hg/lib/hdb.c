@@ -4944,6 +4944,9 @@ void printUpdateTime(char *database, struct trackDb *tdb,
     struct customTrack *ct)
 /* display table update time */
 {
+/* have not decided what to do for a composite container */
+if (tdbIsComposite(tdb))
+    return;
 struct sqlConnection *conn = NULL;
 char *tableName = NULL;
 if (isCustomTrack(tdb->track))
@@ -4990,6 +4993,6 @@ hFreeConn(&conn);
 void printBbiUpdateTime(time_t *timep)
 /* for bbi files, print out the timep value */
 {
-    printf ("<B>Data last updated:&nbsp;%s</B><BR>\n",
+    printf ("<B>Data last updated:&nbsp;</B>%s<BR>\n",
 	sqlUnixTimeToDate(timep, FALSE));
 }
