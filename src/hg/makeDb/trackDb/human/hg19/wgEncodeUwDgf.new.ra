@@ -34,6 +34,7 @@ subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
 subGroup2 cellType Cell_Line 1K562=K562&nbsp;(Tier_1) 2HepG2=HepG2&nbsp;(Tier_2) AOAF=AOAF GM06990=GM06990 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC NHA=NH-A NHDF-Ad=NHDF-Ad SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
+fileSortOrder cell=Cell_Line view=View origAssembly=Assembly<BR>originally<BR>mapped<BR>to geoSampleAccession=GEO<BR>Sample<BR>Accession fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 noInherit on
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
