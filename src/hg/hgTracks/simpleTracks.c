@@ -11098,6 +11098,75 @@ void omimAvSnpMethods (struct track *tg)
 tg->drawItemAt    = omimAvSnpDrawAt;
 }
 
+#define OMIM_MAX_DESC_LEN 256
+char omimLocationBuffer[OMIM_MAX_DESC_LEN*2];
+
+char *omimLocationDescription(struct track *tg, struct bed *item)
+/* Return description of an OMIM entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+
+omimLocationBuffer[0] = '\0';
+
+conn = hAllocConn(database);
+safef(query,sizeof(query),
+        "select concat(title1, ' ', title2) from omimGeneMap where omimId=%s", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+chp = omimLocationBuffer;
+if (row != NULL) 
+    {
+    safef(omimLocationBuffer, sizeof(omimLocationBuffer), "%s", row[0]);
+    }
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(omimLocationBuffer);
+}
+
+static void omimLocationDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *omimTitle;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+omimTitle = omimLocationDescription(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, color);
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, omimTitle)-2, y,
+		    mgFontStringWidth(font, omimTitle),
+                    heightPer, MG_BLACK, font, omimTitle);
+        }
+
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), omimTitle);
+    }
+}
+
+void omimLocationMethods (struct track *tg)
+{
+tg->drawItemAt    = omimLocationDrawAt;
+}
+
 char *omimGeneName(struct track *tg, void *item)
 /* set name for omimGene track */
 {
@@ -12516,6 +12585,7 @@ registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
 registerTrackHandler("omimGeneClass3", omimGeneClass3Methods);
 registerTrackHandler("omimAvSnp", omimAvSnpMethods);
+registerTrackHandler("omimLocation", omimLocationMethods);
 registerTrackHandler("omimComposite", omimGeneClass3Methods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */
