@@ -2791,7 +2791,7 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
        trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
-void printDataVersion(struct trackDb *tdb)
+static void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
 metadataForTable(database,tdb,NULL);
@@ -2818,11 +2818,10 @@ if (restrictionDate != NULL)
     }
 }
 
-void printOrigAssembly(struct trackDb *tdb)
+static void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
 {
-trackDbOrigAssembly(tdb);
 trackDbPrintOrigAssembly(tdb, database);
 }
 
@@ -2842,23 +2841,13 @@ void printTrackHtml(struct trackDb *tdb)
  * last update time for data table and make a link
  * to the TB table schema page for this table. */
 {
-char *tableName;
-
 if (!isCustomTrack(tdb->track))
     {
     extraUiLinks(database,tdb,trackHash);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);
-    if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
-	{
-	struct sqlConnection *conn = hAllocConnTrack(database, tdb);
-
-	char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-	if (date != NULL)
-	    printf("<B>Data last updated:</B> %s<BR>\n", date);
-	hFreeConn(&conn);
-	}
+    printUpdateTime(database, tdb, NULL);
     printDataRestrictionDate(tdb);
     }
 char *html = getHtmlFromSelfOrParent(tdb);
@@ -9800,18 +9789,14 @@ char *chrom, *chromStart, *chromEnd;
 char *omimId;
 char *avId;
 char *dbSnpId;
-char *snpId;
 char *chp;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
-chp = strstr(itemName, "_");
-*chp = '\0';
 avId = strdup(itemName);
-chp++;
-snpId = strdup(chp);
+
 chp = strstr(itemName, "#");
 *chp = '\0';
 omimId = strdup(itemName);
@@ -9857,7 +9842,7 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    dbSnpId = strdup("-");
+    dbSnpId = cloneString("-");
     printf("<BR>\n");
     safef(query, sizeof(query),
     	  "select dbSnpId from omimAvRepl where avId='%s'", avId);
@@ -19726,13 +19711,7 @@ else
 	    printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL,
 		TRUE, NULL);
 	if (ct->dbTrack)
-	    {
-	    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-	    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
-	    if (date != NULL)
-		printf("<B>Data last updated:</B> %s<BR>\n", date);
-	    hFreeConn(&conn);
-	    }
+	    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 	printTrackHtml(ct->tdb);
 	return;
 	}
@@ -19753,14 +19732,7 @@ else
     bedPrintPos(bed, ct->fieldCount, NULL);
     }
 printTrackUiLink(ct->tdb);
-if (ct->dbTrack)
-    {
-    struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-    char *date = firstWordInLine(sqlTableUpdate(conn, ct->dbTableName));
-    if (date != NULL)
-	printf("<B>Data last updated:</B> %s<BR>\n", date);
-    hFreeConn(&conn);
-    }
+printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 printTrackHtml(ct->tdb);
 }
 
@@ -22464,7 +22436,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *escName = NULL, *tableName;
+char *escName = NULL;
 int hasAttr = 0;
 int i;
 int start = cartInt(cart, "o");
@@ -22561,14 +22533,7 @@ printf("</DL>\n");
 printTBSchemaLink(tdb);
 printDataVersion(tdb);
 printOrigAssembly(tdb);
-if ((tableName = hTableForTrack(database, tdb->table)) != NULL)
-    {
-    struct sqlConnection *conn = hAllocConn(database);
-    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
-    if (date != NULL)
-        printf("<B>Data last updated:</B> %s<BR>\n", date);
-    hFreeConn(&conn);
-    }
+printUpdateTime(database, tdb, NULL);
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();

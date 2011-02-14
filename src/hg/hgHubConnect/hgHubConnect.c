@@ -24,7 +24,7 @@ struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
 
 static char *destUrl = "../cgi-bin/hgTracks";
-static char *pageTitle = "UCSC Track Hub Connect";
+static char *pageTitle = "Import Tracks from External Data Hubs";
 char *database = NULL;
 char *organism = NULL;
 
@@ -60,11 +60,11 @@ printf("<FORM ACTION=\"%s\" METHOD=\"POST\" NAME=\"mainForm\">\n", destUrl);
 cartSaveSession(cart);
 cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
 printf(
-   "<P>Track hubs are collections of tracks from outside of UCSC that can be imported into the "
-   "Genome Browser.  To import a hub check the box in the list below. "
+   "<P>Track data hubs are collections of tracks from outside of UCSC that can be imported into "
+   "the Genome Browser.  To import a hub check the box in the list below. "
    "After import the hub will show up as a group of tracks with its own blue "
    "bar and label underneath the main browser graphic, and in the configure page. To arrange "
-   "for your own track hub to appear in this list, please contact genome@soe.ucsc.edu.</P>\n"
+   "for your own track data hub to appear in this list, please contact genome@soe.ucsc.edu.</P>\n"
    );
 getDbAndGenome(cart, &database, &organism, oldVars);
 printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s] ", 

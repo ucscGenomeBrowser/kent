@@ -3184,6 +3184,25 @@ tableName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsNt2d1UwSitesRep1
+objType table
+cell NT2-D1
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-13
+fileName wgEncodeHaibMethylRrbsNt2d1UwSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+obtainedBy Stanford
+origAssembly hg19
+project wgEncode
+replicate 1
+subId 1223
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
 objType table
 cell NT2-D1
@@ -3200,25 +3219,6 @@ project wgEncode
 replicate 2
 subId 3159
 tableName wgEncodeHaibMethylRrbsNt2d1UwSitesRep2
-treatment None
-view Sites
-
-metaObject wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep1
-objType table
-cell NT2-D1
-composite wgEncodeHaibMethylRrbs
-dataType MethylRrbs
-dataVersion ENCODE Jan 2011 Freeze
-dateSubmitted 2010-07-13
-dateUnrestricted 2011-04-13
-fileName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep1.bed9.gz
-grant Myers
-lab HudsonAlpha
-obtainedBy Stanford
-origAssembly hg19
-project wgEncode
-replicate 1
-subId 1223
 treatment None
 view Sites
 
@@ -3868,4 +3868,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 444600469
+# MAGIC: 950797859

@@ -1,6 +1,7 @@
 /* wigToBigWig - Convert ascii format wig file (in fixedStep, variableStep or bedGraph format) 
  * to binary big wig format.. */
 #include "common.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -62,5 +63,7 @@ doCompress = !optionExists("unc");
 if (argc != 4)
     usage();
 wigToBigWig(argv[1], argv[2], argv[3]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

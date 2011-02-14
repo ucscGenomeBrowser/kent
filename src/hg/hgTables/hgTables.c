@@ -119,26 +119,21 @@ void writeHtmlCell(char *text)
  * and stripping html tags and breaking spaces.... */
 {
 int maxLen = 128;
-if (strlen(text) > maxLen)
+int len = strlen(text);
+char *extra = "";
+if (len > maxLen)
     {
-    char *s = cloneStringZ(text,maxLen);
-    char *r;
-    stripHtmlTags(s);
-    eraseTrailingSpaces(s);
-    r = replaceChars(s, " ", "&nbsp;");
-    hPrintf("<TD>%s&nbsp;...</TD>", r);
-    freeMem(s);
-    freeMem(r);
+    len = maxLen;
+    extra = "&nbsp;...";
     }
-else
-    {
-    char *r;
-    stripHtmlTags(text);
-    eraseTrailingSpaces(text);
-    r = replaceChars(text, " ", "&nbsp;");
-    hPrintf("<TD>%s</TD>", r);
-    freeMem(r);
-    }
+char *s = cloneStringZ(text,len);
+char *r;
+stripHtmlTags(s);
+eraseTrailingSpaces(s);
+r = replaceChars(s, " ", "&nbsp;");
+hPrintf("<TD>%s%s</TD>", r, extra);
+freeMem(s);
+freeMem(r);
 }
 
 static void vaHtmlOpen(char *format, va_list args)

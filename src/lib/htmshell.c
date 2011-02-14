@@ -124,6 +124,31 @@ void htmlTextOut(char *s)
 htmTextOut(stdout, s);
 }
 
+char *htmlTextStripTags(char *s)
+/* Returns a cloned string with all html tags stripped out */
+{
+if (s == NULL)
+    return NULL;
+char *scrubbed = needMem(strlen(s));
+char *from=s;
+char *to=scrubbed;
+while(*from!='\0')
+    {
+    if (*from == '<')
+        {
+        from++;
+        while (*from!='\0' && *from != '>')
+            from++;
+        if (*from == '\0')  // The last open tag was never closed!
+            break;
+        from++;
+        }
+    else
+        *to++ = *from++;
+    }
+return scrubbed;
+}
+
 char *htmlEncodeText(char *s,boolean tagsOkay)
 /* Returns a cloned string with quotes replaced by html codes.
    Changes ',",\n and if not tagsOkay >,<,& to code equivalents.
@@ -163,7 +188,6 @@ strSwapStrs(cleanQuote, size,"'" ,"&#39;" ); // Shield single quotes
 
 return cleanQuote;
 }
-
 
 char *htmlWarnStartPattern()
 /* Return starting pattern for warning message. */

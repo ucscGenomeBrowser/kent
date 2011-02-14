@@ -1,0 +1,41 @@
+
+track wgEncodeSydhNsome
+compositeTrack on
+release alpha
+shortLabel Stanford Nucleosome
+longLabel ENCODE Stanford Snyder Nucleosome
+group regulation
+subGroup1 view Views Signal=Signal Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+dimensions dimensionX=cellType
+sortOrder cellType=+ view=+
+controlledVocabulary encode/cv.ra cellType
+dragAndDrop subTracks
+visibilityViewDefaults  Signal=full Alignments=hide
+priority 0
+type bigWig 0 16392
+noInherit on
+viewLimits 0:12
+wgEncode 1
+
+        track wgEncodeSydhNsomeGM12878D000005701
+        release alpha
+        parent wgEncodeSydhNsome
+        shortLabel GM12878 Sig
+        longLabel ENCODE Stanford Nucleosome Peaks (in GM12878 cells)
+        subGroups view=Signal cellType=GM12878
+        type bigWig 0.000000 16392.599609
+        origAssembly hg19
+        color 153,38,0
+        # subId=3329 dateSubmitted=2011-01-24
+
+        track wgEncodeSydhNsomeK562D000005702
+        release alpha
+        parent wgEncodeSydhNsome
+        shortLabel K562 Sig
+        longLabel ENCODE Stanford Nucleosome Peaks (in K562 cells)
+        subGroups view=Signal cellType=K562
+        type bigWig 0.000000 31177.300781
+        origAssembly hg19
+        color 46,0,184
+        # subId=3431 dateSubmitted=2011-01-22

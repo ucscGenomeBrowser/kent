@@ -824,6 +824,9 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	int *retFieldCount);
 /* Get list of beds from BAM, in all regions, that pass filtering. */
 
+struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count);
+/* Return some semi-random qName based IDs from a BAM file. */
+
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
 /* Get custom track list. */
@@ -1112,5 +1115,8 @@ void doOutMicroarrayNames(struct trackDb *tdb);
 /* Show the microarray names from .ra file */
 
 #define uglyw warn	/* Warn for debugging purposes. */
+
+int bigFileMaxOutput();
+/*	return maxOut value (cart variable defined on curTable)	*/
 
 #endif /* HGTABLES_H */

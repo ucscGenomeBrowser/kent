@@ -9,7 +9,7 @@
 #       - Short Labels: 
 #               Template: [cell] [factor] [view] [replicate #]
 #		- Cell: Abbreviations for cells
-#			- SK-N-SH_RA = SKNSHRA
+#			- SK-N-SH_RA = SKRA
 #			- WERI-Rb-1 = WERIRb1
 #		- Factor: Abbreviations for factor
 #			- Inp = Inp
@@ -248,7 +248,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel SKNSHRA CTCF Ht 1
+        shortLabel SKRA CTCF Ht 1
         longLabel SK-N-SH_RA CTCF TFBS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=1
         type broadPeak
@@ -414,7 +414,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel SKNSHRA CTCF Ht 2
+        shortLabel SKRA CTCF Ht 2
         longLabel SK-N-SH_RA CTCF TFBS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=2
         type broadPeak
@@ -928,7 +928,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SKNSHRA CTCF Pk 1
+        shortLabel SKRA CTCF Pk 1
         longLabel SK-N-SH_RA CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=1
         type narrowPeak
@@ -1094,7 +1094,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SKNSHRA CTCF Pk 2
+        shortLabel SKRA CTCF Pk 2
         longLabel SK-N-SH_RA CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=2
         type narrowPeak
@@ -1612,7 +1612,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSHRA CTCF Sg 1
+        shortLabel SKRA CTCF Sg 1
         longLabel SK-N-SH_RA CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=1
         type bigWig 1.000000 3210.000000
@@ -1778,7 +1778,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSHRA CTCF Sg 2
+        shortLabel SKRA CTCF Sg 2
         longLabel SK-N-SH_RA CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=2
         type bigWig 1.000000 3470.000000
@@ -2028,7 +2028,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSHRA Inp Sg 1
+        shortLabel SKRA Inp Sg 1
         longLabel SK-N-SH_RA Input TFBS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=1
         type bigWig 1.000000 12154.000000

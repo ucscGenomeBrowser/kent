@@ -918,6 +918,7 @@ struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 boolean isSmallWig = isWiggle(db, table);
 boolean isWig = isSmallWig || isBigWigTable(table);
 boolean isBedGr = isBedGraph(rootTable);
+boolean isBam = isBamTable(rootTable);
 int bedGraphColumn = 5;		/*	default score column	*/
 
 if (isBedGr)
@@ -969,7 +970,7 @@ else
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr))
+if (!(isWig||isBedGr||isBam))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -982,7 +983,7 @@ if (!(isWig||isBedGr))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr)
+if (isWig||isBedGr||isBam)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
