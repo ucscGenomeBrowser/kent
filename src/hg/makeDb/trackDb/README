@@ -584,6 +584,8 @@ Some settings used by various tracks:
       zoomed at no more than basesPerPixel (a float). showCdsAllScales should
       be set and showDiffBasesMaxZoom should be set to a value not more
       than showCdsMaxZoom  to make this useful.
+    o nextExonText override the default mouseover text of the next-exon button.
+    o prevExonText override the default mouseover text of the previous-exon button.
     o nextItemButton off - For tracks that have next-item buttons that
       shouldn't, turn the buttons off until whatever else is fixed.
       on - This will override the user's UI settings and display the next-item

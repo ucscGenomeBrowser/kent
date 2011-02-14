@@ -129,6 +129,16 @@ assert(numPt < numBufEnd);
 void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
 /* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
 {
+struct hTableInfo *hti = NULL;
+hti = getHti(db, table, conn);
+struct hash *idHash = NULL;
+char *idField = getIdField(db, curTrack, table, hti);
+int idFieldNum = 0;
+
+/* if we know what field to use for the identifiers, get the hash of names */
+if (idField != NULL)
+    idHash = identifierHash(db, table);
+
 if (f == NULL) 
     f = stdout;
 
@@ -144,7 +154,12 @@ struct hash *fieldHash = hashNew(0);
 struct slName *bb, *bbList = bamGetFields(table);
 int i;
 for (bb = bbList, i=0; bb != NULL; bb = bb->next, ++i)
+    {
+    /* if we know the field for identifiers, save it away */
+    if ((idField != NULL) && sameString(idField, bb->name))
+	idFieldNum = i;
     hashAddInt(fieldHash, bb->name, i);
+    }
 
 /* Create an array of column indexes corresponding to the selected field list. */
 int *columnArray;
@@ -175,23 +190,30 @@ if (anyFilter())
 
 /* Loop through outputting each region */
 struct region *region, *regionList = getRegions();
-for (region = regionList; region != NULL; region = region->next)
+
+int maxOut = bigFileMaxOutput();
+for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct lm *lm = lmInit(0);
     struct samAlignment *sam, *samList = bamFetchSamAlignment(fileName, region->chrom,
     	region->start, region->end, lm);
     char *row[SAMALIGNMENT_NUM_COLS];
     char numBuf[BAM_NUM_BUF_SIZE];
-    for (sam = samList; sam != NULL; sam = sam->next)
+    for (sam = samList; sam != NULL && (maxOut > 0); sam = sam->next)
         {
 	samAlignmentToRow(sam, numBuf, row);
 	if (asFilterOnRow(filter, row))
 	    {
+	    /* if we're looking for identifiers, check if this matches */
+	    if ((idHash != NULL)&&(hashLookup(idHash, row[idFieldNum]) == NULL))
+		continue;
+
 	    int i;
 	    fprintf(f, "%s", row[columnArray[0]]);
 	    for (i=1; i<fieldCount; ++i)
 		fprintf(f, "\t%s", row[columnArray[i]]);
 	    fprintf(f, "\n");
+	    maxOut --;
 	    }
 	}
     lmCleanup(&lm);

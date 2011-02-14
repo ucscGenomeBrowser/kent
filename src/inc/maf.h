@@ -247,5 +247,12 @@ void mafStripEmptyColumns(struct mafAli *maf);
 
 boolean isContigOrTandem(char status);
 /* is status MAF_CONTIG_STATUS or MAF_TANDEM_STATUS */
+
+struct mafComp *mafCompClone(struct mafComp *srcComp);
+/* clone a mafComp */
+
+struct mafAli *mafAliClone(struct mafAli *srcAli);
+/* clone a mafAli */
+
 #endif /* MAF_H */
 
