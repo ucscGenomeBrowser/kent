@@ -1726,12 +1726,24 @@ void linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *item,
 struct linkedFeatures *lf = item;
 struct simpleFeature *exons = lf->components;
 struct simpleFeature *exon = exons;
+char *nextExonText;
+char *prevExonText;
 int newWinSize = winEnd - winStart;
 int bufferToEdge = 0.05 * newWinSize;
 int newWinStart, newWinEnd;
 int numExons = 0;
 int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
+if (startsWith("chain", tg->tdb->type))
+    {
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Block");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Block");
+    }
+else 
+    {
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon");
+    }
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
 /* It seems like lf->components isn't necessarily sorted. */
@@ -1769,9 +1781,9 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	if (!revStrand)
-	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", nextExonText, exonIx+1, numExons);
 	else
-	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", prevExonText, numExons-exonIx, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
@@ -1791,9 +1803,9 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	if (!revStrand)
-	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", prevExonText, numExons-exonIx, numExons);
 	else
-	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", nextExonText, exonIx+1, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}

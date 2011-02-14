@@ -43,6 +43,8 @@ static boolean canIntersect(char *db, char *table)
 {
 if (isCustomTrack(table) && ctLookupName(table) != NULL)
     return TRUE;
+if (isBamTable(table))
+    return TRUE;
 if (isHubTrack(table))
     return TRUE;
 if (sameWord(table, WIKI_TRACK_TABLE))
