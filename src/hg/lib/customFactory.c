@@ -846,27 +846,41 @@ static struct customFactory bedDetailFactory =
 
 /*** pgSnp Factory - allow pgSnp(personal genome SNP) custom tracks ***/
 
-static boolean rowIsPgSnp (char **row, char *db) 
+static boolean rowIsPgSnp (char **row, char *db, char *type) 
 /* return TRUE if row looks like a pgSnp row */
 {
 boolean isPgSnp = rowIsBed(row, 3, db);
-if (!isPgSnp) 
+if (type != NULL && !sameWord(type, "pgSnp"))
     return FALSE;
-if (!isdigit(row[4][0]))
+if (!isPgSnp && type == NULL) 
     return FALSE;
+else if (!isPgSnp) 
+    errAbort("Error line 1 of custom track, type is pgSnp but first 3 fields are not BED");
+if (!isdigit(row[4][0]) && type == NULL)
+    return FALSE;
+else if (!isdigit(row[4][0]))
+    errAbort("Error line 1 of custom track, type is pgSnp but count is not an integer (%s)", row[4]);
 int count = atoi(row[4]);
-if (count < 1) 
+if (count < 1 && type == NULL) 
     return FALSE;
+else if (count < 1) 
+    errAbort("Error line 1 of custom track, type is pgSnp but count is less than 1");
 char pattern[128]; /* include count in pattern */
 safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
-if (! matchRegex(row[3], pattern))
+if (! matchRegex(row[3], pattern) && type == NULL)
     return FALSE;
+else if (! matchRegex(row[3], pattern))
+    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but allele is invalid %s", count, row[3]);
 safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
-if (! matchRegex(row[5], pattern))
+if (! matchRegex(row[5], pattern) && type == NULL)
     return FALSE;
+else if (! matchRegex(row[5], pattern))
+    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but frequency is invalid (%s)", count, row[5]);
 safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", count - 1);
-if (! matchRegex(row[6], pattern))
+if (! matchRegex(row[6], pattern) && type == NULL)
     return FALSE;
+else if (! matchRegex(row[6], pattern))
+    errAbort("Error line 1 of custom track, type is pgSnp with a count of %d but score is invalid (%s)", count, row[6]);
 /* if get here must be pgSnp format */
 return TRUE;
 }
@@ -889,7 +903,7 @@ if (wordCount == 7)
     {
     track->fieldCount = wordCount;
     char *ctDb = ctGenomeOrCurrent(track);
-    isPgSnp = rowIsPgSnp(row, ctDb);
+    isPgSnp = rowIsPgSnp(row, ctDb, type);
     }
 freeMem(dupe);
 customPpReuse(cpp, line);

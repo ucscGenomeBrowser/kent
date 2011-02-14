@@ -111,7 +111,6 @@ void samAlignmentToRow(struct samAlignment *sam, char *numBuf, char *row[SAMALIG
 {
 char *numPt = numBuf;
 char *numBufEnd = numBuf + BAM_NUM_BUF_SIZE;
-
 row[0] = sam->qName;
 row[1] = numPt; numPt += sprintf(numPt, "%u", sam->flag); numPt += 1;
 row[2] = sam->rName;
@@ -130,6 +129,16 @@ assert(numPt < numBufEnd);
 void bamTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f)
 /* Print out selected fields from BAM.  If fields is NULL, then print out all fields. */
 {
+struct hTableInfo *hti = NULL;
+hti = getHti(db, table, conn);
+struct hash *idHash = NULL;
+char *idField = getIdField(db, curTrack, table, hti);
+int idFieldNum = 0;
+
+/* if we know what field to use for the identifiers, get the hash of names */
+if (idField != NULL)
+    idHash = identifierHash(db, table);
+
 if (f == NULL) 
     f = stdout;
 
@@ -145,7 +154,12 @@ struct hash *fieldHash = hashNew(0);
 struct slName *bb, *bbList = bamGetFields(table);
 int i;
 for (bb = bbList, i=0; bb != NULL; bb = bb->next, ++i)
+    {
+    /* if we know the field for identifiers, save it away */
+    if ((idField != NULL) && sameString(idField, bb->name))
+	idFieldNum = i;
     hashAddInt(fieldHash, bb->name, i);
+    }
 
 /* Create an array of column indexes corresponding to the selected field list. */
 int *columnArray;
@@ -176,23 +190,30 @@ if (anyFilter())
 
 /* Loop through outputting each region */
 struct region *region, *regionList = getRegions();
-for (region = regionList; region != NULL; region = region->next)
+
+int maxOut = bigFileMaxOutput();
+for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct lm *lm = lmInit(0);
     struct samAlignment *sam, *samList = bamFetchSamAlignment(fileName, region->chrom,
     	region->start, region->end, lm);
     char *row[SAMALIGNMENT_NUM_COLS];
     char numBuf[BAM_NUM_BUF_SIZE];
-    for (sam = samList; sam != NULL; sam = sam->next)
+    for (sam = samList; sam != NULL && (maxOut > 0); sam = sam->next)
         {
 	samAlignmentToRow(sam, numBuf, row);
 	if (asFilterOnRow(filter, row))
 	    {
+	    /* if we're looking for identifiers, check if this matches */
+	    if ((idHash != NULL)&&(hashLookup(idHash, row[idFieldNum]) == NULL))
+		continue;
+
 	    int i;
 	    fprintf(f, "%s", row[columnArray[0]]);
 	    for (i=1; i<fieldCount; ++i)
 		fprintf(f, "\t%s", row[columnArray[i]]);
 	    fprintf(f, "\n");
+	    maxOut --;
 	    }
 	}
     lmCleanup(&lm);
@@ -285,6 +306,32 @@ slReverse(&bedList);
 return bedList;
 }
 
+struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count)
+/* Return some semi-random qName based IDs from a BAM file. */
+{
+/* Read 10000 items from bam file,  or if they ask for a big list, then 4x what they ask for. */
+char *fileName = bamFileName(table, conn);
+samfile_t *fh = bamOpen(fileName, NULL);
+struct lm *lm = lmInit(0);
+int orderedCount = count * 4;
+if (orderedCount < 10000)
+    orderedCount = 10000;
+struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, orderedCount, lm);
+
+/* Shuffle list and extract qNames from first count of them. */
+shuffleList(&samList, 1);
+struct slName *randomIdList = NULL;
+int i;
+for (i=0, sam = samList; i<count && sam != NULL; ++i, sam = sam->next)
+     slNameAddHead(&randomIdList, sam->qName);
+
+/* Clean up and go home. */
+lmCleanup(&lm);
+bamClose(&fh);
+freez(&fileName);
+return randomIdList;
+}
+
 void showSchemaBam(char *table)
 /* Show schema on bam. */
 {
@@ -315,9 +362,43 @@ for (col = as->columnList; col != NULL; col = col->next)
     }
 hTableEnd();
 
-/* In a perfect world would print sample rows here.  Maybe later.... */
+/* Put up another section with sample rows. */
+webNewSection("Sample Rows");
+hTableStart();
+
+/* Print field names as column headers for example */
+hPrintf("<TR>");
+int colIx = 0;
+for (col = as->columnList; col != NULL; col = col->next)
+    {
+    hPrintf("<TH>%s</TH>", col->name);
+    ++colIx;
+    }
+hPrintf("</TR>\n");
+
+/* Fetch sample rows. */
+samfile_t *fh = bamOpen(fileName, NULL);
+struct lm *lm = lmInit(0);
+struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, 10, lm);
+
+/* Print sample lines. */
+char *row[SAMALIGNMENT_NUM_COLS];
+char numBuf[BAM_NUM_BUF_SIZE];
+for (sam=samList; sam != NULL; sam = sam->next)
+    {
+    samAlignmentToRow(sam, numBuf, row);
+    hPrintf("<TR>");
+    for (colIx=0; colIx<colCount; ++colIx)
+        {
+	writeHtmlCell(row[colIx]);
+	}
+    hPrintf("</TR>\n");
+    }
+hTableEnd();
 
 /* Clean up and go home. */
+bamClose(&fh);
+lmCleanup(&lm);
 freeMem(fileName);
 hFreeConn(&conn);
 }

@@ -673,5 +673,7 @@ if (argc != 4)
     usage();
 bedToBigBed(argv[1], argv[2], argv[3]);
 optionFree();
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

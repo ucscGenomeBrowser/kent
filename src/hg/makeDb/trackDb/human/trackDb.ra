@@ -44,6 +44,7 @@ priority 29.6
 visibility hide
 color 0,0,0
 type bed 4
+html decipherOld
 tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 
 track caseControl
@@ -2994,17 +2995,18 @@ track omimComposite
 compositeTrack on
 shortLabel OMIM Comp
 group phenDis
-visibility pack
+priority 29.8
+visibility hide
 type bed 4
 hgsid on
 
 track omimLocation
 parent omimComposite
 shortLabel OMIM Locations
-longLabel OMIM Locations
+longLabel OMIM All Cytogenetic Locations
 group phenDis
 priority 10
-visibility pack
+visibility hide
 color 0, 100, 100
 type bed 4
 hgsid on
@@ -3016,7 +3018,7 @@ parent omimComposite
 longLabel OMIM-Associated Phenotype Class 2 Locations
 group phenDis
 priority 8
-visibility dense
+visibility hide
 color 120, 100, 0
 type bed 4
 hgsid on
@@ -3028,32 +3030,30 @@ parent omimComposite
 longLabel OMIM-Associated Phenotype Class 2 Genes
 group phenDis
 priority 7
-visibility dense
+visibility hide
 color 240, 100, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
 
 track omimGeneClass3
-shortLabel OMIM Class 3
-parent omimComposite
-longLabel OMIM-Associated Phenotype Class 3 Genes
+shortLabel OMIM Genes (Class 3)
+longLabel OMIM Genes (Class 3, with Known Molecular Basis of Disorder)
 group phenDis
-priority 2
-visibility dense
-color 240, 0, 0
+priority 29.73
+visibility pack
+color 220, 0, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
 
 track omimAvSnp
-shortLabel OMIM AV SNP
-longLabel OMIM Allelic Variant SNP
+shortLabel OMIM AV SNPs
+longLabel OMIM Allelic Variant SNPs
 group phenDis
-parent omimComposite
-priority 3
+priority 29.71
 visibility dense
-color 255,0,0
+color 220,0,0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
@@ -3488,6 +3488,15 @@ searchPriority 52
 
 searchName omimGeneAcc
 searchTable omimGene
+searchMethod exact
+searchType bed
+shortCircuit 1
+semiShortCircuit 1
+termRegex ([0-9]{6})
+searchPriority 10
+
+searchName omimGeneLocAcc
+searchTable omimGeneLocation
 searchMethod exact
 searchType bed
 shortCircuit 1

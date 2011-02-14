@@ -6,6 +6,7 @@
 #include "sqlNum.h"
 #include "udc.h"
 #include "bigWig.h"
+#include "obscure.h"
 
 static char const rcsid[] = "$Id: bigWigSummary.c,v 1.13 2009/11/20 17:12:17 kent Exp $";
 
@@ -81,5 +82,7 @@ if (argc != 6)
 summaryType = optionVal("type", summaryType);
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 bigWigSummary(argv[1], argv[2], sqlUnsigned(argv[3]), sqlUnsigned(argv[4]), sqlUnsigned(argv[5]));
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

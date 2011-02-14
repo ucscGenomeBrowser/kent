@@ -16,6 +16,15 @@ encodeMkGeoPkg hg18 wgEncodeCaltechRnaSeq -soft <dummy_seq_platform>
 
 Creates file:  ucsc_encode_dcc_wgEncodeCaltechRnaSeq.soft
 
+Command line options for database and release have also been added.
+The command would take the form:
+
+encodeMkGeoPkg hg18 wgEncodeCaltechRnaSeq -soft <dummy_seq_platform>\
+	-database localhost -release release1
+
+Default values for these options are "mysqlbeta" for database and
+the downloads file for release.
+
 3) To complete submission, run w/o -soft option:
 
 encodeMkGeoPkg hg18 wgEncodeCaltechRnaSeq <dummy_seq_platform>
