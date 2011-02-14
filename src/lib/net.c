@@ -933,13 +933,13 @@ static int netGetOpenHttp(char *url)
 return netOpenHttpExt(url, "GET", NULL);
 }
 
-int netUrlHead(char *url, struct hash *hash)
+int netUrlHeadExt(char *url, char *method, struct hash *hash)
 /* Go get head and return status.  Return negative number if
  * can't get head. If hash is non-null, fill it with header
  * lines with upper cased keywords for case-insensitive lookup, 
  * including hopefully CONTENT-TYPE: . */
 {
-int sd = netOpenHttpExt(url, "HEAD", NULL);
+int sd = netOpenHttpExt(url, method, NULL);
 int status = EIO;
 if (sd >= 0)
     {
@@ -974,6 +974,44 @@ else
     status = errno;
 return status;
 }
+
+
+int netUrlHead(char *url, struct hash *hash)
+/* Go get head and return status.  Return negative number if
+ * can't get head. If hash is non-null, fill it with header
+ * lines with upper cased keywords for case-insensitive lookup, 
+ * including hopefully CONTENT-TYPE: . */
+{
+return netUrlHeadExt(url, "HEAD", hash);
+}
+
+
+long long netUrlSizeByRangeResponse(char *url)
+/* Use byteRange as a work-around alternate method to get file size (content-length).  
+ * Return negative number if can't get. */
+{
+long long retVal = -1;
+char rangeUrl[2048];
+safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=0-0", url);
+struct hash *hash = newHash(0);
+int status = netUrlHeadExt(rangeUrl, "GET", hash);
+if (status == 206)
+    { 
+    char *rangeString = hashFindValUpperCase(hash, "Content-Range:");
+    if (rangeString)
+	{
+ 	/* input pattern: Content-Range: bytes 0-99/2738262 */
+	char *slash = strchr(rangeString,'/');
+	if (slash)
+	    {
+	    retVal = atoll(slash+1);
+	    }
+	}
+    }
+hashFree(&hash);
+return retVal;
+}
+
 
 int netUrlOpenSockets(char *url, int *retCtrlSocket)
 /* Return socket descriptor (low-level file handle) for read()ing url data,

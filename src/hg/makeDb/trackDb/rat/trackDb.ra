@@ -91,8 +91,8 @@ track agilentCgh
 shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
 compositeTrack on
-group regulation
-priority 79.5
+group varRep
+priority 143.2
 visibility hide
 noInherit on
 type bed 3

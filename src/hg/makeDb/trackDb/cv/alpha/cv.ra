@@ -4275,22 +4275,6 @@ targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6_(H-50)(Immunoblot,MassSpec)_Myers:human_E2F6_H-50_validation_Myers.pdf
 
-# This entry duplicates EBF1_(C-8) below.  Eventually, this entry should go away, and all
-# tracks using it should be moved instead to EBF1_(C-8).  (2/9/11)
-term EBF
-tag EBF
-type Antibody
-target EBF
-antibodyDescription See EBF1_C-8
-targetDescription See EBF1_C-8
-vendorName Santa Cruz Biotech
-vendorId sc-137065
-orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
-lab Myers
-targetId GeneCard:EBF1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
-
 
 term  EBF1_(C-8)
 tag  EBF1C8
@@ -5165,22 +5149,6 @@ lab Snyder
 targetId GeneCard:IRF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
-
-# This antibody is equivalent to IRF4_(M-17) below.  Eventually, the two entries should
-# be merged and this copy should be thrown out.  2/9/11.
-term IRF4
-tag IRF4
-type Antibody
-target IRF4
-antibodyDescription See IRF4_(M-17) 
-targetDescription See IRF4_(M-17)
-vendorName Santa Cruz Biotech
-vendorId sc-6059
-orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
-lab Myers
-targetId GeneCard:IRF4
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_M-17(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_IRF4_M-17_validation_Myers.pdf
 
 
 term  IRF4_(M-17)

@@ -2046,10 +2046,10 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 #include jkExperiments.ra
 
 track agilentCgh
-shortLabel Agilent CGH
-longLabel Agilent CGH Microarray probesets
+shortLabel Arrays
+longLabel Microarray probesets
 compositeTrack on
-group expression
+group varRep
 visibility hide
 noScoreFilter .
 noInherit on
