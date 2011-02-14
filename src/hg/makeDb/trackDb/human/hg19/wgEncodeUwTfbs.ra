@@ -26,7 +26,10 @@
 #                       - factor Order: Ordering is based on Histone Number then numerically and alphabetaclly. Numerically 09 before 12.
 #               - Dimension Y - Cell Type
 #                       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
-
+#		- View default settings:
+#			- Hotspots: dense
+#			- Peaks: dense
+#			- Raw Signal: full
 
 
 track wgEncodeUwTfbs
@@ -47,14 +50,13 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
-dataVersion through the ENCODE Jun 2010 Freeze
 noInherit on
 
 	
     track wgEncodeUwTfbsViewHot
     shortLabel Hotspots
     view Hot
-    visibility pack
+    visibility dense
     parent wgEncodeUwTfbs
     pValueFilter 0.0
     pValueFilterLimits 0:324
@@ -734,7 +736,7 @@ noInherit on
     track wgEncodeUwTfbsViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack
+    visibility dense
     parent wgEncodeUwTfbs
     pValueFilter 0.0
     pValueFilterLimits 0:324
