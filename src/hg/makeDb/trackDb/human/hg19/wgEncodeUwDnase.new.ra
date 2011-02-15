@@ -15,8 +15,8 @@
 #		- HepG2
 #       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that the tier and that they are distinct
 #       - Default View selections
-#               - Hotspots = pack
-#               - Peaks = pack
+#               - Hotspots = dense
+#               - Peaks = dense
 #               - Raw Signal = full
 #	- Short Labels: 
 #		Template: [cell] [treatment] [view] [replicate #]
@@ -70,7 +70,7 @@ wgEncode 1
     track wgEncodeUwDnaseViewHot
     shortLabel Hot Spots
     view Hot
-    visibility pack
+    visibility dense
     parent wgEncodeUwDnase
     pValueFilter 0.0
     pValueFilterLimits 1:324
@@ -1455,7 +1455,7 @@ wgEncode 1
     track wgEncodeUwDnaseViewaPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack
+    visibility dense
     parent wgEncodeUwDnase
     pValueFilter 0.0
     pValueFilterLimits 1:324
