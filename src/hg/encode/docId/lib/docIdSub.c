@@ -181,11 +181,11 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-char *docIdDecorate(char *composite, int num)
+char *docIdDecorate(char *composite, char *cellType, int num)
 {
 char buffer[10 * 1024];
 
-safef(buffer, sizeof buffer, "%s%09d",composite, num);
+safef(buffer, sizeof buffer, "%s%sD%09d",composite, cellType, num);
 return cloneString(buffer);
 }
 
