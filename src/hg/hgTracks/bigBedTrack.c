@@ -17,7 +17,7 @@
 #include "bigWig.h"
 #include "bigBed.h"
 
-static struct bbiFile *fetchBbiForTrack(struct track *track)
+struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
 {
 struct bbiFile *bbi = track->bbiFile;
