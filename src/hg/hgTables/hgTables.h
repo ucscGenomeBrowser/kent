@@ -739,6 +739,10 @@ void wigShowFilter(struct sqlConnection *conn);
 boolean isBigWigTable(char *table);
 /* Return TRUE if table is bedGraph in current database's trackDb. */
 
+char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn);
+/* If table is a custom track or hub track, return the bigDataUrl setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
+
 char *bigWigFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
@@ -799,10 +803,6 @@ struct asObject *bamAsObj();
 
 boolean isBamTable(char *table);
 /* Return TRUE if table corresponds to a BAM file. */
-
-char *bamFileName(char *table, struct sqlConnection *conn);
-/* Return file name associated with BAM.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
 
 struct slName *bamGetFields(char *table);
 /* Get fields of bam as simple name list. */
