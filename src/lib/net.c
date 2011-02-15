@@ -1697,7 +1697,7 @@ while (TRUE)
 		int newSd = 0;
 		if (startsWith("http://",url) || startsWith("https://",url))
 		    {
-		    if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, url, &newSd, &newUrl))
+		    if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, urlExt, &newSd, &newUrl))
 			{
 			warn("Error processing http response for %s", url);
 			return FALSE;
