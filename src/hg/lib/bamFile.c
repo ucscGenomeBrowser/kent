@@ -12,8 +12,8 @@
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
- * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
- * bam file might have '1' not 'chr1'). */
+ * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
+ * case in the bam file). */
 {
 boolean checkSeqName = (sqlFieldIndex(conn, table, "seqName") >= 0);
 if (checkSeqName && bamSeqName == NULL)
