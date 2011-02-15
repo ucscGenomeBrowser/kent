@@ -12,12 +12,14 @@ subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 dimensions dimensionX=readType dimensionY=cellType dimensionA=rep
 dimensionAchecked rep1,rep2,rep3,rep4
 sortOrder cellType=+ readType=+ view=+ rep=+
+fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell readType=readType mapAlgorithm=mapAlgorithm insertLength=insertLength
 dragAndDrop subTracks
 priority 0
 type bed 3
 noInherit on
 wgEncode 1
+maxWindowToDraw 10000000
 html wgEncodeCaltechRnaSeq.new.html
 
 	track wgEncodeCaltechRnaSeqViewGeneModel
@@ -144,7 +146,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewGeneModel
         shortLabel GM12878 2
         longLabel ENCODE Caltech RNA-seq DeNovo Gene Models from Cufflinks Replicate 2 (in GM12878 cells)
-        subGroups view=GeneModel cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        subGroups view=GeneModel cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type genePred
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
@@ -511,7 +513,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewSplices
         shortLabel GM12878 2
         longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in GM12878 cells)
-        subGroups view=Splices cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        subGroups view=Splices cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type bam
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
@@ -917,7 +919,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewPaired
         shortLabel GM12878 2
         longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in GM12878 cells)
-        subGroups view=Paired cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        subGroups view=Paired cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type bam
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
@@ -1403,7 +1405,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewSignal
         shortLabel GM12878 Sig 2
         longLabel ENCODE Caltech RNA-seq Signal Replicate 2 (in GM12878 cells)
-        subGroups view=Signal cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        subGroups view=Signal cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type bigWig 1.000000 141988.000000
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
