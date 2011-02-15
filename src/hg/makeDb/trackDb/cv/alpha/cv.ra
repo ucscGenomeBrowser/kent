@@ -9152,10 +9152,19 @@ validate cv
 priority 500
 # This is Caltech only and possibly should be retired.  (11/3/10)
 
+term md5sum      
+type typeOfTerm
+label md5sum
+description The md5sum for the file associated with the object. Provisional.
+searchable no    
+cvDefined no 
+validate none  #there should be a good rule for this
+#priority 500 #???? what is this
+
 term obtainedBy
 type typeOfTerm
 label obtainedBy
-description The production group that grew the cells and isolated genomic DNA. (Provis
+description The production group that grew the cells and isolated genomic DNA. (Provisional)
 searchable select
 cvDefined no #(Defined by lab)
 validate none

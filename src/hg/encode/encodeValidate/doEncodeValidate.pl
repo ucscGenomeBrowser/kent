@@ -178,6 +178,8 @@ our %validators = (
     phase => \&validateControlledVocabOrControl,
     restrictionEnzyme => \&validateControlledVocabOrControl,
     obtainedBy => \&validateObtainedBy,
+    md5sum => \&validateNoValidation,
+    bioRep => \&validateNoValidation,
     default => \&validateControlledVocab,
     );
 
