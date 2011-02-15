@@ -88,6 +88,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *docIdType = mdbObjFindValue(mdbObj, "type");
     char *docIdComposite = mdbObjFindValue(mdbObj, "composite");
     char buffer[10 * 1024];
+    char *cellFromMetaData = mdbObjFindValue(mdbObj, "cell"); 
+
     safef(buffer, sizeof buffer, "%d", docIdSub->ix);
     if (sameString(database, "encpipeline_beta"))
         docIdDir = docIdDirBeta;
@@ -95,7 +97,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<tr>");
     printf("<td>%s</td> ",   docIdSub->submitDate);
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "dataType"));
-    printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "cell"));
+    printf("<td>%s</td> ",  cellFromMetaData);
     struct dyString *str = newDyString(100);
     addValue(str,  mdbObjFindValue(mdbObj, "antibody"));
     addValue(str,  mdbObjFindValue(mdbObj, "treatment"));
@@ -108,7 +110,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<td>%s</td> ",   mdbObjFindValue(mdbObj, "type"));
     printf("<td><a href=%s> %s</a></td>", 
         docIdGetPath(buffer, docIdDir, docIdType, NULL) , 
-        docIdDecorate(docIdComposite,docIdSub->ix));
+        docIdDecorate(docIdComposite, cellFromMetaData, docIdSub->ix));
     char *lab = mdbObjFindValue(mdbObj, "lab");
     char *subId = mdbObjFindValue(mdbObj, "subId");
     printf("<td><a href=docIdView?docId=%s&db=%s&lab=\"%s\"> %s</a></td>",buffer, database, subId, lab);
