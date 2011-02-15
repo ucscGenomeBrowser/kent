@@ -360,10 +360,18 @@ if (status != 200) // && status != 302 && status != 301)
 char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
 if (sizeString == NULL)
     {
-    hashFree(&hash);
-    errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
+    /* try to get remote file size by an alternate method */
+    retInfo->size = netUrlSizeByRangeResponse(url);
+    if (retInfo->size < 0)
+	{
+    	hashFree(&hash);
+	errAbort("No Content-Length: returned in header for %s, can't proceed, sorry", url);
+	}
     }
-retInfo->size = atoll(sizeString);
+else
+    {
+    retInfo->size = atoll(sizeString);
+    }
 
 char *lastModString = hashFindValUpperCase(hash, "Last-Modified:");
 if (lastModString == NULL)
