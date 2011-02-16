@@ -265,11 +265,19 @@ myoLuc2.refseq.mrna.xeno.loadDesc  = yes
     git commit -m "Added myoLuc2 - Microbat" etc/align.dbs etc/hgwdev.dbs
     make etc-update
 
+
+############################################################################
+#  myoLuc2 - Microbat - Ensembl Genes (pending - 2011-02-15 - Chin)
+#  Ensembl Genes version 61 contains myoLuc1 assembly (Mar 2006) by Broad
+#  Institute. .
+#  The sequence downloaded from ncbi is Myoluc2.0 dated 2010-07-21 by Broad
+#  Institute.
+#  We need to wait for the newer release of Ensemble Genes.   
 #########################################################################
-# reset position to RHO location as found from blat of hg19 RHO gene
-#	(working - pending result of ensGene work - Chin)
+# reset default position to RHO location as result from RHO gene search
+#	(DONE 2011-02-15 - Chin)
     hgsql -e \
-'update dbDb set defaultPos="chr13:57394166-57402412" where name="myoLuc2";' \
+'update dbDb set defaultPos="GL429775:12,852,264-12,856,982" where name="myoLuc2";' \
 	hgcentraltest
 
 # NOTE - create myoLuc2 entry in all.joiner since this is a new species
