@@ -5,6 +5,7 @@ static char const rcsid[] = "$Id: wigEncode.c,v 1.12 2009/01/14 18:59:18 hiram E
 #include "common.h"
 #include "wiggle.h"
 #include "options.h"
+#include "obscure.h"
 
 void usage()
 /* Explain usage and exit */
@@ -128,5 +129,7 @@ verbose(2,"output .wig file: %s\n", argv[2]);
 verbose(2,"output .wib file: %s\n", argv[3]);
 
 wigEncode(argv[1], argv[2], argv[3]);
+if (verboseLevel() > 1)
+    printVmPeak();
 exit(0);
 }

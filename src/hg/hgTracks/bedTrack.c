@@ -791,8 +791,8 @@ if (wordCount > 1)
 track->bedSize = fieldCount;
 track->isBigBed = isBigBed;
 
-if (track->isBigBed)
-    track->nextItemButtonable = FALSE;
+//if (track->isBigBed)
+    //track->nextItemButtonable = FALSE;
 
 if (fieldCount < 8)
     {

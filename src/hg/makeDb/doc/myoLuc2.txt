@@ -1,0 +1,285 @@
+# for emacs: -*- mode: sh; -*-
+
+
+# Myotis lucifugus (microbat) --  Broad Institute of MIT and Harvard
+
+
+# file template copied from susScr2.txt
+
+
+#  Myotis lucifugus 
+# (NCBI Project ID: 16951, Accession: GCA_000005525.1) 
+#   by Broad Institute of MIT and Harvard
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Myotis_lucifugus/Myoluc2.0/
+
+##########################################################################
+# Download sequence (DONE - 2010-10-22 - Chin)
+    mkdir /hive/data/genomes/myoLuc2
+    cd /hive/data/genomes/myoLuc2
+    mkdir genbank
+    cd genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Myotis_lucifugus/Myoluc2.0/*"
+    # FINISHED --2010-10-22 09:11:24--
+    # Downloaded: 12 files, 802M in 18m 12s (752 KB/s)
+    # Read ASSEMBLY_INFO 
+
+    # stay at genbank directory
+    # Process the unplaced scaffolds, filter out the  
+    #   The ".1" at the end (i.e. ABQO010000034.1) of contig name, since
+    #   MySQL does not allow "." as part of the table name and 
+    #   will casue problems in genbank task step later
+
+    export S=Primary_Assembly/unplaced_scaffolds
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > myoLuc2.agp
+    # append the gap records
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
+            | sed  -e "s/\.1//"  >> myoLuc2.agp
+    gzip myoLuc2.agp &
+
+    zcat ${S}/FASTA/unplaced.scaf.fa.gz \
+            | sed -e "s#^>.*|gb|#>#; s#|.*##"  -e "s/\.1//"  \
+            | gzip > myoLuc2.fa.gz
+    zcat myoLuc2.fa.gz | grep "^>" | wc
+    #   11654   11654  149528
+
+   faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+   # 2034575300 bases (68155432 N's 1966419868 real 1966419868 upper
+   #   0 lower) in 11654 sequences in 1 files
+
+   # N50
+   mkdir N50
+   zcat  myoLuc2.fa.gz | faCount stdin | awk '/^(GL|AAPE)/ {print $1, $2}' > N50/chrom.sizes
+   n50.pl N50/chrom.sizes
+#       reading: N50/chrom.sizes
+#       contig count: 11654, total size: 2034575300, one half size: 1017287650
+# cumulative    N50 count       contig  contig size
+1015221828      105     GL429874        4309204
+1017287650 one half size
+1019515143      106     GL429872        4293315
+
+#########################################################################
+# Initial makeGenomeDb.pl (DONE - 2010-11-02 - Chin)
+    cd /hive/data/genomes/myoLuc2
+    cat << '_EOF_' > myoLuc2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db myoLuc2
+clade mammal
+genomeCladePriority 35
+scientificName Myotis lucifugus
+commonName Microbat
+assemblyDate Jul. 2010
+assemblyLabel  Broad Institute (NCBI Project ID: 16951, Accession: GCA_000147115.1)
+assemblyShortLabel  Broad Institute Myoluc2.0
+orderKey 236.5
+mitoAcc none
+fastaFiles /hive/data/genomes/myoLuc2/genbank/myoLuc2.fa.gz
+agpFiles /hive/data/genomes/myoLuc2/genbank/myoLuc2.agp.gz
+# qualFiles none
+dbDbSpeciesDir microbat
+taxId 59463
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev myoLuc2.config.ra \
+	> makeGenomeDb.log 2>&1 &
+    # real    15m33.626s
+    
+    # add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/myoLuc2.unmasked.2bit /gbdb/myoLuc2/myoLuc2.2bit
+    #  Per instructions in makeGenomeDb.log:
+    # cd ~/kent/src/hg/makeDb/trackDb
+    # edit makefile to add myoLuc2 to DBS.
+    # git add microbat/myoLuc2/*.{ra,html}
+    # git commit -m "Added myoLuc2 to DBS." makefile
+    # git commit -m "Initial descriptions for myoLuc2." microbat/myoLuc2/*.{ra,html}
+    #  git pull; git push
+    # Run make update DBS=myoLuc2 and make alpha when done.
+    # (optional) Clean up /cluster/data/myoLuc2/TemporaryTrackDbCheckout
+
+
+#########################################################################
+# RepeatMasker (DONE 2010-11-03 - Chin)
+    mkdir /hive/data/genomes/myoLuc2/bed/repeatMasker
+    cd /hive/data/genomes/myoLuc2/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
+	-workhorse=hgwdev -bigClusterHub=swarm -noSplit myoLuc2 > do.log 2>&1 &
+    #   real    253m45.336s
+    cat faSize.rmsk.txt
+    # 2034575300 bases (68155432 N's 1966419868 real 1304219212 upper 
+    # 662200656 lower) in 11654 sequences in 1 files
+    # %32.55 masked total, %33.68 masked real
+
+#########################################################################
+# simpleRepeats ( DONE 2010-11-03 - Chin)
+    mkdir /hive/data/genomes/myoLuc2/bed/simpleRepeat
+    cd /hive/data/genomes/myoLuc2/bed/simpleRepeat
+
+    time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-bigClusterHub=swarm -smallClusterHub=swarm myoLuc2 > do.log 2>&1 &
+    # real    9m30.973s    
+    cat fb.simpleRepeat
+    # 43294476 bases of 1966419868 (2.202%) in intersection
+    #	add to the repeatMasker
+    cd /hive/data/genomes/myoLuc2
+    twoBitMask myoLuc2.rmsk.2bit -add bed/simpleRepeat/trfMask.bed myoLuc2.2bit
+    #	safe to ignore warnings about >=13 fields
+    twoBitToFa myoLuc2.2bit stdout | faSize stdin > myoLuc2.2bit.faSize.txt
+    cat myoLuc2.2bit.faSize.txt
+    # 2034575300 bases (68155432 N's 1966419868 real 1303520693 upper 
+    # 662899175 lower) in 11654 sequences in 1 files
+    # %32.58 masked total, %33.71 masked real
+
+#########################################################################
+# Marking *all* gaps - they are all in the AGP file
+#	(DONE - 2010-11-04 - Chin)
+    mkdir /hive/data/genomes/myoLuc2/bed/allGaps
+    cd /hive/data/genomes/myoLuc2/bed/allGaps
+
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../myoLuc2.unmasked.2bit > findMotif.txt 2>&1
+    # real    0m25.895s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits myoLuc2 -not gap -bed=notGap.bed
+    # 1966419868 bases of 1966419868 (100.000%) in intersection
+    featureBits myoLuc2 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #   0 bases of 1966419868 (0.000%) in intersection
+    #   they are all in the AGP file 
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" myoLuc2 | sort -n | tail -1
+    #	2378
+
+
+########################################################################
+# Create kluster run files (DONE - 2010-11-04 - Chin)
+    # numerator is myoLuc2 gapless bases "real" as reported by: 
+    featureBits -noRandom -noHap myoLuc2 gap
+    # 68155432 bases of 1966419868 (3.466%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #	featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \(  1966419868  / 2861349177 \) \* 1024
+    # ( 1966419868 / 2861349177 ) * 1024 = 703.728843
+    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    #	and rounded down to nearest 50 (in this case, 700)
+    cd /hive/data/genomes/myoLuc2
+    blat myoLuc2.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/myoLuc2.11.ooc \
+	-repMatch=700 &
+    # Loading myoLuc2.2bit
+    # Counting myoLuc2.2bit
+    # Writing jkStuff/myoLuc2.11.ooc
+    # Wrote 7846 overused 11-mers to jkStuff/myoLuc2.11.ooc
+    # Done making jkStuff/myoLuc2.11.ooc
+
+    mkdir /hive/data/staging/data/myoLuc2
+    cp -p myoLuc2.2bit jkStuff/myoLuc2.11.ooc /hive/data/staging/data/myoLuc2
+    cp -p chrom.sizes /hive/data/staging/data/myoLuc2
+    #	check  for non-bridged gaps to see what the typical size is:
+    hgsql -e "select bridge from gap;" myoLuc2 | sort | uniq
+    #  bridge
+    #  yes
+    # all gap are bridged, done
+    
+    # ask cluster-admin to copy (evry time if any file chsnged)
+    #    /hive/data/staging/data/myoLuc2 directory to cluster nodes
+    #    /scratch/data/myoLuc2
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE 2011-02-15 - Chin)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+
+    # edit etc/genbank.conf to add myoLuc2 just after ponAbe2
+
+# myoLuc2 (Microbat)
+myoLuc2.serverGenome = /hive/data/genomes/myoLuc2/myoLuc2.2bit
+myoLuc2.clusterGenome = /scratch/data/myoLuc2/myoLuc2.2bit
+myoLuc2.ooc = /scratch/data/myoLuc2/myoLuc2.11.ooc
+myoLuc2.lift = no
+myoLuc2.perChromTables = no
+myoLuc2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+myoLuc2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+myoLuc2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+myoLuc2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+myoLuc2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+myoLuc2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+myoLuc2.downloadDir = myoLuc2
+myoLuc2.refseq.mrna.native.load  = yes
+myoLuc2.refseq.mrna.xeno.load = yes
+myoLuc2.refseq.mrna.xeno.loadDesc  = yes
+
+
+
+
+    git add etc/genbank.conf
+    git commit -m "Added myoLuc2" etc/genbank.conf
+    git pull
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  With these two lines:
+# static char *myoLucNames[] = {"Myotis lucifugus", NULL};
+#   ... later ...
+#    {"myoLuc", myoLucNames},
+#  gbGenome.c is  in
+#  /cluster/home/chinhli/kent/src/hg/makeDb/genbank/src/lib
+# make and checkin
+
+    git add src/lib/gbGenome.c
+    git commit -m "adding myoLuc2 microbat" src/lib/gbGenome.c
+    git pull
+    git push
+    make install-server
+
+    ssh genbank
+    screen	#  control this business with a screen since it takes a while
+
+    cd /cluster/data/genbank
+     time nice -n +19 ./bin/gbAlignStep -initial myoLuc2 &
+    #   logFile: var/build/logs/2010.11.04-14:14:12.myoLuc2.initalign.log 
+    #   real    185m34.759s
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/data/aligned/genbank.176.0/myoLuc2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad myoLuc2 &
+    #   logFile: var/dbload/hgwdev/logs/2011.02.15-10:12:57.dbload.log
+    #   real   17m13.500s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add myoLuc2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git add etc/align.dbs
+    git add etc/hgwdev.dbs
+    git commit -m "Added myoLuc2 - Microbat" etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+
+############################################################################
+#  myoLuc2 - Microbat - Ensembl Genes (pending - 2011-02-15 - Chin)
+#  Ensembl Genes version 61 contains myoLuc1 assembly (Mar 2006) by Broad
+#  Institute. .
+#  The sequence downloaded from ncbi is Myoluc2.0 dated 2010-07-21 by Broad
+#  Institute.
+#  We need to wait for the newer release of Ensemble Genes.   
+#########################################################################
+# reset default position to RHO location as result from RHO gene search
+#	(DONE 2011-02-15 - Chin)
+    hgsql -e \
+'update dbDb set defaultPos="GL429775:12,852,264-12,856,982" where name="myoLuc2";' \
+	hgcentraltest
+
+# NOTE - create myoLuc2 entry in all.joiner since this is a new species
+
+############################################################################
