@@ -1,0 +1,693 @@
+# for emacs: -*- mode: sh; -*-
+
+#       $Id: melGal1.txt,v 1.6 2010/05/06 16:27:44 chinhli Exp $
+
+
+# Meleagris gallopavo (turkey) -- Turkey Genome Consortium Turkey_2.01
+(2009-12-10)
+
+ATE:	10-DEC-2009
+ORGANISM:	Meleagris gallopavo
+TAXID:	9103
+ASSEMBLY LONG NAME:	Turkey_2.01
+ASSEMBLY SHORT NAME:	Turkey_2.01
+ASSEMBLY SUBMITTER:	Turkey Genome Consortium
+ASSEMBLY TYPE:	Haploid
+NUMBER OF ASSEMBLY-UNITS:	1
+Assembly Accession:	GCA_000146605.1
+
+
+# file template copied from susScr2.txt
+
+
+# Meleagris gallopavo (NCBI Project ID: 10805, Accession: GCA_000146605.1)
+#    by Turkey Genome Consortium
+#    sequence: 
+# ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Meleagris_gallopavo/Turkey_2.01/
+
+##########################################################################
+# Download sequence (DONE - 2010-10-22 - Chin)
+    mkdir /hive/data/genomes/melGal1
+    cd /hive/data/genomes/melGal1
+    mkdir genbank
+    cd genbank
+    wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+        --no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_other/Meleagris_gallopavo/Turkey_2.01/*"
+    # FINISHED --2010-10-22 08:28:53--
+    # Downloaded: 243 files, 611M in 9m 19s (1.09 MB/s)
+
+    # Read ASSEMBLY_INFO 
+
+    mkdir ucscChr
+    # stay at genbank directory
+    #   fixup the accession names to become UCSC chrom names
+
+export S=Primary_Assembly/assembled_chromosomes
+cut -f2 ${S}/chr2acc  | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    echo "${ACC} -> chr${C}"
+    zcat ${S}/AGP/chr${C}.comp.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/" | gzip > ucscChr/chr${C}.agp.gz
+done
+
+
+export S=Primary_Assembly/assembled_chromosomes
+cut -f2 ${S}/chr2acc  | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    echo "${ACC} -> chr${C}"
+    echo ">chr${C}" > ucscChr/chr${C}.fa
+    zcat ${S}/FASTA/chr${C}.fa.gz | grep -v "^>" >> ucscChr/chr${C}.fa
+    gzip ucscChr/chr${C}.fa &
+done
+   # Check them with faSize 
+    faSize Primary_Assembly/assembled_chromosomes/FASTA/chr*.fa.gz
+    #   2784748484 bases (1600136831 N's 1184611653 real 1184611653 upper
+    #   0 lower) in 27 sequences in 27 files
+    faSize ucscChr/chr*.fa.gz
+    #  1061800384 bases (125894715 N's 935905669 real 935905669 upper 
+    #  0 lower) in 5890 sequences in 33 files
+
+    # For unplaced scalfolds, named them as chrUn_xxxxxxxx
+    #   where xxxxxx is the original access id as: chrUn_GL340781.1  
+    #   The ".1" at the end need to be filter out since
+    #   MySQL does not allow "." as part of the table name and 
+    #   will casue problems in genbank task step later
+
+    export S=Primary_Assembly/unplaced_scaffolds
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep "^#" > ucscChr/chrUn.agp
+   # append the gap records
+    zcat ${S}/AGP/unplaced.scaf.agp.gz | grep -v "^#" \
+        | sed -e "s/^/chrUn_/" -e "s/\.1//"  >> ucscChr/chrUn.agp
+    gzip ucscChr/chrUn.agp &
+
+    zcat ${S}/FASTA/unplaced.scaf.fa.gz \
+        | sed -e "s#^>.*|gb|#>chrUn_#; s#|.*##"  -e "s/\.1//"  \
+        | gzip > ucscChr/chrUn.fa.gz
+   # about 5858 sequences in the unplaced
+    zcat ucscChr/chrUn.fa.gz | grep "^>" | wc
+   #    5858    5858   93728
+
+    # Check them with faSize 
+    faSize Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz
+    #  21513314 bases (2885592 N's 18627722 real 18627722 upper 
+    #  0 lower) in 5858 sequences in 1 files
+    #  75747883 bases (59104875 N's 16643008 real 16643008 upper 0 lower)
+    #     in 1190 sequences in 1 files
+    faSize ucscChr/chrUn.fa.gz
+    # 21513314 bases (2885592 N's 18627722 real 18627722 upper 
+    # 0 lower) in 5858 sequences in 1 files
+   
+    # N50
+    mkdir N50
+    export S=Primary_Assembly/assembled_chromosomes
+    cut -f2 ${S}/chr2acc  | while read ACC
+    do
+    	C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    	echo ">chr${C}" > ucscChr/chr${C}.fa
+    	zcat ucscChr/chr${C}.fa.gz  >> N50/melGal1.fa
+    done
+    zcat ucscChr/chrUn.fa.gz  >> N50/melGal1.fa
+    faCount  N50/melGal1.fa | awk ' /^chr/ {print $1, $2}' > N50/chrom.sizes
+    n50.pl N50/chrom.sizes
+#       reading: N50/chrom.sizes
+#       contig count: 5890, total size: 1061800384, one half size: 530900192
+# cumulative    N50 count       contig  contig size
+502447651       4       chrZ    81011772
+530900192 one half size
+577312103       5       chr4    74864452
+
+     rm N50/melGal1.fa
+
+#########################################################################
+# Initial makeGenomeDb.pl (DONE - 2010-11-03 - Chin)
+    cd /hive/data/genomes/melGal1
+    cat << '_EOF_' > melGal1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db melGal1
+clade vertebrate
+genomeCladePriority 55
+scientificName Meleagris gallopavo
+commonName Turkey
+assemblyDate Dec. 2009
+assemblyLabel TGC (NCBI Project ID: 10805, Accession: GCA_000146605.1)
+assemblyShortLabel TGC Turkey_2.01 
+orderKey 436
+mitoAcc NC_010195
+fastaFiles /hive/data/genomes/melGal1/genbank/ucscChr/chr*.fa.gz
+agpFiles /hive/data/genomes/melGal1/genbank/ucscChr/chr*.agp.gz
+# qualFiles none
+dbDbSpeciesDir turkey
+taxId 9103
+'_EOF_'
+    # << happy emacs
+    time makeGenomeDb.pl -noGoldGapSplit -workhorse=hgwdev melGal1.config.ra \
+	> makeGenomeDb.log 2>&1 &
+    # real    7m58.244s
+    #	add the trackDb entries to the source tree, and the 2bit link:
+    ln -s `pwd`/melGal1.unmasked.2bit /gbdb/melGal1/melGal1.2bit
+
+    #  Per instructions in makeGenomeDb.log:
+    # cd ~/kent/src/hg/makeDb/trackDb
+    # edit makefile to add melGal1 to DBS.
+    # git add turkey/melGal1/*.{ra,html}
+    # git commit -m "Added melGal1 to DBS." makefile
+    # git commit -m "Initial descriptions for melGal1."
+    # turkey/melGal1/*.{ra,html}
+    # git pull; git push
+    # Run make update DBS=melGal1 and make alpha when done.
+    # (optional) Clean up /cluster/data/melGal1/TemporaryTrackDbCheckout
+
+
+#########################################################################
+# RepeatMasker (DONE - 2010-11-04 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/repeatMasker
+    cd /hive/data/genomes/melGal1/bed/repeatMasker
+
+    time nice -n +19 doRepeatMasker.pl -buildDir=`pwd` \
+	-workhorse=hgwdev -bigClusterHub=swarm -noSplit melGal1 > do.log 2>&1 &
+    #   real    36m27.415s
+    cat faSize.rmsk.txt
+    # 1061817101 bases (125894715 N's 935922386 real 874501528 upper 
+    # 61420858 lower) in 5891 sequences in 1 files
+    # %5.78 masked total, %6.56 masked real
+
+#########################################################################
+# simpleRepeats ( DONE - 2010-11-05 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/simpleRepeat
+    cd /hive/data/genomes/melGal1/bed/simpleRepeat
+
+    time nice -n +19 doSimpleRepeat.pl -buildDir=`pwd` -workhorse=hgwdev \
+	-bigClusterHub=swarm -smallClusterHub=swarm melGal1 > do.log 2>&1 &
+    #   real    7m12.044s
+    cat fb.simpleRepeat 
+    # 4997546 bases of 935922386 (0.534%) in intersection
+
+    #	add to the repeatMasker
+    cd /hive/data/genomes/melGal1
+    twoBitMask melGal1.rmsk.2bit -add bed/simpleRepeat/trfMask.bed melGal1.2bit
+    #	safe to ignore warnings about >=13 fields
+    twoBitToFa melGal1.2bit stdout | faSize stdin > melGal1.2bit.faSize.txt
+    cat melGal1.2bit.faSize.txt
+    # 1061817101 bases (125894715 N's 935922386 real 874132579 upper 
+    # 61789807 lower) in 5891 sequences in 1 files
+    # %5.82 masked total, %6.60 masked real
+
+#########################################################################
+# Marking *all* gaps - they are all in the AGP file
+#	(DONE 2010-11-05 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/allGaps
+    cd /hive/data/genomes/melGal1/bed/allGaps
+
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../melGal1.unmasked.2bit > findMotif.txt 2>&1
+    #   real    0m22.247s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits melGal1 -not gap -bed=notGap.bed
+    # 935922386 bases of 935922386 (100.000%) in intersection
+    featureBits melGal1 allGaps.bed notGap.bed -bed=new.gaps.bed
+    # 0 bases of 935922386 (0.000%) in intersection
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" melGal1 | sort -n | tail -1
+    #	53110
+
+    hgsql -e "select count(*) from gap;" melGal1
+    #	 146748
+
+########################################################################
+# Create kluster run files (DONE 2010-11-05 - Chin)
+    # numerator is melGal1 gapless bases "real" as reported by: 
+    featureBits -noRandom -noHap melGal1 gap
+    # 123009123 bases of 917294664 (13.410%) in intersection
+    #     1600136831 bases of 1184628269 (135.075%) in interddsection
+
+    # denominator is hg19 gapless bases as reported by:
+    #	featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 917294664 / 2861349177 \) \* 1024
+    #  ( 917294664 / 2861349177 ) * 1024 = 328.275117
+    # ==> use -repMatch=400 according to size scaled down from 1024 for human.
+    #	and rounded down to nearest 50
+    cd /hive/data/genomes/melGal1
+    blat melGal1.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/melGal1.11.ooc \
+	-repMatch=300 &
+    #  Wrote 22129 overused 11-mers to jkStuff/melGal1.11.ooc
+    mkdir /hive/data/staging/data/melGal1
+    cp -p melGal1.2bit jkStuff/melGal1.11.ooc /hive/data/staging/data/melGal1
+    cp -p chrom.sizes /hive/data/staging/data/melGal1
+    #	check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+	-e 'select * from gap where bridge="no" order by size;' melGal1 \
+	| sort -k7,7nr
+    #   most gaps have size > 100,000
+    #	decide on a minimum gap for this break
+    gapToLift -verbose=2 -minGap=20000 melGal1 jkStuff/nonBridged.lft \
+	-bedFile=jkStuff/nonBridged.bed
+    cp -p jkStuff/nonBridged.lft \
+	/hive/data/staging/data/melGal1/melGal1.nonBridged.lft
+    # ask cluster-admin to copy (evry time if any file chsnged)
+    #    /hive/data/staging/data/melGal1 directory to cluster nodes
+    #    /scratch/data/melGal1
+XXXX stop here pending mingap is understood 11-05 3:21 PM
+But proceed with genbank work
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 201w1-02-16 - Chin)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+
+    # edit etc/genbank.conf to add melGal1 just after chicken galGal2
+
+# melGal1 (turkey)
+melGal1.serverGenome = /hive/data/genomes/melGal1/melGal1.2bit
+melGal1.clusterGenome = /scratch/data/melGal1/melGal1.2bit
+melGal1.ooc = /scratch/data/melGal1/melGal1.11.ooc
+melGal1.lift = no
+melGal1.perChromTables = no
+melGal1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+melGal1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+melGal1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+melGal1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+melGal1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+melGal1.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+melGal1.downloadDir = melGal1
+melGal1.refseq.mrna.native.load  = yes
+melGal1.refseq.mrna.xeno.load = yes
+melGal1.refseq.mrna.xeno.loadDesc  = yes
+
+    git add etc/genbank.conf
+    git commit -m "Added melGal1" etc/genbank.conf
+    git pull
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  With these two lines:
+# static char *melGalNames[] = {"Meleagris gallopavo", NULL};
+#   ... later ...
+#    {"melGal", melGal1Names},
+#  gbGenome.c is  in
+#  /cluster/home/chinhli/kent/src/hg/makeDb/genbank/src/lib
+# make and checkin
+
+    make install-server
+    git add src/lib/gbGenome.c
+    git commit -m "adding melGal1 Turkey" src/lib/gbGenome.c
+    git pull
+    git push	    
+
+    ssh genbank
+    screen	#  control this business with a screen since it takes a while
+
+
+    cd /cluster/data/genbank
+     time nice -n +19 ./bin/gbAlignStep -initial melGal1 &
+    #   logFile: var/build/logs/2011.02.16-09:21:59.melGal1.initalign.log
+    #   real     109m5.431s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad melGal1 &
+    #    logFile: var/dbload/hgwdev/logs/2011.02.16-12:45:15.dbload.log
+    #   real    23m10.935s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add melGal1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git add  etc/align.dbs
+    git add  etc/hgwdev.dbs
+    git commit  -m "Added melGal1 - Turkey" etc/align.dbs etc/hgwdev.dbs
+    git pull
+    git push
+    make etc-update
+
+#########################################################################
+# reset position to RHO location as found from blat of hg19 RHO gene
+#	(??? TBD -  - Chin)
+    hgsql -e \
+'update dbDb set defaultPos="chr13:57394166-57402412" where name="melGal1";' \
+	hgcentraltest
+
+############################################################################
+# ctgPos2 track - showing clone sequence locations on chromosomes
+#	(working 2010-04-15 - Chin)
+# NOTE - create melGal1 entry in all.joiner since this is a new species
+    mkdir /hive/data/genomes/melGal1/bed/ctgPos2
+    cd /hive/data/genomes/melGal1/bed/ctgPos2
+    cat << '_EOF_' > agpToCtgPos2.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    printf STDERR "usage: zcat your.files.agp.gz | agpToCtgPos2.pl /dev/stdin > ctgPos2.tab\n";
+    exit 255;
+}
+
+my $agpFile = shift;
+
+open (FH, "<$agpFile") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my @a = split('\s+', $line);
+    next if ($a[4] =~ m/^N$/);
+    my $chrSize = $a[2]-$a[1]+1;
+    my $ctgSize = $a[7]-$a[6]+1;
+    die "sizes differ $chrSize != $ctgSize\n$line\n" if ($chrSize != $ctgSize);
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n", $a[5], $chrSize, $a[0], $a[1]-1, $a[2], $a[4];
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+export S=../../genbank/Primary_Assembly/assembled_chromosomes
+cut -f2 ${S}/chr2acc | while read ACC
+do
+    C=`grep "${ACC}" ${S}/chr2acc | cut -f1`
+    zcat ${S}/AGP/chr${C}.agp.gz \
+        | sed -e "s/^${ACC}/chr${C}/"
+done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
+
+    hgLoadSqlTab melGal1 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+
+############################################################################
+# melGal1 Turkey BLASTZ/CHAIN/NET (working 04-16-2010 - Chin)
+
+#  request to copy /hive/data/staging.melGal1 over to /scratch/data/melGal1
+    screen # use a screen to manage this multi-day job
+    mkdir /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
+    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
+
+    cat << '_EOF_' > DEF
+# Cow vs. Turkey
+BLASTZ_M=50
+
+# TARGET: Cow BosTau4
+SEQ1_DIR=/scratch/data/bosTau4/bosTau4.2bit
+SEQ1_LEN=/scratch/data/bosTau4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Turkey OviAri1
+SEQ2_DIR=/scratch/data/melGal1/melGal1.2bit
+SEQ2_LEN=/scratch/data/melGal1/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #   real    1651m36.829s
+
+    #	failed during the netChainSubset | chainStitchId out of memory
+    #	finish that manually with ulimits to allow more memory on hgwdev:
+    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
+    export sizeG=188743680
+    ulimit -d $sizeG
+    ulimit -v $sizeG
+
+    netChainSubset -verbose=0 noClass.net bosTau4.melGal1.all.chain.gz stdout \
+       |  chainStitchId stdin stdout | gzip -c > bosTau4.melGal1.over.chain.gz
+
+    #	and, finish the rest of netChains.csh manually, the netToAxt step
+    #	and the axtToMaf step, log is in axtChain/finiChains.log
+
+    #  about 4 hours
+    #	after done with netChains - continuing with load:
+    cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=load -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > load.log 2>&1 &
+    #	this didn't work either due to memory limits with hgLoadChain
+    #	add the following to loadUp.csh
+# limit at 160 Gb
+limit datasize 163840m
+limit vmemoryuse 163840m
+    #	and finish it manually
+     ./loadUp.csh > loadUp.log 2>&1 &
+ ulimit -d  163840000
+ ulimit -v 163840000
+    cat fb.bosTau4.chainOviAri1Link.txt 
+    #   1319167970 bases of 2731830700 (48.289%) in intersection
+    #	then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=download -noLoadChainSplit -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > download.part3.log 2>&1 &
+    # failed again with 
+    #    needLargeMem: Out of memory - request size 1073741824 bytes, errno: 12
+    #   add the following to netSynteny.csh
+# limit at 160 Gb
+limit datasize 163840m
+limit vmemoryuse 163840m
+    #   and finish it manually
+
+     tcsh
+     cd /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/axtChain
+     ./netSynteny.csh > & netSynteny_tcsh.log 
+
+   #   and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.bosTau4.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.bosTau4.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/bosTau4/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+
+#########################################################################
+#  SWAP mm9 lastz (DONE - 2010-04-12 - Chin)
+    #	original alignment
+    cd	/hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16
+    cat fb.mm9.chainOviAri1Link.txt 
+    #   406407377 bases of 2620346127 (15.510%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.mm9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm9/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    35m25.217s
+
+    cat fb.melGal1.chainMm9Link.txt
+    #   383753361 bases of 1201271277 (31.946%) in intersection
+
+
+############################################################################
+#  SWAP hg19 lastz (DONE 2010-04-12 - Chin)
+    #	original alignment
+    cd /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16
+    cat fb.hg19.chainOviAri1Link.txt 
+    #   878545517 bases of 2897316137 (30.323%) in intersection
+
+    #	and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg19/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    72m47.780s
+
+    cat fb.melGal1.chainHg19Link.txt
+    #   824310420 bases of 1201271277 (68.620%) in intersection
+
+#########################################################################
+#  SWAP monDom5 lastz (working 2010-04-12 Chin)
+    #	original alignment
+    cd /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-16
+    cat fb.monDom5.chainOviAri1Link.txt
+    #   133534458 bases of 3501660299 (3.813%) in intersection
+    cd /hive/data/genomes/monDom5/bed/
+    ln -s lastzFelCatV17e.2010-03-22 lastz.melGal1
+
+    #	and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.monDom5.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=memn -bigClusterHub=pk \
+        -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
+    #   real    39m13.430s
+
+    cat fb.melGal1.chainMonDom5Link.txt
+    #   117493519 bases of 1201271277 (9.781%) in intersection
+
+#########################################################################
+#  SWAP equCap2 lastz (DONE 2010-04-12 Chin)
+    #   original alignment
+    cd /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16
+    cat fb.equCab2.chainOviAri1Link.txt
+    #   1012763540 bases of 2428790173 (41.698%) in intersection 
+
+
+    #   and the swap
+    mkdir /hive/data/genomes/melGal1/bed/blastz.equCab2.swap
+    cd /hive/data/genomes/melGal1/bed/blastz.equCab2.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/equCab2/bed/lastzOviAri1.2010-04-16/DEF \
+        -swap -noLoadChainSplit -syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=pk \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #   real    103m0.724s
+
+    cat fb.melGal1.chainEquCab2Link.txt
+    #   940763026 bases of 1201271277 (78.314%) in intersection
+
+############################################################################
+# running cpgIsland business (DONE -2010-04-29 - Chin)
+    mkdir /hive/data/genomes/melGal1/bed/cpgIsland
+    cd /hive/data/genomes/melGal1/bed/cpgIsland
+    cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    #	needed to fixup this source, adding include to readseq.c:
+#include "string.h"
+    #	and to cpg_lh.c:
+#include "unistd.h"
+#include "stdlib.h"
+    # and fixing a declaration in cpg_lh.c
+    sed -e "s#\(extern char\* malloc\)#// \1#" cpg_lh.c > tmp.c
+    mv tmp.c cpg_lh.c
+    make
+    cd ../../ 
+    ln -s hg3rdParty/cpgIslands/cpglh.exe
+    mkdir -p hardMaskedFa
+    cut -f1 ../../chrom.sizes | while read C
+do
+    echo ${C}
+    twoBitToFa ../../melGal1.2bit:$C stdout \
+	| maskOutFa stdin hard hardMaskedFa/${C}.fa
+done
+
+    ssh swarm
+    cd /hive/data/genomes/melGal1/bed/cpgIsland
+    mkdir results
+    cut -f1 ../../chrom.sizes > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./runOne $(root1) {check out exists results/$(root1).cpg}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    #	the faCount business is to make sure there is enough sequence to
+    #	work with in the fasta.  cpglh.exe does not like files with too many
+    #	N's - it gets stuck
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+set C = `faCount hardMaskedFa/$1.fa | grep ^chr | awk '{print  $2 - $7 }'`
+if ( $C > 200 ) then
+    ./cpglh.exe hardMaskedFa/$1.fa > /scratch/tmp/$1.$$
+    mv /scratch/tmp/$1.$$ $2
+else
+    touch $2
+endif
+'_EOF_'
+    # << happy emacs
+
+    chmod 775 runOne 
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+    para check ... etc
+    para time
+    para problems
+    para status
+    # then, kick it with para push
+    # check it with plb
+    # when all are done, para time shows:
+   #   para time
+    #  1218 jobs in batch
+    #  319 jobs (including everybody's) in Parasol queue or running.
+    #  Checking finished jobs
+    #  Completed: 1218 of 1218 jobs
+    #  CPU time in finished jobs:        201s       3.36m     0.06h    0.00d  0.000 y
+    #  IO & Wait Time:                  3099s      51.64m     0.86h    0.04d  0.000 y
+    #  Average job time:                   3s       0.05m     0.00h    0.00d
+    #  Longest finished job:              25s       0.42m     0.01h    0.00d
+    #  Submission to last job:            90s       1.50m     0.03h    0.00d
+    #  Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    # Transform cpglh output to bed +
+    catDir results | awk '{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}' > cpgIsland.bed
+
+    ssh hgwdev
+    cd /hive/data/genomes/melGal1/bed/cpgIsland
+    hgLoadBed melGal1 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    # Loaded 25384 elements of size 10
+    # Sorted
+    # Creating table definition for cpgIslandExt
+    # Saving bed.tab
+    # Loading melGal1
+
+
+    #	cleanup
+    rm -fr hardMaskedFa
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (??? Pending the ISg status 2010-04-29)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=melGal1 -all all.joiner
+
+    mkdir /hive/data/genomes/melGal1/goldenPath
+    cd /hive/data/genomes/melGal1/goldenPath
+    makeDownloads.pl melGal1 > do.log 2>&1
+
+    #	now ready for pushQ entry
+    mkdir /hive/data/genomes/melGal1/pushQ
+    cd /hive/data/genomes/melGal1/pushQ
+    makePushQSql.pl melGal1 > melGal1.pushQ.sql 2> stderr.out
+    #	check for errors in stderr.out, some are OK, e.g.:
+# WARNING: melGal1 does not have seq
+# WARNING: melGal1 does not have extFile
+
+# WARNING: Could not tell (from trackDb, all.joiner and hardcoded lists of
+# supporting and genbank tables) which tracks to assign these tables to:
+#  bosTau4ChainPileUp
+
+    #	copy it to hgwbeta
+    scp -p melGal1.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < melGal1.pushQ.sql
+    #	in that pushQ entry walk through each entry and see if the
+    #	sizes will set properly
+
+############################################################################
