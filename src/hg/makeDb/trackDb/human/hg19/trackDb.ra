@@ -2256,3 +2256,13 @@ visibility hide
 type snake hg19
 otherDb hg19
 
+track bamWigTest
+table wgEncodeYaleRnaSeqGm12878PolyaAln
+release alpha
+shortLabel bamWigTest
+longLabel bamWigTest
+group x
+priority 160
+visibility hide
+type bamWig 0 1
+viewLimits 0:1

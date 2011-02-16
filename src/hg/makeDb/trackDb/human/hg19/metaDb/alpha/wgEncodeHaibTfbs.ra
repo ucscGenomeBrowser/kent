@@ -5115,7 +5115,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
@@ -5138,7 +5138,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsGm12878ControlPcr2xRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL218
@@ -6470,54 +6470,6 @@ subId 3021
 tableName wgEncodeHaibTfbsGm12878GabpPcr2xRawRep2
 treatment None
 view RawSignal
-
-metaObject wgEncodeHaibTfbsGm12878InputPcr1xRawDataRep1
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeHaibTfbs
-controlId SL516
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-05-14
-dateUnrestricted 2011-02-14
-fileName wgEncodeHaibTfbsGm12878InputPcr1xRawDataRep1.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL516
-labVersion SL516
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 1
-setType input
-subId 1191
-treatment None
-view RawData
-
-metaObject wgEncodeHaibTfbsGm12878InputPcr1xRawDataRep2
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeHaibTfbs
-controlId SL517
-dataType ChipSeq
-dataVersion ENCODE Jan 2010 Freeze
-dateSubmitted 2010-05-14
-dateUnrestricted 2011-02-14
-fileName wgEncodeHaibTfbsGm12878InputPcr1xRawDataRep2.fastq.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL517
-labVersion SL517
-origAssembly hg18
-project wgEncode
-protocol PCR1x
-replicate 2
-setType input
-subId 1191
-treatment None
-view RawData
 
 metaObject wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep1
 objType file
@@ -11335,7 +11287,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12891ControlPcr1xRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL817
@@ -12893,7 +12845,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsGm12892ControlPcr1xRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell GM12892
 composite wgEncodeHaibTfbs
 controlId SL818
@@ -14663,7 +14615,7 @@ view Alignments
 
 metaObject wgEncodeHaibTfbsH1hescControlPcr1xRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL969
@@ -27012,7 +26964,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsK562ControlV2RawDataRep1
 objType file
-antibody Input
+antibody Control
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL518
@@ -27038,7 +26990,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsK562ControlV2RawDataRep2
 objType file
-antibody Input
+antibody Control
 cell K562
 composite wgEncodeHaibTfbs
 controlId SL519
@@ -33557,7 +33509,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsPanc1ControlRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL117
@@ -33581,7 +33533,7 @@ view RawData
 
 metaObject wgEncodeHaibTfbsPanc1ControlRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
@@ -34131,7 +34083,7 @@ view RawSignal
 
 metaObject wgEncodeHaibTfbsSknmcControlRawData
 objType file
-antibody Input
+antibody Control
 cell SK-N-MC
 composite wgEncodeHaibTfbs
 controlId SL714
@@ -36779,4 +36731,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -2008302236
+# MAGIC: -802059951
