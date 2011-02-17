@@ -11,6 +11,7 @@ fileName wgEncodeOpenChromFaireA549AlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3496
@@ -29,6 +30,7 @@ fileName wgEncodeOpenChromFaireA549AlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3496
@@ -47,6 +49,7 @@ fileName wgEncodeOpenChromFaireA549BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3496
 tableName wgEncodeOpenChromFaireA549BaseOverlapSignal
@@ -65,6 +68,7 @@ fileName wgEncodeOpenChromFaireA549Pk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 3496
 tableName wgEncodeOpenChromFaireA549Pk
@@ -82,6 +86,7 @@ dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3496
@@ -99,6 +104,7 @@ dateUnrestricted 2011-10-21
 fileName wgEncodeOpenChromFaireA549RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3496
@@ -117,6 +123,7 @@ fileName wgEncodeOpenChromFaireA549Sig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 3496
 tableName wgEncodeOpenChromFaireA549Sig
@@ -136,6 +143,7 @@ fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2481
@@ -155,6 +163,7 @@ fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2481
@@ -173,6 +182,7 @@ fileName wgEncodeOpenChromFaireAstrocyBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2481
 tableName wgEncodeOpenChromFaireAstrocyBaseOverlapSignal
@@ -191,6 +201,7 @@ fileName wgEncodeOpenChromFaireAstrocyPk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 2481
 tableName wgEncodeOpenChromFaireAstrocyPk
@@ -208,6 +219,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2481
@@ -225,6 +237,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2481
@@ -243,6 +256,7 @@ fileName wgEncodeOpenChromFaireAstrocySig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 2481
 tableName wgEncodeOpenChromFaireAstrocySig
@@ -262,6 +276,7 @@ fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2515
@@ -281,6 +296,7 @@ fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2515
@@ -300,6 +316,7 @@ fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2515
@@ -318,6 +335,7 @@ fileName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2515
 tableName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
@@ -336,6 +354,7 @@ fileName wgEncodeOpenChromFaireGlioblaPk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 2515
 tableName wgEncodeOpenChromFaireGlioblaPk
@@ -353,6 +372,7 @@ dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2515
@@ -370,6 +390,7 @@ dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2515
@@ -387,6 +408,7 @@ dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep3.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 3
 subId 2515
@@ -405,6 +427,7 @@ fileName wgEncodeOpenChromFaireGlioblaSig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_H54
+origAssembly hg19
 project wgEncode
 subId 2515
 tableName wgEncodeOpenChromFaireGlioblaSig
@@ -604,6 +627,7 @@ fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2494
@@ -623,6 +647,7 @@ fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2494
@@ -641,6 +666,7 @@ fileName wgEncodeOpenChromFaireGm12891BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2494
 tableName wgEncodeOpenChromFaireGm12891BaseOverlapSignal
@@ -659,6 +685,7 @@ fileName wgEncodeOpenChromFaireGm12891Pk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 2494
 tableName wgEncodeOpenChromFaireGm12891Pk
@@ -676,6 +703,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2494
@@ -693,6 +721,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2494
@@ -711,6 +740,7 @@ fileName wgEncodeOpenChromFaireGm12891Sig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 2494
 tableName wgEncodeOpenChromFaireGm12891Sig
@@ -730,6 +760,7 @@ fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2488
@@ -749,6 +780,7 @@ fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2488
@@ -767,6 +799,7 @@ fileName wgEncodeOpenChromFaireGm12892BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2488
 tableName wgEncodeOpenChromFaireGm12892BaseOverlapSignal
@@ -785,6 +818,7 @@ fileName wgEncodeOpenChromFaireGm12892Pk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 2488
 tableName wgEncodeOpenChromFaireGm12892Pk
@@ -802,6 +836,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2488
@@ -819,6 +854,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2488
@@ -837,6 +873,7 @@ fileName wgEncodeOpenChromFaireGm12892Sig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 2488
 tableName wgEncodeOpenChromFaireGm12892Sig
@@ -1895,6 +1932,7 @@ fileName wgEncodeOpenChromFaireHtr8AlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3379
@@ -1913,6 +1951,7 @@ fileName wgEncodeOpenChromFaireHtr8AlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3379
@@ -1931,6 +1970,7 @@ fileName wgEncodeOpenChromFaireHtr8BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3379
 tableName wgEncodeOpenChromFaireHtr8BaseOverlapSignal
@@ -1949,6 +1989,7 @@ fileName wgEncodeOpenChromFaireHtr8Pk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 3379
 tableName wgEncodeOpenChromFaireHtr8Pk
@@ -1966,6 +2007,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireHtr8RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3379
@@ -1983,6 +2025,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireHtr8RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3379
@@ -2001,6 +2044,7 @@ fileName wgEncodeOpenChromFaireHtr8Sig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3379
 tableName wgEncodeOpenChromFaireHtr8Sig
@@ -2224,6 +2268,7 @@ fileName wgEncodeOpenChromFaireK562NabutAlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562NabutAlnRep1
 project wgEncode
 replicate 1
@@ -2245,6 +2290,7 @@ fileName wgEncodeOpenChromFaireK562NabutAlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562NabutAlnRep2
 project wgEncode
 replicate 2
@@ -2265,6 +2311,7 @@ fileName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2771
 tableName wgEncodeOpenChromFaireK562NabutBaseOverlapSignal
@@ -2284,6 +2331,7 @@ fileName wgEncodeOpenChromFaireK562NabutPk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 2771
 tableName wgEncodeOpenChromFaireK562NabutPk
@@ -2302,6 +2350,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep1
 project wgEncode
 replicate 1
@@ -2321,6 +2370,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562NabutRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562NabutRawSignalRep2
 project wgEncode
 replicate 2
@@ -2341,6 +2391,7 @@ fileName wgEncodeOpenChromFaireK562NabutSig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_K562
+origAssembly hg19
 project wgEncode
 subId 2771
 tableName wgEncodeOpenChromFaireK562NabutSig
@@ -2361,6 +2412,7 @@ fileName wgEncodeOpenChromFaireK562OhureaAlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562OhureaAlnRep1
 project wgEncode
 replicate 1
@@ -2382,6 +2434,7 @@ fileName wgEncodeOpenChromFaireK562OhureaAlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562OhureaAlnRep2
 project wgEncode
 replicate 2
@@ -2402,6 +2455,7 @@ fileName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2772
 tableName wgEncodeOpenChromFaireK562OhureaBaseOverlapSignal
@@ -2421,6 +2475,7 @@ fileName wgEncodeOpenChromFaireK562OhureaPk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 2772
 tableName wgEncodeOpenChromFaireK562OhureaPk
@@ -2439,6 +2494,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep1
 project wgEncode
 replicate 1
@@ -2458,6 +2514,7 @@ dateUnrestricted 2011-07-27
 fileName wgEncodeOpenChromFaireK562OhureaRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 parentTable wgEncodeOpenChromFaireK562OhureaRawSignalRep2
 project wgEncode
 replicate 2
@@ -2478,6 +2535,7 @@ fileName wgEncodeOpenChromFaireK562OhureaSig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_K562
+origAssembly hg19
 project wgEncode
 subId 2772
 tableName wgEncodeOpenChromFaireK562OhureaSig
@@ -2575,6 +2633,7 @@ fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3378
@@ -2594,6 +2653,7 @@ fileName wgEncodeOpenChromFaireMcf7HypoxlacAlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3378
@@ -2613,6 +2673,7 @@ fileName wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3378
 tableName wgEncodeOpenChromFaireMcf7HypoxlacBaseOverlapSignal
@@ -2632,6 +2693,7 @@ fileName wgEncodeOpenChromFaireMcf7HypoxlacPk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 3378
 tableName wgEncodeOpenChromFaireMcf7HypoxlacPk
@@ -2650,6 +2712,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3378
@@ -2668,6 +2731,7 @@ dateUnrestricted 2011-10-19
 fileName wgEncodeOpenChromFaireMcf7HypoxlacRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3378
@@ -2687,6 +2751,7 @@ fileName wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_MCF7
+origAssembly hg19
 project wgEncode
 subId 3378
 tableName wgEncodeOpenChromFaireMcf7HypoxlacSig
@@ -2707,6 +2772,7 @@ fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2501
@@ -2726,6 +2792,7 @@ fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2501
@@ -2744,6 +2811,7 @@ fileName wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 2501
 tableName wgEncodeOpenChromFaireMedulloBaseOverlapSignal
@@ -2762,6 +2830,7 @@ fileName wgEncodeOpenChromFaireMedulloPk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 2501
 tableName wgEncodeOpenChromFaireMedulloPk
@@ -2779,6 +2848,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 2501
@@ -2796,6 +2866,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 2501
@@ -2814,6 +2885,7 @@ fileName wgEncodeOpenChromFaireMedulloSig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_male
+origAssembly hg19
 project wgEncode
 subId 2501
 tableName wgEncodeOpenChromFaireMedulloSig
@@ -3212,6 +3284,7 @@ fileName wgEncodeOpenChromFaireUrotsaAlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3277
@@ -3230,6 +3303,7 @@ fileName wgEncodeOpenChromFaireUrotsaAlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3277
@@ -3248,6 +3322,7 @@ fileName wgEncodeOpenChromFaireUrotsaBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3277
 tableName wgEncodeOpenChromFaireUrotsaBaseOverlapSignal
@@ -3266,6 +3341,7 @@ fileName wgEncodeOpenChromFaireUrotsaPk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 3277
 tableName wgEncodeOpenChromFaireUrotsaPk
@@ -3283,6 +3359,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaRawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3277
@@ -3300,6 +3377,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaRawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3277
@@ -3318,6 +3396,7 @@ fileName wgEncodeOpenChromFaireUrotsaSig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3277
 tableName wgEncodeOpenChromFaireUrotsaSig
@@ -3336,6 +3415,7 @@ fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep1.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3278
@@ -3355,6 +3435,7 @@ fileName wgEncodeOpenChromFaireUrotsaUt189AlnRep2.bam
 grant Crawford
 lab UNC
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3278
@@ -3374,6 +3455,7 @@ fileName wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 subId 3278
 tableName wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal
@@ -3393,6 +3475,7 @@ fileName wgEncodeOpenChromFaireUrotsaUt189Pk.narrowPeak.gz
 grant Crawford
 lab UNC
 labVersion p-value cutoff: 0.1
+origAssembly hg19
 project wgEncode
 subId 3278
 tableName wgEncodeOpenChromFaireUrotsaUt189Pk
@@ -3411,6 +3494,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep1.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 1
 subId 3278
@@ -3429,6 +3513,7 @@ dateUnrestricted 2011-10-18
 fileName wgEncodeOpenChromFaireUrotsaUt189RawDataRep2.fastq.gz
 grant Crawford
 lab UNC
+origAssembly hg19
 project wgEncode
 replicate 2
 subId 3278
@@ -3448,10 +3533,11 @@ fileName wgEncodeOpenChromFaireUrotsaUt189Sig.bigWig
 grant Crawford
 lab UNC
 labVersion fseq v 1.84, iff_generic_female
+origAssembly hg19
 project wgEncode
 subId 3278
 tableName wgEncodeOpenChromFaireUrotsaUt189Sig
 treatment UT189
 view Signal
 
-# MAGIC: 149053699
+# MAGIC: 2022290371

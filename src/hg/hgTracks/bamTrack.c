@@ -723,8 +723,6 @@ void bamMethods(struct track *track)
 {
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 knetUdcInstall();
-if (udcCacheTimeout() < 300)
-    udcSetCacheTimeout(300);
 #endif//def USE_BAM && KNETFILE_HOOKS
 
 track->canPack = TRUE;
