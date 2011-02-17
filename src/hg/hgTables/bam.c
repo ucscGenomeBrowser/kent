@@ -41,12 +41,14 @@ else
     return trackIsType(database, table, curTrack, "bam", ctLookupName);
 }
 
-char *bamFileName(char *table, struct sqlConnection *conn)
+char *bamFileName(char *table, struct sqlConnection *conn, char *seqName)
 /* Return file name associated with BAM.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
 {
-/* Implementation is same as bigWig. */
-return bigWigFileName(table, conn);
+char *fileName = bigFileNameFromCtOrHub(table, conn);
+if (fileName == NULL)
+    fileName = bamFileNameFromTable(conn, table, seqName);
+return fileName;
 }
 
 char *bamAsDef = 
@@ -175,7 +177,6 @@ for (i=1; i<fieldCount; ++i)
     fprintf(f, "\t%s", fieldArray[i]);
 fprintf(f, "\n");
 
-char *fileName = bamFileName(table, conn);
 struct asObject *as = bamAsObj();
 struct asFilter *filter = NULL;
 
@@ -195,6 +196,7 @@ int maxOut = bigFileMaxOutput();
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct lm *lm = lmInit(0);
+    char *fileName = bamFileName(table, conn, region->chrom);
     struct samAlignment *sam, *samList = bamFetchSamAlignment(fileName, region->chrom,
     	region->start, region->end, lm);
     char *row[SAMALIGNMENT_NUM_COLS];
@@ -216,6 +218,7 @@ for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
 	    maxOut --;
 	    }
 	}
+    freeMem(fileName);
     lmCleanup(&lm);
     }
 
@@ -293,7 +296,6 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 /* Get list of beds from BAM, in all regions, that pass filtering. */
 {
 /* Figure out bam file name get column info and filter. */
-char *fileName = bamFileName(table, conn);
 struct asObject *as = bamAsObj();
 struct asFilter *filter = asFilterFromCart(cart, db, table, as);
 
@@ -301,7 +303,11 @@ struct asFilter *filter = asFilterFromCart(cart, db, table, as);
 struct bed *bedList = NULL;
 struct region *region;
 for (region = regionList; region != NULL; region = region->next)
+    {
+    char *fileName = bamFileName(table, conn, region->chrom);
     addFilteredBedsOnRegion(fileName, region, table, filter, lm, &bedList);
+    freeMem(fileName);
+    }
 slReverse(&bedList);
 return bedList;
 }
@@ -310,7 +316,7 @@ struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count)
 /* Return some semi-random qName based IDs from a BAM file. */
 {
 /* Read 10000 items from bam file,  or if they ask for a big list, then 4x what they ask for. */
-char *fileName = bamFileName(table, conn);
+char *fileName = bamFileName(table, conn, NULL);
 samfile_t *fh = bamOpen(fileName, NULL);
 struct lm *lm = lmInit(0);
 int orderedCount = count * 4;
@@ -336,7 +342,7 @@ void showSchemaBam(char *table)
 /* Show schema on bam. */
 {
 struct sqlConnection *conn = hAllocConn(database);
-char *fileName = bamFileName(table, conn);
+char *fileName = bamFileName(table, conn, NULL);
 
 struct asObject *as = bamAsObj();
 hPrintf("<B>Database:</B> %s", database);

@@ -439,7 +439,7 @@ if (item)
 	height += tg->itemHeight(tg, item);
 	}
     }
-return 1500; //height;
+return 3500; //height;
 }
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
