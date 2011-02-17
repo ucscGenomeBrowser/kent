@@ -1,7 +1,7 @@
 track wgEncodeRikenCage
 compositeTrack on
 shortLabel RIKEN CAGE Loc
-longLabel RNA Subcellular CAGE Localization from ENCODE/RIKEN
+longLabel RNA CAGE Subcellular Localization from ENCODE/RIKEN
 group expression
 subGroup1 view Views PlusRawSignal=Plus_Signal MinusRawSignal=Minus_Signal Alignments=Alignments
 subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC MCF7=MCF7 NHEK=NHEK prostate=Prostate
@@ -30,7 +30,7 @@ superTrack wgEncodeRnaSeqSuper dense
     minLimit .005
     maxLimit 25183
     viewLimits 0:30
-    autoScale on
+    autoScale off
     transformFunc NONE
     windowingFunction mean
     maxWindowToDraw 1000000
@@ -631,7 +631,7 @@ superTrack wgEncodeRnaSeqSuper dense
     maxLimit 25183
     viewLimits 0:30
     windowingFunction mean
-    autoScale on
+    autoScale off
     transformFunc NONE
     maxWindowToDraw 1000000
 
@@ -1239,7 +1239,7 @@ superTrack wgEncodeRnaSeqSuper dense
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 100000
+    maxWindowToDraw 900000
 
 
         track wgEncodeRikenCageNhekCytosolLongnonpolyaAln

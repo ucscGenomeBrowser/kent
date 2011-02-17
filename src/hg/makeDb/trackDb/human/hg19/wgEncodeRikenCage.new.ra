@@ -24,14 +24,13 @@ superTrack wgEncodeRnaSeqSuper dense
     track wgEncodeRikenCageViewPlusClusters
     shortLabel Plus Signal
     view PlusRawSignal
-    #view PlusClusters
     visibility full
     parent wgEncodeRikenCage
     maxHeightPixels 100:24:16
     minLimit .005
     maxLimit 25183
     viewLimits 0:30
-    autoScale on
+    autoScale off
     transformFunc NONE
     windowingFunction mean
 
@@ -694,7 +693,7 @@ superTrack wgEncodeRnaSeqSuper dense
     maxLimit 25183
     viewLimits 0:30
     windowingFunction mean
-    autoScale on
+    autoScale off
     transformFunc NONE
 
 
@@ -1364,7 +1363,7 @@ superTrack wgEncodeRnaSeqSuper dense
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 1000000
+    maxWindowToDraw 900000
 
 
         track wgEncodeRikenCageNhekCytosolLongnonpolyaAln
