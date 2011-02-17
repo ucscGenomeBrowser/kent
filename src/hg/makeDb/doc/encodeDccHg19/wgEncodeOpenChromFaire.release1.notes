@@ -11,9 +11,9 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 72
-    Files: 227
-    Gbdbs: 48
+    Tables: 75
+    Files: 234
+    Gbdbs: 50
 
 A) Untouched Tables (0):
 
@@ -23,7 +23,7 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (72):
+C) New tables (75):
 wgEncodeOpenChromFaireA549BaseOverlapSignal
 wgEncodeOpenChromFaireA549Pk
 wgEncodeOpenChromFaireA549Sig
@@ -84,6 +84,9 @@ wgEncodeOpenChromFaireMcf7HypoxlacSig
 wgEncodeOpenChromFaireMedulloBaseOverlapSignal
 wgEncodeOpenChromFaireMedulloPk
 wgEncodeOpenChromFaireMedulloSig
+wgEncodeOpenChromFaireNhbeBaseOverlapSignal
+wgEncodeOpenChromFaireNhbePk
+wgEncodeOpenChromFaireNhbeSig
 wgEncodeOpenChromFaireNhekBaseOverlapSignal
 wgEncodeOpenChromFaireNhekPk
 wgEncodeOpenChromFaireNhekSig
@@ -97,7 +100,7 @@ wgEncodeOpenChromFaireUrotsaUt189BaseOverlapSignal
 wgEncodeOpenChromFaireUrotsaUt189Pk
 wgEncodeOpenChromFaireUrotsaUt189Sig
 
-C') New files (224 downloadables, 48 gbdbs):
+C') New files (231 downloadables, 50 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/
     NOT on RR but must be placed in:
@@ -292,8 +295,15 @@ C') New files (224 downloadables, 48 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireMedulloRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireMedulloRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireMedulloSig.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeAlnRep1.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeAlnRep2.bam
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbePk.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeRawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeRawDataRep2.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhbeSig.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhekAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhekAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeOpenChromFaire/release1/wgEncodeOpenChromFaireNhekAlnRep2.bam
@@ -368,6 +378,8 @@ C') New files (224 downloadables, 48 gbdbs):
 /gbdb/hg19/bbi/wgEncodeOpenChromFaireMcf7HypoxlacSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromFaireMedulloSig.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
+/gbdb/hg19/bbi/wgEncodeOpenChromFaireNhbeSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromFaireNhekSig.bigWig
 /gbdb/hg19/bbi/wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig

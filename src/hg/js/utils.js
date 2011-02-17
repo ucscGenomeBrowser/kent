@@ -609,6 +609,7 @@ function varHashToQueryString(varHash)
         var val = varHash[aVar];
         // XXXX encode var=val ?
         if (typeof(val) == 'string'
+        && val.length >= 2
         && val.indexOf('[') == 0
         && val.lastIndexOf(']') == (val.length - 1)) {
             var vals = val.substr(1,val.length - 2).split(',');
@@ -1606,6 +1607,12 @@ function sortTableInitialize(table,addSuperscript,altColors)
         //if ( $(this).queue('click').length == 0 ) {
         if ( $(this).attr('onclick') == undefined ) {
             $(this).click( function () { tableSortOnButtonPress(this);} );
+        }
+        if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work (note pointer and hand because older IE calls it hand)
+            $(this).hover(
+                function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'pointer', cursor: 'hand' } ); },
+                function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }
+            );
         }
         if ( $(this).attr('title').length == 0) {
             var title = $(this).text().replace(/[^a-z0-9 ]/ig,'');

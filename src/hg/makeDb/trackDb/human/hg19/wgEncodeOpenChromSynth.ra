@@ -8,7 +8,7 @@ superTrack wgEncodeDNAseSuper pack
 shortLabel Open Chrom Synth
 longLabel Open Chromatin Synthesis by DNaseI HS, FAIRE and ChIP from ENCODE/Duke/UNC/UTA
 group regulation
-subGroup1 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC HEPG2=HepG2 HELA=HeLa-S3 HUVEC=HUVEC K562=K562 NHEK=NHEK
+subGroup1 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier1</i> 1H1=H1-hESC&nbsp;<i>Tier1</i> 1K5=K562&nbsp;<i>Tier1</i> 2HELA=HeLa-S3&nbsp;<i>Tier2</i> 2HEP=HepG2&nbsp;<i>Tier2</i> 2HUV=HUVEC&nbsp;<i>Tier2</i> NHEK=NHEK
 dimensions dimensionX=cellType
 sortOrder cellType=+
 fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
@@ -46,9 +46,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromSynth
         shortLabel K562 OpChr Syn
         longLabel K562 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
-        subGroups cellType=K562
+        subGroups cellType=1K5
         type bed 9 +
-        origAssembly hg19
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthGm12878Pk
@@ -56,9 +55,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromSynth
         shortLabel GM12878 OpChr Syn
         longLabel GM12878 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
-        subGroups cellType=GM12878
+        subGroups cellType=1GM
         type bed 9 +
-        origAssembly hg19
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthH1hescPk
@@ -66,9 +64,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromSynth
         shortLabel H1-hESC OpChr Syn
         longLabel H1-hESC Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
-        subGroups cellType=H1hESC
+        subGroups cellType=1H1
         type bed 9 +
-        origAssembly hg19
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthHepg2Pk
@@ -76,9 +73,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromSynth off
         shortLabel HepG2 OpChr Syn
         longLabel HepG2 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
-        subGroups cellType=HEPG2
+        subGroups cellType=2HEP
         type bed 9 +
-        origAssembly hg19
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthHelas3Pk
@@ -86,9 +82,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromSynth off
         shortLabel HeLa-S3 OpChr Syn
         longLabel HeLa-S3 Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
-        subGroups cellType=HELA
+        subGroups cellType=2HELA
         type bed 9 +
-        origAssembly hg19
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthHuvecPk
@@ -96,9 +91,8 @@ dataVersion through the ENCODE Jan 2011 Freeze
         parent wgEncodeOpenChromSynth off
         shortLabel HUVEC OpChr Syn
         longLabel HUVEC Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
-        subGroups cellType=HUVEC
+        subGroups cellType=2HUV
         type bed 9 +
-        origAssembly hg19
         # subId=3273 dateSubmitted=2011-01-17
 
         track wgEncodeOpenChromSynthNhekPk
@@ -108,6 +102,5 @@ dataVersion through the ENCODE Jan 2011 Freeze
         longLabel NHEK Open Chromatin Synthesis by DNaseI/FAIRE/ChIP from ENCODE/Duke/UNC/UTA
         subGroups cellType=NHEK
         type bed 9 +
-        origAssembly hg19
         # subId=3273 dateSubmitted=2011-01-17
 

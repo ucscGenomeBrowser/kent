@@ -13,6 +13,7 @@
 #include "hgTracks.h"
 #include "cds.h"
 #include "bamFile.h"
+#include "wigCommon.h"
 #if (defined USE_BAM && defined KNETFILE_HOOKS)
 #include "knetUdc.h"
 #include "udc.h"
@@ -772,6 +773,121 @@ if (differentString(colorMode, "off"))
     track->colorShades = shadesOfGray;
 }
 
+struct bamWigTrackData
+{
+struct preDrawElement *preDraw;
+double scale;
+int width;
+int preDrawZero;
+};
+
+static void bamWigLoadItems(struct track *tg)
+{
+/* Figure out bigWig file name. */
+struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
+tg->customPt = fileName;
+hFreeConn(&conn);
+}
+
+static int countBam(const bam1_t *bam, void *data)
+/* bam_fetch() calls this on each bam alignment retrieved.  */
+{
+struct bamWigTrackData *btd = (struct bamWigTrackData *)data;
+const bam1_core_t *core = &bam->core;
+
+int tLength=0, tPos = core->pos, qPos = 0;
+unsigned int *cigar = bam1_cigar(bam);
+int i;
+double scale = btd->scale;
+for (i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int n = bamUnpackCigarElement(cigar[i], &op);
+    switch (op)
+	{
+	case 'M': // match or mismatch (gapless aligned block)
+	    {
+	    int start = (int)(scale * (tPos - winStart));
+	    int end = (int)(scale * ((tPos + n) - winStart));
+	    for(i=start; i < end; i++)
+		btd->preDraw[i + btd->preDrawZero].count++;
+	    tPos =  tPos + n;
+	    qPos =  qPos + n;
+	    tLength += n;
+	    break;
+	    }
+	case 'I': // inserted in query
+	    qPos += n;
+	    break;
+	case 'D': // deleted from query
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    tPos += n;
+	    tLength += n;
+	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
+	    break;
+	default:
+	    errAbort("countBam: unrecognized CIGAR op %c -- update me", op);
+	}
+
+    }
+return 0;
+}
+
+static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+/* Allocate predraw area. */
+int preDrawZero, preDrawSize;
+struct preDrawContainer *preDrawList = NULL;
+struct bamWigTrackData *bwData;
+double scale = (double)width/(winEnd - winStart);
+
+AllocVar(bwData);
+bwData->preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+bwData->scale = scale;
+bwData->width = width;
+bwData->preDrawZero = preDrawZero;
+
+char posForBam[512];
+safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
+
+char *fileName = tg->customPt;
+tg->customPt = NULL;
+
+bamFetch(fileName, posForBam, countBam, bwData, NULL);
+
+/* fill in rest of predraw */
+int i;
+for (i=0; i<width; ++i)
+    {
+    struct preDrawElement *pe = &bwData->preDraw[i + preDrawZero];
+    pe->min = pe->count;
+    pe->max = pe->count;
+    pe->sumData = pe->count;
+    pe->sumSquares = pe->count * pe->count;
+    }
+
+AllocVar(preDrawList);
+preDrawList->preDraw = bwData->preDraw;
+/* Call actual graphing routine. */
+wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       preDrawList, preDrawZero, preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+
+}
+
+void bamWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[])
+/* Set up bamWig methods. */
+{
+bedGraphMethods(track, tdb, wordCount, words);
+track->loadItems = bamWigLoadItems;
+track->drawItems = bamWigDrawItems;
+}
 #else /* no USE_BAM */
 
 #include "common.h"

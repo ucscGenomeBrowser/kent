@@ -3299,6 +3299,26 @@ noInherit on
         color 0,107,27
         # subId=3495 dateSubmitted=2011-01-21
 
+        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM12878 YY1_(C-20) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (YY1_(C-20) in GM12878 cells)
+        subGroups view=Peaks factor=YY1C20 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=3531 dateSubmitted=2011-02-15
+
+        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM12878 YY1_(C-20) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (YY1_(C-20) in GM12878 cells)
+        subGroups view=Peaks factor=YY1C20 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=3531 dateSubmitted=2011-02-15
+
 
 
     #Raw Signal Track HAIB TFBS#
@@ -7332,3 +7352,23 @@ noInherit on
         subGroups view=RawSignal factor=zControl cellType=BE2C protocol=PCR2x treatment=None rep=rep2
         type bigWig 0.151308 277.424011
         # subId=3035 dateSubmitted=2011-01-20
+
+        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 YY1_(C-20) Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (YY1_(C-20) in GM12878 cells)
+        subGroups view=RawSignal factor=YY1C20 cellType=GM12878 protocol=PCR1x treatment=None rep=rep2
+        type bigWig 0.206929 143.660995
+        color 153,38,0
+        # subId=3531 dateSubmitted=2011-02-15
+
+        track wgEncodeHaibTfbsGm12878Yy1c20Pcr1xRawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 YY1_(C-20) Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (YY1_(C-20) in GM12878 cells)
+        subGroups view=RawSignal factor=YY1C20 cellType=GM12878 protocol=PCR1x treatment=None rep=rep1
+        type bigWig 0.240201 156.850998
+        color 153,38,0
+        # subId=3531 dateSubmitted=2011-02-15

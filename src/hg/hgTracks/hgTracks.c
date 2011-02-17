@@ -5602,12 +5602,15 @@ jsIncludeFile("lowetooltip.js", NULL);
 
 if(advancedJavascriptFeaturesEnabled(cart))
     {
-webIncludeResourceFile("jquery.contextmenu.css");
-webIncludeResourceFile("ui.dropdownchecklist.css");
-webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("jquery.contextmenu.js", NULL);
-jsIncludeFile("ui.core.js", NULL);
-jsIncludeFile("ui.dropdownchecklist.js", NULL);
+    webIncludeResourceFile("jquery-ui.css");
+    if (sameString(cartUsualString(cart, TRACK_SEARCH,"0"),"0")) // NOT doing search
+        {
+        webIncludeResourceFile("jquery.contextmenu.css");
+        jsIncludeFile("jquery.contextmenu.js", NULL);
+        webIncludeResourceFile("ui.dropdownchecklist.css");
+        jsIncludeFile("ui.core.js", NULL);
+        jsIncludeFile("ui.dropdownchecklist.js", NULL);
+        }
     }
 jsIncludeFile("jquery-ui.js", NULL);
 
