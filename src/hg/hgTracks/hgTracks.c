@@ -38,6 +38,7 @@
 #include "bigBed.h"
 #include "bigWig.h"
 #include "bedCart.h"
+#include "udc.h"
 #include "customTrack.h"
 #include "trackHub.h"
 #include "hubConnect.h"
@@ -5560,6 +5561,9 @@ if (hIsGisaidServer())
     }
 
 setUdcCacheDir();
+int timeout = cartUsualInt(cart, "udcTimeout", 300);
+if (udcCacheTimeout() < timeout)
+    udcSetCacheTimeout(timeout);
 
 initTl();
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
