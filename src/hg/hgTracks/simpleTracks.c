@@ -133,6 +133,7 @@ static char const rcsid[] = "$Id: simpleTracks.c,v 1.149 2010/06/05 19:29:42 bra
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
+#define OMIM_MAX_DESC_LEN 256
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
@@ -10922,8 +10923,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 /* reserve space no more than 20 unique OMIM entries */
-#define OMIM_MAX_DESC_LEN 256
-char omimGeneClass3Buffer[20 * OMIM_MAX_DESC_LEN];
+char omimGeneClass3Buffer[21 * OMIM_MAX_DESC_LEN];
 
 char *omimGeneClass3DisorderList(struct track *tg, struct bed *item)
 /* Return list of disorders associated with a OMIM entry */
@@ -10935,6 +10935,21 @@ char **row;
 char *chp;
 int i=0;
 
+// get gene symbol(s) first
+
+conn = hAllocConn(database);
+safef(query,sizeof(query),
+        "select geneSymbol from omimGeneMap where omimId =%s", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+if (row != NULL) 
+    {
+    safef(omimGeneClass3Buffer, sizeof(omimGeneClass3Buffer), "%s; disorder(s): ", row[0]);
+    }
+
+chp = omimGeneClass3Buffer + (long)strlen(row[0]) + 15L; 
+
 conn = hAllocConn(database);
 safef(query,sizeof(query),
         "select distinct disorder from omimDisorderMap, omimGeneClass3 where name='%s' and name=cast(omimId as char) order by disorder", item->name);
@@ -10942,9 +10957,10 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 /* show up to 20 max entries */
-chp = omimGeneClass3Buffer;
+//chp = omimGeneClass3Buffer;
 while ((row != NULL) && i<20)
     {
+    int lengthLeft = sizeof(omimGeneClass3Buffer) - strlen(omimGeneClass3Buffer);
     /* omimDisorderMap disorder field some times have trailing blanks. */
     eraseTrailingSpaces(row[0]);
     if (i != 0)
@@ -10952,7 +10968,12 @@ while ((row != NULL) && i<20)
 	safef(chp, 3, "; ");
 	chp++;chp++;
 	}
+    safecpy(chp, lengthLeft, row[0]);
+    lengthLeft = lengthLeft - strlen(row[0]) - 2;
+    
     safecpy(chp, OMIM_MAX_DESC_LEN, row[0]);
+    
+    
     chp = chp+strlen(row[0]);
     row = sqlNextRow(sr);
     i++;
@@ -11025,7 +11046,6 @@ void omimGeneClass3Methods (struct track *tg)
 tg->drawItemAt    = omimGeneClass3DrawAt;
 }
 
-#define OMIM_MAX_DESC_LEN 256
 char omimAvSnpBuffer[OMIM_MAX_DESC_LEN];
 
 char *omimAvSnpAaReplacement(struct track *tg, struct bed *item)
@@ -11110,7 +11130,6 @@ void omimAvSnpMethods (struct track *tg)
 tg->drawItemAt    = omimAvSnpDrawAt;
 }
 
-#define OMIM_MAX_DESC_LEN 256
 char omimLocationBuffer[OMIM_MAX_DESC_LEN*2];
 
 char *omimLocationDescription(struct track *tg, struct bed *item)
@@ -11242,7 +11261,6 @@ else
 }
 
 /* reserve space no more than 20 unique OMIM entries */
-#define OMIM_MAX_DESC_LEN 256
 char omimGeneBuffer[20 * OMIM_MAX_DESC_LEN];
 
 char *omimGeneDiseaseList(struct track *tg, struct bed *item)
