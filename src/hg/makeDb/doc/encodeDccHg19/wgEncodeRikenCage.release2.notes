@@ -11,38 +11,20 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release2 (new+untouched):
-    Tables: 192
-    Files: 338
-    Gbdbs: 262
+    Tables: 183
+    Files: 315
+    Gbdbs: 246
 
-A) Untouched Tables (180):
-wgEncodeRikenCageGm12878CellPapAlnRep1
-wgEncodeRikenCageGm12878CellPapAlnRep2
-wgEncodeRikenCageGm12878CellPapMinusClustersRep1
-wgEncodeRikenCageGm12878CellPapMinusClustersRep2
-wgEncodeRikenCageGm12878CellPapPlusClustersRep1
-wgEncodeRikenCageGm12878CellPapPlusClustersRep2
+A) Untouched Tables (156):
 wgEncodeRikenCageGm12878CytosolLongnonpolyaAln
 wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters
 wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
-wgEncodeRikenCageGm12878CytosolPapAlnRep1
-wgEncodeRikenCageGm12878CytosolPapAlnRep2
-wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1
-wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2
-wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1
-wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2
 wgEncodeRikenCageGm12878NucleolusTotalAln
 wgEncodeRikenCageGm12878NucleolusTotalMinusClusters
 wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
 wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
 wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1
 wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1
-wgEncodeRikenCageGm12878NucleusPapAlnRep1
-wgEncodeRikenCageGm12878NucleusPapAlnRep2
-wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1
-wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2
-wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1
-wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2
 wgEncodeRikenCageH1hescCellLongnonpolyaAln
 wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
 wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
@@ -151,12 +133,6 @@ wgEncodeRikenCageK562CytosolPapMinusClustersRep2
 wgEncodeRikenCageK562CytosolPapPlusClusters
 wgEncodeRikenCageK562CytosolPapPlusClustersRep1
 wgEncodeRikenCageK562CytosolPapPlusClustersRep2
-wgEncodeRikenCageK562NucleolusTotalAln
-wgEncodeRikenCageK562NucleolusTotalAlnRep1
-wgEncodeRikenCageK562NucleolusTotalMinusClusters
-wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
-wgEncodeRikenCageK562NucleolusTotalPlusClusters
-wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
 wgEncodeRikenCageK562NucleoplasmTotalAln
 wgEncodeRikenCageK562NucleoplasmTotalMinusClusters
 wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
@@ -197,32 +173,16 @@ wgEncodeRikenCageProstateCellLongnonpolyaAln
 wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
 wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
 
-A') Untouched Files (243 downloadables, 180 gbdbs):
+A') Untouched Files (211 downloadables, 156 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/
     on RR:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/
 
-wgEncodeRikenCageGm12878CellPapAlnRep1.bam
-wgEncodeRikenCageGm12878CellPapAlnRep2.bam
-wgEncodeRikenCageGm12878CellPapMinusClustersRep1.bigWig
-wgEncodeRikenCageGm12878CellPapMinusClustersRep2.bigWig
-wgEncodeRikenCageGm12878CellPapPlusClustersRep1.bigWig
-wgEncodeRikenCageGm12878CellPapPlusClustersRep2.bigWig
-wgEncodeRikenCageGm12878CellPapRawDataRep1.fastq.gz
-wgEncodeRikenCageGm12878CellPapRawDataRep2.fastq.gz
 wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam
 wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters.bigWig
 wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters.bigWig
 wgEncodeRikenCageGm12878CytosolLongnonpolyaRawData.fastq.gz
-wgEncodeRikenCageGm12878CytosolPapAlnRep1.bam
-wgEncodeRikenCageGm12878CytosolPapAlnRep2.bam
-wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1.bigWig
-wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2.bigWig
-wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1.bigWig
-wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2.bigWig
-wgEncodeRikenCageGm12878CytosolPapRawDataRep1.fastq.gz
-wgEncodeRikenCageGm12878CytosolPapRawDataRep2.fastq.gz
 wgEncodeRikenCageGm12878NucleolusTotalAln.bam
 wgEncodeRikenCageGm12878NucleolusTotalMinusClusters.bigWig
 wgEncodeRikenCageGm12878NucleolusTotalPlusClusters.bigWig
@@ -231,14 +191,6 @@ wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam
 wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1.bigWig
 wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1.bigWig
 wgEncodeRikenCageGm12878NucleusLongnonpolyaRawDataRep1.fastq.gz
-wgEncodeRikenCageGm12878NucleusPapAlnRep1.bam
-wgEncodeRikenCageGm12878NucleusPapAlnRep2.bam
-wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1.bigWig
-wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2.bigWig
-wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1.bigWig
-wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2.bigWig
-wgEncodeRikenCageGm12878NucleusPapRawDataRep1.fastq.gz
-wgEncodeRikenCageGm12878NucleusPapRawDataRep2.fastq.gz
 wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam
 wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
 wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig
@@ -384,14 +336,6 @@ wgEncodeRikenCageK562CytosolPapPlusClustersRep2.bigWig
 wgEncodeRikenCageK562CytosolPapRawData.fastq.gz
 wgEncodeRikenCageK562CytosolPapRawDataRep1.fastq.gz
 wgEncodeRikenCageK562CytosolPapRawDataRep2.fastq.gz
-wgEncodeRikenCageK562NucleolusTotalAln.bam
-wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam
-wgEncodeRikenCageK562NucleolusTotalMinusClusters.bigWig
-wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1.bigWig
-wgEncodeRikenCageK562NucleolusTotalPlusClusters.bigWig
-wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1.bigWig
-wgEncodeRikenCageK562NucleolusTotalRawData.fastq.gz
-wgEncodeRikenCageK562NucleolusTotalRawDataRep1.fastq.gz
 wgEncodeRikenCageK562NucleoplasmTotalAln.bam
 wgEncodeRikenCageK562NucleoplasmTotalMinusClusters.bigWig
 wgEncodeRikenCageK562NucleoplasmTotalPlusClusters.bigWig
@@ -447,33 +391,15 @@ wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters.bigWig
 wgEncodeRikenCageProstateCellLongnonpolyaRawData.csfasta.gz
 wgEncodeRikenCageProstateCellLongnonpolyaRawData2.csqual.gz
 
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapMinusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapMinusClustersRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapPlusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapPlusClustersRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleolusTotalAln.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleolusTotalMinusClusters.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleolusTotalPlusClusters.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusLongnonpolyaMinusClustersRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusLongnonpolyaPlusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapAlnRep2.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig
@@ -582,12 +508,6 @@ wgEncodeRikenCageProstateCellLongnonpolyaRawData2.csqual.gz
 /gbdb/hg19/bbi/wgEncodeRikenCageK562CytosolPapPlusClusters.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageK562CytosolPapPlusClustersRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageK562CytosolPapPlusClustersRep2.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalAln.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam
-/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalMinusClusters.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalPlusClusters.bigWig
-/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageK562NucleoplasmTotalAln.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageK562NucleoplasmTotalMinusClusters.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageK562NucleoplasmTotalPlusClusters.bigWig
@@ -640,13 +560,28 @@ B') Deprecated files (0 downloadables, 0 gbdbs):
 
 
 
-C) New tables (12):
+C) New tables (27):
 wgEncodeRikenCageA549CellPapAlnRep1
 wgEncodeRikenCageA549CellPapAlnRep2
+wgEncodeRikenCageA549CellPapMinusRawRep1
+wgEncodeRikenCageA549CellPapMinusRawRep2
+wgEncodeRikenCageA549CellPapPlusRawRep1
+wgEncodeRikenCageA549CellPapPlusRawRep2
 wgEncodeRikenCageAg04450CellPapAlnRep1
 wgEncodeRikenCageAg04450CellPapAlnRep2
+wgEncodeRikenCageAg04450CellPapMinusRawRep1
+wgEncodeRikenCageAg04450CellPapMinusRawRep2
+wgEncodeRikenCageAg04450CellPapPlusRawRep1
+wgEncodeRikenCageAg04450CellPapPlusRawRep2
 wgEncodeRikenCageBjCellPapAlnRep1
 wgEncodeRikenCageBjCellPapAlnRep2
+wgEncodeRikenCageBjCellPapMinusRawRep1
+wgEncodeRikenCageBjCellPapMinusRawRep2
+wgEncodeRikenCageBjCellPapPlusRawRep1
+wgEncodeRikenCageBjCellPapPlusRawRep2
+wgEncodeRikenCageK562NucleolusTotalAlnRep1
+wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1
+wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1
 wgEncodeRikenCageMcf7CellPapAlnRep2
 wgEncodeRikenCageNhekCytosolPapAlnRep4
 wgEncodeRikenCageSknshraCellPapAlnRep1
@@ -654,39 +589,45 @@ wgEncodeRikenCageSknshraCellPapAlnRep2
 wgEncodeRikenCageSknshraCellPapMinusClustersRep2
 wgEncodeRikenCageSknshraCellPapPlusClustersRep2
 
-C') New files (92 downloadables, 82 gbdbs):
+C') New files (101 downloadables, 90 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/
     NOT on RR but must be placed in:
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/
 
 wgEncodeRikenCageA549CellPapAlnRep1.bam
 wgEncodeRikenCageA549CellPapAlnRep1.bam.bai
 wgEncodeRikenCageA549CellPapAlnRep2.bam
 wgEncodeRikenCageA549CellPapAlnRep2.bam.bai
+wgEncodeRikenCageA549CellPapMinusRawRep1.bigWig
+wgEncodeRikenCageA549CellPapMinusRawRep2.bigWig
+wgEncodeRikenCageA549CellPapPlusRawRep1.bigWig
+wgEncodeRikenCageA549CellPapPlusRawRep2.bigWig
 wgEncodeRikenCageA549CellPapRawDataRep1.fastq.gz
 wgEncodeRikenCageA549CellPapRawDataRep2.fastq.gz
 wgEncodeRikenCageAg04450CellPapAlnRep1.bam
 wgEncodeRikenCageAg04450CellPapAlnRep1.bam.bai
 wgEncodeRikenCageAg04450CellPapAlnRep2.bam
 wgEncodeRikenCageAg04450CellPapAlnRep2.bam.bai
+wgEncodeRikenCageAg04450CellPapMinusRawRep1.bigWig
+wgEncodeRikenCageAg04450CellPapMinusRawRep2.bigWig
+wgEncodeRikenCageAg04450CellPapPlusRawRep1.bigWig
+wgEncodeRikenCageAg04450CellPapPlusRawRep2.bigWig
 wgEncodeRikenCageAg04450CellPapRawDataRep1.fastq.gz
 wgEncodeRikenCageAg04450CellPapRawDataRep2.fastq.gz
 wgEncodeRikenCageBjCellPapAlnRep1.bam
 wgEncodeRikenCageBjCellPapAlnRep1.bam.bai
 wgEncodeRikenCageBjCellPapAlnRep2.bam
 wgEncodeRikenCageBjCellPapAlnRep2.bam.bai
+wgEncodeRikenCageBjCellPapMinusRawRep1.bigWig
+wgEncodeRikenCageBjCellPapMinusRawRep2.bigWig
+wgEncodeRikenCageBjCellPapPlusRawRep1.bigWig
+wgEncodeRikenCageBjCellPapPlusRawRep2.bigWig
 wgEncodeRikenCageBjCellPapRawDataRep1.fastq.gz
 wgEncodeRikenCageBjCellPapRawDataRep2.fastq.gz
-wgEncodeRikenCageGm12878CellPapAlnRep1.bam.bai
-wgEncodeRikenCageGm12878CellPapAlnRep2.bam.bai
 wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
-wgEncodeRikenCageGm12878CytosolPapAlnRep1.bam.bai
-wgEncodeRikenCageGm12878CytosolPapAlnRep2.bam.bai
 wgEncodeRikenCageGm12878NucleolusTotalAln.bam.bai
 wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
-wgEncodeRikenCageGm12878NucleusPapAlnRep1.bam.bai
-wgEncodeRikenCageGm12878NucleusPapAlnRep2.bam.bai
 wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
 wgEncodeRikenCageH1hescCellPapAlnRep1.bam.bai
 wgEncodeRikenCageH1hescCellPapAlnRep2.bam.bai
@@ -723,8 +664,11 @@ wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam.bai
 wgEncodeRikenCageK562CytosolPapAln.bam.bai
 wgEncodeRikenCageK562CytosolPapAlnRep1.bam.bai
 wgEncodeRikenCageK562CytosolPapAlnRep2.bam.bai
-wgEncodeRikenCageK562NucleolusTotalAln.bam.bai
+wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam
 wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam.bai
+wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1.bigWig
+wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1.bigWig
+wgEncodeRikenCageK562NucleolusTotalRawDataRep1.fastq.gz
 wgEncodeRikenCageK562NucleoplasmTotalAln.bam.bai
 wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
 wgEncodeRikenCageK562NucleusPapAlnRep1.bam.bai
@@ -757,23 +701,29 @@ wgEncodeRikenCageSknshraCellPapRawDataRep2.fastq.gz
 /gbdb/hg19/bbi/wgEncodeRikenCageA549CellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageA549CellPapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageA549CellPapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeRikenCageA549CellPapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageA549CellPapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageA549CellPapPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageA549CellPapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageAg04450CellPapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapAlnRep2.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapAlnRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapAlnRep1.bam.bai
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CellPapAlnRep2.bam.bai
+/gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapMinusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapMinusRawRep2.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapPlusRawRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageBjCellPapPlusRawRep2.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapAlnRep1.bam.bai
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878CytosolPapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleolusTotalAln.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1.bam.bai
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapAlnRep1.bam.bai
-/gbdb/hg19/bbi/wgEncodeRikenCageGm12878NucleusPapAlnRep2.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageH1hescCellPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageH1hescCellPapAlnRep2.bam.bai
@@ -810,8 +760,10 @@ wgEncodeRikenCageSknshraCellPapRawDataRep2.fastq.gz
 /gbdb/hg19/bbi/wgEncodeRikenCageK562CytosolPapAln.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageK562CytosolPapAlnRep1.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageK562CytosolPapAlnRep2.bam.bai
-/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalAln.bam.bai
+/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalAlnRep1.bam.bai
+/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalMinusClustersRep1.bigWig
+/gbdb/hg19/bbi/wgEncodeRikenCageK562NucleolusTotalPlusClustersRep1.bigWig
 /gbdb/hg19/bbi/wgEncodeRikenCageK562NucleoplasmTotalAln.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam.bai
 /gbdb/hg19/bbi/wgEncodeRikenCageK562NucleusPapAlnRep1.bam.bai
@@ -840,7 +792,7 @@ D) Additional items:
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/release2/
     should be placed on the RR in (overwritting any existing copy):
-      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeRikenCage/
 
 index.html
 files.txt
