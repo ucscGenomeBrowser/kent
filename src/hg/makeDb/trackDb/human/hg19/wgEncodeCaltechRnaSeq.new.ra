@@ -4,7 +4,7 @@ compositeTrack on
 shortLabel Caltech RNA-seq
 longLabel RNA-seq from ENCODE/Wold 
 group expression
-subGroup1 view Views GeneModel=Gene_Model Signal=Raw_Signal PlusSignal=Plus_Raw_Signal MinusSignal=Minus_Raw_Signal  Splices=Splice_Sites Aligns=Alignments Paired=Paired 
+subGroup1 view Views GeneModel=Gene_Model Signal=Raw_Signal PlusSignal=Plus_Raw_Signal MinusSignal=Minus_Raw_Signal  Splices=Splice_Sites Aligns=Alignments 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) GM12891=GM12891 GM12892=GM12892 HSMM=HSMM HUVEC=HUVEC HeLaS3=HeLaS3 HepG2=HepG2 HCT116=HCT116 MCF7=MCF7 NHEK=NHEK NHLF=NHLF
 subGroup3 readType Read_Type r1x75=Single_75nt r1x75D=Single_Strand-Specific_75nt r2x75=Paired_75nt_(200_bp) r2x75400=Paired_75nt_(400_bp)
 subGroup4 insertLength Insert_Length il200=200 il400=400 ilNa=NA
@@ -12,12 +12,14 @@ subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
 dimensions dimensionX=readType dimensionY=cellType dimensionA=rep
 dimensionAchecked rep1,rep2,rep3,rep4
 sortOrder cellType=+ readType=+ view=+ rep=+
+fileSortOrder cell=Cell_Line localization=Localization rnaExtract=RNA<BR>Extract readType=Read<BR>Type insertLength=Insert<BR>Length view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell readType=readType mapAlgorithm=mapAlgorithm insertLength=insertLength
 dragAndDrop subTracks
 priority 0
 type bed 3
 noInherit on
 wgEncode 1
+maxWindowToDraw 10000000
 html wgEncodeCaltechRnaSeq.new.html
 
 	track wgEncodeCaltechRnaSeqViewGeneModel
@@ -144,7 +146,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewGeneModel
         shortLabel GM12878 2
         longLabel ENCODE Caltech RNA-seq DeNovo Gene Models from Cufflinks Replicate 2 (in GM12878 cells)
-        subGroups view=GeneModel cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        subGroups view=GeneModel cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type genePred
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
@@ -259,6 +261,39 @@ html wgEncodeCaltechRnaSeq.new.html
         subGroups view=GeneModel cellType=GM12891 readType=r1x75D rep=rep2 insertLength=ilNa
         type genePred
         # subId=3437 dateSubmitted=2011-01-21
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneModelRep1V2
+        parent wgEncodeCaltechRnaSeqViewGeneModel off
+        shortLabel MCF-7 1
+        longLabel ENCODE Caltech RNA-seq DeNovo Gene Models from Cufflinks Replicate 1 (in MCF-7 cells)
+        subGroups view=GeneModel cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep1
+        type genePred
+        # subId=3414 dateSubmitted=2011-01-22
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200GeneModelRep3V2
+        parent wgEncodeCaltechRnaSeqViewGeneModel off
+        shortLabel MCF-7 3
+        longLabel ENCODE Caltech RNA-seq DeNovo Gene Models from Cufflinks Replicate 3 (in MCF-7 cells)
+        subGroups view=GeneModel cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep3
+        type genePred
+        # subId=3478 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqHct116R2x75Il200GeneModelRep2V2
+        parent wgEncodeCaltechRnaSeqViewGeneModel off
+        shortLabel HCT-116 2
+        longLabel ENCODE Caltech RNA-seq DeNovo Gene Models from Cufflinks Replicate 2 (in HCT-116 cells)
+        subGroups view=GeneModel cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep2
+        type genePred
+        # subId=3475 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqH1hescR2x75Il400GeneModelRep1V2
+        parent wgEncodeCaltechRnaSeqViewGeneModel off
+        shortLabel H1-hESC 1
+        longLabel ENCODE Caltech RNA-seq DeNovo Gene Models from Cufflinks Replicate 1 (in H1-hESC cells)
+        subGroups view=GeneModel cellType=H1hESC insertLength=il400 readType=r2x75400 rep=rep1
+        type genePred
+        color 0,107,27
+        # subId=3462 dateSubmitted=2011-01-22
 
 	track wgEncodeCaltechRnaSeqViewSplices
 	view Splices
@@ -511,7 +546,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewSplices
         shortLabel GM12878 2
         longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in GM12878 cells)
-        subGroups view=Splices cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        subGroups view=Splices cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type bam
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
@@ -634,6 +669,39 @@ html wgEncodeCaltechRnaSeq.new.html
         subGroups view=Splices cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         # subId=3474 dateSubmitted=2011-01-22
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep1V2
+        parent wgEncodeCaltechRnaSeqViewSplices off
+        shortLabel MCF-7 1
+        longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in MCF-7 cells)
+        subGroups view=Splices cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep1
+        type bam
+        # subId=3414 dateSubmitted=2011-01-22
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200SplicesRep3V2
+        parent wgEncodeCaltechRnaSeqViewSplices off
+        shortLabel MCF-7 3
+        longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 3 (in MCF-7 cells)
+        subGroups view=Splices cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep3
+        type bam
+        # subId=3478 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqHct116R2x75Il200SplicesRep2V2
+        parent wgEncodeCaltechRnaSeqViewSplices off
+        shortLabel HCT-116 2
+        longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in HCT-116 cells)
+        subGroups view=Splices cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep2
+        type bam
+        # subId=3475 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqH1hescR2x75Il400SplicesRep1V2
+        parent wgEncodeCaltechRnaSeqViewSplices off
+        shortLabel H1-hESC 1
+        longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in H1-hESC cells)
+        subGroups view=Splices cellType=H1hESC insertLength=il400 readType=r2x75400 rep=rep1
+        type bam
+        color 0,107,27
+        # subId=3462 dateSubmitted=2011-01-22
 	
 	track wgEncodeCaltechRnaSeqViewAligns
     	view Aligns
@@ -794,228 +862,255 @@ html wgEncodeCaltechRnaSeq.new.html
         type bam
         # subId=3437 dateSubmitted=2011-01-21
 
-	track wgEncodeCaltechRnaSeqViewPaired
-    	view Paired
-        shortLabel Alignments
-    	visibility hide
-    	subTrack wgEncodeCaltechRnaSeq
-
         track wgEncodeCaltechRnaSeqGm12892R2x75Il200PairedRep1
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel GM12892 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in GM12892 cells)
-        subGroups view=Paired cellType=GM12892 insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in GM12892 cells)
+        subGroups view=Aligns cellType=GM12892 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         # subId=3441 dateSubmitted=2011-01-21
 
         track wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HSMM 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in HSMM cells)
-        subGroups view=Paired cellType=HSMM insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HSMM cells)
+        subGroups view=Aligns cellType=HSMM insertLength=il200 readType=r2x75 rep=rep1
         type bam
         # subId=3468 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHsmmR2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HSMM 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in HSMM cells)
-        subGroups view=Paired cellType=HSMM insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HSMM cells)
+        subGroups view=Aligns cellType=HSMM insertLength=il200 readType=r2x75 rep=rep2
         type bam
         # subId=3469 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HUVEC 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in HUVEC cells)
-        subGroups view=Paired cellType=HUVEC insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HUVEC cells)
+        subGroups view=Aligns cellType=HUVEC insertLength=il200 readType=r2x75 rep=rep2
         type bam
         color 224,75,0
         # subId=3471 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHuvecR2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HUVEC 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in HUVEC cells)
-        subGroups view=Paired cellType=HUVEC insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HUVEC cells)
+        subGroups view=Aligns cellType=HUVEC insertLength=il200 readType=r2x75 rep=rep1
         type bam
         color 224,75,0
         # subId=3470 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired
+        parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel GM12878 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in GM12878 cells)
-        subGroups view=Paired cellType=GM12878 insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in GM12878 cells)
+        subGroups view=Aligns cellType=GM12878 insertLength=il200 readType=r2x75 rep=rep2
         type bam
         color 153,38,0
         # subId=3463 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HepG2 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in HepG2 cells)
-        subGroups view=Paired cellType=HepG2 insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HepG2 cells)
+        subGroups view=Aligns cellType=HepG2 insertLength=il200 readType=r2x75 rep=rep2
         type bam
         color 189,0,157
         # subId=3467 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHepg2R2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HepG2 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in HepG2 cells)
-        subGroups view=Paired cellType=HepG2 insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HepG2 cells)
+        subGroups view=Aligns cellType=HepG2 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         color 189,0,157
         # subId=3466 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HeLa-S3 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in HeLa-S3 cells)
-        subGroups view=Paired cellType=HeLaS3 insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HeLa-S3 cells)
+        subGroups view=Aligns cellType=HeLaS3 insertLength=il200 readType=r2x75 rep=rep2
         type bam
         color 0,119,158
         # subId=3465 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel H1-hESC 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in H1-hESC cells)
-        subGroups view=Paired cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in H1-hESC cells)
+        subGroups view=Aligns cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep1
         type bam
         color 0,107,27
         # subId=3464 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired
+        parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel K562 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in K562 cells)
-        subGroups view=Paired cellType=K562 insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in K562 cells)
+        subGroups view=Aligns cellType=K562 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         color 46,0,184
         # subId=3419 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel NHLF 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in NHLF cells)
-        subGroups view=Paired cellType=NHLF insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in NHLF cells)
+        subGroups view=Aligns cellType=NHLF insertLength=il200 readType=r2x75 rep=rep1
         type bam
         # subId=3413 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep3V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel H1-hESC 3
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 3 (in H1-hESC cells)
-        subGroups view=Paired cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep3
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 3 (in H1-hESC cells)
+        subGroups view=Aligns cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep3
         type bam
         color 0,107,27
         # subId=3417 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il400PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired
+        parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel GM12878 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in GM12878 cells)
-        subGroups view=Paired cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in GM12878 cells)
+        subGroups view=Aligns cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type bam
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHelas3R2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HeLa-S3 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in HeLa-S3 cells)
-        subGroups view=Paired cellType=HeLaS3 insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HeLa-S3 cells)
+        subGroups view=Aligns cellType=HeLaS3 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         color 0,119,158
         # subId=3418 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel NHEK 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in NHEK cells)
-        subGroups view=Paired cellType=NHEK insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in NHEK cells)
+        subGroups view=Aligns cellType=NHEK insertLength=il200 readType=r2x75 rep=rep2
         type bam
         color 179,0,134
         # subId=3411 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel H1-hESC 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in H1-hESC cells)
-        subGroups view=Paired cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in H1-hESC cells)
+        subGroups view=Aligns cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep2
         type bam
         color 0,107,27
         # subId=3409 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqNhlfR2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel NHLF 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in NHLF cells)
-        subGroups view=Paired cellType=NHLF insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in NHLF cells)
+        subGroups view=Aligns cellType=NHLF insertLength=il200 readType=r2x75 rep=rep2
         type bam
         # subId=3440 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqH1hescR2x75Il200PairedRep4V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel H1-hESC 4
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 4 (in H1-hESC cells)
-        subGroups view=Paired cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep4
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 4 (in H1-hESC cells)
+        subGroups view=Aligns cellType=H1hESC insertLength=il200 readType=r2x75 rep=rep4
         type bam
         color 0,107,27
         # subId=3410 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel MCF-7 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in MCF-7 cells)
-        subGroups view=Paired cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in MCF-7 cells)
+        subGroups view=Aligns cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep2
         type bam
         # subId=3412 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqNhekR2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel NHEK 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in NHEK cells)
-        subGroups view=Paired cellType=NHEK insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in NHEK cells)
+        subGroups view=Aligns cellType=NHEK insertLength=il200 readType=r2x75 rep=rep1
         type bam
         color 179,0,134
         # subId=3473 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqGm12891R2x75Il200PairedRep1
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel GM12891 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in GM12891 cells)
-        subGroups view=Paired cellType=GM12891 insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in GM12891 cells)
+        subGroups view=Aligns cellType=GM12891 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         # subId=3436 dateSubmitted=2011-01-21
 
         track wgEncodeCaltechRnaSeqK562R2x75Il200PairedRep2V2
-        parent wgEncodeCaltechRnaSeqViewPaired
+        parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel K562 2
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in K562 cells)
-        subGroups view=Paired cellType=K562 insertLength=il200 readType=r2x75 rep=rep2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in K562 cells)
+        subGroups view=Aligns cellType=K562 insertLength=il200 readType=r2x75 rep=rep2
         type bam
         color 46,0,184
         # subId=3472 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqGm12878R2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired
+        parent wgEncodeCaltechRnaSeqViewAligns
         shortLabel GM12878 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in GM12878 cells)
-        subGroups view=Paired cellType=GM12878 insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in GM12878 cells)
+        subGroups view=Aligns cellType=GM12878 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         color 153,38,0
         # subId=3416 dateSubmitted=2011-01-22
 
         track wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep1V2
-        parent wgEncodeCaltechRnaSeqViewPaired off
+        parent wgEncodeCaltechRnaSeqViewAligns off
         shortLabel HCT-116 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in HCT-116 cells)
-        subGroups view=Paired cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in HCT-116 cells)
+        subGroups view=Aligns cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep1
         type bam
         # subId=3474 dateSubmitted=2011-01-22
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep1V2
+        parent wgEncodeCaltechRnaSeqViewAligns off
+        shortLabel MCF-7 1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in MCF-7 cells)
+        subGroups view=Aligns cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep1
+        type bam
+        # subId=3414 dateSubmitted=2011-01-22
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200PairedRep3V2
+        parent wgEncodeCaltechRnaSeqViewAligns off
+        shortLabel MCF-7 3
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 3 (in MCF-7 cells)
+        subGroups view=Aligns cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep3
+        type bam
+        # subId=3478 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqHct116R2x75Il200PairedRep2V2
+        parent wgEncodeCaltechRnaSeqViewAligns off
+        shortLabel HCT-116 2
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 2 (in HCT-116 cells)
+        subGroups view=Aligns cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep2
+        type bam
+        # subId=3475 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqH1hescR2x75Il400PairedRep1V2
+        parent wgEncodeCaltechRnaSeqViewAligns off
+        shortLabel H1-hESC 1
+        longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in H1-hESC cells)
+        subGroups view=Aligns cellType=H1hESC insertLength=il400 readType=r2x75400 rep=rep1
+        type bam
+        color 0,107,27
+        # subId=3462 dateSubmitted=2011-01-22
 
 
 
@@ -1403,7 +1498,7 @@ html wgEncodeCaltechRnaSeq.new.html
         parent wgEncodeCaltechRnaSeqViewSignal
         shortLabel GM12878 Sig 2
         longLabel ENCODE Caltech RNA-seq Signal Replicate 2 (in GM12878 cells)
-        subGroups view=Signal cellType=GM12878 insertLength=il400 readType=r2x75 rep=rep2
+        subGroups view=Signal cellType=GM12878 insertLength=il400 readType=r2x75400 rep=rep2
         type bigWig 1.000000 141988.000000
         color 153,38,0
         # subId=3461 dateSubmitted=2011-01-22
@@ -1518,4 +1613,37 @@ html wgEncodeCaltechRnaSeq.new.html
         subGroups view=Signal cellType=GM12891 readType=r1x75D rep=rep2 insertLength=ilNa
         type bigWig 1.000000 312845.000000
         # subId=3437 dateSubmitted=2011-01-21
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep1V2
+        parent wgEncodeCaltechRnaSeqViewSignal off
+        shortLabel MCF-7 Sig 1
+        longLabel ENCODE Caltech RNA-seq Signal Replicate 1 (in MCF-7 cells)
+        subGroups view=Signal cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep1
+        type bigWig 1.000000 213622.000000
+        # subId=3414 dateSubmitted=2011-01-22
+
+        track wgEncodeCaltechRnaSeqMcf7R2x75Il200SigRep3V2
+        parent wgEncodeCaltechRnaSeqViewSignal off
+        shortLabel MCF-7 Sig 3
+        longLabel ENCODE Caltech RNA-seq Signal Replicate 3 (in MCF-7 cells)
+        subGroups view=Signal cellType=MCF7 insertLength=il200 readType=r2x75 rep=rep3
+        type bigWig 1.000000 227488.000000
+        # subId=3478 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqHct116R2x75Il200SigRep2V2
+        parent wgEncodeCaltechRnaSeqViewSignal off
+        shortLabel HCT-116 Sig 2
+        longLabel ENCODE Caltech RNA-seq Signal Replicate 2 (in HCT-116 cells)
+        subGroups view=Signal cellType=HCT116 insertLength=il200 readType=r2x75 rep=rep2
+        type bigWig 1.000000 343240.000000
+        # subId=3475 dateSubmitted=2011-02-12
+
+        track wgEncodeCaltechRnaSeqH1hescR2x75Il400SigRep1V2
+        parent wgEncodeCaltechRnaSeqViewSignal off
+        shortLabel H1-hESC Sig 1
+        longLabel ENCODE Caltech RNA-seq Signal Replicate 1 (in H1-hESC cells)
+        subGroups view=Signal cellType=H1hESC insertLength=il400 readType=r2x75400 rep=rep1
+        type bigWig 1.000000 244104.000000
+        color 0,107,27
+        # subId=3462 dateSubmitted=2011-01-22
 

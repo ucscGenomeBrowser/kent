@@ -13,6 +13,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 replicate 1
@@ -35,6 +36,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 replicate 2
@@ -56,6 +58,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 setType exp
@@ -77,6 +80,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 privacy noSequence
 project wgEncode
 setType exp
@@ -98,6 +102,7 @@ fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_FB8470
+origAssembly hg19
 privacy noSequence
 project wgEncode
 setType exp
@@ -120,6 +125,7 @@ fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 privacy noSequence
 project wgEncode
 setType input
@@ -140,6 +146,7 @@ fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+origAssembly hg19
 privacy noSequence
 project wgEncode
 setType input
@@ -162,6 +169,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -183,6 +191,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -203,6 +212,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2516
@@ -223,6 +233,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2516
@@ -242,6 +253,7 @@ dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -261,6 +273,7 @@ dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -281,6 +294,7 @@ fileName wgEncodeOpenChromChipGlioblaCtcfSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_H54
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2516
@@ -302,6 +316,7 @@ fileName wgEncodeOpenChromChipGlioblaInputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 setType input
 subId 2499
@@ -320,6 +335,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipGlioblaInputRawData.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 setType input
 subId 2499
@@ -339,6 +355,7 @@ fileName wgEncodeOpenChromChipGlioblaInputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+origAssembly hg19
 project wgEncode
 setType input
 subId 2499
@@ -359,6 +376,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -379,6 +397,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -399,6 +418,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 setType exp
 subId 3272
@@ -419,6 +439,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 setType exp
 subId 3272
@@ -438,6 +459,7 @@ dateUnrestricted 2011-10-17
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -457,6 +479,7 @@ dateUnrestricted 2011-10-17
 fileName wgEncodeOpenChromChipGlioblaPol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -477,6 +500,7 @@ fileName wgEncodeOpenChromChipGlioblaPol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_H54
+origAssembly hg19
 project wgEncode
 setType exp
 subId 3272
@@ -4366,6 +4390,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep1
 project wgEncode
 replicate 1
@@ -4389,6 +4414,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 parentTable wgEncodeOpenChromChipMcf7CmycEstroAlnRep2
 project wgEncode
 replicate 2
@@ -4411,6 +4437,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2503
@@ -4432,6 +4459,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -4453,6 +4481,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep1
 project wgEncode
 replicate 1
@@ -4474,6 +4503,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycEstroRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 parentTable wgEncodeOpenChromChipMcf7CmycEstroRawSignalRep2
 project wgEncode
 replicate 2
@@ -4496,6 +4526,7 @@ fileName wgEncodeOpenChromChipMcf7CmycEstroSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2503
@@ -4560,6 +4591,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -4582,6 +4614,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -4603,6 +4636,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2504
@@ -4624,6 +4658,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2504
@@ -4644,6 +4679,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -4664,6 +4700,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -4685,6 +4722,7 @@ fileName wgEncodeOpenChromChipMcf7CmycVehSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2504
@@ -4775,6 +4813,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -4797,6 +4836,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -4818,6 +4858,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2502
@@ -4839,6 +4880,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2502
@@ -4859,6 +4901,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -4879,6 +4922,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -4900,6 +4944,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2502
@@ -5006,6 +5051,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -5028,6 +5074,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -5049,6 +5096,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2505
@@ -5070,6 +5118,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehPkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2505
@@ -5090,6 +5139,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -5110,6 +5160,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -5131,6 +5182,7 @@ fileName wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2505
@@ -5216,6 +5268,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -5237,6 +5290,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -5257,6 +5311,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A
 labVersion baseAlignCounts.pl v 1
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2495
@@ -5277,6 +5332,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2PkRep1.narrowPeak.gz
 grant Crawford
 lab UT-A
 labVersion p-value cutoff: 0.05
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2495
@@ -5296,6 +5352,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep1.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 1
 setType exp
@@ -5315,6 +5372,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep2.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 replicate 2
 setType exp
@@ -5335,6 +5393,7 @@ fileName wgEncodeOpenChromChipMcf7Pol2Sig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84, iff_MCF7
+origAssembly hg19
 project wgEncode
 setType exp
 subId 2495
@@ -5355,6 +5414,7 @@ fileName wgEncodeOpenChromChipMonocd14InputAln.bam
 grant Crawford
 lab UT-A
 labVersion align_on_cluster_bwa.pl v 1
+origAssembly hg19
 project wgEncode
 setType input
 subId 3271
@@ -5373,6 +5433,7 @@ dateUnrestricted 2011-10-17
 fileName wgEncodeOpenChromChipMonocd14InputRawData.fastq.gz
 grant Crawford
 lab UT-A
+origAssembly hg19
 project wgEncode
 setType input
 subId 3271
@@ -5392,6 +5453,7 @@ fileName wgEncodeOpenChromChipMonocd14InputSig.bigWig
 grant Crawford
 lab UT-A
 labVersion fseq v 1.84
+origAssembly hg19
 project wgEncode
 setType input
 subId 3271
@@ -5832,4 +5894,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1425910042
+# MAGIC: -1573681498

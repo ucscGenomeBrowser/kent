@@ -29,6 +29,7 @@
 #include "wigCommon.h"
 #include "hui.h"
 #include "imageV2.h"
+#include "bigBed.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -1654,6 +1655,30 @@ tg->items = list;
 hFreeConn(&conn);
 }
 
+struct bed* loadBigBedAsBed (struct track *tg, char *chr, int start, int end)
+/* load bigBed for a range, as a bed list (for next item button). Just grab one item */
+{
+extern struct bbiFile *fetchBbiForTrack(struct track *track);
+struct bbiFile *bbiFile = fetchBbiForTrack(tg);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *intervals = bigBedIntervalQuery(bbiFile, chr, 
+	start, end, 1, lm);
+
+
+struct bed *retBed = NULL;
+if (intervals != NULL)
+    {
+    AllocVar(retBed);
+    retBed->chrom = cloneString(chr);
+    retBed->chromStart = intervals->start;
+    retBed->chromEnd = intervals->end;
+    }
+
+lmCleanup(&lm);
+
+return retBed;
+}
+
 struct bed* loadOregannoAsBed (struct track *tg, char *chr, int start, int end)
 /* load oreganno with filters, for a range, as a bed list (for next item button) */
 {
@@ -1726,12 +1751,24 @@ void linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *item,
 struct linkedFeatures *lf = item;
 struct simpleFeature *exons = lf->components;
 struct simpleFeature *exon = exons;
+char *nextExonText;
+char *prevExonText;
 int newWinSize = winEnd - winStart;
 int bufferToEdge = 0.05 * newWinSize;
 int newWinStart, newWinEnd;
 int numExons = 0;
 int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
+if (startsWith("chain", tg->tdb->type))
+    {
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Block");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Block");
+    }
+else 
+    {
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon");
+    }
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
 /* It seems like lf->components isn't necessarily sorted. */
@@ -1769,9 +1806,9 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	if (!revStrand)
-	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", nextExonText, exonIx+1, numExons);
 	else
-	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", prevExonText, numExons-exonIx, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
@@ -1791,9 +1828,9 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	if (!revStrand)
-	    safef(mouseOverText, sizeof(mouseOverText), "Prev Exon (%d/%d)", numExons-exonIx, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", prevExonText, numExons-exonIx, numExons);
 	else
-	    safef(mouseOverText, sizeof(mouseOverText), "Next Exon (%d/%d)", exonIx+1, numExons);
+	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", nextExonText, exonIx+1, numExons);
 	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
@@ -1840,6 +1877,8 @@ if (end > start)
 	    items = loadGvAsBed(tg, chromName, start, end);
 	else if (sameWord(tg->table, "oreganno"))
 	    items = loadOregannoAsBed(tg, chromName, start, end);
+	else if (tg->isBigBed)
+	    items = loadBigBedAsBed(tg, chromName, start, end);
 	else
 #endif /* GBROWSE */
 	    {
@@ -5209,17 +5248,40 @@ static void decipherDrawAt(struct track *tg, void *item,
 struct bed *bed = item;
 char *sPhenotypes;
 int heightPer = tg->heightPer;
-int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
-int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int start = bed->chromStart;
+if (start < winStart)
+    start = winStart;
+int end = bed->chromEnd;
+if (end > winEnd)
+    end = winEnd;
+int x1 = round((double)((int)start-winStart)*scale) + xOff;
+int x2 = round((double)((int)end-winStart)*scale) + xOff;
 int w;
 
 sPhenotypes = decipherPhenotypeList(tg, item);
 w = x2-x1;
+
 if (w < 1)
     w = 1;
 if (color)
     {
-    hvGfxBox(hvg, x1, y, w, heightPer, decipherColor(tg, item, hvg));
+    void drawTri(struct hvGfx *hvg, int x, int y1, int y2, Color color, char strand);
+    int ourX = x1;
+    int ourW = w;
+    if (bed->chromStart < winStart)
+	{
+	assert(x1 == xOff);
+	ourX += heightPer/2;
+	ourW -= heightPer/2;
+	drawTri(hvg, xOff, y, y + heightPer -1,decipherColor(tg, item, hvg), '-');
+	}
+
+    if (bed->chromEnd > winEnd)
+	{
+	ourW -= heightPer/2;
+	drawTri(hvg, x2 - heightPer/2, y, y + heightPer -1,decipherColor(tg, item, hvg), '+');
+	}
+    hvGfxBox(hvg, ourX, y, ourW, heightPer, decipherColor(tg, item, hvg));
 
     if (vis == tvFull)
         {
@@ -9955,7 +10017,7 @@ tg->itemNameColor = blastNameColor;
 }
 
 
-static void drawTri(struct hvGfx *hvg, int x, int y1, int y2, Color color,
+void drawTri(struct hvGfx *hvg, int x, int y1, int y2, Color color,
 	char strand)
 /* Draw traingle. */
 {
@@ -11753,7 +11815,7 @@ if (wordCount <= 0)
 type = words[0];
 
 #ifndef GBROWSE
-if (sameWord(type, "bed") || sameWord(type, "bedLogR"))
+if (sameWord(type, "bed"))
     {
     complexBedMethods(track, tdb, FALSE, wordCount, words);
     /* bed.h includes genePred.h so should be able to use these trackDb
@@ -11761,6 +11823,15 @@ if (sameWord(type, "bed") || sameWord(type, "bedLogR"))
     if (trackDbSetting(track->tdb, GENEPRED_CLASS_TBL) !=NULL)
         track->itemColor = genePredItemClassColor;
     }
+/*
+else if (sameWord(type, "bedLogR"))
+    {
+    wordCount++;
+    words[1] = "9";
+    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    //track->bedSize = 10;
+    }
+    */
 else if (sameWord(type, "bigBed"))
     {
     bigBedMethods(track, tdb, wordCount, words);
@@ -11903,6 +11974,10 @@ else if (sameWord(type, "factorSource"))
 else if (sameWord(type, "remote"))
     {
     remoteMethods(track);
+    }
+else if (sameWord(type, "bamWig"))
+    {
+    bamWigMethods(track, tdb, wordCount, words);
     }
 else if (sameWord(type, "interaction"))
     {

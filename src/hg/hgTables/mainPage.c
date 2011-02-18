@@ -596,7 +596,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-      isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE;
+      isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -655,6 +655,7 @@ hPrintf("<TABLE BORDER=0>\n");
         hti = getHti(database, curTable, conn);
         isPositional = htiIsPositional(hti);
         }
+    isBam = isBamTable( curTable);
     isWig = isWiggle(database, curTable);
     if (isBigWigTable(curTable))
         {
@@ -885,7 +886,7 @@ hPrintf("</TABLE>\n");
 /* Submit buttons. */
     {
     hPrintf("<BR>\n");
-    if (isWig)
+    if (isWig || isBam)
 	{
 	char *name;
 	extern char *maxOutMenu[];
@@ -898,12 +899,18 @@ hPrintf("</TABLE>\n");
 
 	maxOutput = cartUsualString(cart, name, maxOutMenu[0]);
 
-	hPrintf(
-	    "<I>Note: to return more than %s lines, change the filter setting"
-	    " (above). The entire data set may be available for download as"
-            " a very large file that contains the original data values (not"
-            " compressed into the wiggle format) -- see the Downloads page."
-            "</I><BR>", maxOutput);
+	if (isWig)
+	    hPrintf(
+		"<I>Note: to return more than %s lines, change the filter setting"
+		" (above). The entire data set may be available for download as"
+		" a very large file that contains the original data values (not"
+		" compressed into the wiggle format) -- see the Downloads page."
+		"</I><BR>", maxOutput);
+	else if (isBam)
+	    hPrintf(
+		"<I>Note: to return more than %s lines, change the filter setting"
+		" (above). Please consider downloading the entire data from our Download pages."
+		"</I><BR>", maxOutput);
 	}
     else if (anySubtrackMerge(database, curTable) || anyIntersection())
 	{

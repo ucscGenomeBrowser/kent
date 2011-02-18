@@ -1608,6 +1608,12 @@ function sortTableInitialize(table,addSuperscript,altColors)
         if ( $(this).attr('onclick') == undefined ) {
             $(this).click( function () { tableSortOnButtonPress(this);} );
         }
+        if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work (note pointer and hand because older IE calls it hand)
+            $(this).hover(
+                function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'pointer', cursor: 'hand' } ); },
+                function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }
+            );
+        }
         if ( $(this).attr('title').length == 0) {
             var title = $(this).text().replace(/[^a-z0-9 ]/ig,'');
             if (title.length > 0 && $(this).find('sup'))

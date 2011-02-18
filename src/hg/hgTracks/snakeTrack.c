@@ -58,7 +58,6 @@ sr = sqlGetResult(conn, query->string);
 
 /* Loop through making up simple features and adding them
  * to the corresponding linkedFeature. */
-//printf("read chain\n");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     lf = hashFindVal(hash, row[0]);
@@ -79,7 +78,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    sf->qStart = pChain->qSize - sf->qEnd;
 	    sf->qEnd = pChain->qSize - temp;
 	    }
-	//printf("%d \n",sf->qStart);
 	sf->grayIx = lf->orientation;
 	slAddHead(&lf->components, sf);
 	}
@@ -90,7 +88,6 @@ dyStringFree(&query);
 
 int snakeItemHeight(struct track *tg, void *item)
 {
-//printf("snakeItemHeight\n");
 //return 40;
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 struct simpleFeature  *sf;
@@ -98,10 +95,12 @@ int s, e;
 int lineHeight = tg->lineHeight ;
 int oldOrient = 0;
 int tStart, tEnd;
-int size = lineHeight;
+int size = 0;
 //int count = 0;
 tStart = 0;
 tEnd = 0;
+if (lf->components)
+    size = lineHeight;
 for (sf =  lf->components; sf ;  sf = sf->next)
     {
     int orient = sf->grayIx;
@@ -112,20 +111,17 @@ for (sf =  lf->components; sf ;  sf = sf->next)
 	continue;
     if (s < winStart) s = winStart;
     */
-    //printf("bounds %d %d\n",winStart, winEnd);
     
     if (((oldOrient) && (oldOrient != orient))
 	||  ((oldOrient == 1) && (tEnd) && (s < tEnd))
 	||  ((oldOrient == -1) && (tStart) && (e > tStart)))
 	{
-	//printf("plus \n");
 	size += lineHeight;
 	}
     oldOrient = orient;
     tEnd = e;
     tStart = s;
     }
-//printf("snakeItemHieght %d\n",size);
 return size;
 }
 
@@ -150,10 +146,8 @@ struct slList *item;
 int y;
 struct linkedFeatures  *lfStart = (struct linkedFeatures *)tg->items;
 struct linkedFeatures  *lf;
-//int lineHeight = tg->lineHeight;
 double scale = scaleForWindow(width, seqStart, seqEnd);
 
-//printf("snakeDraw ");
 for(lf = lfStart; lf; lf = lf->next)
     {
     struct simpleFeature  *sf;
@@ -175,7 +169,6 @@ for (item = tg->items; item != NULL; item = item->next)
 	color = tg->itemColor(tg, item, hvg);
     tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
     y += tg->itemHeight(tg, item);
-//    break;
     } 
 }
 
@@ -191,8 +184,6 @@ void snakeDrawAt(struct track *tg, void *item,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw a single simple bed item at position. */
 {
-//printf("snakeDrawAt %d %d %g \n",xOff, y, scale);
-//return;
 struct linkedFeatures  *lf = (struct linkedFeatures *)item;
 struct simpleFeature  *sf, *prevSf;
 int s, e;
@@ -203,17 +194,11 @@ int tStart, tEnd, qStart;
 int lastQEnd = 0;
 int midY;
 int  qs, qe;
-//int prevStart;
-//int count = 0;
 qStart = 0;
 tStart = xOff;
 tEnd = winEnd;
 prevSf = NULL;
 
-//printf("snakeDrawAt\n");
-//prevStart = 0;
-//for (sf =  lf->components; sf != NULL; prevStart = sf->qStart,prevSf = sf, sf = sf->next)
-    //printf("%d \n",sf->qStart - prevStart);
 qe = lastQEnd = 0;
 for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next)
     {
@@ -222,199 +207,161 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
 
     qs = sf->qStart;
     s = sf->start; e = sf->end;
+    /*
     if (qs < lastQEnd )
 	continue;
+	*/
 
     qe = sf->qEnd;
+    /*
     if ((e < winStart) || (s > winEnd))
 	continue;
+	*/
 
     if (s < winStart) s = winStart;
-    //printf("bounds %d %d\n",winStart, winEnd);
     
     if (((oldOrient) && (oldOrient != orient))
 	||  ((oldOrient == 1) && (tEnd) && (s < tEnd))
 	||  ((oldOrient == -1) && (tStart) && (e > tStart)))
 	{
-	//printf("one\n");
 	if ((qStart) && (sf->qStart - qStart) < 500000)
-	{
-	//printf("three\n");
-	if (oldOrient == 1)
 	    {
-	//printf("four\n");
-	    if ((orient == -1) && (tEnd < sf->start))
+	    if (oldOrient == 1)
 		{
-		int x1, x2, x3, w;
+		if ((orient == -1) && (tEnd < sf->start))
+		    {
+		    int x1, x2, x3, w;
 
-	//printf("five\n");
-		x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		x2 = round((double)((int)e-winStart)*scale) + xOff + 8;
-		x3 = round((double)((int)sf->end-winStart)*scale) + xOff;
-		w = x2-x1;
-       //hvGfxLine(hvg, x1, y, x2, y, color);
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		//innerLine(vg, x2, midY, 1, color);
-		clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		clippedBarbs(hvg, x3, midY + lineHeight, x2-x3, tl.barbHeight, tl.barbSpacing, 
-			 orient, color, FALSE);
+		    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
+		    x2 = round((double)((int)e-winStart)*scale) + xOff + 8;
+		    x3 = round((double)((int)sf->end-winStart)*scale) + xOff;
+		    w = x2-x1;
+		    hvGfxLine(hvg, x1, midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
+		    clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
+			     oldOrient, color, FALSE);
+		    clippedBarbs(hvg, x3, midY + lineHeight, x2-x3, tl.barbHeight, tl.barbSpacing, 
+			     orient, color, FALSE);
+		    }
+		else if ((orient == -1) && (tEnd > sf->start))
+		    {
+		    int x1, x2, x3, w;
+
+		    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
+		    x2 = round((double)((int)tEnd-winStart)*scale) + xOff + 8;
+		    x3 = round((double)((int)sf->end-winStart)*scale) + xOff;
+		    w = x2-x1;
+		    hvGfxLine(hvg, x1, midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
+		    clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
+			     oldOrient, color, FALSE);
+		    clippedBarbs(hvg, x3, midY + lineHeight, x2-x3+1, tl.barbHeight, tl.barbSpacing, 
+			     orient, color, FALSE);
+		    }
+		else if ((orient == 1) && (s < tEnd))
+		    {
+		    int x1, x2, x3,x4, w;
+
+		    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
+		    x2 = round((double)((int)tEnd-winStart)*scale) + xOff + 8;
+		    x3 = round((double)((int)s-winStart)*scale) + xOff - 8;
+		    x4 = round((double)((int)s-winStart)*scale) + xOff;
+		    w = x2-x1;
+		    hvGfxLine(hvg, x1, midY, x2, midY, color);
+		    hvGfxBox(hvg, x2, midY-2, 4, 4, color);
+		    hvGfxBox(hvg, x3 - 4, midY-2 + lineHeight, 4, 4, color);
+		    hvGfxLine(hvg, x3, lineHeight + midY, x4, lineHeight+midY, color);
+		    clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
+			     oldOrient, color, FALSE);
+		    if (x3 > x4)
+			printf("oops\n");
+		    clippedBarbs(hvg, x3, midY +  lineHeight, x4-x3+1, tl.barbHeight, tl.barbSpacing, 
+			     orient , color, FALSE);
+		    }
 		}
-	    else if ((orient == -1) && (tEnd > sf->start))
+	    else if (oldOrient == -1)
 		{
-		int x1, x2, x3, w;
+		if ((orient == 1) && (tStart >= sf->start))
+		    {
+		    int x1, x2, x3, w;
 
-	//printf("siz\n");
-		x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		x2 = round((double)((int)tEnd-winStart)*scale) + xOff + 8;
-		x3 = round((double)((int)sf->end-winStart)*scale) + xOff;
-		w = x2-x1;
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		//innerLine(vg, x2, midY, 1, color);
-		clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		clippedBarbs(hvg, x3, midY + lineHeight, x2-x3+1, tl.barbHeight, tl.barbSpacing, 
-			 orient, color, FALSE);
-		}
-	    else if ((orient == 1) && (s < tEnd))
-		{
-		int x1, x2, x3,x4, w;
+		    x1 = round((double)((int)tStart-winStart)*scale) + xOff;
+		    x2 = round((double)((int)sf->start-winStart)*scale) + xOff - 8;
+		    x3 = round((double)((int)sf->start-winStart)*scale) + xOff;
+		    w = x1 - x2;
+		    hvGfxLine(hvg, x1, midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
+		    clippedBarbs(hvg, x2, midY, w, tl.barbHeight, tl.barbSpacing, 
+			     oldOrient, color, FALSE);
+		    clippedBarbs(hvg, x2, lineHeight+midY, x3-x2+1, tl.barbHeight, tl.barbSpacing, 
+			     orient, color, FALSE);
+		    }
+		else if ((orient == 1) && (tStart < sf->start))
+		    {
+		    int x1, x2, x3, w;
 
-		//printf("seven\n");
-		x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		x2 = round((double)((int)tEnd-winStart)*scale) + xOff + 8;
-		x3 = round((double)((int)s-winStart)*scale) + xOff - 8;
-		x4 = round((double)((int)s-winStart)*scale) + xOff;
-		w = x2-x1;
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		hvGfxBox(hvg, x2, midY-2, 4, 4, color);
-		//hvGfxLine(vg, x2, lineHeight + midY, x2, midY, color);
-		//hvGfxLine(vg, x2, lineHeight + midY, x3, lineHeight+midY, color);
-		//hvGfxLine(vg, x3, lineHeight + midY, x3, 2*lineHeight+midY, color);
-		//hvGfxLine(vg, x2,  midY, x3, lineHeight+midY, color);
-		//hvGfxLine(vg, x3, 2*lineHeight + midY, x4, 2*lineHeight+midY, color);
-		hvGfxBox(hvg, x3 - 4, midY-2 + lineHeight, 4, 4, color);
-		hvGfxLine(hvg, x3, lineHeight + midY, x4, lineHeight+midY, color);
-		//y += lineHeight;
-		//innerLine(vg, x2, midY, 1, color);
-		clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		//clippedBarbs(vg, x3, midY + lineHeight, x2-x3+1, tl.barbHeight, tl.barbSpacing, 
-			 //-1 , color, FALSE);
-		if (x3 > x4)
-		printf("oops\n");
-		clippedBarbs(hvg, x3, midY +  lineHeight, x4-x3+1, tl.barbHeight, tl.barbSpacing, 
-			 orient , color, FALSE);
-		//clippedBarbs(vg, x3, midY + 2* lineHeight, x4-x3+1, tl.barbHeight, tl.barbSpacing, 
-			 //orient , color, FALSE);
-		}
-	    }
-	else if (oldOrient == -1)
-	    {
-	    if ((orient == 1) && (tStart >= sf->start))
-		{
-		int x1, x2, x3, w;
+		    x1 = round((double)((int)tStart-winStart)*scale) + xOff;
+		    x2 = round((double)((int)tStart-winStart)*scale) + xOff - 8;
+		    x3 = round((double)((int)sf->start-winStart)*scale) + xOff;
+		    w = x1-x2;
+		    hvGfxLine(hvg, x1, midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
+		    hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
+		    clippedBarbs(hvg, x2, midY, w, tl.barbHeight, tl.barbSpacing, 
+			     oldOrient, color, FALSE);
+		    if (x3 < x2)
+			printf("oops\n");
+		    clippedBarbs(hvg, x2, midY + lineHeight, x3-x2, tl.barbHeight, tl.barbSpacing, 
+			     orient, color, FALSE);
+		    }
+		else if ((orient == -1) && (e > sf->start))
+		    {
+		    int x1, x2, x3,x4, w;
 
-		//printf("gook\n");
-		x1 = round((double)((int)tStart-winStart)*scale) + xOff;
-		x2 = round((double)((int)sf->start-winStart)*scale) + xOff - 8;
-		x3 = round((double)((int)sf->start-winStart)*scale) + xOff;
-		w = x1 - x2;
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		//innerLine(vg, x2, midY, 1, color);
-		clippedBarbs(hvg, x2, midY, w, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		clippedBarbs(hvg, x2, lineHeight+midY, x3-x2+1, tl.barbHeight, tl.barbSpacing, 
-			 orient, color, FALSE);
+		    x1 = round((double)((int)tStart-winStart)*scale) + xOff;
+		    x2 = round((double)((int)tStart-winStart)*scale) + xOff - 8;
+		    x3 = round((double)((int)e-winStart)*scale) + xOff + 8;
+		    x4 = round((double)((int)e-winStart)*scale) + xOff;
+		    w = x1-x2;
+		    hvGfxLine(hvg, x1, midY, x2, midY, color);
+		    hvGfxBox(hvg, x2, midY-2, 4, 4, color);
+		    hvGfxLine(hvg, x3, lineHeight + midY, x4, lineHeight+midY, color);
+		    hvGfxBox(hvg, x3, lineHeight + midY-2, 4, 4, color);
+		    clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
+			     oldOrient, color, FALSE);
+		    if (x4 > x3)
+			printf("oops\n");
+		    clippedBarbs(hvg, x4, midY + lineHeight, x3-x4+1, tl.barbHeight, tl.barbSpacing, 
+			     oldOrient , color, FALSE);
+		    }
 		}
-	    else if ((orient == 1) && (tStart < sf->start))
-		{
-		int x1, x2, x3, w;
-
-		//printf("grook\n");
-		x1 = round((double)((int)tStart-winStart)*scale) + xOff;
-		x2 = round((double)((int)tStart-winStart)*scale) + xOff - 8;
-		x3 = round((double)((int)sf->start-winStart)*scale) + xOff;
-		w = x1-x2;
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight + midY, x2, midY, color);
-		hvGfxLine(hvg, x2, lineHeight+midY, x3, lineHeight+midY, color);
-		//innerLine(vg, x2, midY, 1, color);
-		clippedBarbs(hvg, x2, midY, w, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		if (x3 < x2)
-		    printf("oops\n");
-		clippedBarbs(hvg, x2, midY + lineHeight, x3-x2, tl.barbHeight, tl.barbSpacing, 
-			 orient, color, FALSE);
 		}
-	    else if ((orient == -1) && (e > sf->start))
-		{
-		int x1, x2, x3,x4, w;
-
-		//printf("tStart %d e %d sf %d %d\n",tStart,e,sf->start,sf->end);
-		//printf("loop\n");
-		x1 = round((double)((int)tStart-winStart)*scale) + xOff;
-		x2 = round((double)((int)tStart-winStart)*scale) + xOff - 8;
-		x3 = round((double)((int)e-winStart)*scale) + xOff + 8;
-		x4 = round((double)((int)e-winStart)*scale) + xOff;
-		w = x1-x2;
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		hvGfxBox(hvg, x2, midY-2, 4, 4, color);
-		//hvGfxLine(vg, x2, lineHeight + midY, x2, midY, color);
-		//hvGfxLine(vg, x2, lineHeight + midY, x3, lineHeight+midY, color);
-		//hvGfxLine(vg, x3, lineHeight + midY, x3, 2*lineHeight+midY, color);
-		hvGfxLine(hvg, x3, lineHeight + midY, x4, lineHeight+midY, color);
-		hvGfxBox(hvg, x3, lineHeight + midY-2, 4, 4, color);
-		//y += lineHeight;
-		//innerLine(vg, x2, midY, 1, color);
-		clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient, color, FALSE);
-		//clippedBarbs(vg, x2, midY + lineHeight, x3-x2+1, tl.barbHeight, tl.barbSpacing, 
-			 //1 , color, FALSE);
-		if (x4 > x3)
-		    printf("oops\n");
-		clippedBarbs(hvg, x4, midY + lineHeight, x3-x4+1, tl.barbHeight, tl.barbSpacing, 
-			 oldOrient , color, FALSE);
-		}
-	    }
-	else
-	    printf("eat me\n");
-	    }
-	    //else 
-		//printf("sf %d qStart %d \n",sf->qStart,qStart);
 
 	y += lineHeight;
 	}
-	else if ((oldOrient) && ((qStart) && (sf->qStart - qStart) < 500000))
-	    {
-	//printf("two\n");
-		int x1, x2, w;
+    else if ((oldOrient) && ((qStart) && (sf->qStart - qStart) < 500000))
+	{
+	    int x1, x2, w;
 
-		x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
-		x2 = round((double)((int)sf->start -winStart)*scale) + xOff;
-		hvGfxLine(hvg, x1, midY, x2, midY, color);
-		if (x2 > x1)
-		    {
-		    w = x2-x1;
-		    clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    }
-		else
-		    {
-		    w = x1-x2;
-		    clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
-			     oldOrient, color, FALSE);
-		    }
-	    }
-    //printf("sf %d %d\n",s - tStart,e -tStart);
-    //printf("sfq %d %d\n",sf->qStart, sf->qEnd);
-    //if(tg->itemColor != NULL) 
+	    x1 = round((double)((int)tEnd-winStart)*scale) + xOff;
+	    x2 = round((double)((int)sf->start -winStart)*scale) + xOff;
+	    hvGfxLine(hvg, x1, midY, x2, midY, color);
+	    if (x2 > x1)
+		{
+		w = x2-x1;
+		clippedBarbs(hvg, x1, midY, w+1, tl.barbHeight, tl.barbSpacing, 
+			 oldOrient, color, FALSE);
+		}
+	    else
+		{
+		w = x1-x2;
+		clippedBarbs(hvg, x2, midY, w+1, tl.barbHeight, tl.barbSpacing, 
+			 oldOrient, color, FALSE);
+		}
+	}
     color =	    lfChromColor(tg, item, hvg);
 
     drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
@@ -423,10 +370,7 @@ for (sf =  lf->components; sf != NULL; lastQEnd = qe, prevSf = sf, sf = sf->next
     tStart = s;
     qStart = sf->qStart;
     oldOrient = orient;
-    //if (++count == 5)
-    //break;
     }
-//linkedFeaturesDrawAt(tg, item, vg, xOff, y, scale, font, color, vis);
 }
 
 static int simpleFeatureCmpQStart(const void *va, const void *vb)
@@ -452,76 +396,50 @@ return strcmp(a->name, b->name);
 }
 
 int snakeHeight(struct track *tg, enum trackVisibility vis)
-/* set up size of sequence logo */
 {
-//printf("snakeHeight\n");
-//return 50;
 int height = 0;
 struct slList *item = tg->items, *nextItem;
 struct linkedFeatures *firstLf, *lf = (struct linkedFeatures *)tg->items;
 struct simpleFeature  *sf,  *nextSf;
-
-//tg->drawItems = snakeDraw;
-
 
 slSort(&tg->items, linkedFeaturesCmpChrom);
 
 item = tg->items;
 
 lf =  (struct linkedFeatures *)tg->items;
-//item = NULL;
 if (item)
-{
-firstLf = lf;
-//printf("orient %d %c |\n",lf->orientation,lf->orientation);
-for (;item; item = nextItem)
     {
-    struct linkedFeatures *lf = (struct linkedFeatures *)item;
-//    slAddTail(&firstSf, lf->components);
-    nextItem = item->next;
-    //printf("orient %d %c |\n",lf->orientation,lf->orientation);
-    if (!sameString(firstLf->name, lf->name))
+    firstLf = lf;
+    for (;item; item = nextItem)
 	{
-    //printf("name %s %s\n",firstLf->name, lf->name);
-	slSort(&firstLf->components, simpleFeatureCmpQStart);
-	firstLf = lf;
-	}
-    for (sf =  lf->components; sf != NULL; sf = nextSf)
-	{
-	sf->grayIx = lf->orientation;
-	nextSf = sf->next;
-	if (firstLf != lf)
+	struct linkedFeatures *lf = (struct linkedFeatures *)item;
+	nextItem = item->next;
+	if (!sameString(firstLf->name, lf->name))
 	    {
-	    
-	    lf->components = NULL;
-	    slAddHead(&firstLf->components, sf);
+	    slSort(&firstLf->components, simpleFeatureCmpQStart);
+	    firstLf = lf;
+	    }
+	for (sf =  lf->components; sf != NULL; sf = nextSf)
+	    {
+	    sf->grayIx = lf->orientation;
+	    nextSf = sf->next;
+	    if (firstLf != lf)
+		{
+		
+		lf->components = NULL;
+		slAddHead(&firstLf->components, sf);
+		}
 	    }
 	}
-    height += tg->itemHeight(tg, item);
-    }
 
-slSort(&firstLf->components, simpleFeatureCmpQStart);
+    slSort(&firstLf->components, simpleFeatureCmpQStart);
 
-/*
-for (item=tg->items;item; item = item->next)
-    {
-    struct linkedFeatures *lf = (struct linkedFeatures *)item;
-    int lastQ = 0;
-    printf("begin\n");
-    slSort(&lf->components, simpleFeatureCmpQStart);
-    for (sf =  lf->components; sf != NULL; sf = sf->next)
+    for (item=tg->items;item; item = item->next)
 	{
-	    if (sf == lf->components)
-		printf("%d ",sf->qStart);
-	    else
-		printf("%d ",sf->qStart - lastQ) ;
-	    lastQ = sf->qStart;
+	height += tg->itemHeight(tg, item);
 	}
-    printf("end\n");
     }
-    */
-}
-return 1800;
+return 3500; //height;
 }
 
 static void chainDraw(struct track *tg, int seqStart, int seqEnd,
@@ -539,7 +457,7 @@ struct sqlConnection *conn;
 //double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
-struct simpleFeature *lastSf = NULL;
+//struct simpleFeature *lastSf = NULL;
 int maxOverLeft = 0, maxOverRight = 0;
 int overLeft, overRight;
 
@@ -616,6 +534,7 @@ if (hash->size)
 	end = seqEnd + extra;
 	doQuery(conn, fullName, lm,  hash, start, end,  isSplit, -1);
 
+#ifdef NOTNOW
 	for (lf = tg->items; lf != NULL; lf = lf->next)
 	    {
 	    struct chain *pChain = lf->extra;
@@ -686,6 +605,7 @@ if (hash->size)
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 	    }
+#endif
 	}
     }
 if (1)

@@ -178,6 +178,8 @@ our %validators = (
     phase => \&validateControlledVocabOrControl,
     restrictionEnzyme => \&validateControlledVocabOrControl,
     obtainedBy => \&validateObtainedBy,
+    md5sum => \&validateNoValidation,
+    bioRep => \&validateNoValidation,
     default => \&validateControlledVocab,
     );
 
@@ -324,6 +326,7 @@ our %formatCheckers = (
     bam => \&validateBam,
     shortFrags => \&validateBed,
     bedLogR => \&validateBed,
+    bedRnaElements => \&validateBed,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";

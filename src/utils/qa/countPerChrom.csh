@@ -171,9 +171,11 @@ if ( $histo == "true" ) then
     # get max values for 2nd dataset for scaling purposes
     set max2=`cat XgraphFile0$$ | awk '{print $3}' | sort -n | tail -1`
     if ( $max1 > $max2 ) then
+      # shrink second histogram proportionately
       set histosize2=`echo $max1 $max2 $histosize | awk '{printf("%2d", $2/$1*$3)}'`
       set max=$max1
     else
+      # shrink first histogram proportionately
       set histosize1=`echo $max1 $max2 $histosize | awk '{printf("%2d", $1/$2*$3)}'`
       set max=$max2
     endif
@@ -183,6 +185,7 @@ if ( $histo == "true" ) then
       echo histosize.histosize1.histosize2 $histosize.$histosize1.$histosize2
     endif
 
+    # make two-col files for graph.csh
     cat XgraphFile0$$ | awk '{print $1, $2}' > XgraphFile1$$ 
     cat XgraphFile0$$ | awk '{print $1, $3}' > XgraphFile2$$ 
     graph.csh XgraphFile1$$ $histosize1 > Xgraph1$$
@@ -194,15 +197,16 @@ if ( $histo == "true" ) then
     echo
     echo "chr \t$db \t$oldDb$machineOut" | awk '{printf("%3s %'$histosize1's %-'$histosize2's\n", $1, $2, $3)}'
     echo
-    # join on first col, retaining everything from first col
+    # join on first col, retaining everything from first col.  print both graphs side by side.
     join -a1 -j1 Xgraph1b$$ Xgraph2b$$ | awk '{printf("%3s %'$histosize1's %-'$histosize2's\n", $1, $2, $3)}'
   else
-    graph.csh XgraphFile0$$ | awk '{printf("%3s %-36s\n", $1, $2)}'
+    # only one data set. graph it.
+    graph.csh XgraphFile0$$ | awk '{printf("%3s %-'$histosize's\n", $1, $2)}'
   endif
 
   # print some stats
   if ($max > $histosize) then
-    set eachX=`echo $max1 $histosize | awk '{printf("%2d", $1/$2)}'`
+    set eachX=`echo $max1 $histosize | awk '{printf("%d", $1/$2)}'`
   else
     set eachX=1
   endif
@@ -215,12 +219,13 @@ else
   cat Xout$$
 endif
 
-rm -f Xgraph1$$
-rm -f Xgraph2$$
-rm -f Xgraph1b$$
-rm -f Xgraph2b$$
-rm -f XgraphFile0$$
-rm -f XgraphFile1$$
-rm -f XgraphFile2$$
-rm -f Xout$$
-
+if ( $debug == true) then
+  rm -f Xgraph1$$
+  rm -f Xgraph2$$
+  rm -f Xgraph1b$$
+  rm -f Xgraph2b$$
+  rm -f XgraphFile0$$
+  rm -f XgraphFile1$$
+  rm -f XgraphFile2$$
+  rm -f Xout$$
+endif 
