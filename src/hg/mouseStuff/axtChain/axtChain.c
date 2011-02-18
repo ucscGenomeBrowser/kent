@@ -247,6 +247,13 @@ if (maxScore < chain->score)
 }
 #endif /* TESTONLY */
 
+static void checkBlockRange(char *what, struct dnaSeq *seq, int start, int end)
+/* check block is in range of sequence */
+{
+if (end > seq->size)
+    errAbort("%s %s block %d-%d exceeds sequence length %d", what, seq->name, start, end, seq->size);
+}
+
 void chainPair(struct seqPair *sp,
 	struct dnaSeq *qSeq, struct dnaSeq *tSeq, struct chain **pChainList,
 	FILE *details)
@@ -271,8 +278,9 @@ cc.gapCalc = gapCalc;
 for (b = sp->blockList; b != NULL; b = b->next)
     {
     size = b->qEnd - b->qStart;
-    b->score = axtScoreUngapped(scoreScheme, 
-    	qSeq->dna + b->qStart, tSeq->dna + b->tStart, size);
+    checkBlockRange("query", qSeq, b->qStart, b->qEnd);
+    checkBlockRange("target", tSeq, b->tStart, b->tEnd);
+    b->score = axtScoreUngapped(scoreScheme, qSeq->dna + b->qStart, tSeq->dna + b->tStart, size);
     }
 
 

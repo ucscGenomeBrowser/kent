@@ -72,8 +72,8 @@ mhStack = &defaultMemHandler;
 }
 
 /* 128*8*1024*1024 == 1073741824 == 2^30 on 32 bit machines,size_t == 4 bytes*/
-/* on 64 bit machines, size_t = 8 bytes, 2^30 * 2 * 2 = 2^32 == 4 Gb */
-static size_t maxAlloc = 128*8*1024*1024*(sizeof(size_t)/4)*(sizeof(size_t)/4);
+/* on 64 bit machines, size_t = 8 bytes, 2^30 * 2 * 2 * 2 * 2 = 2^34 == 16 Gb */
+static size_t maxAlloc = (size_t)128*8*1024*1024*(sizeof(size_t)/4)*(sizeof(size_t)/4)*(sizeof(size_t)/4*(sizeof(size_t)/4));
 
 void setMaxAlloc(size_t s)
 /* Set large allocation limit. */

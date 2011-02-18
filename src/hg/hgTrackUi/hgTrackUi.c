@@ -2381,6 +2381,8 @@ else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type) || startsWith("bigWig", tdb->type))
     wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
+else if (startsWith("bamWig", tdb->type))
+    wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
 else if (startsWith("wig", tdb->type))
         {
         if (startsWith("wigMaf", tdb->type))

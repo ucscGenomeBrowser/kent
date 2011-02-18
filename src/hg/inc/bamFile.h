@@ -40,8 +40,8 @@ typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName);
 /* Return file name from table.  If table has a seqName column, then grab the 
- * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
- * bam file might have '1' not 'chr1'). */
+ * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
+ * case in the bam file). */
 
 boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */

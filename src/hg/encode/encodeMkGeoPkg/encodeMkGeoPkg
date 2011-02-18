@@ -51,7 +51,7 @@ my %dataTypeCleaner = (
     "MethylRrbs" => "MethylRrbs",
     "MethylSeq"	=> "MethylSeq",
     "Orchid"	=> "Orchid",
-    "Proteogenomics" => "Proteogenomics"
+    "Proteogenomics" => "Proteogenomics",
     "RnaPet"	=> "RnaPet",
     "RnaSeq"    => "RNA-seq",
 );
@@ -138,7 +138,9 @@ usage: encodeMkGeoPkg database composite seqPlatform
     -instance=s         Use ENCODE pipeline instance s (default prod).
     -configDir=dir      Path of configuration directory, containing metadata
                         .ra files (default: /hive/groups/encode/dcc/pipeline/encpipeline_prod/config/)
+    -database=s		Database on which the metadata will be checked (default: mysqlbeta)
     -downloadDir=dir    Prefix to the downloads directory (default: /hive/groups/encode/dcc/analysis/ftp/pipeline/)
+    -release=s		Name of release of composite to be checked (default: "", uses download folder)
     -verbose=num        Set verbose level to num (default 1).
 END
 exit 1;

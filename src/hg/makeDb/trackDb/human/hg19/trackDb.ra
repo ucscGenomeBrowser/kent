@@ -153,6 +153,14 @@ track ucsfBrainMethyl override
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 
+track pgSnp override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
+track sestanBrainAtlas override
+origAssembly hg18
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
+
 track hapChainNet
 compositeTrack on
 shortLabel Hap Chain/Net
@@ -2046,10 +2054,10 @@ pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 #include jkExperiments.ra
 
 track agilentCgh
-shortLabel Agilent CGH
-longLabel Agilent CGH Microarray probesets
+shortLabel Arrays
+longLabel Microarray probesets
 compositeTrack on
-group expression
+group varRep
 visibility hide
 noScoreFilter .
 noInherit on
@@ -2256,3 +2264,13 @@ visibility hide
 type snake hg19
 otherDb hg19
 
+track bamWigTest
+table wgEncodeYaleRnaSeqGm12878PolyaAln
+release alpha
+shortLabel bamWigTest
+longLabel bamWigTest
+group x
+priority 160
+visibility hide
+type bamWig 0 1
+viewLimits 0:1
