@@ -2304,7 +2304,7 @@ wgEncode 1
         parent wgEncodeSydhTfbsViewSignal off
         shortLabel GM12878 WHIP Sig
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq TFBS Signal (WHIP in GM12878 cells)
-        subGroups view=Signal factor=XRCC4 cellType=GM12878 control=IGGmus treatment=aNone
+        subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone
         type bigWig 0.000000 6583.799805
         color 153,38,0
         # subId=3053 dateSubmitted=2010-12-02

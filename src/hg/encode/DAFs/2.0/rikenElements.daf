@@ -31,6 +31,13 @@ assembly          hg19
 validationSettings      validateFiles.bam:mismatches=8
 
 # Track/view definition
+view             Clusters  
+longLabelPrefix  RIKEN CAGE Clusters 
+type             bed6 +
+required         no
+hasReplicates    no  #pooled
+
+
 # Pooled replicates
 view             TSS
 type             gtf

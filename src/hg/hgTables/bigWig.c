@@ -35,9 +35,9 @@ else
     return trackIsType(database, table, curTrack, "bigWig", ctLookupName);
 }
 
-char *bigWigFileName(char *table, struct sqlConnection *conn)
-/* Return file name associated with bigWig.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
+char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn)
+/* If table is a custom track or hub track, return the bigDataUrl setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
 {
 char *fileName = NULL;
 if (isCustomTrack(table))
@@ -53,7 +53,15 @@ else if (isHubTrack(table))
     fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
     assert(fileName != NULL);
     }
-else
+return fileName;
+}
+
+char *bigWigFileName(char *table, struct sqlConnection *conn)
+/* Return file name associated with bigWig.  This handles differences whether it's
+ * a custom or built-in track.  Do a freeMem on returned string when done. */
+{
+char *fileName = bigFileNameFromCtOrHub(table, conn);
+if (fileName == NULL)
     {
     char query[256];
     safef(query, sizeof(query), "select fileName from %s", table);

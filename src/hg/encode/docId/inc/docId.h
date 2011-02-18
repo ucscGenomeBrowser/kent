@@ -69,7 +69,7 @@ void docIdSubOutput(struct docIdSub *el, FILE *f, char sep, char lastSep);
 
 #define  DEFAULT_DOCID_TABLE "docIdSub"
 
-char *docIdDecorate(char *composite, int num);
+char *docIdDecorate(char *composite, char *cell, int num);
 
 char *docIdSubmit(struct sqlConnection *conn, char *docIdTable, 
     struct docIdSub *docIdSub, char *docIdDir, char *type);
