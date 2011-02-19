@@ -22,6 +22,7 @@ errAbort(
   "   bigWigSummary file.bigWig chrom start end dataPoints\n"
   "Get summary data from bigWig for indicated region, broken into\n"
   "dataPoints equal parts.  (Use dataPoints=1 for simple summary.)\n"
+  "\nNOTE:  start and end coordinates are in BED format (0-based)\n\n"
   "options:\n"
   "   -type=X where X is one of:\n"
   "         mean - average value in region (default)\n"
