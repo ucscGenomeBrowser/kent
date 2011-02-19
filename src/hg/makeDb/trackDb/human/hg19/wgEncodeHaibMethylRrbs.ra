@@ -213,14 +213,6 @@ origAssembly hg19
         type bed 9
         # subId=1223 dateSubmitted=2010-07-13
 
-#        track wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
-#        parent wgEncodeHaibRrbsViewSites off
-#        shortLabel NT2-D1 2
-#        longLabel NT2-D1 Methyl-RRBS Sites Rep 2 from ENCODE/HudsonAlpha
-#        subGroups view=Sites cellType=NT2D1 obtainedBy=UW treatment=None rep=rep2
-#        type bed 9
-#        # subId=1223 dateSubmitted=2010-07-13
-
 #        track wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
 #        parent wgEncodeHaibRrbsViewSites off
 #        shortLabel MCF-7 1

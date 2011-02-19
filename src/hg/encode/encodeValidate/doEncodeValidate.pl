@@ -589,7 +589,7 @@ sub validateGtf {
     }
     HgAutomate::verbose(2, "validateGtf(path=$path,file=$file,type=$type)\n");
     # XXXX Add support for $opt_quick
-    my $err = system ( "gtfToGenePred $filePath $outFile >$errFile 2>&1");
+    my $err = system ( "gtfToGenePred -simple $filePath $outFile >$errFile 2>&1");
     if ($err) {
         print STDERR  "File \'$file\' failed GTF validation\n";
         open(ERR, "$errFile") || die "ERROR: Can't open gtfToGenePred error file \'$errFile\': $!\n";
