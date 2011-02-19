@@ -571,3 +571,63 @@ wgEncode 1
         type bed 9
         color 46,0,184
         # subId=3189 dateSubmitted=2011-01-07
+
+        track wgEncodeHaibMethylArrayGm12878SitesRep1
+        parent wgEncodeHaibMethylArrayViewSites
+        shortLabel GM12878 1
+        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 1 (in GM12878 cells)
+        subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        origAssembly hg18
+        color 153,38,0
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayGm12878SitesRep2
+        parent wgEncodeHaibMethylArrayViewSites
+        shortLabel GM12878 2
+        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in GM12878 cells)
+        subGroups view=Sites cellType=1GM12878 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        origAssembly hg18
+        color 153,38,0
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayHepg2SitesRep1
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HepG2 1
+        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 1 (in HepG2 cells)
+        subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        origAssembly hg18
+        color 189,0,157
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayHepg2SitesRep2
+        parent wgEncodeHaibMethylArrayViewSites off
+        shortLabel HepG2 2
+        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in HepG2 cells)
+        subGroups view=Sites cellType=2HepG2 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        origAssembly hg18
+        color 189,0,157
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayK562SitesRep1
+        parent wgEncodeHaibMethylArrayViewSites
+        shortLabel K562 1
+        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 1 (in K562 cells)
+        subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep1
+        type bed 9
+        origAssembly hg18
+        color 46,0,184
+        # subId=3526 dateSubmitted=2011-02-14
+
+        track wgEncodeHaibMethylArrayK562SitesRep2
+        parent wgEncodeHaibMethylArrayViewSites
+        shortLabel K562 2
+        longLabel ENCODE HudsonAlpha Methylation (27K) by Illumina Bead Arrays Replicate 2 (in K562 cells)
+        subGroups view=Sites cellType=1K562 obtainedBy=HAIB treatment=None rep=rep2
+        type bed 9
+        origAssembly hg18
+        color 46,0,184
+        # subId=3526 dateSubmitted=2011-02-14

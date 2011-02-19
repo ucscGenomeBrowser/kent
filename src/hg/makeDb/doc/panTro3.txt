@@ -219,7 +219,7 @@ assemblyDate Oct. 2010
 assemblyShortLabel CGSC 2.1.3
 assemblyLabel CGSC 2.1.3 (GCA_000001515.3)
 orderKey 23
-mitoAcc none
+mitoAcc NC_001643
 fastaFiles /hive/data/genomes/panTro3/ucsc/*.fa
 agpFiles /hive/data/genomes/panTro3/ucsc/*.agp
 # qualFiles none
@@ -240,3 +240,328 @@ taxId 9598
     #	3307943878 bases of 3307943878 (100.000%) in intersection
 
 #############################################################################
+# reload gold and gap tables (DONE - 2011-02-18 - Hiram)
+# the placed scaffolds AGP is much more detailed, lift it to
+#	the supercontig AGP locations
+    mkdir /hive/data/genomes/panTro3/bed/ctgPos2
+    cd /hive/data/genomes/panTro3/bed/ctgPos2
+    cat << '_EOF_' > liftAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %contigParts = ();
+
+# read the AGP that needs to be lifted to the other AGP
+open (FH, "zcat ../../genbank/Primary_Assembly/placed_scaffolds/AGP/chr*.agp.gz|")
+	or die "can not read placed_scaffolds/AGP/chr*.agp.gz";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($contig, $rest) = split('\s+', $line, 2);
+    my $parts = "";
+    my $index = 0;
+    if (exists($contigParts{$contig})) {
+	$parts = $contigParts{$contig};
+	$index = scalar(@{$parts});
+    } else {
+	my @agpLines;
+	$parts = \@agpLines;
+	$contigParts{$contig} = $parts;
+    }
+    $parts->[$index] = $line;
+}
+close (FH);
+
+my $partCount = 0;
+my $lineCount = 0;
+foreach my $key (keys %contigParts) {
+    ++$partCount;
+    my $parts = $contigParts{$key};
+    $lineCount += scalar(@{$parts});
+}
+
+printf STDERR "partCount: $partCount, lineCount: $lineCount\n";
+
+# read the other AGP and lift that first AGP to this one
+open (FH, "<../../panTro3.agp") or die "can not read panTro3.agp";
+while (my $line = <FH>) {
+    chomp $line;
+    my @a = split('\s+', $line);
+    if (($a[0] =~ m/chrM|_random|chrUn/) || ($a[4] eq "N")) {
+	printf "%s\n", $line;
+    } else {
+	die "ERROR: not 9 fields at $line" if (scalar(@a) != 9);
+	my $chr = $a[0];
+	my $lift = $a[1] - 1;
+	my $contig = $a[5];
+	die "ERROR: can not find contig $contig at $line"
+	    if (!exists($contigParts{$contig}));
+	my $parts = $contigParts{$contig};
+	for (my $i = 0; $i < scalar(@{$parts}); ++$i) {
+	    my $line = $parts->[$i];
+	    my @b = split('\s+', $line);
+	    my $start = $b[1] + $lift;
+	    my $end = $b[2] + $lift;
+	    printf "%s\t%d\t%d", $chr, $start, $end;
+	    for (my $i = 3; $i < scalar(@b); ++$i) {
+		printf "\t%s", $b[$i];
+	    }
+	    printf "\n";
+	}
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x liftAgp.pl
+    ./liftAgp.pl > contig.agp
+    hgGoldGapGl -noGl -noLoad panTro3 contig.agp
+    # take a look at the resulting .tab files, then load into db:
+    hgGoldGapGl -noGl panTro3 contig.agp
+    # verify nothing lost or gained
+    featureBits -or -countGaps panTro3 gold gap
+    3307960432 bases of 3307960432 (100.000%) in intersection
+
+#############################################################################
+# Initial pushQ entry to get QA started on this assembly
+#	(DONE - 2011-02-17 - Hiram)
+    cd /hive/data/genomes/panTro3
+    ln -s `pwd`/panTro3.unmasked.2bit /gbdb/panTro3/panTro3.2bit
+    mkdir pushQ
+    cd pushQ
+    makePushQSql.pl panTro3 > panTro3.pushQ.sql
+    scp -p panTro3.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < panTro3.pushQ.sql 
+
+#############################################################################
+# running repeat masker (DONE - 2011-02-18 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/repeatMasker
+    cd /hive/data/genomes/panTro3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk panTro3 > do.log 2>&1 &
+    #	real    456m48.171s
+    egrep "version|RELEASE" do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp $
+# CC   RELEASE 20090604;
+    # failed during the 'cat' step due to 3 missing sequence numbers,
+    # fixed the fa.out file:
+    cat << '_EOF_' > fixSequence.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $lineCount = 0;
+open (FH, "<panTro3.fa.out") or die "can not read panTro3.fa.out";
+while (my $line = <FH>) {
+    ++$lineCount;
+    if ($lineCount < 4) {
+        printf "%s", $line;
+    } else {
+        my $id = $lineCount - 3;
+        chomp $line;
+        if ($line =~ m/\)\s*$/) {
+            $line =~ s/\s*$//;
+            printf "%s %d\n", $line, $id;
+        } else {
+            $line =~ s/[0-9]+\s*$/$id/;
+            printf "%s\n", $line;
+        }
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x fixSequence.pl
+    ./fixSequence.pl > fixSeq.fa.out
+    #	then manually complete last bit in the 'cat' step:
+    /cluster/bin/scripts/extractNestedRepeats.pl fixSeq.fa.out \
+	> panTro3.nestedRepeats.bed
+    #	continuing with the RM run:
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-continue=mask -smallClusterHub=memk panTro3 > mask.log 2>&1 &
+    #	real    2m15.934s
+
+    cat faSize.rmsk.txt
+# 3307960432 bases (407430668 N's 2900529764 real 1433143127 upper
+#	1467386637 lower) in 24132 sequences in 1 files
+#	%44.36 masked total, %50.59 masked real
+
+##########################################################################
+# running simple repeat (DONE - 2011-02-17 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/simpleRepeat
+    cd /hive/data/genomes/panTro3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	panTro3 > do.log 2>&1 &
+    #	real    30m3.767s
+XXX - some failed due to no sequence in inputs 2011-02-17 17:00
+    cat fb.simpleRepeat 
+    #	66211508 bases of 2752505800 (2.405%) in intersection
+
+    cd /hive/data/genomes/panTro3
+    twoBitMask panTro3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed panTro3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa panTro3.2bit stdout | faSize stdin > faSize.panTro3.2bit.txt
+    cat faSize.panTro3.2bit.txt
+# 2914958544 bases (162452744 N's 2752505800 real 1439244378 upper
+#	1313261422 lower) in 14205 sequences in 1 files
+#	%45.05 masked total, %47.71 masked real
+
+    rm /gbdb/panTro3/panTro3.2bit
+    ln -s `pwd`/panTro3.2bit /gbdb/panTro3/panTro3.2bit
+
+##########################################################################
+# add a ctgPos2 track with other names (DONE - 2011-02-17 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/ctgPos2
+    cd /hive/data/genomes/panTro3/bed/ctgPos2
+    cat << '_EOF_' > ctgPos2.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../../panTro3.agp") or die "can not read panTro3.agp";
+while (my $line = <FH>) {
+    chomp $line;
+    my @a = split('\s+', $line);
+    next if ($a[0] =~ m/_random|chrUn/);
+    if (scalar(@a) == 9) {
+	die "ERR: duplicate acc: $a[5] at $a[0]:$a[1]-$a[2]"
+		if (exists($accToChr{$a[5]}));
+	$accToChr{$a[5]} = "$a[0].$a[1]";
+    }
+}
+close (FH);
+
+open (FH, "zcat ../../genbank/Primary_Assembly/placed_scaffolds/AGP/chr*.agp.gz|")
+	or die "can not read placed_scaffolds/AGP/chr*.agp.gz";
+while (my $line = <FH>) {
+    next if ($line =~ m/#/);
+    my @a = split('\s+', $line);
+    my $acc = $a[0];
+    my $chr = $accToChr{$acc};
+    my $lift = $accToChr{$acc};
+    $chr =~ s/\..*//;
+    $lift =~ s/.*\.//;
+    $lift -= 1;
+    my $start = $a[1] - 1 + $lift;
+    my $end = $a[2] + $lift;
+    my $size = $end - $start;
+    if (scalar(@a) == 9) {
+	printf "%s\t%d\t%s\t%d\t%d\t%s\n",
+	    $a[5], $size, $chr, $start, $end, $a[4];
+    }
+}
+close (FH);
+
+my %accToComponent;
+open (FH, "<../../genbank/Primary_Assembly/component_localID2acc") or
+	die "can not read component_localID2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($component, $acc) = split('\s+', $line);
+    die "duplicate acc: $acc" if (exists($accToComponent{$acc}));
+    $accToComponent{$acc} = $component;
+}
+close (FH);
+
+open (FH, "hgsql -N -e 'select chrom,chromStart,chromEnd,type,frag from gold;' panTro3 | egrep 'chrUn\|_random'|") or die "can not select from gold";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $type, $acc) = split('\s+', $line);
+    die "ERR: can not find acc: $acc" if (!exists($accToComponent{$acc}));
+    my $component = $accToComponent{$acc};
+    my $size = $end - $start;
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n",
+	    $component, $size, $chr, $start, $end, $type;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ctgPos2.pl
+    ./ctgPos2.pl > ctgPos2.tab
+
+    # determine length of unique ctg names:
+    awk '{print $1}' ctgPos2.tab | sed -e "s/\.1$//;s/_random//" \
+	| awk '{print length($0)}' | sort -rn | head -1
+    #	14
+    # determine length of unique chrom names:
+    awk '{print $3}' ctgPos2.tab | sed -e "s/_random//" \
+	| awk '{print length($0)}' | sort -rn | head -1
+    #	18
+
+    # customize our sql definition with proper sizes, the 20 and 16 are
+    #	unique in this template:
+    sed -e "s/20/14/; s/16/18/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+    hgLoadSqlTab panTro3 ctgPos2 ctgPos2.sql ctgPos2.tab
+
+##########################################################################
+# Marking *all* gaps - they are not all in the AGP file
+#	(DONE - 2011-02-18 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/allGaps
+    cd /hive/data/genomes/panTro3/bed/allGaps
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../panTro3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    1m12.153s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits panTro3 -not gap -bed=notGap.bed
+    #	2900583125 bases of 2900583125 (100.000%) in intersection
+    #	real    0m18.559s
+
+    time featureBits panTro3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	53361 bases of 2900583125 (0.002%) in intersection
+    #	real    20m48.848s
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" panTro3 | sort -n | tail -1
+    #	3118
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" panTro3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits panTro3 other.bed
+    #	53361 bases of 2900583125 (0.002%) in intersection
+    #	verify chrom names are OK for index length
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad panTro3 otherGap other.bed
+    #	Loaded 96549
+    #	adding this many:
+    wc -l bed.tab
+    #	23478
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" panTro3
+    #	159676
+    hgsql panTro3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" panTro3
+    #	183154 == 159676 + 23478
+
+#########################################################################
