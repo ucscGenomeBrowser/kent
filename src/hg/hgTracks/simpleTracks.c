@@ -10999,15 +10999,14 @@ if (row != NULL)
     }
 
 chp = omimGeneClass3Buffer + (long)strlen(row[0]) + 15L; 
+sqlFreeResult(&sr);
 
-conn = hAllocConn(database);
 safef(query,sizeof(query),
         "select distinct disorder from omimDisorderMap, omimGeneClass3 where name='%s' and name=cast(omimId as char) order by disorder", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 /* show up to 20 max entries */
-//chp = omimGeneClass3Buffer;
 while ((row != NULL) && i<20)
     {
     int lengthLeft = sizeof(omimGeneClass3Buffer) - strlen(omimGeneClass3Buffer);
@@ -11210,6 +11209,70 @@ sqlFreeResult(&sr);
 return(omimLocationBuffer);
 }
 
+Color omimLocationColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* set the color for omimLocation track items */
+{
+struct bed *el = item;
+char *omimId;
+char *phenClass;
+char query[256];
+struct sqlResult *sr;
+char **row;
+
+struct sqlConnection *conn = hAllocConn(database);
+
+safef(query, sizeof(query), 
+      "select omimId, phenotypeClass from omimDisorderPhenotype where omimId=%s", el->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+hFreeConn(&conn);
+
+if (row == NULL)
+    {
+    // set to gray if this entry does not have any disorder info
+    sqlFreeResult(&sr);
+    return hvGfxFindColorIx(hvg, 200, 200, 200);
+    }
+else
+    {
+    omimId    = row[0];
+    phenClass = row[1];
+
+    if (sameWord(phenClass, "3"))
+    	{
+	// set to dark red, the same color as omimGeneClass3 track
+	sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 220, 0, 0);
+    	}	
+    else
+    	{
+    	if (sameWord(phenClass, "2"))
+    	    {
+	    // set to green for class 2
+	    sqlFreeResult(&sr);
+	    return hvGfxFindColorIx(hvg, 0, 255, 0);
+    	    }	
+	else
+	    {
+    	    if (sameWord(phenClass, "1"))
+    	    	{
+		// set to orange for class 1
+	    	sqlFreeResult(&sr);
+	    	return hvGfxFindColorIx(hvg, 200, 0, 200);
+    	    	}
+	    else
+	    	{
+	    	// set to purplish color for phenClass 4
+            	sqlFreeResult(&sr);
+	    	return hvGfxFindColorIx(hvg, 200, 100, 100);
+            	}
+	    }
+
+	}  
+    }
+}
+
 static void omimLocationDrawAt(struct track *tg, void *item,
 	struct hvGfx *hvg, int xOff, int y,
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -11228,7 +11291,7 @@ if (w < 1)
     w = 1;
 if (color)
     {
-    hvGfxBox(hvg, x1, y, w, heightPer, color);
+    hvGfxBox(hvg, x1, y, w, heightPer, omimLocationColor(tg, item, hvg));
 
     if (vis == tvFull)
         {
@@ -11246,6 +11309,7 @@ if (color)
 void omimLocationMethods (struct track *tg)
 {
 tg->drawItemAt    = omimLocationDrawAt;
+tg->itemColor     = omimLocationColor;
 }
 
 char *omimGeneName(struct track *tg, void *item)
