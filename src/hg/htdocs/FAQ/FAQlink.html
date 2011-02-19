@@ -25,6 +25,8 @@
                 <TR><TD>&nbsp;</TD><TD>
 		<UL>
                 <LI><A HREF="#link1">Linking to the Genome Browser from another software application</A>
+                <LI><A HREF="#link3">Linking to the browser at the
+position of a knownCanonical transcript associated with a gene symbol</A>
                 <LI><A HREF="#link2">The <em>hgsid</em> parameter</A>
 		</UL>
 		<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -89,6 +91,57 @@
     </TABLE>
 <BR>
  
+<!--Content Table------------------------------------------------------------>
+<A NAME="link3"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Linking to the browser at
+the position of a knownCanonical transcript associated with a gene symbol</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"How do I link to the browser from my application so 
+			that it will open at the position of the transcript in 
+			knownCanonical table that is associated with a given 
+			gene symbol?"
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			Using the URL
+			<A HREF="#link1">described above</A>, set the
+			position parameter to the gene symbol and add the 
+			parameter <em>singleSearch=knownCanonical</em>. For 
+			example, this link will open the Genome Browser for the 			hg18 human assembly at the position of the 
+			knownCanonical transcript associated with GABRA3: 
+			<BLOCKQUOTE>
+			<A
+HREF="http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&position=GABRA3"
+			TARGET=_blank>http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg18&singleSearch=knownCanonical&position=GABRA3</A>
+			</BLOCKQUOTE>
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
 <!--Content Table------------------------------------------------------------>
 <A NAME="link2"></A>
     <!--outer table is for border purposes-->        
