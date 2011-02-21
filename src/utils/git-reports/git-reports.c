@@ -191,7 +191,8 @@ while (lineFileNext(lf, &line, &lineSize))
     commit->files = files;
 
     
-    if (!endsWith(commit->comment, "elease log update"))  /* filter out automatic release log commits */
+    if (!startsWith("Merge branch 'master' of", commit->comment) &&
+	!endsWith(commit->comment, "elease log update"))  /* filter out automatic release log commits */
 	slAddHead(&commits, commit);
 
     verbose(2, 
