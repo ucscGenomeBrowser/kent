@@ -9111,10 +9111,8 @@ safef(query, sizeof(query),
       "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-//if (row != NULL)
 if ((row != NULL) && strlen(row[0]) >= 1)
     {
-    printf("<br>---%s---\n", row[0]);fflush(stdout);
     printf("<B>Phenotype: </B><UL>");
     while (row != NULL)
     	{
@@ -9500,10 +9498,10 @@ if (url != NULL && url[0] != 0)
 
     if (kgId != NULL)
     	{
-    	printf("<B>UCSC Canonical Gene ");
+    	printf("<B>UCSC Canonical Gene: ");
     	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
 	       "../cgi-bin/hgGene?hgg_gene=", kgId);
-    	printf("%s</A></B>: ", kgId);
+    	printf("%s</A></B> ", kgId);
 
 	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
     	sr = sqlMustGetResult(conn, query);
@@ -9790,6 +9788,8 @@ char *omimId;
 char *avId;
 char *dbSnpId;
 char *chp;
+char *seqId = NULL;
+char avString[255];
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
@@ -9807,12 +9807,15 @@ if (url != NULL && url[0] != 0)
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
-    	  "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+    	  "select title1, title2,  format(seqNo/10000,4) from omimGeneMap m, omimAv v where m.omimId=%s and m.omimId=v.omimId and v.avId='%s';", itemName, avId);
+
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
     	{
-	if (row[0] != NULL)
+	seqId = strdup(row[2]);
+	safef(avString, sizeof(avString), "%s#%s", omimId, seqId+2L);
+        if (row[0] != NULL)
 	    {
 	    title1 = cloneString(row[0]);
     	    printf(": %s", title1);
@@ -9825,7 +9828,9 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    printf("<br><B>Allelic Variant:</B>%s\n", avId);
+    printf("<BR><B>Allelic Variant: ");fflush(stdout);
+    printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
+    printf("%s</A></B>", avString);
 
     safef(query, sizeof(query),
     	  "select replStr from omimAvRepl where avId=%s;", avId);
