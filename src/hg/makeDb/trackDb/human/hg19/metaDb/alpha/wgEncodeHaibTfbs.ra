@@ -4563,6 +4563,188 @@ tableName wgEncodeHaibTfbsGm12878Bcl3Pcr1xRawRep2
 treatment None
 view RawSignal
 
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101AlnRep1
+objType file
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101AlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL3728
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+subId 3246
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101AlnRep2
+objType file
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101AlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL3931
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 3246
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep1
+objType table
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3728
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+softwareVersion MACS
+subId 3246
+tableName wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep2
+objType table
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3931
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+softwareVersion MACS
+subId 3246
+tableName wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep2
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101RawDataRep1
+objType file
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101RawDataRep1.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3728
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+subId 3246
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101RawDataRep2
+objType file
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101RawDataRep2.fastq.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL3931
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 3246
+treatment None
+view RawData
+
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep1
+objType table
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep1.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL3728
+project wgEncode
+protocol v041610.1
+replicate 1
+setType exp
+subId 3246
+tableName wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep1
+treatment None
+view RawSignal
+
+metaObject wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep2
+objType table
+antibody BCL3
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL1613
+dataType ChipSeq
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-18
+dateUnrestricted 2011-11-18
+fileName wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep2.bigWig
+grant Myers
+lab HudsonAlpha
+labExpId SL3931
+project wgEncode
+protocol v041610.1
+replicate 2
+setType exp
+subId 3246
+tableName wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep2
+treatment None
+view RawSignal
+
 metaObject wgEncodeHaibTfbsGm12878Bclaf1m33V0416101AlnRep1
 objType file
 antibody BCLAF1_(M33-P5B11)
@@ -36913,4 +37095,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xRawRep2
 treatment None
 view RawSignal
 
-# MAGIC: -590544273
+# MAGIC: 1183310669
