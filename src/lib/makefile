@@ -23,7 +23,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     gfNet.o gff.o gff3.o gfxPoly.o gifLabel.o \
     hash.o histogram.o hmmPfamParse.o hmmstats.o htmlPage.o htmshell.o \
     https.o intExp.o intValTree.o internet.o itsa.o \
-    jointalign.o jpegSize.o keys.o kxTok.o linefile.o localmem.o log.o \
+    jointalign.o jpegSize.o keys.o knetUdc.o kxTok.o linefile.o localmem.o log.o \
     maf.o mafFromAxt.o mafScore.o md5.o memalloc.o memgfx.o metaWig.o mgCircle.o \
     mgPolygon.o mime.o net.o nib.o nibTwo.o nt4.o numObscure.o \
     obscure.o oldGff.o oligoTm.o options.o osunix.o pairHmm.o peakCluster.o \
