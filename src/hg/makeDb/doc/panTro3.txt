@@ -324,6 +324,10 @@ close (FH);
     featureBits -or -countGaps panTro3 gold gap
     3307960432 bases of 3307960432 (100.000%) in intersection
 
+    # replace the first agp, but save it for later use
+    mv panTro3.agp panTro3.scaffolds.agp
+    ln -s bed/ctgPos2/contig.agp panTro3.agp
+
 #############################################################################
 # Initial pushQ entry to get QA started on this assembly
 #	(DONE - 2011-02-17 - Hiram)
@@ -360,7 +364,7 @@ close (FH);
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
 	-continue=mask -smallClusterHub=memk panTro3 > mask.log 2>&1 &
-    #	real    2m15.934s
+    #	real    28m6.877s
 
     cat faSize.rmsk.txt
 # 3307960432 bases (407430668 N's 2900529764 real 1433143490 upper
@@ -420,6 +424,7 @@ close (FH);
 # add a ctgPos2 track with other names (DONE - 2011-02-17 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/ctgPos2
     cd /hive/data/genomes/panTro3/bed/ctgPos2
+
     cat << '_EOF_' > ctgPos2.pl
 #!/bin/env perl
 
@@ -428,36 +433,17 @@ use warnings;
 
 my %accToChr;
 
-open (FH, "<../../panTro3.agp") or die "can not read panTro3.agp";
+open (FH, "<../../panTro3.scaffolds.agp") or die "can not read panTro3.scaffolds.agp";
 while (my $line = <FH>) {
     chomp $line;
     my @a = split('\s+', $line);
     next if ($a[0] =~ m/_random|chrUn/);
     if (scalar(@a) == 9) {
-	die "ERR: duplicate acc: $a[5] at $a[0]:$a[1]-$a[2]"
-		if (exists($accToChr{$a[5]}));
-	$accToChr{$a[5]} = "$a[0].$a[1]";
-    }
-}
-close (FH);
-
-open (FH, "zcat ../../genbank/Primary_Assembly/placed_scaffolds/AGP/chr*.agp.gz|")
-	or die "can not read placed_scaffolds/AGP/chr*.agp.gz";
-while (my $line = <FH>) {
-    next if ($line =~ m/#/);
-    my @a = split('\s+', $line);
-    my $acc = $a[0];
-    my $chr = $accToChr{$acc};
-    my $lift = $accToChr{$acc};
-    $chr =~ s/\..*//;
-    $lift =~ s/.*\.//;
-    $lift -= 1;
-    my $start = $a[1] - 1 + $lift;
-    my $end = $a[2] + $lift;
-    my $size = $end - $start;
-    if (scalar(@a) == 9) {
+	my $start = $a[1] - 1;
+	my $end = $a[2];
+	my $size = $end - $start;
 	printf "%s\t%d\t%s\t%d\t%d\t%s\n",
-	    $a[5], $size, $chr, $start, $end, $a[4];
+            $a[5], $size, $a[0], $start, $end, $a[4];
     }
 }
 close (FH);
@@ -486,8 +472,14 @@ while (my $line = <FH>) {
 close (FH);
 '_EOF_'
     # << happy emacs
-    chmod +x ctgPos2.pl
-    ./ctgPos2.pl > ctgPos2.tab
+
+    ./ctgPos2.pl | sed -e "s/NC_001643/GI:5835121/" > ctgPos2.tab
+
+    # check that we have them all:
+    awk '{print $3}' ctgPos2.tab | sort -u | wc -l
+    #	24132
+    wc -l ../../chrom.sizes
+    #	24132 ../../chrom.sizes
 
     # determine length of unique ctg names:
     awk '{print $1}' ctgPos2.tab | sed -e "s/\.1$//;s/_random//" \
