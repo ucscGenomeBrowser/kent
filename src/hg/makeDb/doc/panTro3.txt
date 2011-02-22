@@ -338,7 +338,7 @@ close (FH);
     hgsql qapushq < panTro3.pushQ.sql 
 
 #############################################################################
-# running repeat masker (DONE - 2011-02-18 - Hiram)
+# running repeat masker (DONE - 2011-02-22 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/repeatMasker
     cd /hive/data/genomes/panTro3/bed/repeatMasker
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
@@ -349,39 +349,13 @@ close (FH);
 # RepeatMasker version development-$Id: RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp $
 # CC   RELEASE 20090604;
     # failed during the 'cat' step due to 3 missing sequence numbers,
-    # fixed the fa.out file:
-    cat << '_EOF_' > fixSequence.pl
-#!/bin/env perl
-
-use strict;
-use warnings;
-
-my $lineCount = 0;
-open (FH, "<panTro3.fa.out") or die "can not read panTro3.fa.out";
-while (my $line = <FH>) {
-    ++$lineCount;
-    if ($lineCount < 4) {
-        printf "%s", $line;
-    } else {
-        my $id = $lineCount - 3;
-        chomp $line;
-        if ($line =~ m/\)\s*$/) {
-            $line =~ s/\s*$//;
-            printf "%s %d\n", $line, $id;
-        } else {
-            $line =~ s/[0-9]+\s*$/$id/;
-            printf "%s\n", $line;
-        }
-    }
-}
-close (FH);
-'_EOF_'
-    # << happy emacs
-    chmod +x fixSequence.pl
-    ./fixSequence.pl > fixSeq.fa.out
+    cp -p panTro3.fa.out panTro3.fa.out.broken
+    # manually remove those three lines
+    vi panTro3.fa.out
     #	then manually complete last bit in the 'cat' step:
-    /cluster/bin/scripts/extractNestedRepeats.pl fixSeq.fa.out \
+    /cluster/bin/scripts/extractNestedRepeats.pl panTro3.fa.out \
 	> panTro3.nestedRepeats.bed
+    #	-rw-rw-r-- 1    58826545 Feb 22 09:20 panTro3.nestedRepeats.bed
     #	continuing with the RM run:
     time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
 	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
@@ -389,21 +363,43 @@ close (FH);
     #	real    2m15.934s
 
     cat faSize.rmsk.txt
-# 3307960432 bases (407430668 N's 2900529764 real 1433143127 upper
-#	1467386637 lower) in 24132 sequences in 1 files
+# 3307960432 bases (407430668 N's 2900529764 real 1433143490 upper
+#	1467386274 lower) in 24132 sequences in 1 files
 #	%44.36 masked total, %50.59 masked real
 
+
 ##########################################################################
-# running simple repeat (DONE - 2011-02-17 - Hiram)
+# running simple repeat (DONE - 2011-02-22 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/simpleRepeat
     cd /hive/data/genomes/panTro3/bed/simpleRepeat
     time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
 	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
 	panTro3 > do.log 2>&1 &
     #	real    30m3.767s
-XXX - some failed due to no sequence in inputs 2011-02-17 17:00
+    #	two failed due to no sequence in inputs 2011-02-17 17:00
+    # chr2B:0-50000000 and chr2B:50000000-100000000
+    # faSize on both indicates: (50000000 N's 0 real 0 upper 0 lower)
+    #	TrfPart/049/049.lst.bed
+    #	TrfPart/050/050.lst.bed
+    #	create empty results:
+    touch  /hive/data/genomes/panTro3/TrfPart/049/049.lst.bed
+    touch  /hive/data/genomes/panTro3/TrfPart/050/050.lst.bed
+    # run a para time > run.time on memk to get that file to exist:
+# Completed: 93 of 95 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      35389s     589.82m     9.83h    0.41d  0.001 y
+# IO & Wait Time:                   468s       7.79m     0.13h    0.01d  0.000 y
+# Average job time:                 386s       6.43m     0.11h    0.00d
+# Longest finished job:            9452s     157.53m     2.63h    0.11d
+# Submission to last job:         10661s     177.68m     2.96h    0.12d
+
+    #	continue
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	-continue=filter panTro3 > filter.log 2>&1 &
+    # ~ 1 minute
     cat fb.simpleRepeat 
-    #	66211508 bases of 2752505800 (2.405%) in intersection
+    #	95418830 bases of 2900529764 (3.290%) in intersection
 
     cd /hive/data/genomes/panTro3
     twoBitMask panTro3.rmsk.2bit \
@@ -412,10 +408,11 @@ XXX - some failed due to no sequence in inputs 2011-02-17 17:00
 
     twoBitToFa panTro3.2bit stdout | faSize stdin > faSize.panTro3.2bit.txt
     cat faSize.panTro3.2bit.txt
-# 2914958544 bases (162452744 N's 2752505800 real 1439244378 upper
-#	1313261422 lower) in 14205 sequences in 1 files
-#	%45.05 masked total, %47.71 masked real
+# 3307960432 bases (407430668 N's 2900529764 real 1431641829 upper
+#	1468887935 lower) in 24132 sequences in 1 files
+#	%44.40 masked total, %50.64 masked real
 
+    # reset symlink to this masked sequence
     rm /gbdb/panTro3/panTro3.2bit
     ln -s `pwd`/panTro3.2bit /gbdb/panTro3/panTro3.2bit
 
