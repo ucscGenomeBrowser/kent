@@ -1,4 +1,4 @@
-# Controlled vocabulary from ENCODE
+#+ Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
 
@@ -7278,9 +7278,9 @@ description Poly(A)+ RNA longer than 200 nt
 label longPolyA+
 
 term longNonPolyA
-tag longNonPolyA
+tag pAM 
 type rnaExtract
-description Poly(A)- RNA longer than 200 nt
+description Poly(A)- RNA longer than 200 nt  provisional change for the tag
 label longPolyA-
 
 ## This is what Yale and Caltech are using

@@ -44,7 +44,8 @@ options:
 						'workhorse' => '',
 					        'fileServer' => '');
 print STDERR <<_EOF_
-    -noGoldGapSplit       do not split the gold/gap tables even when chrom based
+    -splitGoldGap         split the gold/gap tables (default is not split)
+    -noGoldGapSplit       default behavior, this option no longer required
 _EOF_
   ;
   print STDERR "
@@ -181,6 +182,7 @@ use vars @HgAutomate::commonOptionVars;
 use vars @HgStepManager::optionVars;
 # specific command line options
 use vars qw/
+    $opt_splitGoldGap
     $opt_noGoldGapSplit
     /;
 
@@ -200,6 +202,7 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      @HgAutomate::commonOptionSpec,
+		      "splitGoldGap",
 		      "noGoldGapSplit",
 		     );
   &usage(1) if (!$ok);
@@ -718,10 +721,10 @@ sort -u chrom.lst.tmp > chrom.lst
 rm chrom.lst.tmp
 _EOF_
     );
-    if ($opt_noGoldGapSplit) {
-      $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
-    } else {
+    if ($opt_splitGoldGap) {
       $bossScript->add("hgGoldGapGl -noGl -chromLst=chrom.lst $db $topDir .\n");
+    } else {
+      $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
     }
   } else {
     $bossScript->add("hgGoldGapGl -noGl $db $allAgp\n");
@@ -736,7 +739,7 @@ _EOF_
     # should always cover the entire mitochondrial genome (typically ~16k).
     my $bin = 585;
     my $mitoGold = ($mitoAcc =~ /^\d+$/) ? "gi|$mitoAcc" : $mitoAcc;
-    if (!$opt_noGoldGapSplit && ($chromBased || $opt_debug)) {
+    if ($opt_splitGoldGap && ($chromBased || $opt_debug)) {
       my $defaultChrom = `head -1 $topDir/chrom.sizes | cut -f 1`;
       chomp $defaultChrom;
       $bossScript->add(<<_EOF_
