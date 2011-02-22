@@ -24339,7 +24339,7 @@ See hg18.txt for details.
 
 
 ############################################################################
-# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie - color change 2/22/11 #2917)
 # DGV V9 done 3/26/10
 # DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
@@ -24354,8 +24354,12 @@ See hg18.txt for details.
       http://projects.tcag.ca/variation/downloads/variation.hg17.v10.nov.2010.txt
     wget --timestamping \
       http://projects.tcag.ca/variation/downloads/indel.hg17.v10.nov.2010.txt
-    # shuffle fields into bed8+ (input has one start coord==0, but min 
+    # shuffle fields into bed9+ w/itemRgb (input has one start coord==0, but min 
     # nonzero size of 99 not 100 implies most coords are 1-based):
+    set purple = "200,0,200"
+    set red = "200,0,0"
+    set blue = "0,0,200"
+    set brown = "139,69,19"
     foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
@@ -24365,11 +24369,11 @@ See hg18.txt for details.
         $id =~ s/^Variation_//; \
         $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = ($varType =~ /^Inv/) ? "200,0,200" : "0,200,0"; \
+        $rgb = ($varType =~ /^Inv/) ? "'$purple'" : "'$brown'"; \
         if ($gain ne "" || $loss ne "") { \
           $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
-          $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
-          $rgb = "0,0,200" if ($loss > 0 && $gain == 0); \
+          $rgb = "'$blue'" if ($gain > 0 && $loss == 0); \
+          $rgb = "'$red'" if ($loss > 0 && $gain == 0); \
         } \
         $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
                   $start, $start, $rgb, $landmark, $varType, \
@@ -24389,6 +24393,8 @@ See hg18.txt for details.
 # 6553700	Inversion  (100,0,100)
 # new:
 # 13107400	Inversion  (200,0,200)
+
+# 2/22/11 color change (Bug #2917): swap blue and red; green -> brown
 
 ############################################################################
 # KIDD/EICHLER DISCORDANT CLONE ENDS (DONE 6/10/08 angie)
