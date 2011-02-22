@@ -2520,7 +2520,6 @@ while(mdbObjs != NULL)
         if (compName == NULL)
             {
             verbose(1, "Object '%s' has no %s defined.\n",mdbObjs->obj,COMPOSITE_VAR);
-            //return 0;
             mdbProcessedObs = slCat(mdbProcessedObs,slPopHead(&mdbObjs));
             continue;
             }
@@ -2725,7 +2724,7 @@ while(mdbObjs != NULL)
         }
     // Done with one composite
 
-    if (warn > 0 && expCount > 0)
+    if (expCount > 0)
         printf("Composite '%s' has %d recognizable experiment%s with %d missing an %s.\n   objects/experiment: min:%d  max:%d  mean:%lf.\n",
                compName,expCount,(expCount != 1?"s":""),expMissing,EXP_ID_NAME,expMin,expMax,((double)expObjsCount/expCount));
 
