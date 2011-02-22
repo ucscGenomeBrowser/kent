@@ -720,34 +720,31 @@ extraFields logR=[f]LogR_Value
         # subId=3303 dateSubmitted=2011-01-18
 
         track wgEncodeHaibGenotypeGm12878RegionsRep2
-        release alpha
         parent wgEncodeHaibGenotypeRegions
         shortLabel GM12878 2
         longLabel ENCODE HAIB Copy Number Variants Replicate 2 (in GM12878 cells)
         subGroups view=Regions cellType=GM12878 treatment=None rep=rep2
-        type bedLogR
+        type bed 9 +
         origAssembly hg18
         color 153,38,0
         # subId=3536 dateSubmitted=2011-02-17
 
         track wgEncodeHaibGenotypeHepg2RegionsRep1
-        release alpha
         parent wgEncodeHaibGenotypeRegions off
         shortLabel HepG2 1
         longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in HepG2 cells)
         subGroups view=Regions cellType=HepG2 treatment=None rep=rep1
-        type bedLogR
+        type bed 9 +
         origAssembly hg18
         color 189,0,157
         # subId=3536 dateSubmitted=2011-02-17
 
         track wgEncodeHaibGenotypeK562RegionsRep1
-        release alpha
         parent wgEncodeHaibGenotypeRegions
         shortLabel K562 1
         longLabel ENCODE HAIB Copy Number Variants Replicate 1 (in K562 cells)
         subGroups view=Regions cellType=K562 treatment=None rep=rep1
-        type bedLogR
+        type bed 9 +
         origAssembly hg18
         color 46,0,184
         # subId=3536 dateSubmitted=2011-02-17
