@@ -274,25 +274,28 @@ The format of the type fields:
 
     The database loading procedure for the table can be:
 	hgBbiDbLink hg18 itemRgbBbTest /gbdb/hg18/bbi/itemRgb.hg18.bb
-    which is equivalent to:
+    The file name given should be a full path name that can be accessed
+	by the Apache WEB server.  Or, the fileName can also be a
+	valid URL to the bb file.
+    This loader is equivalent to:
     hgsql hg18 -e 'drop table if exists itemRgbBbTest;
             create table itemRgbBbTest (fileName varchar(255) not null);
             insert into itemRgbBbTest values
         ("/gbdb/hg18/bbi/itemRgb.hg18.bb");'
-    The fileName can also be a valid URL to the bb file.
 
 18. type bigWig [lower] [upper]
     This uses a binary indexed file rather than a database table.  It is, other
     than substituting "bigWig" for "wig" in the type line, the same as the
     "type wig" explained above.  The database loading procedure is
         hgBbiDbLink hg19 myLocalBigWig /gbdb/hg18/bbi/myLocalBigWig.bw
-    which is equivalent to:
+    The file name given should be a full path name that can be accessed
+	by the Apache WEB server.  Or, the fileName can also be a
+	valid URL to the bw file.
+    This loader is equivalent to:
     hgsql hg19 -e 'drop table if exists myLocalBigWig; \
             create table myLocalBigWig (fileName varchar(255) not null); \
             insert into myLocalBigWig values
         ("/gbdb/hg19/bbi/myLocalBigWig.bw");'
-    I believe this works even if the entry is a URL to a remote
-    bigWig file.
 
 19. type bam
     This uses a binary indexed file (which can be a URL) named in a database table.
@@ -584,6 +587,8 @@ Some settings used by various tracks:
       zoomed at no more than basesPerPixel (a float). showCdsAllScales should
       be set and showDiffBasesMaxZoom should be set to a value not more
       than showCdsMaxZoom  to make this useful.
+    o nextExonText override the default mouseover text of the next-exon button.
+    o prevExonText override the default mouseover text of the previous-exon button.
     o nextItemButton off - For tracks that have next-item buttons that
       shouldn't, turn the buttons off until whatever else is fixed.
       on - This will override the user's UI settings and display the next-item

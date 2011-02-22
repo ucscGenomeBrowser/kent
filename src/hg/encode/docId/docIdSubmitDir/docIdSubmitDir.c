@@ -311,7 +311,10 @@ for(; mdbObj; mdbObj = nextObj)
         char *composite = mdbObjFindValue(mdbObj, "composite");
         if (composite == NULL)
             errAbort("could not find composite name in metadata");
-        char *decoratedDocId = docIdDecorate(composite, atoi(docId));
+        char *cellType = mdbObjFindValue(mdbObj, "cell");
+        if (cellType == NULL)
+            errAbort("could not find cell type in metadata");
+        char *decoratedDocId = docIdDecorate(composite, cellType, atoi(docId));
 
         if (firstTime)
             addMdbTxtVar(mdbObj, "docId", decoratedDocId);

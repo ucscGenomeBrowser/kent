@@ -1628,16 +1628,21 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd, args)
                });
     } else if (cmd == 'openLink' || cmd == 'followLink') {
         var href = selectedMenuItem.href;
+        var vars = new Array("c", "l", "r");
+        var hiddens = new Array("chromName", "l", "r");
+        for (i in vars) {
+            // make sure the link contains chrom and window width info (necessary b/c we are stripping hgsid and/or the cart may be empty);
+            // but don't add chrom to wikiTrack links (see redmine #2476).
+            var val = $("input[name=" + hiddens[i] + "]").val();
+            var v = vars[i];
+            if(val && id != "wikiTrack" && (href.indexOf("?" + v + "=") == -1) && (href.indexOf("&" + v + "=") == -1)) {
+                href = href + "&" + v + "=" + val;
+            }
+        }
         if(cmd == 'followLink') {
             // XXXX This is blocked by Safari's popup blocker (without any warning message).
             location.assign(href);
         } else {
-            var chrom = $("input[name=chromName]").val();
-            if(chrom && id != "wikiTrack" && href.indexOf("c=" + chrom) == -1) {
-                // make sure the link contains chrom info (necessary b/c we are stripping hgsid); but don't add chrom
-                // to wikiTrack links (see redmine #2476).
-                href = href + "&c=" + chrom;
-            }
             // Remove hgsid to force a new session (see redmine ticket 1333).
             href = removeHgsid(href);
             if(window.open(href) == null) {

@@ -18,8 +18,11 @@ use Encode;
 # Last status set by pipeline
 my $LOADED_STATUS = "loaded";
 
+# Revoked Status - If asking to revoke, you should be able to revoke from any state
+my $REVOKED_STATUS = "revoked";
+
 # statuses after $LOADED_STATUS are set by DCC staff currently, and must be used in this order
-my @statuses = ($LOADED_STATUS, "displayed", "approved", "reviewing", "released");
+my @statuses = ($LOADED_STATUS, "displayed", "approved", "reviewing", "released","revoked");
 
 my $instance = 'prod';
 my $force;
@@ -64,7 +67,7 @@ if (!defined($newStatus)) {
 for my $i (0 .. @statuses - 1) {
     my $s = $statuses[$i];
     if ($s eq $newStatus) {
-        if ($newStatus ne $LOADED_STATUS && ($oldStatus ne $statuses[$i - 1] && !$force)) {
+        if ($newStatus ne $LOADED_STATUS && $newStatus ne $REVOKED_STATUS && ($oldStatus ne $statuses[$i - 1] && !$force)) {
             usage("ERROR: New status '$newStatus' cannot follow '$oldStatus'\n");
         }
         $db->execute("UPDATE projects SET status = ? WHERE id = ?", $newStatus, $id);

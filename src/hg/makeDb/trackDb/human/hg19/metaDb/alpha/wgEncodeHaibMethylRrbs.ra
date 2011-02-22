@@ -2426,7 +2426,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
-fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bed.gz
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
@@ -2445,7 +2445,7 @@ dataType MethylRrbs
 dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2011-01-19
 dateUnrestricted 2011-10-18
-fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bed.gz
+fileName wgEncodeHaibMethylRrbsHtr8DukeSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
 obtainedBy Duke
@@ -3868,4 +3868,4 @@ tableName wgEncodeHaibMethylRrbsU87HaibSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 950797859
+# MAGIC: 778864405

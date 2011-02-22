@@ -527,6 +527,7 @@ if (argc < 2)
 hgWiggle(wds, argc-1, argv+1);
 
 wiggleDataStreamFree(&wds);
-
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }
