@@ -3,6 +3,7 @@ compositeTrack on
 shortLabel SUNY RIP Tiling
 longLabel RNA Binding Protein Associated RNA by Tiling Array from ENCODE/SUNY Albany 
 group regulation
+superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1)  K562=K562&nbsp;(Tier_1)
 subGroup3 antibody Antibody_Target ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag ripInput=Input  
