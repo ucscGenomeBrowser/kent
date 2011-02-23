@@ -23,11 +23,13 @@ errAbort(
   "     -sourcePrefix=pre - only process entries where the source name has the\n"
   "      specified prefix.  May be repeated.\n"
   "     -impliedStopAfterCds - implied stop codon in after CDS\n"
+  "     -simple    - just check column validity, not hierarchy, resulting genePred may be damaged\n"
   "     -geneNameAsName2 - if specified, use gene_name for the name2 field\n"
   "      instead of gene_id.\n");
 }
 
 static struct optionSpec options[] = {
+    {"simple", OPTION_BOOLEAN},
     {"genePredExt", OPTION_BOOLEAN},
     {"allErrors", OPTION_BOOLEAN},
     {"infoOut", OPTION_STRING},
@@ -40,6 +42,7 @@ boolean clGenePredExt = FALSE;  /* include frame and geneName */
 boolean clAllErrors = FALSE;    /* report as many errors as possible */
 struct slName *clSourcePrefixes; /* list of source prefixes to match */
 unsigned clGxfOptions = 0;       /* options for converting GTF/GFF */
+boolean doSimple = FALSE;      /* only check column validity */
 
 int badGroupCount = 0;  /* count of inconsistent groups found */
 
@@ -159,9 +162,10 @@ if (infoFile != NULL)
     fputs(infoHeader, infoFh);
     }
 
-for (group = gtf->groupList; group != NULL; group = group->next)
-    if (inclGroup(group))
-        gtfGroupToGenePred(gtf, group, gpFh, infoFh);
+if (!doSimple)
+    for (group = gtf->groupList; group != NULL; group = group->next)
+	if (inclGroup(group))
+	    gtfGroupToGenePred(gtf, group, gpFh, infoFh);
 
 carefulClose(&gpFh);
 gffFileFree(&gtf);
@@ -174,6 +178,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 clGenePredExt = optionExists("genePredExt");
+doSimple = optionExists("simple");
 clAllErrors = optionExists("allErrors");
 clSourcePrefixes = optionMultiVal("sourcePrefix", NULL);
 if (optionExists("impliedStopAfterCds"))

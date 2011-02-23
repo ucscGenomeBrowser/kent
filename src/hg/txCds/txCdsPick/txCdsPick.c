@@ -162,14 +162,15 @@ void transferExceptions(char *inName, char *inSource, struct hash *pepToRefHash,
 /* Write out exceptions attatched to inName to file, this time
  * attached to outName. */
 {
+struct hashEl *hel;
 if (sameString(inSource, "ccds") || startsWith("RefPep", inSource))
     {
     char *refName = hashFindVal(pepToRefHash, inName);
     if (refName != NULL)
         inName = refName;
     }
-if (hashLookup(selenocysteineHash, inName))
-    fprintf(f, "%s\tselenocysteine\tyes\n", outName);
+if ((hel = hashLookup(selenocysteineHash, inName)) != NULL)
+    fprintf(f, "%s\ttranslExcept\t%s\n", outName, (char *) hel->val);
 if (hashLookup(altStartHash, inName))
     fprintf(f, "%s\texception\talternative_start_codon\n", outName);
 }

@@ -3,6 +3,7 @@ compositeTrack on
 shortLabel SUNY RIP Tiling
 longLabel RNA Binding Protein Associated RNA by Tiling Array from ENCODE/SUNY Albany 
 group regulation
+#superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1)  K562=K562&nbsp;(Tier_1)
 subGroup3 antibody Antibody_Target ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag ripInput=Input  
@@ -31,7 +32,6 @@ noInherit on
     type broadPeak
 
     	track wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
-    	release alpha,beta,public
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 Input
         longLabel GM12878 Input RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -41,7 +41,6 @@ noInherit on
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
-    	release alpha,beta,public
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 T7Tag
         longLabel GM12878 T7Tag RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -51,7 +50,6 @@ noInherit on
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna
-    	release alpha,beta,public
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 PABPC1
         longLabel GM12878 PABPC1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -61,7 +59,6 @@ noInherit on
     	# subId=1245 dateSubmitted=2010-06-01
 
    	track wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
-    	release alpha,beta,public
      	subTrack wgEncodeSunyAlbanyTilingView
   	shortLabel GM12878 ELAVL1
         longLabel GM12878 ELAVL1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -71,7 +68,6 @@ noInherit on
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
-    	release alpha,beta,public
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 Input
         longLabel K562 Input RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -81,7 +77,6 @@ noInherit on
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
-    	release alpha,beta,public
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 T7Tag
         longLabel K562 T7Tag RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -91,7 +86,6 @@ noInherit on
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna
-    	release alpha,beta,public
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 PABPC1
         longLabel K562 PABPC1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
@@ -101,7 +95,6 @@ noInherit on
     	# subId=1245 dateSubmitted=2010-06-01
 
     	track wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna
-    	release alpha,beta,public
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 ELAVL1
         longLabel K562 ELAVL1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
