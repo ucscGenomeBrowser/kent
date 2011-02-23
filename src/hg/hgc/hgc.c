@@ -269,6 +269,7 @@ boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
 int maxRGBShade = 16;
 
 struct bed *sageExpList = NULL;
+char ncbiOmimUrl[255] = {"http://www.ncbi.nlm.nih.gov/omim/"};
 
 struct palInfo
 {
@@ -9409,6 +9410,9 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     printf("<BR>\n");
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
     
     safef(query, sizeof(query),
     	  "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
@@ -9609,7 +9613,10 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     printf("<BR>\n");
-    
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
+
     printf("<B>Location: </B>");
     safef(query, sizeof(query),
     	  "select location from omimGeneMap where omimId=%s;", itemName);
@@ -9790,6 +9797,7 @@ char *dbSnpId;
 char *chp;
 char *seqId = NULL;
 char avString[255];
+char *avDesc = NULL;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
@@ -9797,7 +9805,7 @@ chromEnd   = cartOptionalString(cart, "t");
 
 avId = strdup(itemName);
 
-chp = strstr(itemName, "#");
+chp = strstr(itemName, ".");
 *chp = '\0';
 omimId = strdup(itemName);
 
@@ -9807,7 +9815,7 @@ if (url != NULL && url[0] != 0)
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
-    	  "select title1, title2,  format(seqNo/10000,4) from omimGeneMap m, omimAv v where m.omimId=%s and m.omimId=v.omimId and v.avId='%s';", itemName, avId);
+    	  "select title1, title2,  format(seqNo/10000,4), v.description from omimGeneMap m, omimAv v where m.omimId=%s and m.omimId=v.omimId and v.avId='%s';", itemName, avId);
 
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
@@ -9815,7 +9823,7 @@ if (url != NULL && url[0] != 0)
     	{
 	seqId = strdup(row[2]);
 	safef(avString, sizeof(avString), "%s#%s", omimId, seqId+2L);
-        if (row[0] != NULL)
+	if (row[0] != NULL)
 	    {
 	    title1 = cloneString(row[0]);
     	    printf(": %s", title1);
@@ -9825,12 +9833,19 @@ if (url != NULL && url[0] != 0)
 	    title2 = cloneString(row[1]);
     	    printf(" %s ", title2);
 	    }
+	avDesc = row[3];
 	}
     sqlFreeResult(&sr);
+    
+    printf("<BR>\n");
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
 
-    printf("<BR><B>Allelic Variant: ");fflush(stdout);
+    printf("<B>Allelic Variant: ");fflush(stdout);
     printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
-    printf("%s</A></B>", avString);
+    printf("%s</A></B>", avId);
+    printf(" %s", avDesc);
 
     safef(query, sizeof(query),
     	  "select replStr from omimAvRepl where avId=%s;", avId);
