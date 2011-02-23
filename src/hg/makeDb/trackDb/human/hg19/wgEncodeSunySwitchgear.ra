@@ -14,7 +14,6 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
-superTrack wgEncodeRbpSuper dense
 
     track wgEncodeSunySwitchgearView
     shortLabel Suny Switchgear

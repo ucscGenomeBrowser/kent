@@ -19,7 +19,6 @@ type bed 3
 wgEncode 1
 origAssembly hg19
 noInherit on
-superTrack wgEncodeRbpSuper dense
 
     track wgEncodeSunyAlbanyGeneStView
     shortLabel SunyAlbanyGeneSt
