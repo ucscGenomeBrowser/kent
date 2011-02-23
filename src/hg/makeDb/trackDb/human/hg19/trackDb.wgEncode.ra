@@ -65,7 +65,7 @@ include wgEncodeUwDnase.new.ra alpha
 # SUNY Rip-Seq Tracks (wrangler: Cricket)
 include wgEncodeSunyAlbanyGeneSt.ra alpha
 include wgEncodeSunyAlbanyTiling.ra beta,public
-include wgEncodeSunyAlbanyTiling.ra alpha
+include wgEncodeSunyAlbanyTiling.new.ra alpha
 include wgEncodeSunySwitchgear.ra alpha
 include wgEncodeSunyRipSeq.ra alpha 
 

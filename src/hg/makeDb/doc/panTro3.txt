@@ -566,13 +566,13 @@ close (FH);
 	-makeOoc=jkStuff/panTro3.11.ooc -repMatch=1024
     #	Wrote 31038 overused 11-mers to jkStuff/panTro3.11.ooc
 
+    # make up non bridged gap lift file for use in genbank runs
+    gapToLift -minGap=3001 -bedFile=jkStuff/nonBridgedGaps.bed panTro3 \
+	jkStuff/panTro3.nonBridged.lft
+
     mkdir /hive/data/staging/data/panTro3
     cp -p panTro3.2bit chrom.sizes jkStuff/panTro3.11.ooc \
-	/hive/data/staging/data/panTro3
-
-    # just to see what this looks like, there are too many here to be useful
-    gapToLift -bedFile=jkStuff/nonBridgedGaps.bed panTro3 \
-	jkStuff/panTro3.nonBridged.lft
+	jkStuff/panTro3.nonBridged.lft /hive/data/staging/data/panTro3
 
 ##########################################################################
 #  BLATSERVERS ENTRY (DONE - 2009-12-23 - Hiram)
@@ -808,8 +808,8 @@ panTro3.upstreamGeneTbl = refGene
     screen  # control this business with a screen since it takes a while
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial panTro3 &
-    #	logFile: var/build/logs/2011.02.22-16:11:37.panTro3.initalign.log
-XXX - running - Tue Feb 22 16:11:54 PST 2011
+    #	logFile: var/build/logs/2011.02.23-09:44:44.panTro3.initalign.log
+XXX - running - Tue Feb 23 09:45:54 PST 2011
 
     ssh hgwdev
     time nice -n +19 bin/gbDbLoadStop -initialLoad -drop panTro3 &
@@ -982,7 +982,8 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
-######################
+
+############################################################################
 # LASTZ Rat Rn4 (DONE - 2011-02-22 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
     cd /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
@@ -1028,6 +1029,344 @@ TMPDIR=/scratch/tmp
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    188m0.163s
-    cat fb.rn4.chainHg19Link.txt 
+    cat fb.rn4.chainPanTro3Link.txt 
     #	947862300 bases of 2571531505 (36.860%) in intersection
+
 ##############################################################################
+# LASTZ Mouse Mm9 (DONE - 2011-02-23 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzMm9.2011-02-23
+    cd /hive/data/genomes/panTro3/bed/lastzMm9.2011-02-23
+
+    cat << '_EOF_' > DEF
+# chimp vs mouse
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Mouse Mm9
+SEQ2_DIR=/scratch/data/mm9/mm9.2bit
+SEQ2_LEN=/scratch/data/mm9/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzMm9.2011-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - Wed Feb 23 11:02:40 PST 2011
+    #	real    314m18.227s
+    cat fb.panTro3.chainMm9Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/mm9/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/mm9/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzMm9.2011-02-23/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.mm9.chainPanTro3Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+
+##############################################################################
+# Swap Human lastz (DONE - 2011-02-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22
+    cat fb.hg19.chainPanTro3Link.txt 
+    #	2760939621 bases of 2897316137 (95.293%) in intersection
+
+#	running the swap
+    mkdir /hive/data/genomes/panTro3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-syntenicNet > swap.log 2>&1 &
+#	real    86m49.706s
+    cat fb.panTro3.chainHg19Link.txt 
+    #	2772816267 bases of 2900529764 (95.597%) in intersection
+
+##############################################################################
+# LASTZ Dog CanFam2 (DONE - 2011-02-23 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23
+    cd /hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23
+
+    cat << '_EOF_' > DEF
+# chimp vs dog
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Dog CanFam2
+SEQ2_DIR=/scratch/data/canFam2/canFam2.2bit
+SEQ2_LEN=/scratch/data/canFam2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - Wed Feb 23 11:08:40 PST 2011
+    #	real    314m18.227s
+    cat fb.panTro3.chainCanFam2Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/canFam2/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzCanFam2.2011-02-23/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.canFam2.chainPanTro3Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+
+############################################################################
+# LASTZ Horse EquCab2 (DONE - 2011-02-23 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzEquCab2.2011-02-23
+    cd /hive/data/genomes/panTro3/bed/lastzEquCab2.2011-02-23
+
+    cat << '_EOF_' > DEF
+# chimp vs horse
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Horse EquCab2
+SEQ2_DIR=/scratch/data/equCab2/equCab2.2bit
+SEQ2_LEN=/scratch/data/equCab2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzEquCab2.2011-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+XXX - running - Wed Feb 23 11:10:40 PST 2011
+    #	real    314m18.227s
+    cat fb.panTro3.chainEquCab2Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/equCab2/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzEquCab2.2011-02-23/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.equCab2.chainPanTro3Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+
+############################################################################
+# LASTZ Opossum MonDom5 (DONE - 2011-02-23 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23
+    cd /hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23
+
+    cat << '_EOF_' > DEF
+# chimp vs opossum
+# settings for more distant organism alignments
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Opossum MonDom5
+SEQ2_DIR=/scratch/data/monDom5/monDom5.2bit
+SEQ2_LEN=/scratch/data/monDom5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+XXX - running - Wed Feb 23 11:21:40 PST 2011
+    #	real    314m18.227s
+    cat fb.panTro3.chainMonDom5Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/monDom5/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/monDom5/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzMonDom5.2011-02-23/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.monDom5.chainPanTro3Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+
+############################################################################
+# LASTZ Chicken GalGal3 (DONE - 2011-02-23 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzGalGal3.2011-02-23
+    cd /hive/data/genomes/panTro3/bed/lastzGalGal3.2011-02-23
+
+    cat << '_EOF_' > DEF
+# chimp vs chicken
+# settings for more distant organism alignments
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chicken GalGal3
+SEQ2_DIR=/scratch/data/galGal3/galGal3.2bit
+SEQ2_LEN=/scratch/data/galGal3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzGalGal3.2011-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+XXX - running - Wed Feb 23 11:24:40 PST 2011
+    #	real    314m18.227s
+    cat fb.panTro3.chainGalGal3Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/galGal3/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/galGal3/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzGalGal3.2011-02-23/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.galGal3.chainPanTro3Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+
+############################################################################
+# LASTZ Zebrafish DanRer7 (DONE - 2011-02-23 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23
+    cd /hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23
+
+    cat << '_EOF_' > DEF
+# chimp vs zebrafish
+# settings for more distant organism alignments
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Zebrafish DanRer7
+SEQ2_DIR=/scratch/data/danRer7/danRer7.2bit
+SEQ2_LEN=/scratch/data/danRer7/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+	-chainMinScore=5000 -chainLinearGap=loose > do.log 2>&1 &
+XXX - running - Wed Feb 23 11:28:40 PST 2011
+    #	real    314m18.227s
+    cat fb.panTro3.chainDanRer7Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/danRer7/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/danRer7/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzDanRer7.2011-02-23/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.danRer7.chainPanTro3Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+
+############################################################################

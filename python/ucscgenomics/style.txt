@@ -1,5 +1,10 @@
 Style Guide for Python Code
 
+Documentation Conventions
+
+Use ''' doc strings to embed comments for automated documentation generator:
+    http://epydoc.sourceforge.net/
+
 Naming Conventions
 
 Packages and Modules
