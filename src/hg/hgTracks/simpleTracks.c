@@ -11110,14 +11110,14 @@ omimAvSnpBuffer[0] = '\0';
 
 conn = hAllocConn(database);
 safef(query,sizeof(query),
-        "select replStr, dbSnpId from omimAvRepl where avId='%s'", item->name);
+        "select replStr, dbSnpId, description from omimAvRepl where avId='%s'", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 chp = omimAvSnpBuffer;
 if (row != NULL) 
     {
-    safef(omimAvSnpBuffer, sizeof(omimAvSnpBuffer), "%s, %s", row[0], row[1]);
+    safef(omimAvSnpBuffer, sizeof(omimAvSnpBuffer), "%s, %s: %s", row[0], row[1], row[2]);
     }
 
 hFreeConn(&conn);
