@@ -815,3 +815,51 @@ XXX - running - Tue Feb 22 16:11:54 PST 2011
     time nice -n +19 bin/gbDbLoadStop -initialLoad -drop panTro3 &
 
 ############################################################################
+# LASTZ Rat Rn4 (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
+    cd /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
+
+    cat << '_EOF_' > DEF
+# chimp vs rat
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Rat Rn4
+SEQ2_DIR=/scratch/data/rn4/rn4.2bit
+SEQ2_LEN=/scratch/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    314m18.227s
+    cat fb.panTro3.chainRn4Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/rn4/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/rn4/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.rn4.chainHg19Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+##############################################################################
