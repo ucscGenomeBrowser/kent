@@ -36,7 +36,7 @@ superTrack wgEncodeDNAseSuper dense
 shortLabel Duke DNaseI HS
 longLabel Open Chromatin by DNaseI HS from ENCODE/OpenChrom(Duke University)
 group regulation
-subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Raw_Base_Overlap_Signal
+subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Base_Overlap_Signal
 subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K5=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEP=HepG2&nbsp;(Tier_2) 2HUV=HUVEC&nbsp;(Tier_2) A549=A549 AOSMC=AoSMC CHORN=Chorion CLL=CLL FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC Hepatocytes=Hepatocytes HMEC=HMEC HPDE6E6E7=HPDE6-E6E7  HSMM=HSMM HSMMt=HSMMtube HTR8=HTR8svn Huh7=Huh-7 Huh7.5=Huh-7.5 iPS=iPS LHSR=LHSR LNCaP=LNCaP MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK  Osteobl=Osteobl 8988T=PA-TU-8988T PANI=PanIslets PanIsD=PanIsletD pHTE=pHTE PROG=ProgFib Stellate=Stellate T47D=T-47D UROtsa=Urothelia
 subGroup3 treatment Treatment AANONE=None ANDRO=Methyltrienolone&nbsp;(androgen) ESTRO=Estrogen IFNa4h=IFN&alpha_4hrs IFNg4h=IFN&gamma_4hrs SERUMFREE=Serum_Free UT189=UT189_E.coli
 sortOrder cellType=+ treatment=+ view=+
