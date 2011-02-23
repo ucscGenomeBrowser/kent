@@ -917,12 +917,12 @@ exit 1
 
     para time
 
-# Completed: 250096 of 250096 jobs
-# CPU time in finished jobs:    7759615s  129326.92m  2155.45h   89.81d  0.246 y
-# IO & Wait Time:               1198357s   19972.62m   332.88h   13.87d  0.038 y
-# Average job time:                  36s       0.60m     0.01h    0.00d
-# Longest finished job:            1267s      21.12m     0.35h    0.01d
-# Submission to last job:         18191s     303.18m     5.05h    0.21d
+# Completed: 449196 of 449196 jobs
+# CPU time in finished jobs:   17546812s  292446.87m  4874.11h  203.09d  0.556 y
+# IO & Wait Time:               3314556s   55242.59m   920.71h   38.36d  0.105 y
+# Average job time:                  46s       0.77m     0.01h    0.00d
+# Longest finished job:             697s      11.62m     0.19h    0.01d
+# Submission to last job:         31706s     528.43m     8.81h    0.37d
 
     ssh swarm
     cd /cluster/data/panTro3/bed/tblastn.hg18KG

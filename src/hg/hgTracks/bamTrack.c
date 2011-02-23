@@ -945,4 +945,11 @@ track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
 }
 
+void bamWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[])
+/* Same stub when compiled without USE_BAM. */
+{
+bamMethods(track);
+}
+
 #endif /* no USE_BAM */
