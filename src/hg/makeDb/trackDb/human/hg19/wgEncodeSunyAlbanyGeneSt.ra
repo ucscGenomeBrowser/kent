@@ -4,6 +4,7 @@ release alpha
 shortLabel SUNY GeneST 
 longLabel ENCODE SUNY Albany (Tenenbaum) RBP Associated RNA by GeneST 
 group regulation
+superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
 subGroup2 cellType Cell_Line  GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2
 subGroup3 factor Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
