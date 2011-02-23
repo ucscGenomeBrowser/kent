@@ -2,9 +2,9 @@
 <DIV style='max-width: 900px;'>
 <P>These tracks display chromatin immunoprecipitation (ChIP-seq) evidence as
 part of the four <B><em>Open Chromatin</em></B> track sets.
-ChIP0seq is a method to identify the specific location of proteins that are
-directly or indirectly bound to genomic DNA. By identifying the binding l
-ocation of sequence-specific transcription factors, general transcription
+ChIP-seq is a method to identify the specific location of proteins that are
+directly or indirectly bound to genomic DNA. By identifying the binding location
+of sequence-specific transcription factors, general transcription
 machinery components, and chromatin factors, ChIP can help in the functional
 annotation of the open chromatin regions identified by DNaseI HS mapping and
 FAIRE.
@@ -27,10 +27,10 @@ sequencing by synthesis as the detection platform.
 The Tier 1 and Tier 2 cell types were additionally verified by a
 second platform, high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 </P>
-<P>As a background control experiment, we sequenced
-the <B>input</B> genomic DNA sample that was used for ChIP. Crosslinked chromatin
-is sheared and the crosslinks are reversed without carrying out the
-immunoprecipitation step. This sample is otherwise processed in a manner
+<P>As a background control experiment, the <B>input</B> genomic DNA sample that
+was used for ChIP was sequenced. Crosslinked chromatin
+was sheared and the crosslinks were reversed without carrying out the
+immunoprecipitation step. This sample was otherwise processed in a manner
 identical to the ChIP sample as described below. The input track is
 useful in revealing potential artifacts arising from the sequence
 alignment process such as copy number differences between the
@@ -62,8 +62,8 @@ autoscale will rescale the data and inflate the background signal, making the
 regions appear noisy. Changing back to fixed scale will alleviate this issue.
 In general, for each experiment in each of the cell types, the
 <B>UTA TFBS</B> tracks contain the following views:
-</P>
-<P><DT><I>Peaks</I></DT>
+<DL>
+<DT><I>Peaks</I></DT>
 <DD>Regions of enriched signal in ChIP experiments.
 Peaks were called based on signals created using F-Seq, a software program
 developed at Duke (Boyle <em>et al.</em>, 2008b). Significant regions were
@@ -71,20 +71,18 @@ determined by fitting the data to a gamma distribution to calculate p-values.
 Contiguous regions where p-values were below a 0.05/0.01 threshold were
 considered significant.  The solid vertical line in the peak represents the
 point with highest signal.</DD>
-</P>
-<P><DT><I>F-Seq Density Signal</I></DT>
+<DT><I>F-Seq Density Signal</I></DT>
 <DD>Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
 replicates. F-Seq employs Parzen kernel density estimation to create base pair
 scores (Boyle <em>et al.</em>, 2008b). This method does not look at fixed-length
 windows but rather weights contributions of nearby sequences in proportion to
 their distance from that base.  It only considers sequences aligned 4 or less
-times in the genome, and uses an alignability background model to try to correct
+times in the genome and uses an alignability background model to try to correct
 for regions where sequences cannot be aligned. For each cell type, especially
 important for those with an abnormal karyotype, a model to try to correct for
 amplifications and deletions that is based on control input data was also used.</DD>
-</P>
-<P><DT><I>Base Overlap Signal</I></DT>
+<DT><I>Base Overlap Signal</I></DT>
 <DD>An alternative version of the
 <I>F-Seq Density Signal</I> track annotation that provides a higher resolution
 view of the raw sequence data. This track also includes the combined set of
@@ -180,19 +178,19 @@ please see the Release Notes section of the hg18
 <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeChromatinMap" target=_blank>
 Open Chromatin</a> track for information on the NCBI36/hg18 releases of the data).
 <UL>
-<li>There are 11 new ChIP experiments in this release, on 3 new cell lines.
+<li>There are 11 new ChIP experiments in this release on 3 new cell lines.
 <li>New to this release is a reconfiguration of how this track is displayed in
 relation to other tracks from the Duke/UNC/UT-Austin/EBI group.
 <li>A synthesis of open chromatin evidence from the three assay types was
-compiled for Tier 1 and 2 cell lines plus NHEK has also been added in this
+compiled for Tier 1 and 2 cell lines, plus NHEK has also been added in this
 release:
 <a href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chromatin Synthesis</a>.
 <li><B>Enhancer and Insulator Functional assays:</B>  A subset of DNase and FAIRE
 regions were cloned into functional tissue culture reporter assays to test for
 enhancer and insulator activity.  Coordinates and results from these
 experiments can be found
-<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
- TARGET=ucscDownloads>here</a>.  <!-- WARNING: Change to hgdownload.cse.ucsc.edu on release -->
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+ TARGET=ucscDownloads>here</a>.
 </UL></P>
 
 
