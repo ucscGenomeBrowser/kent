@@ -8,7 +8,7 @@ superTrack wgEncodeDNAseSuper pack
 shortLabel Open Chrom Synth
 longLabel DNaseI/FAIRE/ChIP Synthesis from ENCODE/OpenChrom(Duke/UNC/UTA)
 group regulation
-subGroup1 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier_1</i> 1H1=H1-hESC&nbsp;<i>Tier_1</i> 1K5=K562&nbsp;<i>Tier_1</i> 2HELA=HeLa-S3&nbsp;<i>Tier_2</i> 2HEP=HepG2&nbsp;<i>Tier_2</i> 2HUV=HUVEC&nbsp;<i>Tier_2</i> NHEK=NHEK
+subGroup1 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K5=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEP=HepG2&nbsp;(Tier_2) 2HUV=HUVEC&nbsp;(Tier_2) NHEK=NHEK
 dimensions dimensionX=cellType
 sortOrder cellType=+
 fileSortOrder cell=Cell_Line fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
