@@ -3226,6 +3226,7 @@ tablesIgnored $gbd
     uwNucOccDennis
     uwNucOccMec
     ws210Gene
+    snp132ExceptionDesc
 
 tablesIgnored $kgDb
     pbAaDist_
