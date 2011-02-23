@@ -46,24 +46,24 @@ The associated transcripts were identified using GeneChip Human Gene 1.0 ST Arra
 Arrays were analyzed using Agilent's GeneSpringGX software (version 11.0).
 </P>
 <P>
-Arrays for Totals (input RNA) were summarized by applying the Iterative PLIER16 algorithm using quantile normalization.
+Arrays for RIP-Input were summarized by applying the Iterative PLIER16 algorithm using quantile normalization.
 Probesets whose normalized expression levels fell within the  18 to 98 percentile in at least two of the three replicates
 were retained for further analysis.  These probesets were then subjected to a TTest against zero and a p-value
 cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate algorithm was applied and a corrected
 p-value is also provided.
 </P>
 <P>
-Arrays for T7Tag(background/negative control) RIPs were summarized with those for totals, also using the PLIER16 Iterative
+Arrays for T7Tag(background/negative control) RIPs were summarized with those for RIP-inputs, also using the PLIER16 Iterative
 algorithm with quantile normalization.  Probesets whose normalized expression levels fell within the 18 to 98 percentile in at
-least two of three replicates in either group (totals or T7Tag RIPs) were retained for further analysis.  Probesets
+least two of three replicates in either group (RIP-inputs or T7Tag RIPs) were retained for further analysis.  Probesets
 were then filtered for those that showed a minimum 2 fold increase of expression in T7Tag versus total.  An unpaired TTest
 was applied to these probesets and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate
 algorithm was applied and a corrected p-value is also provided.
 </P>
 <P>
-Arrays for treatment RIP samples were summarized together with those for totals and T7Tag RIPs.  Again, this was done using
+Arrays for treatment RIP samples were summarized together with those for RIP-inputs and T7Tag RIPs.  Again, this was done using
 Iterative PLIER16 with quantile normalization. Probesets whose normalized expression levels fell within the 18 to 98 percentile in at
-least two of three replicates in any group (treatment RIPs, totals or T7Tag RIPs) were retained for further analysis.
+least two of three replicates in any group (treatment RIPs, RIP-inputs or T7Tag RIPs) were retained for further analysis.
 <br/>A list of probesets was produced of those that showed a minimum 2 fold increase of expression in treatment over total.
 A oneway ANOVA was applied and a p-value cutoff of .05 was applied.  The Benjamini-Hochberg false discovery rate algorithm was applied
 and a corrected p-value is also provided.
