@@ -3,6 +3,7 @@ compositeTrack on
 shortLabel SUNY SwitchGear
 longLabel ENCODE SUNY Albany Tenenbaum RBP Associated RNA by SwitchGear 
 group regulation
+superTrack wgEncodeRbpSuper dense
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA
 subGroup2 cellType Cell_Line HT1080=HT-1080 
 subGroup3 factor Target_Protein ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag IGF2BP1=IGF2BP1 

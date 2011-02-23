@@ -7280,7 +7280,7 @@ label longPolyA+
 term longNonPolyA
 tag pAM 
 type rnaExtract
-description Poly(A)- RNA longer than 200 nt  provisional change for the tag
+description Poly(A)- RNA longer than 200 nt  
 label longPolyA-
 
 ## This is what Yale and Caltech are using
@@ -9155,16 +9155,16 @@ priority 500
 term md5sum      
 type typeOfTerm
 label md5sum
-description The md5sum for the file associated with the object. Provisional.
+description The md5sum for the file associated with the object. 
 searchable no    
 cvDefined no 
-validate none  #there should be a good rule for this
-#priority 500 #???? what is this
+validate regex: ^([0-9a-f]){32,32}$
+priority 500 
 
 term obtainedBy
 type typeOfTerm
 label obtainedBy
-description The production group that grew the cells and isolated genomic DNA. (Provisional)
+description The production group that grew the cells and isolated genomic DNA. 
 searchable select
 cvDefined no #(Defined by lab)
 validate none
