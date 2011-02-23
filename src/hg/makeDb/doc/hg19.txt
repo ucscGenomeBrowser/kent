@@ -8929,7 +8929,7 @@ TMPDIR=/scratch/tmp
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 ########################################################################
-# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie - color change 2/22/11 #2917)
     ssh hgwdev
     mkdir /hive/data/genomes/hg19/bed/dgv.v10
     cd /hive/data/genomes/hg19/bed/dgv.v10
@@ -8937,7 +8937,11 @@ TMPDIR=/scratch/tmp
       http://projects.tcag.ca/variation/downloads/variation.hg19.v10.nov.2010.txt
     wget --timestamping \
       http://projects.tcag.ca/variation/downloads/indel.hg19.v10.nov.2010.txt
-    # shuffle fields into bed8+
+    # shuffle fields into bed9+ w/itemRgb
+    set purple = "200,0,200"
+    set red = "200,0,0"
+    set blue = "0,0,200"
+    set brown = "139,69,19"
     foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
@@ -8947,11 +8951,11 @@ TMPDIR=/scratch/tmp
         $id =~ s/^Variation_//; \
         $start-- unless ($start == 0); \
         $landmark = "" if ($landmark =~ /^chr.*\d\.\.\d/); \
-        $rgb = ($varType =~ /^Inv/) ? "200,0,200" : "0,200,0"; \
+        $rgb = ($varType =~ /^Inv/) ? "'$purple'" : "'$brown'"; \
         if ($gain ne "" || $loss ne "") { \
           $gain =~ s/^(NA)? ?$/0/;  $loss =~ s/^(NA)? ?$/0/; \
-          $rgb = "200,0,0" if ($gain > 0 && $loss == 0); \
-          $rgb = "0,0,200" if ($loss > 0 && $gain == 0); \
+          $rgb = "'$blue'" if ($gain > 0 && $loss == 0); \
+          $rgb = "'$red'" if ($loss > 0 && $gain == 0); \
         } \
         $_ = join("\t", $chr, $start, $end, $id, 0, "+", \
                   $start, $start, $rgb, $landmark, $varType, \
@@ -8963,6 +8967,8 @@ TMPDIR=/scratch/tmp
 #Loaded 101605 elements of size 15
       hgsql hg19 -NBe 'select count(distinct(pubMedId)) from dgv;'
 #42
+
+# 2/22/11 color change (Bug #2917): swap blue and red; green -> brown
 
 
 #######################################################################
@@ -14309,3 +14315,62 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
 
 #############################################################################
+# Chimp Lastz run (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22
+    cd /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22
+    cat << '_EOF_' > DEF
+# human vs chimp
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PanTro3
+SEQ2_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ2_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	> do.log 2>&1 &
+XXX - running - Tue Feb 22 12:19:34 PST 2011
+(remember syntenicNet)
+#	real    173m22.880s
+    cat fb.hg19.chainPanTro3Link.txt 
+#	2747983350 bases of 2897316137 (94.846%) in intersection
+
+#	running the swap - DONE - 2009-05-24
+    ssh swarm
+    mkdir /hive/data/genomes/panTro3/bed/blastz.hg19.swap
+    cd /hive/data/genomes/panTro3/bed/blastz.hg19.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/hg19/bed/lastzPanTro3.2011-02-22/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=swarm -bigClusterHub=swarm \
+	> swap.log 2>&1 &
+#	real    723m41.377s
+    cat fb.panTro3.chainHg19Link.txt 
+#	2761343871 bases of 2909485072 (94.908%) in intersection
+
+############################################################################

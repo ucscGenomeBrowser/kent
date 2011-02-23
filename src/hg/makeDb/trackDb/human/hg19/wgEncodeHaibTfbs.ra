@@ -3319,6 +3319,26 @@ noInherit on
         color 153,38,0
         # subId=3531 dateSubmitted=2011-02-15
 
+        track wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM12878 BCL3 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 2 (BCL3 in GM12878 cells)
+        subGroups view=Peaks factor=BCL3 cellType=GM12878 protocol=V0416101 treatment=None rep=rep2
+        type broadPeak
+        color 153,38,0
+        # subId=3246 dateSubmitted=2011-02-18
+
+        track wgEncodeHaibTfbsGm12878Bcl3V0416101PkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM12878 BCL3 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Peaks Replicate 1 (BCL3 in GM12878 cells)
+        subGroups view=Peaks factor=BCL3 cellType=GM12878 protocol=V0416101 treatment=None rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=3246 dateSubmitted=2011-02-18
+
 
 
     #Raw Signal Track HAIB TFBS#
@@ -7372,3 +7392,23 @@ noInherit on
         type bigWig 0.240201 156.850998
         color 153,38,0
         # subId=3531 dateSubmitted=2011-02-15
+
+        track wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 BCL3 Raw 2
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 2 (BCL3 in GM12878 cells)
+        subGroups view=RawSignal factor=BCL3 cellType=GM12878 protocol=V0416101 treatment=None rep=rep2
+        type bigWig 0.260326 363.350006
+        color 153,38,0
+        # subId=3246 dateSubmitted=2011-02-18
+
+        track wgEncodeHaibTfbsGm12878Bcl3V0416101RawRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewRawSignal off
+        shortLabel GM12878 BCL3 Raw 1
+        longLabel ENCODE HudsonAlpha ChIP-seq Raw Signal Replicate 1 (BCL3 in GM12878 cells)
+        subGroups view=RawSignal factor=BCL3 cellType=GM12878 protocol=V0416101 treatment=None rep=rep1
+        type bigWig 0.151761 82.292603
+        color 153,38,0
+        # subId=3246 dateSubmitted=2011-02-18

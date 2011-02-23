@@ -1,10 +1,13 @@
 <H2>Description</H2>
 <DIV style='max-width: 900px;'>
-<P>These tracks display the locations of active regulatory elements identified as
-open chromatin in  <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
+<P>These tracks display DNaseI hypersensitivity (HS) evidence as part of the
+four <B><em>Open Chromatin</em></B> track sets. Together with FAIRE and
+ChIP-seq experiments, these tracks display the locations of active regulatory
+elements identified as open chromatin in
+<A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
 from the Duke, UNC-Chapel Hill, UT-Austin, and EBI ENCODE group.
 Within this project, open chromatin was identified using two
-independent and complementary methods: DNaseI hypersensitivity (HS)
+independent and complementary methods: these DNaseI HS assays
 and Formaldehyde-Assisted Isolation of Regulatory Elements (FAIRE),
 combined with chromatin immunoprecipitation (ChIP) for select
 regulatory factors. DNaseI HS and FAIRE provide assay
@@ -23,6 +26,9 @@ be found in the <B>ENC DNase/FAIRE Super-track</B> in
 Data for the ChIP experiments can be found
 in in the <B>ENC TF Binding Super-track</B> in
 <A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">UTA TFBS</A>.
+A syntheseis of all the open chromatin assays for select cell lines can
+also be found in the <B>ENC DNase/FAIRE Super-track</B> in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chrom Synth</a>.
 </P>
 <P><B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map general
 chromatin accessibility, and DNaseI "hypersensitivity" is a feature of active
@@ -94,7 +100,7 @@ for regions where sequences cannot be aligned. For each cell type, especially
 important for those with an abnormal karyotype, a model to try to correct for
 amplifications and deletions that is based on control input data was also used.</DD>
 </P>
-<P><DT><I>Raw Base Overlap Signal</I></DT>
+<P><DT><I>Base Overlap Signal</I></DT>
 <DD>An alternative version of the
 <I>F-Seq Density Signal</I> track annotation that provides a higher resolution
 view of the raw sequence data. This track also includes the combined set of
@@ -102,20 +108,6 @@ sequences from all replicates.  For each sequence, the aligned read is
 extended 5 bp in both directions from its 5' aligned end where DNase cut
 the DNA.  The score at each base pair represents the number of
 extended fragments that overlap the base pair.</DD>
-</P>
-<P><DT><I>Uniqueness</I></DT>
-<DD>The <EM>Duke uniqueness</EM> tracks were used in
-the background models for use with F-seq.  These tracks identify regions of
-sequence that appear one, two, three, four, or more than four times within the
-genome for different tag lengths. The tracks help identify regions where
-high-throughput sequence tags cannot be mapped.</DD>
-</P>
-<P><DT><I>Excluded Regions</I></DT>
-<DD>The <EM>Duke excluded regions</EM> track
-was used to identify problematic regions for short sequence tag signal
-detection (such as satellites and rRNA genes). These regions of the genome were
-excluded from the Duke DNaseI HS Peaks tracks.</DD>
-</DD></P>
 </P>
 
 
