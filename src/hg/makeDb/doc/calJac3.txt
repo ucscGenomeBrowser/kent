@@ -1393,6 +1393,50 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/calJac3/calJac3.2bit $outMaf
     rm multiz13way*.tab
 
 
+    # re-do the multiz13way.maf (DONE 2011-02-23 - Chin)
+    ssh hgwdev
+    rm -fr /gbdb/calJac3/multiz13way/maf
+    mkdir /gbdb/calJac3/multiz13way/maf
+    cd /hive/data/genomes/calJac3/bed/multiz13way/anno
+    grep "^##maf version" maf/000.maf \
+        | sort -u > calJac3.anno.13way.maf
+    find ./maf -type f  -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> calJac3.anno.13way.maf
+    echo "##eof maf" >> calJac3.anno.13way.maf
+
+    mkdir -p /gbdb/calJac3/multiz13way/anno
+    ln -s `pwd`/calJac3.anno.13way.maf \
+                /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    #   by loading this into the table multiz13way, it will replace the
+    #   previously loaded table with the unannotated mafs
+    #   huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/calJac3/multiz13way/anno \
+                calJac3 multiz13way
+    # Indexing and tabulating /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    # Loading multiz13way into database
+    # Loaded 14259674 mafs in 1 files from /gbdb/calJac3/multiz13way/anno
+    # 
+    # real    25m49.362s
+
+    hgLoadMafSummary calJac3 -minSize=30000 -mergeGap=1500 \
+        -maxSize=200000  multiz13waySummary \
+            /gbdb/calJac3/multiz13way/anno/multiz13way.maf
+    # Loading into calJac3 table multiz13waySummary...
+    # Loading complete
+
+    #   by loading this into the table multiz13waySummary, it will
+    #   replace
+    #   the previously loaded table with the unannotated mafs
+    #   remove the multiz13way*.tab files in this /scratch/tmp directory
+    rm multiz13way*.tab
+    #   And, you can remove the previously loaded non-annotated maf file
+    #   link:
+    rm /gbdb/calJac3/multiz13way/maf/multiz13way.maf
+    rmdir /gbdb/calJac3/multiz13way/maf
+
 #####################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
