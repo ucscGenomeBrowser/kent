@@ -776,9 +776,18 @@ else
         // If this is a container track, allow configuring...
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
             {
-            containerTrackCount++;
-            hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' onclick='findTracksConfigureSet(\"%s\");'>&nbsp;", track->track);
+            containerTrackCount++; // Using onclick ensures return to search tracks on submit
+            hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' title='Configure this track container...' onclick='findTracksConfigureSet(\"%s\");'>&nbsp;", track->track);
             }
+//#define SHOW_PARENT_FOLDER
+#ifdef SHOW_PARENT_FOLDER
+        else if (tdbIsContainerChild(track->tdb) || tdbIsFolderContent(track->tdb))
+            {
+            struct trackDb *parentTdb = tdbIsContainerChild(track->tdb) ? tdbGetContainer(track->tdb) : tdbGetImmediateFolder(track->tdb);
+            if (parentTdb != NULL) // Using href will not return to search tracks on submit
+                hPrintf("&nbsp;<A HREF='../cgi-bin/hgTrackUi?g=%s'><IMG SRC='../images/folderC.png' title='Navigate to parent container...'></A>&nbsp;", parentTdb->track);
+            }
+#endif///def SHOW_PARENT_FOLDER
         hPrintf("</td>\n");
 
         // shortLabel has description popup and longLabel has "..." metadata
@@ -1060,7 +1069,6 @@ cgiMakeDropListFull(TRACK_SEARCH_ON_FILETYPE, formatLabels, formatTypes, formatC
 hPrintf("</td></tr>\n");
 if (selectedTab==filesTab && fileTypeSearch)
     searchTermsExist = TRUE;
-hPrintf("</div>\n");
 
 // Metadata selects require careful accounting
 if(metaDbExists)
@@ -1136,21 +1144,18 @@ if(doSearch)
     if (measureTiming)
         uglyTime("Searched for tracks");
 
-    if (tracks != NULL)
+    // Sort and Print results
+    if(selectedTab!=filesTab)
         {
-        // Sort and Print results
-        if(selectedTab!=filesTab)
-            {
-            enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
-            tracksFound = slCount(tracks);
-            if(tracksFound > 1)
-                findTracksSort(&tracks,sortBy);
+        enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
+        tracksFound = slCount(tracks);
+        if(tracksFound > 1)
+            findTracksSort(&tracks,sortBy);
 
-            displayFoundTracks(cart,tracks,tracksFound,sortBy);
+        displayFoundTracks(cart,tracks,tracksFound,sortBy);
 
-            if (measureTiming)
-                uglyTime("Displayed found tracks");
-            }
+        if (measureTiming)
+            uglyTime("Displayed found tracks");
         }
     slPairFreeList(&mdbPairs);
     }
