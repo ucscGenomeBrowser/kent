@@ -14353,9 +14353,13 @@ TMPDIR=/scratch/tmp
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
 	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
 	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
-	> do.log 2>&1 &
-XXX - running - Tue Feb 22 12:19:34 PST 2011
-(remember syntenicNet)
+	-syntenicNet > do.log 2>&1 &
+    # problems with memk, after recovery, continue chainMerge:
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-continue=chainMerge -syntenicNet > chainMerge.log 2>&1 &
+XXX - running - Tue Feb 22 16:32:34 PST 2011
 #	real    173m22.880s
     cat fb.hg19.chainPanTro3Link.txt 
 #	2747983350 bases of 2897316137 (94.846%) in intersection
