@@ -1654,7 +1654,7 @@ if (!isOK)
     {
     isRedo = TRUE;
     }
-if ((q->sizeMB < 0) || (q->sizeMB > 1000000))
+if ((q->sizeMB < 0) || (q->sizeMB > 100000000))
     {
     safef(msg,sizeof(msg),"Size(MB): invalid size. <br>\n");
     isRedo = TRUE;

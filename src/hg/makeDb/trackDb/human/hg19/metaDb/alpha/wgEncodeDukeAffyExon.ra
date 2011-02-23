@@ -1521,7 +1521,7 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-14
+dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep1.broadPeak.gz
 grant Crawford
@@ -1541,7 +1541,7 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-14
+dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep2.broadPeak.gz
 grant Crawford
@@ -1561,7 +1561,7 @@ cell K562
 composite wgEncodeDukeAffyExon
 dataType AffyExonArray
 dataVersion ENCODE Jan 2011 Freeze
-dateResubmitted 2010-12-14
+dateSubmitted 2010-12-14
 dateUnrestricted 2011-09-14
 fileName wgEncodeDukeAffyExonK562SimpleSignalRep3.broadPeak.gz
 grant Crawford
@@ -2151,4 +2151,4 @@ tableName wgEncodeDukeAffyExonUrotsaUt189SimpleSignalRep1
 treatment UT189
 view SimpleSignal
 
-# MAGIC: -512592269
+# MAGIC: 1752331246

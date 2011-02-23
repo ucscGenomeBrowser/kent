@@ -1,77 +1,37 @@
-#
-# Holds raDict class which is an internal representation of
-# the data held in the RA file. Essentially just a dict that
-# also has a list to preserve the computationally arbitrary
-# order we want an RA entry to be in.
-#
-
 import sys
 import re
+import orderedDict
+import raEntry
 
-class _OrderedDict(object):
-
-    def __init__(self):
-        self._dictionary = dict()
-        self._ordering = list()
-
-    def add(self, key, value):
-        key = key.strip()
-
-        if (key in self._dictionary):
-            raise KeyError()
-            sys.exit(1)
-
-        if (key == None or key == ''):
-            return
-        
-        self._dictionary[key] = value
-        self._ordering.append(key)
-        
-    def remove(self, key):
-        key = key.strip()
-
-        if (key not in self._dictionary):
-            raise KeyError()
-
-        if (key == None or key == ''):
-            return
-
-        del self._dictionary[key]
-        self._ordering.remove(key)
-
-    def getValue(self, key):
-        if (key not in self._dictionary):
-            raise KeyError()
-
-        return self._dictionary[key]
-
-class RaFile(_OrderedDict):
-
-    def addComment(self, comment):
-        if not comment.startswith('#'):
-            raise Exception()
-
-        self._ordering.append(comment)
+class RaFile(orderedDict.OrderedDict):
+    """
+    Stores an Ra file in a set of entries, one for each stanza in the file.
+    """
 
     def read(self, filePath, keyField):
+        """
+        Reads an rafile, separating it by keyField, and internalizes it.
+
+        keyField must be the first field in each entry.
+        """
 
         file = open(filePath, 'r')
-        raEntry = RaEntry()
+        entry = raEntry.RaEntry()
         raKey = None
 
         for line in file:
 
             line = line.strip()
 
-            # remove all commented lines
+            # put all commented lines in the list only
             if (line.startswith('#')):
-                self.addComment(line)
+                self._ordering.append(line)
                 continue
 
             # a blank line indicates we need to move to the next entry
             if (len(line) == 0):
                 raKey = None
-                raEntry = None
+                entry = None
                 continue
 
             # check if we're at the first key in a new entry
@@ -80,19 +40,19 @@ class RaFile(_OrderedDict):
                     raise KeyError()
 
                 raKey = line.split(' ', 1)[1].strip()
-                raEntry = RaEntry()
-                raEntry.add(keyField, raKey)
-                self.add(raKey, raEntry)
+                entry = raEntry.RaEntry()
+                entry.add(keyField, raKey)
+                self.add(raKey, entry)
 
             # otherwise we should be somewhere in the middle of an entry
-            elif (raEntry != None):
+            elif (entry != None):
                 raKey = line.split()[0].strip()
                 raVal = ''
 
                 if len(line.split()) > 1:
                     raVal = line.split(' ', 1)[1].strip()
 
-                raEntry.add(raKey, raVal)
+                entry.add(raKey, raVal)
 
             # we only get here if we didn't find the keyField at the beginning
             else:
@@ -101,9 +61,17 @@ class RaFile(_OrderedDict):
         file.close()
 
     def write(self):
+        """
+        Write out the entire RaFile.
+        """
+
         print self
 
     def writeEntry(self, key):
+        """
+        Write out a single stanza, specified by key
+        """
+
         print self.getValue(key)
 
     def __str__(self):
@@ -113,12 +81,4 @@ class RaFile(_OrderedDict):
                 str = str + key + '\n'
             else:
                 str = str + self._dictionary[key].__str__() + '\n'
-        return str
-
-class RaEntry(_OrderedDict):
-
-    def __str__(self):
-        str = ''
-        for key in self._ordering:
-            str = str + key + ' ' + self._dictionary[key] + '\n'
         return str

@@ -435,5 +435,7 @@ if (pathPrefix)
 if (chromInfoDb)
     verbose(2, "chromInfoDb: %s\n", chromInfoDb);
 hgLoadWiggle(argv[1], argv[2], argc-3, argv+3);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

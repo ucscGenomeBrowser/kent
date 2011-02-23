@@ -209,6 +209,7 @@ minMax chromGraph
 minScore bed broadPeak narrowPeak
 msaTable wig wigMafProt wigMaf
 ncbiAccXref bed
+nextExonText *
 nextItemButton *
 noColorTag bam
 noInherit *
@@ -241,6 +242,7 @@ pgDbLink bed
 pgPolyphenPredTab bed
 pgSiftPredTab bed
 pred psl
+prevExonText *
 priority *
 private bed
 pslSequence psl

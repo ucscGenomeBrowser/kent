@@ -1,9 +1,10 @@
 <H2>Description</H2>
 <DIV style='max-width: 900px;'>
-<P>
-This synthesis track displays open chromatin regions and/or transcription
-factor binding sites identified in
-<A TARGET=_BLANK HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
+<P><P>These tracks display a synthesis of evidence from different assays
+as part of the four <B><em>Open Chromatin</em></B> track sets.
+This track displays open chromatin regions and/or transcription factor binding
+sites identified in
+<A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
 by one or more complementary methodologies, DNaseI hypersensitivity (HS)
 (<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>),
 Formaldehyde-Assisted Isolation of Regulatory Elements (FAIRE)
@@ -16,46 +17,84 @@ for all cell types). Regions that overlap between methodologies identify
 regulatory elements that are cross-validated indicating high confidence
 regions.  In addition, multiple lines of evidence suggest that regions detected
 by a single assay (e.g., DNase-only or FAIRE-only) are also biologically
-relevant (Song et al., submitted). Sites in this track are categorized and
-color-coded for each cell type as follows:
+relevant (Song et al., submitted).
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">DNaseI HS data</A>:
+DNaseI is an enzyme that has long been used to map general
+chromatin accessibility, and DNaseI "hypersensitivity" is a feature of active
+cis-regulatory sequences.The use of this method has led to the discovery of
+functional regulatory elements that include promoters, enhancers, silencers,
+insulators, locus control regions, and novel elements. DNaseI hypersensitivity
+signifies chromatin accessibility following binding of trans-acting factors in
+place of a canonical nucleosome.
 </P>
-<P><DT><B>Validated (Valid - Black)</B>:</DT>
-Regions identified as peaks by both the DNaseI HS assay<!-- described here--> and
-FAIRE assay<!-- described here-->.  Peaks for DNaseI HS have
-p-values <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value > 1.3)</code>)
-and peaks for FAIRE have
-p-values <code>< 0.1</code> (<code>-log<sub>10</sub>(p-value > 1.0)</code>).
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">FAIRE data</A>:
+FAIRE (Formaldehyde Assisted Isolation of Regulatory
+Elements) is a method to isolate and identify nucleosome-depleted regions of
+the genome.  FAIRE was initially discovered in yeast and subsequently shown to
+identify active regulatory elements in human cells (Giresi <em>et al.</em>,
+2007). Similar to DNaseI HS, FAIRE appears to identify functional regulatory
+elements that include promoters, enhancers, silencers, insulators, locus
+control regions and novel elements.
 </P>
-<P><DT><B>Open Chromatin (OpenChrom - <span style='color: #0000FF;'>Blue</span>)</B>:</DT>
-Regions not identified as peaks in both DNaseI HS and FAIRE, but for which
-the combination of p-values from these assays using Fisher's combined
-probability test results in a
-p-value <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value > 1.3)</code>).
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">ChIP data</A>:
+ChIP (Chromatin Immunoprecipitation) is a method to
+identify the specific location of proteins that are directly or indirectly
+bound to genomic DNA. By identifying the binding location of sequence-specific
+transcription factors, general transcription machinery components, and
+chromatin factors, ChIP can help in the functional annotation of the open
+chromatin regions identified by DNaseI HS mapping and FAIRE.
 </P>
-<P><DT><B>DNaseOnly (<span style='color: #009900;'>Green</span>)</B>:</DT>
-Regions identified by DNaseI HS as peaks and not identified by FAIRE as
-peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>> 0.05</code> (<code>-log<sub>10</sub>(p-value < 1.3)</code>).
-</P>
-<P><DT><B>FAIREOnly (<span style='color: #990000;'>Dark Red</span>)</B>:</DT>
-Regions identified by FAIRE as peaks and not identified by DNaseI HS as
-peaks, and with a Fisher's combined DNaseI HS and FAIRE
-p-value <code>> 0.05</code> (<code>-log<sub>10</sub>(p-value < 1.3)</code>).
-</P>
-<P><DT><B>ChIPOnly (<span style='color: #FF00FF;'>Pink</span>)</B>:</DT>
-Regions identified by ChIP-seq as peaks indicating binding sites for one
-or more of RNA Pol II, CTCF, and c-Myc described here and not identified by
-DNaseI HS or FAIRE as peaks. Peaks for ChIP-seq have
-p-values <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value > 1.3)</code>).
-For RNA Pol II, only sites that overlap annotated transcription start sites
-by the UCSC Genes track are considered.
-</P>
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">Input data</A>:
+As a background control experiment, we sequenced
+the input genomic DNA sample that was used for ChIP. Crosslinked chromatin
+is sheared and the crosslinks are reversed without carrying out the
+immunoprecipitation step. This sample is otherwise processed in a manner
+identical to the ChIP sample as described below. The input track is
+useful in revealing potential artifacts arising from the sequence
+alignment process such as copy number differences between the
+reference genome and the sequenced samples, as well as regions of
+poor sequence alignability.</P>
 
 <H2> Display Conventions and Configuration </H2>
 <P>This track contains multiple subtracks representing different cell types
 that display individually on the browser. Instructions for configuring tracks
 with multiple subtracks are
 <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+Sites in this track are categorized and
+color-coded for each cell type as follows:
+</P>
+<P><DT><B>Validated (Valid - Black)</B>:</DT>
+Regions identified as peaks by both the DNaseI HS assay<!-- described here--> and
+FAIRE assay<!-- described here-->.  Peaks for DNaseI HS have
+p-values <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>)
+and peaks for FAIRE have
+p-values <code>< 0.1</code> (<code>-log<sub>10</sub>(p-value) > 1.0</code>).
+</P>
+<P><DT><B>Open Chromatin (OpenChrom - <span style='color: #0000FF;'>Blue</span>)</B>:</DT>
+Regions not identified as peaks in both DNaseI HS and FAIRE, but for which
+the combination of p-values from these assays using Fisher's combined
+probability test results in a
+p-value <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>).
+</P>
+<P><DT><B>DNaseOnly (<span style='color: #009900;'>Green</span>)</B>:</DT>
+Regions identified by DNaseI HS as peaks and not identified by FAIRE as
+peaks, and with a Fisher's combined DNaseI HS and FAIRE
+p-value <code>> 0.05</code> (<code>-log<sub>10</sub>(p-value) < 1.3</code>).
+</P>
+<P><DT><B>FAIREOnly (<span style='color: #990000;'>Dark Red</span>)</B>:</DT>
+Regions identified by FAIRE as peaks and not identified by DNaseI HS as
+peaks, and with a Fisher's combined DNaseI HS and FAIRE
+p-value <code>> 0.05</code> (<code>-log<sub>10</sub>(p-value) < 1.3</code>).
+</P>
+<P><DT><B>ChIPOnly (<span style='color: #FF00FF;'>Pink</span>)</B>:</DT>
+Regions identified by ChIP-seq as peaks indicating binding sites for one
+or more of RNA Pol II, CTCF, and c-Myc described here and not identified by
+DNaseI HS or FAIRE as peaks. Peaks for ChIP-seq have
+p-values <code>< 0.05</code> (<code>-log<sub>10</sub>(p-value) > 1.3</code>).
+For RNA Pol II, only sites that overlap annotated transcription start sites
+by the UCSC Genes track are considered.
+</P>
+
 
 <H2>Methods</H2>
 <P>For each site, the maximum F-Seq Density Signal value has been calculated
@@ -84,20 +123,31 @@ thus a combined p-value can be assigned to this test statistic.
 assigned for each region as follows:
 <uL>
 <li>1 = Validated, identified as a peak by DNaseI HS and FAIRE.
-<li>2 = DNase-only, identified as a peak by DNaseI HS but not FAIRE.
-<li>3 = FAIRE-only, identified as a peak by FAIRE but not DNaseI HS.
-<li>4 = Neither, not identified as a peak by DNaseI HS or FAIRE.
+<li>2 = <span style='color: #009900;'>DNase-only</span> (includes <span style='color: #0000FF;'>OpenChrom</span>), identified as a peak by DNaseI HS but not FAIRE.
+<li>3 = <span style='color: #990000;'>FAIRE-only</span> (includes <span style='color: #0000FF;'>OpenChrom</span>), identified as a peak by FAIRE but not DNaseI HS.
+<li>4 = <span style='color: #FF00FF;'>Neither</span>, not identified as a peak by DNaseI HS or FAIRE.
 </uL>
 <P>All signal values, <code>-log<sub>10</sub></code>(p-values), and the OC Code is
 displayed on the detail description page for each element and is available in the
 corresponding bed file.
 </P>
 
-<!--
 <h2>Release Notes</h2>
 <P>
-Release 1 (Feb 2011) ...
--->
+This is release 1 (Feb 2011) of this track and is based upon the first release on <B>GRCh37/hg19</B>
+of the three Open Chromatin tracks:
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>,
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>,
+and
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">UTA TFBS</A>.
+</P><P>
+<B>Enhancer and Insulator Functional assays:</B>  A subset of DNase and FAIRE
+regions were cloned into functional tissue culture reporter assays to test for
+enhancer and insulator activity.  Coordinates and results from these
+experiments can be found
+<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+ TARGET=ucscDownloads>here</a>.  <!-- WARNING: Change to hgdownload.cse.ucsc.edu on release -->
+</P>
 
 <H2>Credits</H2>
 <P>

@@ -739,6 +739,10 @@ void wigShowFilter(struct sqlConnection *conn);
 boolean isBigWigTable(char *table);
 /* Return TRUE if table is bedGraph in current database's trackDb. */
 
+char *bigFileNameFromCtOrHub(char *table, struct sqlConnection *conn);
+/* If table is a custom track or hub track, return the bigDataUrl setting;
+ * otherwise return NULL.  Do a freeMem on returned string when done. */
+
 char *bigWigFileName(char *table, struct sqlConnection *conn);
 /* Return file name associated with bigWig.  This handles differences whether it's
  * a custom or built-in track.  Do a freeMem on returned string when done. */
@@ -800,10 +804,6 @@ struct asObject *bamAsObj();
 boolean isBamTable(char *table);
 /* Return TRUE if table corresponds to a BAM file. */
 
-char *bamFileName(char *table, struct sqlConnection *conn);
-/* Return file name associated with BAM.  This handles differences whether it's
- * a custom or built-in track.  Do a freeMem on returned string when done. */
-
 struct slName *bamGetFields(char *table);
 /* Get fields of bam as simple name list. */
 
@@ -823,6 +823,9 @@ struct bed *bamGetFilteredBedsOnRegions(struct sqlConnection *conn,
 	char *db, char *table, struct region *regionList, struct lm *lm, 
 	int *retFieldCount);
 /* Get list of beds from BAM, in all regions, that pass filtering. */
+
+struct slName *randomBamIds(char *table, struct sqlConnection *conn, int count);
+/* Return some semi-random qName based IDs from a BAM file. */
 
 /* ----------- Custom track stuff. -------------- */
 struct customTrack *getCustomTracks();
@@ -1112,5 +1115,8 @@ void doOutMicroarrayNames(struct trackDb *tdb);
 /* Show the microarray names from .ra file */
 
 #define uglyw warn	/* Warn for debugging purposes. */
+
+int bigFileMaxOutput();
+/*	return maxOut value (cart variable defined on curTable)	*/
 
 #endif /* HGTABLES_H */

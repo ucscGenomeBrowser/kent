@@ -1,0 +1,9 @@
+_name All
+_add MissingTermTagDesc
+
+_name TermTagDesc
+term .+
+tag .+
+description .+
+_remove MissingTermTagDesc
+

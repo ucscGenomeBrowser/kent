@@ -17,7 +17,8 @@ my %expVarCVMapper = (
     "cell" => "Cell Line",
     "antibody" => "Antibody",
     "treatment" => "treatment",
-    "control" => "control"
+    "control" => "control",
+    "obtainedBy" => "lab"
 );
 
 # for each metadata term, what fields do we want to output
@@ -37,44 +38,86 @@ my %detailsCleaner = (
 
 # takes dirty metadata and outputs normalized form
 my %dataTypeCleaner = (
+    "Cage" 	=> "Cage",
     "ChIPseq"   => "ChIP-seq",
     "ChIPSeq"   => "ChIP-seq",
     "Chipseq"   => "ChIP-seq",
     "ChipSeq"   => "ChIP-seq",
+    "DnaPet"	=> "DnaPet",
+    "DnaseDgf"  => "DNaseDgf",
     "DNaseSeq"  => "DNase-seq",
     "DnaseSeq"  => "DNase-seq",
     "FAIREseq"  => "FAIRE-seq",
+    "MethylRrbs" => "MethylRrbs",
+    "MethylSeq"	=> "MethylSeq",
+    "Orchid"	=> "Orchid",
+    "Proteogenomics" => "Proteogenomics",
+    "RnaPet"	=> "RnaPet",
     "RnaSeq"    => "RNA-seq",
-    "DnaseDgf"  => "DNase-seq",
 );
 
 # given a normalized datatype (see above), give the molecle involved
 my %dataTypeMolecule = (
+    "Cage"	=> "Total RNA",
     "ChIP-seq"  => "genomic DNA",
+    "DnaPet"	=> "genomic DNA",
+    "DnaseDgf"	=> "genomic DNA",
     "DNase-seq" => "genomic DNA",
     "FAIRE-seq" => "genomic DNA",
+    "MethylRrbs" => "genomic DNA",
+    "MethylSeq"	=> "genomic DNA",
+    "Orchid"	=> "genomic DNA",
+    "Proteogenomics" => "protein",
+    "RnaPet"	=> "total RNA",
     "RNA-seq"   => "polyA RNA",
 );
 
-# given a normalized datatype, give the library strategy
+# given a normalized datatype, give rbs library strategy
 my %dataTypeLibraryStrategy = (
+    "Cage"	=> "OTHER",
     "ChIP-seq"  => "ChIP-Seq",
-    "RNA-seq"   => "RNA-Seq",
+    "DnaPet"	=> "OTHER",
+    "DnaseDgf"	=> "DNase-Hypersensitivity",
     "DNase-seq" => "DNase-Hypersensitivity",
+    "FAIRE-seq"	=> "OTHER",
+    "MethylRrbs" => "Bisulfite-Seq",
+    "MethylSeq"	=> "MRE-Seq",
+    "Orchid"	=> "OTHER",
+    "Proteogenomics" => "mass spectrometry-based proteogenomic mapping", 
+    "RnaPet"	=> "OTHER",
+    "RNA-seq"   => "RNA-Seq",
 );
 
 # given a normalized datatype, give the library source
 my %dataTypeLibrarySource = (
+    "Cage"	=> "transcriptomic",
     "ChIP-seq"  => "genomic",
-    "RNA-seq"   => "genomic",
+    "DnaPet"	=> "genomic",
+    "DnaseDgf"	=> "genomic",
     "DNase-seq" => "genomic",
+    "FAIRE-seq"	=> "genomic",
+    "MethylRrbs" => "genomic",
+    "MethylSeq"	=> "genomic",
+    "Orchid"	=> "genomic",
+    "Proteogenomics" => "protein",
+    "RnaPet"	=> "transcriptomic",
+    "RNA-seq"   => "genomic",
 );
 
 # given a normalized datatype, give the library selection method
 my %dataTypeLibrarySelection = (
+    "Cage"	=> "CAGE",
     "ChIP-seq"  => "ChIP",
-    "RNA-seq"  => "cDNA",
+    "DnaPet"	=> "size fractionation",
+    "DnaseDgf"	=> "DNase",
     "DNase-seq" => "DNase",
+    "FAIRE-seq"	=> "other",
+    "MethylRrbs" => "Reduced Representation",
+    "MethylSeq"	=> "Restriction Digest",
+    "Orchid"	=> "other",
+    "Proteogenomics" => "chromatographically fractionated peptides",
+    "RnaPet"	=> "other",
+    "RNA-seq"	=> "cDNA",
 );
 
 use vars qw/
@@ -95,7 +138,9 @@ usage: encodeMkGeoPkg database composite seqPlatform
     -instance=s         Use ENCODE pipeline instance s (default prod).
     -configDir=dir      Path of configuration directory, containing metadata
                         .ra files (default: /hive/groups/encode/dcc/pipeline/encpipeline_prod/config/)
+    -database=s		Database on which the metadata will be checked (default: mysqlbeta)
     -downloadDir=dir    Prefix to the downloads directory (default: /hive/groups/encode/dcc/analysis/ftp/pipeline/)
+    -release=s		Name of release of composite to be checked (default: "", uses download folder)
     -verbose=num        Set verbose level to num (default 1).
 END
 exit 1;
@@ -145,13 +190,13 @@ sub getSameMetadata {
     my @metadataList = @_;
 
     my %metadata;
-
     %metadata = %{$metadataList[0]};
     my $firstValue = $metadata{$field};
     for (my $i = 1; $i < scalar(@metadataList); ++$i) {
         %metadata = %{$metadataList[$i]};
         die "$firstValue != $metadata{$field}" unless $firstValue eq $metadata{$field};
     }
+
     return $firstValue;
 }
 
@@ -322,7 +367,7 @@ while(scalar(keys %objsSet) > 0) {
     my @currentMetadata = {%metadata};
     my @currentExpVars;
     for my $i (@expVars) {
-        defined $metadata{$i} or die "can't find field for experimental variable " . $i;
+        defined $metadata{$i} or die "can't find field for experimental variable " . $i . " located in $firstObject\n";
         push @currentExpVars, $metadata{$i};
     }
 
@@ -377,6 +422,7 @@ while(scalar(keys %objsSet) > 0) {
     my $dataProcessing    = "For data processing details see: $dataProcessingUrl";
 
     my $dataType = $dataTypeCleaner{getSameMetadata("dataType", @currentMetadata)} or die "cannot handle data type " . getSameMetadata("dataType", @currentMetadata);
+
     my $molecule = $dataTypeMolecule{$dataType} or die "could not find molecule for data type $dataType";
 
     my $libraryStrategy = $dataTypeLibraryStrategy{$dataType};

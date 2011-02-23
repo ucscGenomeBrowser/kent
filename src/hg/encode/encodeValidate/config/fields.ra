@@ -65,6 +65,12 @@ file ddf
 type string
 required no
 
+#The md5sum of the file being submitted
+field md5sum   
+file ddf
+type string
+required no
+
 # This is replicate number as you would expect
 # It would be nice to verify that you have a rep 1 if you have a rep 2. etc
 field replicate
@@ -139,6 +145,13 @@ field mapAlgorithm
 file ddf
 type string
 required no 
+
+#The bioRep information for the transcriptome lab
+field bioRep
+file ddf
+type string
+required no
+
 
 
 # This is the field where you can enter which type of control is being used

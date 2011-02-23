@@ -1,0 +1,46 @@
+# Data Agreement File for RIKEN Elements project $Revision: 1.1 $
+
+# This file specifies the data agreement between your lab and
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the related .ddf should look like this:
+# files	view	cell	localization	rnaExtract	labProtocolId	labExpId	replicate
+#
+#files          a list of files that will be concatenated together
+#view           the view of the data as described below
+#cell           the cell line (http://genome-test.cse.ucsc.edu/ENCODE/cellTypes.html)
+#localization   the cellular compartment (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#localization)
+#rnaExtract     the features of rnaExtract (http://genome-test.cse.ucsc.edu/ENCODE/otherTerms.html#rnaExtract )
+#labProtocolId  Transcriptome specific lab protocol ID, Can be comma separated list
+#labExpId       optional lab internal identifiers, Can be comma separated list
+#replicate      pooled
+#
+#NOTE:  The optional columns do not have to be in the DDF for validation
+
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Gingeras
+lab               RIKEN
+dataType          Cage
+compositeSuffix   RikenCage
+group             expression
+variables         cell, localization, rnaExtract
+assembly          hg19
+validationSettings      validateFiles.bam:mismatches=8
+
+# Track/view definition
+view             Clusters  
+longLabelPrefix  RIKEN CAGE Clusters 
+type             bed6 +
+required         no
+hasReplicates    no  #pooled
+
+
+# Pooled replicates
+view             TSS
+type             gtf
+hasReplicates    no 
+required         yes
+downloadOnly     yes

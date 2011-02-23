@@ -1,0 +1,1033 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the panTro3 chimp genome: October 2010
+
+#############################################################################
+# Fetch sequence from genbank (DONE - 2011-02-15 - Hiram)
+
+    mkdir -p /hive/data/genomes/panTro3/genbank
+    cd /hive/data/genomes/panTro3/genbank
+
+    time wget --timestamping -r --cut-dirs=6 --level=0 -nH -x \
+	--no-remove-listing -np \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Pan_troglodytes/Pan_troglodytes-2.1.3/*"
+
+    #	real    56m24.981s
+    #	user    0m1.053s
+    #	sys     0m8.815s
+
+    # measure total sequence in this assembly
+    cd Primary_Assembly
+    faSize assembled_chromosomes/FASTA/*.fa.gz \
+	unlocalized_scaffolds/FASTA/*.fa.gz unplaced_scaffolds/FASTA/*.fa.gz
+# 3307943878 bases (407430668 N's 2900513210 real 2900513210 upper 0 lower)
+#	in 24131 sequences in 50 files
+# Total size: mean 137082.8 sd 4455051.2 min 373 (gi|284234151|gb|AACZ03151841.1|) max 247518478 (gi|305434869|gb|CM000316.2|) median 2299
+# N count: mean 16884.1 sd 887107.9
+# U count: mean 120198.6 sd 3921497.1
+# L count: mean 0.0 sd 0.0
+# %0.00 masked total, %0.00 masked real
+
+#############################################################################
+# process into UCSC naming scheme (DONE - 2011-02-17 - Hiram)
+    mkdir /hive/data/genomes/panTro3/ucsc
+    cd /hive/data/genomes/panTro3/ucsc
+
+    cat << '_EOF_' > toUcsc.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../genbank/Primary_Assembly/assembled_chromosomes/chr2acc") or
+        die "can not read Primary_Assembly/assembled_chromosomes/chr2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+}
+close (FH);
+
+foreach my $acc (keys %accToChr) {
+    my $chrN =  $accToChr{$acc};
+    print "$acc $accToChr{$acc}\n";
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/AGP/chr${chrN}.agp.gz|") or die "can not read chr${chrN}.agp.gz";
+    open (UC, ">chr${chrN}.agp") or die "can not write to chr${chrN}.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+            $line =~ s/^$acc/chr${chrN}/;
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+    open (FH, "zcat ../genbank/Primary_Assembly/assembled_chromosomes/FASTA/chr${chrN}.fa.gz|") or die "can not read chr${chrN}.fa.gz";
+    open (UC, ">chr${chrN}.fa") or die "can not write to chr${chrN}.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+            printf UC ">chr${chrN}\n";
+        } else {
+            print UC $line;
+        }
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x toUcsc.pl
+
+    cat << '_EOF_' > unplaced.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $agpFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
+my $fastaFile =  "../genbank/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fa.gz";
+open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+open (UC, ">unplaced.agp") or die "can not write to unplaced.agp";
+while (my $line = <FH>) {
+    if ($line =~ m/^#/) {
+        print UC $line;
+    } else {
+        $line =~ s/\.1//;    
+        printf UC "chrUn_%s", $line;
+    }
+}
+close (FH);
+close (UC);
+
+open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+open (UC, ">unplaced.fa") or die "can not write to unplaced.fa";
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+        chomp $line;
+        $line =~ s/.*gb\|//;
+        $line =~ s/\.1\|.*//;
+        printf UC ">chrUn_$line\n";
+    } else {
+        print UC $line;
+    }
+}
+close (FH);
+close (UC);
+'_EOF_'
+    # << happy emacs
+    chmod +x unplaced.pl
+
+    cat << '_EOF_' > unlocalized.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+my %chrNames;
+
+open (FH, "<../genbank/Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf") or
+        die "can not read Primary_Assembly/unlocalized_scaffolds/unlocalized.chr2scaf";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chrN, $acc) = split('\s+', $line);
+    $accToChr{$acc} = $chrN;
+    $chrNames{$chrN} += 1;
+}
+close (FH);
+
+foreach my $chrN (keys %chrNames) {
+    my $agpFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/AGP/chr$chrN.unlocalized.scaf.agp.gz";
+    my $fastaFile =  "../genbank/Primary_Assembly/unlocalized_scaffolds/FASTA/chr$chrN.unlocalized.scaf.fa.gz";
+    open (FH, "zcat $agpFile|") or die "can not read $agpFile";
+    open (UC, ">chr${chrN}_random.agp") or die "can not write to chr${chrN}_random.agp";
+    while (my $line = <FH>) {
+        if ($line =~ m/^#/) {
+            print UC $line;
+        } else {
+	    chomp $line;
+	    my (@a) = split('\t', $line);
+	    my $acc = $a[0];
+	    my $accNo1 = $acc;
+	    $accNo1 =~ s/.1$//;
+	    die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+	    die "ERROR: chrN $chrN not correct for $acc"
+		if ($accToChr{$acc} ne $chrN);
+	    my $ucscName = "chr${chrN}_${accNo1}_random";
+	    printf UC "%s", $ucscName;
+	    for (my $i = 1; $i < scalar(@a); ++$i) {
+		printf UC "\t%s", $a[$i];
+	    }
+	    printf UC "\n";
+        }
+    }
+    close (FH);
+    close (UC);
+    printf "chr%s\n", $chrN;
+    open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
+    open (UC, ">chr${chrN}_random.fa") or die "can not write to chr${chrN}_random.fa";
+    while (my $line = <FH>) {
+        if ($line =~ m/^>/) {
+	    chomp $line;
+	    my $acc = $line;
+	    $acc =~ s/.*gb\|//;
+	    $acc =~ s/\|.*//;
+	    my $accNo1 = $acc;
+	    $accNo1 =~ s/.1$//;
+	    die "ERROR: acc not .1: $acc" if ($accNo1 =~ m/\./);
+	    die "ERROR: chrN $chrN not correct for $acc"
+		if ($accToChr{$acc} ne $chrN);
+	    my $ucscName = "chr${chrN}_${accNo1}_random";
+	    printf UC ">$ucscName\n";
+	} else {
+	    print UC $line;
+	}
+    }
+    close (FH);
+    close (UC);
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x unlocalized.pl
+
+    ./toUcsc.pl
+    ./unlocalized.pl
+    ./unplaced.pl
+
+    # verify nothing lost in the translation
+    faSize *.fa
+# 3307943878 bases (407430668 N's 2900513210 real 2900513210 upper 0 lower)
+#	in 24131 sequences in 50 files
+# Total size: mean 137082.8 sd 4455051.2 min 373 (chr1_AACZ03151841_random) max 247518478 (chr2B) median 2299
+# N count: mean 16884.1 sd 887107.9
+# U count: mean 120198.6 sd 3921497.1
+# L count: mean 0.0 sd 0.0
+# %0.00 masked total, %0.00 masked real
+
+#############################################################################
+# Initial database build (DONE - 2011-02-17 - Hiram)
+    cd /hive/data/genomes/panTro3
+    cat << '_EOF_' > panTro3.ra
+# Config parameters for makeGenomeDb.pl:
+db panTro3
+scientificName Pan troglodytes
+commonName Chimp
+assemblyDate Oct. 2010
+assemblyShortLabel CGSC 2.1.3
+assemblyLabel CGSC 2.1.3 (GCA_000001515.3)
+orderKey 23
+mitoAcc NC_001643
+fastaFiles /hive/data/genomes/panTro3/ucsc/*.fa
+agpFiles /hive/data/genomes/panTro3/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir chimp
+taxId 9598
+'_EOF_'
+    # << happy emacs
+
+    time makeGenomeDb.pl -stop=agp -dbHost=hgwdev -fileServer=hgwdev \
+	-workhorse=hgwdev -noGoldGapSplit panTro3.ra > makeGenome.agp.log 2>&1
+    #	real    3m33.842s
+
+    time makeGenomeDb.pl -continue=db -dbHost=hgwdev -fileServer=hgwdev \
+	-workhorse=hgwdev -noGoldGapSplit panTro3.ra > makeGenome.db.log 2>&1
+    #	real    22m7.001s
+
+    cat fb.panTro3.gold.gap.txt
+    #	3307943878 bases of 3307943878 (100.000%) in intersection
+
+#############################################################################
+# reload gold and gap tables (DONE - 2011-02-18 - Hiram)
+# the placed scaffolds AGP is much more detailed, lift it to
+#	the supercontig AGP locations
+    mkdir /hive/data/genomes/panTro3/bed/ctgPos2
+    cd /hive/data/genomes/panTro3/bed/ctgPos2
+    cat << '_EOF_' > liftAgp.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %contigParts = ();
+
+# read the AGP that needs to be lifted to the other AGP
+open (FH, "zcat ../../genbank/Primary_Assembly/placed_scaffolds/AGP/chr*.agp.gz|")
+	or die "can not read placed_scaffolds/AGP/chr*.agp.gz";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($contig, $rest) = split('\s+', $line, 2);
+    my $parts = "";
+    my $index = 0;
+    if (exists($contigParts{$contig})) {
+	$parts = $contigParts{$contig};
+	$index = scalar(@{$parts});
+    } else {
+	my @agpLines;
+	$parts = \@agpLines;
+	$contigParts{$contig} = $parts;
+    }
+    $parts->[$index] = $line;
+}
+close (FH);
+
+my $partCount = 0;
+my $lineCount = 0;
+foreach my $key (keys %contigParts) {
+    ++$partCount;
+    my $parts = $contigParts{$key};
+    $lineCount += scalar(@{$parts});
+}
+
+printf STDERR "partCount: $partCount, lineCount: $lineCount\n";
+
+# read the other AGP and lift that first AGP to this one
+open (FH, "<../../panTro3.agp") or die "can not read panTro3.agp";
+while (my $line = <FH>) {
+    chomp $line;
+    my @a = split('\s+', $line);
+    if (($a[0] =~ m/chrM|_random|chrUn/) || ($a[4] eq "N")) {
+	printf "%s\n", $line;
+    } else {
+	die "ERROR: not 9 fields at $line" if (scalar(@a) != 9);
+	my $chr = $a[0];
+	my $lift = $a[1] - 1;
+	my $contig = $a[5];
+	die "ERROR: can not find contig $contig at $line"
+	    if (!exists($contigParts{$contig}));
+	my $parts = $contigParts{$contig};
+	for (my $i = 0; $i < scalar(@{$parts}); ++$i) {
+	    my $line = $parts->[$i];
+	    my @b = split('\s+', $line);
+	    my $start = $b[1] + $lift;
+	    my $end = $b[2] + $lift;
+	    printf "%s\t%d\t%d", $chr, $start, $end;
+	    for (my $i = 3; $i < scalar(@b); ++$i) {
+		printf "\t%s", $b[$i];
+	    }
+	    printf "\n";
+	}
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x liftAgp.pl
+    ./liftAgp.pl > contig.agp
+    hgGoldGapGl -noGl -noLoad panTro3 contig.agp
+    # take a look at the resulting .tab files, then load into db:
+    hgGoldGapGl -noGl panTro3 contig.agp
+    # verify nothing lost or gained
+    featureBits -or -countGaps panTro3 gold gap
+    3307960432 bases of 3307960432 (100.000%) in intersection
+
+    # replace the first agp, but save it for later use
+    mv panTro3.agp panTro3.scaffolds.agp
+    ln -s bed/ctgPos2/contig.agp panTro3.agp
+
+#############################################################################
+# Initial pushQ entry to get QA started on this assembly
+#	(DONE - 2011-02-17 - Hiram)
+    cd /hive/data/genomes/panTro3
+    ln -s `pwd`/panTro3.unmasked.2bit /gbdb/panTro3/panTro3.2bit
+    mkdir pushQ
+    cd pushQ
+    makePushQSql.pl panTro3 > panTro3.pushQ.sql
+    scp -p panTro3.pushQ.sql hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < panTro3.pushQ.sql 
+
+#############################################################################
+# running repeat masker (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/repeatMasker
+    cd /hive/data/genomes/panTro3/bed/repeatMasker
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-smallClusterHub=memk panTro3 > do.log 2>&1 &
+    #	real    456m48.171s
+    egrep "version|RELEASE" do.log
+# RepeatMasker version development-$Id: RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp $
+# CC   RELEASE 20090604;
+    # failed during the 'cat' step due to 3 missing sequence numbers,
+    cp -p panTro3.fa.out panTro3.fa.out.broken
+    # manually remove those three lines
+    vi panTro3.fa.out
+    #	then manually complete last bit in the 'cat' step:
+    /cluster/bin/scripts/extractNestedRepeats.pl panTro3.fa.out \
+	> panTro3.nestedRepeats.bed
+    #	-rw-rw-r-- 1    58826545 Feb 22 09:20 panTro3.nestedRepeats.bed
+    #	continuing with the RM run:
+    time doRepeatMasker.pl -buildDir=`pwd` -noSplit \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	-continue=mask -smallClusterHub=memk panTro3 > mask.log 2>&1 &
+    #	real    28m6.877s
+
+    cat faSize.rmsk.txt
+# 3307960432 bases (407430668 N's 2900529764 real 1433143490 upper
+#	1467386274 lower) in 24132 sequences in 1 files
+#	%44.36 masked total, %50.59 masked real
+
+
+##########################################################################
+# running simple repeat (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/simpleRepeat
+    cd /hive/data/genomes/panTro3/bed/simpleRepeat
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	panTro3 > do.log 2>&1 &
+    #	real    30m3.767s
+    #	two failed due to no sequence in inputs 2011-02-17 17:00
+    # chr2B:0-50000000 and chr2B:50000000-100000000
+    # faSize on both indicates: (50000000 N's 0 real 0 upper 0 lower)
+    #	TrfPart/049/049.lst.bed
+    #	TrfPart/050/050.lst.bed
+    #	create empty results:
+    touch  /hive/data/genomes/panTro3/TrfPart/049/049.lst.bed
+    touch  /hive/data/genomes/panTro3/TrfPart/050/050.lst.bed
+    # run a para time > run.time on memk to get that file to exist:
+# Completed: 93 of 95 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:      35389s     589.82m     9.83h    0.41d  0.001 y
+# IO & Wait Time:                   468s       7.79m     0.13h    0.01d  0.000 y
+# Average job time:                 386s       6.43m     0.11h    0.00d
+# Longest finished job:            9452s     157.53m     2.63h    0.11d
+# Submission to last job:         10661s     177.68m     2.96h    0.12d
+
+    #	continue
+    time doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=swarm \
+	-dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=memk \
+	-continue=filter panTro3 > filter.log 2>&1 &
+    # ~ 1 minute
+    cat fb.simpleRepeat 
+    #	95418830 bases of 2900529764 (3.290%) in intersection
+
+    cd /hive/data/genomes/panTro3
+    twoBitMask panTro3.rmsk.2bit \
+	-add bed/simpleRepeat/trfMask.bed panTro3.2bit
+    #	you can safely ignore the warning about fields >= 13
+
+    twoBitToFa panTro3.2bit stdout | faSize stdin > faSize.panTro3.2bit.txt
+    cat faSize.panTro3.2bit.txt
+# 3307960432 bases (407430668 N's 2900529764 real 1431641829 upper
+#	1468887935 lower) in 24132 sequences in 1 files
+#	%44.40 masked total, %50.64 masked real
+
+    # reset symlink to this masked sequence
+    rm /gbdb/panTro3/panTro3.2bit
+    ln -s `pwd`/panTro3.2bit /gbdb/panTro3/panTro3.2bit
+
+##########################################################################
+# add a ctgPos2 track with other names (DONE - 2011-02-17 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/ctgPos2
+    cd /hive/data/genomes/panTro3/bed/ctgPos2
+
+    cat << '_EOF_' > ctgPos2.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %accToChr;
+
+open (FH, "<../../panTro3.scaffolds.agp") or die "can not read panTro3.scaffolds.agp";
+while (my $line = <FH>) {
+    chomp $line;
+    my @a = split('\s+', $line);
+    next if ($a[0] =~ m/_random|chrUn/);
+    if (scalar(@a) == 9) {
+	my $start = $a[1] - 1;
+	my $end = $a[2];
+	my $size = $end - $start;
+	printf "%s\t%d\t%s\t%d\t%d\t%s\n",
+            $a[5], $size, $a[0], $start, $end, $a[4];
+    }
+}
+close (FH);
+
+my %accToComponent;
+open (FH, "<../../genbank/Primary_Assembly/component_localID2acc") or
+	die "can not read component_localID2acc";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($component, $acc) = split('\s+', $line);
+    die "duplicate acc: $acc" if (exists($accToComponent{$acc}));
+    $accToComponent{$acc} = $component;
+}
+close (FH);
+
+open (FH, "hgsql -N -e 'select chrom,chromStart,chromEnd,type,frag from gold;' panTro3 | egrep 'chrUn\|_random'|") or die "can not select from gold";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $start, $end, $type, $acc) = split('\s+', $line);
+    die "ERR: can not find acc: $acc" if (!exists($accToComponent{$acc}));
+    my $component = $accToComponent{$acc};
+    my $size = $end - $start;
+    printf "%s\t%d\t%s\t%d\t%d\t%s\n",
+	    $component, $size, $chr, $start, $end, $type;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+
+    ./ctgPos2.pl | sed -e "s/NC_001643/GI:5835121/" > ctgPos2.tab
+
+    # check that we have them all:
+    awk '{print $3}' ctgPos2.tab | sort -u | wc -l
+    #	24132
+    wc -l ../../chrom.sizes
+    #	24132 ../../chrom.sizes
+
+    # determine length of unique ctg names:
+    awk '{print $1}' ctgPos2.tab | sed -e "s/\.1$//;s/_random//" \
+	| awk '{print length($0)}' | sort -rn | head -1
+    #	14
+    # determine length of unique chrom names:
+    awk '{print $3}' ctgPos2.tab | sed -e "s/_random//" \
+	| awk '{print length($0)}' | sort -rn | head -1
+    #	18
+
+    # customize our sql definition with proper sizes, the 20 and 16 are
+    #	unique in this template:
+    sed -e "s/20/14/; s/16/18/" $HOME/kent/src/hg/lib/ctgPos2.sql > ctgPos2.sql
+    hgLoadSqlTab panTro3 ctgPos2 ctgPos2.sql ctgPos2.tab
+
+##########################################################################
+# Marking *all* gaps - they are not all in the AGP file
+#	(DONE - 2011-02-18 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/allGaps
+    cd /hive/data/genomes/panTro3/bed/allGaps
+    time nice -n +19 findMotif -motif=gattaca -verbose=4 \
+	-strand=+ ../../panTro3.unmasked.2bit > findMotif.txt 2>&1
+    #	real    1m12.153s
+    grep "^#GAP " findMotif.txt | sed -e "s/^#GAP //" > allGaps.bed
+    featureBits panTro3 -not gap -bed=notGap.bed
+    #	2900583125 bases of 2900583125 (100.000%) in intersection
+    #	real    0m18.559s
+
+    time featureBits panTro3 allGaps.bed notGap.bed -bed=new.gaps.bed
+    #	53361 bases of 2900583125 (0.002%) in intersection
+    #	real    20m48.848s
+
+    #	what is the highest index in the existing gap table:
+    hgsql -N -e "select ix from gap;" panTro3 | sort -n | tail -1
+    #	3118
+    cat << '_EOF_' > mkGap.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my $ix=`hgsql -N -e "select ix from gap;" panTro3 | sort -n | tail -1`;
+chomp $ix;
+
+open (FH,"<new.gaps.bed") or die "can not read new.gaps.bed";
+while (my $line = <FH>) {
+    my ($chrom, $chromStart, $chromEnd, $rest) = split('\s+', $line);
+    ++$ix;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tother\tyes\n", $chrom, $chromStart,
+        $chromEnd, $ix, $chromEnd-$chromStart;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkGap.pl
+    ./mkGap.pl > other.bed
+    featureBits panTro3 other.bed
+    #	53361 bases of 2900583125 (0.002%) in intersection
+    #	verify chrom names are OK for index length
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+	-noLoad panTro3 otherGap other.bed
+    #	Loaded 96549
+    #	adding this many:
+    wc -l bed.tab
+    #	23478
+    #	starting with this many
+    hgsql -e "select count(*) from gap;" panTro3
+    #	159676
+    hgsql panTro3 -e 'load data local infile "bed.tab" into table gap;'
+    #	result count:
+    hgsql -e "select count(*) from gap;" panTro3
+    #	183154 == 159676 + 23478
+
+#########################################################################
+# MAKE 11.OOC FILES FOR BLAT (DONE - 2011-02-22 - Hiram)
+    # numerator is panTro3 gapless bases "real" as reported by faSize 
+    # denominator is hg17 gapless bases as reported by featureBits,
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2900529764 / 2897310462 \) \* 1024
+    #	( 2900529764 / 2897310462 ) * 1024 = 1025.137802
+    # ==> use -repMatch=1024, ends up same as human sequence
+    cd /hive/data/genomes/panTro3
+    time blat panTro3.2bit /dev/null /dev/null -tileSize=11 \
+	-makeOoc=jkStuff/panTro3.11.ooc -repMatch=1024
+    #	Wrote 31038 overused 11-mers to jkStuff/panTro3.11.ooc
+
+    mkdir /hive/data/staging/data/panTro3
+    cp -p panTro3.2bit chrom.sizes jkStuff/panTro3.11.ooc \
+	/hive/data/staging/data/panTro3
+
+    # just to see what this looks like, there are too many here to be useful
+    gapToLift -bedFile=jkStuff/nonBridgedGaps.bed panTro3 \
+	jkStuff/panTro3.nonBridged.lft
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2009-12-23 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panTro3", "blat1", "17810", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("panTro3", "blat1", "17811", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# reset position to same area as was panTro2 (gene: HIVEP1)
+    hgsql -e \
+'update dbDb set defaultPos="chr6:12165392-12278032" where name="panTro3";' \
+	hgcentraltest
+
+############################################################################
+# construct liftOver from panTro2 (DONE - 2011-02-22 - Hiram) 
+    # documented in panTro2.txt
+    cd /hive/data/genomes/panTro2/bed/blat.panTro3.2011-02-22
+
+############################################################################
+# Orangutan Lastz run (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzPonAbe2.2011-02-22
+    cd /hive/data/genomes/panTro3/bed/lastzPonAbe2.2011-02-22
+    cat << '_EOF_' > DEF
+# chimp vs orangutan
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Chimp PonAbe2
+SEQ2_DIR=/scratch/data/ponAbe2/ponAbe2.2bit
+SEQ2_LEN=/scratch/data/ponAbe2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzPonAbe2.2011-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-syntenicNet > do.log 2>&1 &
+XXX - running - Tue Feb 22 12:19:34 PST 2011
+(remember syntenicNet)
+#	real    173m22.880s
+    cat fb.panTro3.chainPonAbe2Link.txt 
+#	2747983350 bases of 2897316137 (94.846%) in intersection
+
+#	running the swap - DONE - 2009-05-24
+    ssh swarm
+    mkdir /hive/data/genomes/ponAbe2/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/ponAbe2/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/panTro3/bed/lastzPonAbe2.2011-02-22/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=memk \
+	-bigClusterHub=swarm > swap.log 2>&1 &
+#	real    723m41.377s
+    cat fb.ponAbe2.chainPanTro3Link.txt 
+#	2761343871 bases of 2909485072 (94.908%) in intersection
+
+############################################################################
+# Rhesus Lastz run (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzRheMac2.2011-02-22
+    cd /hive/data/genomes/panTro3/bed/lastzRheMac2.2011-02-22
+    cat << '_EOF_' > DEF
+# chimp vs rhesus
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Rhesus RheMac2
+SEQ2_DIR=/scratch/data/rheMac2/rheMac2.2bit
+SEQ2_LEN=/scratch/data/rheMac2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzRheMac2.2011-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-syntenicNet > do.log 2>&1 &
+XXX - running - Tue Feb 22 12:19:34 PST 2011
+(remember syntenicNet)
+#	real    173m22.880s
+    cat fb.panTro3.chainRheMac2Link.txt 
+#	2747983350 bases of 2897316137 (94.846%) in intersection
+
+#	running the swap - DONE - 2009-05-24
+    ssh swarm
+    mkdir /hive/data/genomes/rheMac2/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/rheMac2/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/panTro3/bed/lastzRheMac2.2011-02-22/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=memk \
+	-bigClusterHub=swarm > swap.log 2>&1 &
+#	real    723m41.377s
+    cat fb.rheMac2.chainPanTro3Link.txt 
+#	2761343871 bases of 2909485072 (94.908%) in intersection
+
+############################################################################
+# Marmoset Lastz run (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzCalJac3.2011-02-22
+    cd /hive/data/genomes/panTro3/bed/lastzCalJac3.2011-02-22
+    cat << '_EOF_' > DEF
+# chimp vs marmoset
+BLASTZ=lastz
+# maximum M allowed with lastz is only 254
+BLASTZ_M=254
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_T=2
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Marmoset CalJac3
+SEQ2_DIR=/scratch/data/calJac3/calJac3.2bit
+SEQ2_LEN=/scratch/data/calJac3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzCalJac3.2011-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    screen # use screen to manage this long-running job
+    time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-syntenicNet > do.log 2>&1 &
+XXX - running - Tue Feb 22 12:19:34 PST 2011
+(remember syntenicNet)
+#	real    173m22.880s
+    cat fb.panTro3.chainCalJac3Link.txt 
+#	2747983350 bases of 2897316137 (94.846%) in intersection
+
+#	running the swap - DONE - 2009-05-24
+    ssh swarm
+    mkdir /hive/data/genomes/calJac3/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/calJac3/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-swap /hive/data/genomes/panTro3/bed/lastzCalJac3.2011-02-22/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=medium \
+	-syntenicNet -workhorse=hgwdev -smallClusterHub=memk \
+	-bigClusterHub=swarm > swap.log 2>&1 &
+#	real    723m41.377s
+    cat fb.calJac3.chainPanTro3Link.txt 
+#	2761343871 bases of 2909485072 (94.908%) in intersection
+
+############################################################################
+# GENBANK ALIGNMENTS (WORKING - 2011-02-22 - Hiram)
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add panTro3 to add:
+
+panTro3.serverGenome = /hive/data/genomes/panTro3/panTro3.2bit
+panTro3.clusterGenome = /scratch/data/panTro3/panTro3.2bit
+panTro3.ooc = /scratch/data/panTro3/panTro3.11.ooc
+panTro3.align.unplacedChroms = chrUn*,chr*_random
+panTro3.lift = no
+panTro3.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+panTro3.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+panTro3.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+panTro3.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+panTro3.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+panTro3.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+panTro3.downloadDir = panTro3
+panTro3.refseq.mrna.native.load  = yes
+panTro3.refseq.mrna.xeno.load  = yes
+panTro3.genbank.mrna.xeno.load = yes
+panTro3.genbank.mrna.xeno.loadDesc = yes
+panTro3.genbank.est.native.load = yes
+panTro3.upstreamGeneTbl = refGene
+
+    git commit -m "adding panTro3" etc/genbank.conf
+    git push
+    make etc-update
+
+    ssh genbank
+    screen  # control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial panTro3 &
+    #	logFile: var/build/logs/2011.02.22-16:11:37.panTro3.initalign.log
+XXX - running - Tue Feb 22 16:11:54 PST 2011
+
+    ssh hgwdev
+    time nice -n +19 bin/gbDbLoadStop -initialLoad -drop panTro3 &
+
+############################################################################
+# HUMAN (hg18) PROTEINS TRACK (Working braney 2011-02-22)
+    # bash  if not using bash shell already
+)
+    cd /cluster/data/panTro3
+    mkdir /cluster/data/panTro3/blastDb
+
+    awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
+    twoBitToFa -seqList=1meg.lst  panTro3.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+#  1371 pieces of 1371 written
+    rm temp.fa 1meg.lst
+
+    awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
+    twoBitToFa -seqList=less1meg.lst  panTro3.2bit temp.fa
+    faSplit about temp.fa 1000000 blastDb/y 
+    rm temp.fa less1meg.lst
+
+    cd blastDb
+    for i in *.fa
+    do
+	/hive/data/outside/blast229/formatdb -i $i -p F
+    done
+    rm *.fa
+    ls *.nsq | wc -l
+# 1421
+
+    mkdir -p /cluster/data/panTro3/bed/tblastn.hg18KG
+    cd /cluster/data/panTro3/bed/tblastn.hg18KG
+    echo  ../../blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 1421 query.lst
+
+   # we want around 250000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk '{print $1}'`/\(250000/`wc query.lst | awk '{print $1}'`\)
+
+# 36727/(250000/1421) = 208.756268
+
+   mkdir -p kgfa
+   split -l 209 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  kgfa/kg
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   wc kg.lst
+#  176  176 2288 kg.lst
+
+   mkdir -p blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/panTro3/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/hive/data/outside/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /hive/data/outside/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/panTro3/blastDb.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
+        if pslCheck -prot $3.tmp
+        then                  
+            mv $3.tmp $3     
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0               
+    fi                      
+fi                         
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    exit 
+    
+    ssh swarm
+    cd /cluster/data/panTro3/bed/tblastn.hg18KG
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    para create blastSpec
+#    para try, check, push, check etc.
+
+    para time
+
+# Completed: 250096 of 250096 jobs
+# CPU time in finished jobs:    7759615s  129326.92m  2155.45h   89.81d  0.246 y
+# IO & Wait Time:               1198357s   19972.62m   332.88h   13.87d  0.038 y
+# Average job time:                  36s       0.60m     0.01h    0.00d
+# Longest finished job:            1267s      21.12m     0.35h    0.01d
+# Submission to last job:         18191s     303.18m     5.05h    0.21d
+
+    ssh swarm
+    cd /cluster/data/panTro3/bed/tblastn.hg18KG
+    mkdir chainRun
+    cd chainRun
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS ../blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    para create chainSpec
+    para try, check, push, check etc.
+
+# Completed: 176 of 176 jobs
+# CPU time in finished jobs:      70348s    1172.47m    19.54h    0.81d  0.002 y
+# IO & Wait Time:                 36253s     604.21m    10.07h    0.42d  0.001 y
+# Average job time:                 606s      10.09m     0.17h    0.01d
+# Longest finished job:           15700s     261.67m     4.36h    0.18d
+# Submission to last job:         15708s     261.80m     4.36h    0.18d
+
+    cd /cluster/data/panTro3/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort u.*.psl m60* | uniq | sort -T /tmp -k 14,14 -k 16,16n -k 17,17n > ../blastHg18KG.psl
+    cd ..
+    pslCheck blastHg18KG.psl
+# checked: 45598 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/panTro3/bed/tblastn.hg18KG
+    hgLoadPsl panTro3 blastHg18KG.psl
+
+    # check coverage
+    featureBits panTro3 blastHg18KG 
+# 21889813 bases of 1409770109 (1.553%) in intersection
+
+    featureBits panTro3 blastHg18KG refGene  -enrichment
+# blastHg18KG 1.553%, refGene 1.960%, both 0.816%, cover 52.58%, enrich 26.83x
+
+    featureBits panTro3 blastHg18KG ensGene  -enrichment
+# blastHg18KG 1.553%, ensGene 3.961%, both 1.392%, cover 89.68%, enrich 22.64x
+
+    rm -rf blastOut
+#end tblastn
+######################
+# LASTZ Rat Rn4 (DONE - 2011-02-22 - Hiram)
+    mkdir /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
+    cd /hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
+
+    cat << '_EOF_' > DEF
+# chimp vs rat
+
+# TARGET: Chimp PanTro3
+SEQ1_DIR=/scratch/data/panTro3/panTro3.2bit
+SEQ1_LEN=/scratch/data/panTro3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Rat Rn4
+SEQ2_DIR=/scratch/data/rn4/rn4.2bit
+SEQ2_LEN=/scratch/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > do.log 2>&1 &
+    #	real    314m18.227s
+    cat fb.panTro3.chainRn4Link.txt 
+    #	952605822 bases of 2897316137 (32.879%) in intersection
+
+    #	running the swap - DONE - 2009-06-02
+    mkdir /hive/data/genomes/rn4/bed/blastz.panTro3.swap
+    cd /hive/data/genomes/rn4/bed/blastz.panTro3.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/panTro3/bed/lastzRn4.2011-02-22/DEF \
+	-swap -noLoadChainSplit \
+	-workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
+    #	real    188m0.163s
+    cat fb.rn4.chainHg19Link.txt 
+    #	947862300 bases of 2571531505 (36.860%) in intersection
+##############################################################################

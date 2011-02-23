@@ -2381,6 +2381,8 @@ else if (sameString(track, "hgPcrResult"))
     pcrResultUi(tdb);
 else if (startsWith("bedGraph", tdb->type) || startsWith("bigWig", tdb->type))
     wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
+else if (startsWith("bamWig", tdb->type))
+    wigCfgUi(cart,tdb,tdb->track,NULL, FALSE);
 else if (startsWith("wig", tdb->type))
         {
         if (startsWith("wigMaf", tdb->type))
@@ -2740,9 +2742,7 @@ if (!ct)
    /* Print lift information from trackDb, if any */
    trackDbPrintOrigAssembly(tdb, database);
 
-    /* it would be interesting to do something for composites */
-    if (!tdbIsComposite(tdb))
-	printUpdateTime(database, tdb, NULL);
+    printUpdateTime(database, tdb, NULL);
     }
 
 if (tdb->html != NULL && tdb->html[0] != 0)

@@ -563,8 +563,12 @@ function getAllVars(obj,subtrackName)
                     urlData[name+"_sel"] = 1;
                     urlData[name]        = val;
                 }
-            } else
-                urlData[name] = val;
+            } else {
+                if ($.isArray( val ) && val.length > 1) {
+                    urlData[name] = "[" + val.toString() + "]";
+                } else
+                    urlData[name] = val;
+            }
         }
     });
     return urlData;
@@ -602,8 +606,20 @@ function varHashToQueryString(varHash)
         if(count++ > 0) {
             retVal += "&";
         }
+        var val = varHash[aVar];
         // XXXX encode var=val ?
-        retVal += aVar + "=" + varHash[aVar];
+        if (typeof(val) == 'string'
+        && val.length >= 2
+        && val.indexOf('[') == 0
+        && val.lastIndexOf(']') == (val.length - 1)) {
+            var vals = val.substr(1,val.length - 2).split(',');
+            $(vals).each(function (ix) {
+                if (ix > 0)
+                    retVal += "&";
+                retVal += aVar + "=" + this;
+            });
+        } else
+            retVal += aVar + "=" + val;
     }
     return retVal;
 }
@@ -1591,6 +1607,12 @@ function sortTableInitialize(table,addSuperscript,altColors)
         //if ( $(this).queue('click').length == 0 ) {
         if ( $(this).attr('onclick') == undefined ) {
             $(this).click( function () { tableSortOnButtonPress(this);} );
+        }
+        if ($.browser.msie) { // Special case for IE since CSS :hover doesn't work (note pointer and hand because older IE calls it hand)
+            $(this).hover(
+                function () { $(this).css( { backgroundColor: '#CCFFCC', cursor: 'pointer', cursor: 'hand' } ); },
+                function () { $(this).css( { backgroundColor: '#FCECC0', cursor: '' } ); }
+            );
         }
         if ( $(this).attr('title').length == 0) {
             var title = $(this).text().replace(/[^a-z0-9 ]/ig,'');

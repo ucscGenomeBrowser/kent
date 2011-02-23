@@ -40,8 +40,8 @@ typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName);
 /* Return file name from table.  If table has a seqName column, then grab the 
- * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
- * bam file might have '1' not 'chr1'). */
+ * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
+ * case in the bam file). */
 
 boolean bamFileExists(char *bamFileName);
 /* Return TRUE if we can successfully open the bam file and its index file. */
@@ -58,6 +58,17 @@ struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int star
 	struct lm *lm);
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
+
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm);
+/* Read next count alignments in SAM format, allocated in lm.  May return less than
+ * count at end of file. */
+
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName);
+/* Return an open bam file, dealing with FUSE caching if need be. 
+ * Return parameter if NON-null will return the file name after FUSing */
+
+void bamClose(samfile_t **pSamFile);
+/* Close down a samefile_t */
 
 boolean bamIsRc(const bam1_t *bam);
 /* Return TRUE if alignment is on - strand. */

@@ -1,4 +1,4 @@
-metaObject wgEncodeSunyAlbanyGeneSTGm12878Celf1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 objType table
 antibody CELF1
 cell GM12878
@@ -7,7 +7,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTGm12878Celf1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
@@ -15,10 +15,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein CELF1
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTGm12878Celf1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTGm12878Elavl1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell GM12878
@@ -27,7 +27,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTGm12878Elavl1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -35,10 +35,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ELAVL1
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTGm12878Elavl1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTGm12878Igf2bp1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
 objType table
 antibody IGF2BP1
 cell GM12878
@@ -47,7 +47,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTGm12878Igf2bp1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_21027 antibody
@@ -55,10 +55,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein IGF2BP1
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTGm12878Igf2bp1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStGm12878Igf2bp1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTGm12878Pabpc1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell GM12878
@@ -67,7 +67,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTGm12878Pabpc1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -75,10 +75,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein PABPC1
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTGm12878Pabpc1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTGm12878RipinputRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell GM12878
@@ -87,7 +87,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTGm12878RipinputRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -95,10 +95,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ripInput
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTGm12878RipinputRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTGm12878SlbpRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
 objType table
 antibody SLBP
 cell GM12878
@@ -107,7 +107,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTGm12878SlbpRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522 antibody
@@ -115,10 +115,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein SLBP
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTGm12878SlbpRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTGm12878T7tagRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell GM12878
@@ -127,7 +127,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTGm12878T7tagRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -135,7 +135,7 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein T7Tag
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTGm12878T7tagRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
 view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
@@ -152,6 +152,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
 project wgEncode
+ripTgtProtien ELAVL1
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescElavl1RbpAssocRna
 view RbpAssocRna
@@ -170,6 +171,7 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Input
 project wgEncode
+ripTgtProtien ripInput
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescRipinputRbpAssocRna
 view RbpAssocRna
@@ -188,11 +190,12 @@ grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
 project wgEncode
+ripTgtProtien T7Tag
 subId 3084
 tableName wgEncodeSunyAlbanyGeneStH1hescT7tagRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHelas3Elavl1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell HeLa-S3
@@ -201,7 +204,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-fileName wgEncodeSunyAlbanyGeneSTHelas3Elavl1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -209,10 +212,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ELAVL1
 subId 1613
-tableName wgEncodeSunyAlbanyGeneSTHelas3Elavl1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHelas3Pabpc1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell HeLa-S3
@@ -221,7 +224,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-fileName wgEncodeSunyAlbanyGeneSTHelas3Pabpc1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -229,10 +232,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein PABPC1
 subId 1613
-tableName wgEncodeSunyAlbanyGeneSTHelas3Pabpc1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHelas3Pabpc1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHelas3RipinputRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell HeLa-S3
@@ -241,7 +244,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTHelas3RipinputRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -249,10 +252,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ripInput
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTHelas3RipinputRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHelas3T7tagRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell HeLa-S3
@@ -261,7 +264,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-fileName wgEncodeSunyAlbanyGeneSTHelas3T7tagRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -269,10 +272,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein T7Tag
 subId 1613
-tableName wgEncodeSunyAlbanyGeneSTHelas3T7tagRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHepg2Elavl1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell HepG2
@@ -281,7 +284,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-fileName wgEncodeSunyAlbanyGeneSTHepg2Elavl1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -289,10 +292,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ELAVL1
 subId 1613
-tableName wgEncodeSunyAlbanyGeneSTHepg2Elavl1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHepg2Pabpc1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell HepG2
@@ -301,7 +304,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-fileName wgEncodeSunyAlbanyGeneSTHepg2Pabpc1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246 antibody
@@ -309,10 +312,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein PABPC1
 subId 1613
-tableName wgEncodeSunyAlbanyGeneSTHepg2Pabpc1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHepg2RipinputRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell HepG2
@@ -321,7 +324,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTHepg2RipinputRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -329,10 +332,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ripInput
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTHepg2RipinputRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTHepg2T7tagRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell HepG2
@@ -341,7 +344,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-fileName wgEncodeSunyAlbanyGeneSTHepg2T7tagRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522,Mil_AB3790 antibodies
@@ -349,10 +352,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein T7Tag
 subId 1613
-tableName wgEncodeSunyAlbanyGeneSTHepg2T7tagRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTK562Celf1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
 objType table
 antibody CELF1
 cell K562
@@ -361,7 +364,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-18
-fileName wgEncodeSunyAlbanyGeneSTK562Celf1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Mil_05621 antibody
@@ -369,10 +372,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein CELF1
 subId 1613
-tableName wgEncodeSunyAlbanyGeneSTK562Celf1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTK562Elavl1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
 objType table
 antibody ELAVL1
 cell K562
@@ -381,7 +384,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTK562Elavl1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_5261 antibody
@@ -389,10 +392,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ELAVL1
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTK562Elavl1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTK562Pabpc1RbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
 objType table
 antibody PABPC1
 cell K562
@@ -401,7 +404,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTK562Pabpc1RbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Sig_P6246  antibody
@@ -409,10 +412,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein PABPC1
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTK562Pabpc1RbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTK562RipinputRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 objType table
 antibody ripInput
 cell K562
@@ -421,7 +424,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTK562RipinputRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Input
@@ -429,10 +432,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein ripInput
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTK562RipinputRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTK562SlbpRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 objType table
 antibody SLBP
 cell K562
@@ -441,7 +444,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTK562SlbpRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion SC_26522,Mil_061376 antibodies
@@ -449,10 +452,10 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein SLBP
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTK562SlbpRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
 view RbpAssocRna
 
-metaObject wgEncodeSunyAlbanyGeneSTK562T7tagRbpAssocRna
+metaObject wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 objType table
 antibody T7Tag
 cell K562
@@ -461,7 +464,7 @@ dataType RipChip
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
-fileName wgEncodeSunyAlbanyGeneSTK562T7tagRbpAssocRna.broadPeak.gz
+fileName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna.broadPeak.gz
 grant Tenenbaum
 lab SunyAlbany
 labVersion Nov_69522 antibody
@@ -469,7 +472,7 @@ origAssembly hg18
 project wgEncode
 ripTgtProtein T7Tag
 subId 1237
-tableName wgEncodeSunyAlbanyGeneSTK562T7tagRbpAssocRna
+tableName wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 2066832246
+# MAGIC: 984264056

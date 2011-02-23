@@ -65,10 +65,18 @@ static struct slName *getExamples(struct sqlConnection *conn,
 				  char *table, char *field, int count)
 /* Return a list of several example values of table.field. */
 {
-char fullTable[HDB_MAX_TABLE_STRING];
-if (! hFindSplitTable(database, NULL, table, fullTable, NULL))
-    safecpy(fullTable, sizeof(fullTable), table);
-return sqlRandomSampleConn(conn, fullTable, field, count);
+if (isBamTable(table))
+    {
+    assert(sameString(field, "qName"));
+    return randomBamIds(table, conn, count);
+    }
+else
+    {
+    char fullTable[HDB_MAX_TABLE_STRING];
+    if (! hFindSplitTable(database, NULL, table, fullTable, NULL))
+	safecpy(fullTable, sizeof(fullTable), table);
+    return sqlRandomSampleConn(conn, fullTable, field, count);
+    }
 }
 
 static void explainIdentifiers(struct sqlConnection *conn, char *idField)
@@ -278,7 +286,7 @@ struct sqlConnection *alternateConn = conn;
 if (sameWord(curTable, WIKI_TRACK_TABLE))
     alternateConn = wikiConnect();
 
-if (isCustomTrack(curTable))
+if (isCustomTrack(curTable) || isBamTable(curTable)) 
     /* Currently we don't check whether these are valid CT item
      * names or not.  matchHash is empty for CTs. */
     tableList = NULL;
@@ -382,7 +390,7 @@ if (isNotEmpty(idText))
     for (term = allTerms;  term != NULL;  term = term->next)
 	{
 	struct slName *matchList = NULL, *match;
-	if (isCustomTrack(curTable))
+	if (isCustomTrack(curTable) || isBamTable(curTable))
 	    {
 	    /* Currently we don't check whether these are valid CT item
 	     * names or not.  matchHash is empty for CTs. */

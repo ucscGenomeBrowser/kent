@@ -12,8 +12,8 @@
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
- * row associated with bamSeqName (which is not nec. in chromInfo, e.g. 
- * bam file might have '1' not 'chr1'). */
+ * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
+ * case in the bam file). */
 {
 boolean checkSeqName = (sqlFieldIndex(conn, table, "seqName") >= 0);
 if (checkSeqName && bamSeqName == NULL)
@@ -196,15 +196,13 @@ if (fh != NULL)
 return FALSE;
 }
 
-void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-	samfile_t **pSamFile)
-/* Open the .bam file, fetch items in the seq:start-end position range,
- * and call callbackFunc on each bam item retrieved from the file plus callbackData.
- * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
- * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
- * the benefit of the callback function, with the open samFile.  */
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
+/* Return an open bam file, dealing with FUSE caching if need be. 
+ * Return parameter if NON-null will return the file name after FUSing */
 {
 char *bamFileName = samtoolsFileName(fileOrUrl);
+if (retBamFileName != NULL)
+    *retBamFileName = bamFileName;
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 if (fh == NULL)
     {
@@ -221,8 +219,32 @@ if (fh == NULL)
 		       "please try reloading this page.");
 	}
     warn("failed to open %s%s", fileOrUrl, urlWarning->string);
-    return;
+    return NULL;
     }
+return fh;
+}
+
+void bamClose(samfile_t **pSamFile)
+/* Close down a samefile_t */
+{
+if (pSamFile != NULL)
+    {
+    samclose(*pSamFile);
+    *pSamFile = NULL;
+    }
+}
+
+
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+	samfile_t **pSamFile)
+/* Open the .bam file, fetch items in the seq:start-end position range,
+ * and call callbackFunc on each bam item retrieved from the file plus callbackData.
+ * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
+ * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
+ * the benefit of the callback function, with the open samFile.  */
+{
+char *bamFileName = NULL;
+samfile_t *fh = bamOpen(fileOrUrl, &bamFileName);
 if (pSamFile != NULL)
     *pSamFile = fh;
 int chromId, start, end;
@@ -253,7 +275,7 @@ else
 	warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
     free(idx); // Not freeMem, freez etc -- sam just uses malloc/calloc.
     }
-samclose(fh);
+bamClose(&fh);
 }
 
 boolean bamIsRc(const bam1_t *bam)
@@ -676,8 +698,7 @@ return TRUE;
 
 int bamAddOneSamAlignment(const bam1_t *bam, void *data)
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
- * into a linkedFeaturesSeries item, and either store it until we find its mate
- * or add it to tg->items. */
+ * into a samAlignment. */
 {
 struct bamToSamHelper *helper = (struct bamToSamHelper *)data;
 struct lm *lm = helper->lm;
@@ -687,7 +708,10 @@ const bam1_core_t *core = &bam->core;
 struct dyString *dy = helper->dy;
 sam->qName = lmCloneString(lm, bam1_qname(bam));
 sam->flag = core->flag;
-sam->rName = helper->chrom;
+if (helper->chrom != NULL)
+    sam->rName = helper->chrom;
+else
+    sam->rName = lmCloneString(lm, helper->samFile->header->target_name[core->tid]);
 sam->pos = core->pos + 1;
 sam->mapQ = core->qual;
 dyStringClear(dy);
@@ -739,6 +763,35 @@ slReverse(&helper.samList);
 return helper.samList;
 }
 
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm)
+/* Read next count alignments in SAM format, allocated in lm.  May return less than
+ * count at end of file. */
+{
+/* Set up helper. */
+struct bamToSamHelper helper;
+helper.lm = lm;
+helper.chrom = NULL;
+helper.dy = dyStringNew(0);
+helper.samFile = fh;
+helper.samList = NULL;
+
+/* Loop through calling our own fetch function */
+int i;
+bam1_t *b = bam_init1();
+for (i=0; i<count; ++i)
+    {
+    if (samread(fh, b) < 0)
+       break;
+    bamAddOneSamAlignment(b, &helper);
+    }
+bam_destroy1(b);
+
+/* Clean up and go home. */
+dyStringFree(&helper.dy);
+slReverse(&helper.samList);
+return helper.samList;
+}
+
 #else
 // If we're not compiling with samtools, make stub routines so compile won't fail:
 
@@ -758,6 +811,19 @@ warn(COMPILE_WITH_SAMTOOLS, "bamFileExists");
 return FALSE;
 }
 
+samfile_t *bamOpen(char *fileOrUrl, char **retBamFileName)
+/* Return an open bam file, dealing with some FUSE caching if need be. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamOpen");
+return FALSE;
+}
+
+void bamClose(samfile_t **pSamFile)
+/* Close down a samefile_t */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamClose");
+}
+
 void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
 	samfile_t **pSamFile)
 /* Open the .bam file, fetch items in the seq:start-end position range,
@@ -775,6 +841,14 @@ struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int star
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 {
 errAbort(COMPILE_WITH_SAMTOOLS, "bamFetchSamAlignment");
+return NULL;
+}
+
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm)
+/* Read next count alignments in SAM format, allocated in lm.  May return less than
+ * count at end of file. */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamReadNextSamAlignments");
 return NULL;
 }
 

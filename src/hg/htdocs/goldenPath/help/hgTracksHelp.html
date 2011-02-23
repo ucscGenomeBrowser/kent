@@ -642,6 +642,15 @@ Base Position track. In this case, the zoom is centered on the coordinate of the
 mouse click.  To view the base composition of the sequence underlying the
 current annotation track display, click the <em>base</em> button. 
 <P>
+Quickly zoom to a specific region of interest by using the browser's
+&quot;drag-and-zoom&quot; feature. To define the region you wish to zoom to, 
+click-and-hold the mouse button on one edge of the desired zoom area in the Base
+Position track, drag the mouse right or left to highlight the selection area, 
+then release the mouse button. The annotation tracks image will automatically 
+zoom to the new region. Note that the <em>Enable advanced javascript 
+features</em> option on the Track Configuration page must be toggled on to use 
+this feature. 
+<P>
 To scroll the annotation tracks sideways to the left or right by 10%, 50%, or 95% of the displayed
 size (as given in base pairs), click the corresponding <I>move</I> arrow. It is also 
 possible to scroll the left or right side of the tracks by a specified number
@@ -664,6 +673,12 @@ on the chromosome to  move to that position (the current window size will be
 maintained). Select a region of any size by clicking and dragging in the image.
 Finally, hold the &quot;control&quot; key while clicking on a chromosome band
 to select the entire band.
+<P>
+<B>Changing the order of the displayed tracks</B><BR>
+To vertically reposition a track in the annotation track window, click-and-hold 
+the mouse button on the side label or gray mini-button to the left of the track,
+then drag the highlighted track up or down within the image. Release the mouse 
+button when the track is in the desired position.
 <P>
 <A NAME="TRACK_CONFIG"></A>
 <B>Changing the width of the annotation track window</B><BR>
@@ -713,26 +728,14 @@ When the <em>Next/previous item navigation</em> configuration option is
 toggled on, on the Track Configuration page,  
 gray double-headed arrows display in the Genome Browser tracks image on both 
 sides of the track labels of gene, mRNA and EST tracks (or any standard tracks 
-based on BED, PSL or genePred format). The image window may be shifted to 
-display the next feature in that track towards the 5' or 3' end of the 
-chromosome by 
-clicking the corresponding left or right arrow. Similarly, the 
+based on BED, PSL or genePred format). Clicking on the gray arrows shifts the
+image window toward that end of the chromosome so that the next item in the
+track is displayed. Similarly, the
 <em>Next/previous exon navigation</em> configuration option displays white 
 double-headed arrows on 
 both the 5' and 3' end of each track item that has exons positioned beyond the 
-edges of the current image. Clicking on one of the arrows shifts the image 
+edges of the current image. Clicking on one of the white arrows shifts the image
 window to the next exon located towards that end of the feature.
-<P>
-<B>Enabling the drag-and-zoom feature</B><BR>
-With the <em>Drag Selection/Zooming</em> configuration option toggled on, 
-it is possible to zoom into a location of interest by clicking and 
-dragging the mouse within the Genome Browser tracks image.  Selection 
-is made via a user-defined colored rectangle in the graphical tracks 
-display.  A rectangle is created by clicking in the Base Position track 
-at one boundary of the region of interest.  After clicking, drag the 
-mouse either right or left to the other boundary of the region of 
-interest, and release the mouse.  Once the rectangle is created, the 
-zoom happens automatically. 
 <P>
 <A NAME="RIGHT_CLICK_NAV"></A>
 <B>Enabling the right-click navigation feature</B><BR>

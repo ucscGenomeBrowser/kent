@@ -4999,50 +4999,6 @@ tableName wgEncodeSydhTfbsGm12878Znf143166181apStdSig
 treatment None
 view Signal
 
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1
-objType file
-antibody ZNF274
-cell GM12878
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-20
-dateUnrestricted 2011-02-20
-fileIndex wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam.bai
-fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam
-grant Snyder
-lab UCD
-project wgEncode
-replicate 1
-setType exp
-subId 1203
-treatment None
-view Alignments
-
-metaObject wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2
-objType file
-antibody ZNF274
-cell GM12878
-composite wgEncodeSydhTfbs
-control UCDavis
-controlId GM12878/None/Input/UCDavis
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-20
-dateUnrestricted 2011-02-20
-fileIndex wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam.bai
-fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam
-grant Snyder
-lab UCD
-project wgEncode
-replicate 2
-setType exp
-subId 1203
-treatment None
-view Alignments
-
 metaObject wgEncodeSydhTfbsGm12878Znf274UcdPk
 objType table
 antibody ZNF274
@@ -10409,7 +10365,7 @@ control UCDavis
 controlId H1-hESC/None/Input/UCDavis
 dataType ChipSeq
 dataVersion ENCODE Jan 2011 Freeze
-dateReubmitted 2011-02-03
+dateResubmitted 2011-02-03
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-20
 fileName wgEncodeSydhTfbsH1hescCtbp2UcdAlnRep1.bam
@@ -36309,4 +36265,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -861307916
+# MAGIC: -728349655

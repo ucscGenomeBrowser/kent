@@ -95,5 +95,7 @@ if (argc != 2)
     usage();
 udcSetDefaultDir(optionVal("udcDir", udcDefaultDir()));
 bigBedInfo(argv[1]);
+if (verboseLevel() > 1)
+    printVmPeak();
 return 0;
 }

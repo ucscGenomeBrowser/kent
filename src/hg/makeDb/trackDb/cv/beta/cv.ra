@@ -1,4 +1,4 @@
-# Controlled vocabulary from ENCODE
+#+ Controlled vocabulary from ENCODE
 # Will be auto-generated from private Wiki
 # $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeValidate/config/cv.ra,v 1.256 2010/06/07 21:02:41 cline Exp $
 
@@ -4275,19 +4275,6 @@ targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6_(H-50)(Immunoblot,MassSpec)_Myers:human_E2F6_H-50_validation_Myers.pdf
 
-term EBF
-tag EBF
-type Antibody
-target EBF
-antibodyDescription Mouse monoclonal IgG2a, 200?g/ml. Raised against amino acids 1-300 mapping at the N-terminus of EBF of human origin. Recommended for detection of EBF1-4 of m, r and h origin by WB, IP, IF and ELISA
-targetDescription Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity)
-vendorName Santa Cruz Biotech
-vendorId sc-137065
-orderUrl http://www.scbt.com/datasheet-137065-ebf-c-8-antibody.html
-lab Myers
-targetId GeneCard:EBF1
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation missing
 
 term  EBF1_(C-8)
 tag  EBF1C8
@@ -5163,19 +5150,6 @@ targetId GeneCard:IRF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
 
-term IRF4
-tag IRF4
-type Antibody
-target IRF4
-antibodyDescription IRF-4 (M-17) Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the C-terminus of IRF-4 of mouse origin. Recommended for detection of IRF-4 of m, r and h origin by WB, IP, IF and ELISA
-targetDescription Transcriptional activator. Binds to the interferon-stimulated response element (ISRE) of the MHC class I promoter. Binds the immunoglobulin lambda light chain enhancer, together with PU.1. Probably plays a role in ISRE-targeted signal transduction mechanisms specific to lymphoid cells
-vendorName Santa Cruz Biotech
-vendorId sc-6059
-orderUrl http://www.scbt.com/datasheet-6059-irf-4-m-17-antibody.html
-lab Myers
-targetId GeneCard:IRF4
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation missing
 
 term  IRF4_(M-17)
 tag  IRF4M17
@@ -5353,7 +5327,7 @@ lab Myers
 lots C0909
 targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
-validation (NANOG_SC-33759)(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_NANOG_SC-33759_validation_Myers.pdf
+validation NANOG_(SC-33759)(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_NANOG_SC-33759_validation_Myers.pdf
 
 
 
@@ -5485,18 +5459,6 @@ targetId
 targetUrl
 validation missing
 
-##This does not appear in metaDb
-term Oct-2
-tag OCT2
-type Antibody
-target OCT2
-targetDescription Oct-2 (C-20)
-antibodyDescription Rabbit Polyclonal IgG
-vendorName Santa Cruz Biotech
-vendorId sc-233
-orderUrl  http://www.scbt.com/product.php?datasheet=233
-lab Myers
-validation missing
 
 term p300
 tag P300
@@ -5712,7 +5674,7 @@ lab Myers
 lots F2609
 targetId GeneCards:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
-validation (POU5F1_SC-9081)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_POU5F1_SC-9081_validation_Myers.pdf
+validation POU5F1_(SC-9081)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_POU5F1_SC-9081_validation_Myers.pdf
 
 term POU2F2
 tag POU2F2
@@ -6166,7 +6128,7 @@ targetDescription TCF4 is a member of the high mobility group (HMG) DNA binding 
 vendorName Cell Signaling Technology
 vendorId 2569S
 orderUrl http://www.cellsignal.com/products/2569.html
-lab Farnham/Myers
+lab Farnham
 targetId GeneCard:TCF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TCF4
 validation missing
@@ -7316,9 +7278,9 @@ description Poly(A)+ RNA longer than 200 nt
 label longPolyA+
 
 term longNonPolyA
-tag longNonPolyA
+tag pAM 
 type rnaExtract
-description Poly(A)- RNA longer than 200 nt
+description Poly(A)- RNA longer than 200 nt  
 label longPolyA-
 
 ## This is what Yale and Caltech are using
@@ -8264,11 +8226,11 @@ labPiFull Roderic Guigo
 grantPi Guigo
 organism human
 
-term GIS(Ruan)
+term GIS-Ruan
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia)
+description Ruan - Genome Institute of Singapore (Chia) 
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8694,9 +8656,9 @@ projectName BU
 term Ruan
 tag ruan
 type grant
-description Ruan
+description Ruan        
 grantInst Genome Institute of Singapore
-projectName Chia PET??
+projectName ChIA-PET
 
 term Hubbard
 tag hubbard
@@ -8801,9 +8763,9 @@ projectName PSU
 term White
 tag white
 type grant
-description White
+description White 
 grantInst University of Chicago
-projectName
+projectName UChicago
 
 term Giddings
 tag giddings
@@ -8829,7 +8791,8 @@ projectName UNC-Giddings
 #       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
 #
 #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
-#           cv: must be defined term in cv (e.g. cell=GM12878)  # could be "cv or control" or "cv or None" to say control terms also acceptable
+#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.  
+#               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
 #         date: must be date in YYYY-MM-DD format
 #       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
 #        float: must be floating point number
@@ -8839,7 +8802,7 @@ projectName UNC-Giddings
 #     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
 #    # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances.  (e.g. sortable column order in hgFileUi)
+#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances, with lower numbers implying greater priority.  
 #       At beginnning:
 #         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
 #       Experiment defining:
@@ -9189,10 +9152,19 @@ validate cv
 priority 500
 # This is Caltech only and possibly should be retired.  (11/3/10)
 
+term md5sum      
+type typeOfTerm
+label md5sum
+description The md5sum for the file associated with the object. 
+searchable no    
+cvDefined no 
+validate regex: ^([0-9a-f]){32,32}$
+priority 500 
+
 term obtainedBy
 type typeOfTerm
 label obtainedBy
-description The production group that grew the cells and isolated genomic DNA. (Provis
+description The production group that grew the cells and isolated genomic DNA. 
 searchable select
 cvDefined no #(Defined by lab)
 validate none
@@ -9307,11 +9279,11 @@ validate cv
 priority 150
 
 term run
-type run
+type typeOfTerm
 label Sequencing Run
 description Sequencing run
 searchable select
-cvDefined yes
+cvDefined no
 validate none
 priority 500
 

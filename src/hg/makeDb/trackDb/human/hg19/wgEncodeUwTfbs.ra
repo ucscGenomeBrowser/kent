@@ -9,7 +9,7 @@
 #       - Short Labels: 
 #               Template: [cell] [factor] [view] [replicate #]
 #		- Cell: Abbreviations for cells
-#			- SK-N-SH_RA = SKNSHRA
+#			- SK-N-SH_RA = SKRA
 #			- WERI-Rb-1 = WERIRb1
 #		- Factor: Abbreviations for factor
 #			- Inp = Inp
@@ -26,7 +26,10 @@
 #                       - factor Order: Ordering is based on Histone Number then numerically and alphabetaclly. Numerically 09 before 12.
 #               - Dimension Y - Cell Type
 #                       - cellType Order: Ordering is based on tier and alphabetical within a tier. 
-
+#		- View default settings:
+#			- Hotspots: dense
+#			- Peaks: dense
+#			- Raw Signal: full
 
 
 track wgEncodeUwTfbs
@@ -47,14 +50,13 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
-dataVersion through the ENCODE Jun 2010 Freeze
 noInherit on
 
 	
     track wgEncodeUwTfbsViewHot
     shortLabel Hotspots
     view Hot
-    visibility pack
+    visibility dense
     parent wgEncodeUwTfbs
     pValueFilter 0.0
     pValueFilterLimits 0:324
@@ -248,7 +250,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTfbsViewHot       off
-        shortLabel SKNSHRA CTCF Ht 1
+        shortLabel SKRA CTCF Ht 1
         longLabel SK-N-SH_RA CTCF TFBS Hotspots Rep 1 from ENCODE/UW
         subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=1
         type broadPeak
@@ -414,7 +416,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
-        shortLabel SKNSHRA CTCF Ht 2
+        shortLabel SKRA CTCF Ht 2
         longLabel SK-N-SH_RA CTCF TFBS Hotspots Rep 2 from ENCODE/UW
         subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=2
         type broadPeak
@@ -581,6 +583,16 @@ noInherit on
         origAssembly hg19
         # subId=2672 dateSubmitted=2010-10-23
 
+        track wgEncodeUwTfbsAoafCtcfStdHotspotsRep1
+        release alpha
+        parent wgEncodeUwTfbsViewHot off
+        shortLabel AoAF CTCF Ht 1
+        longLabel AoAF CTCF TFBS Hotspots Rep 1 from ENCODE/UW
+        subGroups view=Hot factor=CTCF cellType=AOAF rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=2675 dateSubmitted=2010-10-23
+
         track wgEncodeUwTfbsAoafCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTfbsViewHot off
@@ -734,7 +746,7 @@ noInherit on
     track wgEncodeUwTfbsViewPeaks
     shortLabel Peaks
     view Peaks
-    visibility pack
+    visibility dense
     parent wgEncodeUwTfbs
     pValueFilter 0.0
     pValueFilterLimits 0:324
@@ -928,7 +940,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SKNSHRA CTCF Pk 1
+        shortLabel SKRA CTCF Pk 1
         longLabel SK-N-SH_RA CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
         subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=1
         type narrowPeak
@@ -1094,7 +1106,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTfbsViewPeaks  off
-        shortLabel SKNSHRA CTCF Pk 2
+        shortLabel SKRA CTCF Pk 2
         longLabel SK-N-SH_RA CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
         subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=2
         type narrowPeak
@@ -1260,6 +1272,16 @@ noInherit on
         type narrowPeak
         origAssembly hg19
         # subId=2672 dateSubmitted=2010-10-23
+
+        track wgEncodeUwTfbsAoafCtcfStdPkRep1
+        release alpha
+        parent wgEncodeUwTfbsViewPeaks off
+        shortLabel AoAF CTCF Pk 1
+        longLabel AoAF CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
+        subGroups view=Peaks factor=CTCF cellType=AOAF rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=2675 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdPkRep2
         release alpha
@@ -1612,7 +1634,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSHRA CTCF Sg 1
+        shortLabel SKRA CTCF Sg 1
         longLabel SK-N-SH_RA CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=1
         type bigWig 1.000000 3210.000000
@@ -1778,7 +1800,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSHRA CTCF Sg 2
+        shortLabel SKRA CTCF Sg 2
         longLabel SK-N-SH_RA CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
         subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=2
         type bigWig 1.000000 3470.000000
@@ -2028,7 +2050,7 @@ noInherit on
         track wgEncodeUwTfbsSknshraInputStdRawRep1
         release alpha
         parent wgEncodeUwTfbsViewRawSig off
-        shortLabel SKNSHRA Inp Sg 1
+        shortLabel SKRA Inp Sg 1
         longLabel SK-N-SH_RA Input TFBS Raw Signal Rep 1 from ENCODE/UW
         subGroups view=zRSig factor=zInput cellType=SKNSHRA rep=1
         type bigWig 1.000000 12154.000000
@@ -2271,6 +2293,15 @@ noInherit on
         origAssembly hg19
         # subId=2673 dateSubmitted=2010-10-23
 
+        track wgEncodeUwTfbsAoafCtcfStdRawRep1
+        release alpha
+        parent wgEncodeUwTfbsViewRawSig off
+        shortLabel AoAF CTCF Sg 1
+        longLabel AoAF CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
+        subGroups view=zRSig factor=CTCF cellType=AOAF rep=1
+        type bigWig 1.000000 4397.000000
+        origAssembly hg19
+        # subId=2675 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdRawRep2
         release alpha

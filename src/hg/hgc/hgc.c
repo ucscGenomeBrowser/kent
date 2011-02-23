@@ -2791,7 +2791,7 @@ printf("<P><A HREF=\"../cgi-bin/hgTrackUi?g=%s&%s\">"
        trackName, cartSidUrlString(cart), parentTdb->shortLabel);
 }
 
-void printDataVersion(struct trackDb *tdb)
+static void printDataVersion(struct trackDb *tdb)
 /* If this annotation has a dataVersion trackDb setting, print it */
 {
 metadataForTable(database,tdb,NULL);
@@ -2818,11 +2818,10 @@ if (restrictionDate != NULL)
     }
 }
 
-void printOrigAssembly(struct trackDb *tdb)
+static void printOrigAssembly(struct trackDb *tdb)
 /* If this annotation has been lifted, print the original
  * freeze, as indicated by the "origAssembly" trackDb setting */
 {
-trackDbOrigAssembly(tdb);
 trackDbPrintOrigAssembly(tdb, database);
 }
 
@@ -9790,18 +9789,14 @@ char *chrom, *chromStart, *chromEnd;
 char *omimId;
 char *avId;
 char *dbSnpId;
-char *snpId;
 char *chp;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
 chromEnd   = cartOptionalString(cart, "t");
 
-chp = strstr(itemName, "_");
-*chp = '\0';
 avId = strdup(itemName);
-chp++;
-snpId = strdup(chp);
+
 chp = strstr(itemName, "#");
 *chp = '\0';
 omimId = strdup(itemName);
@@ -9847,7 +9842,7 @@ if (url != NULL && url[0] != 0)
 	}
     sqlFreeResult(&sr);
 
-    dbSnpId = strdup("-");
+    dbSnpId = cloneString("-");
     printf("<BR>\n");
     safef(query, sizeof(query),
     	  "select dbSnpId from omimAvRepl where avId='%s'", avId);
@@ -19737,8 +19732,7 @@ else
     bedPrintPos(bed, ct->fieldCount, NULL);
     }
 printTrackUiLink(ct->tdb);
-if (ct->dbTrack)
-    printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
+printUpdateTime(CUSTOM_TRASH, ct->tdb, ct);
 printTrackHtml(ct->tdb);
 }
 
@@ -23506,14 +23500,9 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
 
             }
         bed = bedLoad6(row);
-
-        if (sameString("numtSAssembled", table) || sameString("numtS", table))
-            printf("<A HREF=\"%s&db=%s&position=%s\">browser</A> | ",
-                   hgTracksPathAndSettings(), database, bed->name);
-        else
-            printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
-                   hgTracksPathAndSettings(), database,
-                    bed->chrom, bed->chromStart+1, bed->chromEnd);
+        printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+               hgTracksPathAndSettings(), database,
+               bed->chrom, bed->chromStart+1, bed->chromEnd);
 
         printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,

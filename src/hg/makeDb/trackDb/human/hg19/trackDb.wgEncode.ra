@@ -49,10 +49,10 @@ include wgEncodeHaibRnaSeq.ra alpha
 include wgEncodeHaibTfbs.ra
 
 #Broad Histone (wrangler: Tim)
-include wgEncodeBroadHistone.ra alpha,beta
+include wgEncodeBroadHistone.ra
 
 #UW Histone (wrangler:Venkat)
-include wgEncodeUwHistone.ra alpha,beta
+include wgEncodeUwHistone.ra
 
 #UW DNase DGF (wrangler: Venkat)
 include wgEncodeUwDgf.ra beta,public
@@ -63,10 +63,11 @@ include wgEncodeUwDnase.ra beta,public
 include wgEncodeUwDnase.new.ra alpha
 
 # SUNY Rip-Seq Tracks (wrangler: Cricket)
-include wgEncodeSunyAlbanyGeneSt.ra
-include wgEncodeSunyAlbanyTiling.ra
-include wgEncodeSunySwitchgear.ra
-include wgEncodeSunyRipSeq.ra
+include wgEncodeSunyAlbanyGeneSt.ra alpha
+include wgEncodeSunyAlbanyTiling.ra beta,public
+include wgEncodeSunyAlbanyTiling.ra alpha
+include wgEncodeSunySwitchgear.ra alpha
+include wgEncodeSunyRipSeq.ra alpha 
 
 include wgEncodeGisRnaSeq.ra
 include wgEncodeGisRnaPet.ra
