@@ -753,7 +753,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 est CTCF DS
-        longLabel MCF-7 estro CTCF TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 estrogen CTCF TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=ESTRO view=SIG factor=CTCF cellType=MCF7
         type bigWig 0.000000 4.305300
         # subId=2502 dateSubmitted=2010-10-16
@@ -762,7 +762,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 veh cMyc DS
-        longLabel MCF-7 veh c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 vehicle c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=VEH view=SIG factor=CMYC cellType=MCF7
         type bigWig 0.000000 3.484600
         # subId=2504 dateSubmitted=2010-10-16
@@ -771,7 +771,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 veh CTCF DS
-        longLabel MCF-7 veh CTCF TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 vehicle CTCF TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups treatment=VEH view=SIG factor=CTCF cellType=MCF7
         type bigWig 0.000000 6.029000
         # subId=2505 dateSubmitted=2010-10-16
@@ -789,7 +789,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSignal off
         shortLabel MCF-7 est cMyc DS
-        longLabel MCF-7 estr c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 estrogen c-Myc TFBS ChIP-seq Density Signal ENCODE/OpenChrom-UTA
         subGroups view=SIG factor=CMYC cellType=MCF7 treatment=ESTRO
         type bigWig 0.000000 0.801700
         # subId=2503 dateSubmitted=2010-10-16
@@ -1109,7 +1109,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 est CTCF OS
-        longLabel MCF-7 estro CTCF TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 estrogen CTCF TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=ESTRO view=SIGBO factor=CTCF cellType=MCF7
         type bigWig 0.000000 4381.000000
         # subId=2502 dateSubmitted=2010-10-16
@@ -1118,7 +1118,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 veh cMyc OS
-        longLabel MCF-7 veh c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 vehicle c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=VEH view=SIGBO factor=CMYC cellType=MCF7
         type bigWig 0.000000 4372.000000
         # subId=2504 dateSubmitted=2010-10-16
@@ -1127,7 +1127,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 veh CTCF OS
-        longLabel MCF-7 veh CTCF TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 vehicle CTCF TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups treatment=VEH view=SIGBO factor=CTCF cellType=MCF7
         type bigWig 0.000000 5010.000000
         # subId=2505 dateSubmitted=2010-10-16
@@ -1145,7 +1145,7 @@ dataVersion through the ENCODE Jan 2011 Freeze
         release alpha
         parent wgEncodeOpenChromChipViewSigBo off
         shortLabel MCF-7 est cMyc OS
-        longLabel MCF-7 estr c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
+        longLabel MCF-7 estrogen c-Myc TFBS ChIP-seq Overlap Signal ENCODE/OpenChrom-UTA
         subGroups view=SIGBO factor=CMYC cellType=MCF7 treatment=ESTRO
         type bigWig 0.000000 2368.000000
         # subId=2503 dateSubmitted=2010-10-16
