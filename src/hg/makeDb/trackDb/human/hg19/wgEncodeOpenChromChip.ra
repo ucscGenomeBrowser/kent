@@ -23,7 +23,7 @@ shortLabel UTA TFBS
 longLabel Open Chromatin TFBS by ChIP-seq from ENCODE/Open Chrom(UT Austin)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Base_Overlap_Signal
-subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;<i>Tier_1</i> 1H1=H1-hESC&nbsp;<i>Tier_1</i> 1K5=K562&nbsp;<i>Tier_1</i> 2HELA=HeLa-S3&nbsp;<i>Tier_2</i> 2HEP=HepG2&nbsp;<i>Tier_2</i> 2HUV=HUVEC&nbsp;<i>Tier_2</i> AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MonoCD14=Monocytes-CD14+ MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
+subGroup2 cellType Cell_Line 1GM=GM12878&nbsp;(Tier_1) 1H1=H1-hESC&nbsp;(Tier_1) 1K5=K562&nbsp;(Tier_1) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEP=HepG2&nbsp;(Tier_2) 2HUV=HUVEC&nbsp;(Tier_2) AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MonoCD14=Monocytes-CD14+ MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
 subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
 subGroup4 treatment Treatment AANONE=None ESTRO=Estradiol;(estrogen) VEH=vehicle
 sortOrder cellType=+ factor=+ treatment=+ view=+
