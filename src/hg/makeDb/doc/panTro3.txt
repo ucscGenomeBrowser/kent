@@ -809,10 +809,24 @@ panTro3.upstreamGeneTbl = refGene
     cd /cluster/data/genbank
     time nice -n +19 bin/gbAlignStep -initial panTro3 &
     #	logFile: var/build/logs/2011.02.23-09:44:44.panTro3.initalign.log
-XXX - running - Tue Feb 23 09:45:54 PST 2011
+    #	real    1658m46.609s (lots of kluster interference from other work)
 
     ssh hgwdev
-    time nice -n +19 bin/gbDbLoadStop -initialLoad -drop panTro3 &
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbDbLoadStep -initialLoad -drop panTro3 &
+    #	logFile: var/dbload/hgwdev/logs/2011.02.24-13:51:55.dbload.log
+    #	real    31m43.237s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add panTro3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "adding panTro3 to the daily update cycle" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
 
 ############################################################################
 # HUMAN (hg18) PROTEINS TRACK (Working braney 2011-02-22)
