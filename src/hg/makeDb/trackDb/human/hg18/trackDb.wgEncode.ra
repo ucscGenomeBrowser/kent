@@ -1512,8 +1512,8 @@ include wgEncodeUwDGF.ra
 
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.ra beta,public
-include wgEncodeUwDnaseSeq.new.ra alpha
+include wgEncodeUwDnaseSeq.ra public
+include wgEncodeUwDnaseSeq.new.ra alpha,beta
 
 
 # UW DNAase-seq southerns
