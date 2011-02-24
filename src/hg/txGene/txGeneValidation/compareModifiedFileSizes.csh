@@ -29,4 +29,5 @@ else
     cat $tmpDir/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $tmpDir/sizes.old 
     popd
     sdiff $tmpDir/sizes.old $tmpDir/sizes.new
+    rm -r $tmpDir
 endif
