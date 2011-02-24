@@ -6,27 +6,27 @@
 #     files.
 #
 echo $#
-if ( $#argv < 4 ) then
+if ( $#argv < 2 ) then
     echo "compareModifiedFileSizes.csh: compare the size of recently-modified files against previous versions" 
     echo "usage"
-    echo " compareModifiedFileSizes.csh <tmpDir> <newDir> <oldDir> <filenameSuffix> ] [ctimeArg]"
+    echo " compareModifiedFileSizes.csh <oldDir> <newDir> [ctimeArg]"
     echo "options:"
-    echo "- tmpDir: a temporary directory to hold the results"
-    echo "- newDir: the directory with the new versions of the file.  Defaults to the current directory"
-    echo "- oldDir: the directory with the old versions of the files.  The new versions are assumed to be in the current directory"
-    echo "- filenameSuffix: suffix of a filename for the file sizes: new<suffix> and old<suffix>"
+    echo "- oldDir: the directory with the old versions of the files."
+    echo "- newDir: the directory with the new versions of the file. "
     echo "- [ctimeArg]: argument for ctime to indicate files of what age to select (default: 1 day old)"
 else
+    set tmpDir = /hive/scratch/compareModifiedFileSizes.$$
+    mkdir $tmpDir
     set ctimeArg = -1
-    if ( $#argv > 4 ) then
-        set ctimeArg = $5
+    if ( $#argv > 2 ) then
+        set ctimeArg = $3
     endif
+    pushd $1
+    find . -type f -ctime $ctimeArg -print > $tmpDir/modifiedFiles.txt
+    cat $tmpDir/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $tmpDir/sizes.new
+    popd
     pushd $2
-    find . -type f -ctime $ctimeArg -print > $1/modifiedFiles.txt
-    cat $1/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $1/new${4}
+    cat $tmpDir/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $tmpDir/sizes.old 
     popd
-    pushd $3
-    cat $1/modifiedFiles.txt | sed 's/^/wc -l /' |bash > $1/old${4} 
-    popd
-    sdiff $1/new${4} $1/old${4}
+    sdiff $tmpDir/sizes.old $tmpDir/sizes.new
 endif
