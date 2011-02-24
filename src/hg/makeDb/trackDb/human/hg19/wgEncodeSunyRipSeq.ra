@@ -18,7 +18,6 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-superTrack wgEncodeRbpSuper dense
 
     track wgEncodeSunyRipSeqViewAlignments
     shortLabel Alignments

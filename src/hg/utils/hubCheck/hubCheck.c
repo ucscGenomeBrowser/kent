@@ -23,10 +23,9 @@ void usage()
 errAbort(
   "hubCheck - Check a track data hub for integrity.\n"
   "usage:\n"
-  "   hubCheck XXX\n"
+  "   hubCheck http://yourHost/yourDir/hub.txt\n"
   "options:\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs\n"
-  "   -xxx=XXX\n"
   );
 }
 
