@@ -1,6 +1,7 @@
 import sys
 import re
 import orderedDict
+import filterEntry
 
 class FilterFile(orderedDict.OrderedDict):
     """
@@ -9,7 +10,7 @@ class FilterFile(orderedDict.OrderedDict):
 
     Match = list()
 
-    def read(self, filePath, keyField):
+    def read(self, filePath):
         """
         Reads an rafile, separating it by keyField, and internalizes it.
 
@@ -17,7 +18,7 @@ class FilterFile(orderedDict.OrderedDict):
         """
 
         file = open(filePath, 'r')
-        entry = list()
+        entry = None
         raKey = None
 
         for line in file:
@@ -36,15 +37,15 @@ class FilterFile(orderedDict.OrderedDict):
                 continue
 
             # check if we're at the first key in a new entry
-            if (line.split()[0].strip() == keyField):
+            if (entry == None):
                 if len(line.split()) < 2:
                     raise KeyError()
 
-                raKey = line.split(' ', 1)[1].strip()
-                entry = list()
-                entry.append([keyField, raKey])
-                print entry
-                self.add(raKey, entry)
+                raKey = line.split(' ', 1)[0].strip()
+                raVal = line.split(' ', 1)[1].strip()
+                entry = filterEntry.FilterEntry()
+                entry.add(raKey, raVal)
+                self.add(raVal, entry)
 
             # otherwise we should be somewhere in the middle of an entry
             elif (entry != None):
@@ -53,14 +54,9 @@ class FilterFile(orderedDict.OrderedDict):
 
                 if len(line.split()) > 1:
                     raVal = line.split(' ', 1)[1].strip()
-
-                if raKey == '_add':
-                    self.Match.append([raVal, 'add'])
-                if raKey == '_remove':
-                    self.Match.append([raVal, 'remove'])                
-
-                entry.append([raKey, raVal])
-                print entry
+                
+                entry.add(raKey, raVal)
+                #print entry
 
             # we only get here if we didn't find the keyField at the beginning
             else:
@@ -69,7 +65,7 @@ class FilterFile(orderedDict.OrderedDict):
         file.close()
 
     def getKeyAt(self, index):
-        return self.getValue(self._ordering[index])
+        return self._ordering[index]
 
     def getValueAt(self, index):
         return self.getValue(self._ordering[index])
@@ -90,6 +86,16 @@ class FilterFile(orderedDict.OrderedDict):
         """
 
         print self.getValue(key)
+
+    def iterValues(self):
+        """
+        Return an iterator over the values in the dictionary
+        """
+
+        for item in self._ordering:
+            if item.startswith('#'):
+                continue
+            yield self.getValue(item)
 
     def __str__(self):
         str = ''
