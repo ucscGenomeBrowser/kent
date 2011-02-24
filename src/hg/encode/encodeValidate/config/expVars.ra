@@ -103,6 +103,10 @@ expVar1 cell
 expVar2 antibody
 expVar3 replicate
 
+composite wgEncodeUncBsuProt
+expVar1 cell
+expVar2 localization
+
 composite wgEncodeUwAffyExonArray
 expVar1 cell
 expVar2 treatment
