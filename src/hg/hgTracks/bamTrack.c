@@ -785,6 +785,11 @@ static void bamWigLoadItems(struct track *tg)
 {
 /* Figure out bigWig file name. */
 struct sqlConnection *conn = hAllocConnTrack(database, tg->tdb);
+/* this should call bamFileNameFromTable with logic from bamLoadItemsCore to 
+ * check the bigDataUrl setting.  Fix this if bamWigs end up being
+ * a supported type.   It may be that this code gets rolled into
+ * normal BAM display... since that's the plan ;-).
+ */
 char *fileName = bbiNameFromSettingOrTable(tg->tdb, conn, tg->table);
 tg->customPt = fileName;
 hFreeConn(&conn);
@@ -868,8 +873,8 @@ for (i=0; i<width; ++i)
     struct preDrawElement *pe = &bwData->preDraw[i + preDrawZero];
     pe->min = pe->count;
     pe->max = pe->count;
-    pe->sumData = pe->count;
-    pe->sumSquares = pe->count * pe->count;
+    pe->sumData = pe->count / scale;
+    pe->sumSquares = (pe->count * pe->count)/scale;
     }
 
 AllocVar(preDrawList);
@@ -938,6 +943,13 @@ if (trackVis != tvHide)
 track->nextItemButtonable = track->nextExonButtonable = FALSE;
 track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
+}
+
+void bamWigMethods(struct track *track, struct trackDb *tdb, 
+	int wordCount, char *words[])
+/* Same stub when compiled without USE_BAM. */
+{
+bamMethods(track);
 }
 
 #endif /* no USE_BAM */

@@ -1,62 +1,52 @@
 <H2>Description</H2>
 <DIV style='max-width: 900px;'>
-<P>These tracks display the locations of active regulatory elements identified as
-open chromatin in  <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
+<P>These tracks display chromatin immunoprecipitation (ChIP-seq) evidence as
+part of the four <B><em>Open Chromatin</em></B> track sets.
+ChIP-seq is a method to identify the specific location of proteins that are
+directly or indirectly bound to genomic DNA. By identifying the binding location
+of sequence-specific transcription factors, general transcription
+machinery components, and chromatin factors, ChIP can help in the functional
+annotation of the open chromatin regions identified by DNaseI HS mapping and
+FAIRE.
+</P>
+<P>Together with
+DNaseI HS and FAIRE experiments, these tracks display the locations of active
+regulatory elements identified as open chromatin in
+<A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
 from the Duke, UNC-Chapel Hill, UT-Austin, and EBI ENCODE group.
 Within this project, open chromatin was identified using two
 independent and complementary methods: DNaseI hypersensitivity (HS)
 and Formaldehyde-Assisted Isolation of Regulatory Elements (FAIRE),
-combined with chromatin immunoprecipitation (ChIP) for select
+combined with these ChIP-seq assays for select
 regulatory factors. DNaseI HS and FAIRE provide assay
 cross-validation with commonly identified regions delineating the
-highest confidence areas of open chromatin.  ChIP assays provide
+highest confidence areas of open chromatin.  These ChIP assays provide
 functional validation and preliminary annotation of a subset of
 open chromatin sites. Each method employed Illumina (formerly Solexa)
 sequencing by synthesis as the detection platform.
 The Tier 1 and Tier 2 cell types were additionally verified by a
 second platform, high-resolution 1% ENCODE tiled microarrays supplied by NimbleGen.
 </P>
-<P>The particular tracks described in this <B>UTA TFBS</B> page detail results
-from the ChIP experiments. Data for the DNaseI HS experiments can be found
-in the <B>ENC DNase/FAIRE Super-track</B> in
-<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>.
-Data for the FAIRE experiments can also be found in the
-<B>ENC DNase/FAIRE Super-track</B>, but in
-<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>.
-</P>
-<P><B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map general
-chromatin accessibility, and DNaseI "hypersensitivity" is a feature of active
-cis-regulatory sequences. The use of this method has led to the discovery of
-functional regulatory elements that include promoters, enhancers, silencers,
-insulators, locus control regions, and novel elements. DNaseI hypersensitivity
-signifies chromatin accessibility following binding of trans-acting factors in
-place of a canonical nucleosome.
-</P>
-<P><B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory
-Elements) is a method to isolate and identify nucleosome-depleted regions of
-the genome.  FAIRE was initially discovered in yeast and subsequently shown to
-identify active regulatory elements in human cells (Giresi <em>et al.</em>,
-2007). Similar to DNaseI HS, FAIRE appears to identify functional regulatory
-elements that include promoters, enhancers, silencers, insulators, locus
-control regions and novel elements.
-</P>
-<P><B> ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to
-identify the specific location of proteins that are directly or indirectly
-bound to genomic DNA. By identifying the binding location of sequence-specific
-transcription factors, general transcription machinery components, and
-chromatin factors, ChIP can help in the functional annotation of the open
-chromatin regions identified by DNaseI HS mapping and FAIRE.
-</P>
-<P><B>Input data</B>: As a background control experiment, we sequenced
-the input genomic DNA sample that was used for ChIP. Crosslinked chromatin
-is sheared and the crosslinks are reversed without carrying out the
-immunoprecipitation step. This sample is otherwise processed in a manner
+<P>As a background control experiment, the <B>input</B> genomic DNA sample that
+was used for ChIP was sequenced. Crosslinked chromatin
+was sheared and the crosslinks were reversed without carrying out the
+immunoprecipitation step. This sample was otherwise processed in a manner
 identical to the ChIP sample as described below. The input track is
 useful in revealing potential artifacts arising from the sequence
 alignment process such as copy number differences between the
 reference genome and the sequenced samples, as well as regions of
 poor sequence alignability.
 </P>
+<P>Other <B><em>Open Chromatin</em></B> track sets:
+<UL>
+<LI>Data for the DNaseI HS experiments can be found in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>.
+<LI>Data for the FAIRE experiments can found in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">UNC FAIRE</A>.
+<LI>A syntheseis of all the open chromatin assays for select cell lines can
+be found in
+<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chrom Synth</a>.
+</UL>
 
 <H2> Display Conventions and Configuration </H2>
 <P>This track is a multi-view composite track that contains a single data type
@@ -72,8 +62,8 @@ autoscale will rescale the data and inflate the background signal, making the
 regions appear noisy. Changing back to fixed scale will alleviate this issue.
 In general, for each experiment in each of the cell types, the
 <B>UTA TFBS</B> tracks contain the following views:
-</P>
-<P><DT><I>Peaks</I></DT>
+<DL>
+<DT><I>Peaks</I></DT>
 <DD>Regions of enriched signal in ChIP experiments.
 Peaks were called based on signals created using F-Seq, a software program
 developed at Duke (Boyle <em>et al.</em>, 2008b). Significant regions were
@@ -81,20 +71,18 @@ determined by fitting the data to a gamma distribution to calculate p-values.
 Contiguous regions where p-values were below a 0.05/0.01 threshold were
 considered significant.  The solid vertical line in the peak represents the
 point with highest signal.</DD>
-</P>
-<P><DT><I>F-Seq Density Signal</I></DT>
+<DT><I>F-Seq Density Signal</I></DT>
 <DD>Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
 replicates. F-Seq employs Parzen kernel density estimation to create base pair
 scores (Boyle <em>et al.</em>, 2008b). This method does not look at fixed-length
 windows but rather weights contributions of nearby sequences in proportion to
 their distance from that base.  It only considers sequences aligned 4 or less
-times in the genome, and uses an alignability background model to try to correct
+times in the genome and uses an alignability background model to try to correct
 for regions where sequences cannot be aligned. For each cell type, especially
 important for those with an abnormal karyotype, a model to try to correct for
 amplifications and deletions that is based on control input data was also used.</DD>
-</P>
-<P><DT><I>Raw Base Overlap Signal</I></DT>
+<DT><I>Base Overlap Signal</I></DT>
 <DD>An alternative version of the
 <I>F-Seq Density Signal</I> track annotation that provides a higher resolution
 view of the raw sequence data. This track also includes the combined set of
@@ -102,20 +90,6 @@ sequences from all replicates.  For each sequence, the aligned read is
 extended 5 bp in both directions from its 5' aligned end where DNase cut
 the DNA.  The score at each base pair represents the number of
 extended fragments that overlap the base pair.</DD>
-</P>
-<P><DT><I>Uniqueness</I></DT>
-<DD>The <EM>Duke uniqueness</EM> tracks were used in
-the background models for use with F-seq.  These tracks identify regions of
-sequence that appear one, two, three, four, or more than four times within the
-genome for different tag lengths. The tracks help identify regions where
-high-throughput sequence tags cannot be mapped.</DD>
-</P>
-<P><DT><I>Excluded Regions</I></DT>
-<DD>The <EM>Duke excluded regions</EM> track
-was used to identify problematic regions for short sequence tag signal
-detection (such as satellites and rRNA genes). These regions of the genome were
-excluded from the UTA TFBS Peaks tracks.</DD>
-</DD></P>
 </P>
 
 <H2>Methods</H2>
@@ -154,7 +128,7 @@ in the sam/bam format using samtools.
 were also filtered based on their alignment to problematic regions
 (such as satellites and rRNA genes - see The <em>Duke excluded regions</em> track).
 The mappings of these short reads to the genome are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromChip/"
 TARGET=_BLANK>download</A>.
 </P>
 <P>The resulting digital signal was converted to a continuous wiggle track using
@@ -204,19 +178,19 @@ please see the Release Notes section of the hg18
 <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg18&g=wgEncodeChromatinMap" target=_blank>
 Open Chromatin</a> track for information on the NCBI36/hg18 releases of the data).
 <UL>
-<li>There are 11 new ChIP experiments in this release, on 3 new cell lines.
+<li>There are 11 new ChIP experiments in this release on 3 new cell lines.
 <li>New to this release is a reconfiguration of how this track is displayed in
 relation to other tracks from the Duke/UNC/UT-Austin/EBI group.
 <li>A synthesis of open chromatin evidence from the three assay types was
-compiled for Tier 1 and 2 cell lines plus NHEK has also been added in this
+compiled for Tier 1 and 2 cell lines, plus NHEK has also been added in this
 release:
 <a href="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromSynth">Open Chromatin Synthesis</a>.
 <li><B>Enhancer and Insulator Functional assays:</B>  A subset of DNase and FAIRE
 regions were cloned into functional tissue culture reporter assays to test for
 enhancer and insulator activity.  Coordinates and results from these
 experiments can be found
-<A HREF="http://hgdownload-test.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
- TARGET=ucscDownloads>here</a>.  <!-- WARNING: Change to hgdownload.cse.ucsc.edu on release -->
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/encodeDCC/wgEncodeOpenChromDnase/supplemental/"
+ TARGET=ucscDownloads>here</a>.
 </UL></P>
 
 

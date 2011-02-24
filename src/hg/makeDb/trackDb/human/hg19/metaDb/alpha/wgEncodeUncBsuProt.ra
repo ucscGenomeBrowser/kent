@@ -1,4 +1,4 @@
-metaObject wgEncodeuncBsuProtGm12878NucleusSig
+metaObject wgEncodeUncBsuProtGm12878NucleusSig
 objType table
 cell GM12878
 composite wgEncodeUncBsuProt
@@ -17,7 +17,7 @@ subId 3160
 tableName wgEncodeUncBsuProtGm12878NucleusSig
 view Signal
 
-metaObject wgEncodeuncBsuProtK562MembranefractionSig
+metaObject wgEncodeUncBsuProtK562MembranefractionSig
 objType table
 cell K562
 composite wgEncodeUncBsuProt

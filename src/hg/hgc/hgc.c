@@ -23520,14 +23520,9 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
 
             }
         bed = bedLoad6(row);
-
-        if (sameString("numtSAssembled", table) || sameString("numtS", table))
-            printf("<A HREF=\"%s&db=%s&position=%s\">browser</A> | ",
-                   hgTracksPathAndSettings(), database, bed->name);
-        else
-            printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
-                   hgTracksPathAndSettings(), database,
-                    bed->chrom, bed->chromStart+1, bed->chromEnd);
+        printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+               hgTracksPathAndSettings(), database,
+               bed->chrom, bed->chromStart+1, bed->chromEnd);
 
         printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
