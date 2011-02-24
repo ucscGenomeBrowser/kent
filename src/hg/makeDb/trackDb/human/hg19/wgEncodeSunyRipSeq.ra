@@ -3,6 +3,7 @@ compositeTrack on
 shortLabel SUNY RIP-seq
 longLabel RIP-seq from ENCODE/SUNY Albany
 group regulation
+superTrack wgEncodeRbpSuper dense
 subGroup1 view Views Peaks=Peaks Signal=Signal Alignments=Alignments 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1)
 subGroup3 factor Target_Protien ELAVL1=ELAVL1 PABPC1=PABPC1 ripInput=RIP_Input T7Tag=T7_Tag
