@@ -3925,7 +3925,7 @@ target BCLAF1
 antibodyDescription Mouse monoclonal IgG, raised against a synthetic peptide corresponding to a.a. 900-909 of BCLAF1 of human origin.
 targetDescription This gene encodes a transcriptional repressor that interacts with several members of the BCL2 family of proteins. Overexpression of this protein induces apoptosis, which can be suppressed by co-expression of BCL2 proteins (RefSeq).
 vendorName Santa Cruz Biotech
-vendorId sc-1-101388
+vendorId sc-101388
 orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
 lab Myers
 targetId GeneCard:BCLAF1
