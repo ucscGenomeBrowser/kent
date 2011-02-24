@@ -297,11 +297,25 @@ char *mdbRemoveCommonVar(struct mdbObj *mdbList, char *var);
 // Removes var from set of mdbObjs but only if all that hav it have a commmon val
 // Returns the val if removed, else NULL
 
+boolean mdbObjSetVar(struct mdbObj *mdbObj, char *var,char *val);
+// Sets the string value to a single var in an obj, preparing for DB update.
+// returns TRUE if updated, FALSE if added
+
+boolean mdbObjSetVarInt(struct mdbObj *mdbObj, char *var,int val);
+// Sets an integer value to a single var in an obj, preparing for DB update.
+// returns TRUE if updated, FALSE if added
+
 void mdbObjSwapVars(struct mdbObj *mdbObjs, char *vars,boolean deleteThis);
 // Replaces objs' vars with var=vap pairs provided, preparing for DB update.
 
-struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,boolean exclude);
-// Filters mdb objects to only those that include/exclude vars.  Optionally checks val too.  Frees removed objects
+struct mdbObj *mdbObjsFilter(struct mdbObj **pMdbObjs, char *var, char *val,boolean returnMatches);
+// Filters mdb objects to only those that include/exclude vars.  Optionally checks val too.
+// Returns matched or unmatched items objects as requested, maintaining sort order
+
+struct mdbObj *mdbObjsFilterByVars(struct mdbObj **pMdbObjs,char *vars,boolean noneEqualsNotFound,boolean returnMatches);
+// Filters mdb objects to only those that include/exclude var=val pairs (e.g. "var1=val1 var2 var3!=val3 var4=None").
+// Supports != ("var!=" means var not found). Optionally supports var=None equal to var is not found
+// Returns matched or unmatched items objects as requested.  Multiple passes means sort order is destroyed.
 
 struct mdbObj *mdbObjsFilterTablesOrFiles(struct mdbObj **pMdbObjs,boolean table, boolean files);
 // Filters mdb objects to only those that have associated tables or files. Returns removed non-table/file objects
@@ -322,6 +336,18 @@ struct slName *mdbObjToSlName(struct mdbObj *mdbObjs);
 
 int mdbVarCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
+
+
+// ----------------- Validateion and specialty APIs -----------------
+int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
+// Validates vars and vals against cv.ra.  Returns count of errors found.
+// Full considers vars not defined in cv as invalids
+
+struct mdbObj *mdbObjsEncodeExperimentify(struct sqlConnection *conn,char *db,char *tableName,struct mdbObj **pMdbObjs,int warn);
+// Organizes objects into experiments and validates experiment IDs.  Will add/update the ids in the structures.
+// If warn=1, then prints to stdout all the experiments/obs with missing or wrong expIds;
+//    warn=2, then print line for each obj with expId or warning.
+// Returns a new set of mdbObjs that is what can (and should) be used to update the mdb via mdbObjsSetToDb().
 
 
 // --------------- Free at last ----------------
@@ -389,10 +415,5 @@ enum mdbCvSearchable mdbCvSearchMethod(char *term);
 
 const char *cvLabel(char *term);
 // returns cv label if term found or else just term
-
-int mdbObjsValidate(struct mdbObj *mdbObjs, boolean full);
-// Validates vars and vals against cv.ra.  Returns count of errors found.
-// Full considers vars not defined in cv as invalids
-
 #endif /* MDB_H */
 

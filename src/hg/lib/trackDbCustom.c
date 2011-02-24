@@ -1028,8 +1028,6 @@ for (tdbContainer = tdbList; tdbContainer != NULL; tdbContainer = tdbContainer->
     sortOrderFree(&sortOrder);
     sortableTdbItemsFree(&itemsToSort);
     }
-if(countOfSortedContainers > 0)
-    verbose(1,"Sorted %d containers\n",countOfSortedContainers);
 }
 
 void trackDbAddTableField(struct trackDb *tdbList)
