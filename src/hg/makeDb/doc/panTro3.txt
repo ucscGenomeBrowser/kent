@@ -1381,7 +1381,7 @@ XXX - running - Wed Feb 23 11:28:40 PST 2011
     vi */README.txt
 
 ############################################################################
-# running cpgIsland business (DONE - 2010-02-11 - Hiram)
+# running cpgIsland business (DONE - 2011-02-24 - Hiram)
     mkdir /hive/data/genomes/panTro3/bed/cpgIsland
     cd /hive/data/genomes/panTro3/bed/cpgIsland
     cvs -d /projects/compbio/cvsroot checkout -P hg3rdParty/cpgIslands
@@ -1438,12 +1438,12 @@ endif
     para check ... etc
 XXX - running - Wed Feb 23 15:26:43 PST 2011
     para time
-# Completed: 14205 of 14205 jobs
-# CPU time in finished jobs:        205s       3.41m     0.06h    0.00d  0.000 y
-# IO & Wait Time:                 38701s     645.02m    10.75h    0.45d  0.001 y
-# Average job time:                   3s       0.05m     0.00h    0.00d
-# Longest finished job:              23s       0.38m     0.01h    0.00d
-# Submission to last job:           202s       3.37m     0.06h    0.00d
+# Completed: 24132 of 24132 jobs
+# CPU time in finished jobs:        262s       4.36m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                 61074s    1017.91m    16.97h    0.71d  0.002 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:              26s       0.43m     0.01h    0.00d
+# Submission to last job:          3122s      52.03m     0.87h    0.04d
 
     # Transform cpglh output to bed +
     catDir results | awk '{
@@ -1454,16 +1454,28 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
        $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
 }' > cpgIsland.bed
 
+    # verify longest unique chrom name:
+    cut -f1 cpgIsland.bed | sed -e 's/_random//' \
+	| awk '{print length($0)}' | sort -rn | head -1
+    #	18
+    # update the length 14 in the template to be 18:
+    sed -e "s/14/18/" $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandExt.sql
+
     cd /hive/data/genomes/panTro3/bed/cpgIsland
-    hgLoadBed panTro3 cpgIslandExt -tab \
-      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    hgLoadBed panTro3 cpgIslandExt -tab -sqlTable=cpgIslandExt.sql cpgIsland.bed
 
 # Reading cpgIsland.bed
-# Loaded 32732 elements of size 10
+# Loaded 28288 elements of size 10
 # Sorted
 # Saving bed.tab
 # Loading panTro3
 
+    featureBits panTro3 cpgIslandExt
+    #	19195554 bases of 2900529764 (0.662%) in intersection
+    # there should be no output from checkTableCoords:
+    checkTableCoords -verboseBlocks -table=cpgIslandExt panTro3
+
     #	cleanup
     rm -fr hardMaskedFa
 
+############################################################################
