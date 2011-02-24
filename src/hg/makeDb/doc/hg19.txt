@@ -14315,3 +14315,76 @@ hgLoadBed -sqlTable=hapmapPhaseIIISummary.sql hg19 hapmapPhaseIIISummary hg19.ha
     # http://genomewiki.ucsc.edu/images/8/85/Hg19.ncbiIncidentDb.bb
 
 #############################################################################
+# UNIGENE/SAGE TRACK (RE-BUILT - 2011-02-22 Fan)
+
+# Create the uniGene alignments
+
+    # Download of the latest UniGene version is now automated by a
+    # cron job -- see /cluster/home/angie/crontab ,
+    # /cluster/home/angie/unigeneVers/unigene.csh .
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/022211
+    cd /hive/data/genomes/hg19/bed/uniGene/022211
+
+    set Version = 229
+
+    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
+    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
+
+    ssh swarm
+    set Version = 229
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/022211/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/022211/run.blat
+
+    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
+    ls -1S \
+    /hive/data/genomes/hg19/bed/uniGene/022211/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95 ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+
+#Completed: 93 of 93 jobs
+#CPU time in finished jobs:      67404s    1123.41m    18.72h    0.78d  0.002 y
+#IO & Wait Time:                  5838s      97.29m     1.62h    0.07d  0.000 y
+#Average job time:                 788s      13.13m     0.22h    0.01d
+#Longest finished job:            5228s      87.13m     1.45h    0.06d
+#Submission to last job:          5320s      88.67m     1.48h    0.06d
+#Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    cat raw.psl|\
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg19.uniGene.pslReps.psl /dev/null
+    
+    gzip raw.psl
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/uniGene/022211/run.blat
+
+    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
+
+    mkdir -p /gbdb/hg19/uniGene
+    cd /gbdb/hg19/uniGene
+
+    rm Hs.seq.uniq.simpleHeader.fa
+    ln -s \
+    /hive/data/genomes/hg19/bed/uniGene/022211/Hs.seq.uniq.simpleHeader.fa \
+    Hs.seq.uniq.simpleHeader.fa
+
+# load the sequence
+
+    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+
+##############################################################################
