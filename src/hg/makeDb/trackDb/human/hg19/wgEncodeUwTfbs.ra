@@ -62,7 +62,6 @@ noInherit on
     pValueFilterLimits 0:324
 
         track wgEncodeUwTfbsBjCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel BJ CTCF Ht 1
         longLabel BJ CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -72,7 +71,6 @@ noInherit on
         # subId=1255 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot      
         shortLabel GM12878 CTCF Ht 1
         longLabel GM12878 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -83,7 +81,6 @@ noInherit on
         # subId=1263 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot      
         shortLabel K562 CTCF Ht 1
         longLabel K562 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -94,7 +91,6 @@ noInherit on
         # subId=1266 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel GM06990 CTCF Ht 1
         longLabel GM06990 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -104,7 +100,6 @@ noInherit on
         # subId=1268 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsCaco2CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel Caco2 CTCF Ht 1
         longLabel Caco-2 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -114,7 +109,6 @@ noInherit on
         # subId=1269 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12864CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel GM12864 CTCF Ht 1
         longLabel GM12864 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -124,7 +118,6 @@ noInherit on
         # subId=1272 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel GM12865 CTCF Ht 1
         longLabel GM12865 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -134,7 +127,6 @@ noInherit on
         # subId=1275 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel GM12872 CTCF Ht 1
         longLabel GM12872 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -144,7 +136,6 @@ noInherit on
         # subId=1277 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel GM12874 CTCF Ht 1
         longLabel GM12874 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -154,7 +145,6 @@ noInherit on
         # subId=1281 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsHek293CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HEK293 CTCF Ht 1
         longLabel HEK293 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -164,7 +154,6 @@ noInherit on
         # subId=1294 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHelas3CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HeLa-S3 CTCF Ht 1
         longLabel HeLa-S3 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -175,7 +164,6 @@ noInherit on
         # subId=1297 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HepG2 CTCF Ht 1
         longLabel HepG2 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -186,7 +174,6 @@ noInherit on
         # subId=1298 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHl60CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HL-60 CTCF Ht 1
         longLabel HL-60 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -196,7 +183,6 @@ noInherit on
         # subId=1300 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHmecCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HMEC CTCF Ht 1
         longLabel HMEC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -206,7 +192,6 @@ noInherit on
         # subId=1301 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HRE CTCF Ht 1
         longLabel HRE CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -216,7 +201,6 @@ noInherit on
         # subId=1304 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel HUVEC CTCF Ht 1
         longLabel HUVEC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -227,7 +211,6 @@ noInherit on
         # subId=1307 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel NHEK CTCF Ht 1
         longLabel NHEK CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -238,7 +221,6 @@ noInherit on
         # subId=1310 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel SAEC CTCF Ht 1
         longLabel SAEC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -248,7 +230,6 @@ noInherit on
         # subId=1312 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel SKRA CTCF Ht 1
         longLabel SK-N-SH_RA CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -258,7 +239,6 @@ noInherit on
         # subId=1313 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot       off
         shortLabel WERIRb1 CTCF Ht 1
         longLabel WERI-Rb-1 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -268,7 +248,6 @@ noInherit on
         # subId=1315 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsBjCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel BJ CTCF Ht 2
         longLabel BJ CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -278,7 +257,6 @@ noInherit on
         # subId=1262 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot 
         shortLabel K562 CTCF Ht 2
         longLabel K562 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -289,7 +267,6 @@ noInherit on
         # subId=1264 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot 
         shortLabel GM12878 CTCF Ht 2
         longLabel GM12878 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -300,7 +277,6 @@ noInherit on
         # subId=1265 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsCaco2CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel Caco2 CTCF Ht 2
         longLabel Caco-2 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -310,7 +286,6 @@ noInherit on
         # subId=1267 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM06990 CTCF Ht 2
         longLabel GM06990 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -320,7 +295,6 @@ noInherit on
         # subId=1271 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12865 CTCF Ht 2
         longLabel GM12865 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -330,7 +304,6 @@ noInherit on
         # subId=1274 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12872 CTCF Ht 2
         longLabel GM12872 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -340,7 +313,6 @@ noInherit on
         # subId=1278 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12874 CTCF Ht 2
         longLabel GM12874 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -350,7 +322,6 @@ noInherit on
         # subId=1280 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsHelas3CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HeLa-S3 CTCF Ht 2
         longLabel HeLa-S3 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -361,7 +332,6 @@ noInherit on
         # subId=1296 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HepG2 CTCF Ht 2
         longLabel HepG2 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -372,7 +342,6 @@ noInherit on
         # subId=1299 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HRE CTCF Ht 2
         longLabel HRE CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -382,7 +351,6 @@ noInherit on
         # subId=1305 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HUVEC CTCF Ht 2
         longLabel HUVEC CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -393,7 +361,6 @@ noInherit on
         # subId=1306 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel NHEK CTCF Ht 2
         longLabel NHEK CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -404,7 +371,6 @@ noInherit on
         # subId=1309 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel SAEC CTCF Ht 2
         longLabel SAEC CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -414,7 +380,6 @@ noInherit on
         # subId=1311 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel SKRA CTCF Ht 2
         longLabel SK-N-SH_RA CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -424,7 +389,6 @@ noInherit on
         # subId=1314 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsGm12864CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12864 CTCF Ht 2
         longLabel GM12864 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -434,7 +398,6 @@ noInherit on
         # subId=1273 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12873CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12873 CTCF Ht 1
         longLabel GM12873 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -444,7 +407,6 @@ noInherit on
         # subId=1276 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsGm12875CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12875 CTCF Ht 1
         longLabel GM12875 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -454,7 +416,6 @@ noInherit on
         # subId=1482 dateSubmitted=2010-06-15
 
       	track wgEncodeUwTfbsGm12801CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12801 CTCF Ht 1
         longLabel GM12801 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -464,7 +425,6 @@ noInherit on
         # subId=1270 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12873CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12873 CTCF Ht 2
         longLabel GM12873 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -474,7 +434,6 @@ noInherit on
         # subId=1279 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsHek293CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HEK293 CTCF Ht 2
         longLabel HEK293 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -484,7 +443,6 @@ noInherit on
         # subId=1486 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12875CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel GM12875 CTCF Ht 2
         longLabel GM12875 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -494,7 +452,6 @@ noInherit on
         # subId=1484 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel WERIRb1 CTCF Ht 2
         longLabel WERI-Rb-1 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -504,7 +461,6 @@ noInherit on
         # subId=1492 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG04449 CTCF Ht 2
         longLabel AG04449 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -514,7 +470,6 @@ noInherit on
         # subId=2595 dateSubmitted=2010-10-22
 
         track wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG04449 CTCF Ht 1
         longLabel AG04449 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -524,7 +479,6 @@ noInherit on
         # subId=2596 dateSubmitted=2010-10-22
 
         track wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG04450 CTCF Ht 1
         longLabel AG04450 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -534,7 +488,6 @@ noInherit on
         # subId=2663 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG09309 CTCF Ht 2
         longLabel AG09309 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -544,7 +497,6 @@ noInherit on
         # subId=2665 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG09309 CTCF Ht 1
         longLabel AG09309 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -554,7 +506,6 @@ noInherit on
         # subId=2666 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG09319 CTCF Ht 2
         longLabel AG09319 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -564,7 +515,6 @@ noInherit on
         # subId=2669 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG10803 CTCF Ht 1
         longLabel AG10803 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -574,7 +524,6 @@ noInherit on
         # subId=2671 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG10803 CTCF Ht 2
         longLabel AG10803 CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -584,7 +533,6 @@ noInherit on
         # subId=2672 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AoAF CTCF Ht 1
         longLabel AoAF CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -594,7 +542,6 @@ noInherit on
         # subId=2675 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AoAF CTCF Ht 2
         longLabel AoAF CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -604,7 +551,6 @@ noInherit on
         # subId=2674 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HBMEC CTCF Ht 1
         longLabel HBMEC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -614,7 +560,6 @@ noInherit on
         # subId=2677 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HBMEC CTCF Ht 2
         longLabel HBMEC CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -624,7 +569,6 @@ noInherit on
         # subId=2678 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCFaa CTCF Ht 1
         longLabel HCFaa CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -634,7 +578,6 @@ noInherit on
         # subId=2680 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCPEpiC CTCF Ht 1
         longLabel HCPEpiC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -644,7 +587,6 @@ noInherit on
         # subId=2682 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HCPEpiC CTCF Ht 2
         longLabel HCPEpiC CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -654,7 +596,6 @@ noInherit on
         # subId=2683 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHeeCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HEEpiC CTCF Ht 2
         longLabel HEEpiC CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -664,7 +605,6 @@ noInherit on
         # subId=2685 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHeeCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HEEpiC CTCF Ht 1
         longLabel HEEpiC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -674,7 +614,6 @@ noInherit on
         # subId=2686 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHmfCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HMF CTCF Ht 2
         longLabel HMF CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -684,7 +623,6 @@ noInherit on
         # subId=2688 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHmfCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HMF CTCF Ht 1
         longLabel HMF CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -694,7 +632,6 @@ noInherit on
         # subId=2689 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpafCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPAF CTCF Ht 2
         longLabel HPAF CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -704,7 +641,6 @@ noInherit on
         # subId=2691 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpafCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPAF CTCF Ht 1
         longLabel HPAF CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -714,7 +650,6 @@ noInherit on
         # subId=2692 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpfCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPF CTCF Ht 1
         longLabel HPF CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -724,7 +659,6 @@ noInherit on
         # subId=2694 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HRPEpiC CTCF Ht 1
         longLabel HRPEpiC CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -734,7 +668,6 @@ noInherit on
         # subId=2697 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHaspCtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HA-sp CTCF Ht 1
         longLabel HA-sp CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -744,7 +677,6 @@ noInherit on
         # subId=2781 dateSubmitted=2010-10-28
 
         track wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel AG09319 CTCF Ht 1
         longLabel AG09319 CTCF TFBS Hotspots Rep 1 from ENCODE/UW
@@ -754,7 +686,6 @@ noInherit on
         # subId=2668 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpfCtcfStdHotspotsRep2
-        release alpha
         parent wgEncodeUwTfbsViewHot off
         shortLabel HPF CTCF Ht 2
         longLabel HPF CTCF TFBS Hotspots Rep 2 from ENCODE/UW
@@ -772,7 +703,6 @@ noInherit on
     pValueFilterLimits 0:324
 
         track wgEncodeUwTfbsBjCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel BJ CTCF Pk 1
         longLabel BJ CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -782,7 +712,6 @@ noInherit on
         # subId=1255 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks 
         shortLabel GM12878 CTCF Pk 1
         longLabel GM12878 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -793,7 +722,6 @@ noInherit on
         # subId=1263 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks 
         shortLabel K562 CTCF Pk 1
         longLabel K562 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -804,7 +732,6 @@ noInherit on
         # subId=1266 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM06990 CTCF Pk 1
         longLabel GM06990 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -814,7 +741,6 @@ noInherit on
         # subId=1268 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsCaco2CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel Caco2 CTCF Pk 1
         longLabel Caco-2 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -824,7 +750,6 @@ noInherit on
         # subId=1269 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12864CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12864 CTCF Pk 1
         longLabel GM12864 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -834,7 +759,6 @@ noInherit on
         # subId=1272 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12865 CTCF Pk 1
         longLabel GM12865 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -844,7 +768,6 @@ noInherit on
         # subId=1275 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12872 CTCF Pk 1
         longLabel GM12872 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -854,7 +777,6 @@ noInherit on
         # subId=1277 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12874 CTCF Pk 1
         longLabel GM12874 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -864,7 +786,6 @@ noInherit on
         # subId=1281 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsHek293CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HEK293 CTCF Pk 1
         longLabel HEK293 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -874,7 +795,6 @@ noInherit on
         # subId=1294 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHelas3CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HeLa-S3 CTCF Pk 1
         longLabel HeLa-S3 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -885,7 +805,6 @@ noInherit on
         # subId=1297 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HepG2 CTCF Pk 1
         longLabel HepG2 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -896,7 +815,6 @@ noInherit on
         # subId=1298 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHl60CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HL-60 CTCF Pk 1
         longLabel HL-60 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -906,7 +824,6 @@ noInherit on
         # subId=1300 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHmecCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HMEC CTCF Pk 1
         longLabel HMEC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -916,7 +833,6 @@ noInherit on
         # subId=1301 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HRE CTCF Pk 1
         longLabel HRE CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -926,7 +842,6 @@ noInherit on
         # subId=1304 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HUVEC CTCF Pk 1
         longLabel HUVEC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -937,7 +852,6 @@ noInherit on
         # subId=1307 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel NHEK CTCF Pk 1
         longLabel NHEK CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -948,7 +862,6 @@ noInherit on
         # subId=1310 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel SAEC CTCF Pk 1
         longLabel SAEC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -958,7 +871,6 @@ noInherit on
         # subId=1312 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel SKRA CTCF Pk 1
         longLabel SK-N-SH_RA CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -968,7 +880,6 @@ noInherit on
         # subId=1313 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsWerirb1CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel WERIRb1 CTCF Pk 1
         longLabel WERI-Rb-1 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -978,7 +889,6 @@ noInherit on
         # subId=1315 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsBjCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel BJ CTCF Pk 2
         longLabel BJ CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -988,7 +898,6 @@ noInherit on
         # subId=1262 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  
         shortLabel K562 CTCF Pk 2
         longLabel K562 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -999,7 +908,6 @@ noInherit on
         # subId=1264 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks 
         shortLabel GM12878 CTCF Pk 2
         longLabel GM12878 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1010,7 +918,6 @@ noInherit on
         # subId=1265 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsCaco2CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel Caco2 CTCF Pk 2
         longLabel Caco-2 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1020,7 +927,6 @@ noInherit on
         # subId=1267 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM06990 CTCF Pk 2
         longLabel GM06990 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1030,7 +936,6 @@ noInherit on
         # subId=1271 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12865 CTCF Pk 2
         longLabel GM12865 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1040,7 +945,6 @@ noInherit on
         # subId=1274 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12872 CTCF Pk 2
         longLabel GM12872 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1050,7 +954,6 @@ noInherit on
         # subId=1278 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12874 CTCF Pk 2
         longLabel GM12874 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1060,7 +963,6 @@ noInherit on
         # subId=1280 dateSubmitted=2010-06-08
 
      	track wgEncodeUwTfbsHelas3CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HeLa-S3 CTCF Pk 2
         longLabel HeLa-S3 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1071,7 +973,6 @@ noInherit on
         # subId=1296 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HepG2 CTCF Pk 2
         longLabel HepG2 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1082,7 +983,6 @@ noInherit on
         # subId=1299 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HRE CTCF Pk 2
         longLabel HRE CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1092,7 +992,6 @@ noInherit on
         # subId=1305 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HUVEC CTCF Pk 2
         longLabel HUVEC CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1103,7 +1002,6 @@ noInherit on
         # subId=1306 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel NHEK CTCF Pk 2
         longLabel NHEK CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1114,7 +1012,6 @@ noInherit on
         # subId=1309 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel SAEC CTCF Pk 2
         longLabel SAEC CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1124,7 +1021,6 @@ noInherit on
         # subId=1311 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel SKRA CTCF Pk 2
         longLabel SK-N-SH_RA CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1134,7 +1030,6 @@ noInherit on
         # subId=1314 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsGm12864CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12864 CTCF Pk 2
         longLabel GM12864 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1144,7 +1039,6 @@ noInherit on
         # subId=1273 dateSubmitted=2010-06-08
 
        track wgEncodeUwTfbsGm12873CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12873 CTCF Pk 1
         longLabel GM12873 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1154,7 +1048,6 @@ noInherit on
         # subId=1276 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsGm12875CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12875 CTCF Pk 1
         longLabel GM12875 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1164,7 +1057,6 @@ noInherit on
         # subId=1482 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsGm12873CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12873 CTCF Pk 2
         longLabel GM12873 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1174,7 +1066,6 @@ noInherit on
         # subId=1279 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsHek293CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel HEK293 CTCF Pk 2
         longLabel HEK293 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1184,7 +1075,6 @@ noInherit on
         # subId=1486 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12875CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12875 CTCF Pk 2
         longLabel GM12875 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1194,7 +1084,6 @@ noInherit on
         # subId=1484 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12801CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel GM12801 CTCF Pk 1
         longLabel GM12801 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1204,7 +1093,6 @@ noInherit on
         # subId=1270 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsWerirb1CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks  off
         shortLabel WERIRb1 CTCF Pk 2
         longLabel WERI-Rb-1 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1214,7 +1102,6 @@ noInherit on
         # subId=1492 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsAg04449CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG04449 CTCF Pk 2
         longLabel AG04449 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1224,7 +1111,6 @@ noInherit on
         # subId=2595 dateSubmitted=2010-10-22
 
         track wgEncodeUwTfbsAg04449CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG04449 CTCF Pk 1
         longLabel AG04449 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1234,7 +1120,6 @@ noInherit on
         # subId=2596 dateSubmitted=2010-10-22
 
         track wgEncodeUwTfbsAg04450CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG04450 CTCF Pk 1
         longLabel AG04450 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1244,7 +1129,6 @@ noInherit on
         # subId=2663 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09309CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG09309 CTCF Pk 2
         longLabel AG09309 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1254,7 +1138,6 @@ noInherit on
         # subId=2665 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09309CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG09309 CTCF Pk 1
         longLabel AG09309 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1264,7 +1147,6 @@ noInherit on
         # subId=2666 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09319CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG09319 CTCF Pk 2
         longLabel AG09319 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1274,7 +1156,6 @@ noInherit on
         # subId=2669 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg10803CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG10803 CTCF Pk 1
         longLabel AG10803 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1284,7 +1165,6 @@ noInherit on
         # subId=2671 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg10803CtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG10803 CTCF Pk 2
         longLabel AG10803 CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1294,7 +1174,6 @@ noInherit on
         # subId=2672 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AoAF CTCF Pk 1
         longLabel AoAF CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1304,7 +1183,6 @@ noInherit on
         # subId=2675 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AoAF CTCF Pk 2
         longLabel AoAF CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1314,7 +1192,6 @@ noInherit on
         # subId=2674 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHbmecCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HBMEC CTCF Pk 1
         longLabel HBMEC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1324,7 +1201,6 @@ noInherit on
         # subId=2677 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHbmecCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HBMEC CTCF Pk 2
         longLabel HBMEC CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1334,7 +1210,6 @@ noInherit on
         # subId=2678 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcfaaCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCFaa CTCF Pk 1
         longLabel HCFaa CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1344,7 +1219,6 @@ noInherit on
         # subId=2680 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcpeCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCPEpiC CTCF Pk 1
         longLabel HCPEpiC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1354,7 +1228,6 @@ noInherit on
         # subId=2682 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcpeCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HCPEpiC CTCF Pk 2
         longLabel HCPEpiC CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1364,7 +1237,6 @@ noInherit on
         # subId=2683 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHeeCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HEEpiC CTCF Pk 2
         longLabel HEEpiC CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1374,7 +1246,6 @@ noInherit on
         # subId=2685 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHeeCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HEEpiC CTCF Pk 1
         longLabel HEEpiC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1384,7 +1255,6 @@ noInherit on
         # subId=2686 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHmfCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HMF CTCF Pk 2
         longLabel HMF CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1394,7 +1264,6 @@ noInherit on
         # subId=2688 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHmfCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HMF CTCF Pk 1
         longLabel HMF CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1404,7 +1273,6 @@ noInherit on
         # subId=2689 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpafCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPAF CTCF Pk 2
         longLabel HPAF CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1414,7 +1282,6 @@ noInherit on
         # subId=2691 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpafCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPAF CTCF Pk 1
         longLabel HPAF CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1424,7 +1291,6 @@ noInherit on
         # subId=2692 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpfCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPF CTCF Pk 1
         longLabel HPF CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1434,7 +1300,6 @@ noInherit on
         # subId=2694 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHrpeCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HRPEpiC CTCF Pk 1
         longLabel HRPEpiC CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1444,7 +1309,6 @@ noInherit on
         # subId=2697 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHaspCtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HA-sp CTCF Pk 1
         longLabel HA-sp CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1454,7 +1318,6 @@ noInherit on
         # subId=2781 dateSubmitted=2010-10-28
 
         track wgEncodeUwTfbsAg09319CtcfStdPkRep1
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel AG09319 CTCF Pk 1
         longLabel AG09319 CTCF TFBS Peaks (FDR 1%) Rep 1 from ENCODE/UW
@@ -1464,7 +1327,6 @@ noInherit on
         # subId=2668 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpfCtcfStdPkRep2
-        release alpha
         parent wgEncodeUwTfbsViewPeaks off
         shortLabel HPF CTCF Pk 2
         longLabel HPF CTCF TFBS Peaks (FDR 1%) Rep 2 from ENCODE/UW
@@ -1486,7 +1348,6 @@ noInherit on
     windowingFunction mean
 
         track wgEncodeUwTfbsBjCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BJ CTCF Sg 1
         longLabel BJ CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1496,7 +1357,6 @@ noInherit on
         # subId=1255 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig
         shortLabel GM12878 CTCF Sg 1
         longLabel GM12878 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1507,7 +1367,6 @@ noInherit on
         # subId=1263 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig
         shortLabel K562 CTCF Sg 1
         longLabel K562 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1518,7 +1377,6 @@ noInherit on
         # subId=1266 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12990 CTCF Sg 1
         longLabel GM06990 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1528,7 +1386,6 @@ noInherit on
         # subId=1268 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsCaco2CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Caco2 CTCF Sg 1
         longLabel Caco-2 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1538,7 +1395,6 @@ noInherit on
         # subId=1269 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12864CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12864 CTCF Sg 1
         longLabel GM12864 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1548,7 +1404,6 @@ noInherit on
         # subId=1272 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12865 CTCF Sg 1
         longLabel GM12865 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1558,7 +1413,6 @@ noInherit on
         # subId=1275 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12872 CTCF Sg 1
         longLabel GM12872 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1568,7 +1422,6 @@ noInherit on
         # subId=1277 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12874 CTCF Sg 1
         longLabel GM12874 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1578,7 +1431,6 @@ noInherit on
         # subId=1281 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsHek293CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEK293 CTCF Sg 1
         longLabel HEK293 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1588,7 +1440,6 @@ noInherit on
         # subId=1294 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHelas3CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLa-S3 CTCF Sg 1
         longLabel HeLa-S3 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1599,7 +1450,6 @@ noInherit on
         # subId=1297 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 CTCF Sg 1
         longLabel HepG2 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1610,7 +1460,6 @@ noInherit on
         # subId=1298 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHl60CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HL-60 CTCF Sg 1
         longLabel HL-60 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1620,7 +1469,6 @@ noInherit on
         # subId=1300 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHmecCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMEC CTCF Sg 1
         longLabel HMEC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1630,7 +1478,6 @@ noInherit on
         # subId=1301 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRE CTCF Sg 1
         longLabel HRE CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1640,7 +1487,6 @@ noInherit on
         # subId=1304 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC CTCF Sg 1
         longLabel HUVEC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1651,7 +1497,6 @@ noInherit on
         # subId=1307 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHEK  CTCF Sg 1
         longLabel NHEK CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1662,7 +1507,6 @@ noInherit on
         # subId=1310 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SAEC CTCF Sg 1
         longLabel SAEC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1672,7 +1516,6 @@ noInherit on
         # subId=1312 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA CTCF Sg 1
         longLabel SK-N-SH_RA CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1682,7 +1525,6 @@ noInherit on
         # subId=1313 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsWerirb1CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WERIRb1 CTCF Sg 1
         longLabel WERI-Rb-1 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1692,7 +1534,6 @@ noInherit on
         # subId=1315 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsBjCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BJ CTCF Sg 2
         longLabel BJ CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1702,7 +1543,6 @@ noInherit on
         # subId=1262 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsK562CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig 
         shortLabel K562 CTCF Sg 2
         longLabel K562 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1713,7 +1553,6 @@ noInherit on
         # subId=1264 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsGm12878CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig 
         shortLabel GM12878 CTCF Sg 2
         longLabel GM12878 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1724,7 +1563,6 @@ noInherit on
         # subId=1265 dateSubmitted=2010-06-07
 
         track wgEncodeUwTfbsCaco2CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Caco2 CTCF Sg 2
         longLabel Caco-2 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1734,7 +1572,6 @@ noInherit on
         # subId=1267 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm06990CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM06990 CTCF Sg 2
         longLabel GM06990 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1744,7 +1581,6 @@ noInherit on
         # subId=1271 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12865CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12865 CTCF Sg 2
         longLabel GM12865 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1754,7 +1590,6 @@ noInherit on
         # subId=1274 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12872CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12872 CTCF Sg 2
         longLabel GM12872 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1764,7 +1599,6 @@ noInherit on
         # subId=1278 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12874CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12874 CTCF Sg 2
         longLabel GM12874 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1774,7 +1608,6 @@ noInherit on
         # subId=1280 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsHelas3CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLa-S3 CTCF Sg 2
         longLabel HeLa-S3 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1785,7 +1618,6 @@ noInherit on
         # subId=1296 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHepg2CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 CTCF Sg 2
         longLabel HepG2 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1796,7 +1628,6 @@ noInherit on
         # subId=1299 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRE CTCF Sg 2
         longLabel HRE CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1806,7 +1637,6 @@ noInherit on
         # subId=1305 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHuvecCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC CTCF Sg 2
         longLabel HUVEC CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1817,7 +1647,6 @@ noInherit on
         # subId=1306 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHEK CTCF Sg 2
         longLabel NHEK CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1828,7 +1657,6 @@ noInherit on
         # subId=1309 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SAEC CTCF Sg 2
         longLabel SAEC CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1838,7 +1666,6 @@ noInherit on
         # subId=1311 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA CTCF Sg 2
         longLabel SK-N-SH_RA CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1848,7 +1675,6 @@ noInherit on
         # subId=1314 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsGm12864CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12864 CTCF Sg 2
         longLabel GM12864 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1858,7 +1684,6 @@ noInherit on
         # subId=1273 dateSubmitted=2010-06-08
 
         track wgEncodeUwTfbsGm12873CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12873 CTCF Sg 1
         longLabel GM12873 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1868,7 +1693,6 @@ noInherit on
         # subId=1276 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsGm12875CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12875 CTCF Sg 1
         longLabel GM12875 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1878,7 +1702,6 @@ noInherit on
         # subId=1482 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsGm12801CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12801 CTCF Sg 1
         longLabel GM12801 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1888,7 +1711,6 @@ noInherit on
         # subId=1270 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12873CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12873 CTCF Sg 2
         longLabel GM12873 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1898,7 +1720,6 @@ noInherit on
         # subId=1279 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsHek293CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEK293 CTCF Sg 2
         longLabel HEK293 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1908,7 +1729,6 @@ noInherit on
         # subId=1486 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsGm12875CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12875 CTCF Sg 2
         longLabel GM12875 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1918,7 +1738,6 @@ noInherit on
         # subId=1484 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsWerirb1CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WERIRb1 CTCF Sg 2
         longLabel WERI-Rb-1 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -1928,7 +1747,6 @@ noInherit on
         # subId=1492 dateSubmitted=2010-06-16
 
 	track wgEncodeUwTfbsBjInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel BJ Inp Sg 1
         longLabel BJ Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1938,7 +1756,6 @@ noInherit on
         # subId=1283 dateSubmitted=2010-06-10
 
 	track wgEncodeUwTfbsCaco2InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Caco2 Inp Sg 1
         longLabel Caco-2 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1949,7 +1766,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsGm06990InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM06990 Inp Sg 1
         longLabel GM06990 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1960,7 +1776,6 @@ noInherit on
 
 	
         track wgEncodeUwTfbsGm12801InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12801 Inp Sg 1
         longLabel GM12801 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1971,7 +1786,6 @@ noInherit on
 
        
 	track wgEncodeUwTfbsGm12864InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12864 Inp Sg 1
         longLabel GM12864 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1982,7 +1796,6 @@ noInherit on
 
     
         track wgEncodeUwTfbsGm12865InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12865 Inp Sg 1
         longLabel GM12865 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -1993,7 +1806,6 @@ noInherit on
 
 	
         track wgEncodeUwTfbsGm12872InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12872 Inp Sg 1
         longLabel GM12872 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2003,7 +1815,6 @@ noInherit on
         # subId=1292 dateSubmitted=2010-06-10
         
 	track wgEncodeUwTfbsGm12878InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig
         shortLabel GM12878 Inp Sg 1
         longLabel GM12878 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2015,7 +1826,6 @@ noInherit on
 
 	
         track wgEncodeUwTfbsHek293InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEK293 Inp Sg 1
         longLabel HEK293 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2025,7 +1835,6 @@ noInherit on
         # subId=1295 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHmecInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMEC Inp Sg 1
         longLabel HMEC Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2035,7 +1844,6 @@ noInherit on
         # subId=1302 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsHreInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRE Inp Sg 1
         longLabel HRE Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2045,7 +1853,6 @@ noInherit on
         # subId=1303 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsK562InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig
         shortLabel K562 Inp Sg 1
         longLabel K562 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2056,7 +1863,6 @@ noInherit on
         # subId=1308 dateSubmitted=2010-06-10
 	
         track wgEncodeUwTfbsHuvecInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HUVEC Inp Sg 1
         longLabel HUVEC Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2067,7 +1873,6 @@ noInherit on
         # subId=1316 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsNhekInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHEK Inp Sg 1
         longLabel NHEK Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2078,7 +1883,6 @@ noInherit on
         # subId=1317 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSaecInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SAEC Inp Sg 1
         longLabel SAEC Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2088,7 +1892,6 @@ noInherit on
         # subId=1318 dateSubmitted=2010-06-10
 
         track wgEncodeUwTfbsSknshraInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel SKRA Inp Sg 1
         longLabel SK-N-SH_RA Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2099,7 +1902,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsWerirb1InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel WERIRb1 Inp Sg 1
         longLabel WERI-Rb-1 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2110,7 +1912,6 @@ noInherit on
 
 	
         track wgEncodeUwTfbsGm12874InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12874 Inp Sg 1
         longLabel GM12874 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2120,7 +1921,6 @@ noInherit on
         # subId=1416 dateSubmitted=2010-06-14
 
         track wgEncodeUwTfbsHelas3InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HeLa-S3 Inp Sg 1
         longLabel HeLa-S3 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2131,7 +1931,6 @@ noInherit on
         # subId=1423 dateSubmitted=2010-06-14
 
         track wgEncodeUwTfbsHepg2InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HepG2 Inp Sg 1
         longLabel HepG2 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2142,7 +1941,6 @@ noInherit on
         # subId=1435 dateSubmitted=2010-06-15
 
         track wgEncodeUwTfbsHl60InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HL-60 Inp Sg 1
         longLabel HL-60 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2153,7 +1951,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsGm12873InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12873 Inp Sg 1
         longLabel GM12873 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2164,7 +1961,6 @@ noInherit on
 
 	
         track wgEncodeUwTfbsGm12875InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel GM12875 Inp Sg 1
         longLabel GM12875 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2174,7 +1970,6 @@ noInherit on
         # subId=1485 dateSubmitted=2010-06-16
 
         track wgEncodeUwTfbsAg04449CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG04449 CTCF Sg 2
         longLabel AG04449 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2185,7 +1980,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg04449CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG04449 CTCF Sg 1
         longLabel AG04449 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2195,7 +1989,6 @@ noInherit on
         # subId=2596 dateSubmitted=2010-10-22
 
         track wgEncodeUwTfbsAg04449InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG04449 Inp Sg 1
         longLabel AG04449 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2206,7 +1999,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg04450InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG04450 Inp Sg 1
         longLabel AG04450 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2216,7 +2008,6 @@ noInherit on
         # subId=2662 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg04450CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG04450 CTCF Sg 1
         longLabel AG04450 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2226,7 +2017,6 @@ noInherit on
         # subId=2663 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsMcf7InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel MCF-7 Inp Sg 1
         longLabel MCF-7 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2237,7 +2027,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg09309InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09309 Inp Sg 1
         longLabel AG09309 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2248,7 +2037,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg09309CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09309 CTCF Sg 2
         longLabel AG09309 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2259,7 +2047,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg09309CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09309 CTCF Sg 1
         longLabel AG09309 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2269,7 +2056,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg09319InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09319 Inp Sg 1
         longLabel AG09319 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2280,7 +2066,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg09319CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09319 CTCF Sg 2
         longLabel AG09319 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2291,7 +2076,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg10803InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG10803 Inp Sg 1
         longLabel AG10803 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2302,7 +2086,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg10803CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG10803 CTCF Sg 1
         longLabel AG10803 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2313,7 +2096,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAg10803CtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG10803 CTCF Sg 2
         longLabel AG10803 CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2324,7 +2106,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsAoafInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AoAF Inp Sg 1
         longLabel AoAF Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2334,7 +2115,6 @@ noInherit on
         # subId=2673 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AoAF CTCF Sg 1
         longLabel AoAF CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2344,7 +2124,6 @@ noInherit on
         # subId=2675 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAoafCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AoAF CTCF Sg 2
         longLabel AoAF CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2355,7 +2134,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHbmecCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HBMEC CTCF Sg 1
         longLabel HBMEC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2366,7 +2144,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHbmecCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HBMEC CTCF Sg 2
         longLabel HBMEC CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2377,7 +2154,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHcfaaCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCFaa CTCF Sg 1
         longLabel HCFaa CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2388,7 +2164,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHcpeInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCPEpiC Inp Sg 1
         longLabel HCPEpiC Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2399,7 +2174,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHcpeCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCPEpiC CTCF Sg 1
         longLabel HCPEpiC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2410,7 +2184,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHcpeCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCPEpiC CTCF Sg 2
         longLabel HCPEpiC CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2421,7 +2194,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHeeInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEEpiC Inp Sg 1
         longLabel HEEpiC Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2431,7 +2203,6 @@ noInherit on
         # subId=2684 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHeeCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEEpiC CTCF Sg 2
         longLabel HEEpiC CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2442,7 +2213,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHeeCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HEEpiC CTCF Sg 1
         longLabel HEEpiC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2453,7 +2223,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHmfInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMF Inp Sg 1
         longLabel HMF Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2464,7 +2233,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHmfCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMF CTCF Sg 2
         longLabel HMF CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2475,7 +2243,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHmfCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HMF CTCF Sg 1
         longLabel HMF CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2486,7 +2253,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHpafInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPAF Inp Sg 1
         longLabel HPAF Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2497,7 +2263,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHpafCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPAF CTCF Sg 2
         longLabel HPAF CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
@@ -2508,7 +2273,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHpafCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPAF CTCF Sg 1
         longLabel HPAF CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2519,7 +2283,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHpfInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPF Inp Sg 1
         longLabel HPF Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2530,7 +2293,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHpfCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPF CTCF Sg 1
         longLabel HPF CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2541,7 +2303,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHrpeInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRPEpiC Inp Sg 1
         longLabel HRPEpiC Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2552,7 +2313,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHrpeCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HRPEpiC CTCF Sg 1
         longLabel HRPEpiC CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2563,7 +2323,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHvmfInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HVMF Inp Sg 1
         longLabel HVMF Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2574,7 +2333,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsJurkatInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel Jurkat Inp Sg 1
         longLabel Jurkat Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2584,7 +2342,6 @@ noInherit on
         # subId=2699 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsNb4InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NB4 Inp Sg 1
         longLabel NB4 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2595,7 +2352,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsNhdfneoInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel NHDF-neo Inp Sg 1
         longLabel NHDF-neo Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2606,7 +2362,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHcfInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCF Inp Sg 1
         longLabel HCF Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2617,7 +2372,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHct116InputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCT-116 Inp Sg 1
         longLabel HCT-116 Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2627,7 +2381,6 @@ noInherit on
         # subId=2705 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHaspInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HA-sp Inp Sg 1
         longLabel HA-sp Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2637,7 +2390,6 @@ noInherit on
         # subId=2780 dateSubmitted=2010-10-28
 
         track wgEncodeUwTfbsHaspCtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HA-sp CTCF Sg 1
         longLabel HA-sp CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2647,7 +2399,6 @@ noInherit on
         # subId=2781 dateSubmitted=2010-10-28
 
         track wgEncodeUwTfbsHbmecInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HBMEC Inp Sg 1
         longLabel HBMEC Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2657,7 +2408,6 @@ noInherit on
         # subId=2676 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHcfaaInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCFaa Inp Sg 1
         longLabel HCFaa Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2667,7 +2417,6 @@ noInherit on
         # subId=2679 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsAg09319CtcfStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel AG09319 CTCF Sg 1
         longLabel AG09319 CTCF TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2678,7 +2427,6 @@ noInherit on
 
 
         track wgEncodeUwTfbsHcmInputStdRawRep1
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HCM Inp Sg 1
         longLabel HCM Input TFBS Raw Signal Rep 1 from ENCODE/UW
@@ -2688,7 +2436,6 @@ noInherit on
         # subId=2704 dateSubmitted=2010-10-23
 
         track wgEncodeUwTfbsHpfCtcfStdRawRep2
-        release alpha
         parent wgEncodeUwTfbsViewRawSig off
         shortLabel HPF CTCF Sg 2
         longLabel HPF CTCF TFBS Raw Signal Rep 2 from ENCODE/UW
