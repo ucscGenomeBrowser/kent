@@ -15,6 +15,7 @@ wgEncodeUwHistone.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeCaltechRnaSeq.ra \
 wgEncodeUwAffyExonArray.ra \
+wgEncodeUwTfbs.ra \
 
 include ../../../../makefile.metaDb
 
