@@ -34,11 +34,11 @@ display according to several attributes:
 	    (can have 2, 3 or 4 alleles)
         <LI><B>In-del</B> - insertion/deletion
         <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'
-        <LI><B>Microsatellite</B> - the observed allele from dbSNP is variation in counts of short tandem repeats
-        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name
-        <LI><B>No Variation</B> - no variation asserted for sequence
+        <LI><B>Microsatellite</B> - the observed allele from dbSNP is a variation in counts of short tandem repeats
+        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name instead of raw sequence, e.g., (Alu)/-
+        <LI><B>No Variation</B> - the submission reports an invariant region in the surveyed sequence
         <LI><B>Mixed</B> - the cluster contains submissions from multiple classes
-        <LI><B>Multiple Nucleotide Polymorphism</B> - alleles of the same length, length > 1, and from set of {A,T,C,G}
+        <LI><B>Multiple Nucleotide Polymorphism (MNP)</B> - the alleles are all of the same length, and length > 1
         <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly
         <LI><B>Deletion</B> - the polymorphism is a deletion relative to the reference assembly
         <LI><B>Unknown</B> - no classification provided by data contributor
@@ -68,18 +68,20 @@ display according to several attributes:
       <B>Function</B>: Predicted functional role 
 	(<I>each variant may have more than one functional role</I>)<BR>
       <UL>
-        <LI><B>Locus Region</B> - variation within 2000 bases of gene, but not 
-	    in transcript (<TT>near-gene-3</TT>, <TT>near-gene-5</TT>)
+        <LI><B>Locus Region</B> - variation is 3' to and within 500  bases of a
+          transcript, or is 5' to and within 2000 bases of a transcript
+          (<TT>near-gene-3</TT>, <TT>near-gene-5</TT>)
         <LI><B>Coding - Synonymous</B> - no change in peptide for allele with 
-	    respect to reference assembly (<TT>coding-synon</TT>)
+	    respect to the reference assembly (<TT>coding-synon</TT>)
         <LI><B>Coding - Non-Synonymous</B> - change in peptide for allele with 
-	    respect to reference assembly (<TT>nonsense</TT>, <TT>missense</TT>, 
+	    respect to the eference assembly (<TT>nonsense</TT>, <TT>missense</TT>, 
             <TT>frameshift</TT>, <TT>cds-indel</TT>, <TT>coding-synonymy-unknown</TT>)
-        <LI><B>Untranslated</B> - variation in transcript, but not in coding 
+        <LI><B>Untranslated</B> - variation is in a transcript, but not in a coding 
 	    region interval (<TT>untranslated-3</TT>, <TT>untranslated-5</TT>)
-        <LI><B>Intron</B> - variation in intron, but not in first two or last two bases of intron
-        <LI><B>Splice Site</B> - variation in first two or last two bases of 
-	    intron (<TT>splice-3</TT>, <TT>splice-5</TT>)
+        <LI><B>Intron</B> - variation is in an intron, but not in the first two or
+          last two bases of the intron
+        <LI><B>Splice Site</B> - variation is in the first two or last two bases
+          of an intron (<TT>splice-3</TT>, <TT>splice-5</TT>)
         <LI><B>Unknown</B> - no known functional classification
       </UL>
     </LI>
@@ -128,7 +130,7 @@ display according to several attributes:
             total sample count for this SNP is probably incorrect.</LI>
         <LI><B>ObservedContainsIupac</B> - At least one observed allele 
             from dbSNP contains an <A HREF="../goldenPath/help/iupac.html"
-	    TARGET=_BLANK>IUPAC</A> ambiguous base (e.g. R, Y, N).</LI>
+	    TARGET=_BLANK>IUPAC</A> ambiguous base (e.g., R, Y, N).</LI>
         <LI><B>ObservedMismatch</B> - UCSC reference allele does not
             match any observed allele from dbSNP.  This is tested only
 	    for SNPs whose class is single, in-del, insertion, deletion,
@@ -138,7 +140,7 @@ display according to several attributes:
         <LI><B>ObservedWrongFormat</B> - Observed allele(s) from dbSNP
             have unexpected format for the given class.</LI>
         <LI><B>RefAlleleMismatch</B> - The reference allele from dbSNP
-            does not match the UCSC reference allele, i.e. the bases in
+            does not match the UCSC reference allele, i.e., the bases in
 	    the mapped position range.</LI>
         <LI><B>RefAlleleRevComp</B> - The reference allele from dbSNP
             matches the reverse complement of the UCSC reference
@@ -196,7 +198,7 @@ display according to several attributes:
 	        some SNPs in build 132</B></EM></LI>
         <LI><B>Genotype Conflict</B> - Quality check: different genotypes 
 	    have been submitted for the same individual.</LI>
-        <LI><B>Ref SNP Cluster has Nonoverlapping Alleles</B> - Quality
+        <LI><B>Ref SNP Cluster has Non-overlapping Alleles</B> - Quality
 	    check: this reference SNP was clustered from submitted SNPs
 	    with non-overlapping sets of observed alleles.</LI>
         <LI><B>Some Assembly's Allele Does Not Match Observed</B> - 
@@ -229,9 +231,9 @@ display according to several attributes:
     </LI>
     <LI>
       <A name="Submitters"></A>
-      <B>Submitter handles</B>: These are short single-word identifiers of
+      <B>Submitter handles</B>: These are short, single-word identifiers of
       labs or consortia that submitted SNPs that were clustered into this
-      reference SNP by dbSNP (e.g. 1000GENOMES, ENSEMBL, KWOK).  Some SNPs
+      reference SNP by dbSNP (e.g., 1000GENOMES, ENSEMBL, KWOK).  Some SNPs
       have been observed by many different submitters, and some by only a
       single submitter (although that single submitter may have tested a
       large number of samples).
@@ -240,7 +242,7 @@ display according to several attributes:
       <A name="AlleleFreq"></A>
       <B>AlleleFrequencies</B>: Some submissions to dbSNP include 
       allele frequencies and the study's sample size 
-      (i.e. the number of distinct chromosomes which is two times the
+      (i.e., the number of distinct chromosomes, which is two times the
       number of individuals assayed, a.k.a. 2N).  dbSNP combines all
       available frequencies and counts from submitted SNPs that are 
       clustered together into a reference SNP.
@@ -299,7 +301,7 @@ The database dump files were downloaded from
 <A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/"
 TARGET=_BLANK>ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
 <EM>organism</EM>_<EM>tax_id</EM>/database/
-(e.g. for Human, <EM>organism</EM>_<EM>tax_id</EM> = human_9606).
+(e.g., for Human, <EM>organism</EM>_<EM>tax_id</EM> = human_9606).
 The fasta files were downloaded from 
 <A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/"
 TARGET=_BLANK>ftp://ftp.ncbi.nih.gov/snp/organisms/</A>
