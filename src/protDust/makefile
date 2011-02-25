@@ -3,7 +3,7 @@ include ../inc/common.mk
 O = protDust.o 
 
 protDust.exe: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a ${L}
 	mv ${AOUT} protDust.exe
 	chmod a+rx protDust.exe
 

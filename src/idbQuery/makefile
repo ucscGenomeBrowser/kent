@@ -7,7 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = idbQuery.o 
 
 idbQuery.exe: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
 	mv ${AOUT} idbQuery.exe
 	chmod a+rx idbQuery.exe
 
