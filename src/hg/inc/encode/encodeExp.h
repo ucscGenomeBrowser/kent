@@ -92,20 +92,38 @@ void encodeExpJsonOutput(struct encodeExp *el, FILE *f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+/* WARNING:  When schema is changed, encodeExp.c will need changes as well */
+
+#define ENCODE_EXP_FIELD_IX             "ix"
+#define ENCODE_EXP_FIELD_ORGANISM       "organism"
+#define ENCODE_EXP_FIELD_ACCESSION      "accession"
+#define ENCODE_EXP_FIELD_LAB            "lab"
+#define ENCODE_EXP_FIELD_DATA_TYPE      "dataType"
+#define ENCODE_EXP_FIELD_CELL_TYPE      "cellType"
+#define ENCODE_EXP_FIELD_VARS           "vars"
+
 #define ENCODE_EXP_TABLE        "encodeExp"
 #define ENCODE_EXP_DATABASE     "hgFixed"
 #define ENCODE_EXP_ACC_PREFIX   "wgEncodeE"
+#define ENCODE_EXP_TABLE_LOCK   "lock_encodeExp"
+
+void encodeExpFieldIndex(char *fieldName);
+/* Get column number of named field in EncodeExp schema */
 
 void encodeExpTableCreate(struct sqlConnection *conn, char *tableName);
 /* Create an encodeExp table */
 
 struct encodeExp *encodeExpFromRa(struct hash *ra);
-/* Load an encodeExp from a Ra */
+/* Load an encodeExp from a Ra hash */
 
-struct hash *encodeExpToRa(struct encodeExp *el);
-/* Create a .ra from an encodeExp */
+struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f);
+/* Create a Ra hash from an encodeExp.  Print to file if non NULL */
 
-void encodeExpSave(struct sqlConnection *conn, struct encodeExp *el, char *tableName);
+struct hash *encodeExpToRa(struct encodeExp *exp);
+/* Create a Ra hash from an encodeExp */
+
+void encodeExpSave(struct sqlConnection *conn, struct encodeExp *exp, 
+                                         char *tableName);
 /* Save encodeExp as a row to the table specified by tableName. Update accession using
  * index assigned with autoincrement */
 

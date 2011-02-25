@@ -284,10 +284,74 @@ fputc('}',f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+/* Schema in alternate format with additional properties.
+   For each field, there is a 'get' function and an entry in the fields table.
+   WARNING:  Must parallel .sql */
 
-void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
-/* Create an encodeExp table */
+/* BEGIN schema-dependent section */
+
+char *encodeExpGetIx(struct encodeExp *exp)
+/* Return ix field of encodeExp */
 {
+char buf[64];
+safef(buf, 64, "%d", exp->ix);
+return cloneString(buf);
+}
+
+char *encodeExpGetOrganism(struct encodeExp *exp)
+/* Return organism field of encodeExp */
+{
+return cloneString(exp->organism);
+}
+
+char *encodeExpGetAccession(struct encodeExp *exp)
+/* Return accession field of encodeExp */
+{
+return cloneString(exp->accession);
+}
+
+char *encodeExpGetLab(struct encodeExp *exp)
+/* Return lab field of encodeExp */
+{
+return cloneString(exp->lab);
+}
+
+char *encodeExpGetDataType(struct encodeExp *exp)
+/* Return dataType field of encodeExp */
+{
+return cloneString(exp->dataType);
+}
+
+char *encodeExpGetCellType(struct encodeExp *exp)
+/* Return cellType field of encodeExp */
+{
+return cloneString(exp->cellType);
+}
+
+char *encodeExpGetVars(struct encodeExp *exp)
+/* Return vars field of encodeExp */
+{
+return cloneString(exp->vars);
+}
+
+typedef char * (*encodeExpGetField)(struct encodeExp *exp);
+
+struct encodeExpField {
+    char *name;
+    encodeExpGetField get; 
+    boolean required;
+} encodeExpField;
+
+struct encodeExpField encodeExpFields[] = 
+   { {ENCODE_EXP_FIELD_IX, &encodeExpGetIx, TRUE},                  //required, set to 0
+     {ENCODE_EXP_FIELD_ORGANISM, &encodeExpGetOrganism, TRUE},      //required
+     {ENCODE_EXP_FIELD_ACCESSION, &encodeExpGetAccession, FALSE},
+     {ENCODE_EXP_FIELD_LAB, &encodeExpGetLab, TRUE},                 //required
+     {ENCODE_EXP_FIELD_DATA_TYPE, &encodeExpGetDataType, TRUE},      //required
+     {ENCODE_EXP_FIELD_CELL_TYPE, &encodeExpGetCellType, TRUE},      //required
+     {ENCODE_EXP_FIELD_VARS, &encodeExpGetVars, FALSE},
+     {NULL, 0, 0} };
+
 static char *sqlCreate =
 "CREATE TABLE %s (\n"
 "    ix int not null AUTO_INCREMENT,     # auto-increment ID\n"
@@ -301,73 +365,101 @@ static char *sqlCreate =
 "    PRIMARY KEY(ix)\n"
 ")";
 
-struct dyString *dy = newDyString(1024);
+/* END schema-dependent section */
+
+void encodeExpTableCreate(struct sqlConnection *conn, char *tableName)
+/* Create an encodeExp table */
+{
+struct dyString *dy = newDyString(0);
 dyStringPrintf(dy, sqlCreate, tableName, dyStringContents(dy));
 sqlRemakeTable(conn, tableName, dyStringContents(dy));
-//dyStringFree(&dy);
+dyStringFree(&dy);
 }
 
 struct encodeExp *encodeExpFromRa(struct hash *ra)
-/* Load an encodeExp from a .ra */
+/* Load an encodeExp from a Ra hash. */
 {
+char *rows[ENCODEEXP_NUM_COLS];
 struct encodeExp *ret;
+int i;
 
 AllocVar(ret);
-ret->organism = cloneString(hashMustFindVal(ra, "organism"));
-ret->lab = cloneString(hashMustFindVal(ra, "lab"));
-ret->dataType = cloneString(hashMustFindVal(ra, "dataType"));
-ret->cellType = cloneString(hashMustFindVal(ra, "cellType"));
-
-char *vars = hashFindVal(ra, "vars");
-ret->vars = (vars != NULL ? cloneString(vars) : NULL);
+for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
+    {
+    struct encodeExpField *fp = &encodeExpFields[i];
+    assert(fp->name != NULL);
+    char *val = hashFindVal(ra, fp->name);
+    if (val == NULL && fp->required)
+        errAbort("Required field \'%s\' not found in .ra", fp->name);
+    rows[i] = cloneString(val);
+    }
+encodeExpStaticLoad(rows, ret);
 return ret;
 }
 
-struct hash *encodeExpToRa(struct encodeExp *el)
-/* Create a .ra from an encodeExp */
+struct hash *encodeExpToRaFile(struct encodeExp *exp, FILE *f)
+/* Create a Ra hash from an encodeExp.  Print to file if non NULL */
 {
 struct hash *ra = hashNew(0);
-hashAdd(ra, "organism", el->organism);
-hashAdd(ra, "lab", el->lab);
-hashAdd(ra, "dataType", el->dataType);
-hashAdd(ra, "cellType", el->cellType);
-if (el->vars != NULL)
-    hashAdd(ra, "vars", el->vars);
+int i;
+for (i = 0; i < ENCODEEXP_NUM_COLS; i++)
+    {
+    struct encodeExpField *fp = &encodeExpFields[i];
+    assert(fp->name != NULL);
+    char *val = fp->get(exp);
+    if (val != NULL)
+        {
+        hashAdd(ra, fp->name, val);
+        if (f != NULL)
+            fprintf(f, "%s %s\n", fp->name, val);
+        }
+    }
+fputs("\n", f);
 return ra;
 }
 
-static char *encodeExpAccession(struct encodeExp *el)
+struct hash *encodeExpToRa(struct encodeExp *exp)
+/* Create a Ra hash from an encodeExp */
+{
+return encodeExpToRaFile(exp, NULL);
+}
+
+static char *encodeExpAccession(struct encodeExp *exp)
 /* Make accession string from prefix + organism + id */
 {
-char org = 'H';
-#define BUF_SIZE 32
+#define BUF_SIZE 64 
 char accession[BUF_SIZE];
-if (sameString(el->organism, "human"))
+
+char org = (char) NULL;
+if (sameString(exp->organism, "human"))
     org = 'H';
-else if (sameString(el->organism, "mouse"))
+else if (sameString(exp->organism, "mouse"))
     org = 'M';
 else
-    errAbort("Invalid organism %s", el->organism);
-safef(accession, BUF_SIZE, "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, el->ix);
+    errAbort("Invalid organism %s", exp->organism);
+safef(accession, BUF_SIZE, "%s%c%06d", ENCODE_EXP_ACC_PREFIX, org, exp->ix);
 return cloneString(accession);
 }
 
-void encodeExpSave(struct sqlConnection *conn, struct encodeExp *el, char *tableName)
-/* Save encodeExp as a row to the table specified by tableName. Update accession using
- * index assigned with autoincrement */
+void encodeExpSave(struct sqlConnection *conn, struct encodeExp *exp, char *tableName)
+/* Save encodeExp as a row to the table specified by tableName. 
+   Update accession using index assigned with autoincrement
+*/
 {
 struct dyString *query;
-char *accession;
 
-encodeExpSaveToDb(conn, el, tableName, 2048);
-query = newDyString(1024);
+query = newDyString(0);
+sqlGetLock(conn, ENCODE_EXP_TABLE_LOCK);
+encodeExpSaveToDb(conn, exp, tableName, 0);
 dyStringPrintf(query, "select max(ix) from %s", tableName);
-el->ix = sqlQuickNum(conn, query->string);
+exp->ix = sqlQuickNum(conn, query->string);
 freeDyString(&query);
-query = newDyString(1024);
-accession = encodeExpAccession(el);
+query = newDyString(0);
+char *accession = encodeExpAccession(exp);
 dyStringPrintf(query, "update %s set accession=\'%s\' where ix=%d", 
-                        tableName, accession, el->ix);
+                        tableName, accession, exp->ix);
 sqlUpdate(conn, query->string);
+sqlReleaseLock(conn, ENCODE_EXP_TABLE_LOCK);
+freez(&accession);
 freeDyString(&query);
 }

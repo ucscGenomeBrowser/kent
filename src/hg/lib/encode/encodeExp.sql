@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#ENCODE experiments
+#ENCODE experiment
 CREATE TABLE encodeExp (
     ix int not null AUTO_INCREMENT,	# auto-increment ID
     organism varchar(255) not null,	# human | mouse

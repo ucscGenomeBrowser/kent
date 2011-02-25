@@ -10,3 +10,6 @@ O = $A.o
 compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
+
+install: $A${EXE}
+	cp $A${EXE} ~kate/bin/x86_64
