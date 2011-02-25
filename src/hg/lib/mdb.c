@@ -3155,7 +3155,7 @@ while ((hEl = hashNext(&hc)) != NULL)
         {
         setting = hashFindVal(typeHash,"searchable");
         if (setting == NULL
-        || (differentWord(setting,"select") && differentWord(setting,"freeText")))
+        || (differentWord(setting,"select") && differentWord(setting,"multiSelect") && differentWord(setting,"freeText")))
            continue;
         }
     if (cvDefined)
