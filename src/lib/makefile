@@ -30,7 +30,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o base64.o \
     phyloTree.o pipeline.o portimpl.o pngwrite.o psGfx.o psPoly.o pscmGfx.o \
     psl.o pslGenoShow.o pslShow.o pslTbl.o pslTransMap.o pthreadWrap.o \
     qa.o quickHeap.o quotedP.o \
-    ra.o rbTree.o rangeTree.o repMask.o rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
+    ra.o rbTree.o rangeTree.o regexHelper.o repMask.o rle.o rnautil.o rqlEval.o rqlParse.o rudp.o \
     scoreWindow.o seg.o seqOut.o seqStats.o servBrcMcw.o servCrunx.o \
     servcis.o servcl.o servmsII.o servpws.o shaRes.o slog.o snof.o \
     snofmake.o snofsig.o spaceSaver.o spacedColumn.o spacedSeed.o \
