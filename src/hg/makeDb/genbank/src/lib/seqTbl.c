@@ -187,7 +187,7 @@ struct hash* seqTblLoadAcc(struct sqlConnection *conn,
 char query[512];
 char **row;
 struct sqlResult *sr;
-struct hash* seqHash = hashNew(22);
+struct hash* seqHash = hashNew(20);
 
 if (sqlTableExists(conn, SEQ_TBL))
     {
