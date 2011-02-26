@@ -7278,9 +7278,9 @@ description Poly(A)+ RNA longer than 200 nt
 label longPolyA+
 
 term longNonPolyA
-tag pAM 
+tag pAM
 type rnaExtract
-description Poly(A)- RNA longer than 200 nt  
+description Poly(A)- RNA longer than 200 nt
 label longPolyA-
 
 ## This is what Yale and Caltech are using
@@ -8230,7 +8230,7 @@ term GIS-Ruan
 tag GisRuan
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
-description Ruan - Genome Institute of Singapore (Chia) 
+description Ruan - Genome Institute of Singapore (Chia)
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -8656,7 +8656,7 @@ projectName BU
 term Ruan
 tag ruan
 type grant
-description Ruan        
+description Ruan
 grantInst Genome Institute of Singapore
 projectName ChIA-PET
 
@@ -8763,7 +8763,7 @@ projectName PSU
 term White
 tag white
 type grant
-description White 
+description White
 grantInst University of Chicago
 projectName UChicago
 
@@ -8783,6 +8783,7 @@ projectName UNC-Giddings
 # Definition of specialized settings:
 #   searchable [no/select/date/numeric]  DEFAULT: NO
 #       select: drop-down selection of values discovered in mdb
+#  multiSelect: drop-down check-box list allowing selection of multiple values (e.g. [GM12878,K562] means search for either)
 #         date: by less than or greater than date range (not yet implemented)
 #      numeric: numeric by range (not yet implemented)
 #
@@ -8791,7 +8792,7 @@ projectName UNC-Giddings
 #       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
 #
 #     validate [cv/date/exists/float/integer/list:/none/regex:] outlines the expected values.  ENFORCED by mdbPrint -validate
-#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.  
+#           cv: must be defined term in cv (e.g. cell=GM12878).  "cv or None" indicates that "None is also acceptable.
 #               "cv or control" indicates that cv-defined terms of type "control" are also acceptable.
 #         date: must be date in YYYY-MM-DD format
 #       exists: not enforced.  (e.g. fileName could be validated to exist in download directory)
@@ -8802,7 +8803,7 @@ projectName UNC-Giddings
 #     "regex:": must match regular expression (e.g. "regex: ^GS[M,E][0-9]$" )  # ("regex:" includes colon)
 #    # NOTE: that validate rules may end comment delimited by a '#'
 #
-#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances, with lower numbers implying greater priority.  
+#     priority Like in trackDb.ra this is used for enfocing a sort order in certain circumstances, with lower numbers implying greater priority.
 #       At beginnning:
 #         species:??  assembly:??  project:010  grant:015  lab:020  composite:025  dataType:030  view:035  type:040
 #       Experiment defining:
@@ -8844,7 +8845,7 @@ term age
 type typeOfTerm
 label Age of donor organism
 description The age of the organism used to produce tissue or cell line.
-searchable select
+searchable multiSelect
 cvDefined yes
 priority 140
 validate cv
@@ -8862,7 +8863,7 @@ term Antibody
 type typeOfTerm
 label Antibody or target protein
 description The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv or control
 priority 190
@@ -8880,7 +8881,7 @@ term cellType
 type typeOfTerm
 label Cell, tissue or DNA sample
 description Cell line or tissue used as the source of experimental material.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 120
@@ -8905,7 +8906,7 @@ term control
 type typeOfTerm
 label Control or Input for ChIPseq
 description The type of control (or 'input') used in ChIP-seq experiments to remove background noise before peak calling.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 230
@@ -8925,7 +8926,7 @@ term dataType
 type typeOfTerm
 label Experiment (Assay) type
 description The types of experiments such as ChIP-seq, DNAse-seq and RNA-seq.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 030
@@ -8934,7 +8935,7 @@ term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
 description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
-searchable select
+searchable multiSelect
 cvDefined no
 priority 310
 validate none # ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
@@ -9048,7 +9049,7 @@ priority 345
 # type typeOfTerm
 # label GEO sample accession
 # description GEO sample accession number applied to a single data set in a series of related data sets.
-# searchable select
+# searchable freeText
 # cvDefined no
 # Should be replaced by geoSample (11/3/10)
 
@@ -9064,7 +9065,7 @@ priority 340
 # term geoSeriesAccession
 # type typeOfTerm
 # label GEO series
-# searchable select
+# searchable freeText
 # description GEO Sample accession number applied to a single data set in a series of related data sets.
 # cvDefined no
 # Should be replaced by geoSeries (11/3/10)
@@ -9073,7 +9074,7 @@ term grant
 type typeOfTerm
 label Principal Investigator on grant
 description Principle investigator holding the grant by which a set of experiments are financed. Several labs led by other PI's may be under one grant.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 015
@@ -9092,7 +9093,7 @@ term lab
 type typeOfTerm
 label Lab producing data
 description The name of the lab producing the data.  Often many labs are working together under one grant or one project.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 020
@@ -9137,7 +9138,7 @@ term localization
 type typeOfTerm
 label Cellular compartment
 description The cellular compartment from which RNA is extracted. Primarily used by the Transcriptome Project.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 160
@@ -9150,22 +9151,22 @@ searchable select
 cvDefined yes
 validate cv
 priority 500
-# This is Caltech only and possibly should be retired.  (11/3/10)
+# This is Caltech only and possibly should be retired.  (11/3/10)  ## If there were more than 2 this would be multiSelect
 
-term md5sum      
+term md5sum
 type typeOfTerm
 label md5sum
-description The md5sum for the file associated with the object. 
-searchable no    
-cvDefined no 
+description The md5sum for the file associated with the object.
+searchable no
+cvDefined no
 validate regex: ^([0-9a-f]){32,32}$
-priority 500 
+priority 500
 
 term obtainedBy
 type typeOfTerm
-label obtainedBy
-description The production group that grew the cells and isolated genomic DNA. 
-searchable select
+label Obtained by
+description The production group that grew the cells and isolated genomic DNA.
+searchable multiSelect
 cvDefined no #(Defined by lab)
 validate none
 priority 500
@@ -9178,7 +9179,7 @@ searchable select
 cvDefined no
 validate list: hg18,hg19,mm9
 priority 305
-# Could be cv.ra term
+# Could be cv.ra term  ## If there were more than 2 to choose from in one organism this would be multiSelect
 
 term parentTable
 type typeOfTerm
@@ -9225,7 +9226,7 @@ term protocol
 type typeOfTerm
 label Library Protocol
 description Lab specific protocol that may cover a number of steps in an experiment.  Most typically this identifies methods for building a DNA or RNA library.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 200
@@ -9245,7 +9246,7 @@ term readType
 type typeOfTerm
 label Paired/Single reads lengths
 description Specific information about cDNA sequence reads including length, directionality and single versus paired read.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 500
@@ -9255,7 +9256,7 @@ term replicate
 type typeOfTerm
 label Replicate number
 description The biological replicate of a particular experiment.
-searchable select
+searchable multiSelect
 cvDefined no
 validate integer
 priority 240
@@ -9273,7 +9274,7 @@ term rnaExtract
 type typeOfTerm
 label RNA Extract
 description Fraction of total cellular RNA selected for by an experiment. This includes size fractionation (long versus short) and feature frationation (PolyA-, PolyA+, rRNA-).
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 150
@@ -9282,9 +9283,9 @@ term run
 type typeOfTerm
 label Sequencing Run
 description Sequencing run
-searchable select
+searchable multiSelect
 cvDefined no
-validate none
+validate integer
 priority 500
 
 term seqPlatform
@@ -9295,6 +9296,7 @@ searchable select
 cvDefined yes
 validate cv
 priority 500
+## If there were more than 2 this would be multiSelect
 
 term setType
 type typeOfTerm
@@ -9304,6 +9306,7 @@ searchable select
 cvDefined no
 priority 350
 validate list: exp,input,control
+## If there were more than 2 this would be multiSelect
 
 term sex
 type typeOfTerm
@@ -9337,7 +9340,7 @@ term strain
 type typeOfTerm
 label Strain of organism
 description The strain of the doner organism used in an experiment.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv
 priority 110
@@ -9376,7 +9379,7 @@ term treatment
 type typeOfTerm
 label Treatment
 description Treatment used as an experimental variable in a series of experiments.
-searchable select
+searchable multiSelect
 cvDefined yes
 validate cv or None
 priority 180
@@ -9406,7 +9409,7 @@ term view
 type typeOfTerm
 label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
-searchable select
+searchable multiSelect
 cvDefined no
 validate none  # When this is cv defined it then change to cv
 priority 035

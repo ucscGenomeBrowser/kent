@@ -136,46 +136,42 @@ else if(startsWith(METADATA_VALUE_PREFIX, cmd))
         if(ix == 0) //
             fail("Unsupported 'cmd' parameter");
 
-        char *onChange="findTracksMdbValChanged(this);";
-    #define PLUS_MINUS_BUTTON_BY_JS
-    #ifndef PLUS_MINUS_BUTTON_BY_JS
-        onChange="findTracksSearchButtonsEnable(this);";
-    #endif///ndef PLUS_MINUS_BUTTON_BY_JS
         enum mdbCvSearchable searchBy = mdbCvSearchMethod(var);
-        if (searchBy == cvsSearchBySingleSelect)
+        if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)
             {
-            dyStringPrintf(output,"<SELECT NAME=\"%s%i\" class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='%s'>\n",
-                            METADATA_VALUE_PREFIX, ix, onChange);
+            dyStringPrintf(output,"<SELECT NAME='%s%i' onchange='findTracksMdbValChanged(this); style='min-width:200px; font-size:.9em;",METADATA_VALUE_PREFIX,ix);
+            if (searchBy == cvsSearchBySingleSelect)
+                dyStringPrintf(output,"' class='mdbVal'>\n");
+            else
+                dyStringPrintf(output," display:none;' class='mdbVal filterBy' multiple>\n");
 
             // Get options list
             struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
-            struct slPair *pair;
             if (pairs == NULL)
                 fail("No selectable values for this metadata variable");
 
-            dyStringPrintf(output, "<OPTION VALUE='Any'>Any</OPTION>\n");
-            dyStringPrintf(output, "[\n");
+            #define ANYLABEL "Any"
+            slPairAdd(&pairs, ANYLABEL, ANYLABEL); // Need to add Any to the list
+            struct slPair *pair;
+            // All options
             for (pair = pairs; pair != NULL; pair = pair->next)
-                {
                 dyStringPrintf(output, "<OPTION VALUE=\"%s\">%s</OPTION>\n", javaScriptLiteralEncode(pair->val), javaScriptLiteralEncode(pair->name));
-                }
             dyStringPrintf(output,"</SELECT>\n");
+            slPairFreeList(&pairs);
             }
         else if (searchBy == cvsSearchByFreeText)
             {
-            dyStringPrintf(output,"<input type='text' name='%s%i' value='' class='mdbVal freeText' onkeyup='%s' style='max-width:310px; width:310px; font-size:.9em;'>",
-                            METADATA_VALUE_PREFIX, ix, onChange);
+            dyStringPrintf(output,"<input type='text' name='%s%i' value='' class='mdbVal freeText' onchange='findTracksMdbValChanged(this);' style='max-width:310px; width:310px; font-size:.9em;'>",
+                            METADATA_VALUE_PREFIX, ix);
             }
-        //else if (searchBy == cvsSearchByMultiSelect)
-        //    {
-        //    // TO BE IMPLEMENTED
-        //    }
         //else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByDateRange)
         //    {
         //    // TO BE IMPLEMENTED
         //    }
         else
             fail("Metadata variable not searchable");
+
+        dyStringPrintf(output,"<span id='helpLink%i'>&nbsp;</span>",ix);
         }
     else
         fail("Assembly does not support metaDb");
