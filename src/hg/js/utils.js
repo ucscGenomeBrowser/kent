@@ -1758,7 +1758,7 @@ function findTracksHandleNewMdbVals(response, status)
             if ($(inp).hasClass('freeText')) {
                 $(tdIsLike).text('contains');
             } else if (usesFilterBy && $(inp).hasClass('filterBy')) {
-                $(tdIsLike).text('is (any of)');
+                $(tdIsLike).text('is among');
             } else {
                 $(tdIsLike).text('is');
             }
