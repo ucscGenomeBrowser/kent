@@ -1,0 +1,321 @@
+# generated with encodeMkChangeNotes 0.9
+This is a release2 of the "ENCODE wgEncodeUwDgf"
+The composite track is wgEncodeUwDgf
+# WARNINGS #################################################
+############################################################
+
+Categories of tables and files('):
+A) Untouched - are on public browser and should remain
+B) Deprecated - are currently on RR but will no longer be needed and should not be referenced by the public site.
+   NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).  
+   This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+C) New - are only currently on test but will need to be pushed to the RR.
+D) Additional items of note
+
+Summary total counts for release2 (new+untouched):
+    Tables: 76
+    Files: 136
+    Gbdbs: 38
+
+A) Untouched Tables (41):
+wgEncodeUwDgfGm06990Hotspots
+wgEncodeUwDgfGm06990Pk
+wgEncodeUwDgfGm06990Raw
+wgEncodeUwDgfGm06990Sig
+wgEncodeUwDgfH7esHotspots
+wgEncodeUwDgfH7esRaw
+wgEncodeUwDgfH7esSig
+wgEncodeUwDgfHaeHotspots
+wgEncodeUwDgfHaeRaw
+wgEncodeUwDgfHaeSig
+wgEncodeUwDgfHcpeHotspots
+wgEncodeUwDgfHcpeRaw
+wgEncodeUwDgfHcpeSig
+wgEncodeUwDgfHepg2Hotspots
+wgEncodeUwDgfHepg2Pk
+wgEncodeUwDgfHepg2Raw
+wgEncodeUwDgfHepg2Sig
+wgEncodeUwDgfHmfHotspots
+wgEncodeUwDgfHmfRaw
+wgEncodeUwDgfHmfSig
+wgEncodeUwDgfHmvecdbladHotspots
+wgEncodeUwDgfHmvecdbladRaw
+wgEncodeUwDgfHmvecdbladSig
+wgEncodeUwDgfK562Hotspots
+wgEncodeUwDgfK562Pk
+wgEncodeUwDgfK562Raw
+wgEncodeUwDgfK562Sig
+wgEncodeUwDgfNhdfadHotspots
+wgEncodeUwDgfNhdfadRaw
+wgEncodeUwDgfNhdfadSig
+wgEncodeUwDgfSkmcHotspots
+wgEncodeUwDgfSkmcRaw
+wgEncodeUwDgfSkmcSig
+wgEncodeUwDgfSknshraHotspots
+wgEncodeUwDgfSknshraPk
+wgEncodeUwDgfSknshraRaw
+wgEncodeUwDgfSknshraSig
+wgEncodeUwDgfTh1Hotspots
+wgEncodeUwDgfTh1Pk
+wgEncodeUwDgfTh1Raw
+wgEncodeUwDgfTh1Sig
+
+A') Untouched Files (60 downloadables, 24 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/release2/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/
+
+wgEncodeUwDgfGm06990Aln.bam
+wgEncodeUwDgfGm06990Hotspots.broadPeak.gz
+wgEncodeUwDgfGm06990Pk.narrowPeak.gz
+wgEncodeUwDgfGm06990Raw.bigWig
+wgEncodeUwDgfGm06990Sig.bigWig
+wgEncodeUwDgfH7esAln.bam
+wgEncodeUwDgfH7esHotspots.broadPeak.gz
+wgEncodeUwDgfH7esRaw.bigWig
+wgEncodeUwDgfH7esRawData.fastq.gz
+wgEncodeUwDgfH7esSig.bigWig
+wgEncodeUwDgfHaeAln.bam
+wgEncodeUwDgfHaeHotspots.broadPeak.gz
+wgEncodeUwDgfHaeRaw.bigWig
+wgEncodeUwDgfHaeRawData.fastq.gz
+wgEncodeUwDgfHaeSig.bigWig
+wgEncodeUwDgfHcpeAln.bam
+wgEncodeUwDgfHcpeHotspots.broadPeak.gz
+wgEncodeUwDgfHcpeRaw.bigWig
+wgEncodeUwDgfHcpeRawData.fastq.gz
+wgEncodeUwDgfHcpeSig.bigWig
+wgEncodeUwDgfHepg2Aln.bam
+wgEncodeUwDgfHepg2Hotspots.broadPeak.gz
+wgEncodeUwDgfHepg2Pk.narrowPeak.gz
+wgEncodeUwDgfHepg2Raw.bigWig
+wgEncodeUwDgfHepg2Sig.bigWig
+wgEncodeUwDgfHmfAln.bam
+wgEncodeUwDgfHmfHotspots.broadPeak.gz
+wgEncodeUwDgfHmfRaw.bigWig
+wgEncodeUwDgfHmfRawData.fastq.gz
+wgEncodeUwDgfHmfSig.bigWig
+wgEncodeUwDgfHmvecdbladAln.bam
+wgEncodeUwDgfHmvecdbladHotspots.broadPeak.gz
+wgEncodeUwDgfHmvecdbladRaw.bigWig
+wgEncodeUwDgfHmvecdbladRawData.fastq.gz
+wgEncodeUwDgfHmvecdbladSig.bigWig
+wgEncodeUwDgfK562Aln.bam
+wgEncodeUwDgfK562Hotspots.broadPeak.gz
+wgEncodeUwDgfK562Pk.narrowPeak.gz
+wgEncodeUwDgfK562Raw.bigWig
+wgEncodeUwDgfK562Sig.bigWig
+wgEncodeUwDgfNhdfadAln.bam
+wgEncodeUwDgfNhdfadHotspots.broadPeak.gz
+wgEncodeUwDgfNhdfadRaw.bigWig
+wgEncodeUwDgfNhdfadRawData.fastq.gz
+wgEncodeUwDgfNhdfadSig.bigWig
+wgEncodeUwDgfSkmcAln.bam
+wgEncodeUwDgfSkmcHotspots.broadPeak.gz
+wgEncodeUwDgfSkmcRaw.bigWig
+wgEncodeUwDgfSkmcRawData.fastq.gz
+wgEncodeUwDgfSkmcSig.bigWig
+wgEncodeUwDgfSknshraAln.bam
+wgEncodeUwDgfSknshraHotspots.broadPeak.gz
+wgEncodeUwDgfSknshraPk.narrowPeak.gz
+wgEncodeUwDgfSknshraRaw.bigWig
+wgEncodeUwDgfSknshraSig.bigWig
+wgEncodeUwDgfTh1Aln.bam
+wgEncodeUwDgfTh1Hotspots.broadPeak.gz
+wgEncodeUwDgfTh1Pk.narrowPeak.gz
+wgEncodeUwDgfTh1Raw.bigWig
+wgEncodeUwDgfTh1Sig.bigWig
+
+/gbdb/hg19/bbi/wgEncodeUwDgfGm06990Raw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfGm06990Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfH7esRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfH7esSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHaeRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHaeSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHcpeRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHcpeSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHepg2Raw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHepg2Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHmfRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHmfSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHmvecdbladRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHmvecdbladSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfK562Raw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfK562Sig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfNhdfadRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfNhdfadSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfSkmcRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfSkmcSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfSknshraRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfSknshraSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfTh1Raw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfTh1Sig.bigWig
+
+B) Deprecated tables (7):
+wgEncodeUwDgfH7esPk
+wgEncodeUwDgfHaePk
+wgEncodeUwDgfHcpePk
+wgEncodeUwDgfHmfPk
+wgEncodeUwDgfHmvecdbladPk
+wgEncodeUwDgfNhdfadPk
+wgEncodeUwDgfSkmcPk
+
+B') Deprecated files (7 downloadables, 0 gbdbs):
+    NOTE: NO FILES SHOULD BE REMOVED from the downloads directory on hgdownloads (RR).
+    This list is provided for completeness. Any files marked here as in gbdb may be eliminated.
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/release1/
+    on RR:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/
+
+wgEncodeUwDgfH7esPk.narrowPeak.gz
+wgEncodeUwDgfHaePk.narrowPeak.gz
+wgEncodeUwDgfHcpePk.narrowPeak.gz
+wgEncodeUwDgfHmfPk.narrowPeak.gz
+wgEncodeUwDgfHmvecdbladPk.narrowPeak.gz
+wgEncodeUwDgfNhdfadPk.narrowPeak.gz
+wgEncodeUwDgfSkmcPk.narrowPeak.gz
+
+
+C) New tables (35):
+wgEncodeUwDgfAoafHotspots
+wgEncodeUwDgfAoafPk
+wgEncodeUwDgfAoafRaw
+wgEncodeUwDgfAoafSig
+wgEncodeUwDgfH7esPkV2
+wgEncodeUwDgfHaePkV2
+wgEncodeUwDgfHcpePkV2
+wgEncodeUwDgfHmfPkV2
+wgEncodeUwDgfHmvecdbladPkV2
+wgEncodeUwDgfHpafHotspots
+wgEncodeUwDgfHpafPk
+wgEncodeUwDgfHpafRaw
+wgEncodeUwDgfHpafSig
+wgEncodeUwDgfHpdlfHotspots
+wgEncodeUwDgfHpdlfPk
+wgEncodeUwDgfHpdlfRaw
+wgEncodeUwDgfHpdlfSig
+wgEncodeUwDgfHpfHotspots
+wgEncodeUwDgfHpfPk
+wgEncodeUwDgfHpfRaw
+wgEncodeUwDgfHpfSig
+wgEncodeUwDgfHrceHotspots
+wgEncodeUwDgfHrcePk
+wgEncodeUwDgfHrceRaw
+wgEncodeUwDgfHrceSig
+wgEncodeUwDgfNhaHotspots
+wgEncodeUwDgfNhaPk
+wgEncodeUwDgfNhaRaw
+wgEncodeUwDgfNhaSig
+wgEncodeUwDgfNhdfadPkV2
+wgEncodeUwDgfSaecHotspots
+wgEncodeUwDgfSaecPk
+wgEncodeUwDgfSaecRaw
+wgEncodeUwDgfSaecSig
+wgEncodeUwDgfSkmcPkV2
+
+C') New files (73 downloadables, 14 gbdbs):
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/release2/
+    NOT on RR but must be placed in:
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/
+
+wgEncodeUwDgfAoafAln.bam
+wgEncodeUwDgfAoafAln.bam.bai
+wgEncodeUwDgfAoafHotspots.broadPeak.gz
+wgEncodeUwDgfAoafPk.narrowPeak.gz
+wgEncodeUwDgfAoafRaw.bigWig
+wgEncodeUwDgfAoafRawData.fastq.gz
+wgEncodeUwDgfAoafSig.bigWig
+wgEncodeUwDgfGm06990Aln.bam.bai
+wgEncodeUwDgfGm06990RawData.fastq.gz
+wgEncodeUwDgfH7esAln.bam.bai
+wgEncodeUwDgfH7esPkV2.narrowPeak.gz
+wgEncodeUwDgfHaeAln.bam.bai
+wgEncodeUwDgfHaePkV2.narrowPeak.gz
+wgEncodeUwDgfHcpeAln.bam.bai
+wgEncodeUwDgfHcpePkV2.narrowPeak.gz
+wgEncodeUwDgfHepg2Aln.bam.bai
+wgEncodeUwDgfHepg2RawData.fastq.gz
+wgEncodeUwDgfHmfAln.bam.bai
+wgEncodeUwDgfHmfPkV2.narrowPeak.gz
+wgEncodeUwDgfHmvecdbladAln.bam.bai
+wgEncodeUwDgfHmvecdbladPkV2.narrowPeak.gz
+wgEncodeUwDgfHpafAln.bam
+wgEncodeUwDgfHpafAln.bam.bai
+wgEncodeUwDgfHpafHotspots.broadPeak.gz
+wgEncodeUwDgfHpafPk.narrowPeak.gz
+wgEncodeUwDgfHpafRaw.bigWig
+wgEncodeUwDgfHpafRawData.fastq.gz
+wgEncodeUwDgfHpafSig.bigWig
+wgEncodeUwDgfHpdlfAln.bam
+wgEncodeUwDgfHpdlfAln.bam.bai
+wgEncodeUwDgfHpdlfHotspots.broadPeak.gz
+wgEncodeUwDgfHpdlfPk.narrowPeak.gz
+wgEncodeUwDgfHpdlfRaw.bigWig
+wgEncodeUwDgfHpdlfRawData.fastq.gz
+wgEncodeUwDgfHpdlfSig.bigWig
+wgEncodeUwDgfHpfAln.bam
+wgEncodeUwDgfHpfAln.bam.bai
+wgEncodeUwDgfHpfHotspots.broadPeak.gz
+wgEncodeUwDgfHpfPk.narrowPeak.gz
+wgEncodeUwDgfHpfRaw.bigWig
+wgEncodeUwDgfHpfRawData.fastq.gz
+wgEncodeUwDgfHpfSig.bigWig
+wgEncodeUwDgfHrceAln.bam
+wgEncodeUwDgfHrceAln.bam.bai
+wgEncodeUwDgfHrceHotspots.broadPeak.gz
+wgEncodeUwDgfHrcePk.narrowPeak.gz
+wgEncodeUwDgfHrceRaw.bigWig
+wgEncodeUwDgfHrceRawData.fastq.gz
+wgEncodeUwDgfHrceSig.bigWig
+wgEncodeUwDgfK562Aln.bam.bai
+wgEncodeUwDgfK562RawData.fastq.gz
+wgEncodeUwDgfNhaAln.bam
+wgEncodeUwDgfNhaAln.bam.bai
+wgEncodeUwDgfNhaHotspots.broadPeak.gz
+wgEncodeUwDgfNhaPk.narrowPeak.gz
+wgEncodeUwDgfNhaRaw.bigWig
+wgEncodeUwDgfNhaRawData.fastq.gz
+wgEncodeUwDgfNhaSig.bigWig
+wgEncodeUwDgfNhdfadAln.bam.bai
+wgEncodeUwDgfNhdfadPkV2.narrowPeak.gz
+wgEncodeUwDgfSaecAln.bam
+wgEncodeUwDgfSaecAln.bam.bai
+wgEncodeUwDgfSaecHotspots.broadPeak.gz
+wgEncodeUwDgfSaecPk.narrowPeak.gz
+wgEncodeUwDgfSaecRaw.bigWig
+wgEncodeUwDgfSaecRawData.fastq.gz
+wgEncodeUwDgfSaecSig.bigWig
+wgEncodeUwDgfSkmcAln.bam.bai
+wgEncodeUwDgfSkmcPkV2.narrowPeak.gz
+wgEncodeUwDgfSknshraAln.bam.bai
+wgEncodeUwDgfSknshraRawData.fastq.gz
+wgEncodeUwDgfTh1Aln.bam.bai
+wgEncodeUwDgfTh1RawData.fastq.gz
+
+/gbdb/hg19/bbi/wgEncodeUwDgfAoafRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfAoafSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHpafRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHpafSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHpdlfRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHpdlfSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHpfRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHpfSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHrceRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfHrceSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfNhaRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfNhaSig.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfSaecRaw.bigWig
+/gbdb/hg19/bbi/wgEncodeUwDgfSaecSig.bigWig
+
+D) Additional items:
+    current location on alpha:
+      /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/release2/
+    should be placed on the RR in (overwritting any existing copy):
+      /usr/local/apache/htdocs/goldenPath/hg19/encodeDCC/wgEncodeUwDgf/
+
+index.html
+files.txt
+md5sum.txt
