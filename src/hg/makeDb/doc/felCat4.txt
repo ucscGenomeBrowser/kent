@@ -1194,6 +1194,51 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCat4/felCat4.2bit $outMaf
     #   real    2m44.689s
 
 
+    # re-do the multiz6way.maf (DONE 2011-02-24 - Chin)
+    ssh hgwdev
+    rm -fr /gbdb/felCat4/multiz6way/maf
+    cd /hive/data/genomes/felCat4/bed/multiz6way/anno
+
+    grep "^##maf version" maf/000.maf \
+        | sort -u > felCat4.anno.6way.maf
+    find ./maf -type f  -name "*.maf" | while read F
+do
+    grep -v -h "^#" "${F}"
+done >> felCat4.anno.6way.maf
+    echo "##eof maf" >> felCat4.anno.6way.maf
+
+    mkdir -p /gbdb/felCat4/multiz6way/anno
+    ln -s `pwd`/felCat4.anno.6way.maf \
+                /gbdb/felCat4/multiz6way/anno/multiz6way.maf
+    #   by loading this into the table multiz6way, it will replace the
+    #   previously loaded table with the unannotated mafs
+    #   huge temp files are made, do them on local disk
+    cd /scratch/tmp
+    time nice -n +19 hgLoadMaf -pathPrefix=/gbdb/felCat4/multiz6way/anno \
+                felCat4 multiz6way
+    # Indexing and tabulating /gbdb/felCat4/multiz6way/anno/multiz6way.maf
+    # Loading multiz6way into database
+    # Loaded 6509883 mafs in 1 files from /gbdb/felCat4/multiz6way/anno
+    # 
+    # real    9m6.201s
+
+
+    hgLoadMafSummary felCat4 -minSize=30000 -mergeGap=1500 \
+        -maxSize=200000  multiz6waySummary \
+            /gbdb/felCat4/multiz6way/anno/multiz6way.maf
+    # Loading into felCat4 table multiz6waySummary...
+    # Loading complete
+
+    #   by loading this into the table multiz6waySummary, it will
+    #   replace
+    #   the previously loaded table with the unannotated mafs
+    #   remove the multiz6way*.tab files in this /scratch/tmp directory
+    rm multiz6way*.tab
+    #   And, you can remove the previously loaded non-annotated maf file
+    #   link:
+    rm /gbdb/felCat4/multiz6way/maf/multiz6way.maf
+    rmdir /gbdb/felCat4/multiz6way/maf
+
 ####################################################################
 # HUMAN (hg18) PROTEINS TRACK (???? DONE braney 2010-05-05) 
     # bash  if not using bash shell already

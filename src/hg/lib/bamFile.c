@@ -218,8 +218,7 @@ if (fh == NULL)
 		       ". If you are able to access the URL with your web browser, "
 		       "please try reloading this page.");
 	}
-    warn("failed to open %s%s", fileOrUrl, urlWarning->string);
-    return NULL;
+    errAbort("Failed to open %s%s", fileOrUrl, urlWarning->string);
     }
 return fh;
 }

@@ -681,10 +681,12 @@ if (slCount(mdbList) == 0)
 // Now sort mdbObjs so that composites will stay together and lookup of files will be most efficient
 mdbObjsSortOnVars(&mdbList, "composite");
 
+#define FOUND_FILE_LIMIT 1000
+int fileCount = 0;
 // Verify file existance and make fileList of those found
 struct fileDb *fileList = NULL, *oneFile = NULL; // Will contain found files
 struct mdbObj *mdbFiles = NULL; // Will caontain a list of mdbs for the found files
-while(mdbList)
+while(mdbList && fileCount < FOUND_FILE_LIMIT)
     {
     boolean found = FALSE;
     struct mdbObj *mdbFile = slPopHead(&mdbList);
@@ -705,6 +707,7 @@ while(mdbList)
                     slAddHead(&fileList,oneFile);
                     oneFile->mdb = mdbFile;
                     slAddHead(&mdbFiles,mdbFile);
+                    fileCount++;
                     found = TRUE;
                     continue;
                     }
@@ -732,6 +735,7 @@ while(mdbList)
                         oneFile->mdb = mdbFile;
                         slAddHead(&mdbFiles,mdbFile);
                         }
+                    fileCount++;
                     found = TRUE;
                     continue;
                     }
@@ -765,10 +769,18 @@ mdbObjRemoveVars(mdbFiles,"tableName"); // Remove this from mdb now so that it i
 
 // Print table
 printf("<DIV id='filesFound'>");
-int filesCount = filesPrintTable(db,NULL,fileList,sortOrder);
+if (mdbList != NULL)
+    {
+    printf("<DIV class='redBox' style='width: 380px;'>Too many files found.  Displaying first %d of potentially %d.<BR>Narrow search parameters and try again.</DIV><BR>\n",
+           fileCount,(fileCount+slCount(mdbList)*2)); // Multiply*2 because of fileIndexes
+    //warn("Too many files found.  Displaying first %d of potentially %d.<BR>Narrow search parameters and try again.\n", fileCount,(fileCount+slCount(mdbList)*2)); // Multiply because of fileIndexes
+    mdbObjsFree(&mdbList);
+    }
+
+fileCount = filesPrintTable(db,NULL,fileList,sortOrder);
 printf("</DIV><BR>\n");
 
 //fileDbFree(&fileList); // Why bother on this very long running cgi?
-return filesCount;
+return fileCount;
 }
 

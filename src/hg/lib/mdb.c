@@ -2926,28 +2926,9 @@ struct dyString *dyTerms = dyStringNew(256);
 for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
     {
     enum mdbCvSearchable searchBy = mdbCvSearchMethod(onePair->name);
-    // If select is by free text then like
-    if (searchBy == cvsSearchByMultiSelect)
-        {
-        // TO BE IMPLEMENTED
-        warn("mdb search by multi-select is not yet implemented.");
-        // The mdbVal[1] will hve to be filled cartOptionalSlNameList(cart,???)
-        struct slName *choices = (struct slName *)onePair->val;
-        if (slCount(choices) == 1)
-            dyStringPrintf(dyTerms,"%s=%s ",onePair->name,choices->name);
-        else if(choices != NULL)
-            {
-            // Then slNames will need to be assembled into a string in the form of a,b,c
-            dyStringPrintf(dyTerms,"%s=%s",onePair->name,choices->name);
-            struct slName *choice = choices->next;
-            for(;choice!=NULL;choice=choice->next)
-                dyStringPrintf(dyTerms,",%s",choice->name);
-            dyStringAppendC(dyTerms,' ');
-            }
-        }
-    else if (searchBy == cvsSearchBySingleSelect)
+    if (searchBy == cvsSearchBySingleSelect || searchBy == cvsSearchByMultiSelect)  // multiSelect val will be filled with a comma delimited list
         dyStringPrintf(dyTerms,"%s=%s ",onePair->name,(char *)onePair->val);
-    else if (searchBy == cvsSearchByFreeText)
+    else if (searchBy == cvsSearchByFreeText)                                      // If select is by free text then like
         dyStringPrintf(dyTerms,"%s=%%%s%% ",onePair->name,(char *)onePair->val);
     else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
         {
@@ -3174,7 +3155,7 @@ while ((hEl = hashNext(&hc)) != NULL)
         {
         setting = hashFindVal(typeHash,"searchable");
         if (setting == NULL
-        || (differentWord(setting,"select") && differentWord(setting,"freeText")))
+        || (differentWord(setting,"select") && differentWord(setting,"multiSelect") && differentWord(setting,"freeText")))
            continue;
         }
     if (cvDefined)
@@ -3208,6 +3189,8 @@ if (termHash != NULL)
         {
         if (sameWord(searchable,"select"))
             return cvsSearchBySingleSelect;
+        if (sameWord(searchable,"multiSelect"))
+            return cvsSearchByMultiSelect;
         if (sameWord(searchable,"freeText"))
             return cvsSearchByFreeText;
         }

@@ -34,7 +34,6 @@ static char *statValDefaults[] = {
     "Under review, update",
     "Reviewed, update pending",
     "Under review, withdrawal",
-    "Reviewed, withdrawal pending",
     NULL
 };
 
@@ -63,7 +62,6 @@ errAbort(
   "      \"Under review, update\",\n"
   "      \"Reviewed, update pending\",\n"
   "      \"Under review, withdrawal\",\n"
-  "      \"Reviewed, withdrawal pending\"\n"
   "   if \"any\" is specified, then status is not used in selection.\n"
   "  -loadDb - load tables into hgdb, bin column is added to genePred\n"
   "  -keep - keep tab file used to load database\n"

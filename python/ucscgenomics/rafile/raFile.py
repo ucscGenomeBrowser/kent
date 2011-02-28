@@ -8,7 +8,7 @@ class RaFile(orderedDict.OrderedDict):
     Stores an Ra file in a set of entries, one for each stanza in the file.
     """
 
-    def read(self, filePath, keyField):
+    def read(self, filePath):
         """
         Reads an rafile, separating it by keyField, and internalizes it.
 
@@ -16,7 +16,7 @@ class RaFile(orderedDict.OrderedDict):
         """
 
         file = open(filePath, 'r')
-        entry = raEntry.RaEntry()
+        entry = None 
         raKey = None
 
         for line in file:
@@ -35,14 +35,16 @@ class RaFile(orderedDict.OrderedDict):
                 continue
 
             # check if we're at the first key in a new entry
-            if (line.split()[0].strip() == keyField):
+            #if (line.split()[0].strip() == keyField):
+            if (entry == None): 
                 if len(line.split()) < 2:
                     raise KeyError()
 
-                raKey = line.split(' ', 1)[1].strip()
+                raKey = line.split(' ', 1)[0].strip()
+                raVal = line.split(' ', 1)[1].strip()
                 entry = raEntry.RaEntry()
-                entry.add(keyField, raKey)
-                self.add(raKey, entry)
+                entry.add(raKey, raVal)
+                self.add(raVal, entry)
 
             # otherwise we should be somewhere in the middle of an entry
             elif (entry != None):
@@ -73,6 +75,16 @@ class RaFile(orderedDict.OrderedDict):
         """
 
         print self.getValue(key)
+
+    def iterValues(self):
+        """
+        Return an iterator over the values in the dictionary
+        """
+
+        for item in self._ordering:
+            if item.startswith('#'):
+                continue
+            yield self.getValue(item)
 
     def __str__(self):
         str = ''

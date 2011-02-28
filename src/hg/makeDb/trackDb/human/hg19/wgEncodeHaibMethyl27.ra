@@ -26,7 +26,7 @@ wgEncode 1
         view Sites
         type bed 9
         visibility full
-        maxWindowToDraw 1000000
+        #maxWindowToDraw 1000000
         itemRgb on
         viewUi on
 

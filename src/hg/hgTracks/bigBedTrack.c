@@ -16,6 +16,11 @@
 #include "obscure.h"
 #include "bigWig.h"
 #include "bigBed.h"
+#include "bigWarn.h"
+#include "errCatch.h"
+
+
+
 
 struct bbiFile *fetchBbiForTrack(struct track *track)
 /* Fetch bbiFile from track, opening it if it is not already open. */
@@ -35,15 +40,31 @@ struct bigBedInterval *bigBedSelectRange(struct track *track,
 	char *chrom, int start, int end, struct lm *lm)
 /* Return list of intervals in range. */
 {
-struct bbiFile *bbi = fetchBbiForTrack(track);
-int maxItems = maximumTrackItems(track) + 1;
-struct bigBedInterval *result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
-if (slCount(result) >= maxItems)
+struct bigBedInterval *result = NULL;
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    track->limitedVis = tvDense;
-    track->limitedVisSet = TRUE;
+    struct bbiFile *bbi = fetchBbiForTrack(track);
+    int maxItems = maximumTrackItems(track) + 1;
+    result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems, lm);
+    if (slCount(result) >= maxItems)
+	{
+	track->limitedVis = tvDense;
+	track->limitedVisSet = TRUE;
+	result = NULL;
+	}
+    }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    track->networkErrMsg = cloneString(errCatch->message->string);
+    track->drawItems = bigDrawWarning;
+    track->totalHeight = bigWarnTotalHeight;
     result = NULL;
     }
+errCatchFree(&errCatch);
+
 return result;
 }
 
@@ -84,43 +105,55 @@ void bigBedDrawDense(struct track *tg, int seqStart, int seqEnd,
         MgFont *font, Color color)
 /* Use big-bed summary data to quickly draw bigBed. */
 {
-struct bbiSummaryElement summary[width];
-struct bbiFile *bbi = fetchBbiForTrack(tg);
-if (bigBedSummaryArrayExtended(bbi, chromName, seqStart, seqEnd, width, summary))
+/* protect against temporary network error */
+struct errCatch *errCatch = errCatchNew();
+if (errCatchStart(errCatch))
     {
-    char *denseCoverage = trackDbSettingClosestToHome(tg->tdb, "denseCoverage");
-    if (denseCoverage != NULL)
-        {
-	double startVal = 0, endVal = atof(denseCoverage);
-	if (endVal <= 0)
+    struct bbiSummaryElement summary[width];
+    struct bbiFile *bbi = fetchBbiForTrack(tg);
+    if (bigBedSummaryArrayExtended(bbi, chromName, seqStart, seqEnd, width, summary))
+	{
+	char *denseCoverage = trackDbSettingClosestToHome(tg->tdb, "denseCoverage");
+	if (denseCoverage != NULL)
 	    {
-	    struct bbiSummaryElement sumAll = bbiTotalSummary(bbi);
-	    double mean = sumAll.sumData/sumAll.validCount;
-	    double std = calcStdFromSums(sumAll.sumData, sumAll.sumSquares, sumAll.validCount);
-	    rangeFromMinMaxMeanStd(0, sumAll.maxVal, mean, std, &startVal, &endVal);
-	    }
-	int x;
-	for (x=0; x<width; ++x)
-	    {
-	    if (summary[x].validCount > 0)
+	    double startVal = 0, endVal = atof(denseCoverage);
+	    if (endVal <= 0)
 		{
-		Color color = shadesOfGray[grayInRange(summary[x].maxVal, startVal, endVal)];
-		hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
+		struct bbiSummaryElement sumAll = bbiTotalSummary(bbi);
+		double mean = sumAll.sumData/sumAll.validCount;
+		double std = calcStdFromSums(sumAll.sumData, sumAll.sumSquares, sumAll.validCount);
+		rangeFromMinMaxMeanStd(0, sumAll.maxVal, mean, std, &startVal, &endVal);
+		}
+	    int x;
+	    for (x=0; x<width; ++x)
+		{
+		if (summary[x].validCount > 0)
+		    {
+		    Color color = shadesOfGray[grayInRange(summary[x].maxVal, startVal, endVal)];
+		    hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
+		    }
 		}
 	    }
-	}
-    else
-	{
-	int x;
-	for (x=0; x<width; ++x)
+	else
 	    {
-	    if (summary[x].validCount > 0)
+	    int x;
+	    for (x=0; x<width; ++x)
 		{
-		hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
+		if (summary[x].validCount > 0)
+		    {
+		    hvGfxBox(hvg, x+xOff, yOff, 1, tg->heightPer, color);
+		    }
 		}
 	    }
 	}
     }
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    {
+    tg->networkErrMsg = cloneString(errCatch->message->string);
+    bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, tvDense);
+    }
+errCatchFree(&errCatch);
 }
 
 void bigBedMethods(struct track *track, struct trackDb *tdb, 

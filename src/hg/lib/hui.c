@@ -26,6 +26,8 @@
 #include "web.h"
 #include "hPrint.h"
 #include "fileUi.h"
+#include "bigBed.h"
+#include "bigWig.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -7276,4 +7278,61 @@ else if(trackDbSetting(tdb, "wgEncode") != NULL)
     return TRUE;
     }
 return FALSE;
+}
+
+void printUpdateTime(char *database, struct trackDb *tdb,
+    struct customTrack *ct)
+/* display table update time */
+{
+/* have not decided what to do for a composite container */
+if (tdbIsComposite(tdb))
+    return;
+struct sqlConnection *conn = NULL;
+char *tableName = NULL;
+if (isCustomTrack(tdb->track))
+    {
+    if (ct)
+	{
+	conn =  hAllocConn(CUSTOM_TRASH);
+	tableName = ct->dbTableName;
+	}
+    }
+else if (startsWith("big", tdb->type))
+    {
+    char *tableName = hTableForTrack(database, tdb->table);
+    struct sqlConnection *conn =  hAllocConnTrack(database, tdb);
+    char *bbiFileName = bbiNameFromSettingOrTable(tdb, conn, tableName);
+    hFreeConn(&conn);
+    struct bbiFile *bbi = NULL;
+    if (startsWith("bigBed", tdb->type))
+	bbi = bigBedFileOpen(bbiFileName);
+    if (startsWith("bigWig", tdb->type))
+	bbi = bigWigFileOpen(bbiFileName);
+    time_t timep = 0;
+    if (bbi)
+	{
+	timep = bbiUpdateTime(bbi);
+	bbiFileClose(&bbi);
+	}
+    printBbiUpdateTime(&timep);
+    }
+else
+    {
+    tableName = hTableForTrack(database, tdb->table);
+    conn = hAllocConnTrack(database, tdb);
+    }
+if (tableName)
+    {
+    char *date = firstWordInLine(sqlTableUpdate(conn, tableName));
+    if (date != NULL)
+	printf("<B>Data last updated:&nbsp;</B>%s<BR>\n", date);
+    }
+hFreeConn(&conn);
+}
+
+void printBbiUpdateTime(time_t *timep)
+/* for bbi files, print out the timep value */
+{
+    printf ("<B>Data last updated:&nbsp;</B>%s<BR>\n",
+	sqlUnixTimeToDate(timep, FALSE));
 }
