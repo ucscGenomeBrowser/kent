@@ -158,6 +158,11 @@ density signal.  Significant regions were determined by fitting the
 data to a gamma distribution to calculate p-values. Contiguous regions
 where p-values were below a 0.05/0.01 threshold were considered significant.
 </P>
+<P>ENCODE Array data were normalized using the Tukey biweight normalization, and
+peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
+levels of significance.  Regions matched on size to these peaks that were
+devoid of any significant signal were also created to allow for ROC analysis.
+</P>
 
 <h2>Release Notes</h2>
 <P>
