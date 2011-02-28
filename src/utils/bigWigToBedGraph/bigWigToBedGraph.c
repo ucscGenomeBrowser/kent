@@ -46,8 +46,8 @@ struct bbiChromInfo *chrom, *chromList = bbiChromList(bwf);
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     {
     boolean firstTime = TRUE;
-    int saveStart, prevEnd;
-    double saveVal;
+    int saveStart = -1, prevEnd = -1;
+    double saveVal = -1.0;
 
     if (clChrom != NULL && !sameString(clChrom, chrom->name))
         continue;

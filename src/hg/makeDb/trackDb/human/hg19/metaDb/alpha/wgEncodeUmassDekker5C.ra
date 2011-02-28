@@ -1,0 +1,137 @@
+metaObject wgEncodeUmassDekker5CGm12878MatrixRep1
+objType file
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878MatrixRep1.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CGm12878MatrixRep1
+project wgEncode
+replicate 1
+subId 3488
+view Matrix
+
+metaObject wgEncodeUmassDekker5CGm12878MatrixRep2
+objType file
+cell GM12878
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CGm12878MatrixRep2.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CGm12878MatrixRep2
+project wgEncode
+replicate 2
+subId 3488
+view Matrix
+
+metaObject wgEncodeUmassDekker5CH1hescMatrixRep1
+objType file
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescMatrixRep1.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CH1hescMatrixRep1
+project wgEncode
+replicate 1
+subId 3488
+view Matrix
+
+metaObject wgEncodeUmassDekker5CH1hescMatrixRep2
+objType file
+cell H1-hESC
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CH1hescMatrixRep2.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CH1hescMatrixRep2
+project wgEncode
+replicate 2
+subId 3488
+view Matrix
+
+metaObject wgEncodeUmassDekker5CHelas3MatrixRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3MatrixRep1.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CHelas3MatrixRep1
+project wgEncode
+replicate 1
+subId 3488
+view Matrix
+
+metaObject wgEncodeUmassDekker5CHelas3MatrixRep2
+objType file
+cell HeLa-S3
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CHelas3MatrixRep2.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CHelas3MatrixRep2
+project wgEncode
+replicate 2
+subId 3488
+view Matrix
+
+metaObject wgEncodeUmassDekker5CK562MatrixRep1
+objType file
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562MatrixRep1.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CK562MatrixRep1
+project wgEncode
+replicate 1
+subId 3488
+view Matrix
+
+metaObject wgEncodeUmassDekker5CK562MatrixRep2
+objType file
+cell K562
+composite wgEncodeUmassDekker5C
+dataType 5C
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2011-01-25
+dateUnrestricted 2011-10-25
+fileName wgEncodeUmassDekker5CK562MatrixRep2.download.gz
+grant Dekker
+lab UMass-Dekker
+parentTable wgEncodeUmassDekker5CK562MatrixRep2
+project wgEncode
+replicate 2
+subId 3488
+view Matrix
+
+# MAGIC: -535483648
