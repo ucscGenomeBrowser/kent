@@ -21,6 +21,7 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
+
 #define ANYLABEL                 "Any"
 #define TRACK_SEARCH_FORM        "trackSearch"
 #define SEARCH_RESULTS_FORM      "searchResults"
@@ -33,6 +34,9 @@
 #define TRACK_SEARCH_ON_GROUP    "tsGroup"
 #define TRACK_SEARCH_ON_DESCR    "tsDescr"
 #define TRACK_SEARCH_SORT        "tsSort"
+
+// If there are problems with multiSelect support, it can quickly be blocked!
+//#define BLOCK_MULTI_SELECT_SUPPORT
 
 //#define FILES_SEARCH
 #ifdef FILES_SEARCH
@@ -331,6 +335,7 @@ return count;
 
 static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,enum searchTab selectedTab,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
 // Prints a table of mdb selects if appropriate and returns number of them
+// TODO: move to lib since hgTracks and hgFileSearch share it
 {
 // figure out how many metadata selects are visible.
 int delSearchSelect = cartUsualInt(cart, TRACK_SEARCH_DEL_ROW, 0);   // 1-based row to delete
@@ -387,10 +392,27 @@ if(numMetadataSelects)
                     found = TRUE;
             if(found)
                 {
-            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-            mdbVal[i] = cloneString(cartOptionalString(cart, buf));
-            if(sameString(mdbVal[i], ANYLABEL))
-                mdbVal[i] = NULL;
+                safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
+                enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
+#ifdef BLOCK_MULTI_SELECT_SUPPORT
+                if (searchBy == cvsSearchByMultiSelect)  // NOTE: Temprorarily bypass cv.ra
+                    searchBy =  cvsSearchBySingleSelect;
+#endif///def BLOCK_MULTI_SELECT_SUPPORT
+                if (searchBy == cvsSearchByMultiSelect)
+                    {
+                    // Multi-selects as comma delimited list of values
+                    struct slName *vals = cartOptionalSlNameList(cart,buf);
+                    if (vals)
+                        {
+                        mdbVal[i] = slNameListToString(vals,','); // A comma delimited list of values
+                        slNameFreeList(&vals);
+                        }
+                    }
+                else
+                    mdbVal[i] = cloneString(cartUsualString(cart, buf,ANYLABEL));
+
+                if (mdbVal[i] != NULL && sameString(mdbVal[i], ANYLABEL))
+                    mdbVal[i] = NULL;
                 }
             else
                 {
@@ -422,7 +444,7 @@ else
     mdbVal[1] = ANYLABEL;
     }
 
-    hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
+    hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>\n", cols,COLOR_DARKGREY);
     for(i = 0; i < numMetadataSelects; i++)
         {
         char **terms = NULL, **labels = NULL;
@@ -430,62 +452,67 @@ else
         int len;
 
     #define PLUS_MINUS_BUTTON "<input type='button' id='%sButton%d' value='%c' style='font-size:.7em;' title='%s' onclick='findTracksMdbSelectPlusMinus(this,%d)'>"
-    #define PRINT_PM_BUTTON(type,num,value) printf(PLUS_MINUS_BUTTON, (type), (num), (value), ((value) == '+' ? "add another row after":"delete"), (num));
-    #ifndef PLUS_MINUS_BUTTON
-        #define PRINT_BUTTON(name,value,msg,js) printf("<input type='submit' name='%s' value='%s' style='font-size:.7em;' title='%s this row' onclick='%s'>", (name), (value), (msg), (js));
-    #endif//ndef PLUS_MINUS_BUTTON
-        hPrintf("<tr class='mdbSelect'><td nowrap>\n");
+    #define PRINT_PM_BUTTON(type,num,value) printf(PLUS_MINUS_BUTTON, (type), (num), (value), ((value) == '+' ? "add another row after":"delete"), (num))
+        hPrintf("<tr valign='top' class='mdbSelect'><td nowrap>\n");
         if(numMetadataSelects > 2 || i >= 2)
-            {
-        #ifdef PLUS_MINUS_BUTTON
             PRINT_PM_BUTTON("minus", i + 1, '-');
-        #else///ifndef PLUS_MINUS_BUTTON
-            safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
-            PRINT_BUTTON(TRACK_SEARCH, "-", "delete this row", buf);
-        #endif//ndef PLUS_MINUS_BUTTON
-            }
         else
             hPrintf("&nbsp;");
-    #ifdef PLUS_MINUS_BUTTON
         PRINT_PM_BUTTON("plus", i + 1, '+');
-    #else///ifndef PLUS_MINUS_BUTTON
-        hPrintf("</td><td>\n");
-        safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
-        PRINT_BUTTON(TRACK_SEARCH, "+", "add another row after this row", buf);
-    #endif//ndef PLUS_MINUS_BUTTON
 
         hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
-        // TODO: move to lib since hgTracks and hgApi share
         enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
+    #ifdef BLOCK_MULTI_SELECT_SUPPORT
+        if (searchBy == cvsSearchByMultiSelect)  // NOTE: Temprorarily bypass cv.ra
+            searchBy =  cvsSearchBySingleSelect;
+    #else///ndef BLOCK_MULTI_SELECT_SUPPORT
+        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
+        safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
+    #endif///ndef BLOCK_MULTI_SELECT_SUPPORT
         if (searchBy == cvsSearchByMultiSelect)
             {
-            // TO BE IMPLEMENTED
+        #ifdef BLOCK_MULTI_SELECT_SUPPORT
+            cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
+            safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
+        #endif///ndef BLOCK_MULTI_SELECT_SUPPORT
+            printf("</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is among</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
+            #define MULTI_SELECT_CBS_FORMAT "<SELECT MULTIPLE=true name='%s' style='display: none; min-width:200px; font-size:.9em;' class='filterBy mdbVal' onchange='findTracksMdbValChanged(this)'>\n"
+            printf(MULTI_SELECT_CBS_FORMAT,buf);
+            len = getTermArray(conn, &labels, &terms, mdbVar[i]);
+            int tix=0;
+            for(;tix < len;tix++)
+                {
+                char *selected = findWordByDelimiter(terms[tix],',', mdbVal[i]);
+                printf("<OPTION%s value='%s'>%s</OPTION>\n",(selected != NULL?" SELECTED":""),terms[tix],labels[tix]);
+                }
+            printf("</SELECT>\n");
             }
         else if (searchBy == cvsSearchBySingleSelect)
             {
+#ifdef BLOCK_MULTI_SELECT_SUPPORT
+            cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar noMulti' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
             safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-            hPrintf("</td><td align='right' id='isLike%d' style='width:10px;'>is</td><td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
+        #endif///ndef BLOCK_MULTI_SELECT_SUPPORT
+            hPrintf("</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
             len = getTermArray(conn, &labels, &terms, mdbVar[i]);
-        #ifdef PLUS_MINUS_BUTTON
-            cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='findTracksMdbValChanged(this);'");
-        #else///ifndef PLUS_MINUS_BUTTON
-            cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'");
-        #endif//ndef PLUS_MINUS_BUTTON
+            cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px; font-size:.9em;' onchange='findTracksMdbValChanged(this);'");
             }
         else if (searchBy == cvsSearchByFreeText)
             {
+#ifdef BLOCK_MULTI_SELECT_SUPPORT
+            cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar noMulti' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
             safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-            hPrintf("</td><td align='right' id='isLike%d' style='width:10px;'>contains</td><td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
-            hPrintf("<input type='text' name='%s' value='%s' class='mdbVal freeText' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:310px; width:310px; font-size:.9em;'>",
+        #endif///ndef BLOCK_MULTI_SELECT_SUPPORT
+            hPrintf("</td><td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>contains</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
+            hPrintf("<input type='text' name='%s' value='%s' class='mdbVal freeText' style='max-width:310px; width:310px; font-size:.9em;' onchange='findTracksMdbVarChanged(true);'>\n",
                     buf,(mdbVal[i] ? mdbVal[i]: ""));
             }
         else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
             {
             // TO BE IMPLEMENTED
             }
-        hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
+        hPrintf("<span id='helpLink%i'>&nbsp;</span></td>\n", i + 1);
         hPrintf("</tr>\n");
         }
 
@@ -776,9 +803,18 @@ else
         // If this is a container track, allow configuring...
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
             {
-            containerTrackCount++;
-            hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' onclick='findTracksConfigureSet(\"%s\");'>&nbsp;", track->track);
+            containerTrackCount++; // Using onclick ensures return to search tracks on submit
+            hPrintf("&nbsp;<IMG SRC='../images/folderWrench.png' style='cursor:pointer;' title='Configure this track container...' onclick='findTracksConfigureSet(\"%s\");'>&nbsp;", track->track);
             }
+//#define SHOW_PARENT_FOLDER
+#ifdef SHOW_PARENT_FOLDER
+        else if (tdbIsContainerChild(track->tdb) || tdbIsFolderContent(track->tdb))
+            {
+            struct trackDb *parentTdb = tdbIsContainerChild(track->tdb) ? tdbGetContainer(track->tdb) : tdbGetImmediateFolder(track->tdb);
+            if (parentTdb != NULL) // Using href will not return to search tracks on submit
+                hPrintf("&nbsp;<A HREF='../cgi-bin/hgTrackUi?g=%s'><IMG SRC='../images/folderC.png' title='Navigate to parent container...'></A>&nbsp;", parentTdb->track);
+            }
+#endif///def SHOW_PARENT_FOLDER
         hPrintf("</td>\n");
 
         // shortLabel has description popup and longLabel has "..." metadata
@@ -838,6 +874,15 @@ if (!advancedJavascriptFeaturesEnabled(cart))
     warn("Requires advanced javascript features.");
     return;
     }
+
+#ifndef BLOCK_MULTI_SELECT_SUPPORT
+webIncludeResourceFile("ui.dropdownchecklist.css");
+//jsIncludeFile("ui.core.js",NULL);   // NOTE: This appears to be not needed as long as jquery-ui.js comes before ui.dropdownchecklist.js
+jsIncludeFile("ui.dropdownchecklist.js",NULL);
+// This line is needed to get the multi-selects initialized
+hPrintf("<script type='text/javascript'>$(document).ready(function() { $('.filterBy').each( function(i) { $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: true });});});</script>\n");
+#endif///ndef BLOCK_MULTI_SELECT_SUPPORT
+
 struct group *group;
 char *groups[128];
 char *labels[128];
@@ -1060,7 +1105,6 @@ cgiMakeDropListFull(TRACK_SEARCH_ON_FILETYPE, formatLabels, formatTypes, formatC
 hPrintf("</td></tr>\n");
 if (selectedTab==filesTab && fileTypeSearch)
     searchTermsExist = TRUE;
-hPrintf("</div>\n");
 
 // Metadata selects require careful accounting
 if(metaDbExists)
@@ -1136,21 +1180,18 @@ if(doSearch)
     if (measureTiming)
         uglyTime("Searched for tracks");
 
-    if (tracks != NULL)
+    // Sort and Print results
+    if(selectedTab!=filesTab)
         {
-        // Sort and Print results
-        if(selectedTab!=filesTab)
-            {
-            enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
-            tracksFound = slCount(tracks);
-            if(tracksFound > 1)
-                findTracksSort(&tracks,sortBy);
+        enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
+        tracksFound = slCount(tracks);
+        if(tracksFound > 1)
+            findTracksSort(&tracks,sortBy);
 
-            displayFoundTracks(cart,tracks,tracksFound,sortBy);
+        displayFoundTracks(cart,tracks,tracksFound,sortBy);
 
-            if (measureTiming)
-                uglyTime("Displayed found tracks");
-            }
+        if (measureTiming)
+            uglyTime("Displayed found tracks");
         }
     slPairFreeList(&mdbPairs);
     }

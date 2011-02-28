@@ -780,6 +780,28 @@ tableName wgEncodeGisChiaPetK562D000005642
 type bed 12
 view Interactions
 
+metaObject wgEncodeGisChiaPetK562D000006820
+objType file
+antibody Pol2
+assembly hg19
+cell K562
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-23
+dateUnrestricted 2011-11-23
+docId wgEncodeGisChiaPetK562D000006820
+fileName wgEncodeGisChiaPetK562D000006820.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion RNAPII_K562
+project wgEncode
+replicate pooled
+subId 3382
+submitPath gisChIA-PET_RNAPII_K562_combined/RNAPII_K562T.chromInteractons.bed
+type bed 12
+view Interactions
+
 metaObject wgEncodeGisChiaPetMCF7D000005608
 objType file
 antibody Pol2
@@ -1723,6 +1745,50 @@ tableName wgEncodeGisChiaPetMCF7D000005669
 type bed 12
 view Interactions
 
+metaObject wgEncodeGisChiaPetMCF7D000006821
+objType file
+antibody Pol2
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-23
+dateUnrestricted 2011-11-23
+docId wgEncodeGisChiaPetMCF7D000006821
+fileName wgEncodeGisChiaPetMCF7D000006821.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion RNAPII
+project wgEncode
+replicate pooled
+subId 3383
+submitPath gisChIA-PET_RNAPII_MCF7_combined/RNAPII.chromInteractons.bed
+type bed 12
+view Interactions
+
+metaObject wgEncodeGisChiaPetMCF7D000006822
+objType file
+antibody ERalpha_a
+assembly hg19
+cell MCF-7
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-23
+dateUnrestricted 2011-11-23
+docId wgEncodeGisChiaPetMCF7D000006822
+fileName wgEncodeGisChiaPetMCF7D000006822.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion ER
+project wgEncode
+replicate pooled
+subId 3385
+submitPath gisChIA-PET_ER_MCF7_combined/ER.chromInteractons.bed
+type bed 12
+view Interactions
+
 metaObject wgEncodeGisChiaPetNB4D000005594
 objType file
 antibody Pol2
@@ -2114,4 +2180,26 @@ tableName wgEncodeGisChiaPetNB4D000005621
 type bed 12
 view Interactions
 
-# MAGIC: 433145149
+metaObject wgEncodeGisChiaPetNB4D000006819
+objType file
+antibody Pol2
+assembly hg19
+cell NB4
+composite wgEncodeGisChiaPet
+dataType ChiaPet
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-23
+dateUnrestricted 2011-11-23
+docId wgEncodeGisChiaPetNB4D000006819
+fileName wgEncodeGisChiaPetNB4D000006819.bed.gz
+grant Ruan
+lab GIS-Ruan
+labVersion RNAPII_NB4
+project wgEncode
+replicate pooled
+subId 3381
+submitPath gisChIA-PET_RNAPII_NB4_combined/RNAPII_NB4T.chromInteractons.bed
+type bed 12
+view Interactions
+
+# MAGIC: 2106786450

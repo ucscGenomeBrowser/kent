@@ -269,6 +269,7 @@ boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
 int maxRGBShade = 16;
 
 struct bed *sageExpList = NULL;
+char ncbiOmimUrl[255] = {"http://www.ncbi.nlm.nih.gov/omim/"};
 
 struct palInfo
 {
@@ -9111,10 +9112,8 @@ safef(query, sizeof(query),
       "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
-//if (row != NULL)
 if ((row != NULL) && strlen(row[0]) >= 1)
     {
-    printf("<br>---%s---\n", row[0]);fflush(stdout);
     printf("<B>Phenotype: </B><UL>");
     while (row != NULL)
     	{
@@ -9411,6 +9410,9 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     printf("<BR>\n");
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
     
     safef(query, sizeof(query),
     	  "select geneSymbol from omimGeneMap where omimId=%s;", itemName);
@@ -9500,10 +9502,10 @@ if (url != NULL && url[0] != 0)
 
     if (kgId != NULL)
     	{
-    	printf("<B>UCSC Canonical Gene ");
+    	printf("<B>UCSC Canonical Gene: ");
     	printf("<A HREF=\"%s%s&hgg_chrom=none\" target=_blank>",
 	       "../cgi-bin/hgGene?hgg_gene=", kgId);
-    	printf("%s</A></B>: ", kgId);
+    	printf("%s</A></B> ", kgId);
 
 	safef(query, sizeof(query), "select refseq from kgXref where kgId='%s';", kgId);
     	sr = sqlMustGetResult(conn, query);
@@ -9611,7 +9613,10 @@ if (url != NULL && url[0] != 0)
     sqlFreeResult(&sr);
 
     printf("<BR>\n");
-    
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
+
     printf("<B>Location: </B>");
     safef(query, sizeof(query),
     	  "select location from omimGeneMap where omimId=%s;", itemName);
@@ -9790,6 +9795,9 @@ char *omimId;
 char *avId;
 char *dbSnpId;
 char *chp;
+char *seqId = NULL;
+char avString[255];
+char *avDesc = NULL;
 
 chrom      = cartOptionalString(cart, "c");
 chromStart = cartOptionalString(cart, "o");
@@ -9797,7 +9805,7 @@ chromEnd   = cartOptionalString(cart, "t");
 
 avId = strdup(itemName);
 
-chp = strstr(itemName, "#");
+chp = strstr(itemName, ".");
 *chp = '\0';
 omimId = strdup(itemName);
 
@@ -9807,11 +9815,14 @@ if (url != NULL && url[0] != 0)
     printf("<A HREF=\"%s%s\" target=_blank>", url, itemName);
     printf("%s</A></B>", itemName);
     safef(query, sizeof(query),
-    	  "select title1, title2 from omimGeneMap where omimId=%s;", itemName);
+    	  "select title1, title2,  format(seqNo/10000,4), v.description from omimGeneMap m, omimAv v where m.omimId=%s and m.omimId=v.omimId and v.avId='%s';", itemName, avId);
+
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
     	{
+	seqId = strdup(row[2]);
+	safef(avString, sizeof(avString), "%s#%s", omimId, seqId+2L);
 	if (row[0] != NULL)
 	    {
 	    title1 = cloneString(row[0]);
@@ -9822,10 +9833,19 @@ if (url != NULL && url[0] != 0)
 	    title2 = cloneString(row[1]);
     	    printf(" %s ", title2);
 	    }
+	avDesc = row[3];
 	}
     sqlFreeResult(&sr);
+    
+    printf("<BR>\n");
+    printf("<B>OMIM page at NCBI: ");
+    printf("<A HREF=\"%s%s\" target=_blank>", ncbiOmimUrl, itemName);
+    printf("%s</A></B><BR>", itemName);
 
-    printf("<br><B>Allelic Variant:</B>%s\n", avId);
+    printf("<B>Allelic Variant: ");fflush(stdout);
+    printf("<A HREF=\"%s%s\" target=_blank>", url, avString);
+    printf("%s</A></B>", avId);
+    printf(" %s", avDesc);
 
     safef(query, sizeof(query),
     	  "select replStr from omimAvRepl where avId=%s;", avId);
@@ -23500,14 +23520,9 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
 
             }
         bed = bedLoad6(row);
-
-        if (sameString("numtSAssembled", table) || sameString("numtS", table))
-            printf("<A HREF=\"%s&db=%s&position=%s\">browser</A> | ",
-                   hgTracksPathAndSettings(), database, bed->name);
-        else
-            printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
-                   hgTracksPathAndSettings(), database,
-                    bed->chrom, bed->chromStart+1, bed->chromEnd);
+        printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+               hgTracksPathAndSettings(), database,
+               bed->chrom, bed->chromStart+1, bed->chromEnd);
 
         printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
             bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,

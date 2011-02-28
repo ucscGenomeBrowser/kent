@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
-
-<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="content-type"
+ content="text/html; charset=ISO-8859-1">
 </head>
 <body>
 <h2>Description</h2>
@@ -32,30 +32,48 @@ transcripts, or sites annotated as introns that encode proteins
 <h2>Display Conventions and Configuration</h2>
 <p>The display for this track show peptide mappings as
 grayscale-colored items where higher scores correspond to
-darker-colored blocks.</p>
-<p>There are several new nonstandard BED fields are added for this
-track. For example, there are three fields provided to assess the
-veracity of a match. The first is the <i>Raw Score </i> of the
-peptide. As the fields <i> Score </i> actually represents the
-confidence of identification (-log10(EValue)) for the peptide, we are
-providing raw score for that peptide to assess peptide identification
-(Jainab: how can users interpret this score?&nbsp; What constitutes a
-"good" score?). The second is the <i>Rank of the peptide</i> which
-indicates which position this particular peptide match was (those &gt;
-rank 5 are automatically eliminated) for that spectrum (Jainab: the
-word "position" is a bit confusing here.&nbsp; Perhaps more detail
-would help). Since a spectrum can be chimeric, containing more than one
-peptide, it is possible to obtain more than one valid match for the
-spectrum against the genome. A third field <i> Peptide Repeat Count</i>
-indicates how many places in the genome have the same matching peptide
-sequence, i.e. its uniqueness. The method may find a very strong match
-to a given peptide sequence X, but if X is present at three places in
-the genome, then we cannot be sure which of those locations encoded the
-protein observed. </p>
-<p>Another field <i>Precursor M/Z</i> represents the mass over charge
-ratio of the digested peptide before it was further dissociated by mass
-spectrometry. This is a semi unique identifier of the peptide that can
-be used to track its origins. </p>
+darker-colored blocks.<br>
+</p>
+<p>In addition to the displayed genomic coordinates, several additional
+fields are available for each track item.<br>
+</p>
+<ul>
+  <li>The <span style="font-style: italic;">Raw Score</span> reflects
+the strength of the peptide mapping, in contrast to the <span
+ style="font-style: italic;">Score</span> field which reflects the
+confidence of the mapping. The <span style="font-style: italic;">Score</span>
+field is computed as <span style="font-style: italic;">-log10(EValue) </span>for
+the peptide mapping, and scores of 130 or greater have an estimated 5%
+false positive rate. The Raw Score offers an additional
+level of confidence: raw scores of 200 or greater have an estimated 1%
+false positive rate. Note that <span style="font-style: italic;">Raw
+Score</span> is not normalized for the length of the peptide mapping,
+while <span style="font-style: italic;">Score</span> is.
+Consequently, short mappings might have a strong raw score but a weaker
+score.</li>
+  <li>The <span style="font-style: italic;">Repeat Count</span>
+indicates the number of places in the genome that match the peptide
+sequence. This reflects the uniqueness of the peptide mapping in
+the genome. Any mappings to highly-duplicated regions will have
+high repeat counts. This track does not contain any mappings with
+repeat counts of greater than five, but such mappings can be downloaded
+via the Downloads page.<br>
+  </li>
+  <li>The <span style="font-style: italic;">Peptide Rank </span>reflects
+a source of uncertainty in mass spectrometry-based proteomics: any
+single peak in the spectrum can be chimeric, containing more than one
+peptide. Consequently, one peak can have more than one distinct,
+valid match to the genome, reflecting the contribution of the separate
+peptides. Each of these matches can be ranked (based on?).
+The <span style="font-style: italic;">Peptide Rank</span> indicates
+the rank of each match. This track does not contain any mappings
+with peptide ranks greater than 3, but such mappings can be downloaded
+via the Downloads page.</li>
+  <li>The <span style="font-style: italic;">spectrum ID</span> is a
+semi-unique identifier of the spectrum associated with the peptide
+mapping, and can be used to track the origins of the mapping.<br>
+  </li>
+</ul>
 <h2>Methods</h2>
 <p>ENCODE cell lines K562 and GM12878 were used for large scale
 proteomic analysis. Cell lines were cultured according to standard
@@ -65,12 +83,14 @@ protocol[3]. </p>
 The proteolytic enzyme <i>trypsin</i> was used to digest the proteins
 in order to produce short, MS/MS analyzable peptides. Trypsin is a
 common protease that typically cleaves proteins after R or K. The
-parameter <i>enzyme</i> specifies the restriction enzyme used for
+metadata parameter <i>enzyme</i> specifies the restriction enzyme used
+for
 digestion. Tandem mass spectrometry (RPLC-MS/MS) analysis was then
-performed on an Eksigent Ultra-LTQ Orbitrap system.&nbsp; However, due
+performed on an Eksigent Ultra-LTQ Orbitrap system. However, due
 to enzyme inefficiency, it does not always cleave at R or K, so there
 may be peptides that include an uncleaved R/K site. The number of such
-missed cleavages allowed in the search is described by the parameter <i>miscleavages</i>.
+missed cleavages allowed in the search is described by the metadata
+parameter <i>miscleavages</i>.
 <p>We performed proteogenomic mapping with two miscleavages allowed and
 using whole human genomic sequence (UCSC hg19) via the genome
 fingerprint scanning (GFS) program [2], which uses HMM_Score [4] to
@@ -80,9 +100,6 @@ results at the given score level which would be expected by random
 chance. The E-values are used to assess the false-positive rate, and
 only those matches falling within the specified 5% FPR rate
 are included in the track. </p>
-<p> See the <a
- href="../../ENCODE/protocols/general/wgEncodeBroadChipSeq.txt">Protocol
-Document</a> for more details. </p>
 <h2>Credits</h2>
 <p>Proteogenomic mapping: Dr. Jainab Khatun, Brian Risk, Mustaque
 Ahamed, Christopher Maier and Dennis Crenshaw (Giddings Lab). </p>

@@ -1,8 +1,9 @@
 <H2>Description</H2>
 <DIV style='max-width: 900px;'>
-<P>
-This synthesis track displays open chromatin regions and/or transcription
-factor binding sites identified in
+<P><P>These tracks display a synthesis of evidence from different assays
+as part of the four <B><em>Open Chromatin</em></B> track sets.
+This track displays open chromatin regions and/or transcription factor binding
+sites identified in
 <A TARGET=ucscVocab HREF="/cgi-bin/hgEncodeVocab?type=cellType">multiple cell types</A>
 by one or more complementary methodologies, DNaseI hypersensitivity (HS)
 (<A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">Duke DNaseI HS</A>),
@@ -16,7 +17,50 @@ for all cell types). Regions that overlap between methodologies identify
 regulatory elements that are cross-validated indicating high confidence
 regions.  In addition, multiple lines of evidence suggest that regions detected
 by a single assay (e.g., DNase-only or FAIRE-only) are also biologically
-relevant (Song et al., submitted). Sites in this track are categorized and
+relevant (Song et al., submitted).
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromDnase">DNaseI HS data</A>:
+DNaseI is an enzyme that has long been used to map general
+chromatin accessibility, and DNaseI "hypersensitivity" is a feature of active
+cis-regulatory sequences.The use of this method has led to the discovery of
+functional regulatory elements that include promoters, enhancers, silencers,
+insulators, locus control regions, and novel elements. DNaseI hypersensitivity
+signifies chromatin accessibility following binding of trans-acting factors in
+place of a canonical nucleosome.
+</P>
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">FAIRE data</A>:
+FAIRE (Formaldehyde Assisted Isolation of Regulatory
+Elements) is a method to isolate and identify nucleosome-depleted regions of
+the genome.  FAIRE was initially discovered in yeast and subsequently shown to
+identify active regulatory elements in human cells (Giresi <em>et al.</em>,
+2007). Similar to DNaseI HS, FAIRE appears to identify functional regulatory
+elements that include promoters, enhancers, silencers, insulators, locus
+control regions and novel elements.
+</P>
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">ChIP data</A>:
+ChIP (Chromatin Immunoprecipitation) is a method to
+identify the specific location of proteins that are directly or indirectly
+bound to genomic DNA. By identifying the binding location of sequence-specific
+transcription factors, general transcription machinery components, and
+chromatin factors, ChIP can help in the functional annotation of the open
+chromatin regions identified by DNaseI HS mapping and FAIRE.
+</P>
+<P><A HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">Input data</A>:
+As a background control experiment, we sequenced
+the input genomic DNA sample that was used for ChIP. Crosslinked chromatin
+is sheared and the crosslinks are reversed without carrying out the
+immunoprecipitation step. This sample is otherwise processed in a manner
+identical to the ChIP sample as described below. The input track is
+useful in revealing potential artifacts arising from the sequence
+alignment process such as copy number differences between the
+reference genome and the sequenced samples, as well as regions of
+poor sequence alignability.</P>
+
+<H2> Display Conventions and Configuration </H2>
+<P>This track contains multiple subtracks representing different cell types
+that display individually on the browser. Instructions for configuring tracks
+with multiple subtracks are
+<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
+Sites in this track are categorized and
 color-coded for each cell type as follows:
 </P>
 <P><DT><B>Validated (Valid - Black)</B>:</DT>
@@ -51,11 +95,6 @@ For RNA Pol II, only sites that overlap annotated transcription start sites
 by the UCSC Genes track are considered.
 </P>
 
-<H2> Display Conventions and Configuration </H2>
-<P>This track contains multiple subtracks representing different cell types
-that display individually on the browser. Instructions for configuring tracks
-with multiple subtracks are
-<A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 
 <H2>Methods</H2>
 <P>For each site, the maximum F-Seq Density Signal value has been calculated

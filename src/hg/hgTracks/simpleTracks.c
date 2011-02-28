@@ -134,6 +134,7 @@ static char const rcsid[] = "$Id: simpleTracks.c,v 1.149 2010/06/05 19:29:42 bra
 
 #define CHROM_COLORS 26
 #define SMALLDYBUF 64
+#define OMIM_MAX_DESC_LEN 256
 
 int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
@@ -10972,8 +10973,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 }
 
 /* reserve space no more than 20 unique OMIM entries */
-#define OMIM_MAX_DESC_LEN 256
-char omimGeneClass3Buffer[20 * OMIM_MAX_DESC_LEN];
+char omimGeneClass3Buffer[21 * OMIM_MAX_DESC_LEN];
 
 char *omimGeneClass3DisorderList(struct track *tg, struct bed *item)
 /* Return list of disorders associated with a OMIM entry */
@@ -10985,16 +10985,31 @@ char **row;
 char *chp;
 int i=0;
 
+// get gene symbol(s) first
+
 conn = hAllocConn(database);
+safef(query,sizeof(query),
+        "select geneSymbol from omimGeneMap where omimId =%s", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+if (row != NULL) 
+    {
+    safef(omimGeneClass3Buffer, sizeof(omimGeneClass3Buffer), "%s; disorder(s): ", row[0]);
+    }
+
+chp = omimGeneClass3Buffer + (long)strlen(row[0]) + 15L; 
+sqlFreeResult(&sr);
+
 safef(query,sizeof(query),
         "select distinct disorder from omimDisorderMap, omimGeneClass3 where name='%s' and name=cast(omimId as char) order by disorder", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 /* show up to 20 max entries */
-chp = omimGeneClass3Buffer;
 while ((row != NULL) && i<20)
     {
+    int lengthLeft = sizeof(omimGeneClass3Buffer) - strlen(omimGeneClass3Buffer);
     /* omimDisorderMap disorder field some times have trailing blanks. */
     eraseTrailingSpaces(row[0]);
     if (i != 0)
@@ -11002,7 +11017,12 @@ while ((row != NULL) && i<20)
 	safef(chp, 3, "; ");
 	chp++;chp++;
 	}
+    safecpy(chp, lengthLeft, row[0]);
+    lengthLeft = lengthLeft - strlen(row[0]) - 2;
+    
     safecpy(chp, OMIM_MAX_DESC_LEN, row[0]);
+    
+    
     chp = chp+strlen(row[0]);
     row = sqlNextRow(sr);
     i++;
@@ -11075,7 +11095,6 @@ void omimGeneClass3Methods (struct track *tg)
 tg->drawItemAt    = omimGeneClass3DrawAt;
 }
 
-#define OMIM_MAX_DESC_LEN 256
 char omimAvSnpBuffer[OMIM_MAX_DESC_LEN];
 
 char *omimAvSnpAaReplacement(struct track *tg, struct bed *item)
@@ -11091,14 +11110,14 @@ omimAvSnpBuffer[0] = '\0';
 
 conn = hAllocConn(database);
 safef(query,sizeof(query),
-        "select replStr, dbSnpId from omimAvRepl where avId='%s'", item->name);
+        "select replStr, dbSnpId, description from omimAvRepl where avId='%s'", item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 chp = omimAvSnpBuffer;
 if (row != NULL) 
     {
-    safef(omimAvSnpBuffer, sizeof(omimAvSnpBuffer), "%s, %s", row[0], row[1]);
+    safef(omimAvSnpBuffer, sizeof(omimAvSnpBuffer), "%s, %s: %s", row[0], row[1], row[2]);
     }
 
 hFreeConn(&conn);
@@ -11158,6 +11177,139 @@ if (tg->subType == lfWithBarbs)
 void omimAvSnpMethods (struct track *tg)
 {
 tg->drawItemAt    = omimAvSnpDrawAt;
+}
+
+char omimLocationBuffer[OMIM_MAX_DESC_LEN*2];
+
+char *omimLocationDescription(struct track *tg, struct bed *item)
+/* Return description of an OMIM entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+
+omimLocationBuffer[0] = '\0';
+
+conn = hAllocConn(database);
+safef(query,sizeof(query),
+        "select concat(title1, ' ', title2) from omimGeneMap where omimId=%s", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+chp = omimLocationBuffer;
+if (row != NULL) 
+    {
+    safef(omimLocationBuffer, sizeof(omimLocationBuffer), "%s", row[0]);
+    }
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(omimLocationBuffer);
+}
+
+Color omimLocationColor(struct track *tg, void *item, struct hvGfx *hvg)
+/* set the color for omimLocation track items */
+{
+struct bed *el = item;
+char *omimId;
+char *phenClass;
+char query[256];
+struct sqlResult *sr;
+char **row;
+
+struct sqlConnection *conn = hAllocConn(database);
+
+safef(query, sizeof(query), 
+      "select omimId, phenotypeClass from omimDisorderPhenotype where omimId=%s", el->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+hFreeConn(&conn);
+
+if (row == NULL)
+    {
+    // set to gray if this entry does not have any disorder info
+    sqlFreeResult(&sr);
+    return hvGfxFindColorIx(hvg, 200, 200, 200);
+    }
+else
+    {
+    omimId    = row[0];
+    phenClass = row[1];
+
+    if (sameWord(phenClass, "3"))
+    	{
+	// set to dark red, the same color as omimGeneClass3 track
+	sqlFreeResult(&sr);
+	return hvGfxFindColorIx(hvg, 220, 0, 0);
+    	}	
+    else
+    	{
+    	if (sameWord(phenClass, "2"))
+    	    {
+	    // set to green for class 2
+	    sqlFreeResult(&sr);
+	    return hvGfxFindColorIx(hvg, 0, 255, 0);
+    	    }	
+	else
+	    {
+    	    if (sameWord(phenClass, "1"))
+    	    	{
+		// set to orange for class 1
+	    	sqlFreeResult(&sr);
+	    	return hvGfxFindColorIx(hvg, 200, 0, 200);
+    	    	}
+	    else
+	    	{
+	    	// set to purplish color for phenClass 4
+            	sqlFreeResult(&sr);
+	    	return hvGfxFindColorIx(hvg, 200, 100, 100);
+            	}
+	    }
+
+	}  
+    }
+}
+
+static void omimLocationDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *omimTitle;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+omimTitle = omimLocationDescription(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, omimLocationColor(tg, item, hvg));
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, omimTitle)-2, y,
+		    mgFontStringWidth(font, omimTitle),
+                    heightPer, MG_BLACK, font, omimTitle);
+        }
+
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), omimTitle);
+    }
+}
+
+void omimLocationMethods (struct track *tg)
+{
+tg->drawItemAt    = omimLocationDrawAt;
+tg->itemColor     = omimLocationColor;
 }
 
 char *omimGeneName(struct track *tg, void *item)
@@ -11223,7 +11375,6 @@ else
 }
 
 /* reserve space no more than 20 unique OMIM entries */
-#define OMIM_MAX_DESC_LEN 256
 char omimGeneBuffer[20 * OMIM_MAX_DESC_LEN];
 
 char *omimGeneDiseaseList(struct track *tg, struct bed *item)
@@ -12591,6 +12742,7 @@ registerTrackHandlerOnFamily("omicia", omiciaMethods);
 registerTrackHandler("omimGene", omimGeneMethods);
 registerTrackHandler("omimGeneClass3", omimGeneClass3Methods);
 registerTrackHandler("omimAvSnp", omimAvSnpMethods);
+registerTrackHandler("omimLocation", omimLocationMethods);
 registerTrackHandler("omimComposite", omimGeneClass3Methods);
 registerTrackHandler("rest", restMethods);
 #endif /* GBROWSE */

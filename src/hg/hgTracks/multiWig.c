@@ -26,7 +26,6 @@ if (aggregate == NULL)
 return differentString(aggregate, WIG_AGGREGATE_NONE);
 }
 
-
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -35,22 +34,41 @@ static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
 struct track *subtrack;
 char *aggregate = aggregateFromCartOrDefault(cart, tg);
 boolean overlay = isOverlayTypeAggregate(aggregate);
+boolean errMsgShown = FALSE;
 int y = yOff;
+boolean errMsgFound = FALSE;
+// determine if any subtracks had errors
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack) && subtrack->networkErrMsg)
+	errMsgFound = TRUE;
+    }
+if (errMsgFound)
+    {
+    Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
+    hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
+    }
+
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack))
 	{
-	int height = subtrack->totalHeight(subtrack, vis);
-	hvGfxSetClip(hvg, xOff, y, width, height);
-        if (sameString(WIG_AGGREGATE_TRANSPARENT, aggregate))
-            hvGfxSetWriteMode(hvg, MG_WRITE_MODE_MULTIPLY);
-	if (overlay)
-	    subtrack->lineHeight = tg->lineHeight;
-	subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
-	if (!overlay)
-	    y += height + 1;
-        hvGfxSetWriteMode(hvg, MG_WRITE_MODE_NORMAL);
-	hvGfxUnclip(hvg);
+        if (!subtrack->networkErrMsg || !errMsgShown)
+	    {
+	    if (subtrack->networkErrMsg)
+	       errMsgShown = TRUE;
+	    int height = subtrack->totalHeight(subtrack, vis);
+	    hvGfxSetClip(hvg, xOff, y, width, height);
+	    if (sameString(WIG_AGGREGATE_TRANSPARENT, aggregate))
+		hvGfxSetWriteMode(hvg, MG_WRITE_MODE_MULTIPLY);
+	    if (overlay)
+		subtrack->lineHeight = tg->lineHeight;
+	    subtrack->drawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
+	    if (!overlay)
+		y += height + 1;
+	    hvGfxSetWriteMode(hvg, MG_WRITE_MODE_NORMAL);
+	    hvGfxUnclip(hvg);
+	    }
 	}
     }
 char *url = trackUrl(tg->track, chromName);
@@ -93,7 +111,7 @@ struct track *firstTrack = NULL;
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (isSubtrackVisible(track))
+    if (isSubtrackVisible(track) && !track->networkErrMsg)
         {
 	if (firstTrack == NULL)
 	    *retFirstTrack = firstTrack = track;
