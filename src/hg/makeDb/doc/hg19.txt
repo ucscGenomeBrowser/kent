@@ -13749,7 +13749,18 @@ liftOver hg18.gl.bed /gbdb/hg18/liftOver/hg18ToHg19.over.chain.gz hg19.gl.{bed,u
 hgLoadBed -noLoad hg19 gl hg19.gl.bed
 mv bed.tab hg19.gl.withBin.bed
 awk 'BEGIN{OFS="\t";}{fname=$2"_gl.txt"; print $1, $5, $3, $4, $7 >> fname;}' hg19.gl.withBin.bed
-for f in chr*.txt; do hgLoadSqlTab hg19 ${f%.txt} hg18.chr1_gl.sql $f; done
+cd ../
+for tab in `echo show tables like "'chr%_gl'" | hgsql hg19 | tail -n +2`; do 
+  echo select frag from $tab | hgsql hg19 | tail -n +2  >> gl.names; 
+done
+sed 's/_.*//' gl.names | sort | uniq > uniq.gl.names
+cut -f4 hg19.clonePos.bed4p > hg19.clonePos.names
+diff uniq.gl.names hg19.clonePos.names | grep '<' | sed 's/< //' > bad_gl.names
+for f in chr*.txt; do 
+   tab=${f%.txt}
+   grep -v -f ../bad_gl.names $f > ${tab}.update.txt
+   hgLoadSqlTab hg19 ${tab} hg18.chr1_gl.sql ${tab}.update.txt; 
+done
 
 #############################################################################
 # MGI MOUSE QTL LIFT (DONE 2010-12-30, Andy)
