@@ -16,7 +16,7 @@ controlledVocabulary encode/cv.ra cellType=cell treatment=treatment
 dragAndDrop subTracks
 priority 0
 wgEncode 1
-type bed 9 +
+type bed 9 + 
 itemRgb on
 visibility dense
 canPack On
