@@ -11,7 +11,6 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-
 static char const rcsid[] = "$Id: hgMapToGene.c,v 1.16 2009/11/23 23:39:44 kent Exp $";
 
 void usage()
@@ -171,18 +170,18 @@ for (el = elList; el != NULL; el = el->next)
 	bestOverlap = overlap;
 	bestBed = bed;
 	}
-        else if (overlap == bestOverlap)
-            {
-            /* If two beds have the same number of overlapping bases to
-             * the gene prediction, then take the bed with the greatest proportion of
-             * overlapping bases, i.e. the shorter one. */
-            if (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed))
-                {
-                bestOverlap = overlap;
-                bestBed = bed;
-                }
-            }
-        }
+    else if (overlap == bestOverlap)
+	{
+	/* If two beds have the same number of overlapping bases to
+	 * the gene prediction, then take the bed with the greatest proportion of
+	 * overlapping bases, i.e. the shorter one. */
+	if (bestBed == NULL || (bedTotalBlockSize(bed) < bedTotalBlockSize(bestBed)))
+	    {
+	    bestOverlap = overlap;
+	    bestBed = bed;
+	    }
+	}
+    }
 return bestBed;
 }
 
