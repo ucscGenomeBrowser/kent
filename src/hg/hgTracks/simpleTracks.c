@@ -5249,40 +5249,17 @@ static void decipherDrawAt(struct track *tg, void *item,
 struct bed *bed = item;
 char *sPhenotypes;
 int heightPer = tg->heightPer;
-int start = bed->chromStart;
-if (start < winStart)
-    start = winStart;
-int end = bed->chromEnd;
-if (end > winEnd)
-    end = winEnd;
-int x1 = round((double)((int)start-winStart)*scale) + xOff;
-int x2 = round((double)((int)end-winStart)*scale) + xOff;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
 int w;
 
 sPhenotypes = decipherPhenotypeList(tg, item);
 w = x2-x1;
-
 if (w < 1)
     w = 1;
 if (color)
     {
-    void drawTri(struct hvGfx *hvg, int x, int y1, int y2, Color color, char strand);
-    int ourX = x1;
-    int ourW = w;
-    if (bed->chromStart < winStart)
-	{
-	assert(x1 == xOff);
-	ourX += heightPer/2;
-	ourW -= heightPer/2;
-	drawTri(hvg, xOff, y, y + heightPer -1,decipherColor(tg, item, hvg), '-');
-	}
-
-    if (bed->chromEnd > winEnd)
-	{
-	ourW -= heightPer/2;
-	drawTri(hvg, x2 - heightPer/2, y, y + heightPer -1,decipherColor(tg, item, hvg), '+');
-	}
-    hvGfxBox(hvg, ourX, y, ourW, heightPer, decipherColor(tg, item, hvg));
+    hvGfxBox(hvg, x1, y, w, heightPer, decipherColor(tg, item, hvg));
 
     if (vis == tvFull)
         {
@@ -10018,7 +9995,7 @@ tg->itemNameColor = blastNameColor;
 }
 
 
-void drawTri(struct hvGfx *hvg, int x, int y1, int y2, Color color,
+static void drawTri(struct hvGfx *hvg, int x, int y1, int y2, Color color,
 	char strand)
 /* Draw traingle. */
 {
