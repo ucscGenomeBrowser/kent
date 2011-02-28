@@ -3501,7 +3501,7 @@ if (hgPcrOk(database))
 if (!psOutput)
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
-        " %s </A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
+        "%s</A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
         winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
     }
 
