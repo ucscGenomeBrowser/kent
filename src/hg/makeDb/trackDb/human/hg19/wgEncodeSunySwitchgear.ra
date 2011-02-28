@@ -9,6 +9,7 @@ subGroup2 cellType Cell_Line HT1080=HT-1080
 subGroup3 factor Target_Protein ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag IGF2BP1=IGF2BP1 
 dimensions dimensionX=factor dimensionY=cellType
 sortOrder cellType=+ factor=+
+fileSortOrder cell=Cell_Line antibody=Antibody<BR>Target view=View replicate=Rep fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
