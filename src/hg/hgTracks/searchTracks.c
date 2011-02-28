@@ -394,10 +394,10 @@ if(numMetadataSelects)
                 {
                 safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
                 enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
-            #ifdef BLOCK_MULTI_SELECT_SUPPORT
+#ifdef BLOCK_MULTI_SELECT_SUPPORT
                 if (searchBy == cvsSearchByMultiSelect)  // NOTE: Temprorarily bypass cv.ra
                     searchBy =  cvsSearchBySingleSelect;
-            #endif///def BLOCK_MULTI_SELECT_SUPPORT
+#endif///def BLOCK_MULTI_SELECT_SUPPORT
                 if (searchBy == cvsSearchByMultiSelect)
                     {
                     // Multi-selects as comma delimited list of values
@@ -476,7 +476,7 @@ else
             cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
             safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
         #endif///ndef BLOCK_MULTI_SELECT_SUPPORT
-            printf("</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is (any of)</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
+            printf("</td>\n<td align='right' id='isLike%i' style='width:10px; white-space:nowrap;'>is among</td>\n<td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
             #define MULTI_SELECT_CBS_FORMAT "<SELECT MULTIPLE=true name='%s' style='display: none; min-width:200px; font-size:.9em;' class='filterBy mdbVal' onchange='findTracksMdbValChanged(this)'>\n"
             printf(MULTI_SELECT_CBS_FORMAT,buf);
             len = getTermArray(conn, &labels, &terms, mdbVar[i]);
@@ -490,7 +490,7 @@ else
             }
         else if (searchBy == cvsSearchBySingleSelect)
             {
-        #ifdef BLOCK_MULTI_SELECT_SUPPORT
+#ifdef BLOCK_MULTI_SELECT_SUPPORT
             cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar noMulti' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
             safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
         #endif///ndef BLOCK_MULTI_SELECT_SUPPORT
@@ -500,7 +500,7 @@ else
             }
         else if (searchBy == cvsSearchByFreeText)
             {
-        #ifdef BLOCK_MULTI_SELECT_SUPPORT
+#ifdef BLOCK_MULTI_SELECT_SUPPORT
             cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar noMulti' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
             safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
         #endif///ndef BLOCK_MULTI_SELECT_SUPPORT

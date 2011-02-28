@@ -816,7 +816,7 @@ panTro3.upstreamGeneTbl = refGene
     cd /cluster/data/genbank
     time nice -n +19 bin/gbDbLoadStep -initialLoad -drop panTro3 &
     #	logFile: var/dbload/hgwdev/logs/2011.02.24-13:51:55.dbload.log
-    #	real    31m43.237s
+    #	real    30m58.420s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank

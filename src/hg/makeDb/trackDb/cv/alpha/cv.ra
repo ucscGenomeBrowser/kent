@@ -9360,7 +9360,7 @@ label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 searchable no
 cvDefined no
-validate regex: ^V[2-9]*.*$   # shoue be with reason: "V2 - earlier version had a bad smell"
+validate regex: ^V[2-9]*.*$   # Format: "V# - {reason for version}".  An example :"V2 - earlier version had a bad smell"
 priority 250
 
 term tableName

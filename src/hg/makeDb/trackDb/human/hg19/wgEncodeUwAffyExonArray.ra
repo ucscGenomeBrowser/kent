@@ -11,6 +11,7 @@ subGroup2 rep Rep rep1=1 rep2=2
 dimensions dimensionX=rep dimensionY=cellType 
 boxedCfg on
 sortOrder cellType=+ rep=+
+fileSortOrder cell=Cell_Line replicate=Rep origAssembly=Assembly<BR>originally<BR>mapped<BR>to fileSize=Size fileType=File_Type dateSubmitted=Submitted dateUnrestricted=RESTRICTED<BR>Until
 controlledVocabulary encode/cv.ra cellType=cell
 dragAndDrop subTracks
 visibility hide
