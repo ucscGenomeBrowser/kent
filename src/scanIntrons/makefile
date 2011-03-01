@@ -3,7 +3,7 @@ include ../inc/common.mk
 O = scanIntrons.o
 
 scanIntrons.exe: $(O) lib
-	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a
+	${CC} ${COPT} ${CFLAGS} $O ../lib/$(MACHTYPE)/jkweb.a ${L}
 	mv ${AOUT} scanIntrons.exe
 	chmod a+rx scanIntrons.exe
 

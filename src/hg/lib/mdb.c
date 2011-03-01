@@ -2164,7 +2164,7 @@ assert(tables || files); // Cant exclude both
 struct mdbObj *mdbObjs = *pMdbObjs;
 struct mdbObj *mdbObjsDropped  = NULL;
 if (tables)
-    mdbObjsDropped = mdbObjsFilter(&mdbObjs,"tableName",NULL,FALSE);
+    mdbObjsDropped = mdbObjsFilter(&mdbObjs,"objType","table",FALSE);
 
 if (files)
     {
@@ -2937,16 +2937,17 @@ for(onePair = varValPairs; onePair != NULL; onePair = onePair->next)
         warn("mdb search by date is not yet implemented.");
         }
     }
-// Be sure to include table of file in selections
+// Be sure to include table or file in selections
 if (tables)
-    dyStringAppend(dyTerms,"tableName=? ");
+    dyStringAppend(dyTerms,"objType=table ");
 if (files)
     dyStringAppend(dyTerms,"fileName=? ");
 
 // Build the mdbByVals struct and then select all mdbObjs in one query
 struct mdbByVar *mdbByVars = mdbByVarsLineParse(dyStringContents(dyTerms));
 dyStringClear(dyTerms);
-struct mdbObj *mdbObjs = mdbObjsQueryByVars(conn,NULL,mdbByVars); // Uses master table metaDb not sandbox versions
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+struct mdbObj *mdbObjs = mdbObjsQueryByVars(conn,tableName,mdbByVars);
 
 return mdbObjs;
 }
@@ -2999,7 +3000,7 @@ return retVal;
 }
 
 // TODO: decide to make this public or hide it away inside the one function so far that uses it.
-static struct hash *cvHash = NULL;
+//static struct hash *cvHash = NULL;
 static char *cv_file()
 // return default location of cv.ra
 {
@@ -3038,31 +3039,29 @@ if (!tables || !files)
 dyStringAppend(dyQuery," order by val");
 
 // Establish cv hash
-if (cvHash == NULL)
-    cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
+struct hash *varHash = mdbCvTermHash(var);
 
 struct slPair *pairs = NULL, *pair;
 struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
 dyStringFree(&dyQuery);
 char **row;
-struct hash *ra = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(pair);
     char *name = cloneString(row[0]);
     pair = slPairNew(name,name);  // defaults the label to the metaDb.val
-    ra = hashFindVal(cvHash,name);
-    if (ra == NULL && sameString(var,"lab"))  // FIXME: ugly special case to be removed when metaDb is cleaned up!
+    struct hash *valHash = hashFindVal(varHash,name);
+    if (valHash == NULL && sameString(var,"lab"))  // FIXME: ugly special case to be removed when metaDb is cleaned up!
         {
         char *val = cloneString(name);
-        ra = hashFindVal(cvHash,strUpper(val));
-        if (ra == NULL)
-            ra = hashFindVal(cvHash,strLower(val));
+        valHash = hashFindVal(varHash,strUpper(val));
+        if (valHash == NULL)
+            valHash = hashFindVal(varHash,strLower(val));
         freeMem(val);
         }
-    if (ra != NULL)
+    if (valHash != NULL)
         {
-        char *label = hashFindVal(ra,"label");
+        char *label = hashFindVal(valHash,"label");
         if (label != NULL)
             {
             freeMem(pair->name); // Allocated when pair was created

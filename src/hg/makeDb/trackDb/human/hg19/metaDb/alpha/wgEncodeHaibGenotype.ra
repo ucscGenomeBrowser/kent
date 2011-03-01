@@ -324,13 +324,34 @@ dateUnrestricted 2011-10-08
 fileName wgEncodeHaibGenotypeGm12878RegionsRep1.bedLogR.gz
 grant Myers
 lab HudsonAlpha
-labExpId  Illumina 1MDuo
+labExpId Illumina 1MDuo
 labVersion HudsonAlpha
 origAssembly hg19
 project wgEncode
 replicate 1
 subId 3195
 tableName wgEncodeHaibGenotypeGm12878RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibGenotypeGm12878RegionsRep2
+objType table
+cell GM12878
+composite wgEncodeHaibGenotype
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-17
+dateUnrestricted 2011-11-17
+fileName wgEncodeHaibGenotypeGm12878RegionsRep2.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labExpId Illumina 1MDuo
+labVersion HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 3536
+tableName wgEncodeHaibGenotypeGm12878RegionsRep2
 treatment None
 view Regions
 
@@ -646,6 +667,27 @@ project wgEncode
 replicate 2
 subId 3432
 tableName wgEncodeHaibGenotypeHelas3RegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeHaibGenotypeHepg2RegionsRep1
+objType table
+cell HepG2
+composite wgEncodeHaibGenotype
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-17
+dateUnrestricted 2011-11-17
+fileName wgEncodeHaibGenotypeHepg2RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labExpId Illumina 1MDuo
+labVersion HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3536
+tableName wgEncodeHaibGenotypeHepg2RegionsRep1
 treatment None
 view Regions
 
@@ -1108,6 +1150,27 @@ project wgEncode
 replicate 2
 subId 3303
 tableName wgEncodeHaibGenotypeJurkatRegionsRep2
+treatment None
+view Regions
+
+metaObject wgEncodeHaibGenotypeK562RegionsRep1
+objType table
+cell K562
+composite wgEncodeHaibGenotype
+dataType Cnv
+dataVersion post ENCODE Jan 2011 Freeze
+dateSubmitted 2011-02-17
+dateUnrestricted 2011-11-17
+fileName wgEncodeHaibGenotypeK562RegionsRep1.bedLogR.gz
+grant Myers
+lab HudsonAlpha
+labExpId Illumina 1MDuo
+labVersion HudsonAlpha
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 3536
+tableName wgEncodeHaibGenotypeK562RegionsRep1
 treatment None
 view Regions
 
@@ -1804,4 +1867,4 @@ tableName wgEncodeHaibGenotypeU87RegionsRep1
 treatment None
 view Regions
 
-# MAGIC: 680107606
+# MAGIC: 156690289

@@ -7,8 +7,6 @@
 
 #define HGFINDSPEC_NUM_COLS 12
 
-#include <regex.h>
-
 struct hgFindSpec
 /* This defines a search to be performed by hgFind. */
     {
@@ -72,15 +70,6 @@ void hgFindSpecOutput(struct hgFindSpec *el, FILE *f, char sep, char lastSep);
 /* Print out hgFindSpec as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
-boolean matchRegex(char *name, char *exp);
-/* Return TRUE if name matches the regular expression pattern
- * (case insensitive). */
-
-boolean matchRegexSubstr(char *name, char *exp, regmatch_t substrArr[],
-			 size_t substrArrSize);
-/* Return TRUE if name matches exp (case insensitive); regexec fills in 
- * substrArr with substring offsets. */
 
 int hgFindSpecCmp(const void *va, const void *vb);
 /* Compare to sort based on searchPriority. */
