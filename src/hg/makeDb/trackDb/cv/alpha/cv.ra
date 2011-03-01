@@ -5258,31 +5258,16 @@ term Max
 tag MAX
 type Antibody
 target Max
-antibodyDescription rabbit polyclonal, epitope mapping at the C-terminus of Max of human origin
-targetDescription MYC associated factor X
-vendorName Santa Cruz Biotech
-vendorId sc-197
-orderUrl http://www.scbt.com/product.php?datasheet=197
-lab Snyder
-targetId GeneCard:MAX
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
-validation missing
-
-term  MAX_(C-17)
-tag  MAXC17
-type Antibody
-target  MAX_(C-17)
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin.
 targetDescription  The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
-lab  Myers
+lab  Myers, Snyder
 lots  J0809
-targetId MAX
+targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX_C-17(Immunoprecipitation-WesternBlot,MassSpec):human_MAX_C-17_validation_Myers.pdf
-
+validation MAX(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_validation_Myers.pdf
 
 
 ##This does not appear in metaDb
