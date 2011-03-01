@@ -17,7 +17,7 @@
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be Cell Line)
-# organism (used by pipeline in ways I don't fully understand.  Should be human)
+# organism (used in many ways.  Should correspond to a "type organism" stanza)
 # description (human-readable description of cell type, for cell type cellTypes.html)
 # tissue (general tissue type, for categorizing cell types)
 # vendorName (name of vendor or lab that provides these cells)
@@ -28,8 +28,9 @@
 # termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
 # termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
 # color (specifies color code for track data of this cell type, rgb values)
-# sex (M, F, B, or U.  If "F", then the track data shouldn't contain chrY)
-# tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html.  Not used in mouse)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
+# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.  
+#       Should correspond to a "type tier" stanza)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
 
@@ -3095,16 +3096,16 @@ tag tHEK293
 type Cell Line
 tier 3
 organism human
-description (Description)(Provisional)
-lineage (Lineage)
-karyotype (Karyotype)
-sex (Sex)
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor
+lineage Human embryonic kidney, ATCC number CRL-1573
+karyotype cancer, hypotriploid, XXX
+sex F
 tissue Kidney
 vendorName Invitrogen
 vendorId r71007
 orderUrl http://products.invitrogen.com/ivgn/product/R71007?ICID=search-r71007
-termId (Term ID)
-termUrl
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
 
 term T98G
@@ -3802,7 +3803,7 @@ description pseudogene
 # vendorName (name of vendor or lab that provides these antibodies)
 # vendorId (the ID of the antibody in the vendor's catalog)
 # orderUrl (URL for ordering the antibody. Links with vendorId on cellTypes.html)
-# lab (lab that first asked for this antibody(
+# lab (lab that first asked for this antibody.  Should match the "labPi" field in some "type lab" stanza)
 # validation (either missing or the name of a validation document in a format to be documented by Venkat)
 # lots (optional lot numbers)
 
@@ -3846,7 +3847,7 @@ vendorId sc-188
 lab Struhl, Myers
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
-validation ATF3(Immunoblot)_Myers:human_ATF3_validation_Myers.pdf
+validation ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
 
 term BAF155
 tag BAF155
@@ -3918,8 +3919,8 @@ targetId GeneCard:BCL3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
 validation BCL3(Immunoblot):human_BCl3_C-14_validation_Myers.pdf
 
-term BCLAF1_(M33-P5B11)
-tag BCLAF1M33
+term BCLAF1_(SC-101388)
+tag BCLAF101388
 type Antibody
 target BCLAF1
 antibodyDescription Mouse monoclonal IgG, raised against a synthetic peptide corresponding to a.a. 900-909 of BCLAF1 of human origin.
@@ -3930,7 +3931,7 @@ orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
 lab Myers
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation BCLAF1(Immunoblot):human_BCLAF1_M33-P5B11_validation_Myers.pdf
+validation BCLAF1(Immunoblot):human_BCLAF1_SC-101388_validation_Myers.pdf
 
 term BDP1
 tag BDP1
@@ -3975,8 +3976,8 @@ targetId GeneCards:BHLHE40
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BHLHE40
 validation missing
 
-term BRCA1_(C-1863)
-tag BRCA1C
+term BRCA1_(A300-000A)
+tag BRCA1A300
 type Antibody
 target BRCA1
 antibodyDescription Rabbit polyclonal recognizing a region between residue 1800 and the C-terminus (residue 1863) of human Breast Cancer Gene 1
@@ -4059,8 +4060,8 @@ targetId GeneCard:JUN
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=JUN
 validation missing
 
-term c-Myb_(H-141)
-tag cMYBH141
+term c-Myb_(SC-7874)
+tag cMYBSC7874
 type Antibody
 target c-Myb
 antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin
@@ -4115,8 +4116,8 @@ vendorId sc-150
 lab Snyder
 validation missing
 
-term CHD2_(N-1250)
-tag CHD21250
+term CHD2_(AB68301)
+tag CHD2AB68301
 type Antibody
 target CHD2
 antibodyDescription Rabbit polyclonal to CHD2 Synthetic peptide derived from within residues 1250 - 1350 of Human CHD2.
@@ -4144,8 +4145,8 @@ targetId GeneCard:CTCF
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
-term CTCF_(C-20)
-tag CTCFC20
+term CTCF_(SC-15914)
+tag CTCFSC15914
 type Antibody
 target CTCF
 antibodyDescription Goat polyclonal, epitope mapping near the C-terminus of CTCF of human origin
@@ -4260,10 +4261,10 @@ targetId GeneCard:E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
 validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf
 
-term  E2F6_(H-50)
-tag  E2F6H50
+term  E2F6_(SC-22823)
+tag  E2F6SC22823
 type Antibody
-target  E2F6_(H-50)
+target  E2F6
 antibodyDescription  Rabbit polyclonal IgG, epitope corresponding to a.a. 232-281 mapping at the C-terminus of E2F-6 of human origin.
 targetDescription  This gene encodes a member of the E2F transcription factor protein family. E2F family members play a crucial role in control of the cell cycle and of the action of tumor suppressor proteins. They are also a target of the transforming proteins of small DNA tumor viruses. Many E2F proteins contain several evolutionarily conserved domains: a DNA binding domain, a dimerization domain which determines interaction with the differentiation regulated transcription factor proteins (DP), a transactivation domain enriched in acidic amino acids, and a tumor suppressor protein association domain which is embedded within the transactivation domain. The encoded protein of this gene is atypical because it lacks the transactivation and tumor suppressor protein association domains. It contains a modular suppression domain and is an inhibitor of E2F-dependent transcription. The protein is part of a multimeric protein complex that contains a histone methyltransferase and the transcription factors Mga and Max. Multiple transcript variants have been reported for this gene, but it has not been clearly demonstrated that they encode valid isoforms (RefSeq).
 vendorName Santa Cruz Biotech
@@ -4273,13 +4274,13 @@ lab  Myers
 lots  D1206
 targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation E2F6_(H-50)(Immunoblot,MassSpec)_Myers:human_E2F6_H-50_validation_Myers.pdf
+validation E2F6_(SC-22823)(Immunoblot,MassSpec):human_E2F6_SC-22823_validation_Myers.pdf
 
 
-term  EBF1_(C-8)
-tag  EBF1C8
+term  EBF1_(SC-137065)
+tag  EBF1SC137065
 type Antibody
-target  EBF1_(C-8)
+target  EBF1
 antibodyDescription  Mouse monoclonal IgG, raised against a.a. 1-300 mapping at the N-terminus of EBF of human origin.
 targetDescription  Early B-cell factor 1.  Transcriptional activator which recognizes variations of the palindromic sequence 5'-ATTCCCNNGGGAATT-3' (By similarity).
 vendorName Santa Cruz Biotech
@@ -4289,7 +4290,7 @@ lab  Myers
 lots  J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation EBF1_C-8(Immunoblot)_Myers:human_EBF1_C-8_validation_Myers.pdf
+validation EBF1_(SC-137065)(Immunoblot):human_EBF1_SC-137065_validation_Myers.pdf
 
 term eGFP-FOS
 tag eFOS
@@ -4394,7 +4395,7 @@ lab  Myers
 lots  L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation ELF1_(SC-631)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_ELF1_SC-631_validation_Myers.pdf
+validation ELF1_(SC-631)(Immunoprecipitation-WesternBlot,MassSpec):human_ELF1_SC-631_validation_Myers.pdf
 
 term ELK4
 tag ELK4
@@ -4491,7 +4492,7 @@ lab  Myers
 lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation FOSL1_(SC-183)(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_FOSL1-SC183_validation_Myers.pdf
+validation FOSL1_(SC-183)(Immunoprecipitation-Western_blot,MassSpec):human_FOSL1-SC183_validation_Myers.pdf
 
 
 
@@ -4509,8 +4510,8 @@ targetId GeneCard:FOSL2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
 validation FOSL2(Immunoblot):human_FOSL2_Q-20_validation_Myers.pdf
 
-term FOXA1_(C-20)
-tag FOXA1C20
+term FOXA1_(SC-6553)
+tag FOXA1SC6553
 type Antibody
 target FOXA1
 targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq).
@@ -4521,7 +4522,7 @@ orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
 lab Myers
 targetId GeneCard:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_C-20_validation_Myers.pdf
+validation FOXA1(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-6553_validation_Myers.pdf
 
 term  FOXA1_(SC-101058)
 tag  FOXA1SC101058
@@ -4536,7 +4537,7 @@ lab  Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
+validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
 
 term FOXA2_(SC-6554)
 tag FOXA2SC6554
@@ -4640,8 +4641,8 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
 
-term GATA2_(CG2-96)
-tag GATA2CG2
+term GATA2_(SC-267)
+tag GATA2SC267
 type Antibody
 target GATA2
 targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
@@ -4652,7 +4653,7 @@ orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
 targetId GeneCard:GATA2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
-validation GATA2(Immunoblot):human_GATA2_CG2-96_validation_Myers.pdf
+validation GATA2_(SC-267)(Immunoblot):human_GATA2_SC-267_validation_Myers.pdf
 
 term  GATA3_(SC-268)
 tag  GATA3SC268
@@ -4667,7 +4668,7 @@ lab  Myers
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(Immunoblot)_Myers:human_GATA3-SC268_validation_Myers.pdf
+validation GATA3_SC-268(Immunoblot):human_GATA3-SC268_validation_Myers.pdf
 
 term GCN5
 tag GCN5
@@ -4727,8 +4728,8 @@ targetId GeneCard:GTF2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2B
 validation missing
 
-term GTF2F1_(RAP-74)
-tag GTF2F1RAP
+term GTF2F1_(AB28179)
+tag GTF2F1ab28179
 type Antibody
 target GTF2F1
 antibodyDescription Rabbit polyclonal to TFIIF - Recombinant full length protein - RAP 74 subunit of TF11F
@@ -4739,7 +4740,7 @@ vendorId ab28179
 lab Snyder
 targetId GeneCard:GTF2F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GTF2F1
-validation GTF2F1(Western_blot,Immunoprecipitation):human_GTF2F1_RAP-74_validation_Snyder.pdf
+validation GTF2F1_(AB28179)(Western_blot,Immunoprecipitation):human_GTF2F1_AB28179_validation_Snyder.pdf
 
 
 ##This does not appear in metaDb
@@ -5018,7 +5019,7 @@ lab  Myers
 lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation HDAC2_(SC-6296)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_HDAC2_SC-6296_validation_Myers.pdf
+validation HDAC2_(SC-6296)(Immunoprecipitation-WesternBlot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
 
 term HEY1
 tag HEY1
@@ -5064,8 +5065,8 @@ targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
 validation missing
 
-term HNF4A_(H-171)
-tag HNF4AH171
+term HNF4A_(SC-8987)
+tag HNF4ASC8987
 type Antibody
 target HNF4A
 antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin.
@@ -5076,7 +5077,7 @@ vendorId sc-8987
 lab Myers
 targetId GeneCard:HNF4A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
-validation HNF4a(Immunoprecipitation-WesternBlot,MassSpec):human_HNF4a_H-171_validation_Myers.pdf
+validation HNF4A_(SC-8987)(Immunoprecipitation-WesternBlot,MassSpec):human_HNF4a_SC-8987_validation_Myers.pdf
 
 term HNF4G_(SC-6558)
 tag HNF4GSC6558
@@ -5151,10 +5152,10 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
 validation IRF3(Immunoblot):human_IRF3_validation_Snyder.pdf
 
 
-term  IRF4_(M-17)
-tag  IRF4M17
+term  IRF4_(SC-6509)
+tag  IRF4SC6509
 type Antibody
-target  IRF4_(M-17)
+target  IRF4
 antibodyDescription  Goat polyclonal IgG, epitope mapping at the C-terminus of IRF-4 of mouse origin.
 targetDescription  The protein encoded by this gene belongs to the IRF (interferon regulatory factor) family.  It functions as a lymphocyte specific transcription factor and negatively regulates TLR signaling by selectively competing with IRF5.  A chromosomal translocation involving this gene and the IgH locus, t(6;14)(p25;q32), may be a cause of multiple myeloma (RefSeq).
 vendorName Santa Cruz Biotech
@@ -5164,7 +5165,7 @@ lab  Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_M-17(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_IRF4_M-17_validation_Myers.pdf
+validation IRF4_(SC-6509)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6509_validation_Myers.pdf
 
 term JunD
 tag JUND
@@ -5194,8 +5195,8 @@ targetId GeneCard:TRIM2B
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28
 validation KAP1(Western_blot,Immunoprecipitation-Western_blot):human_KAP1_validation_Farnham.pdf
 
-term LEF1_(C-19)
-tag LEF1C19
+term LEF1_(SC-8592)
+tag LEF1SC8592
 type Antibody
 target LEF1
 antibodyDescription 	 Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
@@ -5206,7 +5207,7 @@ orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
 lab Myers
 targetId GeneCard:LEF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
-validation LEF1(Immunoprecipitation-WesternBlot,MassSpec):human_LEF1_C-19_validation_Myers.pdf
+validation LEF1_(SC-8592)(Immunoprecipitation-WesternBlot,MassSpec):human_LEF1_SC-8592_validation_Myers.pdf
 
 term MafF_(M8194)
 tag MafFM8194
@@ -5257,31 +5258,16 @@ term Max
 tag MAX
 type Antibody
 target Max
-antibodyDescription rabbit polyclonal, epitope mapping at the C-terminus of Max of human origin
-targetDescription MYC associated factor X
-vendorName Santa Cruz Biotech
-vendorId sc-197
-orderUrl http://www.scbt.com/product.php?datasheet=197
-lab Snyder
-targetId GeneCard:MAX
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
-validation missing
-
-term  MAX_(C-17)
-tag  MAXC17
-type Antibody
-target  MAX_(C-17)
 antibodyDescription  Rabbit polyclonal IgG, epitope mapping at the C-terminus of Max of human origin.
 targetDescription  The protein encoded by this gene is a member of the basic helix-loop-helix leucine zipper (bHLHZ) family of transcription factors. It is able to form homodimers and heterodimers with other family members, which include Mad, Mxi1 and Myc. Myc is an oncoprotein implicated in cell proliferation, differentiation and apoptosis. The homodimers and heterodimers compete for a common DNA target site (the E box) and rearrangement among these dimer forms provides a complex system of transcriptional regulation. Multiple alternatively spliced transcript variants have been described for this gene but the full-length nature for some of them is unknown (RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-197
 orderUrl http://www.scbt.com/datasheet-197-max-c-17-antibody.html
-lab  Myers
+lab  Myers, Snyder
 lots  J0809
-targetId MAX
+targetId GeneCards:MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX_C-17(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_C-17_validation_Myers.pdf
-
+validation MAX(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_validation_Myers.pdf
 
 
 ##This does not appear in metaDb
@@ -5327,7 +5313,7 @@ lab Myers
 lots C0909
 targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
-validation NANOG_(SC-33759)(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_NANOG_SC-33759_validation_Myers.pdf
+validation NANOG_(SC-33759)(Immunoprecipitation-Western_blot,MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 
 
 
@@ -5360,8 +5346,8 @@ targetId GeneCard:NFE2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2
 validation missing
 
-term NF-E2_(H-230)
-tag NFE2H
+term NF-E2_(SC-22827)
+tag NFE2SC22827
 type Antibody
 target NF-E2
 antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NF-E2 of human origin
@@ -5474,8 +5460,8 @@ targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
 
-term p300_(N-15)
-tag P300N15
+term p300_(SC-584)
+tag P300SC582
 type Antibody
 target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
@@ -5488,8 +5474,8 @@ targetId GeneCard:EP300
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EP300
 validation missing
 
-term p300_(F-4)
-tag P300F4
+term p300_(SC-48343)
+tag P300SC48343
 type Antibody
 target P300
 targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein.
@@ -5674,7 +5660,7 @@ lab Myers
 lots F2609
 targetId GeneCards:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
-validation POU5F1_(SC-9081)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_POU5F1_SC-9081_validation_Myers.pdf
+validation POU5F1_(SC-9081)(Immunoprecipitation-WesternBlot,MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
 
 term POU2F2
 tag POU2F2
@@ -5690,8 +5676,8 @@ targetId GeneCard:POU2F2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU2F2
 validation POU2F2(Immunoprecipitation-WesternBlot,MassSpec):human_POU2F2_validation_Myers.pdf
 
-term PRDM1_(Val90)
-tag PRDM1V
+term PRDM1_(9115)
+tag PRDM19115
 type Antibody
 target PRDM1
 antibodyDescription Rabbit Monoclonal antibody against a synthetic peptide corresponding to residues surrounding Val90 of human PRDI-BF1.
@@ -5731,7 +5717,7 @@ lots 940739, 891751
 lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
-validation RAD21(Immunoblot)_Myers:human_RAD21_validation_Myers.pdf
+validation RAD21(Immunoblot):human_RAD21_validation_Myers.pdf
 
 term RPC155
 tag RPC155
@@ -5747,8 +5733,8 @@ targetId GeneCard:POLR3A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR3A
 validation missing
 
-term RFX5_(N-494)
-tag RFX5N494
+term RFX5_(200-401-194)
+tag RFX5200401194
 type Antibody
 target RFX5
 targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
@@ -5759,7 +5745,7 @@ vendorId 200-401-194
 lab Snyder
 targetId GeneCard:RFX5
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RFX5
-validation RFX5(Western_blot,Immunoprecipitation):human_RFX5_N-494_validation_Snyder.pdf
+validation RFX5_(200-401-194)(Western_blot,Immunoprecipitation):human_RFX5_200-401-194_validation_Snyder.pdf
 
 term RXRA
 tag RXRA
@@ -5903,7 +5889,7 @@ lab  Myers
 lots  F2609
 targetId SP4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
-validation SP4_V-20(Immunoblot)_Myers:human_SP4_V-20_validation_Myers.pdf
+validation SP4_V-20(Immunoblot):human_SP4_V-20_validation_Myers.pdf
 
 term SPT20
 tag SPT20
@@ -6034,10 +6020,10 @@ lab Myers / Wold
 lots K0905 F2706
 validation missing
 
-term  TAF7_(SQ-8)
-tag  TAF7SQ8
+term  TAF7_(SC-101167)
+tag  TAF7SC101167
 type Antibody
-target  TAF7_(SQ-8)
+target  TAF7
 antibodyDescription  Mouse monoclonal IgG, raised against recombinant TAF II p55 (TAF7) of human origin.
 targetDescription  The intronless gene for this transcription coactivator is located between the protocadherin beta and gamma gene clusters on chromosome 5. The protein encoded by this gene is a component of the TFIID protein complex, a complex which binds to the TATA box in class II promoters and recruits RNA polymerase II and other factors. This particular subunit interacts with the largest TFIID subunit, as well as multiple transcription activators. The protein is required for transcription by promoters targeted by RNA polymerase II (RefSeq).
 228
@@ -6048,7 +6034,7 @@ lab  Myers
 lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
-validation TAF7_SQ-8(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_TAF7_SQ-8_validation_Myers.pdf
+validation TAF7_(SC-101167)(Immunoprecipitation-WesternBlot,MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
 
 term TAL1_(SC-12984)
 tag TAL1SC12984
@@ -6232,7 +6218,7 @@ lab  Myers
 lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF1_SC-8983(Immunoblot)_Myers:human_USF1_SC-8983_validation_Myers.pdf
+validation USF1_SC-8983(Immunoblot):human_USF1_SC-8983_validation_Myers.pdf
 
 term USF2
 tag USF2
@@ -6261,7 +6247,7 @@ lab  Myers
 lots  J0908
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
-validation USF2_C-20(Immunoblot)_Myers:human_USF2_C-20_validation_Myers.pdf
+validation USF2_C-20(Immunoblot):human_USF2_C-20_validation_Myers.pdf
 
 term WHIP
 tag WHIP
@@ -6305,8 +6291,8 @@ targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
 validation missing
 
-term YY1_(C-20)
-tag YY1C20
+term YY1_(SC-281)
+tag YY1SC281
 type Antibody
 target YY1
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of YY1 of human origin
@@ -6317,7 +6303,7 @@ orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/pro
 lab Myers
 targetId GeneCard:YY1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1
-validation YY1(Immunoblot):human_YY1_C-20_validation_Myers.pdf
+validation YY1_(SC-281)(Immunoblot):human_YY1_SC-281_validation_Myers.pdf
 
 term ZBTB33
 tag ZBTB33
@@ -6347,7 +6333,7 @@ lab  Myers
 lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
-validation ZBTB7A_SC-34508(Immunoblot)_Myers:human_ZBTB7A_SC-34508_validation_Myers.pdf
+validation ZBTB7A_SC-34508(Immunoblot):human_ZBTB7A_SC-34508_validation_Myers.pdf
 
 term ZEB1_(SC-25388)
 tag ZEB1SC25388
@@ -6362,7 +6348,7 @@ lab Myers
 lots D2010
 targetId GeneCards:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
-validation ZEB1_(SC-25388)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_ZEB1_SC-25388_validation_Myers.pdf
+validation ZEB1_(SC-25388)(Immunoprecipitation-WesternBlot,MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
 
 term Znf143_(16618-1-AP)
 tag Znf143166181AP
@@ -6619,8 +6605,8 @@ targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation
 
 
-term Mxi1_(bHLH)
-tag Mxi1BHLH
+term Mxi1_(AF4185)
+tag Mxi1AF4185
 type Antibody
 target Mxi1
 targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
@@ -8094,6 +8080,34 @@ tag U
 type sex
 description Unknown
 
+
+## Organisms
+term human
+tag human
+type organism
+description human
+
+term mouse
+tag mouse
+type mouse
+description mouse
+
+## Tiers (used by cell types)
+term 1
+tag 1
+type tier
+description tier 1
+
+term 2
+tag 2
+type tier
+description tier 2
+
+term 3
+tag 3
+type tier
+description tier 3
+
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
 ### Seq Platform
@@ -9151,7 +9165,8 @@ searchable select
 cvDefined yes
 validate cv
 priority 500
-# This is Caltech only and possibly should be retired.  (11/3/10)  ## If there were more than 2 this would be multiSelect
+# This is Caltech only and possibly should be retired.  (11/3/10)  
+## Note that if there were more than 2 instances of this type this would be multiSelect searchable
 
 term md5sum
 type typeOfTerm

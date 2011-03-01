@@ -4,7 +4,7 @@ include ../../inc/common.mk
 O = xaShow.o 
 
 xaShow.exe: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a -lm
+	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a ${L} -lm
 	mv ${AOUT} xaShow.exe
 	chmod a+rx xaShow.exe
 	chmod g-w xaShow.exe

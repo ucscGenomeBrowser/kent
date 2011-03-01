@@ -7,8 +7,8 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = tailLines.o 
 A = tailLines
 
-${A}: $O ../../lib/$(MACHTYPE)/jkweb.a
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O $(MYLIBS) $L
+${A}: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O $(MYLIBS) ${L}
 
 lib:
 	cd ../../lib && ${MAKE}
