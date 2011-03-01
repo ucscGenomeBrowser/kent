@@ -502,9 +502,9 @@ for(c = commits; c; c = c->next)
 	    // make file diff links
 	    fprintf(h, "<ul><li> %s - lines changed %d, "
 		"context: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>, "
-		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A></li></ul>\n"
+		"full: <A href=\"%s\">html</A>, <A href=\"%s\">text</A>%s</li></ul>\n"
 		, f->path, f->linesChanged
-		, cHtml, cDiff, fHtml, fDiff);
+		, cHtml, cDiff, fHtml, fDiff, f->linesChanged == 0 ? " (whitespace-only change shows no diff)" : "");
 
 	    freeMem(relativePath);
 	    freeMem(commonPath);
