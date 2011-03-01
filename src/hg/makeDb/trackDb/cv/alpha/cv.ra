@@ -17,7 +17,7 @@
 # term (human-readable cell type name)
 # tag (machine-readable cell type name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be Cell Line)
-# organism (used by pipeline in ways I don't fully understand.  Should be human)
+# organism (used in many ways.  Should correspond to a "type organism" stanza)
 # description (human-readable description of cell type, for cell type cellTypes.html)
 # tissue (general tissue type, for categorizing cell types)
 # vendorName (name of vendor or lab that provides these cells)
@@ -28,8 +28,9 @@
 # termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
 # termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
 # color (specifies color code for track data of this cell type, rgb values)
-# sex (M, F, B, or U.  If "F", then the track data shouldn't contain chrY)
-# tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html.  Not used in mouse)
+# sex (used in documentation and validation.  Should correspond to a "type sex" stanza)
+# tier (In human, specifies which table the cell type appears in in cellTypes.html. Not used in mouse.  
+#       Should correspond to a "type tier" stanza)
 # protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 # category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
 
@@ -3095,16 +3096,16 @@ tag tHEK293
 type Cell Line
 tier 3
 organism human
-description (Description)(Provisional)
-lineage (Lineage)
-karyotype (Karyotype)
-sex (Sex)
+description Human embryonic kidney cells transformed with Adenovirus 5 DNA stably expressing tetracycline repressor
+lineage Human embryonic kidney, ATCC number CRL-1573
+karyotype cancer, hypotriploid, XXX
+sex F
 tissue Kidney
 vendorName Invitrogen
 vendorId r71007
 orderUrl http://products.invitrogen.com/ivgn/product/R71007?ICID=search-r71007
-termId (Term ID)
-termUrl
+termId BTO:0000007
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007
 protocol Farnham:T-REx-HEK293_Farnham_protocol.pdf
 
 term T98G
@@ -3802,7 +3803,7 @@ description pseudogene
 # vendorName (name of vendor or lab that provides these antibodies)
 # vendorId (the ID of the antibody in the vendor's catalog)
 # orderUrl (URL for ordering the antibody. Links with vendorId on cellTypes.html)
-# lab (lab that first asked for this antibody(
+# lab (lab that first asked for this antibody.  Should match the "labPi" field in some "type lab" stanza)
 # validation (either missing or the name of a validation document in a format to be documented by Venkat)
 # lots (optional lot numbers)
 
@@ -3846,7 +3847,7 @@ vendorId sc-188
 lab Struhl, Myers
 targetId GeneCard:ATF3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
-validation ATF3(Immunoblot)_Myers:human_ATF3_validation_Myers.pdf
+validation ATF3(Immunoblot):human_ATF3_validation_Myers.pdf
 
 term BAF155
 tag BAF155
@@ -4394,7 +4395,7 @@ lab  Myers
 lots  L2707
 targetId GeneCards:ELF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ELF1
-validation ELF1_(SC-631)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_ELF1_SC-631_validation_Myers.pdf
+validation ELF1_(SC-631)(Immunoprecipitation-WesternBlot,MassSpec):human_ELF1_SC-631_validation_Myers.pdf
 
 term ELK4
 tag ELK4
@@ -4491,7 +4492,7 @@ lab  Myers
 lots  I0809
 targetId GeneCard:FOSL1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL1
-validation FOSL1_(SC-183)(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_FOSL1-SC183_validation_Myers.pdf
+validation FOSL1_(SC-183)(Immunoprecipitation-Western_blot,MassSpec):human_FOSL1-SC183_validation_Myers.pdf
 
 
 
@@ -4536,7 +4537,7 @@ lab  Myers
 lots  A2706
 targetId GeneCards:FOXA1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
-validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_FOXA1_SC-101058_validation_Myers.pdf
+validation FOXA1_(SC-101058)(Immunoprecipitation-WesternBlot,MassSpec):human_FOXA1_SC-101058_validation_Myers.pdf
 
 term FOXA2_(SC-6554)
 tag FOXA2SC6554
@@ -4667,7 +4668,7 @@ lab  Myers
 lots  A2610
 targetId GeneCard:GATA3
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA3
-validation GATA3_SC-268(Immunoblot)_Myers:human_GATA3-SC268_validation_Myers.pdf
+validation GATA3_SC-268(Immunoblot):human_GATA3-SC268_validation_Myers.pdf
 
 term GCN5
 tag GCN5
@@ -5018,7 +5019,7 @@ lab  Myers
 lots  G0307
 targetId GeneCards:HDAC2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HDAC2
-validation HDAC2_(SC-6296)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_HDAC2_SC-6296_validation_Myers.pdf
+validation HDAC2_(SC-6296)(Immunoprecipitation-WesternBlot,MassSpec):human_HDAC2_SC-6296_validation_Myers.pdf
 
 term HEY1
 tag HEY1
@@ -5164,7 +5165,7 @@ lab  Myers
 lots  IO1O6
 targetId IRF4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF4
-validation IRF4_(SC-6509)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_IRF4_SC-6509_validation_Myers.pdf
+validation IRF4_(SC-6509)(Immunoprecipitation-WesternBlot,MassSpec):human_IRF4_SC-6509_validation_Myers.pdf
 
 term JunD
 tag JUND
@@ -5280,7 +5281,7 @@ lab  Myers
 lots  J0809
 targetId MAX
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MAX
-validation MAX_C-17(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_MAX_C-17_validation_Myers.pdf
+validation MAX_C-17(Immunoprecipitation-WesternBlot,MassSpec):human_MAX_C-17_validation_Myers.pdf
 
 
 
@@ -5327,7 +5328,7 @@ lab Myers
 lots C0909
 targetId GeneCards:NANOG
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NANOG
-validation NANOG_(SC-33759)(Immunoprecipitation-Western_blot,MassSpec)_Myers:human_NANOG_SC-33759_validation_Myers.pdf
+validation NANOG_(SC-33759)(Immunoprecipitation-Western_blot,MassSpec):human_NANOG_SC-33759_validation_Myers.pdf
 
 
 
@@ -5674,7 +5675,7 @@ lab Myers
 lots F2609
 targetId GeneCards:POU5F1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POU5F1
-validation POU5F1_(SC-9081)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_POU5F1_SC-9081_validation_Myers.pdf
+validation POU5F1_(SC-9081)(Immunoprecipitation-WesternBlot,MassSpec):human_POU5F1_SC-9081_validation_Myers.pdf
 
 term POU2F2
 tag POU2F2
@@ -5731,7 +5732,7 @@ lots 940739, 891751
 lab Snyder
 targetId GeneCard:RAD21
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=RAD21
-validation RAD21(Immunoblot)_Myers:human_RAD21_validation_Myers.pdf
+validation RAD21(Immunoblot):human_RAD21_validation_Myers.pdf
 
 term RPC155
 tag RPC155
@@ -5903,7 +5904,7 @@ lab  Myers
 lots  F2609
 targetId SP4
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SP4
-validation SP4_V-20(Immunoblot)_Myers:human_SP4_V-20_validation_Myers.pdf
+validation SP4_V-20(Immunoblot):human_SP4_V-20_validation_Myers.pdf
 
 term SPT20
 tag SPT20
@@ -6048,7 +6049,7 @@ lab  Myers
 lots  J1509
 targetId TAF7
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAF7
-validation TAF7_(SC-101167)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_TAF7_SC-101167_validation_Myers.pdf
+validation TAF7_(SC-101167)(Immunoprecipitation-WesternBlot,MassSpec):human_TAF7_SC-101167_validation_Myers.pdf
 
 term TAL1_(SC-12984)
 tag TAL1SC12984
@@ -6232,7 +6233,7 @@ lab  Myers
 lots  E2810
 targetId GeneCards:USF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF1
-validation USF1_SC-8983(Immunoblot)_Myers:human_USF1_SC-8983_validation_Myers.pdf
+validation USF1_SC-8983(Immunoblot):human_USF1_SC-8983_validation_Myers.pdf
 
 term USF2
 tag USF2
@@ -6261,7 +6262,7 @@ lab  Myers
 lots  J0908
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
-validation USF2_C-20(Immunoblot)_Myers:human_USF2_C-20_validation_Myers.pdf
+validation USF2_C-20(Immunoblot):human_USF2_C-20_validation_Myers.pdf
 
 term WHIP
 tag WHIP
@@ -6347,7 +6348,7 @@ lab  Myers
 lots  H2406
 targetId GeneCards:ZBTB7A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZBTB7A
-validation ZBTB7A_SC-34508(Immunoblot)_Myers:human_ZBTB7A_SC-34508_validation_Myers.pdf
+validation ZBTB7A_SC-34508(Immunoblot):human_ZBTB7A_SC-34508_validation_Myers.pdf
 
 term ZEB1_(SC-25388)
 tag ZEB1SC25388
@@ -6362,7 +6363,7 @@ lab Myers
 lots D2010
 targetId GeneCards:ZEB1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZEB1
-validation ZEB1_(SC-25388)(Immunoprecipitation-WesternBlot,MassSpec)_Myers:human_ZEB1_SC-25388_validation_Myers.pdf
+validation ZEB1_(SC-25388)(Immunoprecipitation-WesternBlot,MassSpec):human_ZEB1_SC-25388_validation_Myers.pdf
 
 term Znf143_(16618-1-AP)
 tag Znf143166181AP
@@ -8093,6 +8094,34 @@ term U
 tag U
 type sex
 description Unknown
+
+
+## Organisms
+term human
+tag human
+type organism
+description human
+
+term mouse
+tag mouse
+type mouse
+description mouse
+
+## Tiers (used by cell types)
+term 1
+tag 1
+type tier
+description tier 1
+
+term 2
+tag 2
+type tier
+description tier 2
+
+term 3
+tag 3
+type tier
+description tier 3
 
 #Venkat: Trial to add seqPlatform for use for GEO submissions
 #Uses the GEO terms to be conistent and help with GEO submissions
