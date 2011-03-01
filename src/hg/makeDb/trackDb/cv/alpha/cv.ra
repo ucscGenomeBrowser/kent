@@ -3930,7 +3930,7 @@ orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
 lab Myers
 targetId GeneCard:BCLAF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
-validation BCLAF1(Immunoblot):human_BCLAF1_P5B11_validation_Myers.pdf
+validation BCLAF1(Immunoblot):human_BCLAF1_SC-101388_validation_Myers.pdf
 
 term BDP1
 tag BDP1
@@ -4273,7 +4273,7 @@ lab  Myers
 lots  D1206
 targetId E2F6
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F6
-validation E2F6_(SC-22823)(Immunoblot,MassSpec)_Myers:human_E2F6_SC-22823_validation_Myers.pdf
+validation E2F6_(SC-22823)(Immunoblot,MassSpec):human_E2F6_SC-22823_validation_Myers.pdf
 
 
 term  EBF1_(SC-137065)
@@ -4289,7 +4289,7 @@ lab  Myers
 lots  J0505
 targetId EBF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=EBF1
-validation EBF1_(SC-137065)(Immunoblot)_Myers:human_EBF1_SC-137065_validation_Myers.pdf
+validation EBF1_(SC-137065)(Immunoblot):human_EBF1_SC-137065_validation_Myers.pdf
 
 term eGFP-FOS
 tag eFOS
