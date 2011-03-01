@@ -23,7 +23,7 @@ struct psl *pslBuildFromHsp(char *qName, int qSize, int qStart, int qEnd, char q
                             unsigned flags);
 /* construct a new psl from an HSP.  Chaining is left to other programs. */
 
-FILE *pslBuildScoresOpen(char *scoreFile, bool inclDefs);
+FILE *pslBuildScoresOpen(char *scoreFile, boolean inclDefs);
 /* open score file and write headers */
 
 void pslBuildScoresWrite(FILE* scoreFh, struct psl *psl, double bitScore, double eValue);

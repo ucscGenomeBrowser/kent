@@ -1,6 +1,6 @@
 /* hgFind.c - Find things in human genome annotations. */
 #include "common.h"
-#include <regex.h>
+#include "regexHelper.h"
 #include "obscure.h"
 #include "hCommon.h"
 #include "portable.h"
@@ -1190,7 +1190,7 @@ return ret;
 boolean isRefSeqAcc(char *acc)
 /* Return TRUE if acc looks like a RefSeq acc. */
 {
-return matchRegex(acc, "^(N|X)M_[0-9]{6}[0-9]*$");
+return regexMatchNoCase(acc, "^(N|X)M_[0-9]{6}[0-9]*$");
 }
 
 static char *mrnaType(char *db, char *acc)
@@ -2805,7 +2805,7 @@ if (strlen(term)<2 && !
      sameString(hfs->searchName, "flyBaseGeneSymbolOneLetter")))
     return FALSE;
 
-if (isNotEmpty(hfs->termRegex) && ! matchRegex(term, hfs->termRegex))
+if (isNotEmpty(hfs->termRegex) && ! regexMatchNoCase(term, hfs->termRegex))
     return(FALSE);
 
 if (! hTableOrSplitExists(db, hfs->searchTable))
@@ -3021,18 +3021,15 @@ if (singleSearch(db, term, cart, hgp))
  * If found, strip it off and remember the start and end. */
 char *originalTerm = term;
 if ((canonicalSpec = 
-        matchRegexSubstr(term, canonicalRangeExp,
-				  substrs, ArraySize(substrs))) ||
+        regexMatchSubstrNoCase(term, canonicalRangeExp, substrs, ArraySize(substrs))) ||
     (gbrowserSpec = 
-        matchRegexSubstr(term, gbrowserRangeExp, 
-                                substrs, ArraySize(substrs))) ||
+        regexMatchSubstrNoCase(term, gbrowserRangeExp, substrs, ArraySize(substrs))) ||
     (lengthSpec = 
-        matchRegexSubstr(term, lengthRangeExp, 
-                                substrs, ArraySize(substrs))) ||
-    matchRegexSubstr(term, bedRangeExp, substrs, ArraySize(substrs)) ||
-    (singleBaseSpec = 
-	matchRegexSubstr(term, singleBaseExp, substrs, ArraySize(substrs))) ||
-    matchRegexSubstr(term, sqlRangeExp, substrs, ArraySize(substrs)))
+        regexMatchSubstrNoCase(term, lengthRangeExp, substrs, ArraySize(substrs))) ||
+    regexMatchSubstrNoCase(term, bedRangeExp, substrs, ArraySize(substrs)) ||
+    (singleBaseSpec =
+	regexMatchSubstrNoCase(term, singleBaseExp, substrs, ArraySize(substrs))) ||
+    regexMatchSubstrNoCase(term, sqlRangeExp, substrs, ArraySize(substrs)))
     {
     term = cloneString(term);
     /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart, 

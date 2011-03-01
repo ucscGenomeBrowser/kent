@@ -11,7 +11,7 @@ PROG = scaffoldFaToAgp
 O = ${PROG}.o 
 
 ${PROG}: ${O}
-	${CC} ${COPT} ${CFLAGS} -o ${INSTALLDIR}/${PROG} $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${INSTALLDIR}/${PROG} $O ${MYLIBS} ${L}
 
 test: ${INSTALLDIR}/${PROG}
 	cd test && csh runtest

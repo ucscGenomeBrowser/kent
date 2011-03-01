@@ -39,18 +39,26 @@ in Man (MIM).
 <H2>Display Conventions and Configuration</H2>
 
 <P>Cytogenetic locations of OMIM entries are displayed as solid
-blocks.  The entries are colored according to following calssification:
+blocks.  The entries are colored according to following classification:
 <UL>
-<LI><B><font color="#C800C8">Purple</font></B> for Class 1 OMIM Genes
-<LI><B><font color=green>Green</font></B> for Class 2 OMIM Genes
-<LI><B><font color="#DC0000">Red</font></B> for Class 3 OMIM Genes
-<LI><B><font color="#DC6464">Orange</font></B> for Class 4 OMIM Genes
-<LI><B><font color="#C8C8C8">Gray</font></B> for other entries
+<LI><B><FONT COLOR="#C800C8">Purple</FONT></B> for Class 1 OMIM records 
+- Reasonable guess at <B><FONT COLOR="#C800C8">association of phenotype 
+with gene</FONT></B>, e.g., enzyme deficiencies.  Mapping not definitively 
+established.
+<LI><B><FONT COLOR=green>Green</FONT></B> for Class 2 OMIM records 
+- Phenotype <B><FONT COLOR=green>mapped to region</FONT></B>, but not to gene.
+<LI><B><FONT COLOR="#DC0000">Red</FONT></B> for Class 3 OMIM records 
+- Mutants in <B><FONT COLOR="#DC0000">gene known to cause disease</FONT></B>.
+<LI><B><FONT COLOR="#DC6464">Orange</FONT></B> for Class 4 OMIM records 
+- <B><FONT COLOR="#DC6464"> Contiguous gene syndromes</FONT></B>. 
+<LI><B><FONT COLOR="#C8C8C8">Gray</FONT></B> for 
+<B><FONT COLOR="#C8C8C8">other entries</FONT></B>.
+
 </UL>
 <P> Gene symbol and disease information, when available, are displayed on the details page for an item. 
 </P>
 
-<P>On the main browser display, the description of the OMIM entry are shown when Full display mode is chosen.  In Pack mode, the entry description is shown when mousing over each entries.
+<P>On the main browser display, the description of the OMIM entry are shown when Full display mode is chosen.  In Pack mode, the entry description is shown when mousing over each entry.
 <H2>Methods</H2>
 <P>
 This track was constructed as follows: 
@@ -58,13 +66,13 @@ This track was constructed as follows:
 <LI>The OMIM <TT>genemap</TT> data file was downloaded from ftp://ftp.ncbi.nih.gov/repository/OMIM/genemap.  
 The data are loaded into an MySQL table, <TT>omimGeneMap</TT>.
 <LI>The cytogenetic location data (from the location column in <TT>omimGeneMap</TT> table) are parsed and converted into genomic start and end positions based on the <TT>cytoBand</TT> table.  
-These genomic positions together with the corresponding OMIM IDs are saved into a bed file and loaded into table <TT>omimLocation</TT>. 
+These genomic positions, together with the corresponding OMIM IDs, are saved into a BED file and loaded into table <TT>omimLocation</TT>. 
 </UL>
 
 <H2>Credits</H2>
 <P>
 Thanks to OMIM and NCBI for the use of their data. This track was
-constructed by Fan Hsu in the UCSC Genome Bioinformatics Group.</P> 
+constructed by Fan Hsu and Robert Kuhn in the UCSC Genome Bioinformatics Group.</P> 
 
 <H2>References</H2>
 <P>
