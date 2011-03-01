@@ -9151,7 +9151,8 @@ searchable select
 cvDefined yes
 validate cv
 priority 500
-# This is Caltech only and possibly should be retired.  (11/3/10)  ## If there were more than 2 this would be multiSelect
+# This is Caltech only and possibly should be retired.  (11/3/10)  
+## Note that if there were more than 2 instances of this type this would be multiSelect searchable
 
 term md5sum
 type typeOfTerm
