@@ -11,64 +11,10 @@
 #include "ra.h"
 #include "hash.h"
 #include "obscure.h"
-#include <regex.h>
+#include "regexHelper.h"
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.16 2010/03/29 23:11:37 angie Exp $";
-
 /* ----------- End of AutoSQL generated code --------------------- */
-
-#define REGEX_OPTIONS (REG_NOSUB | REG_EXTENDED | REG_ICASE)
-#define REGEX_SUBSTR_OPTIONS (REG_EXTENDED | REG_ICASE)
-
-static regex_t *compileRegex(char *exp, char *what, int compileFlags)
-/* Compile exp (or die with an informative-as-possible error message). 
- * Cache pre-compiled regex's internally (so don't free result after use). */
-{
-static struct hash *reHash = NULL;
-struct hashEl *hel = NULL;
-
-if (reHash == NULL)
-    reHash = newHash(10);
-hel = hashLookup(reHash, exp);
-if (hel != NULL)
-    return((regex_t *)hel->val);
-else
-    {
-    regex_t *compiledExp = NULL;
-    int errNum = 0;
-    AllocVar(compiledExp);
-    errNum = regcomp(compiledExp, exp, compileFlags);
-    if (errNum != 0)
-	{
-	char errBuf[512];
-	regerror(errNum, compiledExp, errBuf, sizeof(errBuf));
-	errAbort("%s \"%s\" got regular expression compilation error %d:\n%s\n",
-		 what, exp, errNum, errBuf);
-	}
-    hashAdd(reHash, exp, compiledExp);
-    return(compiledExp);
-    }
-}
-
-boolean matchRegex(char *name, char *exp)
-/* Return TRUE if name matches the regular expression pattern
- * (case insensitive). */
-{
-regex_t *compiledExp = compileRegex(exp, "Regular expression", REGEX_OPTIONS);
-return(regexec(compiledExp, name, 0, NULL, 0) == 0);
-}
-
-boolean matchRegexSubstr(char *name, char *exp, regmatch_t substrArr[],
-			 size_t substrArrSize)
-/* Return TRUE if name matches exp (case insensitive); regexec fills in 
- * substrArr with substring offsets. */
-{
-regex_t *compiledExp = compileRegex(exp, "Regular expression w/substrings",
-				    REGEX_SUBSTR_OPTIONS);
-return(regexec(compiledExp, name, substrArrSize, substrArr, 0) == 0);
-}
-
 
 static void anchorTermRegex(struct hgFindSpec *hfs)
 /* termRegex must match the whole term.  If it doesn't already start with 
@@ -98,10 +44,11 @@ static void checkTermRegex(struct hgFindSpec *hfs)
 {
 if (isNotEmpty(hfs->termRegex))
     {
-    regex_t *compiledExp = NULL;
     char buf[256];
     safef(buf, sizeof(buf), "hfsPolish: search %s: termRegex", hfs->searchName);
-    compiledExp = compileRegex(hfs->termRegex, buf, REGEX_OPTIONS);
+    const regex_t *compiledExp = regexCompile(hfs->termRegex, buf,
+					      (REG_EXTENDED | REG_ICASE | REG_NOSUB));
+    compiledExp = NULL;  // Avoid compiler warning about unused variable / return value
     }
 }
 
@@ -172,7 +119,7 @@ static void checkQueryFormat(struct hgFindSpec *hfs)
 {
 if (isNotEmpty(hfs->query) && !hgFindSpecSetting(hfs, "dontCheckQueryFormat"))
     {
-    if (! matchRegex(hfs->query, queryFormatRegex))
+    if (! regexMatchNoCase(hfs->query, queryFormatRegex))
 	errAbort("hfsPolish: search %s: query needs to be of the format "
 		 "\"select field1,field2,field3,field4 from %%s "
 		 "where field4 like '%%s'\" "
@@ -181,7 +128,7 @@ if (isNotEmpty(hfs->query) && !hgFindSpecSetting(hfs, "dontCheckQueryFormat"))
 		 hfs->searchName, hfs->query);
     if (isNotEmpty(hfs->xrefQuery))
 	{
-	if (!matchRegex(hfs->query, exactTermFormatRegex))
+	if (!regexMatchNoCase(hfs->query, exactTermFormatRegex))
 	    errAbort("hfsPolish: search %s: there is an xrefQuery so query "
 		     "needs to end with %s (exact match to xref results).",
 		     hfs->searchName, exactTermFormat);
@@ -194,13 +141,13 @@ if (isNotEmpty(hfs->query) && !hgFindSpecSetting(hfs, "dontCheckQueryFormat"))
 		     "needs to end with %s.",
 		     hfs->searchName, fuzzyTermFormat);
 	else if (sameString(hfs->searchMethod, "prefix") &&
-		 !matchRegex(hfs->query, prefixTermFormatRegex))
+		 !regexMatchNoCase(hfs->query, prefixTermFormatRegex))
 	    errAbort("hfsPolish: search %s: searchMethod is prefix so query "
 		     "needs to end with %s.",
 		     hfs->searchName, prefixTermFormat);
 	
 	else if (sameString(hfs->searchMethod, "exact") &&
-		 !matchRegex(hfs->query, exactTermFormatRegex))
+		 !regexMatchNoCase(hfs->query, exactTermFormatRegex))
 	    errAbort("hfsPolish: search %s: searchMethod is exact so query "
 		     "needs to end with %s.",
 		     hfs->searchName, exactTermFormat);
@@ -217,7 +164,7 @@ static void checkXrefQueryFormat(struct hgFindSpec *hfs)
 if (isNotEmpty(hfs->xrefQuery) &&
     !hgFindSpecSetting(hfs, "dontCheckXrefQueryFormat"))
     {
-    if (! matchRegex(hfs->xrefQuery, xrefQueryFormatRegex))
+    if (! regexMatchNoCase(hfs->xrefQuery, xrefQueryFormatRegex))
 	errAbort("hfsPolish: search %s: xrefQuery needs to be of the format "
 		 "\"select field1,field2 from %%s where field2 like '%%s'\" "
 		 "(for prefix, '%%s%%%%'; for exact, '%%%%%%s%%%%'), "
@@ -229,13 +176,13 @@ if (isNotEmpty(hfs->xrefQuery) &&
 		 "needs to end with %s.",
 		 hfs->searchName, fuzzyTermFormat);
     else if (sameString(hfs->searchMethod, "prefix") &&
-	     !matchRegex(hfs->xrefQuery, prefixTermFormatRegex))
+	     !regexMatchNoCase(hfs->xrefQuery, prefixTermFormatRegex))
 	errAbort("hfsPolish: search %s: searchMethod is prefix so xrefQuery "
 		 "needs to end with %s.",
 		 hfs->searchName, prefixTermFormat);
 	
     else if (sameString(hfs->searchMethod, "exact") &&
-	     !matchRegex(hfs->xrefQuery, exactTermFormatRegex))
+	     !regexMatchNoCase(hfs->xrefQuery, exactTermFormatRegex))
 	errAbort("hfsPolish: search %s: searchMethod is exact so xrefQuery "
 		 " needs to end with %s.",
 		 hfs->searchName, exactTermFormat);

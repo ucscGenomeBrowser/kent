@@ -1,24 +1,33 @@
 <!-- Display image in righthand corner -->
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=185>
   <TR><TD ALIGN=RIGHT>
-    <A HREF="*** link to sequencing center's project page"
+    <A HREF="http://www.ncbi.nlm.nih.gov/genomeprj/13974"
     TARGET=_blank>
-    <IMG SRC="/images/Nomascus_leucogenys.jpg" WIDTH=*** HEIGHT=*** ALT="Gibbon"></A>
+    <IMG SRC="/images/Nomascus_leucogenys.jpg" WIDTH=193 HEIGHT=300 ALT="Gibbon"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>Nomascus leucogenys</em><BR> 
     </FONT>
     <FONT SIZE=-2> 
-      Photo courtesy of ***
-      (<A HREF="*** link to source" 
-      TARGET=_blank>***source</A>)
+      Photo courtesy of NHGRI
+      (<A HREF="http://www.genome.gov/pressDisplay.cfm?photoID=74"
+      TARGET=_blank>press photos</A>)
     </FONT>
   </TD></TR>
 </TABLE>
-
 <P>
 The Jan. 2010 <em>Nomascus leucogenys</em> draft assembly 
-(GGSC (NCBI project 13974, accession GCA_000146795.1)) was produced by the *** sequencing center.
+(NCBI project 
+<A HREF="http://www.ncbi.nlm.nih.gov/genomeprj/13974"
+TARGET=_blank>13974</A>, <A HREF="ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Nomascus_leucogenys/Nleu1.0/" 
+TARGET=_blank>GCA_000146795.1</A>)
+was produced by Gibbon Genome Sequencing Consortium 
+(the <A HREF="http://genome.wustl.edu/genomes/"
+TARGET=_blank>Genome Center</A> 
+at Washington University School of Medicine
+and Baylor College of Medicine  
+<A HREF="http://www.hgsc.bcm.tmc.edu/project-species-p-Gibbon.hgsc?pageLocation=Gibbon"
+TARGET=_blank>Human Genome Sequencing Center</A>).
 
 <H3>Sample position queries</H3>
 <P>
@@ -26,42 +35,38 @@ A genome position can be specified by the accession number of a
 sequenced genomic region, an mRNA or EST, a chromosomal coordinate
 range, or keywords from the GenBank description of an mRNA. The
 following list shows examples of valid position queries for the
-Gibbon genome.  See the
+Marmoset genome.  See the
 <A HREF="../goldenPath/help/hgTracksHelp.html"
     TARGET=_blank>User's Guide</A> for more information.
+</P>
 <P>
 <TABLE border=0 CELLPADDING=0 CELLSPACING=0>
     <TR><TH ALIGN=LEFT>Request:</TH>
         <TH WIDTH=14>&nbsp;</TH>
        	<TH ALIGN=LEFT>Genome Browser Response:</TH></TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
-    <TR><TD VALIGN=Top>chrZ</TD>
+    <TR><TD VALIGN=Top>GL397261</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays all of chromosome Z</TD>
+       	<TD VALIGN=Top>Displays all of contig GL397261</TD>
     </TR>
-    <TR><TD VALIGN=Top>chr3:1-1000000</TD>
+    <TR><TD VALIGN=Top>Contig3759:130,210-140,209</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Displays first million bases of chr 3</TD>
+       	<TD VALIGN=Top>Displays ten thousand bases of contig 3759</TD>
     </TR>
-    <TR><TD VALIGN=Top NOWRAP>chr3:1000000+2000</TD>
+    <TR><TD VALIGN=Top NOWRAP>Contig2815:171328+1500</TD>
        	<TD WIDTH=14></TD>
-       	<TD VALIGN=Top>Displays a region of chr 3 that spans 2000 bases, starting with position 1000000 </TD>
+       	<TD VALIGN=Top>Displays a region of Contig 2815 that spans 1500 bases, starting with position 171328 </TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>BX950328</TD>
+    <TR><TD VALIGN=Top>EF215092</TD>
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Displays region of mRNA with GenBank accession
-		number BX950328</TD>
+		number EF215092</TD>
     </TR>
-    <TR><TD VALIGN=Top>BU335953</TD>
+    <TR><TD VALIGN=Top>EH380513</TD>
         <TD WIDTH=14>&nbsp;</TD>
       	<TD VALIGN=Top>Displays region of EST with GenBank accession
-		BU335953 on chr Z</TD>
-    </TR>
-    <TR><TD VALIGN=Top COLSPAN=3>&nbsp;<br></TD></TR>
-    <TR><TD VALIGN=Top>pseudogene mRNA</TD>
-        <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists transcribed pseudogenes, but not cDNAs</TD>
+		EH380513</TD>
     </TR>
     <TR><TD VALIGN=Top>homeobox caudal</TD>
         <TD WIDTH=14>&nbsp;</TD>
@@ -75,20 +80,21 @@ Gibbon genome.  See the
         <TD WIDTH=14>&nbsp;</TD>
        	<TD VALIGN=Top>Lists only kruppel-like zinc fingers</TD>
     </TR>
-    <TR><TD VALIGN=Top>zhang</TD>
+    <TR><TD VALIGN=Top>datson</TD>
         <TD WIDTH=14>&nbsp;</TD>
-	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Zhang</TD>
+	<TD VALIGN=Top>Lists mRNAs deposited by scientist named Datson</TD>
     </TR>
-    <TR><TD VALIGN=Top>Taguchi,T.</TD>
+    <TR><TD VALIGN=Top>Fuchs,E.</TD>
         <TD WIDTH=14>&nbsp;</TD>
-       	<TD VALIGN=Top>Lists mRNAs deposited by co-author T. Taguchi</TD>
+       	<TD VALIGN=Top>Lists mRNAs deposited by co-author E. Fuchs</TD>
     </TR>
     <TR><TD VALIGN=Top COLSPAN=3>&nbsp;</TD></TR>
     <TR><TD COLSPAN="3"> Use this last format for author queries. Although
-	GenBank requires the search format <em>Taguchi T</em>, internally it
-	uses the format <em>Taguchi,T.</em>.</TD>
+	GenBank requires the search format <em>Fuchs E</em>, internally it
+	uses the format <em>Fuchs,E.</em>.</TD>
     </TR>
 </TABLE>
+
 
 <HR>
 <H3>Assembly details</H3>
